@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE import-control PUBLIC
+  "-//Puppy Crawl//DTD Import Control 1.1//EN"
+  "http://www.puppycrawl.com/dtds/import_control_1_1.dtd">
+<!-- https://github.com/checkstyle/checkstyle/blob/checkstyle-8.12/config/import-control.xml -->
+<import-control pkg="xj.love.hj">
+  <allow pkg=".*" regex="true" />
+
+  <subpackage name="common">
+    <subpackage name="util">
+      <allow pkg="org.apache.commons.beanutils" />
+      <disallow pkg="jodd.bean" /><!-- https://jodd.org/beanutil/index.html -->
+    </subpackage>
+  </subpackage>
+</import-control>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>xj.love.hj</groupId>
+    <artifactId>demos</artifactId>
+    <version>${revision}</version>
+    <relativePath>../../demos</relativePath>
+  </parent>
+  <artifactId>demo-dubbo</artifactId>
+  <packaging>pom</packaging>
+  <name>demo dubbo</name>
+  <description>Demo for Dubbo.</description>
+
+  <properties>
+    <main.basedir>${basedir}/../..</main.basedir>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>xj.love.hj</groupId>
+        <artifactId>demo-dubbo-api</artifactId>
+        <version>${revision}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>dubbo</artifactId>
+    </dependency>
+  </dependencies>
+
+  <modules>
+    <module>api</module>
+    <module>provider</module>
+    <module>consumer</module>
+  </modules>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack-javadoc</id>
+            <phase>package</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>com.alibaba</groupId>
+                  <artifactId>dubbo</artifactId>
+                  <version>${dubbo.version}</version>
+                  <classifier>javadoc</classifier>
+                  <overWrite>false</overWrite>
+                  <outputDirectory>${project.build.directory}/dubbo-javadoc</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <links>
+            <link>${javaee.api}</link>
+            <link>${spring.api}</link>
+            <link>${spring-boot.api}</link>
+          </links>
+          <offlineLinks>
+            <offlineLink>
+              <url>${project.build.directory}/dubbo-javadoc</url>
+              <location>${project.build.directory}/dubbo-javadoc</location>
+            </offlineLink>
+          </offlineLinks>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
+</project>
