@@ -87,6 +87,8 @@ public class CountLinesMojo extends AbstractMojo {
      *
      * @throws MojoExecutionException MojoExecutionException
      * @throws MojoFailureException MojoFailureException
+     * @see <a href="https://stackoverflow.com/questions/1033154/when-to-use-mojoexecutionexception-vs-mojofailureexception-in-maven">
+     * MojoExecutionException vs MojoFailureException</a>
      */
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (includes == null || includes.length == 0) {
