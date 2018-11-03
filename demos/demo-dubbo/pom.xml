@@ -18,6 +18,12 @@
     <main.basedir>${basedir}/../..</main.basedir>
   </properties>
 
+  <modules>
+    <module>api</module>
+    <module>provider</module>
+    <module>consumer</module>
+  </modules>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -35,12 +41,6 @@
     </dependency>
   </dependencies>
 
-  <modules>
-    <module>api</module>
-    <module>provider</module>
-    <module>consumer</module>
-  </modules>
-
   <build>
     <plugins>
       <plugin>
@@ -49,7 +49,7 @@
         <executions>
           <execution>
             <id>unpack-javadoc</id>
-            <phase>package</phase>
+            <phase>pre-site</phase>
             <goals>
               <goal>unpack</goal>
             </goals>

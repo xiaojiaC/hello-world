@@ -14,6 +14,10 @@
   <name>demo maven plugin</name>
   <description>Demo for Maven Plugin.</description>
 
+  <prerequisites>
+    <maven>3.0.0</maven>
+  </prerequisites>
+
   <properties>
     <main.basedir>${basedir}/../..</main.basedir>
   </properties>
@@ -67,6 +71,16 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <links>
+            <link>${maven-plugin.api}</link>
+            <link>${maven-plugin-tools.api}</link>
+          </links>
+        </configuration>
       </plugin>
     </plugins>
   </reporting>
