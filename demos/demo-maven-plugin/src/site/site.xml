@@ -35,16 +35,17 @@
       <link rel="stylesheet" href="@relativePath@/css/plain-links.css" />
     </head>
     <breadcrumbs>
-      <item name="Docs" href="" />
+      <item name="Hello World" href="https://xiaojiac.github.io/hello-world/" />
     </breadcrumbs>
 
     <menu name="Overview">
       <item name="Introduction" href="index.html"/>
       <item name="FAQ" href="faq.html"/>
       <item name="Cookbook" href="cookbook.html"/>
+      <item name="Sample:Docker Maven Plugin" href="asciidoc/docker-plugin-usage.html"/>
     </menu>
 
-    <menu ref="reports" inherit="bottom" />
+    <menu ref="reports" inherit="top" />
   </body>
 
   <poweredBy>

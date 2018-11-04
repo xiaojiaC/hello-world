@@ -91,9 +91,9 @@ public class GreetingMojo extends AbstractMojo
 使用`maven-plugin`packaging定义的标准构建生命周期中一些插件目标：
 
 ---|-----
-`compile | 编译插件的`Java`代码
-`process-classes | 提取数据以构建[插件描述符](https://maven.apache.org/ref/current/maven-plugin-api/plugin.html)
-`test | 运行插件的单元测试
+`compile` | 编译插件的`Java`代码
+`process-classes` | 提取数据以构建[插件描述符](https://maven.apache.org/ref/current/maven-plugin-api/plugin.html)
+`test` | 运行插件的单元测试
 `package` | 构建插件`jar`
 `install` | 在本地存储库中安装插件`jar`
 `deploy` | 将插件`jar`部署到远程存储库
