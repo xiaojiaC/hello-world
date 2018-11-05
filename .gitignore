@@ -54,7 +54,7 @@ atlassian-ide-plugin.xml
 .idea/httpRequests
 
 ### Eclipse template
-
+*.project
 .metadata
 bin/
 tmp/
