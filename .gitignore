@@ -63,6 +63,7 @@ tmp/
 *.swp
 *~.nib
 local.properties
+*.project
 .settings/
 .loadpath
 .recommenders

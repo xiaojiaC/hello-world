@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- http://maven.apache.org/archetype/archetype-models/archetype-descriptor/archetype-descriptor.html -->
+<archetype-descriptor name="demo-maven-archetype">
+  <fileSets>
+      <!--
+        __packageInPathFormat__: 预定义包路径变量
+        __artifactId__: 预定义工件id变量
+
+        filtered：是否对该文件集合应用属性替换
+        packaged：是否将该目录下的内容放置到生成项目相应目录的包路径下
+      -->
+      <fileSet filtered="true" packaged="true" encoding="UTF-8">
+      <directory>src/main/java</directory>
+      <includes>
+        <!-- 保留所有，包括空目录结构 -->
+        <include>**/**</include>
+        <!--<include>**/*.java</include>-->
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" packaged="false" encoding="UTF-8">
+      <directory>src/main/resources</directory>
+      <includes>
+        <include>**/**</include>
+        <!--<include>**/*.xml</include>-->
+        <!--<include>**/*.yml</include>-->
+        <!--<include>**/*.properties</include>-->
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" packaged="true" encoding="UTF-8">
+      <directory>src/test/java</directory>
+      <includes>
+        <include>**/*.java</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" packaged="false" encoding="UTF-8">
+      <directory>src/test/resources</directory>
+      <includes>
+        <include>**/*.xml</include>
+        <include>**/*.yml</include>
+        <include>**/*.properties</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+
+  <requiredProperties>
+    <requiredProperty key="groupId">
+      <defaultValue>xj.love.hj</defaultValue>
+    </requiredProperty>
+    <requiredProperty key="artifactId">
+      <defaultValue>demo</defaultValue>
+    </requiredProperty>
+  </requiredProperties>
+</archetype-descriptor>

@@ -32,6 +32,7 @@
   <modules>
     <module>demo-dubbo</module>
     <module>demo-maven-plugin</module>
+    <module>demo-maven-archetype</module>
   </modules>
 
   <dependencies>
