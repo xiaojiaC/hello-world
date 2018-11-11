@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+
+  <contextName>hello-world</contextName>
+  <property resource="logback.properties" />
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+       <pattern>${log.pattern}</pattern>
+    </encoder>
+  </appender>
+
+  <root level="${log.level}">
+    <appender-ref ref="STDOUT" />
+  </root>
+
+</configuration>

@@ -15,6 +15,11 @@
   <description>Demo for Maven archetype. Quickly build web applications by using SpringMVC,
     Hibernate, JPA, MySQL, Druid, Thymeleaf3, Bootstrap3, JQuery.</description>
 
+  <properties>
+    <main.basedir>${basedir}/../..</main.basedir>
+    <disable.checks>true</disable.checks>
+  </properties>
+
   <build>
     <plugins>
       <plugin>
