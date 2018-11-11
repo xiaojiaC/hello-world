@@ -5,5 +5,8 @@
 <suppressions>
   <suppress files="[.*Application|.+Controller]\.java" checks="JavadocMethod" />
   <suppress files=".+Mojo\.java" checks="JavadocType" />
-  <suppress files="[\\/]src[\\/]test[\\/]java[\\/]" checks="Javadoc*|ImportControl" />
+  <suppress files="[\\/]src[\\/]test[\\/]java[\\/]" checks="Javadoc*|MagicNumber|ImportControl" />
+  <!-- 为了测试一些OOM问题，可能需要引入sun.misc包 -->
+  <suppress files=".+OOM\.java" checks="IllegalImport" />
+  <suppress files="[\\/]demo-hello-java[\\/]" checks="MagicNumber" />
 </suppressions>

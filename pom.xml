@@ -141,4 +141,41 @@
       </build>
     </profile>
   </profiles>
+
+  <repositories>
+    <repository>
+      <id>maven-release</id>
+      <name>Nexus Releases</name>
+      <url>http://127.0.0.1:8081/repository/sunny.releases/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>maven-snapshot</id>
+      <name>Nexus Snapshots</name>
+      <url>http://127.0.0.1:8081/repository/sunny.snapshot/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>maven-release</id>
+      <name>Nexus Releases</name>
+      <url>http://127.0.0.1:8081/repository/sunny.releases/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>maven-snapshot</id>
+      <name>Nexus Snapshots</name>
+      <url>http://127.0.0.1:8081/repository/sunny.snapshot/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
 </project>

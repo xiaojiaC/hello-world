@@ -38,6 +38,7 @@
       <property name="minLineCount" value="2"/>
       <property name="allowedAnnotations" value="Override, Test"/>
       <property name="allowThrowsTagsForSubclasses" value="true"/>
+      <property name="ignoreMethodNamesRegex" value="^main$"/>
     </module>
     <!-- 检查某个变量的Javadoc -->
     <module name="JavadocVariable">
@@ -50,9 +51,9 @@
       <property name="checkFirstSentence" value="false"/>
     </module>
 
-    <!-- 每行不超过100个字-->
+    <!-- 每行不超过120个字-->
     <module name="LineLength">
-      <property name="max" value="100"/>
+      <property name="max" value="120"/>
       <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
     </module>
     <!-- 方法不超过80行 -->
@@ -64,7 +65,7 @@
     </module>
     <!-- 方法的参数个数不超过5个 -->
     <module name="ParameterNumber">
-      <property name="max" value="6"/>
+      <property name="max" value="5"/>
     </module>
 
     <!-- 包名的检查 -->
@@ -155,7 +156,9 @@
       <!-- 是否是大小写敏感的,确省true -->
       <property name="caseSensitive" value="true"/>
       <!-- 类型导入和静态导入之间的相对顺序的策略,确省为底部静态导入 -->
-      <property name="option" value="under"/>
+      <property name="option" value="bottom"/>
+      <!-- 静态导入组是否应至少由一个空行或注释分隔，并且不在内部分隔 -->
+      <property name="separatedStaticGroups" value="true"/>
       <!-- 位于顶部或底部的静态导入是否在组内排序 -->
       <property name="sortStaticImportsAlphabetically" value="true"/>
     </module>

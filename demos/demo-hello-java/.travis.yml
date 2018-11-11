@@ -1,0 +1,33 @@
+sudo: false
+
+language: java
+
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
+
+jdk:
+  - oraclejdk8
+
+script:
+  - mvn clean install -Dmaven.javadoc.skip=true -B -V
+
+cache:
+  apt: true
+  directories:
+    - $HOME/.m2
+
+branches:
+  only:
+    - master
+    - /^release.*$/
+    - develop
+
+notifications:
+  email:
+    recipients:
+      - xiaojia1100@163.com
+  slack:
+    on_success: never
+    on_failure: always
