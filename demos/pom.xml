@@ -33,6 +33,7 @@
     <module>demo-dubbo</module>
     <module>demo-maven-plugin</module>
     <module>demo-maven-archetype</module>
+    <module>demo-spring-session</module>
   </modules>
 
   <dependencies>

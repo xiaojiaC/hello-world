@@ -1,0 +1,1220 @@
+= Spring Session
+Version 2.0.7.RELEASE
+:doctype: book
+:toc: left
+
+Spring Session提供了用于管理用户会话信息的API和实现。
+
+== 简介
+
+Spring Session提供了用于管理用户会话信息的API和实现，同时还使支持集群会话变得微不足道，而不依赖于特定于应用程序容器的解决方案。
+它还提供透明集成：
+
+- https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#httpsession[HttpSession] -允许以应用程序容器（即Tomcat）中立的方式替换  `HttpSession` ，
+支持在头文件中提供会话ID以使用RESTful API。
+- https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#websocket[WebSocket] -提供在接收WebSocket消息时保持 `HttpSession` 活跃的能力。
+- https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#websession[WebSession] -允许以应用程序容器中立方式替换Spring WebFlux的 `WebSession` 。
+
+== 2.0中有什么新功能
+
+以下是Spring Session 2.0新增内容的重点。您可以通过参考以下版本的更改日志找到所有的新特性：
+https://github.com/spring-projects/spring-session/milestone/17?closed=1[2.0.0.M1],
+https://github.com/spring-projects/spring-session/milestone/22?closed=1[2.0.0.M2],
+https://github.com/spring-projects/spring-session/milestone/23?closed=1[2.0.0.M3],
+https://github.com/spring-projects/spring-session/milestone/24?closed=1[2.0.0.M4],
+https://github.com/spring-projects/spring-session/milestone/25?closed=1[2.0.0.M5],
+https://github.com/spring-projects/spring-session/milestone/26?closed=1[2.0.0.RC1],
+https://github.com/spring-projects/spring-session/milestone/27?closed=1[2.0.0.RC2], 和
+https://github.com/spring-projects/spring-session/milestone/30?closed=1[2.0.0.RELEASE].
+
+- 升级到Java 8和Spring Framework 5作为基线
+- 添加了使用 https://github.com/spring-projects/spring-session/issues/816[Redis `ReactiveSessionRepository`]
+https://github.com/spring-projects/spring-session/issues/683[管理Spring WebFlux的 `WebSession` 的支持]
+- https://github.com/spring-projects/spring-session/issues/768[提取 `SessionRepository` 实现]以分离模块
+- 改进了 https://github.com/spring-projects/spring-session/issues/682[`Session`]和
+https://github.com/spring-projects/spring-session/issues/809[`SessionRepository`] API
+- 为所有支持的会话存储提供改进和协调的配置支持
+- https://github.com/spring-projects/spring-session/pull/713[添加了使用 `SessionCookieConfig` 配置默认 `CookieSerializer` 的支持]
+- 大量的性能改进和错误修复
+
+== 样例和指南
+
+如果您希望开始使用Spring Session，最好的起点是我们的示例应用程序。
+
+.使用Spring Boot的示例应用程序
+|===
+| 源 |说明 | 指南
+
+| https://github.com/spring-projects/spring-session/tree/2.0.7.RELEASE/samples/boot/redis[HttpSession with Redis]
+| 演示如何使用Spring Session将HttpSession替换为Redis。
+| https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/guides/boot-redis.html[HttpSession with Redis Guide]
+
+| https://github.com/spring-projects/spring-session/tree/2.0.7.RELEASE/samples/boot/findbyusername[Find by Username]
+| 演示如何使用Spring Session按用户名查找会话。
+| https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/guides/boot-findbyusername.html[Find by Username Guide]
+
+| https://github.com/spring-projects/spring-session/tree/2.0.7.RELEASE/samples/boot/websocket[WebSockets]
+| 演示如何将Spring Session与WebSockets一起使用。
+| https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/guides/boot-websocket.html[WebSockets Guide]
+
+| https://github.com/spring-projects/spring-session/tree/2.0.7.RELEASE/samples/boot/webflux[WebFlux]
+| 演示如何使用Spring Session用Redis替换Spring WebFlux的WebSession。
+| TBD
+
+| https://github.com/spring-projects/spring-session/tree/2.0.7.RELEASE/samples/boot/redis-json[HttpSession with Redis JSON serialization]
+| 演示如何使用Spring Session利用Redis JSON序列化替换HttpSession。
+| TBD
+|===
+
+.使用基于Spring Java的配置的示例应用程序
+|===
+| 源 |说明 | 指南
+
+| https://github.com/spring-projects/spring-session/tree/2.0.7.RELEASE/samples/javaconfig/redis[HttpSession with Redis]
+| 演示如何使用Spring Session将HttpSession替换为Redis。
+| https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/guides/java-redis.html[HttpSession with Redis Guide]
+
+| https://github.com/spring-projects/spring-session/tree/2.0.7.RELEASE/samples/javaconfig/jdbc[HttpSession with JDBC]
+| 演示如何使用Spring Session将HttpSession替换为关系数据库存储。
+| https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/guides/java-jdbc.html[HttpSession with JDBC Guide]
+
+| https://github.com/spring-projects/spring-session/tree/2.0.7.RELEASE/samples/javaconfig/hazelcast[HttpSession with Hazelcast]
+| 演示如何使用Spring Session将Hattcast替换为HttpSession。
+| https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/guides/java-hazelcast.html[HttpSession with Hazelcast Guide]
+
+| https://github.com/spring-projects/spring-session/tree/2.0.7.RELEASE/samples/javaconfig/custom-cookie[Custom Cookie]
+| 演示如何使用Spring Session并自定义cookie。
+| https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/guides/java-custom-cookie.html[Custom Cookie Guide]
+
+| https://github.com/spring-projects/spring-session/tree/2.0.7.RELEASE/samples/javaconfig/security[Spring Security]
+| 演示如何将Spring Session与现有的Spring Security应用程序一起使用。
+| https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/guides/java-security.html[Spring Security Guide]
+
+| https://github.com/spring-projects/spring-session/tree/2.0.7.RELEASE/samples/javaconfig/rest[REST]
+| 演示如何在REST应用程序中使用Spring Session以支持使用Header进行身份验证。
+| https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/guides/java-rest.html[REST Guide]
+|===
+
+.使用基于Spring XML的配置的示例应用程序
+|===
+| 源 |说明 | 指南
+
+| https://github.com/spring-projects/spring-session/tree/2.0.7.RELEASE/samples/xml/redis[HttpSession with Redis]
+| 演示如何使用Spring Session将HttpSession替换为Redis。
+| https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/guides/xml-redis.html[HttpSession with Redis Guide]
+
+| https://github.com/spring-projects/spring-session/tree/2.0.7.RELEASE/samples/xml/jdbc[HttpSession with JDBC]
+| 演示如何使用Spring Session将HttpSession替换为关系数据库存储。
+| https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/guides/xml-jdbc.html[HttpSession with JDBC Guide]
+|===
+
+.其他样例应用
+|===
+| 源 |说明 | 指南
+
+| https://github.com/spring-projects/spring-session/tree/2.0.7.RELEASE/samples/misc/grails3[Grails 3]
+| 演示如何使用Grails 3的Spring Session。
+| https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/guides/grails3.html[Grails 3 Guide]
+
+| https://github.com/spring-projects/spring-session/tree/2.0.7.RELEASE/samples/misc/hazelcast[Hazelcast]
+| 演示如何在Java EE应用程序中使用Spring Session和Hazelcast。
+| TBD
+|===
+
+== Spring Session模块
+
+在Spring Session 1.x中，所有Spring Session的 `SessionRepository` 实现都在 `spring-session` 工件中可用。虽然方便，但随着更多功能和 `SessionRepository` 实现添加到项目中，
+这种方法无法长期持续。
+
+从Spring Session 2.0开始，该项目已经拆分为Spring Session Core模块，以及其他几个带有 `SessionRepository` 实现和与特定数据存储相关功能的模块。
+Spring Data的用户会发现这种安排很熟悉，Spring Session Core模块扮演的角色相当于Spring Data Commons，并提供核心功能和API以及其他包含数据存储特定实现的模块。
+作为此拆分的一部分，Spring Session Data MongoDB和Spring Session Data GemFire模块被移动到单独的存储库，因此项目的存储库/模块的情况如下：
+
+* https://github.com/spring-projects/spring-session[ `spring-session` 仓库]
+** Spring Session Core，Spring Session Data Redis，Spring Session JDBC和Spring Session Hazelcast模块
+
+* https://github.com/spring-projects/spring-session-data-mongodb[ `spring-session-data-mongodb` 仓库]
+** Spring Session Data MongoDB模块
+
+* https://github.com/spring-projects/spring-session-data-geode[ `spring-session-data-geode` 仓库]
+** Spring Session Data Geode模块
+
+最后，Spring Session现在还提供了Maven BOM（如“物料清单”）模块，以帮助用户解决版本管理问题：
+
+* https://github.com/spring-projects/spring-session-bom[ `spring-session-bom` 仓库]
+** Spring Session BOM模块
+
+== HttpSession集成
+
+Spring Session提供与 `HttpSession` 的透明集成。这意味着开发人员可以使用Spring Session支持的实现来切换 `HttpSession` 实现。
+
+=== 为什么选择Spring Session和HttpSession？
+
+我们已经提到Spring Session提供了与 `HttpSession` 的透明集成，但是我们从中获得了什么好处呢？
+
+- **集群会话** - Spring Session使得支持 https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#httpsession-redis[集群会话]变得微不足道，
+而不依赖于特定于应用程序容器的解决方案。
+- **RESTful APIs** - Spring Session允许在头文件中提供会话ID以使用 https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#httpsession-rest[RESTful API]
+
+=== HttpSession和Redis
+
+通过在使用 `HttpSession` 的任何东西之前添加Servlet过滤器来启用使用Spring Session和 `HttpSession`。您可以选择启用此功能：
+
+- https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#httpsession-redis-jc[Java Based Configuration]
+- https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#httpsession-redis-xml[XML Based Configuration]
+
+==== Redis基于Java的配置
+
+本节介绍如何使用Redis使用基于Java的配置来支持 `HttpSession`。
+
+NOTE: https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#samples[HttpSession示例]提供了有关如何使用Java配置集成Spring Session和 `HttpSession` 的工作示例。
+您可以在下面阅读集成的基本步骤，但建议您在与自己的应用程序集成时遵循详细的HttpSession指南。
+
+===== Spring Java配置
+
+添加所需的依赖项后，我们可以创建Spring配置。Spring配置负责创建一个Servlet过滤器，该过滤器用Spring Session支持的实现替换 `HttpSession` 实现。添加以下Spring配置：
+
+[source,java]
+----
+@EnableRedisHttpSession // <1>
+public class Config {
+
+    @Bean
+    public LettuceConnectionFactory connectionFactory() {
+        return new LettuceConnectionFactory(); // <2>
+    }
+}
+----
+
+<1>  `@EnableRedisHttpSession` 注释创建一个名为 `springSessionRepositoryFilter` 的Spring Bean，它实现了Filter。过滤器负责替换由Spring Session支持的 `HttpSession` 实现。
+在这种情况下，Spring Session由Redis提供支持。
+<2> 我们创建了一个 `RedseConnectionFactory`，它将Spring Session连接到Redis Server。我们将连接配置为在默认端口上连接到localhost(6379)。有关配置Spring Data Redis的更多信息，
+请参阅 https://docs.spring.io/spring-data/data-redis/docs/2.0.11.RELEASE/reference/html/[参考文档]。
+
+===== Java Servlet容器初始化
+
+我们的 https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#httpsession-spring-configuration[Spring配置]创建了一个名为 `springSessionRepositoryFilter`
+的Spring Bean，它实现了Filter。 `springSessionRepositoryFilter` bean负责将 `HttpSession` 替换为Spring Session支持的自定义实现。
+
+为了使我们的Filter能够发挥其魔力，Spring需要加载我们的 `Config` 类。最后，我们需要确保我们的Servlet容器（即Tomcat）对每个请求都使用 `springSessionRepositoryFilter`。
+幸运的是，Spring Session提供了一个名为 `AbstractHttpSessionApplicationInitializer` 的实用程序类，使这两个步骤都非常简单。参见下面的一个例子：
+
+.src/main/java/sample/Initializer.java
+[source,java]
+----
+public class Initializer extends AbstractHttpSessionApplicationInitializer { // <1>
+
+    public Initializer() {
+        super(Config.class); // <2>
+    }
+}
+----
+
+NOTE: 我们类名（Initializer）并不重要。重要的是我们扩展了 `AbstractHttpSessionApplicationInitializer`。
+
+<1> 第一步是扩展 `AbstractHttpSessionApplicationInitializer`。这确保了名为 `springSessionRepositoryFilter` 的Spring Bean为每个请求注册了我们的Servlet容器。
+<2>  `AbstractHttpSessionApplicationInitializer` 还提供了一种机制，可以轻松确保Spring加载我们的 `Config`。
+
+==== 基于Redis XML的配置
+
+略
+
+=== HttpSession和JDBC
+
+==== JDBC基于Java的配置
+
+本节介绍如何使用关系数据库来使用基于Java的配置来支持 `HttpSession`。
+
+NOTE: https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#samples[HttpSession JDBC示例]提供了有关如何使用Java配置集成Spring Session和 `HttpSession`
+的工作示例。您可以在下面阅读集成的基本步骤，但是在与您自己的应用程序集成时，建议您遵循详细的HttpSession JDBC指南。
+
+===== Spring Java配置
+
+添加所需的依赖项后，我们可以创建Spring配置。Spring配置负责创建一个Servlet过滤器，该过滤器用Spring Session支持的实现替换HttpSession实现。添加以下Spring配置：
+
+[source,java]
+----
+@EnableJdbcHttpSession // <1>
+public class Config {
+
+    @Bean
+    public EmbeddedDatabase dataSource() {
+        return new EmbeddedDatabaseBuilder() // <2>
+                .setType(EmbeddedDatabaseType.H2)
+                .addScript("org/springframework/session/jdbc/schema-h2.sql").build();
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager(DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource); // <3>
+    }
+
+}
+----
+
+<1>  `@EnableJdbcHttpSession` 注解创建一个名为 `springSessionRepositoryFilter` 的Spring Bean，它实现了Filter。过滤器负责替换由Spring Session支持的 `HttpSession` 实现。
+在这种情况下，Spring Session由关系数据库支持。
+<2> 我们创建了一个 `dataSource`，它将Spring Session连接到H2数据库的嵌入式实例。我们将H2数据库配置为使用Spring Session中包含的SQL脚本创建数据库表。
+<3> 我们创建一个 `transactionManager` 来管理先前配置的 `dataSource` 的事务。
+
+有关如何配置与数据访问相关问题的其他信息，请参阅 https://docs.spring.io/spring/docs/5.0.10.RELEASE/spring-framework-reference/data-access.html[Spring Framework
+Reference Documentation]。
+
+===== Java Servlet容器初始化
+
+https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#httpsession-spring-configuration[Spring配置]创建了一个名为 `springSessionRepositoryFilter`
+的Spring Bean，它实现了Filter。 `springSessionRepositoryFilter` bean负责将 `HttpSession` 替换为Spring Session支持的自定义实现。
+
+为了使我们的Filter能够发挥其魔力，Spring需要加载我们的 `Config` 类。最后，我们需要确保我们的Servlet容器（即Tomcat）对每个请求都使用 `springSessionRepositoryFilter`。
+幸运的是，Spring Session提供了一个名为 `AbstractHttpSessionApplicationInitializer` 的实用程序类，使这两个步骤都非常简单。参见下面的例子：
+
+.src/main/java/sample/Initializer.java
+[source,java]
+----
+public class Initializer extends AbstractHttpSessionApplicationInitializer { // <1>
+
+    public Initializer() {
+        super(Config.class); // <2>
+    }
+}
+----
+
+NOTE: 我们类名（Initializer）并不重要。重要的是我们扩展了 `AbstractHttpSessionApplicationInitializer`。
+
+<1> 第一步是扩展 `AbstractHttpSessionApplicationInitializer`。这确保了名为 `springSessionRepositoryFilter` 的Spring Bean为每个请求注册了我们的Servlet容器。
+<2>  `AbstractHttpSessionApplicationInitializer` 还提供了一种机制，可以轻松确保Spring加载我们的 `Config`。
+
+==== 基于JDBC XML的配置
+
+略
+
+==== 基于JDBC Spring Boot的配置
+
+本节介绍在使用Spring Boot时如何使用关系数据库来支持 `HttpSession`。
+
+NOTE: https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#samples[HttpSession JDBC Spring Boot Sample]提供了一个如何使用Spring Boot集成
+Spring Session和 `HttpSession` 的工作示例。您可以在下面阅读集成的基本步骤，但是在与您自己的应用程序集成时，建议您遵循详细的HttpSession JDBC Spring Boot Guide。
+
+===== Spring Boot配置
+
+添加所需的依赖项后，我们可以创建Spring Boot配置。由于支持一流的自动配置，设置由关系数据库支持的Spring Session就像向 `application.properties` 添加单个配置属性一样简单：
+
+.src/main/resources/application.properties
+[source]
+----
+spring.session.store-type=jdbc #Session存储类型
+----
+
+Spring Boot将应用自动配置这相当于手动添加 `@EnableJdbcHttpSession` 注解。这将创建一个名为 `springSessionRepositoryFilter` 的Spring Bean，它实现了Filter。
+过滤器负责替换由Spring Session支持的 `HttpSession` 实现。
+
+使用 `application.properties` 可以进一步自定义：
+
+.src/main/resources/application.properties
+[source]
+----
+server.servlet.session.timeout= #会话超时时间。如果未指定持续时间后缀，则将使用秒
+spring.session.jdbc.initialize-schema=embedded #数据库Schema初始化模式
+spring.session.jdbc.schema=classpath:org/springframework/session/jdbc/schema-@@platform@@.sql #用于初始化数据库Schema的SQL文件的路径
+spring.session.jdbc.table-name=SPRING_SESSION #用于存储会话的数据库表的名称
+----
+
+有关更多信息，请参阅Spring Boot文档的 https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-session[Spring Session]部分。
+
+===== 配置DataSource
+
+Spring Boot自动创建一个 `DataSource`，将Spring Session连接到H2数据库的嵌入式实例。在生产环境中，您需要确保更新配置以指向关系数据库。
+例如，您可以在 `application.properties` 中包含以下内容:
+
+.src/main/resources/application.properties
+[source]
+----
+spring.datasource.url= # JDBC URL of the database.
+spring.datasource.username= # Login username of the database.
+spring.datasource.password= # Login password of the database.
+----
+
+有关更多信息，请参阅Spring Boot文档的 https://docs.spring.io/spring-boot/docs/2.0.5.RELEASE/reference/htmlsingle/#boot-features-configure-datasource[配置DataSource]部分。
+
+===== Servlet容器初始化
+
+我们的Spring Boot配置创建了一个名为 `springSessionRepositoryFilter` 的Spring Bean，它实现了Filter。 `springSessionRepositoryFilter` bean负责将HttpSession替换为
+Spring Session支持的自定义实现。
+
+为了使我们的Filter能够发挥其魔力，Spring需要加载我们的 `Config` 类。最后，我们需要确保我们的Servlet容器（即Tomcat）对每个请求都使用 `springSessionRepositoryFilter`。
+幸运的是，Spring Boot为我们处理了这两个步骤。
+
+=== HttpSession和Hazelcast
+
+略
+
+=== HttpSession集成如何工作
+
+幸运的是， `HttpSession` 和 `HttpServletRequest`（用于获取 `HttpSession` 的API）都是接口。这意味着我们可以为每个API提供我们自己的实现。
+
+NOTE: 本节描述Spring Session如何提供与 `HttpSession` 的透明集成。目的是让用户能够理解幕后发生的事情。此功能已集成，您无需自己实现此逻辑。
+
+首先，我们创建一个自定义的 `HttpServletRequest`，它返回 `HttpSession` 的自定义实现。它看起来像下面这样：
+
+[source,java]
+----
+public class SessionRepositoryRequestWrapper extends HttpServletRequestWrapper {
+
+    public SessionRepositoryRequestWrapper(HttpServletRequest original) {
+        super(original);
+    }
+
+    public HttpSession getSession() {
+        return getSession(true);
+    }
+
+    public HttpSession getSession(boolean createNew) {
+        // create an HttpSession implementation from Spring Session
+    }
+
+    // ... other methods delegate to the original HttpServletRequest ...
+}
+----
+
+任何返回 `HttpSession` 的方法都会被覆盖。所有其他方法都由 `HttpServletRequestWrapper` 实现，并简单地委托给原始的 `HttpServletRequest` 实现。
+
+我们使用名为 `SessionRepositoryFilter` 的servlet Filter替换 `HttpServletRequest` 实现。伪代码可以在下面找到：
+
+[source,java]
+----
+public class SessionRepositoryFilter implements Filter {
+
+    public doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        SessionRepositoryRequestWrapper customRequest =
+            new SessionRepositoryRequestWrapper(httpRequest);
+
+        chain.doFilter(customRequest, response, chain);
+    }
+
+    // ...
+}
+----
+
+通过将自定义 `HttpServletRequest` 实现传递到 `FilterChain`，我们确保在Filter使用自定义 `HttpSession` 实现之后调用的任何内容。这突出了为什么必须将Spring Session
+的 `SessionRepositoryFilter` 放在与 `HttpSession` 交互的任何内容之前。
+
+=== HttpSession和RESTful API
+
+Spring Session可以通过允许在请求头中提供会话来使用RESTful API。
+
+NOTE: https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#samples[REST示例]提供了有关如何在REST应用程序中使用Spring Session以支持使用标头
+进行身份验证的工作示例。您可以按照以下集成的基本步骤进行操作，但建议您在与自己的应用程序集成时遵循详细的REST指南。
+
+==== Spring配置
+
+添加所需的依赖项后，我们可以创建Spring配置。Spring配置负责创建一个Servlet过滤器，该过滤器用Spring Session支持的实现替换 `HttpSession` 实现。添加以下Spring配置：
+
+[source,java]
+----
+@Configuration
+@EnableRedisHttpSession // <1>
+public class HttpSessionConfig {
+
+    @Bean
+    public LettuceConnectionFactory connectionFactory() {
+        return new LettuceConnectionFactory(); // <2>
+    }
+
+    @Bean
+    public HttpSessionIdResolver httpSessionIdResolver() {
+        return HeaderHttpSessionIdResolver.xAuthToken(); // <3>
+    }
+}
+----
+
+<1>  `@EnableRedisHttpSession` 注释创建一个名为 `springSessionRepositoryFilter` 的Spring Bean，它实现了Filter。过滤器负责替换由Spring Session支持的 `HttpSession`
+实现。在这种情况下，Spring Session由Redis提供支持。
+<2> 我们创建了一个 `RedseConnectionFactory`，它将Spring Session连接到Redis Server。我们将连接配置为在默认端口上连接到localhost（6379）有关配置Spring Data Redis的
+更多信息，请参阅 https://docs.spring.io/spring-data/data-redis/docs/2.0.11.RELEASE/reference/html/[参考文档]。
+<3> 我们定制Spring Session的 `HttpSession` 集成以使用HTTP头来传达当前会话信息而不是Cookie。
+
+==== Servlet容器初始化
+
+我们的Spring配置创建了一个名为 `springSessionRepositoryFilter` 的Spring Bean，它实现了Filter。 `springSessionRepositoryFilter` bean负责将 `HttpSession` 替换为
+Spring Session支持的自定义实现。
+
+为了使我们的Filter能够发挥其魔力，Spring需要加载我们的 `Config` 类。我们在Spring  `MvcInitializer` 中提供配置，如下所示：
+
+.src/main/java/sample/mvc/MvcInitializer.java
+[source,java]
+----
+@Override
+protected Class<?>[] getRootConfigClasses() {
+    return new Class[] { SecurityConfig.class, HttpSessionConfig.class };
+}
+----
+
+最后，我们需要确保我们的Servlet容器（即Tomcat）对每个请求都使用 `springSessionRepositoryFilter`。幸运的是，Spring Session提供了一个名为
+`AbstractHttpSessionApplicationInitializer` 的实用程序类，这使得这非常简单。只需继承该类并使用默认的构造函数，如下所示：
+
+.src/main/java/sample/Initializer.java
+[source,java]
+----
+public class Initializer extends AbstractHttpSessionApplicationInitializer {
+
+}
+----
+
+=== HttpSessionListener
+
+Spring Session通过声明 `SessionEventHttpSessionListenerAdapter` 将 `SessionDestroyedEvent` 和 `SessionCreatedEvent` 转换为 `HttpSessionEvent`
+来支持 `HttpSessionListener`。要使用此支持，您需要：
+
+- 确保您的 `SessionRepository` 实现支持并配置为触发 `SessionDestroyedEvent` 和 `SessionCreatedEvent`。
+- 将 `SessionEventHttpSessionListenerAdapter` 配置为Spring bean。
+- 将每个 `HttpSessionListener` 注入 `SessionEventHttpSessionListenerAdapter`。
+
+如果您正在使用 https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#httpsession-redis[HttpSession中使用Redis]文档记录的配置支持，那么您需要
+做的就是将每个 `HttpSessionListener` 注册为bean。例如，假设您要支持Spring Security的并发控制，并且需要使用 `HttpSessionEventPublisher`，您只需将
+`HttpSessionEventPublisher` 作为bean添加即可。在Java配置中，这可能如下所示：
+
+[source,java]
+----
+@Configuration
+@EnableRedisHttpSession
+public class RedisHttpSessionConfig {
+
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
+    }
+
+    // ...
+}
+----
+
+在XML配置中，这可能如下所示：
+
+[source,xml]
+----
+<bean class="org.springframework.security.web.session.HttpSessionEventPublisher"/>
+----
+
+== WebSocket集成
+
+略
+
+== WebSession集成
+
+略
+
+== Spring Security集成
+
+Spring Session提供与Spring Security的集成。
+
+=== Spring Security Remember-Me支持
+
+Spring Session提供了与 https://docs.spring.io/spring-security/site/docs/5.0.9.RELEASE/reference/htmlsingle/#remember-me[Spring Security的Remember-Me身份验证]的集成。支持：
+
+- 更改会话到期时长
+- 确保会话cookie在 `Integer.MAX_VALUE` 到期。Cookie到期时间设置为最大可能值，因为cookie仅在创建会话时设置。如果将其设置为与会话到期时相同的值，则会在用户使用会话时续订会话，
+但不会更新cookie到期，从而使到期时间被修复。
+
+要在Java配置中使用Spring Security配置Spring Session，请使用以下指南：
+
+[source,java]
+----
+@Override
+protected void configure(HttpSecurity http) throws Exception {
+    http
+        // ... additional configuration ...
+        .rememberMe()
+            .rememberMeServices(rememberMeServices());
+}
+
+@Bean
+public SpringSessionRememberMeServices rememberMeServices() {
+    SpringSessionRememberMeServices rememberMeServices =
+            new SpringSessionRememberMeServices();
+    // optionally customize
+    rememberMeServices.setAlwaysRemember(true);
+    return rememberMeServices;
+}
+----
+
+基于XML的配置看起来像这样：
+
+[source,xml]
+----
+<security:http>
+    <!-- ... -->
+    <security:form-login />
+    <security:remember-me services-ref="rememberMeServices"/>
+</security:http>
+
+<bean id="rememberMeServices"
+    class="org.springframework.session.security.web.authentication.SpringSessionRememberMeServices"
+    p:alwaysRemember="true"/>
+----
+
+=== Spring Security并发会话控制
+
+Spring Session提供与Spring Security的集成，以支持其并发会话控制。这允许限制单个用户可以同时拥有的活动会话数，但与默认的Spring Security支持不同，这也适用于集群环境。
+这是通过提供Spring Security的 `SessionRegistry` 接口的自定义实现来完成的。
+
+使用Spring Security的Java配置DSL时，您可以通过 `SessionManagementConfigurer` 配置自定义 `SessionRegistry`，如下所示：
+
+[source,java]
+----
+@Configuration
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private FindByIndexNameSessionRepository<Session> sessionRepository;
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        // @formatter:off
+        http
+            // other config goes here...
+            .sessionManagement()
+                .maximumSessions(2)
+                .sessionRegistry(sessionRegistry());
+        // @formatter:on
+    }
+
+    @Bean
+    SpringSessionBackedSessionRegistry sessionRegistry() {
+        return new SpringSessionBackedSessionRegistry<>(this.sessionRepository);
+    }
+}
+----
+
+这假定您还配置了Spring Session以提供返回Session实例的 `FindByIndexNameSessionRepository`。
+
+基于XML的配置看起来像这样：
+
+[source,xml]
+----
+<security:http>
+    <!-- other config goes here... -->
+    <security:session-management>
+        <security:concurrency-control max-sessions="2" session-registry-ref="sessionRegistry"/>
+    </security:session-management>
+</security:http>
+
+<bean id="sessionRegistry"
+      class="org.springframework.session.security.SpringSessionBackedSessionRegistry">
+    <constructor-arg ref="sessionRepository"/>
+</bean>
+----
+
+这假设您的Spring Session  `SessionRegistry` bean名为 `sessionRegistry`，它是所有 `SpringHttpSessionConfiguration` 子类使用的名称。
+
+=== 限制
+
+Spring Session的Spring Security的 `SessionRegistry` 接口的实现不支持 `getAllPrincipals` 方法，因为使用Spring Session无法检索此信息。Spring Security从不调用此方法，
+因此这仅影响访问 `SessionRegistry` 本身的应用程序。
+
+== API文档
+
+您可以在线浏览完整的 https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/api/[Javadoc]。关键API如下所述：
+
+=== Session
+
+`Session` 是名称键值对的简化映射。
+
+典型用法可能如下所示：
+
+[source,java]
+----
+public class RepositoryDemo<S extends Session> {
+    private SessionRepository<S> repository; // <1>
+
+    public void demo() {
+        S toSave = this.repository.createSession(); // <2>
+
+        // <3>
+        User rwinch = new User("rwinch");
+        toSave.setAttribute(ATTR_USER, rwinch);
+
+        this.repository.save(toSave); // <4>
+
+        S session = this.repository.findById(toSave.getId()); // <5>
+
+        // <6>
+        User user = session.getAttribute(ATTR_USER);
+        assertThat(user).isEqualTo(rwinch);
+    }
+
+    // ... setter methods ...
+}
+----
+
+<1> 我们使用继承 `Session` 的泛型类型 `S` 创建一个 `SessionRepository` 实例。泛型类型在我们的类中定义。
+<2> 我们使用 `SessionRepository` 创建一个新的 `Session`，并将其分配给 `S` 类型的变量。
+<3> 我们与 `Session` 交互。在我们的示例中，我们演示了如何将用户保存到 `Session` 中。
+<4> 我们现在保存 `Session`。这就是我们需要通用类型 `S` 的原因。 `SessionRepository` 仅允许保存使用相同 `SessionRepository` 创建或检索的 `Session` 实例。
+这允许 `SessionRepository` 进行特定于实现的优化（即:仅编写已更改的属性）。
+<5> 我们从 `SessionRepository` 中检索 `Session`。
+<6> 我们从 `Session` 中获取持久化用户，而无需显式转换属性。
+
+`Session` API还提供与 `Session` 实例的到期相关的属性。
+
+典型用法可能如下所示：
+
+[source,java]
+----
+public class ExpiringRepositoryDemo<S extends Session> {
+    private SessionRepository<S> repository; // <1>
+
+    public void demo() {
+        S toSave = this.repository.createSession(); // <2>
+        // ...
+        toSave.setMaxInactiveInterval(Duration.ofSeconds(30)); // <3>
+
+        this.repository.save(toSave); // <4>
+
+        S session = this.repository.findById(toSave.getId()); // <5>
+        // ...
+    }
+
+    // ... setter methods ...
+}
+----
+
+<1> 我们使用继承 `Session` 的泛型类型 `S` 创建一个 `SessionRepository` 实例。泛型类型在我们的类中定义。
+<2> 我们使用 `SessionRepository` 创建一个新的 `Session`，并将其分配给 `S` 类型的变量。
+<3> 我们与 `Session` 交互。在我们的示例中，我们演示了更新 `Session` 在到期之前可以处于非活动状态的时间。
+<4> 我们现在保存 `Session`。这就是我们需要通用类型 `S` 的原因。 `SessionRepository` 仅允许保存使用相同 `SessionRepository` 创建或检索的 `Session` 实例。
+这允许 `SessionRepository` 进行特定于实现的优化（即:仅编写已更改的属性）。保存会话时，上次访问的时间会自动更新。
+<5> 我们从 `SessionRepository` 中检索 `Session`。如果会话已过期，则结果为null。
+
+=== SessionRepository
+
+`SessionRepository` 负责创建，检索和持久化 `Session` 实例。
+
+如果可能，开发人员不应直接与 `SessionRepository` 或 `Session` 交互。相反，开发人员应该更喜欢通过
+https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#httpsession[HttpSession]和
+https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#websocket[WebSocket]集成间接与 `SessionRepository` 和 `Session` 交互。
+
+=== FindByIndexNameSessionRepository
+
+Spring Session最基本的使用 `Session` 的API是 `SessionRepository`。此API有意非常简单，因此很容易提供具有基本功能的其他实现。
+
+一些 `SessionRepository` 实现也可以选择实现 `FindByIndexNameSessionRepository`。例如，Spring的Redis支持实现了 `FindByIndexNameSessionRepository`。
+
+`FindByIndexNameSessionRepository` 添加一个方法来查找特定用户的所有会话。这是通过确保使用用户名填充名称为 `FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME`
+ 的会话属性来完成的。开发人员有责任确保填充属性，因为Spring Session不知道正在使用的身份验证机制。下面是一个如何使用它的示例：
+
+[source,java]
+----
+String username = "username";
+this.session.setAttribute(
+        FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME, username);
+----
+
+NOTE:  `FindByIndexNameSessionRepository` 的一些实现将提供钩子以自动索引其他会话属性。例如，许多实现将自动确保使用索引名称
+`FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME` 索引当前的Spring Security用户名。
+
+会话编入索引后，可以使用以下内容找到它：
+
+[source,java]
+----
+String username = "username";
+Map<String, Session> sessionIdToSession = this.sessionRepository
+        .findByIndexNameAndIndexValue(
+                FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME,
+                username);
+----
+
+=== ReactiveSessionRepository
+
+`ReactiveSessionRepository` 负责以非阻塞和被动方式创建，检索和持久化 `Session` 实例。
+
+如果可能，开发人员不应直接与 `ReactiveSessionRepository` 或 `Session` 进行交互。相反，开发人员应该更喜欢通过
+https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#websession[WebSession]集成间接与 `ReactiveSessionRepository` 和 `Session` 交互。
+
+=== EnableSpringHttpSession
+
+可以将 `@EnableSpringHttpSession` 注释添加到 `@Configuration` 类，以将 `SessionRepositoryFilter` 公开为名为“springSessionRepositoryFilter”的bean。为了利用该注解，
+必须提供单个 `SessionRepository` bean。例如：
+
+[source,java]
+----
+@EnableSpringHttpSession
+@Configuration
+public class SpringHttpSessionConfig {
+    @Bean
+    public MapSessionRepository sessionRepository() {
+        return new MapSessionRepository(new ConcurrentHashMap<>());
+    }
+}
+----
+
+请务必注意，没有为您配置会话到期的基础结构。这是因为会话到期之类的事情高度依赖于实现。这意味着如果您需要清理过期的会话，则您有责任清理过期的会话。
+
+=== EnableSpringWebSession
+
+可以将 `@EnableSpringWebSession` 注释添加到 `@Configuration` 类，以将 `WebSessionManager` 公开为名为“webSessionManager”的bean。为了利用该注解，
+必须提供单个 `ReactiveSessionRepository` bean。例如：
+
+[source,java]
+----
+@EnableSpringWebSession
+public class SpringWebSessionConfig {
+    @Bean
+    public ReactiveSessionRepository reactiveSessionRepository() {
+        return new ReactiveMapSessionRepository(new ConcurrentHashMap<>());
+    }
+}
+----
+
+请务必注意，没有为您配置会话到期的基础结构。这是因为会话到期之类的事情高度依赖于实现。这意味着如果您需要清理过期的会话，则您有责任清理过期的会话。
+
+=== RedisOperationsSessionRepository
+
+`RedisOperationsSessionRepository` 是使用Spring Data的 `RedisOperations` 实现的 `SessionRepository`。在Web环境中，这通常与 `SessionRepositoryFilter` 结合使用。
+该实现通过 `SessionMessageListener` 支持 `SessionDestroyedEvent` 和 `SessionCreatedEvent`。
+
+==== 实例化RedisOperationsSessionRepository
+
+下面是一个如何创建新实例的典型示例：
+
+[source,java]
+----
+RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
+
+// ... configure redisTemplate ...
+
+SessionRepository<? extends Session> repository =
+        new RedisOperationsSessionRepository(redisTemplate);
+----
+
+有关如何创建 `RedisConnectionFactory` 的其他信息，请参阅Spring Data Redis指南。
+
+==== EnableRedisHttpSession
+
+在Web环境中，创建新 `RedisOperationsSessionRepository` 的最简单方法是使用 `@EnableRedisHttpSession`。可以在
+https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#samples[示例和指南]中找到完整的示例用法。您可以使用以下属性来自定义配置：
+
+- **maxInactiveIntervalInSeconds** - 会话失效时间，最大多少秒未交互将失效
+- **redisNamespace** - 允许为会话配置特定于应用程序的命名空间。Redis键和通道ID将以 `<redisNamespace>:` 的前缀开头。
+- **redisFlushMode** - 允许指定何时将数据写入Redis。默认值仅在 `SessionRepository` 上调用 `save`，在response commit前刷新缓存。
+`RedisFlushMode.IMMEDIATE` 则表示只要有任何更新就将值尽快写入Redis。
+
+===== 自定义RedisSerializer
+
+您可以通过创建名为 `springSessionDefaultRedisSerializer` 的Bean通过实现 `RedisSerializer<Object>` 来自定义序列化器。
+
+==== Redis TaskExecutor
+
+订阅 `RedisOperationsSessionRepository` 以使用 `RedisMessageListenerContainer` 从redis接收事件。您可以通过创建名为 `springSessionRedisTaskExecutor` 和/或
+`springSessionRedisSubscriptionExecutor` 的Bean来自定义调度这些事件的方式。有关配置redis任务执行程序的更多详细信息，请参见
+https://docs.spring.io/spring-data-redis/docs/2.0.11.RELEASE/reference/html/#redis:pubsub:subscribe:containers[此处]。
+
+==== 存储细节
+
+以下部分概述了如何针对每个操作更新Redis。可以在下面找到创建新会话的示例，后续部分描述了详细信息。
+
+[source,bash]
+----
+HMSET spring:session:sessions:33fdd1b6-b496-4b33-9f7d-df96679d32fe creationTime 1404360000000 \
+    maxInactiveInterval 1800 \
+    lastAccessedTime 1404360000000 \
+    sessionAttr:attrName someAttrValue \
+    sessionAttr2:attrName someAttrValue2
+EXPIRE spring:session:sessions:33fdd1b6-b496-4b33-9f7d-df96679d32fe 2100
+APPEND spring:session:sessions:expires:33fdd1b6-b496-4b33-9f7d-df96679d32fe ""
+EXPIRE spring:session:sessions:expires:33fdd1b6-b496-4b33-9f7d-df96679d32fe 1800
+SADD spring:session:expirations:1439245080000 expires:33fdd1b6-b496-4b33-9f7d-df96679d32fe
+EXPIRE spring:session:expirations1439245080000 2100
+----
+
+===== 保存会话
+
+每个会话都作为哈希存储在Redis中。使用 `HMSET` 命令设置和更新每个会话。下面将介绍如何存储每个会话的示例。
+
+[source,bash]
+----
+HMSET spring:session:sessions:33fdd1b6-b496-4b33-9f7d-df96679d32fe creationTime 1404360000000 \
+    maxInactiveInterval 1800 \
+    lastAccessedTime 1404360000000 \
+    sessionAttr:attrName someAttrValue \
+    sessionAttr2:attrName someAttrValue2
+----
+
+上述命令将创建的会话详情如下：
+
+- 会话ID为33fdd1b6-b496-4b33-9f7d-df96679d32fe
+- 自格林威治标准时间1970年1月1日午夜起，该会话创建于1404360000000（毫秒时间戳）。
+- 会话将在1800秒（30分钟）后到期。
+- 该会话最后一次访问时间为1404360000000（毫秒时间戳）。
+- 该会话有两个属性。第一个是“attrName”，其值为“someAttrValue”。第二个会话属性名为“attrName2”，其值为“someAttrValue2”。
+
+===== 优化写
+
+由 `RedisOperationsSessionRepository` 管理的会话实例会跟踪已更改的属性，并仅更新这些属性。这意味着如果一个属性被写入一次并且多次读取，我们只需要写一次该属性。
+例如，假设更新了之前的会话属性“sessionAttr2”。保存后将执行以下操作：
+
+[source,bash]
+----
+HMSET spring:session:sessions:33fdd1b6-b496-4b33-9f7d-df96679d32fe sessionAttr:attrName2 newValue
+----
+
+===== 会话过期
+
+使用基于 `Session.getMaxInactiveInterval()` 的 `EXPIRE` 命令为每个会话设置过期时间。
+
+[source,bash]
+----
+EXPIRE spring:session:sessions:33fdd1b6-b496-4b33-9f7d-df96679d32fe 2100
+----
+
+您将注意到，设置的到期时间是会话实际到期后的5分钟。这是必要的，以便在会话到期时可以访问会话的值。会话本身在实际到期后五分钟设置到期，以确保它被清理，但仅在我们执行任何必要的处理之后。
+
+NOTE:  `SessionRepository.findById(String)` 方法确保不会返回过期的会话。这意味着在使用会话之前无需检查到期日期。
+
+Spring Session依赖于Redis的删除和 https://redis.io/topics/notifications[过期键空间通知]，分别触发
+https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#api-redisoperationssessionrepository-sessiondestroyedevent[SessionDeletedEvent]和
+https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#api-redisoperationssessionrepository-sessiondestroyedevent[SessionExpiredEvent]。
+`SessionDeletedEvent` 或 `SessionExpiredEvent` 确保清除与 `Session` 关联的资源。例如，当使用Spring Session的WebSocket支持时，Redis过期或删除事件会触发与要关闭的会话关联的
+任何WebSocket连接。
+
+不会直接在会话键本身上跟踪到期，因为这意味着会话数据将不再可用。而是使用特殊会话到期键。在我们的示例中，expires键是：
+
+[source,bash]
+----
+APPEND spring:session:sessions:expires:33fdd1b6-b496-4b33-9f7d-df96679d32fe ""
+EXPIRE spring:session:sessions:expires:33fdd1b6-b496-4b33-9f7d-df96679d32fe 1800
+----
+
+当会话到期键被删除或过期时，键空间通知会触发查找实际会话并触发 `SessionDestroyedEvent`。
+
+依赖Redis过期的一个问题是，如果未访问该键，Redis不保证何时将触发过期事件。具体而言，Redis用于清除过期键的后台任务是低优先级任务，可能不会触发键过期。有关其他详细信息，
+请参阅Redis文档中的 https://redis.io/topics/notifications[过期事件的时间]部分。
+
+为了避免过期事件无法确保发生这一事实，我们可以确保在预期到期时访问每个键。这意味着如果键上的TTL过期，Redis将在我们尝试访问键时删除键并触发过期事件。
+
+因此，每个会话到期时间也会跟踪到最近的分钟。这允许后台任务访问可能过期的会话，以确保以更确定的方式触发Redis过期事件。例如：
+
+[source,bash]
+----
+SADD spring:session:expirations:1439245080000 expires:33fdd1b6-b496-4b33-9f7d-df96679d32fe
+EXPIRE spring:session:expirations1439245080000 2100
+----
+
+然后，后台任务将使用这些映射来明确请求每个键。通过访问键而不是删除键，可以确保只有在TTL过期时Redis才会删除键。
+
+NOTE: 我们没有明确删除键，因为在某些情况下可能存在竞争条件错误地将键标识为过期而实际未过期。如果没有使用分布式锁（这会破坏我们的性能），就无法确保到期映射的一致性。
+通过简单地访问键，我们确保仅在该键上的TTL过期时才删除键。
+
+===== SessionDeletedEvent 和 SessionExpiredEvent
+
+`SessionDeletedEvent` 和 `SessionExpiredEvent` 都是 `SessionDestroyedEvent` 的类型。
+
+`RedisOperationsSessionRepository` 支持在删除会话时触发 `SessionDeletedEvent`，或者在会话到期时触发 `SessionExpiredEvent`。这对于确保正确清理与会话相关联的资源是必要的。
+
+例如，当与WebSockets集成时， `SessionDestroyedEvent` 负责关闭任何活动的WebSocket连接。
+
+通过 `SessionMessageListener` 可以触发 `SessionDeletedEvent` 或 `SessionExpiredEvent`，它可以侦听Redis Keyspace事件。为了实现这一点，需要启用针对通用命令和过期事件的
+http://redisdoc.com/topic/notification.html[Redis Keyspace]事件。例如：
+
+[source,bash]
+----
+redis-cli config set notify-keyspace-events Egx
+----
+
+如果您正在使用 `@EnableRedisHttpSession`，则会自动完成 `SessionMessageListener` 并启用必要的Redis Keyspace事件。但是，在安全的Redis环境中，config命令被禁用。这意味着
+Spring Session无法为您配置Redis Keyspace事件。要禁用自动配置，请将 `ConfigureRedisAction.NO_OP` 添加为bean。
+
+例如，Java Configuration可以使用以下内容：
+
+[source,java]
+----
+@Bean
+public static ConfigureRedisAction configureRedisAction() {
+    return ConfigureRedisAction.NO_OP;
+}
+----
+
+XML配置可以使用以下内容：
+
+[source,xml]
+----
+<util:constant
+    static-field="org.springframework.session.data.redis.config.ConfigureRedisAction.NO_OP"/>
+----
+
+===== SessionCreatedEvent
+
+创建会话时，将使用 `spring:session:channel:created:33fdd1b6-b496-4b33-9f7d-df96679d32fe` 的通道向Redis发送事件，以便 `33fdd1b6-b496-4b33-9f7d-df96679d32fe` 是会话ID。
+事件的主体将是创建的会话。
+
+如果注册为 `MessageListener`（默认），则 `RedisOperationsSessionRepository` 将Redis消息转换为 `SessionCreatedEvent`。
+
+===== 在Redis中查看会话
+
+安装redis-cli后，您可以使用redis-cli检查Redis中的值。例如，在终端中输入以下内容：
+
+[source,bash]
+----
+$ redis-cli
+redis 127.0.0.1:6379> keys *
+1) "spring:session:sessions:4fc39ce3-63b3-4e17-b1c4-5e1ed96fb021"  // <1>
+2) "spring:session:expirations:1418772300000" // <2>
+----
+
+<1> 该键的后缀是Spring Session的会话标识符。
+<2> 该键包含应在1418772300000时会被删除的所有会话ID。
+
+您还可以查看每个会话的属性。
+
+[source,bash]
+----
+redis 127.0.0.1:6379> hkeys spring:session:sessions:4fc39ce3-63b3-4e17-b1c4-5e1ed96fb021
+1) "lastAccessedTime"
+2) "creationTime"
+3) "maxInactiveInterval"
+4) "sessionAttr:username"
+redis 127.0.0.1:6379> hget spring:session:sessions:4fc39ce3-63b3-4e17-b1c4-5e1ed96fb021 sessionAttr:username
+"\xac\xed\x00\x05t\x00\x03rob"
+----
+
+=== ReactiveRedisOperationsSessionRepository
+
+`ReactiveRedisOperationsSessionRepository` 是一个使用Spring Data的 `ReactiveRedisOperations` 实现的 `ReactiveSessionRepository`。在Web环境中，这通常与
+`WebSessionStore` 结合使用。
+
+==== 实例化ReactiveRedisOperationsSessionRepository
+
+下面是一个如何创建新实例的典型示例：
+
+[source,java]
+----
+// ... create and configure connectionFactory and serializationContext ...
+
+ReactiveRedisTemplate<String, Object> redisTemplate = new ReactiveRedisTemplate<>(
+        connectionFactory, serializationContext);
+
+ReactiveSessionRepository<? extends Session> repository =
+        new ReactiveRedisOperationsSessionRepository(redisTemplate);
+----
+
+有关如何创建 `ReactiveRedisConnectionFactory` 的其他信息，请参阅Spring Data Redis参考。
+
+==== EnableRedisWebSession
+
+在Web环境中，创建新 `ReactiveRedisOperationsSessionRepository` 的最简单方法是使用 `@EnableRedisWebSession`。您可以使用以下属性来自定义配置：
+
+- **maxInactiveIntervalInSeconds** - 会话失效时间，最大多少秒未交互将失效
+- **redisNamespace** - 允许为会话配置特定于应用程序的命名空间。Redis键和通道ID将以 `<redisNamespace>:` 的前缀开头。
+- **redisFlushMode** - 允许指定何时将数据写入Redis。默认值仅在 `SessionRepository` 上调用 `save`，在response commit前刷新缓存。
+`RedisFlushMode.IMMEDIATE` 则表示只要有任何更新就将值尽快写入Redis。
+
+===== 优化写
+
+由 `ReactiveRedisOperationsSessionRepository` 管理的会话实例会跟踪已更改的属性，并仅更新这些属性。这意味着如果一个属性被写入一次并且多次读取，我们只需要写一次该属性。
+
+===== 在Redis中查看会话
+
+安装redis-cli后，您可以使用redis-cli检查Redis中的值。例如，在终端中输入以下内容：
+
+[source,bash]
+----
+$ redis-cli
+redis 127.0.0.1:6379> keys *
+1) "spring:session:sessions:4fc39ce3-63b3-4e17-b1c4-5e1ed96fb021"  // <1>
+----
+
+<1> 该键的后缀是Spring Session的会话标识符。
+
+您还可以查看每个会话的属性。
+
+[source,bash]
+----
+redis 127.0.0.1:6379> hkeys spring:session:sessions:4fc39ce3-63b3-4e17-b1c4-5e1ed96fb021
+1) "lastAccessedTime"
+2) "creationTime"
+3) "maxInactiveInterval"
+4) "sessionAttr:username"
+redis 127.0.0.1:6379> hget spring:session:sessions:4fc39ce3-63b3-4e17-b1c4-5e1ed96fb021 sessionAttr:username
+"\xac\xed\x00\x05t\x00\x03rob"
+----
+
+=== MapSessionRepository
+
+`MapSessionRepository` 允许在Map中持久化 `Session`，其中键是Session ID，值是 `Session`。该实现可以与 `ConcurrentHashMap` 一起用作测试或便利机制，或者，它可以与分布式Map
+实现一起使用。例如，它可以与Hazelcast一起使用。
+
+==== 实例化MapSessionRepository
+
+创建新实例非常简单：
+
+[source,java]
+----
+SessionRepository<? extends Session> repository = new MapSessionRepository(
+        new ConcurrentHashMap<>());
+----
+
+==== 使用Spring Session和Hazelcast
+
+https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#samples[Hazelcast示例]是一个完整的应用程序，演示了在Hazelcast中使用Spring Session。
+
+要运行它，请使用以下命令：
+
+[source,bash]
+----
+./gradlew :samples:hazelcast:tomcatRun
+----
+
+Hazelcast Spring Sample是一个完整的应用程序，演示了如何使用Spring Session与Hazelcast和Spring Security。
+
+要运行它，请使用以下命令：
+
+[source,bash]
+----
+./gradlew :samples:hazelcast-spring:tomcatRun
+----
+
+=== ReactiveMapSessionRepository
+
+`ReactiveMapSessionRepository` 允许在Map中持久化Session，其中键是Session ID，值是Session。该实现可以与 `ConcurrentHashMap` 一起用作测试或便利机制。或者，它可以与分布式Map
+实现一起使用，并要求所提供的Map必须是非阻塞的。
+
+=== JdbcOperationsSessionRepository
+
+`JdbcOperationsSessionRepository` 是一个 `SessionRepository` 实现，它使用Spring的 `JdbcOperations` 在关系数据库中存储会话。在Web环境中，这通常与 `SessionRepositoryFilter`
+结合使用。请注意，此实现不支持发布会话事件。
+
+==== 实例化JdbcOperationsSessionRepository
+
+下面是一个如何创建新实例的典型示例：
+
+[source,java]
+----
+JdbcTemplate jdbcTemplate = new JdbcTemplate();
+
+// ... configure JdbcTemplate ...
+
+PlatformTransactionManager transactionManager = new DataSourceTransactionManager();
+
+// ... configure transactionManager ...
+
+SessionRepository<? extends Session> repository =
+        new JdbcOperationsSessionRepository(jdbcTemplate, transactionManager);
+----
+
+有关如何创建和配置 `JdbcTemplate` 和 `PlatformTransactionManager` 的其他信息，请参阅
+https://docs.spring.io/spring/docs/5.0.10.RELEASE/spring-framework-reference/data-access.html[Spring Framework Reference Documentation]。
+
+==== EnableJdbcHttpSession
+
+在Web环境中，创建新 `JdbcOperationsSessionRepository` 的最简单方法是使用 `@EnableJdbcHttpSession`。可以在
+https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#samples[示例和指南]中找到完整的示例用法。您可以使用以下属性来自定义配置：
+
+- **tableName** - Spring Session用于存储会话的数据库表的名称
+- **maxInactiveIntervalInSeconds** - 会话失效时间，最大多少秒未交互将失效
+
+===== 自定义LobHandler
+
+您可以通过创建一个名为 `springSessionLobHandler` 的Bean来实现 `LobHandler` 来自定义BLOB处理。
+
+===== 自定义ConversionService
+
+您可以通过提供 `ConversionService` 实例来自定义会话的默认序列化和反序列化。在典型的Spring环境中工作时，将自动选择默认的ConversionService Bean（名为 `conversionService`）
+并用于序列化和反序列化。但是，您可以通过提供名为 `springSessionConversionService` 的Bean来覆盖默认的 `ConversionService`。
+
+==== 存储细节
+
+默认情况下，此实现使用 `SPRING_SESSION` 和 `SPRING_SESSION_ATTRIBUTES` 表来存储会话。请注意，可以轻松自定义表名。在这种情况下，用于存储属性的表将使用提供的表名称命名，
+后缀为 `_ATTRIBUTES`。如果需要进一步自定义，则可以使用 `set*Query` setter方法自定义存储库使用的SQL查询。在这种情况下，您需要手动配置 `sessionRepository` bean。
+
+由于各种数据库供应商之间存在差异，特别是在存储二进制数据时，请确保使用特定于数据库的SQL脚本。大多数主要数据库供应商的脚本打包为 `org/springframework/session/jdbc/schema-*.sql`，
+其中 `*` 是目标数据库类型。
+
+例如，使用PostgreSQL数据库，您将使用以下模式脚本：
+
+[source,sql]
+----
+CREATE TABLE SPRING_SESSION (
+    PRIMARY_ID CHAR(36) NOT NULL,
+    SESSION_ID CHAR(36) NOT NULL,
+    CREATION_TIME BIGINT NOT NULL,
+    LAST_ACCESS_TIME BIGINT NOT NULL,
+    MAX_INACTIVE_INTERVAL INT NOT NULL,
+    EXPIRY_TIME BIGINT NOT NULL,
+    PRINCIPAL_NAME VARCHAR(100),
+    CONSTRAINT SPRING_SESSION_PK PRIMARY KEY (PRIMARY_ID)
+);
+
+CREATE UNIQUE INDEX SPRING_SESSION_IX1 ON SPRING_SESSION (SESSION_ID);
+CREATE INDEX SPRING_SESSION_IX2 ON SPRING_SESSION (EXPIRY_TIME);
+CREATE INDEX SPRING_SESSION_IX3 ON SPRING_SESSION (PRINCIPAL_NAME);
+
+CREATE TABLE SPRING_SESSION_ATTRIBUTES (
+    SESSION_PRIMARY_ID CHAR(36) NOT NULL,
+    ATTRIBUTE_NAME VARCHAR(200) NOT NULL,
+    ATTRIBUTE_BYTES BYTEA NOT NULL,
+    CONSTRAINT SPRING_SESSION_ATTRIBUTES_PK PRIMARY KEY (SESSION_PRIMARY_ID, ATTRIBUTE_NAME),
+    CONSTRAINT SPRING_SESSION_ATTRIBUTES_FK FOREIGN KEY (SESSION_PRIMARY_ID) REFERENCES SPRING_SESSION(PRIMARY_ID) ON DELETE CASCADE
+);
+----
+
+使用MySQL数据库：
+
+[source,sql]
+----
+CREATE TABLE SPRING_SESSION (
+    PRIMARY_ID CHAR(36) NOT NULL,
+    SESSION_ID CHAR(36) NOT NULL,
+    CREATION_TIME BIGINT NOT NULL,
+    LAST_ACCESS_TIME BIGINT NOT NULL,
+    MAX_INACTIVE_INTERVAL INT NOT NULL,
+    EXPIRY_TIME BIGINT NOT NULL,
+    PRINCIPAL_NAME VARCHAR(100),
+    CONSTRAINT SPRING_SESSION_PK PRIMARY KEY (PRIMARY_ID)
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+
+CREATE UNIQUE INDEX SPRING_SESSION_IX1 ON SPRING_SESSION (SESSION_ID);
+CREATE INDEX SPRING_SESSION_IX2 ON SPRING_SESSION (EXPIRY_TIME);
+CREATE INDEX SPRING_SESSION_IX3 ON SPRING_SESSION (PRINCIPAL_NAME);
+
+CREATE TABLE SPRING_SESSION_ATTRIBUTES (
+    SESSION_PRIMARY_ID CHAR(36) NOT NULL,
+    ATTRIBUTE_NAME VARCHAR(200) NOT NULL,
+    ATTRIBUTE_BYTES BLOB NOT NULL,
+    CONSTRAINT SPRING_SESSION_ATTRIBUTES_PK PRIMARY KEY (SESSION_PRIMARY_ID, ATTRIBUTE_NAME),
+    CONSTRAINT SPRING_SESSION_ATTRIBUTES_FK FOREIGN KEY (SESSION_PRIMARY_ID) REFERENCES SPRING_SESSION(PRIMARY_ID) ON DELETE CASCADE
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
+----
+
+==== 事务管理
+
+`JdbcOperationsSessionRepository` 中的所有JDBC操作都以事务方式执行。在传播设置为 `REQUIRES_NEW` 的情况下执行事务，以避免由于干扰现有事务而导致的意外行为（例如，
+在已经参与只读事务的线程中执行保存操作）。
+
+=== HazelcastSessionRepository
+
+略
+
+== 自定义SessionRepository
+
+实现自定义 `SessionRepository` API应该是一项相当简单的任务。将自定义实现与 `@EnableSpringHttpSession` 支持相结合，可以轻松地重用现有的Spring Session配置工具和基础结构。
+然而，有几个方面需要进一步考虑。
+
+在HTTP请求的生命周期中， `HttpSession` 通常会持久保存到 `SessionRepository` 两次。首先，一旦客户端有权访问会话ID，就确保客户端可以使用该会话，并且在提交会话之后还必须进行
+写入，因为其可能会对会话进行进一步的修改。考虑到这一点，通常建议 `SessionRepository` 实现跟踪更改以确保仅保存增量。这在高度并发的环境中尤其非常重要，其中多个请求在相同的
+`HttpSession` 上运行并因此导致竞争条件，其中请求覆盖彼此的会话属性的变化。Spring Session提供的所有 `SessionRepository` 实现都使用所描述的方法来持久化会话更改，并可在实现自定义
+`SessionRepository` 时用于指导。
+
+请注意，相同的建议也适用于实现自定义 `ReactiveSessionRepository`。当然，在这种情况下应该使用 `@EnableSpringWebSession`。
+
+== 最低要求
+
+Spring Session的最低要求是：
+
+- Java 8+
+- 如果您在Servlet容器（不是必需的）中运行，请使用Servlet 3.1+
+- 如果您正在使用其他Spring库（不是必需的），则所需的最低版本是Spring 5.0.x.
+- `@EnableRedisHttpSession` 需要Redis 2.8+。这是支持会话过期所必需的
+- `@EnableHazelcastHttpSession` 需要Hazelcast 3.6+。这是支持 `FindByIndexNameSessionRepository` 所必需的
+
+NOTE: Spring的核心只有spring-jcl所需的依赖。有关在没有任何其他Spring依赖项的情况下使用Spring Session的示例，请参阅
+https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#samples[hazelcast示例]应用程序。
