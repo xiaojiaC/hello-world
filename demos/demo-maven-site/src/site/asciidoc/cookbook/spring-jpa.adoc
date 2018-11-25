@@ -1,0 +1,442 @@
+= Spring Data JPA 参考文档
+Version 2.0.9.RELEASE
+:releaseVersion: 2.0.9.RELEASE
+
+前言
+
+Spring Data JPA为Java Persistence API（JPA）提供存储库支持。它使访问JPA数据源的应用程序开发变得更加简单。
+
+== 项目信息
+
+- 版本控制 - http://github.com/spring-projects/spring-data-jpa
+- Bug追踪 - https://jira.spring.io/browse/DATAJPA
+- 发行版仓库 - https://repo.spring.io/libs-release
+- 里程碑版仓库 - https://repo.spring.io/libs-milestone
+- 快照版仓库 - https://repo.spring.io/libs-snapshot
+
+== 新特性和值得注意的东西
+
+=== Spring Data JPA 1.11中的新功能
+
+- 改进了与Hibernate 5.2的兼容性。
+- 支持 <<_按示例查询>>的任意匹配模式。
+- 分页查询执行优化。
+- 支持存储库查询派生中的 `exists` 投影。
+
+=== Spring Data JPA 1.10中的新功能
+
+- 支持存储库查询方法中的 <<_投影>>。
+- 支持 <<_按示例查询>>。
+- 已启用以下注解以构建组合注解：`@EntityGraph`, `@Lock`, `@Modifying`, `@Query`, `@QueryHints` 和 `@Procedure`。
+- 支持集合表达式上的 `Contains` 关键字。
+- 增加JSR-310和ThreeTenBP的 `ZoneId` 的 `AttributeConverter` 实现。
+- 升级到Querydsl 4，Hibernate 5，OpenJPA 2.4和EclipseLink 2.6.1。
+
+== 依赖
+
+由于各个Spring Data模块的创建日期不同，因此大多数模块都带有不同的主，次要版本号。找到兼容版本的最简单方法是依赖我们
+提供的Spring Data Release Train BOM。在Maven项目中，您将在POM的 `<dependencyManagement/>` 部分中声明此依赖项，如下所示：
+
+.使用Spring Data Release Train BOM
+[source,xml]
+----
+<dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-releasetrain</artifactId>
+      <version>${release-train}</version>
+      <scope>import</scope>
+      <type>pom</type>
+    </dependency>
+  </dependencies>
+</dependencyManagement>
+----
+
+目前的发布版本是 `Kay-SR9`。列车名称按字母顺序上升，此处列出了当前可用的列车。
+版本名称遵循以下模式：`${name}-${release}`，其中release可以是以下之一：
+
+- BUILD-SNAPSHOT: 当前快照版
+- M1, M2等：里程碑版
+- RC1, RC2等：发行版候选人
+- RELEASE: GA发行版
+- SR1, SR2等：服务发行版
+
+可以在 https://github.com/spring-projects/spring-data-examples/tree/master/bom[Spring Data示例存储库]中找到使用BOM的工作示例。
+有了这个，你可以在 `<dependencies/>` 块中声明你想要使用的Spring Data模块而不需要版本，如下所示：
+
+.声明对Spring Data模块的依赖
+[source,xml]
+----
+<dependencies>
+  <dependency>
+    <groupId>org.springframework.data</groupId>
+    <artifactId>spring-data-jpa</artifactId>
+  </dependency>
+<dependencies>
+----
+
+=== Spring Boot的依赖管理
+
+Spring Boot为您选择最新版本的Spring Data模块。如果您仍想升级到更新版本，请将属性 `spring-data-releasetrain.version`
+配置为您要使用的列车名称和迭代版本。
+
+=== Spring框架
+
+当前版本的Spring Data模块需要版本5.0.8.RELEASE或更高版本的Spring框架。这些模块也可以使用该次要版本的旧版本。
+但是，强烈建议使用该代中的最新版本。
+
+== 使用Spring Data存储库
+
+Spring Data存储库抽象的目标是 *显着减少为各种持久性存储实现数据访问层所需的样板代码量*。
+
+[IMPORTANT]
+===
+Spring Data存储库文档和您的模块。
+
+本章介绍Spring Data存储库的核心概念和接口。本章中的信息来自Spring Data Commons模块。
+它使用Java Persistence API（JPA）模块的配置和代码示例。
+您应该将XML名称空间声明和要扩展的类型调整为您所使用的特定模块的等效项。
+<<_命名空间参考>> 涵盖了XML配置参考，支持存储库API的所有Spring Data模块都支持XML配置。
+<<_存储库查询关键字>> 涵盖了存储库抽象支持的查询方法关键字。有关模块特定功能的详细信息，请参阅本文档该模块的章节。
+===
+
+=== 核心概念
+
+Spring Data存储库抽象中的中央接口是 `Repository`。它将域类以及域类的ID类型作为类型参数进行管理。
+此接口主要用作标记接口，用于捕获要使用的类型，并帮助您发现实现它的接口。
+`CrudRepository` 为正在管理的实体类提供复杂的CRUD功能。
+
+.`CrudRepository` 接口
+[source, java]
+----
+public interface CrudRepository<T, ID extends Serializable>
+  extends Repository<T, ID> {
+
+  <S extends T> S save(S entity);      <1>
+
+  Optional<T> findById(ID primaryKey); <2>
+
+  Iterable<T> findAll();               <3>
+
+  long count();                        <4>
+
+  void delete(T entity);               <5>
+
+  boolean existsById(ID primaryKey);   <6>
+
+  // … more functionality omitted.
+}
+----
+
+
+<1> 保存给定的实体。
+<2> 返回由给定ID标识的实体。
+<3> 返回所有实体。
+<4> 返回实体数量。
+<5> 删除给定的实体。
+<6> 指示给定ID的实体是否存在。
+
+NOTE: 我们还提供特定于持久性技术的抽象，例如 `JpaRepository` 或 `MongoRepository`。
+除了相当通用的持久性技术无关的接口（如 `CrudRepository` ）之外，
+这些接口还扩展了 `CrudRepository` 并公开了特定于底层持久性技术的功能。
+
+在 `CrudRepository` 之上，有一个 `PagingAndSortingRepository` 抽象，它添加了额外的方法来简化对实体的分页访问：
+
+.`PagingAndSortingRepository` 接口
+[source, java]
+----
+public interface PagingAndSortingRepository<T, ID extends Serializable>
+  extends CrudRepository<T, ID> {
+
+  Iterable<T> findAll(Sort sort);
+
+  Page<T> findAll(Pageable pageable);
+}
+----
+
+要访问 `User` 的第二页且每页20个，您可以执行以下操作：
+
+[source, java]
+----
+PagingAndSortingRepository<User, Long> repository = // … 获得对bean的访问权限
+Page<User> users = repository.findAll(new PageRequest(1, 20)); // 注意第一页从0开始
+----
+
+除查询方法外，还可以使用计数和删除查询的查询派生。
+
+以下列表显示派生计数查询的接口定义：
+
+.派生计数查询
+[source, java]
+----
+interface UserRepository extends CrudRepository<User, Long> {
+
+  long countByLastname(String lastname);
+}
+----
+
+以下列表显示了派生删除查询的接口定义：
+
+.派生删除查询
+[source, java]
+----
+interface UserRepository extends CrudRepository<User, Long> {
+
+  long deleteByLastname(String lastname);
+
+  List<User> removeByLastname(String lastname);
+}
+----
+
+=== 查询方法
+
+标准CRUD功能存储库通常对底层数据存储库进行查询。使用Spring Data，声明这些查询将分为四个步骤：
+
+. 声明继承 `Repository` 或其子接口之一的接口，并将其键入它应处理的域类和ID类型，如以下示例所示：
++
+
+[source, java]
+----
+interface PersonRepository extends Repository<Person, Long> { … }
+----
+
+. 在接口中声明查询方法。
++
+
+[source, java]
+----
+interface PersonRepository extends Repository<Person, Long> {
+  List<Person> findByLastname(String lastname);
+}
+----
+
+. 设置Spring以使用 <<repositories.create-instances.java-config,Java配置>> 或
+<<repositories.create-instances,XML配置>> 为这些接口创建代理实例。
+.. 要使用Java配置，请创建类似于以下内容的类：
++
+
+[source, java]
+----
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+@EnableJpaRepositories
+class Config {}
+----
+
+.. 要使用XML配置，请定义类似于以下内容的bean：
++
+
+[source, xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+   xsi:schemaLocation="http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/data/jpa
+     http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+   <jpa:repositories base-package="com.acme.repositories"/>
+
+</beans>
+----
+
++
+在此示例中使用JPA命名空间。如果对任何其他存储使用存储库抽象，则需要将其声明为特定于存储模块的相应命名空间。
+换句话说，例如你使用MongoDB则需要将 `jpa` 更改为 `mongodb`。
++
+另请注意，JavaConfig配置未显式设置包，因为默认情况下使用带该注解的类的包。
+要自定义要扫描的包，请使用特定于数据存储库的 `@Enable${store}Repositories` 注解的 `basePackage` 属性。
+
+. 注入存储库实例并使用它，如以下示例所示：
++
+
+[source, java]
+----
+class SomeClient {
+
+  private final PersonRepository repository;
+
+  SomeClient(PersonRepository repository) {
+    this.repository = repository;
+  }
+
+  void doSomething() {
+    List<Person> persons = repository.findByLastname("Matthews");
+  }
+}
+----
+
+以下各节详细说明了每个步骤：
+
+* <<repositories.definition,定义存储库接口>>
+* <<repositories.query-methods.details,定义查询方法>>
+* <<repositories.create-instances,创建存储库实例>>
+* <<repositories.custom-implementations,Spring Data Repositories的自定义实现>>
+
+[[repositories.definition]]
+=== 定义存储库接口
+
+首先，定义特定于域类的存储库接口。接口必须扩展 `Repository` 并键入域类和ID类型。如果要公开该域类型的CRUD方法，请扩展 `CrudRepository` 而不是 `Repository`。
+
+==== 微调存储库定义
+
+通常，存储库接口扩展了 `Repository`，`CrudRepository` 或 `PagingAndSortingRepository`。或者，如果您不想扩展Spring Data接口，还可以使用 `@RepositoryDe​​finition` 标注存储库接口。扩展 `CrudRepository` 暴露了一整套操作实体的方法。如果您希望对所公开的方法有选择性，请将要从
+`CrudRepository` 公开的方法复制到域存储库中。
+
+NOTE: 这样做可以让您在提供的Spring Data Repositories功能之上定义自己的抽象存储库。
+
+以下示例显示如何有选择地公开CRUD方法（在本例中为 `findById` 和 `save`）：
+
+.有选择地暴露CRUD方法
+[source, java]
+----
+@NoRepositoryBean
+interface MyBaseRepository<T, ID extends Serializable> extends Repository<T, ID> {
+
+  Optional<T> findById(ID id);
+
+  <S extends T> S save(S entity);
+}
+
+interface UserRepository extends MyBaseRepository<User, Long> {
+  User findByEmailAddress(EmailAddress emailAddress);
+}
+----
+
+在前面的示例中，您为所有域存储库定义了一个公共基本接口，并公开了 `findById(...)` 以及 `save(...)`。这些方法被路由到Spring Data提供的所选存储的基本存储库实现中（例如，如果您使用JPA，则实现是SimpleJpaRepository），因为它们与 `CrudRepository` 中的方法签名匹配。因此，`UserRepository` 现在可以保存用户，按ID查找单个用户，通过电子邮件地址查找用户。
+
+NOTE: 中间存储库接口需要添加 `@NoRepositoryBean` 注解。它会确保Spring Data不应在运行时创建该存储库接口的实例。
+
+==== 存储库方法的null处理
+
+从Spring Data 2.0开始，可以使用Java 8的 `Optional` 来指示存储库的CRUD方法所返回单个实例可能缺少值。
+除此之外，Spring Data支持在查询方法上返回以下包装类型：
+
+- `com.google.common.base.Optional`
+- `scala.Option`
+- `io.vavr.control.Option`
+- `javaslang.control.Option` (deprecated as Javaslang is deprecated)
+
+
+
+[[repositories.query-methods.details]]
+=== 定义查询方法
+
+
+
+
+[[repositories.create-instances]]
+=== 创建存储库实例
+
+
+
+
+[[repositories.custom-implementations]]
+=== Spring Data Repositories的自定义实现
+
+
+
+
+
+
+
+== 按示例查询
+
+
+
+
+
+
+
+
+
+
+
+== 附录
+
+=== 命名空间参考
+
+==== `<repositories/>` 元素
+
+`<repositories/>` 元素触发Spring Data存储库基础结构的设置。最重要的属性是 `base-package`，
+它定义了扫描Spring Data存储库接口的包。参考 <<_XML配置>>。下表描述了 `<repositories/>` 元素的属性：
+
+.属性
+|===
+| 名字 | 描述
+
+| base-package
+| 定义要扫描的存储库接口的包，该存储库接口继承 `*Repository` （实际接口由特定的Spring Data模块确定）。
+也会扫描配置包下面的所有包。允许使用通配符。
+
+| repository-impl-postfix
+| 定义后缀以自动检测自定义存储库实现。名称以配置的后缀结尾的类被视为候选人。默认后缀为 `Impl`。
+
+| query-lookup-strategy
+| 确定用于创建查询的策略。有关详细信息，请参 <<_查询查找策>>。默认为 `create-if-not-found`。
+
+| named-queries-location
+| 定义搜索的包含外部定义查询的Properties文件的位置。
+
+| consider-nested-repositories
+| 是否应考虑嵌套存储库接口定义。默认为 `false`。
+|===
+
+=== Populators命名空间参考
+
+==== `<populator/>` 元素
+
+`<populator/>` 元素允许通过Spring Data存储库基础结构填充数据存储。
+
+.属性
+|===
+| 名字 | 描述
+
+| locations
+| 用于填充存储库的对象的值的文件位置。
+|===
+
+=== 存储库查询关键字
+
+==== 支持的查询关键字
+
+下表列出了Spring Data存储库查询派生机制通常支持的关键字。
+但是，请参阅特定存储的文档以获取支持的关键字的确切列表，因为此处列出的某些关键字可能在特定存储中不受支持。
+
+.查询关键字
+[options="header", cols="1,3"]
+|===
+| 逻辑关键字 | 关键字表达式
+
+|`AND`|`And`
+|`OR`|`Or`
+|`AFTER`|`After`, `IsAfter`
+|`BEFORE`|`Before`, `IsBefore`
+|`CONTAINING`|`Containing`, `IsContaining`, `Contains`
+|`BETWEEN`|`Between`, `IsBetween`
+|`ENDING_WITH`|`EndingWith`, `IsEndingWith`, `EndsWith`
+|`EXISTS`|`Exists`
+|`FALSE`|`False`, `IsFalse`
+|`GREATER_THAN`|`GreaterThan`, `IsGreaterThan`
+|`GREATER_THAN_EQUALS`|`GreaterThanEqual`, `IsGreaterThanEqual`
+|`IN`|`In`, `IsIn`
+|`IS`|`Is`, `Equals`, (or no keyword)
+|`IS_EMPTY`|`IsEmpty`, `Empty`
+|`IS_NOT_EMPTY`|`IsNotEmpty`, `NotEmpty`
+|`IS_NOT_NULL`|`NotNull`, `IsNotNull`
+|`IS_NULL`|`Null`, `IsNull`
+|`LESS_THAN`|`LessThan`, `IsLessThan`
+|`LESS_THAN_EQUAL`|`LessThanEqual`, `IsLessThanEqual`
+|`LIKE`|`Like`, `IsLike`
+|`NEAR`|`Near`, `IsNear`
+|`NOT`|`Not`, `IsNot`
+|`NOT_IN`|`NotIn`, `IsNotIn`
+|`NOT_LIKE`|`NotLike`, `IsNotLike`
+|`REGEX`|`Regex`, `MatchesRegex`, `Matches`
+|`STARTING_WITH`|`StartingWith`, `IsStartingWith`, `StartsWith`
+|`TRUE`|`True`, `IsTrue`
+|`WITHIN`|`Within`, `IsWithin`
+|===

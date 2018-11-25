@@ -3,7 +3,7 @@
   "-//Puppy Crawl//DTD Suppressions 1.1//EN"
   "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
 <suppressions>
-  <suppress files="[.*Application|.+Controller]\.java" checks="JavadocMethod" />
+  <suppress files="[.*Application|.+Controller|.+Configuration]\.java" checks="JavadocMethod" />
   <suppress files=".+Mojo\.java" checks="JavadocType" />
   <suppress files="[\\/]src[\\/]test[\\/]java[\\/]" checks="Javadoc*|MagicNumber|ImportControl" />
   <!-- 为了测试一些OOM问题，可能需要引入sun.misc包 -->

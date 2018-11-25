@@ -66,6 +66,7 @@
     <!-- 方法的参数个数不超过5个 -->
     <module name="ParameterNumber">
       <property name="max" value="5"/>
+      <property name="ignoreOverriddenMethods" value="true"/>
     </module>
 
     <!-- 包名的检查 -->
