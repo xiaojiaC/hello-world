@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>xj.love.hj</groupId>
+    <artifactId>demos</artifactId>
+    <version>${revision}</version>
+    <relativePath>../../demos</relativePath>
+  </parent>
+  <artifactId>demo-maven-site</artifactId>
+  <packaging>pom</packaging>
+  <name>demo maven site</name>
+  <description>Demo for Maven Site.</description>
+  <url>https://xiaojiac.github.io/hello-world</url>
+
+  <distributionManagement>
+    <!-- mvn clean site site:deploy -Psite -->
+    <site>
+      <id>xiaojiaC.github.io</id>
+      <url>gitsite:git@github.com/xiaojiaC/hello-world.git</url>
+    </site>
+  </distributionManagement>
+
+  <properties>
+    <main.basedir>${basedir}/../..</main.basedir>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <!-- https://asciidoctor.org/docs/asciidoctor-maven-plugin/ -->
+        <groupId>org.asciidoctor</groupId>
+        <artifactId>asciidoctor-maven-plugin</artifactId>
+        <configuration>
+          <sourceDirectory>src/site/asciidoc</sourceDirectory>
+          <outputDirectory>${project.build.directory}/site</outputDirectory>
+          <preserveDirectories>true</preserveDirectories>
+        </configuration>
+        <executions>
+          <execution>
+            <id>asciidoc-html</id>
+            <phase>pre-site</phase>
+            <goals>
+              <goal>process-asciidoc</goal>
+            </goals>
+            <configuration>
+              <backend>html5</backend>
+              <sourceHighlighter>coderay</sourceHighlighter>
+              <!-- http://asciidoc.org/userguide.html#X88 -->
+              <attributes>
+                <doctype>book</doctype>
+                <toc>left</toc>
+                <icons>font</icons>
+                <numbered>true</numbered>
+              </attributes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>index</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+</project>
