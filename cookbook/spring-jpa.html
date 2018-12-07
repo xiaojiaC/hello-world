@@ -649,10 +649,19 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_支持的查询关键字">5.3.1. 支持的查询关键字</a></li>
 </ul>
 </li>
-<li><a href="#repository-query-return-types">5.4. 存储库查询返回类型</a></li>
-<li><a href="#repository-query-return-types">5.5. 存储库查询返回类型</a></li>
-<li><a href="#faq">5.6. FAQ</a></li>
-<li><a href="#glossary">5.7. 词汇表</a></li>
+<li><a href="#repository-query-return-types">5.4. 存储库查询返回类型</a>
+<ul class="sectlevel3">
+<li><a href="#_支持的查询返回类型">5.4.1. 支持的查询返回类型</a></li>
+</ul>
+</li>
+<li><a href="#faq">5.5. FAQ</a>
+<ul class="sectlevel3">
+<li><a href="#_常见">5.5.1. 常见</a></li>
+<li><a href="#_基础设施">5.5.2. 基础设施</a></li>
+<li><a href="#_审计">5.5.3. 审计</a></li>
+</ul>
+</li>
+<li><a href="#glossary">5.6. 词汇表</a></li>
 </ul>
 </li>
 </ul>
@@ -876,7 +885,7 @@ table.CodeRay td.code>pre{padding:0}
 
   <span class="type">boolean</span> existsById(ID primaryKey);   <i class="conum" data-value="6"></i><b>(6)</b>
 
-  <span class="comment">// … more functionality omitted.</span>
+  <span class="comment">// … 省略了更多功能</span>
 }</code></pre>
 </div>
 </div>
@@ -998,7 +1007,7 @@ Page&lt;User&gt; users = repository.findAll(<span class="keyword">new</span> Pag
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>声明继承 <code>Repository</code> 或其子接口之一的接口，并将其键入它应处理的域类和ID类型，如以下示例所示：</p>
+<p>声明继承 <code>Repository</code> 或其子接口之一的接口，并键入它应处理的域类和ID类型，如以下示例所示：</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">PersonRepository</span> <span class="directive">extends</span> Repository&lt;Person, <span class="predefined-type">Long</span>&gt; { <span class="error">…</span> }</code></pre>
@@ -1134,17 +1143,17 @@ Page&lt;User&gt; users = repository.findAll(<span class="keyword">new</span> Pag
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre>@NoRepositoryBean
-interface MyBaseRepository&lt;T, ID extends Serializable&gt; extends Repository&lt;T, ID&gt; {
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@NoRepositoryBean</span>
+<span class="type">interface</span> <span class="class">MyBaseRepository</span>&lt;T, ID <span class="directive">extends</span> <span class="predefined-type">Serializable</span>&gt; <span class="directive">extends</span> Repository&lt;T, ID&gt; {
 
   Optional&lt;T&gt; findById(ID id);
 
-  &lt;S extends T&gt; S save(S entity);
+  &lt;S <span class="directive">extends</span> T&gt; S save(S entity);
 }
 
-interface UserRepository extends MyBaseRepository&lt;User, Long&gt; {
+<span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> MyBaseRepository&lt;User, <span class="predefined-type">Long</span>&gt; {
   User findByEmailAddress(EmailAddress emailAddress);
-}</pre>
+}</code></pre>
 </div>
 </div>
 </div>
@@ -1183,19 +1192,19 @@ interface UserRepository extends MyBaseRepository&lt;User, Long&gt; {
 <p><code>io.vavr.control.Option</code></p>
 </li>
 <li>
-<p><code>javaslang.control.Option</code> (deprecated as Javaslang is deprecated)</p>
+<p><code>javaslang.control.Option</code> (已弃用，不推荐使用Javaslang)</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
 <p>或者，查询方法可以选择根本不使用包装类型。然后通过返回 <code>null</code> 来指示缺少查询结果。
-保证返回集合，集合替代，包装器和流的存储库方法永远不会返回null，而是返回相应的空表示。
+保证返回集合，集合替代，包装器和流的存储库方法永远不会返回 <code>null</code>，而是返回相应的空表示。
 有关详细信息，请参阅 “<a href="#repository-query-return-types">存储库查询返回类型</a>”。</p>
 </div>
 <div class="sect4">
 <h5 id="repositories.nullability.annotations">可空性注解</h5>
 <div class="paragraph">
-<p>你可以使用 <a href="#Spring Framework的可空性注">[Spring Framework的可空性注]</a> 来表达存储库方法的可空性约束。
+<p>你可以使用 <a href="https://docs.spring.io/spring/docs/5.0.8.RELEASE/spring-framework-reference/core.html#null-safety">Spring Framework的可空性注解</a> 来表达存储库方法的可空性约束。
 它们在运行时提供了一种 <strong>工具友好</strong> 的方法和opt-in <code>null</code> 检查，如下所示：</p>
 </div>
 <div class="ulist">
@@ -1325,7 +1334,7 @@ Spring Data存储库使用语言机制来定义这些约束以应用相同的运
 <div class="sect3">
 <h4 id="repositories.multiple-modules">3.3.3. 使用具有多个Spring Data模块的存储库</h4>
 <div class="paragraph">
-<p>在应用程序中使用唯一的Spring Data模块会使事情变得简单，因为定义范围内的所有存储库接口都绑定到Spring Data模块。
+<p>在应用程序中使用唯一的Spring Data模块会使事情变得简单，因为定义范围内的所有存储库接口都绑定到该Spring Data模块。
 有时，应用程序需要使用多个Spring Data模块。在这种情况下，存储库定义必须区分持久性技术。
 当它在类路径上检测到多种存储库工厂时，Spring Data进入严格的存储库配置模式。
 严格配置使用存储库或域类的详细信息来确定存储库定义的Spring Data模块绑定：</p>
@@ -1337,7 +1346,7 @@ Spring Data存储库使用语言机制来定义这些约束以应用相同的运
 </li>
 <li>
 <p>如果使用 <a href="#repositories.multiple-modules.annotations">特定于模块的类型注解</a> 对域类进行注释，则它是特定Spring Data模块的有效候选者。Spring Data模块接受第三方注解
-（例如JPA的 <code>@Entity</code>）或提供自己的注释（例如Spring Data MongoDB和Spring Data Elasticsearch的 <code>@Document</code>）。</p>
+（例如JPA的 <code>@Entity</code>）或存储库已提供的自定义注解（例如Spring Data MongoDB和Spring Data Elasticsearch的 <code>@Document</code>）。</p>
 </li>
 </ol>
 </div>
@@ -1423,7 +1432,7 @@ Spring Data存储库使用语言机制来定义这些约束以应用相同的运
 </div>
 <div class="paragraph">
 <p><code>PersonRepository</code> 引用 <code>Person</code>，它使用JPA <code>@Entity</code> 注解进行批注，因此该存储库显然属于Spring Data JPA。
-<code>UserRepository`引用 `User</code>，它使用Spring Data MongoDB的 <code>@Document</code> 注解进行注释。</p>
+<code>UserRepository</code> 引用 <code>User</code>，它使用Spring Data MongoDB的 <code>@Document</code> 注解进行注释。</p>
 </div>
 </div>
 </div>
@@ -1463,7 +1472,7 @@ Spring Data存储库使用语言机制来定义这些约束以应用相同的运
 </div>
 <div class="paragraph">
 <p>区分存储库的最后一种方法是使用存储库基础包。基础包定义了扫描存储库接口定义的起点，这意味着你需要手动将存储库定义放在相应的包中。
-默认情况下，注释驱动的配置使用配置类的包，但 <a href="#repositories.create-instances.spring">基于XML的配置</a> 中的基本包是必需手动配置的。</p>
+默认情况下，基于注解驱动的配置使用该配置类的包，但 <a href="#repositories.create-instances.spring">基于XML的配置</a> 中的基本包是必需手动配置的。</p>
 </div>
 <div class="paragraph">
 <p>以下示例显示了注解驱动的基础包配置：</p>
@@ -1710,10 +1719,10 @@ Slice&lt;User&gt; findTop3ByLastname(<span class="predefined-type">String</span>
 <h4 id="repositories.query-streaming">3.4.6. 流式查询结果</h4>
 <div class="paragraph">
 <p>可以使用Java 8 <code>Stream&lt;T&gt;</code> 作为返回类型以递增方式处理查询方法的结果，而不是将查询结果包装在 <code>Stream</code> 中，
-使用特定仓储存储的方法执行流式处理，如以下示例所示：</p>
+使用数据存储的特定方法执行流式处理，如以下示例所示：</p>
 </div>
 <div class="exampleblock">
-<div class="title">Example 19. 使用Java 8 `Stream&lt;T&gt;`流式传输查询结果</div>
+<div class="title">Example 19. 使用Java 8 <code>Stream&lt;T&gt;</code> 流式传输查询结果</div>
 <div class="content">
 <div class="listingblock">
 <div class="content">
@@ -1742,7 +1751,7 @@ Stream&lt;User&gt; streamAllPaged(<span class="predefined-type">Pageable</span> 
 </table>
 </div>
 <div class="exampleblock">
-<div class="title">Example 20. 使用try-with-resources块关闭`Stream&lt;T&gt;`</div>
+<div class="title">Example 20. 使用try-with-resources块关闭 <code>Stream&lt;T&gt;</code></div>
 <div class="content">
 <div class="listingblock">
 <div class="content">
@@ -1771,7 +1780,7 @@ Stream&lt;User&gt; streamAllPaged(<span class="predefined-type">Pageable</span> 
 <div class="paragraph">
 <p>可以使用 <a href="https://docs.spring.io/spring/docs/5.0.8.RELEASE/spring-framework-reference/integration.html#scheduling">Spring的异步方法执行功能</a>
 异步运行存储库查询。这意味着该方法在调用时立即返回，而实际的查询执行发生在已提交给Spring <code>TaskExecutor</code> 的任务中。
-异步查询执行与响应式查询执行不同，不应混合使用。有关响应式查询支持的更多详细信息，请参阅特定于仓储的文档。
+异步查询执行与响应式查询执行不同，不应混合使用。有关响应式查询支持的更多详细信息，请参阅特定于存储库的文档。
 以下示例显示了一些异步查询：</p>
 </div>
 <div class="exampleblock">
@@ -1877,7 +1886,7 @@ ListenableFuture&lt;User&gt; findOneByLastname(<span class="predefined-type">Str
 <div class="sect3">
 <h4 id="repositories.create-instances.java-config">3.5.2. Java配置</h4>
 <div class="paragraph">
-<p>还可以通过在JavaConfig类上使用特定于仓储的 <code>@Enable${store}Repositories</code> 注解来触发存储库基础结构。
+<p>还可以通过在JavaConfig类上使用特定于仓储的 <code>@Enable${store}Repositories</code> 注解来启用某种存储库基础设施。
 有关Spring容器的基于Java的配置的介绍，请参阅 <a href="https://docs.spring.io/spring/docs/5.0.8.RELEASE/spring-framework-reference/core.html#beans-java">Spring参考文档中的JavaConfig</a>。</p>
 </div>
 <div class="paragraph">
@@ -2015,7 +2024,7 @@ Spring Data存储库允许你提供自定义存储库代码，并将其与通用
 <p>使用存储库接口继承片段接口可以组合CRUD和自定义功能，并使其可供客户端使用。</p>
 </div>
 <div class="paragraph">
-<p>Spring Data存储库通过使用构成存储库组合的片段来实现。片段是基本存储库，功能方面（如 <a href="#core.extensions.querydsl">QueryDsl</a>），
+<p>Spring Data存储库通过使用构成存储库组合的片段来实现。片段是基本存储库，特定功能方面（如 <a href="#core.extensions.querydsl">QueryDsl</a>），
 自定义接口及其实现。每次向存储库接口添加接口时，都可以通过添加片段来增强组合。每个Spring Data模块都提供了基本存储库和存储库方面的实现。</p>
 </div>
 <div class="paragraph">
@@ -2077,7 +2086,7 @@ Spring Data存储库允许你提供自定义存储库代码，并将其与通用
 <div class="paragraph">
 <p>存储库可以由多个自定义实现组成，这些实现按其声明的顺序导入。自定义实现的优先级高于基本实现和存储库方面实现。
 如果两个片段提供相同的方法签名，则此排序机制允许你覆盖基本存储库和存储库方面的方法并解决歧义。
-存储库片段不限于在单个存储库接口中使用。多个存储库可以使用相同的片段接口，以便你在不同的存储库中重用自定义。</p>
+存储库片段不限于在单个存储库接口中使用。多个存储库可以使用相同的片段接口，以便你在不同的存储库中重用自定义功能。</p>
 </div>
 <div class="paragraph">
 <p>以下示例显示了存储库片段及其实现：</p>
@@ -2505,8 +2514,17 @@ userRepository.findAll(predicate);</code></pre>
 <p>如你所见，该方法直接接收 <code>User</code> 实例，无需进一步查找。可以通过让Spring MVC首先将路径变量转换为域类的id类型来解析实例，
 并最终通过在为域类型注册的存储库实例上调用 <code>findById(&#8230;&#8203;)</code> 来访问实例。</p>
 </div>
-<div class="paragraph">
-<p>NOTE：目前，存储库必须实现 <code>CrudRepository</code> 才有资格被发现并进行转换。</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+目前，存储库必须实现 <code>CrudRepository</code> 才有资格被发现并进行转换。
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect5">
@@ -2561,7 +2579,8 @@ userRepository.findAll(predicate);</code></pre>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">sort</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">应按格式 `property,property(,ASC</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">应按格式 <code>property,property(,ASC|DESC)</code> 排序的属性。默认排序方向是升序。
+如果要切换方向，请使用多个 <code>sort</code> 参数 - 例如，<code>?sort=firstname&amp;sort=lastname,asc</code>。</p></td>
 </tr>
 </tbody>
 </table>
@@ -2595,7 +2614,7 @@ userRepository.findAll(predicate);</code></pre>
 <p>你必须填充 <code>thing1_page</code> 和 <code>thing2_page</code> 等等。</p>
 </div>
 <div class="paragraph">
-<p>传递给方法的默认 <code>Pageable</code> 相当于`new PageRequest(0,20)<code>，但可以通过在 `Pageable</code> 参数上使用 <code>@PageableDefault</code>
+<p>传递给方法的默认 <code>Pageable</code> 相当于 <code>new PageRequest(0,20)</code>，但可以通过在 <code>Pageable</code> 参数上使用 <code>@PageableDefault</code>
 注解进行自定义。</p>
 </div>
 </div>
@@ -2673,7 +2692,7 @@ userRepository.findAll(predicate);</code></pre>
 <div class="paragraph">
 <p>你会看到组装者生成了正确的URI，并且还选择了默认配置以将参数解析为即将发出的请求的 <code>Pageable</code>。
 这意味着，如果更改该配置，链接将遵循设置自动更改。默认情况下，组装者指向它所调用的控制器方法，
-但可以通过交换自定义链接来自定义链接以构建分页链接，这会重载 <code>PagedResourcesAssembler.toResource(&#8230;&#8203;)</code> 方法。</p>
+但可以通过交换自定义链接来自定义链接以构建分页链接，这会用到重载的 <code>PagedResourcesAssembler.toResource(&#8230;&#8203;)</code> 方法。</p>
 </div>
 </div>
 <div class="sect5">
@@ -3318,18 +3337,242 @@ JSON变体首先尝试顶级 <code>lastname</code>，但如果前者没有返回
 </div>
 <div class="sect2">
 <h3 id="repository-query-return-types">5.4. 存储库查询返回类型</h3>
-
+<div class="sect3">
+<h4 id="_支持的查询返回类型">5.4.1. 支持的查询返回类型</h4>
+<div class="paragraph">
+<p>下表列出了Spring Data存储库通常支持的返回类型。但是，请查阅特定于存储库的文档以获取支持的返回类型的确切列表，
+因为特定存储库可能不支持此处列出的某些类型。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+地理空间类型（例如 <code>GeoResult</code>，<code>GeoResults</code> 和 <code>GeoPage</code>）仅适用于支持地理空间查询的数据存储。
+</td>
+</tr>
+</table>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 5. 查询返回类型</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">返回类型</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">描述</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">void</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">表示没有返回值。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Primitives</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Java原语。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Wrapper types</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Java包装器类型。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">T</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">一个特定的实体。期望查询方法最多返回一个结果。如果未找到结果，则返回 <code>null</code>。
+多个结果会触发 <code>IncorrectResultSizeDataAccessException</code>。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Iterator&lt;T&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">迭代器。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Collection&lt;T&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">集合。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List&lt;T&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">列表。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional&lt;T&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Java 8或Guava <code>Optional</code>。期望查询方法最多返回一个结果。如果未找到结果，
+则返回 <code>Optional.empty()</code> 或 <code>Optional.absent()</code>。多个结果会触发 <code>IncorrectResultSizeDataAccessException</code>。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Option&lt;T&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Scala或Javaslang <code>Option</code> 类型。语义上与前面描述的Java 8的 <code>Optional</code> 相同。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Stream&lt;T&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Java 8流 <code>Stream</code>。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Future&lt;T&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Future</code>。期望使用 <code>@Async</code> 注解的方法，并且需要启用Spring的异步方法执行功能。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CompletableFuture&lt;T&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Java 8 <code>CompletableFuture</code>。期望使用 <code>@Async</code> 注解的方法，并且需要启用Spring的异步方法执行功能。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ListenableFuture</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.springframework.util.concurrent.ListenableFuture</code>。
+期望使用 <code>@Async</code> 注解的方法，并且需要启用Spring的异步方法执行功能。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Slice</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">数据块切片，指示是否有更多数据可用。需要 <code>Pageable</code> 方法参数。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Page&lt;T&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">带有附加信息的切片，例如结果总数。需要 <code>Pageable</code> 方法参数。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GeoResult&lt;T&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">带有附加信息的结果条目，例如到参考位置的距离。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GeoResults&lt;T&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">带有附加信息的 <code>GeoResult&lt;T&gt;</code> 列表，例如到参考位置的平均距离。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GeoPage&lt;T&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">包含 <code>GeoResult&lt;T&gt;</code> 的页，例如到参考位置的平均距离。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mono&lt;T&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://projectreactor.io/">Project Reactor</a> <code>Mono</code> 使用响应式存储库发射零或一个元素 。期望查询方法最多返回一个结果。
+如果未找到结果，则返回 <code>Mono.empty()</code>。多个结果会触发 <code>IncorrectResultSizeDataAccessException</code>。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Flux&lt;T&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://projectreactor.io/">Project Reactor</a> <code>Flux</code> 使用响应式存储库发射零个，一个或多个元素。返回 <code>Flux</code> 的查询也可以发出无限数量的元素。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Single&lt;T&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/ReactiveX/RxJava">RxJava</a> <code>Single</code> 使用响应式存储库发射单个元素。期望查询方法最多返回一个结果。如果未找到结果，则返回 <code>Mono.empty()</code>。
+多个结果会触发 <code>IncorrectResultSizeDataAccessException</code>。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maybe&lt;T&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/ReactiveX/RxJava">RxJava</a> <code>Maybe</code> 使用响应式存储库发射零个或一个元素。期望查询方法最多返回一个结果。如果未找到结果，
+则返回 <code>Mono.empty()</code>。多个结果会触发 <code>IncorrectResultSizeDataAccessException</code>。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Flowable&lt;T&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/ReactiveX/RxJava">RxJava</a> <code>Flowable</code> 使用响应式存储库发射零个，一个或多个元素。返回 <code>Flowable</code> 的查询也可以发出无限数量的元素。</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div class="sect2">
-<h3 id="repository-query-return-types">5.5. 存储库查询返回类型</h3>
+<h3 id="faq">5.5. FAQ</h3>
+<div class="sect3">
+<h4 id="_常见">5.5.1. 常见</h4>
+<div class="qlist qanda">
+<ol>
+<li>
+<p><em>我想获得更详细的日志信息，以便了解在 <code>JpaRepository</code> 中调用了哪些方法，该怎么做呢？</em></p>
+<p>您可以使用Spring提供的 <code>CustomizableTraceInterceptor</code>，如以下示例所示：</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;bean</span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">customizableTraceInterceptor</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span>
+  <span class="content">org.springframework.aop.interceptor.CustomizableTraceInterceptor</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+  <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">enterMessage</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Entering $[methodName]($[arguments])</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+  <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">exitMessage</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Leaving $[methodName](): $[returnValue]</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="tag">&lt;/bean&gt;</span>
 
+<span class="tag">&lt;aop:config&gt;</span>
+  <span class="tag">&lt;aop:advisor</span> <span class="attribute-name">advice-ref</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">customizableTraceInterceptor</span><span class="delimiter">&quot;</span></span>
+    <span class="attribute-name">pointcut</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">execution(public * org.springframework.data.jpa.repository.JpaRepository+.*(..))</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="tag">&lt;/aop:config&gt;</span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_基础设施">5.5.2. 基础设施</h4>
+<div class="qlist qanda">
+<ol>
+<li>
+<p><em>目前，我已经实现了基于 <code>HibernateDaoSupport</code> 的存储库层。我使用Spring的 <code>AnnotationSessionFactoryBean</code> 创建一个 <code>SessionFactory</code>。如何在此环境中使用Spring Data存储库？</em></p>
+<p>您必须使用 <code>HibernateJpaSessionFactoryBean</code> 替换 <code>AnnotationSessionFactoryBean</code>，如下所示：</p>
+<div class="exampleblock">
+<div class="title">Example 50. 从 <code>HibernateEntityManagerFactory</code> 查找 <code>SessionFactory</code></div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;bean</span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">sessionFactory</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">org.springframework.orm.jpa.vendor.HibernateJpaSessionFactoryBean</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+  <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">entityManagerFactory</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">ref</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">entityManagerFactory</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+<span class="tag">&lt;/bean&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_审计">5.5.3. 审计</h4>
+<div class="qlist qanda">
+<ol>
+<li>
+<p><em>我想使用Spring Data JPA审计功能，但我的数据库已配置为在实体上设置修改和创建日期。如何防止Spring Data以编程方式设置日期？</em></p>
+<p>将 <code>auditing</code> 命名空间元素的 <code>set-dates</code> 属性设置为 <code>false</code>。</p>
+</li>
+</ol>
+</div>
+</div>
 </div>
 <div class="sect2">
-<h3 id="faq">5.6. FAQ</h3>
-
+<h3 id="glossary">5.6. 词汇表</h3>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">AOP</dt>
+<dd>
+<p>面向切面编程</p>
+</dd>
+<dt class="hdlist1">Commons DBCP</dt>
+<dd>
+<p><a href="http://commons.apache.org/proper/commons-dbcp/index.html">Commons DataBase Connection Pools</a> - 来自Apache基础的库，提供 <code>DataSource</code> 接口的池实现</p>
+</dd>
+<dt class="hdlist1">CRUD</dt>
+<dd>
+<p>创建，读取，更新，删除 - 基本持久性操作</p>
+</dd>
+<dt class="hdlist1">DAO</dt>
+<dd>
+<p>数据访问对象 - 用于将持久化逻辑与要持久化的对象分开的模式</p>
+</dd>
+<dt class="hdlist1">Dependency Injection</dt>
+<dd>
+<p>模式将组件的依赖关系从外部传递给组件，降低组件间耦合。有关更多信息，
+请参阅 <a href="http://en.wikipedia.org/wiki/Dependency_Injection" class="bare">http://en.wikipedia.org/wiki/Dependency_Injection</a></p>
+</dd>
+<dt class="hdlist1">EclipseLink</dt>
+<dd>
+<p>实现JPA的对象关系映射器 -  <a href="http://www.eclipselink.org" class="bare">http://www.eclipselink.org</a></p>
+</dd>
+<dt class="hdlist1">Hibernate</dt>
+<dd>
+<p>实现JPA的对象关系映射器 -  <a href="http://www.hibernate.org" class="bare">http://www.hibernate.org</a></p>
+</dd>
+<dt class="hdlist1">JPA</dt>
+<dd>
+<p>Java持久化API</p>
+</dd>
+<dt class="hdlist1">Spring</dt>
+<dd>
+<p>Java应用程序框架 -  <a href="http://projects.spring.io/spring-framework" class="bare">http://projects.spring.io/spring-framework</a></p>
+</dd>
+</dl>
 </div>
-<div class="sect2">
-<h3 id="glossary">5.7. 词汇表</h3>
 <div class="admonitionblock tip">
 <table>
 <tr>
@@ -3354,7 +3597,7 @@ JSON变体首先尝试顶级 <code>lastname</code>，但如果前者没有返回
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-12-04 20:29:54 CST
+Last updated 2018-12-07 20:01:23 CST
 </div>
 </div>
 </body>
