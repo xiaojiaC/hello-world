@@ -4957,32 +4957,377 @@ Example&lt;Person&gt; example = Example.of(person, matcher); <i class="conum" da
 </div>
 <div class="sect2">
 <h3 id="locking">4.8. 锁</h3>
+<div class="paragraph">
+<p>指定要使用锁定模式，可以在查询方法上使用 <code>@Lock</code> 注解，如以下示例所示：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 101. 在查询方法上定义锁元数据</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> Repository&lt;User, <span class="predefined-type">Long</span>&gt; {
 
+  <span class="comment">// 简单查询方法</span>
+  <span class="annotation">@Lock</span>(LockModeType.READ)
+  <span class="predefined-type">List</span>&lt;User&gt; findByLastname(<span class="predefined-type">String</span> lastname);
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>此方法声明使触发的查询 <code>LockModeType</code> 为 <code>READ</code>。你还可以通过在存储库接口中重新声明CRUD方法并添加
+<code>@Lock</code> 注解来定义CRUD方法的锁定，如以下示例所示：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 102. 在CRUD方法上定义锁元数据</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> Repository&lt;User, <span class="predefined-type">Long</span>&gt; {
+
+  <span class="comment">// 重新声明CRUD方法</span>
+  <span class="annotation">@Lock</span>(LockModeType.READ);
+  <span class="predefined-type">List</span>&lt;User&gt; findAll();
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="auditing">4.9. 审计</h3>
 <div class="sect3">
 <h4 id="auditing.basics">4.9.1. 基础</h4>
+<div class="paragraph">
+<p>Spring Data提供了复杂的支持，可以透明地跟踪创建或更改实体的人员以及更改发生的时间。要从该功能中受益，
+你必须为你的实体类配备审计元数据，该元数据可以使用注解或通过实现接口来定义。</p>
+</div>
+<div class="sect4">
+<h5 id="auditing.annotations">基于注解的审计元数据</h5>
+<div class="paragraph">
+<p>我们提供 <code>@CreatedBy</code> 和 <code>@LastModifiedBy</code> 来捕获创建或修改实体的用户以及 <code>@CreatedDate</code> 和 <code>@LastModifiedDate</code>
+以捕获更改发生的时间。</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 103. 经审计的实体</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">Customer</span> {
 
+  <span class="annotation">@CreatedBy</span>
+  <span class="directive">private</span> User user;
+
+  <span class="annotation">@CreatedDate</span>
+  <span class="directive">private</span> DateTime createdDate;
+
+  <span class="comment">// … 其他属性省略</span>
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>如你所见，可以有选择地应用注解，具体取决于你要捕获的信息。进行更改时捕获的注解可用于Joda-Time，<code>DateTime</code>，
+旧Java <code>Date</code> 和 <code>Calendar</code>，JDK8日期和时间类型以及 <code>long</code> 或 <code>Long</code> 类型的属性。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="auditing.interfaces">基于接口的审计元数据</h5>
+<div class="paragraph">
+<p>如果你不想使用注解来定义审核元数据，可以让你的域类实现 <code>Auditable</code> 接口，它公开了所有审计属性的 <code>setter</code> 方法。</p>
+</div>
+<div class="paragraph">
+<p>还有一个方便的基类 <code>AbstractAuditable</code>，你可以继承它以避免需要手动实现接口方法。这样做会增加域类与Spring Data的耦合，
+这可能是你想要避免的。通常，基于注解的定义审计元数据的方式是优选的，因为它具有较小的侵入性和更灵活性。</p>
+</div>
+<div class="sect5">
+<h6 id="auditing.auditor-aware"><code>AuditorAware</code></h6>
+<div class="paragraph">
+<p>如果你使用 <code>@CreatedBy</code> 或 <code>@LastModifiedBy</code>，审计基础设施需要以某种方式了解当前主体。
+为此，我们提供了一个 <code>AuditorAware&lt;T&gt;</code> SPI接口，你必须实现该接口，以告知基础设施当前与应用程序交互的用户。
+泛型类型 <code>T</code> 定义了使用 <code>@CreatedBy</code> 或 <code>@LastModifiedBy</code> 注解的属性的类型。</p>
+</div>
+<div class="paragraph">
+<p>以下示例显示了使用Spring Security的 <code>Authentication</code> 对象的接口的实现：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 104. 基于Spring Security的 <code>AuditorAware</code> 实现</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">SpringSecurityAuditorAware</span> <span class="directive">implements</span> AuditorAware&lt;User&gt; {
+
+  <span class="directive">public</span> User getCurrentAuditor() {
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    <span class="keyword">if</span> (authentication == <span class="predefined-constant">null</span> || !authentication.isAuthenticated()) {
+      <span class="keyword">return</span> <span class="predefined-constant">null</span>;
+    }
+
+    <span class="keyword">return</span> ((MyUserDetails) authentication.getPrincipal()).getUser();
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>该实现访问Spring Security提供的 <code>Authentication</code> 对象，并查找你在 <code>UserDetailsS​​ervice</code> 实现中创建的自定义 <code>UserDetails</code> 实例。
+我们假设你通过 <code>UserDetails</code> 实现公开域用户，根据找到的身份验证获取它，你也可以从任何地方查找它。</p>
+</div>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="jpa.auditing">4.9.2. JPA审计</h4>
+<div class="sect4">
+<h5 id="jpa.auditing.configuration">通用审计配置</h5>
+<div class="paragraph">
+<p>Spring Data JPA附带了一个实体监听器，可用于触发审计信息的捕获。首先，你必须注册 <code>AuditingEntityListener</code> 以用于审计 <code>orm.xml</code>
+文件中持久性上下文中的所有实体，如以下示例所示：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 105. 审计配置orm.xml</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;persistence-unit-metadata&gt;</span>
+  <span class="tag">&lt;persistence-unit-defaults&gt;</span>
+    <span class="tag">&lt;entity-listeners&gt;</span>
+      <span class="tag">&lt;entity-listener</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">….data.jpa.domain.support.AuditingEntityListener</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+    <span class="tag">&lt;/entity-listeners&gt;</span>
+  <span class="tag">&lt;/persistence-unit-defaults&gt;</span>
+<span class="tag">&lt;/persistence-unit-metadata&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>你还可以将 <code>@EntityListeners</code> 注解在每个实体上以启用 <code>AuditingEntityListener</code>，如下所示：</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Entity</span>
+<span class="annotation">@EntityListeners</span>(AuditingEntityListener.class)
+<span class="directive">public</span> <span class="type">class</span> <span class="class">MyEntity</span> {
 
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+审计功能要求类路径上有 <code>spring-aspects.jar</code>。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>通过适当修改 <code>orm.xml</code> 和类路径上持有 <code>spring-aspects.jar</code>，激活审计功能是将Spring Data JPA审计命名空间元素添加到配置中，
+如下所示：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 106. 使用XML配置激活审计</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;jpa:auditing</span> <span class="attribute-name">auditor-aware-ref</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">yourAuditorAwareBean</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>从Spring Data JPA 1.5开始，你可以通过添加 <code>@EnableJpaAuditing</code> 注解到配置类来启用审计。
+你仍然必须修改 <code>orm.xml</code> 文件并在类路径上使用 <code>spring-aspects.jar</code>。以下示例显示如何使用 <code>@EnableJpaAuditing</code> 注解：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 107. 使用Java配置激活审计</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
+<span class="annotation">@EnableJpaAuditing</span>
+<span class="type">class</span> <span class="class">Config</span> {
+
+  <span class="annotation">@Bean</span>
+  <span class="directive">public</span> AuditorAware&lt;AuditableUser&gt; auditorProvider() {
+    <span class="keyword">return</span> <span class="keyword">new</span> AuditorAwareImpl();
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>如果将 <code>AuditorAware</code> 类型的bean暴露在 <code>ApplicationContext</code>，则审计基础设施会自动选择它并使用它来确定要在域类型上设置的当前用户。
+如果在 <code>ApplicationContext</code> 中注册了多个实现，则可以通过显式设置 <code>@EnableJpaAuditing</code> 的 <code>auditorAwareRef</code> 属性来选择要使用的实现。</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="jpa.misc">4.10. 其他考虑因素</h3>
 <div class="sect3">
 <h4 id="jpa.misc.jpa-context">4.10.1. 在自定义实现中使用 <code>JpaContext</code></h4>
+<div class="paragraph">
+<p>使用多个 <code>EntityManager</code> 实例和<a href="#repositories.custom-implementations">自定义存储库</a>实现时，
+需要将正确的EntityManager连接到存储库实现类。你可以通过在 <code>@PersistenceContext</code> 注解中显式命名 <code>EntityManager</code> 来实现，
+或者，如果 <code>EntityManager</code> 被 <code>@Autowired</code> 标注，则使用 <code>@Qualifier</code> 来区分。</p>
+</div>
+<div class="paragraph">
+<p>从Spring Data JPA 1.9开始，Spring Data JPA包含一个名为 <code>JpaContext</code> 的类，它允许你通过托管域类获取 <code>EntityManager</code>，
+假设它仅由应用程序中的一个 <code>EntityManager</code> 实例管理。以下示例显示如何在自定义存储库中使用 <code>JpaContext</code>：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 108. 在自定义存储库实现中使用 <code>JpaContext</code></div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">UserRepositoryImpl</span> <span class="directive">implements</span> UserRepositoryCustom {
 
+  <span class="directive">private</span> <span class="directive">final</span> EntityManager em;
+
+  <span class="annotation">@Autowired</span>
+  <span class="directive">public</span> UserRepositoryImpl(JpaContext context) {
+    <span class="local-variable">this</span>.em = context.getEntityManagerByManagedType(User.class);
+  }
+
+  <span class="error">…</span>
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>此方法的优点是，如果将域类型分配给不同的持久性单元，则不必触及存储库来更改对持久性单元的引用。</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="jpa.misc.merging-persistence-units">4.10.2. 合并持久性单元</h4>
-
+<div class="paragraph">
+<p>Spring支持具有多个持久性单元。但是，有时你可能希望模块化你的应用程序，但仍然确保所有这些模块在单个持久性单元内运行。
+为了实现该行为，Spring Data JPA提供了一个 <code>PersistenceUnitManager</code> 实现，该实现根据其名称自动合并持久性单元，如以下示例所示：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 109. 使用 <code>MergingPersistenceUnitmanager</code></div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;bean</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">….LocalContainerEntityManagerFactoryBean</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+  <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">persistenceUnitManager</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+    <span class="tag">&lt;bean</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">….MergingPersistenceUnitManager</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+  <span class="tag">&lt;/property&gt;</span>
+<span class="tag">&lt;/bean&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="jpa.misc.entity-scanning"><code>@Entity</code> 类和JPA映射文件的类路径扫描</h5>
+<div class="paragraph">
+<p>普通的JPA设置要求在 <code>orm.xml</code> 中列出所有注解映射的实体类。这同样适用于其它XML映射文件。Spring Data JPA
+提供了一个 <code>ClasspathScanningPersistenceUnitPostProcessor</code>，它可以获取配置的基础包，并可选择采用映射文件名模式。
+然后，它会扫描给定的包以获取使用 <code>@Entity</code> 或 <code>@MappedSuperclass</code> 注解的类，加载与文件名模式匹配的配置文件，并将它们交给JPA配置。
+后置处理器必须配置如下：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 110. 使用 <code>ClasspathScanningPersistenceUnitPostProcessor</code></div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;bean</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">….LocalContainerEntityManagerFactoryBean</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+  <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">persistenceUnitPostProcessors</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+    <span class="tag">&lt;list&gt;</span>
+      <span class="tag">&lt;bean</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">org.springframework.data.jpa.support.ClasspathScanningPersistenceUnitPostProcessor</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+        <span class="tag">&lt;constructor-arg</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.domain</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+        <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">mappingFileNamePattern</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">**/*Mapping.xml</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+      <span class="tag">&lt;/bean&gt;</span>
+    <span class="tag">&lt;/list&gt;</span>
+  <span class="tag">&lt;/property&gt;</span>
+<span class="tag">&lt;/bean&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+从Spring 3.1开始，可以直接在 <code>LocalContainerEntityManagerFactoryBean</code> 上配置要扫描的包，
+以便为实体类启用类路径扫描。有关详细信息，请参阅 <a href="https://docs.spring.io/spring/docs/5.0.8.RELEASE/javadoc-api/org/springframework/orm/jpa/LocalContainerEntityManagerFactoryBean.html#setPackagesToScan(java.lang.String&#8230;&#8203;)">JavaDoc</a>。
+</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="jpd.misc.cdi-integration">4.10.3. CDI集成</h4>
+<div class="paragraph">
+<p>存储库接口的实例通常由容器创建，在使用Spring Data时，Spring是最自然的选择。Spring提供了对创建bean实例的复杂支持，
+如<a href="#repositories.create-instances">创建存储库实例</a>中所述。从版本1.1.0开始，Spring Data JPA附带了一个自定义CDI扩展，
+允许在CDI环境中使用存储库抽象。扩展是JAR的一部分。要激活它，请在类路径中包含Spring Data JPA JAR。</p>
+</div>
+<div class="paragraph">
+<p>你现在可以通过为 <code>EntityManagerFactory</code> 和 <code>EntityManager</code> 实现CDI Producer来设置基础结构，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">EntityManagerFactoryProducer</span> {
 
+  <span class="annotation">@Produces</span>
+  <span class="annotation">@ApplicationScoped</span>
+  <span class="directive">public</span> EntityManagerFactory createEntityManagerFactory() {
+    <span class="keyword">return</span> Persistence.createEntityManagerFactory(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-presistence-unit</span><span class="delimiter">&quot;</span></span>);
+  }
+
+  <span class="directive">public</span> <span class="type">void</span> close(<span class="annotation">@Disposes</span> EntityManagerFactory entityManagerFactory) {
+    entityManagerFactory.close();
+  }
+
+  <span class="annotation">@Produces</span>
+  <span class="annotation">@RequestScoped</span>
+  <span class="directive">public</span> EntityManager createEntityManager(EntityManagerFactory entityManagerFactory) {
+    <span class="keyword">return</span> entityManagerFactory.createEntityManager();
+  }
+
+  <span class="directive">public</span> <span class="type">void</span> close(<span class="annotation">@Disposes</span> EntityManager entityManager) {
+    entityManager.close();
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>必要的设置可能因JavaEE环境而异。你可能只需要将 <code>EntityManager</code> 重新声明为CDI bean，如下所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">CdiConfig</span> {
+
+  <span class="annotation">@Produces</span>
+  <span class="annotation">@RequestScoped</span>
+  <span class="annotation">@PersistenceContext</span>
+  <span class="directive">public</span> EntityManager entityManager;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>在前面的示例中，容器必须能够自己创建JPA <code>EntityManagers</code>。所有配置都将JPA <code>EntityManager</code> 重新导出为CDI bean。</p>
+</div>
 </div>
 </div>
 </div>
@@ -5369,7 +5714,7 @@ Example&lt;Person&gt; example = Example.of(person, matcher); <i class="conum" da
 <p><em>目前，我已经实现了基于 <code>HibernateDaoSupport</code> 的存储库层。我使用Spring的 <code>AnnotationSessionFactoryBean</code> 创建一个 <code>SessionFactory</code>。如何在此环境中使用Spring Data存储库？</em></p>
 <p>你必须使用 <code>HibernateJpaSessionFactoryBean</code> 替换 <code>AnnotationSessionFactoryBean</code>，如下所示：</p>
 <div class="exampleblock">
-<div class="title">Example 101. 从 <code>HibernateEntityManagerFactory</code> 查找 <code>SessionFactory</code></div>
+<div class="title">Example 111. 从 <code>HibernateEntityManagerFactory</code> 查找 <code>SessionFactory</code></div>
 <div class="content">
 <div class="listingblock">
 <div class="content">
@@ -5463,7 +5808,7 @@ Example&lt;Person&gt; example = Example.of(person, matcher); <i class="conum" da
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-12-10 21:04:24 CST
+Last updated 2018-12-11 19:32:37 CST
 </div>
 </div>
 </body>
