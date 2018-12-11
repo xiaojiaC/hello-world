@@ -9,7 +9,7 @@ Version 2.9.2-SNAPSHOT
 
 == 介绍
 
-Springfox的java库套件都是关于使用 http://projects.spring.io/spring-framework[spring系列项目]自动生成JSON API的机器和人类
+Springfox的java库套件都是关于使用 http://projects.spring.io/spring-framework[Spring系列项目]自动生成JSON API的机器和人类
 可读规范。Springfox会检查应用程序一次，在运行时根据spring配置，类结构和各种编译时Java注解来推断API语义。
 
 === 历史
@@ -20,7 +20,7 @@ Springfox从最初由 https://github.com/martypitt[Marty Pitt]创建的项目发
 
 - 扩展并支持针对于JSON API规范和文档的许多不断发展的标准，例如： http://swagger.io/[swagger] ， http://raml.org/[RAML]和
 http://jsonapi.org/[jsonapi]。
-- 扩展对 http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html[springmvc]以外的spring技术的支持
+- 扩展对 http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html[spring webmvc]以外的spring技术的支持
 - 从哲学上讲，我们希望不鼓励使用（swagger-core）注解，这些注解在运行时对服务描述无关紧要。例如：Jackson注解应该总是比
 `@ApiModelProperty` 更重要，再者 `@NotNull` 或指定 `@RequestParam#required` 是十分重要的。
 在无法推断service/schema特征的情况下，注解应仅用于补充文档或覆盖/调整生成的规范。
@@ -349,7 +349,7 @@ dependencies {
 [source,java]
 [subs="verbatim,attributes"]
 ----
-//For java config
+// 对于java配置
 @Import({ ... springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration.class, ...})
 ----
 
@@ -398,7 +398,7 @@ dependencies {
 [source,java]
 [subs="verbatim,attributes"]
 ----
-//For java config
+// 对于java配置
 @Import({ ... springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration.class, ...})
 ----
 
@@ -856,7 +856,7 @@ WARNING: 请谨慎更改此默认值为 `false`。这意味着在以线程安全
 | 例如: `@RequestHeader(defaultValue="${param1.defaultValue}")`
 |===
 
-有关详细说明，请参见 http://springfox.github.io/springfox/docs/current/#property-file-lookup[此处]。
+有关详细说明，请参见 <<property-file-lookup,此处>>。
 
 === 覆盖属性数据类型
 
@@ -903,7 +903,7 @@ private static final Set<String> baseTypes = newHashSet(
 
 要使用该插件，您必须创建一个使用spring的 `@Configuration` 的spring java配置类，并在xml应用程序上下文中声明。
 
-.Xml配置
+.xml配置
 [source,xml]
 ----
 <!-- 必需，指示springfox可以访问spring的RequestMappingHandlerMapping  -->
@@ -960,6 +960,7 @@ public class CustomJavaPluginConfig {
 }
 ----
 
+[[property-file-lookup]]
 === 支持属性文件查找描述
 
 从2.7.0开始，我们支持从以下注解中查找给定属性的描述信息，就像属性占位符解析值注解 `@Value(${key})` 一样。以下注解属性支持描述解析：
