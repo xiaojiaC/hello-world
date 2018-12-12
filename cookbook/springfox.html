@@ -563,7 +563,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_覆盖属性数据类型">6.5. 覆盖属性数据类型</a></li>
 <li><a href="#_docket_xml配置">6.6. Docket XML配置</a></li>
 <li><a href="#_docket_spring_java配置">6.7. Docket Spring Java配置</a></li>
-<li><a href="#_支持属性文件查找描述">6.8. 支持属性文件查找描述</a></li>
+<li><a href="#property-file-lookup">6.8. 支持属性文件查找描述</a></li>
 </ul>
 </li>
 <li><a href="#_安全">7. 安全</a></li>
@@ -575,7 +575,7 @@ table.CodeRay td.code>pre{padding:0}
 <h2 id="_介绍">1. 介绍</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Springfox的java库套件都是关于使用 <a href="http://projects.spring.io/spring-framework">spring系列项目</a>自动生成JSON API的机器和人类
+<p>Springfox的java库套件都是关于使用 <a href="http://projects.spring.io/spring-framework">Spring系列项目</a>自动生成JSON API的机器和人类
 可读规范。Springfox会检查应用程序一次，在运行时根据spring配置，类结构和各种编译时Java注解来推断API语义。</p>
 </div>
 <div class="sect2">
@@ -593,7 +593,7 @@ table.CodeRay td.code>pre{padding:0}
 <a href="http://jsonapi.org/">jsonapi</a>。</p>
 </li>
 <li>
-<p>扩展对 <a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html">springmvc</a>以外的spring技术的支持</p>
+<p>扩展对 <a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html">spring webmvc</a>以外的spring技术的支持</p>
 </li>
 <li>
 <p>从哲学上讲，我们希望不鼓励使用（swagger-core）注解，这些注解在运行时对服务描述无关紧要。例如：Jackson注解应该总是比
@@ -1217,7 +1217,7 @@ list.add(<span class="keyword">new</span> Something());</code></pre>
 <h4 id="_java_config">3.3.3. java config</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">//For java config</span>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// 对于java配置</span>
 <span class="annotation">@Import</span>({ ... springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration.class, ...})</code></pre>
 </div>
 </div>
@@ -1282,7 +1282,7 @@ list.add(<span class="keyword">new</span> Something());</code></pre>
 <h4 id="_java_config_2">3.4.3. java config</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">//For java config</span>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// 对于java配置</span>
 <span class="annotation">@Import</span>({ ... springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration.class, ...})</code></pre>
 </div>
 </div>
@@ -1988,7 +1988,7 @@ swagger 2.0类型。</p>
 </tbody>
 </table>
 <div class="paragraph">
-<p>有关详细说明，请参见 <a href="http://springfox.github.io/springfox/docs/current/#property-file-lookup">此处</a>。</p>
+<p>有关详细说明，请参见 <a href="#property-file-lookup">此处</a>。</p>
 </div>
 </div>
 <div class="sect2">
@@ -2050,7 +2050,7 @@ swagger 2.0类型。</p>
 <p>要使用该插件，您必须创建一个使用spring的 <code>@Configuration</code> 的spring java配置类，并在xml应用程序上下文中声明。</p>
 </div>
 <div class="listingblock">
-<div class="title">Xml配置</div>
+<div class="title">xml配置</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="xml"><span class="comment">&lt;!-- 必需，指示springfox可以访问spring的RequestMappingHandlerMapping  --&gt;</span>
 <span class="tag">&lt;mvc:annotation-driven</span><span class="tag">/&gt;</span>
@@ -2116,7 +2116,7 @@ swagger 2.0类型。</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_支持属性文件查找描述">6.8. 支持属性文件查找描述</h3>
+<h3 id="property-file-lookup">6.8. 支持属性文件查找描述</h3>
 <div class="paragraph">
 <p>从2.7.0开始，我们支持从以下注解中查找给定属性的描述信息，就像属性占位符解析值注解 <code>@Value(${key})</code> 一样。以下注解属性支持描述解析：</p>
 </div>
@@ -2409,7 +2409,7 @@ Springfox会将 <code>getPetsUsingGET</code> 渲染为operationId。</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-12-02 13:00:41 CST
+Last updated 2018-12-11 20:55:42 CST
 </div>
 </div>
 </body>
