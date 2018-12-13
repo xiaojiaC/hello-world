@@ -563,6 +563,8 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#spring-mvc-test-framework">3.6. Spring MVC测试框架</a>
 <ul class="sectlevel3">
 <li><a href="#spring-mvc-test-server">3.6.1. 服务器端测试</a></li>
+<li><a href="#spring-mvc-test-server-htmlunit">3.6.2. HtmlUnit集成</a></li>
+<li><a href="#spring-mvc-test-client">3.6.3. 客户端REST测试</a></li>
 </ul>
 </li>
 <li><a href="#webtestclient">3.7. WebTestClient</a></li>
@@ -2417,7 +2419,7 @@ Spring和JUnit Jupiter的常用测试配置从而减少重复，如下所示：<
 </td>
 <td class="content">
 Spring Boot提供了一个选项来编写包含正在运行的服务器的完整的端到端集成测试。请参阅
-<a href="https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html/boot-features-testing.html#boot-features-testing-spring-boot-applications">Spring Boot参考文档</a>。
+<a href="spring-boot-test.html#boot-features-testing-spring-boot-applications">Spring Boot参考文档</a>。
 有关容器外和端到端集成测试之间差异的更多信息，请参阅<a href="#spring-mvc-test-vs-end-to-end-integration-tests">容器外和端到端集成测试之间的差异</a>。
 </td>
 </tr>
@@ -2642,7 +2644,7 @@ MockMvc mockMvc = MockMvcBuilders.standaloneSetup(<span class="keyword">new</spa
 </div>
 </div>
 <div class="paragraph">
-<p>有关所有 <code>MockMvc</code> 构建器功能的列表，请参阅 <a href="https://docs.spring.io/spring-framework/docs/5.1.3.RELEASE/javadoc-api/org/springframework/test/web/servlet/setup/ConfigurableMockMvcBuilder.html">ConfigurableMockMvcBuilder</a>
+<p>有关所有 <code>MockMvc</code> 构建器功能的列表，请参阅 <a href="https://docs.spring.io/spring-framework/docs/5.1.3.RELEASE/javadoc-api/org/springframework/test/web/servlet/setup/ConfigurableMockMvcBuilder.html"><code>ConfigurableMockMvcBuilder</code></a>
 的javadoc，或使用IDE浏览可用选项。</p>
 </div>
 </div>
@@ -2877,13 +2879,596 @@ mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><s
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">mockMvc = standaloneSetup(<span class="keyword">new</span> PersonController()).addFilters(<span class="keyword">new</span> CharacterEncodingFilter()).build();</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">mockMvc = standaloneSetup(<span class="keyword">new</span> PersonController())
+    .addFilters(<span class="keyword">new</span> CharacterEncodingFilter())
+    .build();</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="paragraph">
 <p>注册过滤器会通过 <code>spring-test</code> 中的 <code>MockFilterChain</code> 调用，最后一个过滤器委托给 <code>DispatcherServlet</code>。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="spring-mvc-test-vs-end-to-end-integration-tests">容器外和端到端集成测试之间的差异</h5>
+<div class="paragraph">
+<p>如前所述，Spring MVC Test构建于 <code>spring-test</code> 模块的Servlet API模拟对象之上，并不使用正在运行的Servlet容器。因此，
+与实际客户端和服务器运行的完整端到端集成测试相比，存在一些重要差异。</p>
+</div>
+<div class="paragraph">
+<p>考虑这一点的最简单方法是从一个空白的 <code>MockHttpServletRequest</code> 开始。无论你添加什么使请求变成什么。
+可能会让您感到意外的事情是默认情况下没有上下文路径、没有 <code>jsessionid</code> cookie、没有转发、错误或异步调度、因此，没有实际的JSP渲染。
+相反，“转发”和“重定向”URLs保存在 <code>MockHttpServletResponse</code> 中，并且可用于期望断言。</p>
+</div>
+<div class="paragraph">
+<p>这意味着，如果使用JSP，则可以验证请求转发到的JSP页面，但不呈现HTML。换句话说，不调用JSP。但请注意，所有其他不依赖转发的渲染技术
+（如Thymeleaf和Freemarker）都会按预期将HTML呈现给响应主体。通过 <code>@ResponseBody</code> 方法渲染JSON，XML和其他格式也是如此。</p>
+</div>
+<div class="paragraph">
+<p>或者，您可以考虑使用 <code>@WebIntegrationTest</code> 从Spring Boot获得完整的端到端集成测试支持。请参阅
+<a href="spring-boot-test.html#boot-features-testing-spring-boot-applications">Spring Boot参考文档</a>。</p>
+</div>
+<div class="paragraph">
+<p>每种方法都有利弊。Spring MVC Test中提供的选项是从经典单元测试到完全集成测试的不同阶段。
+可以肯定的是，Spring MVC Test中没有一个选项属于经典单元测试类别，但它们很接近它。
+例如，您可以通过将模拟服务注入控制器来隔离Web层，在这种情况下，您只通过 <code>DispatcherServlet</code> 测试Web层，但是使用实际的Spring配置，
+因为您可能独立于上面的层来测试数据访问层。此外，您可以使用独立设置，一次关注一个控制器并手动提供使其工作所需的配置。</p>
+</div>
+<div class="paragraph">
+<p>使用Spring MVC Test时的另一个重要区别是，从概念上讲，这样的测试是服务器端，因此您可以检查使用了什么执行器，是否使用
+<code>HandlerExceptionResolver</code> 处理异常，模型的内容是什么，绑定错误是什么和其他细节。这意味着编写期望更容易，因为服务器不是黑盒子，
+就像通过实际的HTTP客户端测试它一样。这通常是经典单元测试的一个优点：它更容易编写，推理和调试，但不能取代完全集成测试。
+同时，重要的是不要忽视响应是最重要的需要去检查的事物。简而言之，即使在同一个项目中，也有多种测试风格和策略的空间。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="spring-mvc-test-server-resources">进一步的服务器端测试示例</h5>
+<div class="paragraph">
+<p>框架自身的测试包括 <a href="https://github.com/spring-projects/spring-framework/tree/master/spring-test/src/test/java/org/springframework/test/web/servlet/samples">许多样例测试</a>，旨在展示如何使用Spring MVC测试。您可以浏览这些示例以获取更多想法。
+此外， <a href="https://github.com/spring-projects/spring-mvc-showcase">spring-mvc-showcase</a>项目具有基于Spring MVC Test的完整测试覆盖率。</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="spring-mvc-test-server-htmlunit">3.6.2. HtmlUnit集成</h4>
+<div class="paragraph">
+<p>Spring提供了<a href="#spring-mvc-test-server">MockMvc</a>和 <a href="http://htmlunit.sourceforge.net/">HtmlUnit</a>之间的集成。
+这简化了使用基于HTML的视图时执行端到端测试的过程。这种集成让您：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>使用 <a href="http://htmlunit.sourceforge.net/">HtmlUnit</a> ， <a href="http://seleniumhq.org/projects/webdriver/">WebDriver</a>和
+<a href="http://seleniumhq.org/projects/webdriver/">Geb</a>等工具轻松测试HTML页面，而无需部署到Servlet容器。</p>
+</li>
+<li>
+<p>在页面中测试JavaScript。</p>
+</li>
+<li>
+<p>可选，使用模拟服务进行测试以加快测试速度。</p>
+</li>
+<li>
+<p>在容器内端到端测试和容器外集成测试之间共享逻辑。</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+MockMvc使用不依赖于Servlet容器的模板技术（例如，Thymeleaf，FreeMarker等），但它不适用于JSP，因为它们依赖于Servlet容器。
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="spring-mvc-test-server-htmlunit-why">为何选择HtmlUnit？</h5>
+<div class="paragraph">
+<p>能想到的最明显的问题是“为什么我需要这个？”通过探索一个非常基本的示例应用程序可以找到答案。假设您有一个Spring MVC Web应用程序，
+它支持 <code>Message</code> 对象上的CRUD操作。该应用程序还支持分页所有消息。你会如何测试它？</p>
+</div>
+<div class="paragraph">
+<p>使用Spring MVC Test，我们可以轻松测试是否能够创建 <code>Message</code>，如下所示：</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">MockHttpServletRequestBuilder createMessage = post(<span class="string"><span class="delimiter">&quot;</span><span class="content">/messages/</span><span class="delimiter">&quot;</span></span>)
+        .param(<span class="string"><span class="delimiter">&quot;</span><span class="content">summary</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Spring Rocks</span><span class="delimiter">&quot;</span></span>)
+        .param(<span class="string"><span class="delimiter">&quot;</span><span class="content">text</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">In case you didn't know, Spring Rocks!</span><span class="delimiter">&quot;</span></span>);
+
+mockMvc.perform(createMessage)
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(<span class="string"><span class="delimiter">&quot;</span><span class="content">/messages/123</span><span class="delimiter">&quot;</span></span>));</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>如果我们要测试允许我们创建消息的表单视图，该怎么办？例如，假设我们的表单看起来像以下代码段：</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;form</span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">messageForm</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">action</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">/messages/</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">method</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">post</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">pull-right</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span><span class="tag">&lt;a</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">/messages/</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>Messages<span class="tag">&lt;/a&gt;</span><span class="tag">&lt;/div&gt;</span>
+
+    <span class="tag">&lt;label</span> <span class="attribute-name">for</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">summary</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>Summary<span class="tag">&lt;/label&gt;</span>
+    <span class="tag">&lt;input</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">text</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">required</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">summary</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">summary</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+
+    <span class="tag">&lt;label</span> <span class="attribute-name">for</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">text</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>Message<span class="tag">&lt;/label&gt;</span>
+    <span class="tag">&lt;textarea</span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">text</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">text</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span><span class="tag">&lt;/textarea&gt;</span>
+
+    <span class="tag">&lt;div</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">form-actions</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+        <span class="tag">&lt;input</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">submit</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Create</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/form&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>我们如何确保我们的表单产生创建新消息的正确请求？天真的尝试可能类似于以下内容：</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/messages/form</span><span class="delimiter">&quot;</span></span>))
+        .andExpect(xpath(<span class="string"><span class="delimiter">&quot;</span><span class="content">//input[@name='summary']</span><span class="delimiter">&quot;</span></span>).exists())
+        .andExpect(xpath(<span class="string"><span class="delimiter">&quot;</span><span class="content">//textarea[@name='text']</span><span class="delimiter">&quot;</span></span>).exists());</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>该测试有一些明显的缺点。如果我们更新控制器以使用参数 <code>message</code> 替换 <code>text</code>，我们的表单测试将继续通过，
+即使HTML表单与控制器不同步。要解决这个问题，我们可以结合两个测试，如下所示：</p>
+</div>
+<div id="spring-mvc-test-server-htmlunit-mock-mvc-test" class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">String</span> summaryParamName = <span class="string"><span class="delimiter">&quot;</span><span class="content">summary</span><span class="delimiter">&quot;</span></span>;
+<span class="predefined-type">String</span> textParamName = <span class="string"><span class="delimiter">&quot;</span><span class="content">text</span><span class="delimiter">&quot;</span></span>;
+mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/messages/form</span><span class="delimiter">&quot;</span></span>))
+        .andExpect(xpath(<span class="string"><span class="delimiter">&quot;</span><span class="content">//input[@name='</span><span class="delimiter">&quot;</span></span> + summaryParamName + <span class="string"><span class="delimiter">&quot;</span><span class="content">']</span><span class="delimiter">&quot;</span></span>).exists())
+        .andExpect(xpath(<span class="string"><span class="delimiter">&quot;</span><span class="content">//textarea[@name='</span><span class="delimiter">&quot;</span></span> + textParamName + <span class="string"><span class="delimiter">&quot;</span><span class="content">']</span><span class="delimiter">&quot;</span></span>).exists());
+
+MockHttpServletRequestBuilder createMessage = post(<span class="string"><span class="delimiter">&quot;</span><span class="content">/messages/</span><span class="delimiter">&quot;</span></span>)
+        .param(summaryParamName, <span class="string"><span class="delimiter">&quot;</span><span class="content">Spring Rocks</span><span class="delimiter">&quot;</span></span>)
+        .param(textParamName, <span class="string"><span class="delimiter">&quot;</span><span class="content">In case you didn't know, Spring Rocks!</span><span class="delimiter">&quot;</span></span>);
+
+mockMvc.perform(createMessage)
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl(<span class="string"><span class="delimiter">&quot;</span><span class="content">/messages/123</span><span class="delimiter">&quot;</span></span>));</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>这样可以降低我们测试错误传递的风险，但仍然存在一些问题：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>如果我们的页面上有多个表单怎么办？不可否认，我们可以更新我们的XPath表达式，但是若我们考虑了更多因素，它们变得更加复杂：
+字段是否是正确的类型？字段是否已启用？等等。</p>
+</li>
+<li>
+<p>另一个问题是我们正在做的工作量是我们预期的两倍。我们必须首先验证视图，然后我们使用我们刚刚验证的相同参数提交视图。
+理想情况下，这可以一次完成。</p>
+</li>
+<li>
+<p>最后，我们仍然无法解释一些事情。例如，如果表单具有我们希望测试的JavaScript验证，该怎么办？</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>总体问题是测试网页不涉及单个交互。相反，它是用户如何与网页交互以及该网页如何与其他资源交互的组合。
+例如，表单视图的结果用作用户输入以创建消息。此外，我们的表单视图可能会使用影响页面行为的其他资源，例如JavaScript验证。</p>
+</div>
+<div class="sect5">
+<h6 id="spring-mvc-test-server-htmlunit-why-integration">集成测试可以拯救您吗?</h6>
+<div class="paragraph">
+<p>为解决前面提到的问题，我们可以执行端到端集成测试，但这有一些缺点。考虑测试让我们浏览消息的视图。我们可能需要以下测试：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>我们的页面是否向用户显示通知，指示消息为空时没有结果可用？</p>
+</li>
+<li>
+<p>我们的页面是否正确显示单个消息？</p>
+</li>
+<li>
+<p>我们的页面是否正确支持分页？</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>要设置这些测试，我们需要确保我们的数据库包含正确的消息。这导致了许多额外的挑战：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>确保数据库中存在正确的消息可能很繁琐（考虑外键约束）。</p>
+</li>
+<li>
+<p>测试可能会变慢，因为每个测试都需要确保数据库处于正确的状态。</p>
+</li>
+<li>
+<p>由于我们的数据库需要处于特定状态，因此我们无法并行运行测试。</p>
+</li>
+<li>
+<p>对自动生成的ID，时间戳等条目执行断言可能很困难。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>这些挑战并不意味着我们应该放弃端到端的集成测试。相反，我们可以通过重构我们的详细测试来减少端到端集成测试的数量，以使用运行速度更快，
+更可靠且没有副作用的模拟服务。然后，我们可以实现少量真正的端到端集成测试，以验证简单的工作流程，以确保一切正常工作。</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="spring-mvc-test-server-htmlunit-why-mockmvc">进入HtmlUnit集成</h6>
+<div class="paragraph">
+<p>那么我们如何才能在测试页面交互之间取得平衡并在测试套件中保持良好的性能呢？答案是：“通过将MockMvc与HtmlUnit集成。”</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="spring-mvc-test-server-htmlunit-options">HtmlUnit集成选项</h6>
+<div class="paragraph">
+<p>当您想要将MockMvc与HtmlUnit集成时，您有许多选项：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#spring-mvc-test-server-htmlunit-mah">MockMvc和HtmlUnit</a>：如果要使用原始HtmlUnit库，请使用此选项。</p>
+</li>
+<li>
+<p><a href="#spring-mvc-test-server-htmlunit-webdriver">MockMvc和WebDriver</a>：使用此选项可以简化集成和端到端测试之间的代码开发和重用。</p>
+</li>
+<li>
+<p><a href="#spring-mvc-test-server-htmlunit-geb">MockMvc和Geb</a>：如果要在集成和端到端测试之间使用Groovy进行测试，
+简化开发和重用代码，请使用此选项。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="spring-mvc-test-server-htmlunit-mah">MockMvc和HtmlUnit</h5>
+<div class="paragraph">
+<p>本节介绍如何集成MockMvc和HtmlUnit。如果要使用原始HtmlUnit库，请使用此选项。</p>
+</div>
+<div class="sect5">
+<h6 id="spring-mvc-test-server-htmlunit-mah-setup">MockMvc和HtmlUnit设置</h6>
+<div class="paragraph">
+<p>首先，确保您已经包含了对 <code>net.sourceforge.htmlunit:htmlunit</code> 测试依赖项。为了将HtmlUnit与Apache HttpComponents 4.5+一起使用，
+您需要使用HtmlUnit 2.18或更高版本。</p>
+</div>
+<div class="paragraph">
+<p>我们可以使用 <code>MockMvcWebClientBuilder</code> 轻松创建一个与MockMvc集成的HtmlUnit <code>WebClient</code>，如下所示：</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Autowired</span>
+WebApplicationContext context;
+
+WebClient webClient;
+
+<span class="annotation">@Before</span>
+<span class="directive">public</span> <span class="type">void</span> setup() {
+    webClient = MockMvcWebClientBuilder
+            .webAppContextSetup(context)
+            .build();
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+这是使用 <code>MockMvcWebClientBuilder</code> 的一个简单示例。有关高级用法，请参阅
+<a href="#spring-mvc-test-server-htmlunit-mah-advanced-builder">高级 <code>MockMvcWebClientBuilder</code></a>。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>这可确保将任何引用 <code>localhost</code> 作为服务器的URL定向到我们的 <code>MockMvc</code> 实例，而无需真正的HTTP连接。
+正常情况下，使用网络连接请求任何其他URL。这让我们可以轻松测试CDN的使用。</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="spring-mvc-test-server-htmlunit-mah-usage">MockMvc和HtmlUnit用法</h6>
+<div class="paragraph">
+<p>现在我们可以像往常一样使用HtmlUnit，但不需要将我们的应用程序部署到Servlet容器。例如，我们可以请求视图使用以下内容创建消息：</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">HtmlPage createMsgFormPage = webClient.getPage(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost/messages/form</span><span class="delimiter">&quot;</span></span>);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+默认上下文路径为 <code>""</code>。 或者，我们可以指定上下文路径，如<a href="#spring-mvc-test-server-htmlunit-mah-advanced-builder">高级  <code>MockMvcWebClientBuilder</code></a>中所述。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>一旦我们引用了 <code>HtmlPage</code>，我们就可以填写表单并提交它以创建消息，如下例所示：</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">HtmlForm form = createMsgFormPage.getHtmlElementById(<span class="string"><span class="delimiter">&quot;</span><span class="content">messageForm</span><span class="delimiter">&quot;</span></span>);
+HtmlTextInput summaryInput = createMsgFormPage.getHtmlElementById(<span class="string"><span class="delimiter">&quot;</span><span class="content">summary</span><span class="delimiter">&quot;</span></span>);
+summaryInput.setValueAttribute(<span class="string"><span class="delimiter">&quot;</span><span class="content">Spring Rocks</span><span class="delimiter">&quot;</span></span>);
+HtmlTextArea textInput = createMsgFormPage.getHtmlElementById(<span class="string"><span class="delimiter">&quot;</span><span class="content">text</span><span class="delimiter">&quot;</span></span>);
+textInput.setText(<span class="string"><span class="delimiter">&quot;</span><span class="content">In case you didn't know, Spring Rocks!</span><span class="delimiter">&quot;</span></span>);
+HtmlSubmitInput submit = form.getOneHtmlElementByAttribute(<span class="string"><span class="delimiter">&quot;</span><span class="content">input</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">submit</span><span class="delimiter">&quot;</span></span>);
+HtmlPage newMessagePage = submit.click();</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>最后，我们可以验证是否已成功创建新消息。以下断言使用 <a href="https://joel-costigliola.github.io/assertj/">AssertJ</a>库：</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">assertThat(newMessagePage.getUrl().toString()).endsWith(<span class="string"><span class="delimiter">&quot;</span><span class="content">/messages/123</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">String</span> id = newMessagePage.getHtmlElementById(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>).getTextContent();
+assertThat(id).isEqualTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">123</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">String</span> summary = newMessagePage.getHtmlElementById(<span class="string"><span class="delimiter">&quot;</span><span class="content">summary</span><span class="delimiter">&quot;</span></span>).getTextContent();
+assertThat(summary).isEqualTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">Spring Rocks</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">String</span> text = newMessagePage.getHtmlElementById(<span class="string"><span class="delimiter">&quot;</span><span class="content">text</span><span class="delimiter">&quot;</span></span>).getTextContent();
+assertThat(text).isEqualTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">In case you didn't know, Spring Rocks!</span><span class="delimiter">&quot;</span></span>);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>上述代码以多种方式改进了我们的<a href="#spring-mvc-test-server-htmlunit-mock-mvc-test">MockMvc测试</a>。
+首先，我们不再需要显式验证我们的表单，然后创建一个看起来像表单的请求。相反，我们请求表单，填写表单并提交表单，从而显着减少开销。</p>
+</div>
+<div class="paragraph">
+<p>另一个重要因素是 <a href="http://htmlunit.sourceforge.net/javascript.html">HtmlUnit使用Mozilla Rhino引擎</a>来评估JavaScript。
+这意味着我们还可以在页面中测试JavaScript的行为。</p>
+</div>
+<div class="paragraph">
+<p>有关使用HtmlUnit的其他信息，请参阅 <a href="http://htmlunit.sourceforge.net/gettingStarted.html">HtmlUnit文档</a>。</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="spring-mvc-test-server-htmlunit-mah-advanced-builder">高级 <code>MockMvcWebClientBuilder</code></h6>
+<div class="paragraph">
+<p>在目前为止的示例中，我们以最简单的方式使用 <code>MockMvcWebClientBuilder</code>，方法是基于Spring TestContext框架为我们加载的
+<code>WebApplicationContext</code> 构建 <code>WebClient</code>。 在以下示例中重复此方法：</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Autowired</span>
+WebApplicationContext context;
+
+WebClient webClient;
+
+<span class="annotation">@Before</span>
+<span class="directive">public</span> <span class="type">void</span> setup() {
+    webClient = MockMvcWebClientBuilder
+            .webAppContextSetup(context)
+            .build();
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>我们还可以指定其他配置选项，如以下示例所示：</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">WebClient webClient;
+
+<span class="annotation">@Before</span>
+<span class="directive">public</span> <span class="type">void</span> setup() {
+    webClient = MockMvcWebClientBuilder
+        <span class="comment">// 演示应用一个MockMvcConfigurer (Spring Security)</span>
+        .webAppContextSetup(context, springSecurity())
+        <span class="comment">// 仅供参考 - 默认为&quot;&quot;</span>
+        .contextPath(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>)
+        <span class="comment">// 默认情况下，MockMvc仅用于localhost;</span>
+        <span class="comment">// 以下将MockMvc也用于example.com和example.org</span>
+        .useMockMvcForHosts(<span class="string"><span class="delimiter">&quot;</span><span class="content">example.com</span><span class="delimiter">&quot;</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">example.org</span><span class="delimiter">&quot;</span></span>)
+        .build();
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>作为替代方案，我们可以通过单独配置 <code>MockMvc</code> 实例并将其提供给 <code>MockMvcWebClientBuilder</code> 来执行完全相同的设置，如下所示：</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">MockMvc mockMvc = MockMvcBuilders
+        .webAppContextSetup(context)
+        .apply(springSecurity())
+        .build();
+
+webClient = MockMvcWebClientBuilder
+        .mockMvcSetup(mockMvc)
+        <span class="comment">// 仅供参考 - 默认为&quot;&quot;</span>
+        .contextPath(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>)
+        <span class="comment">// 默认情况下，MockMvc仅用于localhost;</span>
+        <span class="comment">// 以下将MockMvc也用于example.com和example.org</span>
+        .useMockMvcForHosts(<span class="string"><span class="delimiter">&quot;</span><span class="content">example.com</span><span class="delimiter">&quot;</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">example.org</span><span class="delimiter">&quot;</span></span>)
+        .build();</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>这更加冗长，但是，通过使用 <code>MockMvc</code> 实例构建 <code>WebClient</code>，我们可以轻松获得MockMvc的全部功能。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+有关创建 <code>MockMvc</code> 实例的其他信息，请参阅<a href="#spring-mvc-test-server-setup-options">设置选择</a>。
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="spring-mvc-test-server-htmlunit-webdriver">MockMvc和WebDriver</h5>
+<div class="paragraph">
+<p>TODO</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="spring-mvc-test-server-htmlunit-geb">MockMvc和Geb</h5>
+<div class="paragraph">
+<p>TODO</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="spring-mvc-test-client">3.6.3. 客户端REST测试</h4>
+<div class="paragraph">
+<p>您可以使用客户端测试来测试内部使用 <code>RestTemplate</code> 的代码。我们的想法是声明预期的请求并提供“存根”响应，以便您可以专注于单独测试代码
+（即，无需运行服务器）。以下示例显示了如何执行此操作：</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">RestTemplate restTemplate = <span class="keyword">new</span> RestTemplate();
+
+MockRestServiceServer mockServer = MockRestServiceServer.bindTo(restTemplate).build();
+mockServer.expect(requestTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">/greeting</span><span class="delimiter">&quot;</span></span>)).andRespond(withSuccess());
+
+<span class="comment">// 使用上面RestTemplate的测试代码 ...</span>
+
+mockServer.verify();</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>在前面的示例中，<code>MockRestServiceServer</code>（客户端REST测试的中心类）使用自定义 <code>ClientHttpRequestFactory</code> 配置 <code>RestTemplate</code>，
+该客户端根据预期断言实际请求并返回“存根”响应。在这种情况下，我们期望对 <code>/greeting</code> 发出请求，并希望返回带有 <code>text/plain</code> 内容的200响应。
+我们可以根据需要定义其他预期请求和存根响应。当我们定义期望的请求和存根响应时，<code>RestTemplate</code> 可以像往常一样在客户端代码中使用。
+在测试结束时，<code>mockServer.verify()</code> 可用于验证是否已满足所有期望。</p>
+</div>
+<div class="paragraph">
+<p>默认情况下，请求按期望声明的顺序进行。您可以在构建服务器时设置 <code>ignoreExpectOrder</code> 选项，在这种情况下，将检查所有期望（按顺序）
+以查找给定请求的匹配项。这意味着允许请求以任何顺序出现。以下示例使用 <code>ignoreExpectOrder</code>：</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">server = MockRestServiceServer.bindTo(restTemplate).ignoreExpectOrder(<span class="predefined-constant">true</span>).build();</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>即使默认情况下使用无序请求，也只允许每个请求执行一次。<code>expect</code> 方法提供了一个重载变量，它接受指定计数范围的 <code>ExpectedCount</code> 参数
+（例如，<code>once</code>，<code>manyTimes</code>，<code>max</code>，<code>min</code>，<code>between</code> 等）。以下示例使用 <code>times</code>：</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">RestTemplate restTemplate = <span class="keyword">new</span> RestTemplate();
+
+MockRestServiceServer mockServer = MockRestServiceServer.bindTo(restTemplate).build();
+mockServer.expect(times(<span class="integer">2</span>), requestTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">/something</span><span class="delimiter">&quot;</span></span>)).andRespond(withSuccess());
+mockServer.expect(times(<span class="integer">3</span>), requestTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">/somewhere</span><span class="delimiter">&quot;</span></span>)).andRespond(withSuccess());
+
+<span class="comment">// ...</span>
+
+mockServer.verify();</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>请注意，如果未设置 <code>ignoreExpectOrder</code>（默认值），因此，请求按声明顺序排列，则该顺序仅适用于任何预期请求中的第一个。
+例如，如果预期“/something”两次，然后是“/somewhere”三次，那么在对“/somewhere”的请求之前应该有“/something”的请求，
+但是，此后的“/something”和“/somewhere”请求可以随时发出。</p>
+</div>
+<div class="paragraph">
+<p>作为上述所有选项的替代方案，客户端测试支持还提供了 <code>ClientHttpRequestFactory</code> 实现，
+您可以将其配置为 <code>RestTemplate</code> 以将其绑定到 <code>MockMvc</code> 实例。这允许使用实际的服务器端逻辑处理请求但不运行服务器。
+以下示例显示了如何执行此操作：</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(<span class="local-variable">this</span>.wac).build();
+<span class="local-variable">this</span>.restTemplate = <span class="keyword">new</span> RestTemplate(<span class="keyword">new</span> MockMvcClientHttpRequestFactory(mockMvc));
+
+<span class="comment">// 使用上面RestTemplate的测试代码 ...</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="spring-mvc-test-client-static-imports">静态导入</h5>
+<div class="paragraph">
+<p>与服务器端测试一样，用于客户端测试的流式API需要一些静态导入。通过搜索 <code>MockRest*</code> 很容易找到它们。
+Eclipse用户应该在Java → Editor → Content Assist → Favorites中添加 <code>MockRestRequestMatchers.*</code> 和
+<code>MockRestResponseCreators.*</code> 作为“favorite static members”。这允许在键入静态方法名称的第一个字符后使用内容辅助。
+其他IDE（例如IntelliJ）可能不需要任何其他配置。检查是否支持对静态成员的代码自动完成。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="spring-mvc-test-client-resources">客户端REST测试的更多示例</h5>
+<div class="paragraph">
+<p>Spring MVC Test自己的测试包括客户端REST测试的 <a href="https://github.com/spring-projects/spring-framework/tree/master/spring-test/src/test/java/org/springframework/test/web/client/samples">示例测试</a>。</p>
 </div>
 </div>
 </div>
@@ -2949,7 +3534,7 @@ mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><s
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-12-12 20:52:52 CST
+Last updated 2018-12-13 20:28:44 CST
 </div>
 </div>
 </body>
