@@ -1,10 +1,8 @@
 = 测试
-Version 5.1.3.RELEASE
-:springVersion: 5.1.3.RELEASE 
-:springBootVersion: 2.1.0.RELEASE
+:springVersion: 5.1.3.RELEASE
+Version {springVersion}
 :docSpringBaseUrl: https://docs.spring.io/spring/docs/{springVersion}/spring-framework-reference
 :javadocSpringBaseUrl: https://docs.spring.io/spring-framework/docs/{springVersion}/javadoc-api
-:docSpringBootBaseUrl: https://docs.spring.io/spring-boot/docs/{springBootVersion}/reference/html
 :doctype: book
 :toc: left
 :toclevels: 3
@@ -829,10 +827,9 @@ public void userTest {
 - `@Required`
 - `@Transactional`
 
+.JSR-250生命周期注解
 [NOTE]
 ====
-*_JSR-250生命周期注解_*
-
 在Spring TestContext框架中，你可以在 `ApplicationContext` 中配置的任何应用程序组件上使用 `@PostConstruct` 和
 `@PreDestroy` 以及标准语义。但是，这些生命周期注解在实际测试类中的使用有限。
 
@@ -1127,9 +1124,1068 @@ void deleteOrder() { }
 [[testcontext-framework]]
 === Spring TestContext框架
 
+Spring TestContext框架（位于 `org.springframework.test.context` 包中）提供了通用的，注解驱动的单元和集成测试支持，
+它与使用中的测试框架无关。TestContext框架也非常重视约定优于配置，合理的默认值可以通过基于注解的配置覆盖。
+
+除了提供通用测试基础架构之外，TestContext框架还为JUnit 4，JUnit Jupiter（AKA JUnit 5）和TestNG提供了显式支持。
+对于JUnit 4和TestNG，Spring提供了 `abstract` 支持类。此外，Spring为JUnit 4提供了一个自定义JUnit `Runner` 和自定义JUnit `Rules`，
+并为JUnit Jupiter提供了一个自定义 `Extension`，允许您编写所谓的POJO测试类。POJO测试类不需要继承特定的类层次结构，例如 `abstract` 支持类。
+
+以下部分概述了TestContext框架的内部结构。如果您只对使用框架感兴趣，并且不想使用自己的自定义侦听器或自定义加载器扩展它，
+随意直接进入配置（<<testcontext-ctx-management,上下文管理>>，<<testcontext-fixture-di,依赖注入>>，
+<<testcontext-tx,事务管理>>），<<testcontext-support-classes,类支持>>和<<integration-testing-annotations,注解支持>>部分。
+
+[[testcontext-key-abstractions]]
+==== 关键抽象
+
+框架的核心包括 `TestContextManager` 类和 `TestContext`，`TestExecutionListener` 和 `SmartContextLoader` 接口。
+为每个测试类创建一个 `TestContextManager`（例如，用于在JUnit Jupiter中的单个测试类中执行所有测试方法）。
+反过来，`TestContextManager` 管理一个包含当前测试上下文的 `TestContext`。`TestContextManager` 还会在测试进行时更新
+`TestContext` 的状态，并委托给 `TestExecutionListener` 实现，这些实现通过提供依赖注入，管理事务等来检测实际的测试执行情况。
+`SmartContextLoader` 负责为给定的测试类加载 `ApplicationContext`。有关各种实现的更多信息和示例，请参阅
+{javadocSpringBaseUrl}/org/springframework/test/context/package-summary.html[javadoc]和Spring测试套件。
+
+[[code-testcontext-code]]
+===== `TestContext`
+
+`TestContext` 封装了执行测试的上下文（与使用中的实际测试框架无关），并为其负责的测试实例提供上下文管理和缓存支持。
+如果请求，`TestContext` 还委托 `SmartContextLoader` 加载 `ApplicationContext`。
+
+[[code-testcontextmanager-code]]
+===== `TestContextManager`
+
+`TestContextManager` 是Spring TestContext框架的主要入口点，负责管理单个 `TestContext`，
+并在明确定义的测试执行点向每个注册的 `TestExecutionListener` 发送信号事件：
+
+- 在特定测试框架的任何“before class”或“before all”方法之前。
+- 测试实例后置处理。
+- 在特定测试框架的任何“before”或“before each”方法之前。
+- 在执行测试方法之前，但在测试设置之后。
+- 在执行测试方法之后，但在测试拆除之前。
+- 在特定测试框架的任何“after”或“after each”方法之后。
+- 在特定测试框架的任何“after class”或“after all”方法之后。
+
+[[code-testexecutionlistener-code]]
+===== `TestExecutionListener`
+
+`TestExecutionListener` 定义API，以响应由注册侦听器的 `TestContextManager` 发布的测试执行事件。
+请参阅<<testcontext-tel-config,`TestExecutionListener` 配置>>。
+
+[[context-loaders]]
+===== 上下文加载器
+
+`ContextLoader` 是Spring 2.5中引入的一个策略接口，用于为Spring TestContext框架管理的集成测试加载 `ApplicationContext`。
+您应该实现 `SmartContextLoader` 而不是此接口，以提供对带注解的类，活跃Bean定义配置文件，测试属性源，上下文层次结构和
+`WebApplicationContext` 支持的支持。
+
+`SmartContextLoader` 是Spring 3.1中引入的 `ContextLoader` 接口的扩展子类。`SmartContextLoader` SPI取代了Spring 2.5
+中引入的 `ContextLoader` SPI。具体来说，`SmartContextLoader` 可以选择处理资源位置，带注解的类或上下文初始值设定项。
+此外，`SmartContextLoader` 可以在其加载的上下文中设置活跃Bean定义概要文件和测试属性源。
+
+Spring提供以下实现：
+
+- `DelegatingSmartContextLoader`: 它是两个默认加载器之一，它内部委托给 `AnnotationConfigContextLoader`，
+`GenericXmlContextLoader` 或 `GenericGroovyXmlContextLoader`，具体取决于为测试类声明的配置或默认位置或默认配置类的存在。
+仅当Groovy位于类路径上时才启用Groovy支持。
+- `WebDelegatingSmartContextLoader`: 它是两个默认加载器之一，它内部委托给 `AnnotationConfigWebContextLoader`，
+`GenericXmlWebContextLoader` 或 `GenericGroovyXmlWebContextLoader`，具体取决于为测试类声明的配置或默认位置或默认配置类的存在。
+仅当测试类中存在 `@WebAppConfiguration` 时，才使用Web `ContextLoader`。仅当Groovy位于类路径上时才启用Groovy支持。
+- `AnnotationConfigContextLoader`: 从带注解的类加载标准 `ApplicationContext`。
+- `AnnotationConfigWebContextLoader`: 从带注解的类加载 `WebApplicationContext`。
+- `GenericGroovyXmlContextLoader`: 从Groovy脚本或XML配置文件的资源位置加载标准 `ApplicationContext`。
+- `GenericGroovyXmlWebContextLoader`: 从Groovy脚本或XML配置文件的资源位置加载 `WebApplicationContext`。
+- `GenericXmlContextLoader`: 从XML资源位置加载标准 `ApplicationContext`。
+- `GenericXmlWebContextLoader`: 从XML资源位置加载 `WebApplicationContext`。
+- `GenericPropertiesContextLoader`: 从Java properties资源位置加载标准 `ApplicationContext `。
+
+[[testcontext-bootstrapping]]
+==== 引导TestContext框架
+
+Spring TestContext框架内部的默认配置足以满足所有常见用例。但是，有时开发团队或第三方框架要更改默认的 `ContextLoader`，
+实现自定义 `TestContext` 或 `ContextCache`，扩充 `ContextCustomizerFactory` 和 `TestExecutionListener` 实现的默认集，依此类推。
+对于TestContext框架如何操作的这种低级别控制，Spring提供了一种自引导策略。
+
+`TestContextBootstrapper` 定义了用于引导TestContext框架的SPI。`TestContextManager` 使用 `TestContextBootstrapper`
+为当前测试加载 `TestExecutionListener` 实现并构建它管理的 `TestContext`。您可以使用 `@BootstrapWith` 直接或作为元注释为测试类
+（或测试类层次结构）配置自定义引导策略。如果未使用 `@BootstrapWith` 显式配置引导程序，则使用 `DefaultTestContextBootstrapper` 或
+`WebTestContextBootstrapper`，具体取决于 `@WebAppConfiguration` 的存在。
+
+由于 `TestContextBootstrapper` SPI将来可能会发生变化（以适应新的需求），我们强烈建议实施者不要直接实现此接口，而是扩展
+`AbstractTestContextBootstrapper` 或其中一个具体的子类。
+
+[[testcontext-tel-config]]
+==== `TestExecutionListener` 配置
+
+Spring提供了以下默认注册的 `TestExecutionListener` 实现，完全按以下顺序：
+
+- `ServletTestExecutionListener`: 为 `WebApplicationContext` 配置Servlet API模拟。
+- `DirtiesContextBeforeModesTestExecutionListener`: 处理“before”模式的 `@DirtiesContext` 注解。
+- `DependencyInjectionTestExecutionListener`: 为测试实例提供依赖项注入。
+- `DirtiesContextTestExecutionListener`: 处理“after”模式的 `@DirtiesContext` 注解。
+- `TransactionalTestExecutionListener`: 使用默认回滚语义提供事务性测试执行。
+- `SqlScriptsTestExecutionListener`: 运行使用 `@Sql` 注解配置的SQL脚本。
+
+[[testcontext-tel-config-registering-tels]]
+===== 注册自定义 `TestExecutionListener` 实现
+
+您可以使用 `@TestExecutionListeners` 注解为测试类及其子类注册自定义 `TestExecutionListener` 实现。
+有关详细信息和示例，请参阅<<integration-testing-annotations,注解支持>>和
+{javadocSpringBaseUrl}/org/springframework/test/context/TestExecutionListeners.html[`@TestExecutionListeners`]的javadoc。
+
+[[testcontext-tel-config-automatic-discovery]]
+===== 自动发现默认的 `TestExecutionListener` 实现
+
+使用 `@TestExecutionListeners` 注册自定义 `TestExecutionListener` 实现适用于在有限测试场景中使用的自定义侦听器。
+但是，如果需要在测试套件中使用自定义侦听器，则会变得很麻烦。从Spring Framework 4.1开始，通过支持通过 `SpringFactoriesLoader`
+机制自动发现默认的 `TestExecutionListener` 实现来解决此问题。
+
+具体来说，`spring-test` 模块在其 `META-INF/spring.factories` 属性文件中的 `org.springframework.test.context.TestExecutionListener`
+键下声明所有核心默认的 `TestExecutionListener` 实现。第三方框架和开发人员可以通过自己的 `META-INF/spring.factories`
+属性文件以相同的方式将自己的 `TestExecutionListener` 实现提供给默认侦听器列表。
+
+[[testcontext-tel-config-ordering]]
+===== 排序 `TestExecutionListener` 实现
+
+当TestContext框架通过前面提到的 `SpringFactoriesLoader` 机制发现默认的 `TestExecutionListener` 实现时，
+实例化的侦听器将使用Spring的 `AnnotationAwareOrderComparator` 进行排序，它遵循Spring的 `Ordered` 接口和 `@Order` 注解进行排序。
+`AbstractTestExecutionListener` 和Spring提供的所有默认 `TestExecutionListener` 实现都使用适当的值进行 `Ordered`。
+因此，第三方框架和开发人员应确保通过实现 `Ordered` 或声明 `@Order` 以正确的顺序注册其默认的 `TestExecutionListener` 实现。
+有关为每个核心侦听器分配的值的详细信息，请参阅javadoc以获取核心默认 `TestExecutionListener` 实现的 `getOrder()` 方法。
+
+[[testcontext-tel-config-merging]]
+===== 合并 `TestExecutionListener` 实现
+
+如果通过 `@TestExecutionListeners` 注册了自定义 `TestExecutionListener`，则不会注册默认侦听器。在大多数常见的测试场景中，
+除了任何自定义侦听器之外，这还有效地迫使开发人员手动声明所有默认侦听器。以下清单演示了这种配置：
+
+====
+[source,java]
+----
+@ContextConfiguration
+@TestExecutionListeners({
+    MyCustomTestExecutionListener.class,
+    ServletTestExecutionListener.class,
+    DirtiesContextBeforeModesTestExecutionListener.class,
+    DependencyInjectionTestExecutionListener.class,
+    DirtiesContextTestExecutionListener.class,
+    TransactionalTestExecutionListener.class,
+    SqlScriptsTestExecutionListener.class
+})
+public class MyTest {
+    // class body...
+}
+----
+====
+
+这种方法的挑战在于它要求开发人员确切地知道默认情况下注册了哪些监听器。此外，默认侦听器集在发行版间可能有所改变 — 
+例如，Spring Framework 4.1中引入了 `SqlScriptsTestExecutionListener`，而Spring Framework 4.2中引入了
+`DirtiesContextBeforeModesTestExecutionListener`。此外，Spring Security等第三方框架通过使用上述
+<<testcontext-tel-config-automatic-discovery,自动发现机制>>注册了自己的默认 `TestExecutionListener` 实现。
+
+为避免必须知道并重新声明所有默认侦听器，可以将 `@TestExecutionListeners` 的 `mergeMode` 属性设置为
+`MergeMode.MERGE_WITH_DEFAULTS`。`MERGE_WITH_DEFAULTS` 指示本地声明的侦听器应与默认侦听器合并。
+合并算法确保从列表中删除重复项，并根据 `AnnotationAwareOrderComparator` 的语义对生成的合并侦听器集进行排序，
+如<<testcontext-tel-config-ordering,排序 `TestExecutionListener` 实现>>中所述。
+如果侦听器实现 `Ordered` 或使用 `@Order` 注解，它可以影响它与默认值合并的位置。否则，在合并时，
+本地声明的侦听器将追加到默认侦听器列表后。
+
+例如，如果前一个示例中的 `MyCustomTestExecutionListener` 类将其顺序值（例如，500）配置为小于 `ServletTestExecutionListener`
+（恰好为1000）的顺序，则 `MyCustomTestExecutionListener` 可以自动与默认值列表合并在 `ServletTestExecutionListener` 前面，
+前面的例子可以替换为以下内容：
+
+====
+[source,java]
+----
+@ContextConfiguration
+@TestExecutionListeners(
+    listeners = MyCustomTestExecutionListener.class,
+    mergeMode = MERGE_WITH_DEFAULTS
+)
+public class MyTest {
+    // class body...
+}
+----
+====
+
+[[testcontext-ctx-management]]
+==== 上下文管理
+
+每个 `TestContext` 都为其负责的测试实例提供上下文管理和缓存支持。测试实例不会自动接收对已配置的 `ApplicationContext` 的访问权限。
+但是，如果测试类实现 `ApplicationContextAware` 接口，则会向测试实例提供对 `ApplicationContext` 的引用。
+请注意，`AbstractJUnit4SpringContextTests` 和 `AbstractTestNGSpringContextTests` 实现 `ApplicationContextAware`，
+因此可以自动提供对 `ApplicationContext` 的访问。
+
+.@Autowired ApplicationContext
+[NOTE]
+======
+作为实现 `ApplicationContextAware` 接口的替代方法，您可以通过字段或setter方法上的 `@Autowired`
+注解为测试类注入应用程序上下文，如以下示例所示：
+
+====
+[source,java]
+----
+@RunWith(SpringRunner.class)
+@ContextConfiguration
+public class MyTest {
+
+    @Autowired <1>
+    private ApplicationContext applicationContext;
+
+    // class body...
+}
+----
+<1> 注入 `ApplicationContext`。
+====
+
+同样，如果您的测试配置为加载 `WebApplicationContext`，则可以将Web应用程序上下文注入到测试中，如下所示：
+
+====
+[source,java]
+----
+@RunWith(SpringRunner.class)
+@WebAppConfiguration <1>
+@ContextConfiguration
+public class MyWebAppTest {
+
+    @Autowired <2>
+    private WebApplicationContext wac;
+
+    // class body...
+}
+----
+<1> 配置 `WebApplicationContext`。
+<2> 注入 `WebApplicationContext`。
+====
+
+使用 `@Autowired` 的依赖注入由 `DependencyInjectionTestExecutionListener` 提供，默认情况下配置它（参见
+<<testcontext-fixture-di,测试夹具的依赖注入>>）。
+======
+
+使用TestContext框架的测试类不需要继承任何特定类或实现特定接口来配置其应用程序上下文。相反，通过在类级别声明
+`@ContextConfiguration` 注解来实现配置。如果测试类未显式声明应用程序上下文资源位置或带注解的类，
+则配置的 `ContextLoader` 将确定如何从默认位置或默认配置类加载上下文。除了上下文资源位置和带注解的类之外，
+还可以通过应用程序上下文初始化器配置应用程序上下文。
+
+以下部分说明如何使用Spring的 `@ContextConfiguration` 注解通过使用XML配置文件，Groovy脚本，带注解的类（通常为 `@Configuration` 类）
+或上下文初始化器来配置测试 `ApplicationContext`。或者，您可以为高级用例实现和配置自己的自定义 `SmartContextLoader`。
+
+- <<testcontext-ctx-management-xml,使用XML资源配置上下文>>
+- <<testcontext-ctx-management-groovy,使用Groovy脚本配置上下文>>
+- <<testcontext-ctx-management-javaconfig,使用带注解的类配置上下文>>
+- <<testcontext-ctx-management-mixed-config,混合使用XML，Groovy脚本和带注解的类>>
+- <<testcontext-ctx-management-initializers,使用上下文初始化器配置上下文>>
+- <<testcontext-ctx-management-inheritance,上下文配置继承>>
+- <<testcontext-ctx-management-env-profiles,使用环境配置文件配置上下文>>
+- <<testcontext-ctx-management-property-sources,使用测试属性源配置上下文>>
+- <<testcontext-ctx-management-web,加载 `WebApplicationContext`>>
+- <<testcontext-ctx-management-caching,上下文缓存>>
+- <<testcontext-ctx-management-ctx-hierarchies,上下文层次结构>>
+
+
+
 
 
 TODO
+
+
+
+
+
+
+[[testcontext-fixture-di]]
+==== 测试夹具的依赖注入
+
+当您使用 `DependencyInjectionTestExecutionListener`（默认配置）时，将从您使用 `@ContextConfiguration`
+配置的应用程序上下文中的bean中注入测试实例的依赖项。您可以使用setter方法注入，field注入或两者，
+具体取决于您选择的注解以及是否将它们放在setter方法或字段上。为了与Spring 2.5和3.0中引入的注解支持保持一致，
+您可以使用Spring的 `@Autowired` 注解或JSR 330中的 `@Inject` 注解。
+
+TIP: TestContext框架没有检测实例化测试实例的方式。因此，对于构造函数使用 `@Autowired` 或 `@Inject` 对测试类没有影响。
+
+因为 `@Autowired` 用于 {docSpringBaseUrl}/core.html#beans-factory-autowire[按类型执行自动装配]，如果您有多个相同类型的bean定义，
+则不能依赖此方法来处理这些特定的bean。在这种情况下，您可以将 `@Autowired` 与 `@Qualifier` 结合使用。从Spring 3.0开始，
+您还可以选择将 `@Inject` 与 `@Named` 结合使用。或者，如果您的测试类可以访问 `ApplicationContext`，
+使用（例如：`applicationContext.getBean("titleRepository")`）的调用来执行显式查找。
+
+如果您不希望将依赖项注入应用于测试实例，请不要使用 `@Autowired` 或 `@Inject` 注解字段或setter方法。或者，您可以通过使用
+`@TestExecutionListeners` 显式配置类并从侦听器列表中剔除 `DependencyInjectionTestExecutionListener.class` 来完全禁用依赖项注入。
+
+考虑一下测试 `HibernateTitleRepository` 类的场景，如<<integration-testing-goals,目标>>部分所述。
+接下来的两个代码清单演示了在字段和setter方法中使用 `@Autowired`。在所有示例代码列表之后呈现应用程序上下文配置。
+
+[NOTE]
+====
+以下代码清单中的依赖项注入行为并非特定于JUnit 4。相同的DI技术可与任何测试框架结合使用。
+
+以下示例调用静态断言方法，例如 `assertNotNull()`，但前面未注明使用 `Assert` 进行预调用。
+这假设你通过示例中未显示的静态导入声明正确导入了该方法。
+====
+
+第一个代码清单显示了一个基于JUnit 4的测试类实现，它使用 `@Autowired` 进行字段注入：
+
+====
+[source,java]
+----
+@RunWith(SpringRunner.class)
+// 指定要为此测试夹具加载的Spring配置
+@ContextConfiguration("repository-config.xml")
+public class HibernateTitleRepositoryTests {
+
+    // 此实例将按类型注入依赖项
+    @Autowired
+    private HibernateTitleRepository titleRepository;
+
+    @Test
+    public void findById() {
+        Title title = titleRepository.findById(new Long(10));
+        assertNotNull(title);
+    }
+}
+----
+====
+
+或者，您可以将类配置为使用 `@Autowired` 进行setter注入，如下所示：
+
+====
+[source,java]
+----
+@RunWith(SpringRunner.class)
+// 指定要为此测试夹具加载的Spring配置
+@ContextConfiguration("repository-config.xml")
+public class HibernateTitleRepositoryTests {
+
+    // 此实例将按类型注入依赖项
+    private HibernateTitleRepository titleRepository;
+
+    @Autowired
+    public void setTitleRepository(HibernateTitleRepository titleRepository) {
+        this.titleRepository = titleRepository;
+    }
+
+    @Test
+    public void findById() {
+        Title title = titleRepository.findById(new Long(10));
+        assertNotNull(title);
+    }
+}
+----
+====
+
+前面的代码清单使用 `@ContextConfiguration` 注解引用的相同XML上下文文件（即 `repository-config.xml`）内容如下：
+
+====
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 这个bean将被注入HibernateTitleRepositoryTests类 -->
+    <bean id="titleRepository" class="com.foo.repository.hibernate.HibernateTitleRepository">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <!-- 为简洁而省略了配置 -->
+    </bean>
+
+</beans>
+----
+====
+
+[NOTE]
+======
+如果继承Spring提供的测试基类，并在自身的一个setter方法上使用 `@Autowired`，则可能在应用程序上下文中定义了多个受影响类型的bean
+（例如，多个 `DataSource` bean）。在这种情况下，您可以覆盖setter方法并使用 `@Qualifier` 注解指示特定的目标bean，
+如下所示（但请确保也委托给超类中的该重写方法）：
+
+====
+[source,java]
+----
+// ...
+
+    @Autowired
+    @Override
+    public void setDataSource(@Qualifier("myDataSource") DataSource dataSource) {
+        super.setDataSource(dataSource);
+    }
+
+// ...
+----
+====
+
+指定限定符值指示要注入的特定 `DataSource` bean，将类型匹配集缩小到特定bean。它的值与相应 `<bean>` 定义中的 `<qualifier>` 声明匹配。
+bean名称可用作回退限定符值，因此您可以有效地在那里按名称指向特定的bean（如前所示，假设 `myDataSource` 是bean `id`）。
+======
+
+[[testcontext-web-scoped-beans]]
+==== 测试Request-和Session-Scope的Bean
+
+很早开始，Spring就支持了 {docSpringBaseUrl}/core.html#beans-factory-scopes-other[请求和会话范围的bean]。
+从Spring 3.2开始，您可以按照以下步骤测试请求范围和会话范围的bean：
+
+- 通过使用 `@WebAppConfiguration` 注解测试类，确保为测试加载了 `WebApplicationContext`。
+- 将模拟请求或会话注入测试实例并根据需要准备测试夹具。
+- 调用从配置的 `WebApplicationContext` 获取的Web组件（具有依赖项注入）
+- 对模拟执行断言。
+
+下一个代码段显示了登录用例的XML配置。请注意，`userService` bean依赖于请求范围的 `loginAction` bean。
+此外，通过使用从当前HTTP请求检索用户名和密码的 {docSpringBaseUrl}/core.html#expressions[SpEL表达式]来实例化 `LoginAction`。
+在我们的测试中，我们希望通过TestContext框架管理的模拟来配置这些请求参数。以下清单显示了此用例的配置：
+
+.请求范围的bean配置
+====
+[source,xml]
+----
+<beans>
+
+    <bean id="userService" class="com.example.SimpleUserService"
+            c:loginAction-ref="loginAction"/>
+
+    <bean id="loginAction" class="com.example.LoginAction"
+            c:username="#{request.getParameter('user')}"
+            c:password="#{request.getParameter('pswd')}"
+            scope="request">
+        <aop:scoped-proxy/>
+    </bean>
+
+</beans>
+----
+====
+
+在 `RequestScopedBeanTests` 中，我们将 `UserService`（即测试中的主题）和 `MockHttpServletRequest` 注入我们的测试实例。
+在我们的 `requestScope()` 测试方法中，我们通过在提供的 `MockHttpServletRequest` 中设置请求参数来设置我们的测试夹具。
+当在我们的 `userService` 上调用 `loginUser()` 方法时，我们可以确保用户服务可以访问当前 `MockHttpServletRequest` 的请求范围的
+`loginAction`（也就是我们刚刚设置参数的那个）。然后，我们可以根据用户名和密码的已知输入对结果执行断言。以下清单显示了如何执行此操作：
+
+.请求范围的bean测试
+====
+[source,java]
+----
+@RunWith(SpringRunner.class)
+@ContextConfiguration
+@WebAppConfiguration
+public class RequestScopedBeanTests {
+
+    @Autowired UserService userService;
+    @Autowired MockHttpServletRequest request;
+
+    @Test
+    public void requestScope() {
+        request.setParameter("user", "enigma");
+        request.setParameter("pswd", "$pr!ng");
+
+        LoginResults results = userService.loginUser();
+        // 断言results
+    }
+}
+----
+====
+
+以下代码片段类似于我们之前针对请求范围的bean看到的代码片段。但是，这次，`userService` bean依赖于会话范围的
+`userPreferences` bean。请注意，`UserPreferences` bean是使用SpEL表达式实例化的，该表达式从当前HTTP会话中检索主题。
+在我们的测试中，我们需要在T​​estContext框架管理的模拟会话中配置主题。以下示例显示了如何执行此操作：
+
+.会话范围的bean配置
+====
+[source,xml]
+----
+<beans>
+
+    <bean id="userService" class="com.example.SimpleUserService"
+            c:userPreferences-ref="userPreferences" />
+
+    <bean id="userPreferences" class="com.example.UserPreferences"
+            c:theme="#{session.getAttribute('theme')}"
+            scope="session">
+        <aop:scoped-proxy/>
+    </bean>
+
+</beans>
+----
+====
+
+在 `SessionScopedBeanTests` 中，我们将 `UserService` 和 `MockHttpSession` 注入到我们的测试实例中。
+在我们的 `sessionScope()` 测试方法中，我们通过在提供的 `MockHttpSession` 中设置预期的 `theme` 属性来设置我们的测试夹具。
+当我们在 `userService` 上调用 `processUserPreferences()` 方法时，我们可以确保用户服务可以访问当前 `MockHttpSession`
+的会话范围的 `userPreferences`，并且我们可以根据配置的主题对结果执行断言。以下示例显示了如何执行此操作：
+
+.会话范围的bean测试
+====
+[source,java]
+----
+@RunWith(SpringRunner.class)
+@ContextConfiguration
+@WebAppConfiguration
+public class SessionScopedBeanTests {
+
+    @Autowired UserService userService;
+    @Autowired MockHttpSession session;
+
+    @Test
+    public void sessionScope() throws Exception {
+        session.setAttribute("theme", "blue");
+
+        Results results = userService.processUserPreferences();
+        // 断言results
+    }
+}
+----
+====
+
+[[testcontext-tx]]
+==== 事务管理
+
+在TestContext框架中，事务由 `TransactionalTestExecutionListener` 管理，即使您未在测试类上显式声明 `@TestExecutionListeners`，也会默认配置该事务。但是，要启用对事务的支持，必须在 `ApplicationContext` 中配置一个加载了 `@ContextConfiguration` 语义的 `PlatformTransactionManager` bean（稍后会提供更多详细信息）。此外，您必须在类或方法级别为测试声明Spring的 `@Transactional` 注解。
+
+[[testcontext-tx-test-managed-transactions]]
+===== 测试管理的事务
+
+测试管理的事务是通过使用 `TransactionalTestExecutionListener` 以声明方式管理的事务，或使用 `TestTransaction` 以编程方式管理的事务（稍后描述）。
+您不应将此类事务与Spring管理的事务（在为测试加载的 `ApplicationContext` 中由Spring直接管理的事务）或应用程序管理的事务（在测试调用的应用程序代码中以编程方式管理的事务）混淆。Spring管理和应用程序管理的事务通常参与测试管理的事务。但是，如果Spring管理的事务或应用程序管理的事务配置了除 `REQUIRED` 或 `SUPPORTS` 之外的任何传播类型，则应谨慎使用（有关详细信息，请参阅有关 {docSpringBaseUrl}/data-access.html#tx-propagation[事务传播]的讨论）。
+
+[[testcontext-tx-enabling-transactions]]
+===== 启用和禁用事务
+
+使用 `@Transactional` 注解测试方法会导致测试在事务中运行，默认情况下，该事务在测试完成后自动回滚。如果使用 `@Transactional` 注解测试类，则该类层次结构中的每个测试方法都在事务中运行。未使用 `@Transactional` 注解的测试方法（在类或方法级别）不在事务中运行。此外，使用 `@Transactional` 注解但传播类型设置为 `NOT_SUPPORTED` 的测试也不会在事务中运行。
+
+请注意，<<testcontext-support-classes-junit4,`AbstractTransactionalJUnit4SpringContextTests`>> 和 <<testcontext-support-classes-testng,`AbstractTransactionalTestNGSpringContextTests`>> 已预先配置为类级别的事务支持。
+
+以下示例演示了为基于Hibernate的 `UserRepository` 编写集成测试的常见方案：
+
+====
+[source,java]
+----
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = TestConfig.class)
+@Transactional
+public class HibernateUserRepositoryTests {
+
+    @Autowired
+    HibernateUserRepository repository;
+
+    @Autowired
+    SessionFactory sessionFactory;
+
+    JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public void setDataSource(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+
+    @Test
+    public void createUser() {
+        // 跟踪测试数据库中的初始状态：
+        final int count = countRowsInTable("user");
+
+        User user = new User(...);
+        repository.save(user);
+
+        // 需要手动flush以避免测试中的误报
+        sessionFactory.getCurrentSession().flush();
+        assertNumUsers(count + 1);
+    }
+
+    protected int countRowsInTable(String tableName) {
+        return JdbcTestUtils.countRowsInTable(this.jdbcTemplate, tableName);
+    }
+
+    protected void assertNumUsers(int expected) {
+        assertEquals("Number of rows in the [user] table.", expected, countRowsInTable("user"));
+    }
+}
+----
+====
+
+如<<testcontext-tx-rollback-and-commit-behavior,事务回滚和提交行为>>中所述，在 `createUser()` 方法运行后无需清理数据库，因为对 `TransactionalTestExecutionListener` 会自动回滚对数据库所做的任何更改。有关其他示例，请参阅<<testing-examples-petclinic,PetClinic示例>>。
+
+[[testcontext-tx-rollback-and-commit-behavior]]
+===== 事务回滚和提交行为
+
+默认情况下，测试完成后将自动回滚测试事务；但是，可以通过 `@Commit` 和 `@Rollback` 注解声明式配置事务提交和回滚行为。有关更多详细信息，请参阅<<integration-testing-annotations,注解支持>>部分中的相应条目。
+
+[[testcontext-tx-programmatic-tx-mgt]]
+===== 编程式事务管理
+
+从Spring Framework 4.1开始，您可以使用 `TestTransaction` 中的静态方法以编程方式与测试管理的事务进行交互。例如，您可以在测试方法中，在方法之前，在方法之后使用 `TestTransaction` 来启动或结束当前的测试管理事务，或者为回滚或提交配置当前测试管理的事务。每当启用 `TransactionalTestExecutionListener` 时，都会自动提供对 `TestTransaction` 的支持。
+
+以下示例演示了 `TestTransaction` 的一些功能。有关详细信息，请参阅 {javadocSpringBaseUrl}/org/springframework/test/context/transaction/TestTransaction.html[`TestTransaction`] 的javadoc。
+
+====
+[source,java]
+----
+@ContextConfiguration(classes = TestConfig.class)
+public class ProgrammaticTransactionManagementTests extends
+        AbstractTransactionalJUnit4SpringContextTests {
+
+    @Test
+    public void transactionalTest() {
+        // 断言测试数据库中的初始状态：
+        assertNumUsers(2);
+
+        deleteFromTables("user");
+
+        // 将提交对数据库的更改！
+        TestTransaction.flagForCommit();
+        TestTransaction.end();
+        assertFalse(TestTransaction.isActive());
+        assertNumUsers(0);
+
+        TestTransaction.start();
+        // 对数据库执行其他操作，测试完成后将自动回滚...
+    }
+
+    protected void assertNumUsers(int expected) {
+        assertEquals("Number of rows in the [user] table.", expected, countRowsInTable("user"));
+    }
+}
+----
+====
+
+[[testcontext-tx-before-and-after-tx]]
+===== 在事务之外运行代码
+
+有时，您可能需要在事务测试方法之前或之后，但在事务上下文之外执行某些代码 - 例如，在运行测试之前验证初始数据库状态或在测试运行后验证预期的事务提交行为（如果测试配置为提交事务）。`TransactionalTestExecutionListener` 完全支持 `@BeforeTransaction` 和 `@AfterTransaction` 注解。您可以使用其中一个注解在测试类或测试接口中的任何 `void` default方法中标注任何 `void` 方法，并且 `TransactionalTestExecutionListener` 可确保您的前置事务方法或后置事务方法在适当的时间运行。
+
+TIP: 任何before方法（例如使用JUnit Jupiter的 `@BeforeEach` 标注的方法）和任何after方法（例如使用JUnit Jupiter的 `@AfterEach` 标注的方法）都在事务中运行。此外，对于未配置为在事务中运行的测试方法，不会运行使用 `@BeforeTransaction` 或 `@AfterTransaction` 注解的方法。
+
+[[testcontext-tx-mgr-config]]
+===== 配置事务管理器
+
+`TransactionalTestExecutionListener` 期望在Spring `ApplicationContext` 中定义 `PlatformTransactionManager` bean以进行测试。如果测试的 `ApplicationContext` 中有多个 `PlatformTransactionManager` 实例，则可以使用 `@Transactional("myTxMgr")` 或 `@Transactional(transactionManager = "myTxMgr")` 声明限定符，或者可以通过 `@Configuration` 类实现 `TransactionManagementConfigurer`。有关用于在测试的 `ApplicationContext` 中查找事务管理器的算法的详细信息，请参阅 {javadocSpringBaseUrl}/org/springframework/test/context/transaction/TestContextTransactionUtils.html#retrieveTransactionManager-org.springframework.test.context.TestContext-java.lang.String-[`TestContextTransactionUtils.retrieveTransactionManager()` 的javadoc]。
+
+
+[[testcontext-tx-annotation-demo]]
+===== 演示所有与事务相关的注解
+
+以下基于JUnit 4的示例显示了一个虚构的集成测试场景，该场景突出显示了所有与事务相关的注解。该示例不是为了演示最佳实践，而是为了演示如何使用这些注解。有关更多信息和配置示例，请参阅<<integration-testing-annotations,注解支持>>部分。<<testcontext-executing-sql-declaratively-tx,`@Sql` 的事务管理>>包含一个使用 `@Sql` 进行声明性SQL脚本执行并具有默认事务回滚语义的附加示例。以下示例以粗体显示相关注解：
+
+====
+[source,java]
+[subs="verbatim,quotes"]
+----
+@RunWith(SpringRunner.class)
+@ContextConfiguration
+**@Transactional(transactionManager = "txMgr")**
+**@Commit**
+public class FictitiousTransactionalTest {
+
+    **@BeforeTransaction**
+    void verifyInitialDatabaseState() {
+        // 在事务开始之前验证初始状态的逻辑
+    }
+
+    @Before
+    public void setUpTestDataWithinTransaction() {
+        // 在事务中设置测试数据
+    }
+
+    @Test
+    // 覆盖类级别的@Commit设置
+    **@Rollback**
+    public void modifyDatabaseWithinTransaction() {
+        // 使用测试数据并修改数据库状态的逻辑
+    }
+
+    @After
+    public void tearDownWithinTransaction() {
+        // 在事务中执行测试“拆除”逻辑
+    }
+
+    **@AfterTransaction**
+    void verifyFinalDatabaseState() {
+        // 事务回滚后验证最终状态的逻辑
+    }
+
+}
+----
+====
+
+[[testcontext-tx-false-positives]]
+.在测试ORM代码时避免误报
+[NOTE]
+=====
+当您测试操作Hibernate会话或JPA持久性上下文状态的应用程序代码时，请确保在运行该代码的测试方法中刷新基础工作单元。未能刷新基础工作单元可能会产生误报：您的测试通过，但相同的代码会在实时生产环境中引发异常。请注意，这适用于维护内存工作单元的任何ORM框架。在下面基于Hibernate的示例测试用例中，一个方法演示了误报，另一个方法正确地公开了刷新会话的结果：
+
+====
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+	// ...
+
+	@Autowired
+	SessionFactory sessionFactory;
+
+	@Transactional
+	@Test // 没有期望异常
+	public void falsePositive() {
+		updateEntityInHibernateSession();
+		// 误报：一旦Hibernate会话最终被刷新（即在生产代码中），将抛出异常
+	}
+
+	@Transactional
+	@Test(expected = ...)
+	public void updateWithSessionFlush() {
+		updateEntityInHibernateSession();
+		// 需要手动flush以避免测试中的误报
+		sessionFactory.getCurrentSession().flush();
+	}
+
+	// ...
+----
+====
+
+以下示例显示了JPA的匹配方法：
+
+====
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+	// ...
+
+	@PersistenceContext
+	EntityManager entityManager;
+
+	@Transactional
+	@Test // 没有期望异常
+	public void falsePositive() {
+		updateEntityInJpaPersistenceContext();
+		// 误报：一旦JPA EntityManager最终被刷新（即在生产代码中），将抛出异常
+	}
+
+	@Transactional
+	@Test(expected = ...)
+	public void updateWithEntityManagerFlush() {
+		updateEntityInJpaPersistenceContext();
+		// 需要手动flush以避免测试中的误报
+		entityManager.flush();
+	}
+
+	// ...
+----
+====
+=====
+
+[[testcontext-executing-sql]]
+==== 执行SQL脚本
+
+在针对关系数据库编写集成测试时，执行SQL脚本来修改数据库schema或将测试数据插入表中通常是有益的。`spring-jdbc` 模块通过在加载Spring `ApplicationContext` 时执行SQL脚本来支持初始化嵌入或现有数据库。有关详细信息，请参阅 {docSpringBaseUrl}/data-access.html#jdbc-embedded-database-support[嵌入式数据库支持]和 {docSpringBaseUrl}/data-access.html#jdbc-embedded-database-dao-testing[使用嵌入式数据库测试数据访问逻辑]。
+
+虽然在加载 `ApplicationContext` 时初始化数据库以进行一次测试非常有用，但有时在集成测试期间能够修改数据库是很重要的。以下部分说明如何在集成测试期间以编程方式和声明方式执行SQL脚本。
+
+[[testcontext-executing-sql-programmatically]]
+===== 编程式执行SQL脚本
+
+Spring提供了以下选项，用于在集成测试方法中以编程方式执行SQL脚本。
+
+* `org.springframework.jdbc.datasource.init.ScriptUtils`
+* `org.springframework.jdbc.datasource.init.ResourceDatabasePopulator`
+* `org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests`
+* `org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests`
+
+`ScriptUtils` 提供了一组用于处理SQL脚本的静态实用工具方法，主要用于框架内部使用。但是，如果您需要完全控制SQL脚本的解析和执行方式，则 `ScriptUtils` 可能比后面描述的其他一些替代方案更适合您的需求。有关更多详细信息，请参阅 `ScriptUtils` 中各个方法的 {javadocSpringBaseUrl}/org/springframework/jdbc/datasource/init/ScriptUtils.html[javadoc]。
+
+`ResourceDatabasePopulator` 提供基于对象的API，用于使用外部资源中定义的SQL脚本以编程方式填充，初始化或清理数据库。`ResourceDatabasePopulator` 提供用于配置解析和运行脚本时使用的字符编码，语句分隔符，注释分隔符和错误处理标志的选项。每个配置选项都有一个合理的默认值。有关默认值的详细信息，请参阅 {javadocSpringBaseUrl}/org/springframework/jdbc/datasource/init/ResourceDatabasePopulator.html[javadoc]。要运行在`ResourceDatabasePopulator` 中配置的脚本，可以调用 `populate(Connection)` 方法对 `java.sql.Connection` 执行填充，或者调用 `execute(DataSource)` 方法对 `javax.sql.DataSource` 执行填充。以下示例为测试schema和测试数据指定SQL脚本，将语句分隔符设置为 `@@`，并针对 `DataSource` 执行脚本：
+
+====
+[source,java]
+----
+@Test
+public void databaseTest {
+    ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+    populator.addScripts(
+            new ClassPathResource("test-schema.sql"),
+            new ClassPathResource("test-data.sql"));
+    populator.setSeparator("@@");
+    populator.execute(this.dataSource);
+    // 使用测试schema和数据执行代码
+}
+
+----
+====
+
+请注意，`ResourceDatabasePopulator` 在内部委托给 `ScriptUtils` 来解析和运行SQL脚本。类似地，<<testcontext-support-classes-junit4,`AbstractTransactionalJUnit4SpringContextTests`>>和<<testcontext-support-classes-testng,`AbstractTransactionalTestNGSpringContextTests`>>中的 `executeSqlScript(..)` 方法在内部使用 `ResourceDatabasePopulator` 来运行SQL脚本。有关更多详细信息，请参阅javadoc以获取各种 `executeSqlScript(..)` 方法。
+
+[[testcontext-executing-sql-declaratively]]
+===== 使用 `@Sql` 声明式执行SQL脚本
+
+除了上述以编程方式运行SQL脚本的机制之外，您还可以在Spring TestContext框架中以声明方式配置SQL脚本。具体来说，您可以在测试类或测试方法上声明 `@Sql` 注解，以配置应在集成测试方法之前或之后针对给定数据库运行的SQL脚本的资源路径。请注意，方法级声明会覆盖类级声明，并且 `SqlScriptsTestExecutionListener` 会提供对 `@Sql` 的支持，默认情况下会启用它。
+
+[[path-resource-semantics]]
+====== 路径资源语义
+
+每个路径都被解析为Spring `Resource`。普通路径（例如，`"schema.sql"`）被视为相对于定义测试类的包的类路径资源。以斜杠开头的路径被视为绝对类路径资源（例如，`"/org/example/schema.sql"`）。引用URL的路径（例如，以 `classpath:`, `file:`, `http:`）为前缀的路径是使用指定的资源协议加载的。
+
+以下示例说明如何在类级别和基于JUnit Jupiter的集成测试类中的方法级别使用 `@Sql`：
+
+====
+[source,java]
+----
+@SpringJUnitConfig
+@Sql("/test-schema.sql")
+class DatabaseTests {
+
+    @Test
+    void emptySchemaTest {
+        // 执行使用测试schema而没有任何测试数据的代码
+    }
+
+    @Test
+    @Sql({"/test-schema.sql", "/test-user-data.sql"})
+    void userTest {
+        // 执行使用测试schema和测试数据的代码
+    }
+}
+----
+====
+
+[[default-script-detection]]
+====== 默认脚本检测
+
+如果未指定SQL脚本，则会尝试检测默认脚本，具体取决于声明 `@Sql` 的位置。如果无法检测到默认值，则抛出 `IllegalStateException`。
+
+- 类级声明：如果带注解的测试类是 `com.example.MyTest`，则相应的默认脚本是 `classpath:com/example/MyTest.sql`。
+- 方法级声明：如果带注解的测试方法名为 `testMethod()` 并且在类 `com.example.MyTest` 中定义，则相应的默认脚本为 `classpath:com/example/MyTest.testMethod.sql`。
+
+[[declaring-multiple-code-sql-code-sets]]
+====== 声明多个 `@Sql` 集
+
+如果需要为给定的测试类或测试方法配置多组SQL脚本，但具有不同的语法配置，不同的错误处理规则或每组不同的执行阶段，则可以声明 `@Sql` 的多个实例。使用Java 8，您可以使用 `@Sql` 作为可重复注解。否则，您可以使用 `@SqlGroup` 注解作为显式容器来声明 `@Sql` 的多个实例。
+
+以下示例显示如何在Java 8中将 `@Sql` 用作可重复注解：
+
+====
+[source,java]
+----
+@Test
+@Sql(scripts = "/test-schema.sql", config = @SqlConfig(commentPrefix = "`"))
+@Sql("/test-user-data.sql")
+public void userTest {
+    // 执行使用测试schema和测试数据的代码
+}
+----
+====
+
+在前面示例方案中，`test-schema.sql` 脚本对单行注解使用不同的语法配置。
+
+以下示例与前面的示例相同，只是将 `@Sql` 组合声明在 `@SqlGroup` 中，以便与Java 6和Java 7兼容。
+
+====
+[source,java]
+----
+@Test
+@SqlGroup({
+    @Sql(scripts = "/test-schema.sql", config = @SqlConfig(commentPrefix = "`")),
+    @Sql("/test-user-data.sql")
+)}
+public void userTest {
+    // 执行使用测试schema和测试数据的代码
+}
+----
+====
+
+[[script-execution-phases]]
+====== 脚本执行阶段
+
+默认情况下，SQL脚本在相应的测试方法之前执行。但是，如果需要在测试方法之后运行一组特定的脚本（例如，清理数据库状态），则可以使用 `@Sql` 中的 `executionPhase` 属性，如以下示例所示：
+
+====
+[source,java]
+----
+@Test
+@Sql(
+    scripts = "create-test-data.sql",
+    config = @SqlConfig(transactionMode = ISOLATED)
+)
+@Sql(
+    scripts = "delete-test-data.sql",
+    config = @SqlConfig(transactionMode = ISOLATED),
+    executionPhase = AFTER_TEST_METHOD
+)
+public void userTest {
+    // 执行需要将测试数据提交到测试事务之外的数据库的代码
+}
+----
+====
+
+请注意，`ISOLATED` 和 `AFTER_TEST_METHOD` 分别是从 `Sql.TransactionMode` 和 `Sql.ExecutionPhase` 中静态导入的。
+
+[[script-configuration-with-code-sqlconfig-code]]
+====== 使用 `@SqlConfig` 进行脚本配置
+
+您可以使用 `@SqlConfig` 注解配置脚本解析和错误处理。在集成测试类中声明为类级别注解时，`@SqlConfig` 用作测试类层次结构中所有SQL脚本的全局配置。当使用 `@Sql` 注解的 `config` 属性直接声明时，`@SqlConfig` 用作在封闭的 `@Sql` 注解中声明的SQL脚本的本地配置。`@SqlConfig` 中的每个属性都有一个隐式默认值，该值在相应属性的javadoc中记录。由于在Java语言规范中为注解属性定义了规则，遗憾的是，不可能将 `null` 值赋给注解属性。因此，为了支持继承的全局配置的覆盖，  `@SqlConfig` 属性具有显式默认值 `""`（对于字符串）或 `DEFAULT`（对于枚举）。这种方法允许 `@SqlConfig` 的本地声明通过提供除 `""` 或 `"DEFAULT"` 之外的值来有选择地覆盖 `@SqlConfig` 的全局声明中的各个属性。只要本地 `@SqlConfig` 属性不提供 `""` 或 `"DEFAULT"` 以外的显式值，就会继承全局 `@SqlConfig` 属性。因此，显式本地配置会覆盖全局配置。
+
+`@Sql` 和 `@SqlConfig` 提供的配置选项等同于 `ScriptUtils` 和 `ResourceDatabasePopulator` 支持的配置选项，但它们是 `<jdbc:initialize-database/>` XML命名空间元素提供的超集。有关详细信息，请参阅 {javadocSpringBaseUrl}/org/springframework/test/context/jdbc/Sql.html[`@Sql`]和 {javadocSpringBaseUrl}/org/springframework/test/context/jdbc/SqlConfig.html[`@SqlConfig`]中各个属性的javadoc。
+
+[[testcontext-executing-sql-declaratively-tx]]
+*`@Sql` 的事务管理*
+
+默认情况下，`SqlScriptsTestExecutionListener` 为使用 `@Sql` 配置的脚本推断所需的事务语义。具体来说，SQL脚本在没有事务的情况下运行，在现有的Spring管理的事务中（例如，由 `TransactionalTestExecutionListener` 管理的事务，用于使用 `@Transactional` 注解的测试），或者在隔离的事务中运行，具体取决于 `transactionMode` 的配置值 `@SqlConfig` 中的属性以及测试的 `ApplicationContext` 中是否存在 `PlatformTransactionManager`。但是至少测试的 `ApplicationContext` 中必须存在 `javax.sql.DataSource`。
+
+如果 `SqlScriptsTestExecutionListener` 用于检测 `DataSource` 和 `PlatformTransactionManager` 并推断事务语义的算法不符合您的需要，则可以通过设置 `@SqlConfig` 的 `dataSource` 和 `transactionManager` 属性来显式指定名称。此外，您可以通过设置 `@SqlConfig` 的 `transactionMode` 属性来控制事务传播行为（例如，脚本是否应该在隔离的事务中运行）。虽然对使用 `@Sql` 进行事务管理的所有受支持选项的详尽讨论超出了本参考手册的范围，但 {javadocSpringBaseUrl}/org/springframework/test/context/jdbc/SqlConfig.html[`@SqlConfig`]和 {javadocSpringBaseUrl}/org/springframework/test/context/jdbc/SqlScriptsTestExecutionListener.html[`SqlScriptsTestExecutionListener`]的javadoc提供了详细信息，以下示例显示了使用JUnit Jupiter和 `@Sql` 的事务测试的典型测试场景：
+
+====
+[source,java]
+----
+@SpringJUnitConfig(TestDatabaseConfig.class)
+@Transactional
+class TransactionalSqlScriptsTests {
+
+    final JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    TransactionalSqlScriptsTests(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+
+    @Test
+    @Sql("/test-data.sql")
+    void usersTest() {
+        // 验证测试数据库中的状态：
+        assertNumUsers(2);
+        // 执行使用测试数据的代码......
+    }
+
+    int countRowsInTable(String tableName) {
+        return JdbcTestUtils.countRowsInTable(this.jdbcTemplate, tableName);
+    }
+
+    void assertNumUsers(int expected) {
+        assertEquals(expected, countRowsInTable("user"),
+            "Number of rows in the [user] table.");
+    }
+}
+----
+====
+
+请注意，运行 `usersTest()` 方法后无需清理数据库，因为对数据库所做的任何更改（在测试方法内或在 `/test-data.sql` 脚本中）都会被 `TransactionalTestExecutionListener` 自动回滚（有关详细信息，请参阅<<testcontext-tx,事务管理>>）。
+
+[[testcontext-parallel-test-execution]]
+==== 并行测试执行
+
+Spring Framework 5.0引入了在使用Spring TestContext框架时在单个JVM中并行执行测试的支持。通常，这意味着大多数测试类或测试方法可以并行执行，而无需对测试代码或配置进行任何更改。
+
+TIP: 有关如何设置并行测试执行的详细信息，请参阅测试框架，构建工具或IDE的文档。
+
+请记住，在您的测试套件中引入并发可能会导致意外的副作用，奇怪的运行时行为以及间歇性或看似随机失败的测试。因此，Spring Team提供了以下关于何时不并行执行测试的一般指导原则。
+
+如果在以下场景执行测试，请不要并行执行：
+
+- 使用Spring的 `@DirtiesContext` 支持。
+- 使用JUnit 4的 `@FixMethodOrder` 支持或任何旨在确保测试方法以特定顺序运行的测试框架功能。但请注意，如果并行执行整个测试类，则不适用。
+- 更改共享服务或系统的状态，例如数据库，消息代理，文件系统等。这适用于内存和外部系统。
+
+[TIP]
+====
+如果并行测试执行失败，并且抛出异常声明当前测试的 `ApplicationContext` 不再处于活动状态，则这通常意味着 `ApplicationContext` 已从另一个线程中的 `ContextCache` 中删除。
+
+这可能是由于使用了 `@DirtiesContext` 或者是由于 `ContextCache` 的自动驱逐。如果 `@DirtiesContext` 是罪魁祸首，您需要找到一种方法来避免使用 `@DirtiesContext` 或从并行执行中排除此类测试。如果已超出 `ContextCache` 的最大大小，则可以增加高速缓存的最大大小。有关详细信息，请参阅有关<<testcontext-ctx-management-caching,上下文缓存>>的讨论。
+====
+
+WARNING: 只有为底层的 `TestContext` 实现提供了一个副本构造函数时，Spring TestContext框架中的并行测试才能执行，如 {javadocSpringBaseUrl}/org/springframework/test/context/TestContext.html[`TestContext`]的javadoc中所述。Spring中使用的 `DefaultTestContext` 提供了这样的构造函数。但是，如果使用提供自定义TestContext实现的第三方库，则需要验证它是否适合执行并行测试。
+
+[[testcontext-support-classes]]
+==== TestContext框架支持类
+
+本节描述了支持Spring TestContext框架的各种支持类。
+
+[[testcontext-junit4-runner]]
+===== Spring JUnit 4 Runner
+
+Spring TestContext框架通过自定义运行器（在JUnit 4.12或更高版本上支持）提供与JUnit 4的完全集成。通过使用 `@RunWith(SpringJUnit4ClassRunner.class)` 或更短的 `@RunWith(SpringRunner.class)` 变体来注解测试类，开发人员可以实现基于标准JUnit 4的单元和集成测试，同时获得TestContext框架的好处，例如支持加载应用程序上下文，测试实例的依赖项注入，事务测试方法执行等。如果您想将Spring TestContext框架与替代运行器（例如JUnit 4的 `Parameterized` runner）或第三方运行程序（例如 `MockitoJUnitRunner`）一起使用，您可以选择使用 <<testcontext-junit4-rules,Spring对JUnit规则的支持>>。
+
+以下代码清单显示了配置测试类以使用自定义Spring Runner运行的最低要求：
+
+====
+[source,java]
+----
+@RunWith(SpringRunner.class)
+@TestExecutionListeners({})
+public class SimpleTest {
+
+    @Test
+    public void testMethod() {
+        // 执行测试逻辑...
+    }
+}
+----
+====
+
+在前面的示例中，`@TestExecutionListeners` 配置了一个空列表，以禁用默认侦听器，否则需要通过 `@ContextConfiguration` 配置 `ApplicationContext`。
+
+[[testcontext-junit4-rules]]
+===== Spring JUnit 4 Rules
+
+`org.springframework.test.context.junit4.rules` 包提供以下JUnit 4规则（JUnit 4.12或更高版本支持）：
+
+- `SpringClassRule`
+- `SpringMethodRule`
+
+`SpringClassRule` 是一个JUnit `TestRule`，它支持Spring TestContext框架的类级功能，而 `SpringMethodRule` 是一个JUnit `MethodRule`，它支持Spring TestContext框架的实例级和方法级功能。
+
+与 `SpringRunner` 相比，Spring基于规则的JUnit支持具有独立于任何 `org.junit.runner.Runner` 实现的优势，因此可以与现有的替代Runner（例如JUnit 4的 `Parameterized`）或第三方Runner（如 `MockitoJUnitRunner`）结合使用。
+
+要支持 `TestContext` 框架的完整功能，必须将 `SpringClassRule` 与 `SpringMethodRule` 结合使用。以下示例显示了在集成测试中声明这些规则的正确方法：
+
+====
+[source,java]
+----
+// （可选）通过 @RunWith(...) 指定非Spring Runner
+@ContextConfiguration
+public class IntegrationTest {
+
+    @ClassRule
+    public static final SpringClassRule springClassRule = new SpringClassRule();
+
+    @Rule
+    public final SpringMethodRule springMethodRule = new SpringMethodRule();
+
+    @Test
+    public void testMethod() {
+        // 执行测试逻辑...
+    }
+}
+----
+====
+
+[[testcontext-support-classes-junit4]]
+===== JUnit 4 支持类
+
+`org.springframework.test.context.junit4` 包为基于JUnit 4的测试用例提供以下支持类（在JUnit 4.12或更高版本上受支持）：
+
+- `AbstractJUnit4SpringContextTests`
+- `AbstractTransactionalJUnit4SpringContextTests`
+
+`AbstractJUnit4SpringContextTests` 是一个抽象基础测试类，它将Spring TestContext框架与JUnit 4环境中的显式 `ApplicationContext` 测试支持集成在一起。继承 `AbstractJUnit4SpringContextTests` 时，可以访问受保护的 `applicationContext` 实例变量，该变量可用于执行显式bean查找或测试整个上下文的状态。
+
+`AbstractTransactionalJUnit4SpringContextTests` 是 `AbstractJUnit4SpringContextTests` 的抽象事务的扩展，它为JDBC访问添加了一些便利功能。此类要求在 `ApplicationContext` 中定义 `javax.sql.DataSource` bean和 `PlatformTransactionManager` bean。继承 `AbstractTransactionalJUnit4SpringContextTests` 时，可以访问受保护的 `jdbcTemplate` 实例变量，该变量可用于运行SQL语句以查询数据库。您可以在运行与数据库相关的应用程序代码之前和之后使用此类查询来确认数据库状态，Spring确保此类查询在与应用程序代码相同的事务范围内运行。与ORM工具结合使用时，请务必避免<<testcontext-tx-false-positives,误报>>。正如<<integration-testing-support-jdbc,JDBC测试支持>>中所提到的，`AbstractTransactionalJUnit4SpringContextTests` 还提供了方便的方法，通过使用前面提到的 `jdbcTemplate` 委托调用 `JdbcTestUtils` 中的方法。此外，`AbstractTransactionalJUnit4SpringContextTests` 提供了一个 `executeSqlScript(..)` 方法，用于针对配置的 `DataSource` 运行SQL脚本。
+
+TIP: 这些类方便继承。如果您不希望将测试类绑定到特定于Spring的类层次结构，则可以使用 `@RunWith(SpringRunner.class)` 或Spring的<<testcontext-junit4-rules,JUnit规则>>来配置您自己的自定义测试类。
+
+[[testcontext-junit-jupiter-extension]]
+===== SpringExtension for JUnit Jupiter
+
+
+
+TODO
+
+
+[[testcontext-junit-jupiter-di]]
+===== `SpringExtension` 的依赖注入
+
+
+TODO
+
+
+[[testcontext-support-classes-testng]]
+===== TestNG支持类
+
+
+TODO
+
 
 
 
@@ -1144,7 +2200,7 @@ Spring MVC Test框架提供了一流的支持，可以使用流畅的API测试Sp
 Spring MVC Test还为测试使用 `RestTemplate` 的代码提供客户端支持。客户端测试模拟服务器响应，也不使用正在运行的服务器。
 
 NOTE: Spring Boot提供了一个选项来编写包含正在运行的服务器的完整的端到端集成测试。请参阅 
-{docSpringBootBaseUrl}/boot-features-testing.html#boot-features-testing-spring-boot-applications[Spring Boot参考文档]。
+<<spring-boot-test.adoc#boot-features-testing-spring-boot-applications,Spring Boot参考文档>>。
 有关容器外和端到端集成测试之间差异的更多信息，请参阅<<spring-mvc-test-vs-end-to-end-integration-tests,容器外和端到端集成测试之间的差异>>。
 
 [[spring-mvc-test-server]]
@@ -1338,7 +2394,7 @@ MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new TestController())
 ----
 ====
 
-有关所有 `MockMvc` 构建器功能的列表，请参阅 {javadocSpringBaseUrl}/org/springframework/test/web/servlet/setup/ConfigurableMockMvcBuilder.html[ConfigurableMockMvcBuilder]
+有关所有 `MockMvc` 构建器功能的列表，请参阅 {javadocSpringBaseUrl}/org/springframework/test/web/servlet/setup/ConfigurableMockMvcBuilder.html[`ConfigurableMockMvcBuilder`]
 的javadoc，或使用IDE浏览可用选项。
 
 [[spring-mvc-test-server-performing-requests]]
@@ -1525,16 +2581,437 @@ mockMvc.perform(get("/handle").accept(MediaType.APPLICATION_XML))
 ====
 [source,java]
 ----
-mockMvc = standaloneSetup(new PersonController()).addFilters(new CharacterEncodingFilter()).build();
+mockMvc = standaloneSetup(new PersonController())
+    .addFilters(new CharacterEncodingFilter())
+    .build();
 ----
 ====
 
 注册过滤器会通过 `spring-test` 中的 `MockFilterChain` 调用，最后一个过滤器委托给 `DispatcherServlet`。
 
+[[spring-mvc-test-vs-end-to-end-integration-tests]]
+===== 容器外和端到端集成测试之间的差异
+
+如前所述，Spring MVC Test构建于 `spring-test` 模块的Servlet API模拟对象之上，并不使用正在运行的Servlet容器。因此，
+与实际客户端和服务器运行的完整端到端集成测试相比，存在一些重要差异。
+
+考虑这一点的最简单方法是从一个空白的 `MockHttpServletRequest` 开始。无论你添加什么使请求变成什么。
+可能会让您感到意外的事情是默认情况下没有上下文路径、没有 `jsessionid` cookie、没有转发、错误或异步调度、因此，没有实际的JSP渲染。
+相反，“转发”和“重定向”URLs保存在 `MockHttpServletResponse` 中，并且可用于期望断言。
+
+这意味着，如果使用JSP，则可以验证请求转发到的JSP页面，但不呈现HTML。换句话说，不调用JSP。但请注意，所有其他不依赖转发的渲染技术
+（如Thymeleaf和Freemarker）都会按预期将HTML呈现给响应主体。通过 `@ResponseBody` 方法渲染JSON，XML和其他格式也是如此。
+
+或者，您可以考虑使用 `@WebIntegrationTest` 从Spring Boot获得完整的端到端集成测试支持。请参阅
+<<spring-boot-test.adoc#boot-features-testing-spring-boot-applications,Spring Boot参考文档>>。
+
+每种方法都有利弊。Spring MVC Test中提供的选项是从经典单元测试到完全集成测试的不同阶段。
+可以肯定的是，Spring MVC Test中没有一个选项属于经典单元测试类别，但它们很接近它。
+例如，您可以通过将模拟服务注入控制器来隔离Web层，在这种情况下，您只通过 `DispatcherServlet` 测试Web层，但是使用实际的Spring配置，
+因为您可能独立于上面的层来测试数据访问层。此外，您可以使用独立设置，一次关注一个控制器并手动提供使其工作所需的配置。
+
+使用Spring MVC Test时的另一个重要区别是，从概念上讲，这样的测试是服务器端，因此您可以检查使用了什么执行器，是否使用
+`HandlerExceptionResolver` 处理异常，模型的内容是什么，绑定错误是什么和其他细节。这意味着编写期望更容易，因为服务器不是黑盒子，
+就像通过实际的HTTP客户端测试它一样。这通常是经典单元测试的一个优点：它更容易编写，推理和调试，但不能取代完全集成测试。
+同时，重要的是不要忽视响应是最重要的需要去检查的事物。简而言之，即使在同一个项目中，也有多种测试风格和策略的空间。
+
+[[spring-mvc-test-server-resources]]
+===== 进一步的服务器端测试示例
+
+框架自身的测试包括 https://github.com/spring-projects/spring-framework/tree/master/spring-test/src/test/java/org/springframework/test/web/servlet/samples[许多样例测试]，旨在展示如何使用Spring MVC测试。您可以浏览这些示例以获取更多想法。
+此外， https://github.com/spring-projects/spring-mvc-showcase[spring-mvc-showcase]项目具有基于Spring MVC Test的完整测试覆盖率。
+
+[[spring-mvc-test-server-htmlunit]]
+==== HtmlUnit集成
+
+Spring提供了<<spring-mvc-test-server,MockMvc>>和 http://htmlunit.sourceforge.net/[HtmlUnit]之间的集成。
+这简化了使用基于HTML的视图时执行端到端测试的过程。这种集成让您：
+
+- 使用 http://htmlunit.sourceforge.net/[HtmlUnit] ， http://seleniumhq.org/projects/webdriver/[WebDriver]和
+http://seleniumhq.org/projects/webdriver/[Geb]等工具轻松测试HTML页面，而无需部署到Servlet容器。
+- 在页面中测试JavaScript。
+- 可选，使用模拟服务进行测试以加快测试速度。
+- 在容器内端到端测试和容器外集成测试之间共享逻辑。
+
+NOTE: MockMvc使用不依赖于Servlet容器的模板技术（例如，Thymeleaf，FreeMarker等），但它不适用于JSP，因为它们依赖于Servlet容器。
+
+[[spring-mvc-test-server-htmlunit-why]]
+===== 为何选择HtmlUnit？
+
+能想到的最明显的问题是“为什么我需要这个？”通过探索一个非常基本的示例应用程序可以找到答案。假设您有一个Spring MVC Web应用程序，
+它支持 `Message` 对象上的CRUD操作。该应用程序还支持分页所有消息。你会如何测试它？
+
+使用Spring MVC Test，我们可以轻松测试是否能够创建 `Message`，如下所示：
+
+====
+[source,java]
+----
+MockHttpServletRequestBuilder createMessage = post("/messages/")
+        .param("summary", "Spring Rocks")
+        .param("text", "In case you didn't know, Spring Rocks!");
+
+mockMvc.perform(createMessage)
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl("/messages/123"));
+----
+====
+
+如果我们要测试允许我们创建消息的表单视图，该怎么办？例如，假设我们的表单看起来像以下代码段：
+
+====
+[source,xml]
+----
+<form id="messageForm" action="/messages/" method="post">
+    <div class="pull-right"><a href="/messages/">Messages</a></div>
+
+    <label for="summary">Summary</label>
+    <input type="text" class="required" id="summary" name="summary" value="" />
+
+    <label for="text">Message</label>
+    <textarea id="text" name="text"></textarea>
+
+    <div class="form-actions">
+        <input type="submit" value="Create" />
+    </div>
+</form>
+----
+====
+
+我们如何确保我们的表单产生创建新消息的正确请求？天真的尝试可能类似于以下内容：
+
+====
+[source,java]
+----
+mockMvc.perform(get("/messages/form"))
+        .andExpect(xpath("//input[@name='summary']").exists())
+        .andExpect(xpath("//textarea[@name='text']").exists());
+----
+====
+
+该测试有一些明显的缺点。如果我们更新控制器以使用参数 `message` 替换 `text`，我们的表单测试将继续通过，
+即使HTML表单与控制器不同步。要解决这个问题，我们可以结合两个测试，如下所示：
+
+[[spring-mvc-test-server-htmlunit-mock-mvc-test]]
+====
+[source,java]
+----
+String summaryParamName = "summary";
+String textParamName = "text";
+mockMvc.perform(get("/messages/form"))
+        .andExpect(xpath("//input[@name='" + summaryParamName + "']").exists())
+        .andExpect(xpath("//textarea[@name='" + textParamName + "']").exists());
+
+MockHttpServletRequestBuilder createMessage = post("/messages/")
+        .param(summaryParamName, "Spring Rocks")
+        .param(textParamName, "In case you didn't know, Spring Rocks!");
+
+mockMvc.perform(createMessage)
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl("/messages/123"));
+----
+====
+
+这样可以降低我们测试错误传递的风险，但仍然存在一些问题：
+
+- 如果我们的页面上有多个表单怎么办？不可否认，我们可以更新我们的XPath表达式，但是若我们考虑了更多因素，它们变得更加复杂：
+字段是否是正确的类型？字段是否已启用？等等。
+- 另一个问题是我们正在做的工作量是我们预期的两倍。我们必须首先验证视图，然后我们使用我们刚刚验证的相同参数提交视图。
+理想情况下，这可以一次完成。
+- 最后，我们仍然无法解释一些事情。例如，如果表单具有我们希望测试的JavaScript验证，该怎么办？
+
+总体问题是测试网页不涉及单个交互。相反，它是用户如何与网页交互以及该网页如何与其他资源交互的组合。
+例如，表单视图的结果用作用户输入以创建消息。此外，我们的表单视图可能会使用影响页面行为的其他资源，例如JavaScript验证。
+
+[[spring-mvc-test-server-htmlunit-why-integration]]
+====== 集成测试可以拯救您吗?
+
+为解决前面提到的问题，我们可以执行端到端集成测试，但这有一些缺点。考虑测试让我们浏览消息的视图。我们可能需要以下测试：
+
+- 我们的页面是否向用户显示通知，指示消息为空时没有结果可用？
+- 我们的页面是否正确显示单个消息？
+- 我们的页面是否正确支持分页？
+
+要设置这些测试，我们需要确保我们的数据库包含正确的消息。这导致了许多额外的挑战：
+
+- 确保数据库中存在正确的消息可能很繁琐（考虑外键约束）。
+- 测试可能会变慢，因为每个测试都需要确保数据库处于正确的状态。
+- 由于我们的数据库需要处于特定状态，因此我们无法并行运行测试。
+- 对自动生成的ID，时间戳等条目执行断言可能很困难。
+
+这些挑战并不意味着我们应该放弃端到端的集成测试。相反，我们可以通过重构我们的详细测试来减少端到端集成测试的数量，以使用运行速度更快，
+更可靠且没有副作用的模拟服务。然后，我们可以实现少量真正的端到端集成测试，以验证简单的工作流程，以确保一切正常工作。
+
+[[spring-mvc-test-server-htmlunit-why-mockmvc]]
+====== 进入HtmlUnit集成
+
+那么我们如何才能在测试页面交互之间取得平衡并在测试套件中保持良好的性能呢？答案是：“通过将MockMvc与HtmlUnit集成。”
+
+[[spring-mvc-test-server-htmlunit-options]]
+====== HtmlUnit集成选项
+
+当您想要将MockMvc与HtmlUnit集成时，您有许多选项：
+
+- <<spring-mvc-test-server-htmlunit-mah,MockMvc和HtmlUnit>>：如果要使用原始HtmlUnit库，请使用此选项。
+- <<spring-mvc-test-server-htmlunit-webdriver,MockMvc和WebDriver>>：使用此选项可以简化集成和端到端测试之间的代码开发和重用。
+- <<spring-mvc-test-server-htmlunit-geb,MockMvc和Geb>>：如果要在集成和端到端测试之间使用Groovy进行测试，
+简化开发和重用代码，请使用此选项。
+
+[[spring-mvc-test-server-htmlunit-mah]]
+===== MockMvc和HtmlUnit
+
+本节介绍如何集成MockMvc和HtmlUnit。如果要使用原始HtmlUnit库，请使用此选项。
+
+[[spring-mvc-test-server-htmlunit-mah-setup]]
+====== MockMvc和HtmlUnit设置
+
+首先，确保您已经包含了对 `net.sourceforge.htmlunit:htmlunit` 测试依赖项。为了将HtmlUnit与Apache HttpComponents 4.5+一起使用，
+您需要使用HtmlUnit 2.18或更高版本。
+
+我们可以使用 `MockMvcWebClientBuilder` 轻松创建一个与MockMvc集成的HtmlUnit `WebClient`，如下所示：
+
+====
+[source,java]
+----
+@Autowired
+WebApplicationContext context;
+
+WebClient webClient;
+
+@Before
+public void setup() {
+    webClient = MockMvcWebClientBuilder
+            .webAppContextSetup(context)
+            .build();
+}
+----
+====
+
+NOTE: 这是使用 `MockMvcWebClientBuilder` 的一个简单示例。有关高级用法，请参阅
+<<spring-mvc-test-server-htmlunit-mah-advanced-builder,高级 `MockMvcWebClientBuilder`>>。
+
+这可确保将任何引用 `localhost` 作为服务器的URL定向到我们的 `MockMvc` 实例，而无需真正的HTTP连接。 
+正常情况下，使用网络连接请求任何其他URL。这让我们可以轻松测试CDN的使用。
+
+[[spring-mvc-test-server-htmlunit-mah-usage]]
+====== MockMvc和HtmlUnit用法
+
+现在我们可以像往常一样使用HtmlUnit，但不需要将我们的应用程序部署到Servlet容器。例如，我们可以请求视图使用以下内容创建消息：
+
+====
+[source,java]
+----
+HtmlPage createMsgFormPage = webClient.getPage("http://localhost/messages/form");
+----
+====
+
+NOTE: 默认上下文路径为 `""`。 或者，我们可以指定上下文路径，如<<spring-mvc-test-server-htmlunit-mah-advanced-builder,高级  `MockMvcWebClientBuilder`>>中所述。
+
+一旦我们引用了 `HtmlPage`，我们就可以填写表单并提交它以创建消息，如下例所示：
+
+====
+[source,java]
+----
+HtmlForm form = createMsgFormPage.getHtmlElementById("messageForm");
+HtmlTextInput summaryInput = createMsgFormPage.getHtmlElementById("summary");
+summaryInput.setValueAttribute("Spring Rocks");
+HtmlTextArea textInput = createMsgFormPage.getHtmlElementById("text");
+textInput.setText("In case you didn't know, Spring Rocks!");
+HtmlSubmitInput submit = form.getOneHtmlElementByAttribute("input", "type", "submit");
+HtmlPage newMessagePage = submit.click();
+----
+====
+
+最后，我们可以验证是否已成功创建新消息。以下断言使用 https://joel-costigliola.github.io/assertj/[AssertJ]库：
+
+====
+[source,java]
+----
+assertThat(newMessagePage.getUrl().toString()).endsWith("/messages/123");
+String id = newMessagePage.getHtmlElementById("id").getTextContent();
+assertThat(id).isEqualTo("123");
+String summary = newMessagePage.getHtmlElementById("summary").getTextContent();
+assertThat(summary).isEqualTo("Spring Rocks");
+String text = newMessagePage.getHtmlElementById("text").getTextContent();
+assertThat(text).isEqualTo("In case you didn't know, Spring Rocks!");
+----
+====
+
+上述代码以多种方式改进了我们的<<spring-mvc-test-server-htmlunit-mock-mvc-test,MockMvc测试>>。
+首先，我们不再需要显式验证我们的表单，然后创建一个看起来像表单的请求。相反，我们请求表单，填写表单并提交表单，从而显着减少开销。
+
+另一个重要因素是 http://htmlunit.sourceforge.net/javascript.html[HtmlUnit使用Mozilla Rhino引擎]来评估JavaScript。
+这意味着我们还可以在页面中测试JavaScript的行为。
+
+有关使用HtmlUnit的其他信息，请参阅 http://htmlunit.sourceforge.net/gettingStarted.html[HtmlUnit文档]。
+
+[[spring-mvc-test-server-htmlunit-mah-advanced-builder]]
+====== 高级 `MockMvcWebClientBuilder`
+
+在目前为止的示例中，我们以最简单的方式使用 `MockMvcWebClientBuilder`，方法是基于Spring TestContext框架为我们加载的
+`WebApplicationContext` 构建 `WebClient`。 在以下示例中重复此方法：
+
+====
+[source,java]
+----
+@Autowired
+WebApplicationContext context;
+
+WebClient webClient;
+
+@Before
+public void setup() {
+    webClient = MockMvcWebClientBuilder
+            .webAppContextSetup(context)
+            .build();
+}
+----
+====
+
+我们还可以指定其他配置选项，如以下示例所示：
+
+====
+[source,java]
+----
+WebClient webClient;
+
+@Before
+public void setup() {
+    webClient = MockMvcWebClientBuilder
+        // 演示应用一个MockMvcConfigurer (Spring Security)
+        .webAppContextSetup(context, springSecurity())
+        // 仅供参考 - 默认为""
+        .contextPath("")
+        // 默认情况下，MockMvc仅用于localhost;
+        // 以下将MockMvc也用于example.com和example.org
+        .useMockMvcForHosts("example.com","example.org")
+        .build();
+}
+----
+====
+
+作为替代方案，我们可以通过单独配置 `MockMvc` 实例并将其提供给 `MockMvcWebClientBuilder` 来执行完全相同的设置，如下所示：
+
+====
+[source,java]
+----
+MockMvc mockMvc = MockMvcBuilders
+        .webAppContextSetup(context)
+        .apply(springSecurity())
+        .build();
+
+webClient = MockMvcWebClientBuilder
+        .mockMvcSetup(mockMvc)
+        // 仅供参考 - 默认为""
+        .contextPath("")
+        // 默认情况下，MockMvc仅用于localhost;
+        // 以下将MockMvc也用于example.com和example.org
+        .useMockMvcForHosts("example.com","example.org")
+        .build();
+----
+====
+
+这更加冗长，但是，通过使用 `MockMvc` 实例构建 `WebClient`，我们可以轻松获得MockMvc的全部功能。
+
+TIP: 有关创建 `MockMvc` 实例的其他信息，请参阅<<spring-mvc-test-server-setup-options,设置选择>>。
+
+[[spring-mvc-test-server-htmlunit-webdriver]]
+===== MockMvc和WebDriver
+
+
+TODO
+
+
+[[spring-mvc-test-server-htmlunit-geb]]
+===== MockMvc和Geb
+
+
+TODO
 
 
 
+[[spring-mvc-test-client]]
+==== 客户端REST测试
 
+您可以使用客户端测试来测试内部使用 `RestTemplate` 的代码。我们的想法是声明预期的请求并提供“存根”响应，以便您可以专注于单独测试代码
+（即，无需运行服务器）。以下示例显示了如何执行此操作：
+
+====
+[source,java]
+----
+RestTemplate restTemplate = new RestTemplate();
+
+MockRestServiceServer mockServer = MockRestServiceServer.bindTo(restTemplate).build();
+mockServer.expect(requestTo("/greeting")).andRespond(withSuccess());
+
+// 使用上面RestTemplate的测试代码 ...
+
+mockServer.verify();
+----
+====
+
+在前面的示例中，`MockRestServiceServer`（客户端REST测试的中心类）使用自定义 `ClientHttpRequestFactory` 配置 `RestTemplate`，
+该客户端根据预期断言实际请求并返回“存根”响应。在这种情况下，我们期望对 `/greeting` 发出请求，并希望返回带有 `text/plain` 内容的200响应。
+我们可以根据需要定义其他预期请求和存根响应。当我们定义期望的请求和存根响应时，`RestTemplate` 可以像往常一样在客户端代码中使用。
+在测试结束时，`mockServer.verify()` 可用于验证是否已满足所有期望。
+
+默认情况下，请求按期望声明的顺序进行。您可以在构建服务器时设置 `ignoreExpectOrder` 选项，在这种情况下，将检查所有期望（按顺序）
+以查找给定请求的匹配项。这意味着允许请求以任何顺序出现。以下示例使用 `ignoreExpectOrder`：
+
+====
+[source,java]
+----
+server = MockRestServiceServer.bindTo(restTemplate).ignoreExpectOrder(true).build();
+----
+====
+
+即使默认情况下使用无序请求，也只允许每个请求执行一次。`expect` 方法提供了一个重载变量，它接受指定计数范围的 `ExpectedCount` 参数
+（例如，`once`，`manyTimes`，`max`，`min`，`between` 等）。以下示例使用 `times`：
+
+====
+[source,java]
+----
+RestTemplate restTemplate = new RestTemplate();
+
+MockRestServiceServer mockServer = MockRestServiceServer.bindTo(restTemplate).build();
+mockServer.expect(times(2), requestTo("/something")).andRespond(withSuccess());
+mockServer.expect(times(3), requestTo("/somewhere")).andRespond(withSuccess());
+
+// ...
+
+mockServer.verify();
+----
+====
+
+请注意，如果未设置 `ignoreExpectOrder`（默认值），因此，请求按声明顺序排列，则该顺序仅适用于任何预期请求中的第一个。
+例如，如果预期“/something”两次，然后是“/somewhere”三次，那么在对“/somewhere”的请求之前应该有“/something”的请求，
+但是，此后的“/something”和“/somewhere”请求可以随时发出。
+
+作为上述所有选项的替代方案，客户端测试支持还提供了 `ClientHttpRequestFactory` 实现，
+您可以将其配置为 `RestTemplate` 以将其绑定到 `MockMvc` 实例。这允许使用实际的服务器端逻辑处理请求但不运行服务器。
+以下示例显示了如何执行此操作：
+
+====
+[source,java]
+----
+MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+this.restTemplate = new RestTemplate(new MockMvcClientHttpRequestFactory(mockMvc));
+
+// 使用上面RestTemplate的测试代码 ...
+----
+====
+
+[[spring-mvc-test-client-static-imports]]
+===== 静态导入
+
+与服务器端测试一样，用于客户端测试的流式API需要一些静态导入。通过搜索 `MockRest*` 很容易找到它们。
+Eclipse用户应该在Java → Editor → Content Assist → Favorites中添加 `MockRestRequestMatchers.{asterisk}` 和
+`MockRestResponseCreators.{asterisk}` 作为“favorite static members”。这允许在键入静态方法名称的第一个字符后使用内容辅助。
+其他IDE（例如IntelliJ）可能不需要任何其他配置。检查是否支持对静态成员的代码自动完成。
+
+[[spring-mvc-test-client-resources]]
+===== 客户端REST测试的更多示例
+
+Spring MVC Test自己的测试包括客户端REST测试的 https://github.com/spring-projects/spring-framework/tree/master/spring-test/src/test/java/org/springframework/test/web/client/samples[示例测试]。
 
 [[webtestclient]]
 === WebTestClient
