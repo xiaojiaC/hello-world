@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faqs xmlns="http://maven.apache.org/FML/1.0.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/FML/1.0.1 http://maven.apache.org/xsd/fml-1.0.1.xsd"
+  title="常见问题"
+  toplink="false">
+
+  <part id="overview">
+    <title>链接列表</title>
+
+    <faq id="quick-start">
+      <question>
+        快速认识插件Mojo？
+      </question>
+      <answer>
+        <p>下面是一个简单的Mojo示例：</p>
+        <source>
+    package sample.plugin;
+
+    import org.apache.maven.plugin.AbstractMojo;
+    import org.apache.maven.plugin.MojoExecutionException;
+    import org.apache.maven.plugins.annotations.Mojo;
+
+    /**
+     * Says "Hi" to the user.
+     */
+    @Mojo(name = "sayhi")
+    public class GreetingMojo extends AbstractMojo {
+        public void execute() throws MojoExecutionException {
+            getLog().info("Hello, world.");
+        }
+    }
+        </source>
+      </answer>
+    </faq>
+
+    <faq id="how-develop-plugin">
+      <question>
+        如何开发一个Maven插件？
+      </question>
+      <answer>
+        <p>编写插件的步骤概述: </p>
+        <ol>
+          <li>
+            <p>创建一个<code>maven-plugin</code>项目：插件本身也是<code>maven</code>项目，只是它的<code>packaging</code>必须是<code>maven-plugin</code>，可以使用<code>maven-archetype-plugin</code>快速创建一个插件项目。</p>
+          </li>
+          <li>
+            <p>为插件编写目标：每个插件必须包含一个或多个目标，<code>maven</code>称之为<code>Mojo</code>（与<code>POJO</code>对应）。编写插件时必须提供一个或多个继承自<code>AbstractMojo</code>的类。</p>
+          </li>
+          <li>
+            <p>为目标提供配置点：大部分<code>maven</code>插件以及其目标都是可配置的，因此在编写<code>Mojo</code>的时候需要注意提供可配置的参数。</p>
+          </li>
+          <li>
+            <p>编写代码实现目标行为：根据实际需要实现<code>Mojo</code>。</p>
+          </li>
+          <li>
+            <p>错误处理以及日志：当<code>Mojo</code>发生异常时，根据情况控制<code>Maven</code>的运行状态。在代码中编写必要的日志以便为用户提供足够的信息。</p>
+          </li>
+          <li>
+            <p>测试插件：编写自动化的测试代码测试行为，然后再实际运行插件验证其行为。</p>
+          </li>
+        </ol>
+
+        <p>一些参考链接:</p>
+        <ul>
+          <li>
+            <a href="http://maven.apache.org/plugin-tools/index.html">插件工具</a>
+          </li>
+          <li>
+           <a href="https://maven.apache.org/guides/plugin/guide-java-plugin-development.html">插件开发</a>
+          </li>
+          <li>
+            <a href="http://maven.apache.org/plugins/">插件列表</a>
+          </li>
+        </ul>
+      </answer>
+    </faq>
+  </part>
+</faqs>

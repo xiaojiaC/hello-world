@@ -31,8 +31,11 @@
 
   <modules>
     <module>demo-dubbo</module>
+    <module>demo-hello-java</module>
     <module>demo-maven-plugin</module>
     <module>demo-maven-archetype</module>
+    <module>demo-spring-session</module>
+    <module>demo-maven-site</module>
   </modules>
 
   <dependencies>
