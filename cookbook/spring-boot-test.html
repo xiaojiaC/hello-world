@@ -1700,7 +1700,47 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 <div class="sect3">
 <h4 id="boot-features-testing-spring-boot-applications-testing-autoconfigured-jooq-test">1.3.15. 自动配置jOOQ测试</h4>
 <div class="paragraph">
-<p>TODO</p>
+<p>你可以像 <code>@JdbcTest</code> 一样使用 <code>@JooqTest</code> 但是它仅用于jOOQ相关的测试。由于jOOQ严重依赖于与数据库schema相对应的基于Java的schema，
+因此会使用现有的 <code>DataSource</code>。如果要将其替换为内存数据库，可以使用 <code>@AutoConfigureTestDatabase</code> 覆盖这些设置。
+（有关在Spring Boot中使用jOOQ的更多信息，请参阅本章前面的 <a href="https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html/boot-features-sql.html#boot-features-jooq">使用jOOQ</a>）
+常规 <code>@Component</code> bean不会被加载到 <code>ApplicationContext</code> 中。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+可以在 <a href="https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html/test-auto-configuration.html">附录</a>中找到由 <code>@JooqTest</code> 启用的自动配置设置列表。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><code>@JooqTest</code> 配置 <code>DSLContext</code>。常规 <code>@Component</code> bean未加载到 <code>ApplicationContext</code> 中。
+以下示例显示如何使用的 <code>@JooqTest</code> 注解：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">org.jooq.DSLContext</span>;
+<span class="keyword">import</span> <span class="include">org.junit.Test</span>;
+<span class="keyword">import</span> <span class="include">org.junit.runner.RunWith</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.boot.test.autoconfigure.jooq.JooqTest</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.test.context.junit4.SpringRunner</span>;
+
+<span class="annotation">@RunWith</span>(SpringRunner.class)
+<span class="annotation">@JooqTest</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">ExampleJooqTests</span> {
+
+        <span class="annotation">@Autowired</span>
+        <span class="directive">private</span> DSLContext dslContext;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>默认情况下，JOOQ测试是事务性的，并在每次测试结束时回滚。如果这不是您想要的，您可以像
+<a href="#boot-features-testing-spring-boot-applications-testing-autoconfigured-jdbc-test">在JDBC示例中显示</a>的那样为测试或整个类禁用事务管理。</p>
 </div>
 </div>
 <div class="sect3">
@@ -1766,7 +1806,63 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 <div class="sect3">
 <h4 id="boot-features-testing-spring-boot-applications-testing-autoconfigured-neo4j-test">1.3.17. 自动配置Data Neo4j测试</h4>
 <div class="paragraph">
-<p>TODO</p>
+<p>您可以使用 <code>@DataNeo4jTest</code> 来测试Neo4j应用程序。默认情况下，它使用内存中嵌入式Neo4j（如果嵌入式驱动程序可用），
+扫描 <code>@NodeEntity</code> 类，并配置Spring Data Neo4j存储库。常规 <code>@Component</code> bean不会被加载到 <code>ApplicationContext</code> 中。
+（有关在Spring Boot中使用Neo4J的更多信息，请参阅本章前面的 <a href="https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html/boot-features-nosql.html#boot-features-neo4j">使用Neo4j</a>）</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+可以在 <a href="https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html/test-auto-configuration.html">附录</a>中找到由 <code>@DataNeo4jTest</code> 启用的自动配置设置列表。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>以下示例显示了在Spring Boot中使用Neo4J测试的典型设置：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">org.junit.runner.RunWith</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.beans.factory.annotation.Autowired</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.boot.test.autoconfigure.data.neo4j.DataNeo4jTest</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.test.context.junit4.SpringRunner</span>;
+
+<span class="annotation">@RunWith</span>(SpringRunner.class)
+<span class="annotation">@DataNeo4jTest</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">ExampleDataNeo4jTests</span> {
+
+        <span class="annotation">@Autowired</span>
+        <span class="directive">private</span> YourRepository repository;
+
+        <span class="comment">//</span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>默认情况下，Data Neo4j测试是事务性的，并在每次测试结束时回滚。有关更多详细信息，请参阅Spring框架参考指南中的 <a href="https://docs.spring.io/spring/docs/5.1.3.RELEASE/spring-framework-reference//testing.html#testcontext-tx-enabling-transactions">相关部分</a>。
+如果这不是您想要的，您可以像下例所示为测试或整个类禁用事务管理。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">org.junit.Test</span>;
+<span class="keyword">import</span> <span class="include">org.junit.runner.RunWith</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.boot.test.autoconfigure.data.neo4j.DataNeo4jTest</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.test.context.junit4.SpringRunner</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.transaction.annotation.Propagation</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.transaction.annotation.Transactional</span>;
+
+<span class="annotation">@RunWith</span>(SpringRunner.class)
+<span class="annotation">@DataNeo4jTest</span>
+<span class="annotation">@Transactional</span>(propagation = Propagation.NOT_SUPPORTED)
+<span class="directive">public</span> <span class="type">class</span> <span class="class">ExampleNonTransactionalTests</span> {
+
+}</code></pre>
+</div>
 </div>
 </div>
 <div class="sect3">
@@ -1813,7 +1909,61 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 <div class="sect3">
 <h4 id="boot-features-testing-spring-boot-applications-testing-autoconfigured-ldap-test">1.3.19. 自动配置Data LDAP测试</h4>
 <div class="paragraph">
-<p>TODO</p>
+<p>您可以使用 <code>@DataLdapTest</code> 来测试LDAP应用程序。默认情况下，它配置内存中嵌入式LDAP（如果可用），配置 <code>LdapTemplate</code>，
+扫描 <code>@Entry</code> 类，以及配置Spring Data LDAP存储库。常规 <code>@Component</code> bean不会被加载到 <code>ApplicationContext</code> 中。
+（有关在Spring Boot中使用LDAP的更多信息，请参阅本章前面的 <a href="https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html/boot-features-nosql.html#boot-features-ldap">使用LDAP</a>）</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+可以在 <a href="https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html/test-auto-configuration.html">附录</a>中找到由 <code>@DataLdapTest</code> 启用的自动配置设置列表。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>以下示例显示如何使用的 <code>@DataLdapTest</code> 注解：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">org.junit.runner.RunWith</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.beans.factory.annotation.Autowired</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.boot.test.autoconfigure.data.ldap.DataLdapTest</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.ldap.core.LdapTemplate</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.test.context.junit4.SpringRunner</span>;
+
+<span class="annotation">@RunWith</span>(SpringRunner.class)
+<span class="annotation">@DataLdapTest</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">ExampleDataLdapTests</span> {
+
+        <span class="annotation">@Autowired</span>
+        <span class="directive">private</span> LdapTemplate ldapTemplate;
+
+        <span class="comment">//</span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>内存中嵌入式LDAP通常适用于测试，因为它速度快，不需要任何开发人员安装。
+但是，如果您希望针对真实LDAP服务器运行测试，则应排除嵌入式LDAP自动配置，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">org.junit.runner.RunWith</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.boot.autoconfigure.ldap.embedded.EmbeddedLdapAutoConfiguration</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.boot.test.autoconfigure.data.ldap.DataLdapTest</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.test.context.junit4.SpringRunner</span>;
+
+<span class="annotation">@RunWith</span>(SpringRunner.class)
+<span class="annotation">@DataLdapTest</span>(excludeAutoConfiguration = EmbeddedLdapAutoConfiguration.class)
+<span class="directive">public</span> <span class="type">class</span> <span class="class">ExampleDataLdapNonEmbeddedTests</span> {
+
+}</code></pre>
+</div>
 </div>
 </div>
 <div class="sect3">
@@ -1865,7 +2015,150 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 <div class="sect3">
 <h4 id="boot-features-testing-spring-boot-applications-testing-autoconfigured-rest-docs">1.3.21. 自动配置Spring REST Docs测试</h4>
 <div class="paragraph">
-<p>TODO</p>
+<p>您可以使用 <code>@AutoConfigureRestDocs</code> 注解在Mock MVC，REST Assured或WebTestClient的测试中使用
+<a href="https://projects.spring.io/spring-restdocs/">Spring REST Docs</a>。它移除了Spring REST Docs中JUnit rule的需要。</p>
+</div>
+<div class="paragraph">
+<p><code>@AutoConfigureRestDocs</code> 可用于覆盖默认输出目录（如果您使用的是Maven，则为 <code>target/generated-snippets</code> 或
+如果您使用的是Graven，则为 <code>build/generated-snippets</code>）。它还可用于配置出现在任何已记录的URI中的host, scheme和port。</p>
+</div>
+<div class="sect4">
+<h5 id="boot-features-testing-spring-boot-applications-testing-autoconfigured-rest-docs-mock-mvc">使用Mock MVC自动配置Spring REST Docs测试</h5>
+<div class="paragraph">
+<p><code>@AutoConfigureRestDocs</code> 自定义 <code>MockMvc</code> bean以使用Spring REST Docs。您可以使用 <code>@Autowired</code> 注入它，并在使用Mock MVC
+和Spring REST Docs时在测试中使用它，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">org.junit.Test</span>;
+<span class="keyword">import</span> <span class="include">org.junit.runner.RunWith</span>;
+
+<span class="keyword">import</span> <span class="include">org.springframework.beans.factory.annotation.Autowired</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.http.MediaType</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.test.context.junit4.SpringRunner</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.test.web.servlet.MockMvc</span>;
+
+<span class="keyword">import</span> <span class="include">static</span> <span class="include">org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document</span>;
+<span class="keyword">import</span> <span class="include">static</span> <span class="include">org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get</span>;
+<span class="keyword">import</span> <span class="include">static</span> <span class="include">org.springframework.test.web.servlet.result.MockMvcResultMatchers</span>.*;
+
+<span class="annotation">@RunWith</span>(SpringRunner.class)
+<span class="annotation">@WebMvcTest</span>(UserController.class)
+<span class="annotation">@AutoConfigureRestDocs</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">UserDocumentationTests</span> {
+
+        <span class="annotation">@Autowired</span>
+        <span class="directive">private</span> MockMvc mvc;
+
+        <span class="annotation">@Test</span>
+        <span class="directive">public</span> <span class="type">void</span> listUsers() <span class="directive">throws</span> <span class="exception">Exception</span> {
+                <span class="local-variable">this</span>.mvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/users</span><span class="delimiter">&quot;</span></span>).accept(MediaType.TEXT_PLAIN))
+                                .andExpect(status().isOk())
+                                .andDo(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">list-users</span><span class="delimiter">&quot;</span></span>));
+        }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>如果您需要更多对Spring REST Docs配置的控制，而不仅仅满足于 <code>@AutoConfigureRestDocs</code> 的属性，
+则可以使用 <code>RestDocsMockMvcConfigurationCustomizer</code> bean，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@TestConfiguration</span>
+<span class="directive">static</span> <span class="type">class</span> <span class="class">CustomizationConfiguration</span>
+                <span class="directive">implements</span> RestDocsMockMvcConfigurationCustomizer {
+
+        <span class="annotation">@Override</span>
+        <span class="directive">public</span> <span class="type">void</span> customize(MockMvcRestDocumentationConfigurer configurer) {
+                configurer.snippets().withTemplateFormat(TemplateFormats.markdown());
+        }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>如果要对参数化输出目录使用Spring REST Docs支持，可以创建 <code>RestDocumentationResultHandler</code> bean。
+自动配置使用此结果处理程序调用 <code>alwaysDo</code>，从而使每个 <code>MockMvc</code> 调用自动生成默认代码段。
+以下示例显示何如定义 <code>RestDocumentationResultHandler</code>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@TestConfiguration</span>
+<span class="directive">static</span> <span class="type">class</span> <span class="class">ResultHandlerConfiguration</span> {
+
+        <span class="annotation">@Bean</span>
+        <span class="directive">public</span> RestDocumentationResultHandler restDocumentation() {
+                <span class="keyword">return</span> MockMvcRestDocumentation.document(<span class="string"><span class="delimiter">&quot;</span><span class="content">{method-name}</span><span class="delimiter">&quot;</span></span>);
+        }
+
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="boot-features-testing-spring-boot-applications-testing-autoconfigured-rest-docs-rest-assured">使用REST Assured自动配置Spring REST Docs测试</h5>
+<div class="paragraph">
+<p>@AutoConfigureRestDocs` 生成一个 <code>RequestSpecification</code> bean，预先配置为使用Spring REST Docs，可用于您的测试。
+您可以使用 <code>@Autowired</code> 注入它并在测试中使用它，就像使用REST Assured和Spring REST Doc时一样，如下例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">io.restassured.specification.RequestSpecification</span>;
+<span class="keyword">import</span> <span class="include">org.junit.Test</span>;
+<span class="keyword">import</span> <span class="include">org.junit.runner.RunWith</span>;
+
+<span class="keyword">import</span> <span class="include">org.springframework.beans.factory.annotation.Autowired</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.boot.test.context.SpringBootTest</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.boot.test.context.SpringBootTest.WebEnvironment</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.boot.web.server.LocalServerPort</span>;
+<span class="keyword">import</span> <span class="include">org.springframework.test.context.junit4.SpringRunner</span>;
+
+<span class="keyword">import</span> <span class="include">static</span> <span class="include">io.restassured.RestAssured.given</span>;
+<span class="keyword">import</span> <span class="include">static</span> <span class="include">org.hamcrest.CoreMatchers.is</span>;
+<span class="keyword">import</span> <span class="include">static</span> <span class="include">org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document</span>;
+
+<span class="annotation">@RunWith</span>(SpringRunner.class)
+<span class="annotation">@SpringBootTest</span>(webEnvironment = WebEnvironment.RANDOM_PORT)
+<span class="annotation">@AutoConfigureRestDocs</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">UserDocumentationTests</span> {
+
+        <span class="annotation">@LocalServerPort</span>
+        <span class="directive">private</span> <span class="type">int</span> port;
+
+        <span class="annotation">@Autowired</span>
+        <span class="directive">private</span> RequestSpecification documentationSpec;
+
+        <span class="annotation">@Test</span>
+        <span class="directive">public</span> <span class="type">void</span> listUsers() {
+                given(<span class="local-variable">this</span>.documentationSpec).filter(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">list-users</span><span class="delimiter">&quot;</span></span>)).when()
+                                .port(<span class="local-variable">this</span>.port).get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>).then().assertThat().statusCode(is(<span class="integer">200</span>));
+        }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>如果您需要对Spring REST Docs配置的更多控制，而不仅仅是 <code>@AutoConfigureRestDocs</code> 的属性，
+则可以使用 <code>RestDocsRestAssuredConfigurationCustomizer</code> bean，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@TestConfiguration</span>
+<span class="directive">public</span> <span class="directive">static</span> <span class="type">class</span> <span class="class">CustomizationConfiguration</span>
+                <span class="directive">implements</span> RestDocsRestAssuredConfigurationCustomizer {
+
+        <span class="annotation">@Override</span>
+        <span class="directive">public</span> <span class="type">void</span> customize(RestAssuredRestDocumentationConfigurer configurer) {
+                configurer.snippets().withTemplateFormat(TemplateFormats.markdown());
+        }
+
+}</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect3">
@@ -1971,7 +2264,9 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 <div class="sect3">
 <h4 id="boot-features-testing-spring-boot-applications-with-spock">1.3.24. 使用Spock测试Spring Boot应用程序</h4>
 <div class="paragraph">
-<p>TODO</p>
+<p>如果您希望使用Spock测试Spring Boot应用程序，您应该将Spock <code>spock-spring</code> 模块的依赖项添加到应用程序的构建中。
+<code>spock-spring</code> 集成Spring测试框架到Spock中。建议您使用Spock 1.2或更高版本，以便从Spock的Spring框架和Spring Boot
+集成的许多改进中受益。有关更多详细信息，请参阅 <a href="http://spockframework.org/spock/docs/1.2/modules.html#_spring_module">Spock Spring模块的文档</a>。</p>
 </div>
 </div>
 </div>
@@ -2158,7 +2453,7 @@ Spring Framework 5.0提供了一个新的 <code>WebTestClient</code>，适用于
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-12-13 20:59:32 CST
+Last updated 2018-12-14 20:17:26 CST
 </div>
 </div>
 </body>
