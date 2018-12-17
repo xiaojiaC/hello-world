@@ -509,6 +509,86 @@ table.CodeRay td.code>pre{padding:0}
 .CodeRay .change .change{color:#66f}
 .CodeRay .head .head{color:#f4f}
 </style>
+<style>
+.hidden {
+	display: none;
+}
+
+.switch {
+	border-width: 1px 1px 0 1px;
+	border-style: solid;
+	border-color: #7a2518;
+	display: inline-block;
+}
+
+.switch--item {
+	padding: 10px;
+	background-color: #ffffff;
+	color: #7a2518;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.switch--item:not(:first-child) {
+	border-width: 0 0 0 1px;
+	border-style: solid;
+	border-color: #7a2518;
+}
+
+.switch--item.selected {
+	background-color: #7a2519;
+	color: #ffffff;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
+<script type="text/javascript">
+function addBlockSwitches() {
+	$('.primary').each(function() {
+		primary = $(this);
+		createSwitchItem(primary, createBlockSwitch(primary)).item.addClass("selected");
+		primary.children('.title').remove();
+	});
+	$('.secondary').each(function(idx, node) {
+		secondary = $(node);
+		primary = findPrimary(secondary);
+		switchItem = createSwitchItem(secondary, primary.children('.switch'));
+		switchItem.content.addClass('hidden');
+		findPrimary(secondary).append(switchItem.content);
+		secondary.remove();
+	});
+}
+
+function createBlockSwitch(primary) {
+	blockSwitch = $('<div class="switch"></div>');
+	primary.prepend(blockSwitch);
+	return blockSwitch;
+}
+
+function findPrimary(secondary) {
+	candidate = secondary.prev();
+	while (!candidate.is('.primary')) {
+		candidate = candidate.prev();
+	}
+	return candidate;
+}
+
+function createSwitchItem(block, blockSwitch) {
+	blockName = block.children('.title').text();
+	content = block.children('.content').first().append(block.next('.colist'));
+	item = $('<div class="switch--item">' + blockName + '</div>');
+	item.on('click', '', content, function(e) {
+		$(this).addClass('selected');
+		$(this).siblings().removeClass('selected');
+		e.data.siblings('.content').addClass('hidden');
+		e.data.removeClass('hidden');
+	});
+	blockSwitch.append(item);
+	return {'item': item, 'content': content};
+}
+
+$(addBlockSwitches);
+</script>
+
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
@@ -569,7 +649,7 @@ table.CodeRay td.code>pre{padding:0}
 <h2 id="boot-features-testing">1. 测试</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Spring Boot提供了许多实用程序和注解来帮助您测试应用程序。测试支持由两个模块提供：<code>spring-boot-test</code> 包含核心项，
+<p>Spring Boot提供了许多实用程序和注解来帮助你测试应用程序。测试支持由两个模块提供：<code>spring-boot-test</code> 包含核心项，
 <code>spring-boot-test-autoconfigure</code> 支持测试的自动配置。</p>
 </div>
 <div class="sect2">
@@ -604,25 +684,25 @@ table.CodeRay td.code>pre{padding:0}
 </ul>
 </div>
 <div class="paragraph">
-<p>我们通常发现这些常用库在编写测试时很有用。如果这些库不适合您的需求，您可以添加自己的其他测试依赖项。</p>
+<p>我们通常发现这些常用库在编写测试时很有用。如果这些库不适合你的需求，你可以添加自己的其他测试依赖项。</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="boot-features-testing-spring-applications">1.2. 测试Spring应用程序</h3>
 <div class="paragraph">
-<p>依赖注入的一个主要优点是它应该使您的代码更容易进行单元测试。您可以使用 <code>new</code> 运算符实例化对象，甚至不涉及Spring。
-您还可以使用 <em>模拟对象</em> 而不是真正的依赖项。</p>
+<p>依赖注入的一个主要优点是它应该使你的代码更容易进行单元测试。你可以使用 <code>new</code> 运算符实例化对象，甚至不涉及Spring。
+你还可以使用 <em>模拟对象</em> 而不是真正的依赖项。</p>
 </div>
 <div class="paragraph">
-<p>通常，您需要超越单元测试并开始集成测试（使用Spring <code>ApplicationContext</code>）。能够在不需要部署应用程序或需要连接到其他基础设施
+<p>通常，你需要超越单元测试并开始集成测试（使用Spring <code>ApplicationContext</code>）。能够在不需要部署应用程序或需要连接到其他基础设施
 的情况下执行集成测试非常有用。</p>
 </div>
 <div class="paragraph">
-<p>Spring框架包含一个用于此类集成测试的专用测试模块。您可以直接声明该依赖项：<code>org.springframework:spring-test</code> 或使用
+<p>Spring框架包含一个用于此类集成测试的专用测试模块。你可以直接声明该依赖项：<code>org.springframework:spring-test</code> 或使用
 <code>spring-boot-starter-test</code> “Starter”来传递它。</p>
 </div>
 <div class="paragraph">
-<p>如果您之前没有使用过Spring测试模块，那么首先应阅读 <a href="spring-test.html">Spring框架参考文档</a>的相关部分。</p>
+<p>如果你之前没有使用过Spring测试模块，那么首先应阅读 <a href="spring-test.html">Spring框架参考文档</a>的相关部分。</p>
 </div>
 </div>
 <div class="sect2">
@@ -643,7 +723,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="paragraph">
-<p>Spring Boot提供 <code>@SpringBootTest</code> 注解，当您需要Spring Boot功能时，它可以用作标准 <code>spring-test</code> <code>@ContextConfiguration</code>
+<p>Spring Boot提供 <code>@SpringBootTest</code> 注解，当你需要Spring Boot功能时，它可以用作标准 <code>spring-test</code> <code>@ContextConfiguration</code>
 注解的替代方法。注解通过<a href="#boot-features-testing-spring-boot-applications-detecting-config">在 <code>SpringApplication</code>
 创建测试中使用的 <code>ApplicationContext</code> 来工作</a>。除了 <code>@SpringBootTest</code> 之外，还提供了许多其他注解来测试应用程序的
 <a href="#boot-features-testing-spring-boot-applications-testing-autoconfigured-tests">更具体的切片</a>。</p>
@@ -655,14 +735,14 @@ table.CodeRay td.code>pre{padding:0}
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-如果您使用的是JUnit 4，请不要忘记在测试中添加 <code>@RunWith(SpringRunner.class)</code>，否则将忽略注解。如果您使用的是JUnit 5，
+如果你使用的是JUnit 4，请不要忘记在测试中添加 <code>@RunWith(SpringRunner.class)</code>，否则将忽略注解。如果你使用的是JUnit 5，
 则无需将等效的 <code>@ExtendWith(SpringExtension)</code> 添加为 <code>@SpringBootTest</code>，另一个 <code>@…Test</code> 注解已经用它做了批注。
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>默认情况下，<code>@SpringBootTest</code> 不会启动服务器。您可以使用 <code>@SpringBootTest</code> 的 <code>webEnvironment</code> 属性来进一步优化测试的运行方式：</p>
+<p>默认情况下，<code>@SpringBootTest</code> 不会启动服务器。你可以使用 <code>@SpringBootTest</code> 的 <code>webEnvironment</code> 属性来进一步优化测试的运行方式：</p>
 </div>
 <div class="ulist">
 <ul>
@@ -675,7 +755,7 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li>
 <p><code>DEFINED_PORT</code>: 加载 <code>WebServerApplicationContext</code> 并提供真实的Web环境。嵌入式服务器启动并侦听在指定端口上
-（来自您的 <code>application.properties</code>）或默认端口 <code>8080</code>。</p>
+（来自你的 <code>application.properties</code>）或默认端口 <code>8080</code>。</p>
 </li>
 <li>
 <p><code>NONE</code>：使用 <code>SpringApplication</code> 加载 <code>ApplicationContext</code> 但不提供任何Web环境（模拟或其他）。</p>
@@ -689,7 +769,7 @@ table.CodeRay td.code>pre{padding:0}
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-如果您的测试是 <code>@Transactional</code>，则默认情况下会在每个测试方法的末尾回滚事务。但是，如果使用 <code>RANDOM_PORT</code> 或 <code>DEFINED_PORT</code>
+如果你的测试是 <code>@Transactional</code>，则默认情况下会在每个测试方法的末尾回滚事务。但是，如果使用 <code>RANDOM_PORT</code> 或 <code>DEFINED_PORT</code>
 这种配置隐式提供了一个真正的servlet环境，HTTP客户端和服务器会在不同的线程中运行，因此在单独的事务中运行。在这种情况下，
 在服务器上启动的任何事务都不会回滚。
 </td>
@@ -703,7 +783,7 @@ table.CodeRay td.code>pre{padding:0}
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-如果您的应用程序使用不同的管理服务器端口，带有 <code>webEnvironment = WebEnvironment.RANDOM_PORT</code> 的
+如果你的应用程序使用不同的管理服务器端口，带有 <code>webEnvironment = WebEnvironment.RANDOM_PORT</code> 的
 <code>@SpringBootTest</code> 也将在单独的随机端口上启动管理服务器。
 </td>
 </tr>
@@ -712,7 +792,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="sect3">
 <h4 id="boot-features-testing-spring-boot-applications-detecting-web-app-type">1.3.1. 检测Web应用程序类型</h4>
 <div class="paragraph">
-<p>如果Spring MVC可用，则配置基于MVC的常规应用程序上下文。如果您只有Spring WebFlux，我们将检测到并配置基于WebFlux的应用程序上下文。</p>
+<p>如果Spring MVC可用，则配置基于MVC的常规应用程序上下文。如果你只有Spring WebFlux，我们将检测到并配置基于WebFlux的应用程序上下文。</p>
 </div>
 <div class="paragraph">
 <p>如果两者都存在，则Spring MVC优先。如果要在此方案中测试响应式Web应用程序，则必须设置 <code>spring.main.web-application-type</code> 属性：</p>
@@ -728,15 +808,15 @@ table.CodeRay td.code>pre{padding:0}
 <div class="sect3">
 <h4 id="boot-features-testing-spring-boot-applications-detecting-config">1.3.2. 检测测试配置</h4>
 <div class="paragraph">
-<p>如果您熟悉Spring Test框架，则可能习惯使用 <code>@ContextConfiguration(classes=…​)</code> 来指定要加载的Spring <code>@Configuration</code>。
-或者，您可能经常在测试中使用嵌套的 <code>@Configuration</code> 类。</p>
+<p>如果你熟悉Spring Test框架，则可能习惯使用 <code>@ContextConfiguration(classes=…​)</code> 来指定要加载的Spring <code>@Configuration</code>。
+或者，你可能经常在测试中使用嵌套的 <code>@Configuration</code> 类。</p>
 </div>
 <div class="paragraph">
-<p>在测试Spring Boot应用程序时，通常不需要这样做。只要您没有明确定义，Spring Boot的 <code>@*Test</code> 注解会自动搜索您的主要配置。</p>
+<p>在测试Spring Boot应用程序时，通常不需要这样做。只要你没有明确定义，Spring Boot的 <code>@*Test</code> 注解会自动搜索你的主要配置。</p>
 </div>
 <div class="paragraph">
 <p>搜索算法从包含测试的包开始工作，直到找到使用 <code>@SpringBootApplication</code> 或 <code>@SpringBootConfiguration</code> 注解的类。
-只要您以合理的方式 <a href="https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html/using-boot-structuring-your-code.html">结构化代码</a>，通常就会自动找到主要配置。</p>
+只要你以合理的方式 <a href="https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html/using-boot-structuring-your-code.html">结构化代码</a>，通常就会自动找到主要配置。</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -768,7 +848,7 @@ table.CodeRay td.code>pre{padding:0}
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Spring的测试框架在测试之间缓存应用程序上下文。因此，只要您的测试共享相同的配置（无论如何发现），加载上下文的潜在耗时过程只发生一次。
+Spring的测试框架在测试之间缓存应用程序上下文。因此，只要你的测试共享相同的配置（无论如何发现），加载上下文的潜在耗时过程只发生一次。
 </td>
 </tr>
 </table>
@@ -777,13 +857,13 @@ Spring的测试框架在测试之间缓存应用程序上下文。因此，只�
 <div class="sect3">
 <h4 id="boot-features-testing-spring-boot-applications-excluding-config">1.3.3. 排除测试配置</h4>
 <div class="paragraph">
-<p>如果您的应用程序使用组件扫描（例如，如果您使用 <code>@SpringBootApplication</code> 或 <code>@ComponentScan</code>），
-您可能会发现仅为特定测试创建的顶级配置类会意外地在任何地方被拾取应用。</p>
+<p>如果你的应用程序使用组件扫描（例如，如果你使用 <code>@SpringBootApplication</code> 或 <code>@ComponentScan</code>），
+你可能会发现仅为特定测试创建的顶级配置类会意外地在任何地方被拾取应用。</p>
 </div>
 <div class="paragraph">
 <p><a href="#boot-features-testing-spring-boot-applications-detecting-config">如前所述</a>，<code>@TestConfiguration</code>
 可用于测试的内部类以自定义主要配置。当置于顶级类时，<code>@TestConfiguration</code> 指示不应通过扫描拾取 <code>src/test/java</code> 中的类。
-然后，您可以在需要的位置显式导入该类，如以下示例所示：</p>
+然后，你可以在需要的位置显式导入该类，如以下示例所示：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -817,7 +897,7 @@ Spring的测试框架在测试之间缓存应用程序上下文。因此，只�
 <div class="sect3">
 <h4 id="boot-features-testing-spring-boot-applications-testing-with-mock-environment">1.3.4. 使用模拟环境进行测试</h4>
 <div class="paragraph">
-<p>默认情况下，<code>@SpringBootTest</code> 不会启动服务器。如果您要针对此模拟环境测试Web端点，则可以另外配置
+<p>默认情况下，<code>@SpringBootTest</code> 不会启动服务器。如果你要针对此模拟环境测试Web端点，则可以另外配置
 <a href="spring-test.html#spring-mvc-test-framework">MockMvc</a>，如以下示例所示：</p>
 </div>
 <div class="listingblock">
@@ -859,13 +939,13 @@ Spring的测试框架在测试之间缓存应用程序上下文。因此，只�
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-如果您只想关注Web层而不是启动完整的 <code>ApplicationContext</code>，请考虑使用<a href="#boot-features-testing-spring-boot-applications-testing-autoconfigured-mvc-tests"><code>@WebMvcTest</code></a>。
+如果你只想关注Web层而不是启动完整的 <code>ApplicationContext</code>，请考虑使用<a href="#boot-features-testing-spring-boot-applications-testing-autoconfigured-mvc-tests"><code>@WebMvcTest</code></a>。
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>或者，您可以配置 <a href="https://docs.spring.io/spring/docs/5.1.3.RELEASE/spring-framework-reference//testing.html#webtestclient-tests"><code>WebTestClient</code></a>，如以下示例所示：</p>
+<p>或者，你可以配置 <a href="https://docs.spring.io/spring/docs/5.1.3.RELEASE/spring-framework-reference//testing.html#webtestclient-tests"><code>WebTestClient</code></a>，如以下示例所示：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -899,7 +979,7 @@ Spring的测试框架在测试之间缓存应用程序上下文。因此，只�
 <div class="sect3">
 <h4 id="boot-features-testing-spring-boot-applications-testing-with-running-server">1.3.5. 使用正在运行的服务器进行测试</h4>
 <div class="paragraph">
-<p>如果您需要启动完整运行的服务器，我们建议您使用随机端口。如果使用 <code>@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)</code>，
+<p>如果你需要启动完整运行的服务器，我们建议你使用随机端口。如果使用 <code>@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)</code>，
 则每次运行测试时都会随机选择一个可用端口。</p>
 </div>
 <div class="paragraph">
@@ -995,12 +1075,12 @@ Spring的测试框架在测试之间缓存应用程序上下文。因此，只�
 <div class="sect3">
 <h4 id="boot-features-testing-spring-boot-applications-mocking-beans">1.3.7. 模拟和间谍Beans</h4>
 <div class="paragraph">
-<p>运行测试时，有时需要在应用程序上下文中模拟某些组件。例如，您可能使用了某些处于正在开发期间不可用的远程服务的外观。
-当您想要模拟在真实环境中可能难以触发的故障时，模拟也很有用。</p>
+<p>运行测试时，有时需要在应用程序上下文中模拟某些组件。例如，你可能使用了某些处于正在开发期间不可用的远程服务的外观。
+当你想要模拟在真实环境中可能难以触发的故障时，模拟也很有用。</p>
 </div>
 <div class="paragraph">
 <p>Spring Boot包含一个 <code>@MockBean</code> 注解，可用于为 <code>ApplicationContext</code> 中的bean定义Mockito模拟。
-您可以使用该注解添加新bean或替换单个现有bean定义。该注解可以直接用于测试类，测试中的字段或 <code>@Configuration</code> 类和字段。
+你可以使用该注解添加新bean或替换单个现有bean定义。该注解可以直接用于测试类，测试中的字段或 <code>@Configuration</code> 类和字段。
 在字段上使用时，也会注入创建的模拟实例。每个测试方法结束后，模拟Bean都会自动重置。</p>
 </div>
 <div class="admonitionblock note">
@@ -1011,7 +1091,7 @@ Spring的测试框架在测试之间缓存应用程序上下文。因此，只�
 </td>
 <td class="content">
 <div class="paragraph">
-<p>如果您的测试使用Spring Boot的测试注解之一（例如 <code>@SpringBootTest</code>），则会自动启用此功能。
+<p>如果你的测试使用Spring Boot的测试注解之一（例如 <code>@SpringBootTest</code>），则会自动启用此功能。
 要将此特性用于不同的安排，必须显式地添加侦听器，如下面的示例所示:</p>
 </div>
 <div class="paragraph">
@@ -1058,7 +1138,7 @@ Spring的测试框架在测试之间缓存应用程序上下文。因此，只�
 </div>
 </div>
 <div class="paragraph">
-<p>此外，您可以使用 <code>@SpyBean</code> 将任何现有bean包装为Mockito间谍。有关详细信息，请参阅 <a href="https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/api/org/springframework/boot/test/mock/mockito/SpyBean.html">Javadoc</a>。</p>
+<p>此外，你可以使用 <code>@SpyBean</code> 将任何现有bean包装为Mockito间谍。有关详细信息，请参阅 <a href="https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/api/org/springframework/boot/test/mock/mockito/SpyBean.html">Javadoc</a>。</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1080,7 +1160,7 @@ Spring的测试框架在测试之间缓存应用程序上下文。因此，只�
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-如果您使用 <code>@SpyBean</code> 监视具有按名称引用参数的 <code>@Cacheable</code> 方法的bean，则必须使用 <code>-parameters</code> 编译应用程序。
+如果你使用 <code>@SpyBean</code> 监视具有按名称引用参数的 <code>@Cacheable</code> 方法的bean，则必须使用 <code>-parameters</code> 编译应用程序。
 这确保了一旦bean被监视，参数名称可用于缓存基础架构。
 </td>
 </tr>
@@ -1091,8 +1171,8 @@ Spring的测试框架在测试之间缓存应用程序上下文。因此，只�
 <h4 id="boot-features-testing-spring-boot-applications-testing-autoconfigured-tests">1.3.8. 自动配置测试</h4>
 <div class="paragraph">
 <p>Spring Boot的自动配置系统适用于应用程序，但有时对于测试来说有点太多了。通常，只需加载测试应用程序“切片”所需的配置部分。
-例如，您可能希望测试Spring MVC控制器是否正确映射URL，并且您不希望在这些测试中涉及数据库调用，或者您可能想要测试JPA实体，
-并且您对Web层测试运行不感兴趣。</p>
+例如，你可能希望测试Spring MVC控制器是否正确映射URL，并且你不希望在这些测试中涉及数据库调用，或者你可能想要测试JPA实体，
+并且你对Web层测试运行不感兴趣。</p>
 </div>
 <div class="paragraph">
 <p><code>spring-boot-test-autoconfigure</code> 模块包括许多可用于自动配置这种“切片”的注解。它们中的每一个都以类似的方式工作，
@@ -1105,8 +1185,8 @@ Spring的测试框架在测试之间缓存应用程序上下文。因此，只�
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-每个切片都将组件扫描限制为只加载适当的组件，并加载一组非常有限的自动配置类。如果您需要排除其中一个，
-大多数 <code>@…​Test</code> 注解提供 <code>excludeAutoConfiguration</code> 属性。或者，您可以使用 <code>@ImportAutoConfiguration#exclude</code>。
+每个切片都将组件扫描限制为只加载适当的组件，并加载一组非常有限的自动配置类。如果你需要排除其中一个，
+大多数 <code>@…​Test</code> 注解提供 <code>excludeAutoConfiguration</code> 属性。或者，你可以使用 <code>@ImportAutoConfiguration#exclude</code>。
 </td>
 </tr>
 </table>
@@ -1118,7 +1198,7 @@ Spring的测试框架在测试之间缓存应用程序上下文。因此，只�
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-在一个测试中通过使用几个 <code>@…​Test</code> 包括多个“切片”是不支持的。如果您需要多个“切片”，请选择一个 <code>@…​Test</code>
+在一个测试中通过使用几个 <code>@…​Test</code> 包括多个“切片”是不支持的。如果你需要多个“切片”，请选择一个 <code>@…​Test</code>
 测试注解并手动添加包含其他“切片”的 <code>@AutoConfigure&#8230;&#8203;</code> 注解。
 </td>
 </tr>
@@ -1132,7 +1212,7 @@ Spring的测试框架在测试之间缓存应用程序上下文。因此，只�
 </td>
 <td class="content">
 也可以将 <code>@AutoConfigure&#8230;&#8203;</code> 注解与标准 <code>@SpringBootTest</code> 注解一起使用。
-如果您对“切片”应用程序不感兴趣但想要一些自动配置的测试bean，则可以使用此组合。
+如果你对“切片”应用程序不感兴趣但想要一些自动配置的测试bean，则可以使用此组合。
 </td>
 </tr>
 </table>
@@ -1141,7 +1221,7 @@ Spring的测试框架在测试之间缓存应用程序上下文。因此，只�
 <div class="sect3">
 <h4 id="boot-features-testing-spring-boot-applications-testing-autoconfigured-json-tests">1.3.9. 自动配置JSON测试</h4>
 <div class="paragraph">
-<p>要测试该对象JSON序列化和反序列化是否按预期工作，您可以使用 <code>@JsonTest</code> 注解。
+<p>要测试该对象JSON序列化和反序列化是否按预期工作，你可以使用 <code>@JsonTest</code> 注解。
 <code>@JsonTest</code> 自动配置可用的受支持的JSON映射器，它可以是以下库之一：</p>
 </div>
 <div class="ulist">
@@ -1275,7 +1355,7 @@ JSON辅助类也可以直接用于标准单元测试。为此，如果不使用 
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-您还可以通过使用 <code>@AutoConfigureMockMvc</code> 注解，在非 <code>@WebMvcTest</code>（例如 <code>@SpringBootTest</code>）中自动配置 <code>MockMvc</code>。
+你还可以通过使用 <code>@AutoConfigureMockMvc</code> 注解，在非 <code>@WebMvcTest</code>（例如 <code>@SpringBootTest</code>）中自动配置 <code>MockMvc</code>。
 以下示例使用 <code>MockMvc</code>：
 </td>
 </tr>
@@ -1333,7 +1413,7 @@ JSON辅助类也可以直接用于标准单元测试。为此，如果不使用 
 </table>
 </div>
 <div class="paragraph">
-<p>如果您使用HtmlUnit或Selenium，则自动配置还提供HTMLUnit <code>WebClient</code> bean和/或 <code>WebDriver</code> bean。以下示例使用HtmlUnit：</p>
+<p>如果你使用HtmlUnit或Selenium，则自动配置还提供HTMLUnit <code>WebClient</code> bean和/或 <code>WebDriver</code> bean。以下示例使用HtmlUnit：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1376,7 +1456,7 @@ JSON辅助类也可以直接用于标准单元测试。为此，如果不使用 
 </td>
 <td class="content">
 默认情况下，Spring Boot将 <code>WebDriver</code> bean放在一个特殊的“scope”中，以确保驱动程序在每次测试后退出并注入新实例。
-如果您不想要此行为，可以将 <code>@Scope("singleton")</code> 添加到 <code>WebDriver</code> <code>@Bean</code> 定义中。
+如果你不想要此行为，可以将 <code>@Scope("singleton")</code> 添加到 <code>WebDriver</code> <code>@Bean</code> 定义中。
 </td>
 </tr>
 </table>
@@ -1388,14 +1468,14 @@ JSON辅助类也可以直接用于标准单元测试。为此，如果不使用 
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-Spring Boot创建的 <code>webDriver</code> scope将替换任何用户定义的同名scope。如果您定义自己的 <code>webDriver</code> 范围，
+Spring Boot创建的 <code>webDriver</code> scope将替换任何用户定义的同名scope。如果你定义自己的 <code>webDriver</code> 范围，
 则可能会在使用 <code>@WebMvcTest</code> 时发现它停止工作。
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>如果在类路径上有Spring Security，<code>@WebMvcTest</code> 也将扫描 <code>WebSecurityConfigurer</code> bean。您可以使用Spring Security的测试支持，
+<p>如果在类路径上有Spring Security，<code>@WebMvcTest</code> 也将扫描 <code>WebSecurityConfigurer</code> bean。你可以使用Spring Security的测试支持，
 而不是完全禁用此类测试的安全性。有关如何使用Spring Security的 <code>MockMvc</code> 支持的更多详细信息，请参见第80章
 <a href="https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html//howto-use-test-with-spring-security.html">使用Spring Security测试方法</a>部分。</p>
 </div>
@@ -1406,7 +1486,7 @@ Spring Boot创建的 <code>webDriver</code> scope将替换任何用户定义的�
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-有时编写Spring MVC测试是不够的，Spring Boot可以帮助您 <a href="#boot-features-testing-spring-boot-applications-testing-with-running-server">使用实际的服务器运行完整的端到端测试</a>。
+有时编写Spring MVC测试是不够的，Spring Boot可以帮助你 <a href="#boot-features-testing-spring-boot-applications-testing-with-running-server">使用实际的服务器运行完整的端到端测试</a>。
 </td>
 </tr>
 </table>
@@ -1457,7 +1537,7 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-您还可以通过使用 <code>@AutoConfigureWebTestClient</code> 注解在非 <code>@WebFluxTest</code>（例如 <code>@SpringBootTest</code>）中自动配置
+你还可以通过使用 <code>@AutoConfigureWebTestClient</code> 注解在非 <code>@WebFluxTest</code>（例如 <code>@SpringBootTest</code>）中自动配置
 <code>WebTestClient</code>。以下示例显示了一个同时使用 <code>@WebFluxTest</code> 和 <code>WebTestClient</code> 的类：
 </td>
 </tr>
@@ -1529,7 +1609,7 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-有时编写Spring WebFlux测试是不够的，Spring Boot可以帮助您 <a href="#boot-features-testing-spring-boot-applications-testing-with-running-server">使用实际的服务器运行完整的端到端测试</a>。
+有时编写Spring WebFlux测试是不够的，Spring Boot可以帮助你 <a href="#boot-features-testing-spring-boot-applications-testing-with-running-server">使用实际的服务器运行完整的端到端测试</a>。
 </td>
 </tr>
 </table>
@@ -1538,7 +1618,7 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 <div class="sect3">
 <h4 id="boot-features-testing-spring-boot-applications-testing-autoconfigured-jpa-test">1.3.12. 自动配置Data JPA测试</h4>
 <div class="paragraph">
-<p>您可以使用 <code>@DataJpaTest</code> 注解来测试JPA应用程序。默认情况下，它配置内存中的嵌入式数据库，扫描 <code>@Entity</code> 类，
+<p>你可以使用 <code>@DataJpaTest</code> 注解来测试JPA应用程序。默认情况下，它配置内存中的嵌入式数据库，扫描 <code>@Entity</code> 类，
 并配置Spring Data JPA存储库。常规 <code>@Component</code> bean未加载到 <code>ApplicationContext</code> 中。</p>
 </div>
 <div class="admonitionblock tip">
@@ -1555,7 +1635,7 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 </div>
 <div class="paragraph">
 <p>默认情况下，Data JPA测试是事务性的，并在每次测试结束时回滚。有关更多详细信息，请参阅Spring框架参考指南中的 <a href="https://docs.spring.io/spring/docs/5.1.3.RELEASE/spring-framework-reference//testing.html#testcontext-tx-enabling-transactions">相关部分</a>。
-如果这不是您想要的，您可以为测试或整个类禁用事务管理，如下所示：</p>
+如果这不是你想要的，你可以为测试或整个类禁用事务管理，如下所示：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1610,7 +1690,7 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 </div>
 </div>
 <div class="paragraph">
-<p>内存中嵌入式数据库通常适用于测试，因为它们速度快且不需要任何安装。但是，如果您更喜欢对真实数据库运行测试，
+<p>内存中嵌入式数据库通常适用于测试，因为它们速度快且不需要任何安装。但是，如果你更喜欢对真实数据库运行测试，
 则可以使用 <code>@AutoConfigureTestDatabase</code> 注解配置，如以下示例所示：</p>
 </div>
 <div class="listingblock">
@@ -1646,7 +1726,7 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 </div>
 <div class="paragraph">
 <p>默认情况下，JDBC测试是事务性的，并在每次测试结束时回滚。有关更多详细信息，请参阅Spring框架参考指南中的 <a href="https://docs.spring.io/spring/docs/5.1.3.RELEASE/spring-framework-reference//testing.html#testcontext-tx-enabling-transactions">相关部分</a>。
-如果这不是您想要的，您可以为测试或整个类禁用事务管理，如下所示：</p>
+如果这不是你想要的，你可以为测试或整个类禁用事务管理，如下所示：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1666,7 +1746,7 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 </div>
 </div>
 <div class="paragraph">
-<p>如果您希望测试针对真实数据库运行，则可以使用与 <code>DataJpaTest</code> 相同的方式使用 <code>@AutoConfigureTestDatabase</code> 注解。
+<p>如果你希望测试针对真实数据库运行，则可以使用与 <code>DataJpaTest</code> 相同的方式使用 <code>@AutoConfigureTestDatabase</code> 注解。
 （请参阅<a href="#boot-features-testing-spring-boot-applications-testing-autoconfigured-jpa-test">自动配置Data JPA测试</a>部分）</p>
 </div>
 </div>
@@ -1690,10 +1770,10 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 </div>
 <div class="paragraph">
 <p>默认情况下，Data JDBC测试是事务性的，并在每次测试结束时回滚。有关更多详细信息，请参阅Spring框架参考指南中的 <a href="https://docs.spring.io/spring/docs/5.1.3.RELEASE/spring-framework-reference//testing.html#testcontext-tx-enabling-transactions">相关部分</a>。
-如果这不是您想要的，您可以像<a href="#boot-features-testing-spring-boot-applications-testing-autoconfigured-jdbc-test">在JDBC示例中显示</a>的那样为测试或整个类禁用事务管理。</p>
+如果这不是你想要的，你可以像<a href="#boot-features-testing-spring-boot-applications-testing-autoconfigured-jdbc-test">在JDBC示例中显示</a>的那样为测试或整个类禁用事务管理。</p>
 </div>
 <div class="paragraph">
-<p>如果您希望测试针对真实数据库运行，则可以使用与 <code>DataJpaTest</code> 相同的方式使用 <code>@AutoConfigureTestDatabase</code> 注解。
+<p>如果你希望测试针对真实数据库运行，则可以使用与 <code>DataJpaTest</code> 相同的方式使用 <code>@AutoConfigureTestDatabase</code> 注解。
 （请参阅<a href="#boot-features-testing-spring-boot-applications-testing-autoconfigured-jpa-test">自动配置Data JPA测试</a>部分）</p>
 </div>
 </div>
@@ -1739,14 +1819,14 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 </div>
 </div>
 <div class="paragraph">
-<p>默认情况下，JOOQ测试是事务性的，并在每次测试结束时回滚。如果这不是您想要的，您可以像
+<p>默认情况下，JOOQ测试是事务性的，并在每次测试结束时回滚。如果这不是你想要的，你可以像
 <a href="#boot-features-testing-spring-boot-applications-testing-autoconfigured-jdbc-test">在JDBC示例中显示</a>的那样为测试或整个类禁用事务管理。</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="boot-features-testing-spring-boot-applications-testing-autoconfigured-mongo-test">1.3.16. 自动配置Data MongoDB测试</h4>
 <div class="paragraph">
-<p>您可以使用 <code>@DataMongoTest</code> 来测试MongoDB应用程序。默认情况下，它配置内存中嵌入的MongoDB（如果可用），配置 <code>MongoTemplate</code>，
+<p>你可以使用 <code>@DataMongoTest</code> 来测试MongoDB应用程序。默认情况下，它配置内存中嵌入的MongoDB（如果可用），配置 <code>MongoTemplate</code>，
 扫描 <code>@Document</code> 类，以及配置Spring Data MongoDB存储库。常规 <code>@Component</code> bean不会被加载到 <code>ApplicationContext</code> 中。
 （有关将MongoDB与Spring Boot一起使用的更多信息，请参阅本章前面的 <a href="https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html/boot-features-nosql.html#boot-features-mongodb">MongoDB</a>部分）</p>
 </div>
@@ -1785,7 +1865,7 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 </div>
 </div>
 <div class="paragraph">
-<p>内存中嵌入式MongoDB通常适用于测试，因为它速度快，不需要任何开发人员安装。但是，如果您更喜欢对真正的MongoDB服务器运行测试，
+<p>内存中嵌入式MongoDB通常适用于测试，因为它速度快，不需要任何开发人员安装。但是，如果你更喜欢对真正的MongoDB服务器运行测试，
 则应排除嵌入式MongoDB自动配置，如以下示例所示：</p>
 </div>
 <div class="listingblock">
@@ -1806,7 +1886,7 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 <div class="sect3">
 <h4 id="boot-features-testing-spring-boot-applications-testing-autoconfigured-neo4j-test">1.3.17. 自动配置Data Neo4j测试</h4>
 <div class="paragraph">
-<p>您可以使用 <code>@DataNeo4jTest</code> 来测试Neo4j应用程序。默认情况下，它使用内存中嵌入式Neo4j（如果嵌入式驱动程序可用），
+<p>你可以使用 <code>@DataNeo4jTest</code> 来测试Neo4j应用程序。默认情况下，它使用内存中嵌入式Neo4j（如果嵌入式驱动程序可用），
 扫描 <code>@NodeEntity</code> 类，并配置Spring Data Neo4j存储库。常规 <code>@Component</code> bean不会被加载到 <code>ApplicationContext</code> 中。
 （有关在Spring Boot中使用Neo4J的更多信息，请参阅本章前面的 <a href="https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html/boot-features-nosql.html#boot-features-neo4j">使用Neo4j</a>）</p>
 </div>
@@ -1845,7 +1925,7 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 </div>
 <div class="paragraph">
 <p>默认情况下，Data Neo4j测试是事务性的，并在每次测试结束时回滚。有关更多详细信息，请参阅Spring框架参考指南中的 <a href="https://docs.spring.io/spring/docs/5.1.3.RELEASE/spring-framework-reference//testing.html#testcontext-tx-enabling-transactions">相关部分</a>。
-如果这不是您想要的，您可以像下例所示为测试或整个类禁用事务管理。</p>
+如果这不是你想要的，你可以像下例所示为测试或整个类禁用事务管理。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1868,7 +1948,7 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 <div class="sect3">
 <h4 id="boot-features-testing-spring-boot-applications-testing-autoconfigured-redis-test">1.3.18. 自动配置Data Redis测试</h4>
 <div class="paragraph">
-<p>您可以使用 <code>@DataRedisTest</code> 来测试Redis应用程序。默认情况下，它会扫描 <code>@RedisHash</code> 类并配置Spring Data Redis存储库。
+<p>你可以使用 <code>@DataRedisTest</code> 来测试Redis应用程序。默认情况下，它会扫描 <code>@RedisHash</code> 类并配置Spring Data Redis存储库。
 常规 <code>@Component</code> bean不会被加载到 <code>ApplicationContext</code> 中。
 （有关将Redis与Spring Boot一起使用的更多信息，请参阅本章前面的 <a href="https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html/boot-features-nosql.html#boot-features-redis">Redis</a>部分）</p>
 </div>
@@ -1909,7 +1989,7 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 <div class="sect3">
 <h4 id="boot-features-testing-spring-boot-applications-testing-autoconfigured-ldap-test">1.3.19. 自动配置Data LDAP测试</h4>
 <div class="paragraph">
-<p>您可以使用 <code>@DataLdapTest</code> 来测试LDAP应用程序。默认情况下，它配置内存中嵌入式LDAP（如果可用），配置 <code>LdapTemplate</code>，
+<p>你可以使用 <code>@DataLdapTest</code> 来测试LDAP应用程序。默认情况下，它配置内存中嵌入式LDAP（如果可用），配置 <code>LdapTemplate</code>，
 扫描 <code>@Entry</code> 类，以及配置Spring Data LDAP存储库。常规 <code>@Component</code> bean不会被加载到 <code>ApplicationContext</code> 中。
 （有关在Spring Boot中使用LDAP的更多信息，请参阅本章前面的 <a href="https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html/boot-features-nosql.html#boot-features-ldap">使用LDAP</a>）</p>
 </div>
@@ -1949,7 +2029,7 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 </div>
 <div class="paragraph">
 <p>内存中嵌入式LDAP通常适用于测试，因为它速度快，不需要任何开发人员安装。
-但是，如果您希望针对真实LDAP服务器运行测试，则应排除嵌入式LDAP自动配置，如以下示例所示：</p>
+但是，如果你希望针对真实LDAP服务器运行测试，则应排除嵌入式LDAP自动配置，如以下示例所示：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1969,7 +2049,7 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 <div class="sect3">
 <h4 id="boot-features-testing-spring-boot-applications-testing-autoconfigured-rest-client">1.3.20. 自动配置REST客户端</h4>
 <div class="paragraph">
-<p>您可以使用 <code>@RestClientTest</code> 注解来测试REST客户端。默认情况下，它会自动配置Jackson，GSON和Jsonb支持，
+<p>你可以使用 <code>@RestClientTest</code> 注解来测试REST客户端。默认情况下，它会自动配置Jackson，GSON和Jsonb支持，
 配置 <code>RestTemplateBuilder</code>，并添加对 <code>MockRestServiceServer</code> 的支持。常规 <code>@Component</code> bean不会被加载到 <code>ApplicationContext</code> 中。</p>
 </div>
 <div class="admonitionblock tip">
@@ -2015,17 +2095,17 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 <div class="sect3">
 <h4 id="boot-features-testing-spring-boot-applications-testing-autoconfigured-rest-docs">1.3.21. 自动配置Spring REST Docs测试</h4>
 <div class="paragraph">
-<p>您可以使用 <code>@AutoConfigureRestDocs</code> 注解在Mock MVC，REST Assured或WebTestClient的测试中使用
+<p>你可以使用 <code>@AutoConfigureRestDocs</code> 注解在Mock MVC，REST Assured或WebTestClient的测试中使用
 <a href="https://projects.spring.io/spring-restdocs/">Spring REST Docs</a>。它移除了Spring REST Docs中JUnit rule的需要。</p>
 </div>
 <div class="paragraph">
-<p><code>@AutoConfigureRestDocs</code> 可用于覆盖默认输出目录（如果您使用的是Maven，则为 <code>target/generated-snippets</code> 或
-如果您使用的是Graven，则为 <code>build/generated-snippets</code>）。它还可用于配置出现在任何已记录的URI中的host, scheme和port。</p>
+<p><code>@AutoConfigureRestDocs</code> 可用于覆盖默认输出目录（如果你使用的是Maven，则为 <code>target/generated-snippets</code> 或
+如果你使用的是Graven，则为 <code>build/generated-snippets</code>）。它还可用于配置出现在任何已记录的URI中的host, scheme和port。</p>
 </div>
 <div class="sect4">
 <h5 id="boot-features-testing-spring-boot-applications-testing-autoconfigured-rest-docs-mock-mvc">使用Mock MVC自动配置Spring REST Docs测试</h5>
 <div class="paragraph">
-<p><code>@AutoConfigureRestDocs</code> 自定义 <code>MockMvc</code> bean以使用Spring REST Docs。您可以使用 <code>@Autowired</code> 注入它，并在使用Mock MVC
+<p><code>@AutoConfigureRestDocs</code> 自定义 <code>MockMvc</code> bean以使用Spring REST Docs。你可以使用 <code>@Autowired</code> 注入它，并在使用Mock MVC
 和Spring REST Docs时在测试中使用它，如以下示例所示：</p>
 </div>
 <div class="listingblock">
@@ -2062,7 +2142,7 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 </div>
 </div>
 <div class="paragraph">
-<p>如果您需要更多对Spring REST Docs配置的控制，而不仅仅满足于 <code>@AutoConfigureRestDocs</code> 的属性，
+<p>如果你需要更多对Spring REST Docs配置的控制，而不仅仅满足于 <code>@AutoConfigureRestDocs</code> 的属性，
 则可以使用 <code>RestDocsMockMvcConfigurationCustomizer</code> bean，如以下示例所示：</p>
 </div>
 <div class="listingblock">
@@ -2101,8 +2181,8 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 <div class="sect4">
 <h5 id="boot-features-testing-spring-boot-applications-testing-autoconfigured-rest-docs-rest-assured">使用REST Assured自动配置Spring REST Docs测试</h5>
 <div class="paragraph">
-<p>@AutoConfigureRestDocs` 生成一个 <code>RequestSpecification</code> bean，预先配置为使用Spring REST Docs，可用于您的测试。
-您可以使用 <code>@Autowired</code> 注入它并在测试中使用它，就像使用REST Assured和Spring REST Doc时一样，如下例所示：</p>
+<p>@AutoConfigureRestDocs` 生成一个 <code>RequestSpecification</code> bean，预先配置为使用Spring REST Docs，可用于你的测试。
+你可以使用 <code>@Autowired</code> 注入它并在测试中使用它，就像使用REST Assured和Spring REST Doc时一样，如下例所示：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2142,7 +2222,7 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 </div>
 </div>
 <div class="paragraph">
-<p>如果您需要对Spring REST Docs配置的更多控制，而不仅仅是 <code>@AutoConfigureRestDocs</code> 的属性，
+<p>如果你需要对Spring REST Docs配置的更多控制，而不仅仅是 <code>@AutoConfigureRestDocs</code> 的属性，
 则可以使用 <code>RestDocsRestAssuredConfigurationCustomizer</code> bean，如以下示例所示：</p>
 </div>
 <div class="listingblock">
@@ -2200,7 +2280,7 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 <p>然后，重要的是不要在应用程序的主类上糅合特定于某功能的特定区域的配置设置。</p>
 </div>
 <div class="paragraph">
-<p>假设您使用的是Spring Batch，并依赖于它的自动配置。您可以按如下方式定义 <code>@SpringBootApplication</code>：</p>
+<p>假设你使用的是Spring Batch，并依赖于它的自动配置。你可以按如下方式定义 <code>@SpringBootApplication</code>：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2210,7 +2290,7 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 </div>
 </div>
 <div class="paragraph">
-<p>因为此类是测试的入口配置，所以任何切片测试实际上都会尝试启动Spring Batch，这绝对不是您想要做的。
+<p>因为此类是测试的入口配置，所以任何切片测试实际上都会尝试启动Spring Batch，这绝对不是你想要做的。
 推荐的做法是将特定于区域的配置移动到与应用程序相同级别的单独 <code>@Configuration</code> 类，如以下示例所示：</p>
 </div>
 <div class="listingblock">
@@ -2227,14 +2307,14 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-根据应用程序的复杂程度，您可以为自定义项设置一个 <code>@Configuration</code> 类，或者为每个域区域设置一个类。
-后一种方法允许您在必要时使用 <code>@Import</code> 注解在某一个测试中启用它。
+根据应用程序的复杂程度，你可以为自定义项设置一个 <code>@Configuration</code> 类，或者为每个域区域设置一个类。
+后一种方法允许你在必要时使用 <code>@Import</code> 注解在某一个测试中启用它。
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>混乱的另一个原因是类路径扫描。假设您以合理的方式结构化代码，则需要扫描其他包。您的应用程序可能类似于以下代码：</p>
+<p>混乱的另一个原因是类路径扫描。假设你以合理的方式结构化代码，则需要扫描其他包。你的应用程序可能类似于以下代码：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2244,7 +2324,7 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 </div>
 </div>
 <div class="paragraph">
-<p>这样做会有效地覆盖默认的组件扫描指令，无论您选择哪个切片，都会扫描这两个包。例如，<code>@DataJpaTest</code>
+<p>这样做会有效地覆盖默认的组件扫描指令，无论你选择哪个切片，都会扫描这两个包。例如，<code>@DataJpaTest</code>
 似乎突然扫描了应用程序的组件和用户配置。同样，将自定义指令移动到单独的类是解决此问题的好方法。</p>
 </div>
 <div class="admonitionblock tip">
@@ -2254,8 +2334,8 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-如果这不是您的选择，您可以在测试的层次结构中的某处创建 <code>@SpringBootConfiguration</code>，以便使用它。
-或者，您可以为测试指定源，这会禁用查找默认源的行为。
+如果这不是你的选择，你可以在测试的层次结构中的某处创建 <code>@SpringBootConfiguration</code>，以便使用它。
+或者，你可以为测试指定源，这会禁用查找默认源的行为。
 </td>
 </tr>
 </table>
@@ -2264,8 +2344,8 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 <div class="sect3">
 <h4 id="boot-features-testing-spring-boot-applications-with-spock">1.3.24. 使用Spock测试Spring Boot应用程序</h4>
 <div class="paragraph">
-<p>如果您希望使用Spock测试Spring Boot应用程序，您应该将Spock <code>spock-spring</code> 模块的依赖项添加到应用程序的构建中。
-<code>spock-spring</code> 集成Spring测试框架到Spock中。建议您使用Spock 1.2或更高版本，以便从Spock的Spring框架和Spring Boot
+<p>如果你希望使用Spock测试Spring Boot应用程序，你应该将Spock <code>spock-spring</code> 模块的依赖项添加到应用程序的构建中。
+<code>spock-spring</code> 集成Spring测试框架到Spock中。建议你使用Spock 1.2或更高版本，以便从Spock的Spring框架和Spring Boot
 集成的许多改进中受益。有关更多详细信息，请参阅 <a href="http://spockframework.org/spock/docs/1.2/modules.html#_spring_module">Spock Spring模块的文档</a>。</p>
 </div>
 </div>
@@ -2278,8 +2358,8 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 <div class="sect3">
 <h4 id="boot-features-configfileapplicationcontextinitializer-test-utility">1.4.1. ConfigFileApplicationContextInitializer</h4>
 <div class="paragraph">
-<p><code>ConfigFileApplicationContextInitializer</code> 是一个 <code>ApplicationContextInitializer</code>，您可以将其应用于测试以加载Spring Boot
-<code>application.properties</code> 文件。当您不需要 <code>@SpringBootTest</code> 提供的全套功能时，可以使用它，如以下示例所示：</p>
+<p><code>ConfigFileApplicationContextInitializer</code> 是一个 <code>ApplicationContextInitializer</code>，你可以将其应用于测试以加载Spring Boot
+<code>application.properties</code> 文件。当你不需要 <code>@SpringBootTest</code> 提供的全套功能时，可以使用它，如以下示例所示：</p>
 </div>
 <div class="exampleblock">
 <div class="content">
@@ -2300,7 +2380,7 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 <td class="content">
 仅使用 <code>ConfigFileApplicationContextInitializer</code> 不支持 <code>@Value("${…​}")</code> 注入。
 它唯一的工作是确保将 <code>application.properties</code> 文件加载到Spring的环境中。
-对于 <code>@Value</code> 支持，您需要另外配置 <code>PropertySourcesPlaceholderConfigurer</code> 或使用 <code>@SpringBootTest</code> 它会自动为您配置一个。
+对于 <code>@Value</code> 支持，你需要另外配置 <code>PropertySourcesPlaceholderConfigurer</code> 或使用 <code>@SpringBootTest</code> 它会自动为你配置一个。
 </td>
 </tr>
 </table>
@@ -2309,8 +2389,8 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 <div class="sect3">
 <h4 id="boot-features-test-property-values">1.4.2. TestPropertyValues</h4>
 <div class="paragraph">
-<p><code>TestPropertyValues</code> 允许您快速向 <code>ConfigurableEnvironment</code> 或 <code>ConfigurableApplicationContext</code> 添加属性。
-您可以使用 <code>key=value</code> 字符串调用它，如下所示：</p>
+<p><code>TestPropertyValues</code> 允许你快速向 <code>ConfigurableEnvironment</code> 或 <code>ConfigurableApplicationContext</code> 添加属性。
+你可以使用 <code>key=value</code> 字符串调用它，如下所示：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2321,7 +2401,7 @@ bean限制为 <code>@Controller</code>，<code>@ControllerAdvice</code>，<code>
 <div class="sect3">
 <h4 id="boot-features-output-capture-test-utility">1.4.3. OutputCapture</h4>
 <div class="paragraph">
-<p><code>OutputCapture</code> 是一个JUnit <code>Rule</code>，可用于捕获 <code>System.out</code> 和 <code>System.err</code> 输出。您可以将捕获声明为 <code>@Rule</code>，
+<p><code>OutputCapture</code> 是一个JUnit <code>Rule</code>，可用于捕获 <code>System.out</code> 和 <code>System.err</code> 输出。你可以将捕获声明为 <code>@Rule</code>，
 然后使用 <code>toString()</code> 进行断言，如下所示：</p>
 </div>
 <div class="listingblock">
@@ -2365,15 +2445,15 @@ Spring Framework 5.0提供了一个新的 <code>WebTestClient</code>，适用于
 </table>
 </div>
 <div class="paragraph">
-<p><code>TestRestTemplate</code> 是Spring的 <code>RestTemplate</code> 的一种便利替代品，可用于集成测试。您可以获得一个vanilla模板或一个发送基本HTTP
+<p><code>TestRestTemplate</code> 是Spring的 <code>RestTemplate</code> 的一种便利替代品，可用于集成测试。你可以获得一个vanilla模板或一个发送基本HTTP
 身份验证（使用用户名和密码）的模板。在任何一种情况下，模板都以一种测试友好的方式运行，不会在服务器端错误上抛出异常。
-建议（但不是强制性的）使用Apache HTTP Client（版本4.3.2或更高版本）。如果您在类路径上有这个，则 <code>TestRestTemplate</code>
-通过适当地配置客户端来响应。如果您确实使用了Apache的HTTP客户端，则会启用一些额外的测试友好功能：</p>
+建议（但不是强制性的）使用Apache HTTP Client（版本4.3.2或更高版本）。如果你在类路径上有这个，则 <code>TestRestTemplate</code>
+通过适当地配置客户端来响应。如果你确实使用了Apache的HTTP客户端，则会启用一些额外的测试友好功能：</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>不遵循重定向（因此您可以断言响应location）。</p>
+<p>不遵循重定向（因此你可以断言响应location）。</p>
 </li>
 <li>
 <p>Cookie被忽略（因此模板是无状态的）。</p>
@@ -2453,7 +2533,7 @@ Spring Framework 5.0提供了一个新的 <code>WebTestClient</code>，适用于
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-12-14 20:17:26 CST
+Last updated 2018-12-17 20:51:13 CST
 </div>
 </div>
 </body>

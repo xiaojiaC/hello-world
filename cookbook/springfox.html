@@ -509,6 +509,86 @@ table.CodeRay td.code>pre{padding:0}
 .CodeRay .change .change{color:#66f}
 .CodeRay .head .head{color:#f4f}
 </style>
+<style>
+.hidden {
+	display: none;
+}
+
+.switch {
+	border-width: 1px 1px 0 1px;
+	border-style: solid;
+	border-color: #7a2518;
+	display: inline-block;
+}
+
+.switch--item {
+	padding: 10px;
+	background-color: #ffffff;
+	color: #7a2518;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.switch--item:not(:first-child) {
+	border-width: 0 0 0 1px;
+	border-style: solid;
+	border-color: #7a2518;
+}
+
+.switch--item.selected {
+	background-color: #7a2519;
+	color: #ffffff;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
+<script type="text/javascript">
+function addBlockSwitches() {
+	$('.primary').each(function() {
+		primary = $(this);
+		createSwitchItem(primary, createBlockSwitch(primary)).item.addClass("selected");
+		primary.children('.title').remove();
+	});
+	$('.secondary').each(function(idx, node) {
+		secondary = $(node);
+		primary = findPrimary(secondary);
+		switchItem = createSwitchItem(secondary, primary.children('.switch'));
+		switchItem.content.addClass('hidden');
+		findPrimary(secondary).append(switchItem.content);
+		secondary.remove();
+	});
+}
+
+function createBlockSwitch(primary) {
+	blockSwitch = $('<div class="switch"></div>');
+	primary.prepend(blockSwitch);
+	return blockSwitch;
+}
+
+function findPrimary(secondary) {
+	candidate = secondary.prev();
+	while (!candidate.is('.primary')) {
+		candidate = candidate.prev();
+	}
+	return candidate;
+}
+
+function createSwitchItem(block, blockSwitch) {
+	blockName = block.children('.title').text();
+	content = block.children('.content').first().append(block.next('.colist'));
+	item = $('<div class="switch--item">' + blockName + '</div>');
+	item.on('click', '', content, function(e) {
+		$(this).addClass('selected');
+		$(this).siblings().removeClass('selected');
+		e.data.siblings('.content').addClass('hidden');
+		e.data.removeClass('hidden');
+	});
+	blockSwitch.append(item);
+	return {'item': item, 'content': content};
+}
+
+$(addBlockSwitches);
+</script>
+
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
@@ -1303,7 +1383,7 @@ list.add(<span class="keyword">new</span> Something());</code></pre>
 <h3 id="_springfox_swagger_ui">3.5. Springfox Swagger UI</h3>
 <div class="paragraph">
 <p><code>springfox-swagger-ui</code> <a href="http://www.webjars.org/">web jar</a>附带 <a href="https://github.com/swagger-api/swagger-ui">Swagger UI</a>。
-要将其包含在标准Spring Boot应用程序中，您可以按如下方式添加依赖项：</p>
+要将其包含在标准Spring Boot应用程序中，你可以按如下方式添加依赖项：</p>
 </div>
 <div class="sect3">
 <h4 id="_gradle_4">3.5.1. Gradle</h4>
@@ -1864,7 +1944,7 @@ swagger 2.0类型。</p>
 <div class="sect2">
 <h3 id="_配置启动">6.3. 配置启动</h3>
 <div class="paragraph">
-<p>如果您想延迟springfox的启动，可以选择将auto-startup设置为false。要使用的属性是 <code>springfox.documentation.auto-startup</code>，
+<p>如果你想延迟springfox的启动，可以选择将auto-startup设置为false。要使用的属性是 <code>springfox.documentation.auto-startup</code>，
 它可以作为 <code>-D</code> jvm参数或通过 <code>application.yml/properties</code> 资源文件传入。</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
@@ -1911,7 +1991,7 @@ swagger 2.0类型。</p>
 <h3 id="_通过属性覆盖描述">6.4. 通过属性覆盖描述</h3>
 <div class="paragraph">
 <p>添加了解析属性源中的属性以替换某些注解中表达式的支持。为了使用它，只需在类路径中的 <code>application.properties</code>，<code>application.yml</code>
-文件或属性文件中定义属性，其中包含您希望在已知注解中替换的值。
+文件或属性文件中定义属性，其中包含你希望在已知注解中替换的值。
 例如 <code>@ApModelProperty(value ="${property1.description}")</code> 将从可用属性中查找 <code>property1.description</code>。
 如果未找到，则将按原样呈现未解析的表达式。</p>
 </div>
@@ -2047,7 +2127,7 @@ swagger 2.0类型。</p>
 <div class="sect2">
 <h3 id="_docket_xml配置">6.6. Docket XML配置</h3>
 <div class="paragraph">
-<p>要使用该插件，您必须创建一个使用spring的 <code>@Configuration</code> 的spring java配置类，并在xml应用程序上下文中声明。</p>
+<p>要使用该插件，你必须创建一个使用spring的 <code>@Configuration</code> 的spring java配置类，并在xml应用程序上下文中声明。</p>
 </div>
 <div class="listingblock">
 <div class="title">xml配置</div>
@@ -2301,7 +2381,7 @@ Springfox会将 <code>getPetsUsingGET</code> 渲染为operationId。</p>
 <div class="sect4">
 <h5 id="_自定义_em_operationid_em">自定义 <em>operationId</em></h5>
 <div class="paragraph">
-<p>如果您希望覆盖Springfox呈现的默认 <code>operationId</code>，您可以通过在 <code>@ApiOperation</code> 注释中提供 <code>nickname</code> 元素来实现。</p>
+<p>如果你希望覆盖Springfox呈现的默认 <code>operationId</code>，你可以通过在 <code>@ApiOperation</code> 注释中提供 <code>nickname</code> 元素来实现。</p>
 </div>
 <div class="sect5">
 <h6 id="_以下这个被注解的方法_2">以下这个被注解的方法 &#8230;&#8203;</h6>
@@ -2339,8 +2419,8 @@ Springfox会将 <code>getPetsUsingGET</code> 渲染为operationId。</p>
 <h4 id="_更改泛型的命名方式">6.8.3. 更改泛型的命名方式</h4>
 <div class="paragraph">
 <p>默认情况下，带有泛型的类型将标有'\u00ab'(&lt;&lt;), '\u00bb'(&gt;&gt;) 和逗号。这可能像是swagger-codegen的问题。
-您可以通过实现自己的 <code>GenericTypeNamingStrategy</code> 来覆盖此行为。
-例如，如果您希望将 <code>List&lt;String&gt;</code> 编码为“ListOfString”并将 <code>Map&lt;String，Object&gt;</code> 编码为“MapOfStringAndObject”，
+你可以通过实现自己的 <code>GenericTypeNamingStrategy</code> 来覆盖此行为。
+例如，如果你希望将 <code>List&lt;String&gt;</code> 编码为“ListOfString”并将 <code>Map&lt;String，Object&gt;</code> 编码为“MapOfStringAndObject”，
 则可以在插件自定义期间将 <code>forCodeGeneration</code> 选项设置为 <code>true</code>：</p>
 </div>
 <div class="listingblock">
@@ -2409,7 +2489,7 @@ Springfox会将 <code>getPetsUsingGET</code> 渲染为operationId。</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-12-13 20:59:44 CST
+Last updated 2018-12-17 20:51:13 CST
 </div>
 </div>
 </body>

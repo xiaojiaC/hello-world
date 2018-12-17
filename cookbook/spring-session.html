@@ -509,6 +509,86 @@ table.CodeRay td.code>pre{padding:0}
 .CodeRay .change .change{color:#66f}
 .CodeRay .head .head{color:#f4f}
 </style>
+<style>
+.hidden {
+	display: none;
+}
+
+.switch {
+	border-width: 1px 1px 0 1px;
+	border-style: solid;
+	border-color: #7a2518;
+	display: inline-block;
+}
+
+.switch--item {
+	padding: 10px;
+	background-color: #ffffff;
+	color: #7a2518;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.switch--item:not(:first-child) {
+	border-width: 0 0 0 1px;
+	border-style: solid;
+	border-color: #7a2518;
+}
+
+.switch--item.selected {
+	background-color: #7a2519;
+	color: #ffffff;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
+<script type="text/javascript">
+function addBlockSwitches() {
+	$('.primary').each(function() {
+		primary = $(this);
+		createSwitchItem(primary, createBlockSwitch(primary)).item.addClass("selected");
+		primary.children('.title').remove();
+	});
+	$('.secondary').each(function(idx, node) {
+		secondary = $(node);
+		primary = findPrimary(secondary);
+		switchItem = createSwitchItem(secondary, primary.children('.switch'));
+		switchItem.content.addClass('hidden');
+		findPrimary(secondary).append(switchItem.content);
+		secondary.remove();
+	});
+}
+
+function createBlockSwitch(primary) {
+	blockSwitch = $('<div class="switch"></div>');
+	primary.prepend(blockSwitch);
+	return blockSwitch;
+}
+
+function findPrimary(secondary) {
+	candidate = secondary.prev();
+	while (!candidate.is('.primary')) {
+		candidate = candidate.prev();
+	}
+	return candidate;
+}
+
+function createSwitchItem(block, blockSwitch) {
+	blockName = block.children('.title').text();
+	content = block.children('.content').first().append(block.next('.colist'));
+	item = $('<div class="switch--item">' + blockName + '</div>');
+	item.on('click', '', content, function(e) {
+		$(this).addClass('selected');
+		$(this).siblings().removeClass('selected');
+		e.data.siblings('.content').addClass('hidden');
+		e.data.removeClass('hidden');
+	});
+	blockSwitch.append(item);
+	return {'item': item, 'content': content};
+}
+
+$(addBlockSwitches);
+</script>
+
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
@@ -599,7 +679,7 @@ table.CodeRay td.code>pre{padding:0}
 <h2 id="_2_0中有什么新功能">2. 2.0中有什么新功能</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>以下是Spring Session 2.0新增内容的重点。您可以通过参考以下版本的更改日志找到所有的新特性：
+<p>以下是Spring Session 2.0新增内容的重点。你可以通过参考以下版本的更改日志找到所有的新特性：
 <a href="https://github.com/spring-projects/spring-session/milestone/17?closed=1">2.0.0.M1</a>,
 <a href="https://github.com/spring-projects/spring-session/milestone/22?closed=1">2.0.0.M2</a>,
 <a href="https://github.com/spring-projects/spring-session/milestone/23?closed=1">2.0.0.M3</a>,
@@ -642,7 +722,7 @@ table.CodeRay td.code>pre{padding:0}
 <h2 id="_样例和指南">3. 样例和指南</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>如果您希望开始使用Spring Session，最好的起点是我们的示例应用程序。</p>
+<p>如果你希望开始使用Spring Session，最好的起点是我们的示例应用程序。</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
 <caption class="title">Table 1. 使用Spring Boot的示例应用程序</caption>
@@ -880,7 +960,7 @@ Spring Data的用户会发现这种安排很熟悉，Spring Session Core模块�
 <div class="sect2">
 <h3 id="_httpsession和redis">5.2. HttpSession和Redis</h3>
 <div class="paragraph">
-<p>通过在使用 <code>HttpSession</code> 的任何东西之前添加Servlet过滤器来启用使用Spring Session和 <code>HttpSession</code>。您可以选择启用此功能：</p>
+<p>通过在使用 <code>HttpSession</code> 的任何东西之前添加Servlet过滤器来启用使用Spring Session和 <code>HttpSession</code>。你可以选择启用此功能：</p>
 </div>
 <div class="ulist">
 <ul>
@@ -905,7 +985,7 @@ Spring Data的用户会发现这种安排很熟悉，Spring Session Core模块�
 </td>
 <td class="content">
 <a href="https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#samples">HttpSession示例</a>提供了有关如何使用Java配置集成Spring Session和 <code>HttpSession</code> 的工作示例。
-您可以在下面阅读集成的基本步骤，但建议您在与自己的应用程序集成时遵循详细的HttpSession指南。
+你可以在下面阅读集成的基本步骤，但建议你在与自己的应用程序集成时遵循详细的HttpSession指南。
 </td>
 </tr>
 </table>
@@ -1011,7 +1091,7 @@ Spring Data的用户会发现这种安排很熟悉，Spring Session Core模块�
 </td>
 <td class="content">
 <a href="https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#samples">HttpSession JDBC示例</a>提供了有关如何使用Java配置集成Spring Session和 <code>HttpSession</code>
-的工作示例。您可以在下面阅读集成的基本步骤，但是在与您自己的应用程序集成时，建议您遵循详细的HttpSession JDBC指南。
+的工作示例。你可以在下面阅读集成的基本步骤，但是在与你自己的应用程序集成时，建议你遵循详细的HttpSession JDBC指南。
 </td>
 </tr>
 </table>
@@ -1129,7 +1209,7 @@ Reference Documentation</a>。</p>
 </td>
 <td class="content">
 <a href="https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#samples">HttpSession JDBC Spring Boot Sample</a>提供了一个如何使用Spring Boot集成
-Spring Session和 <code>HttpSession</code> 的工作示例。您可以在下面阅读集成的基本步骤，但是在与您自己的应用程序集成时，建议您遵循详细的HttpSession JDBC Spring Boot Guide。
+Spring Session和 <code>HttpSession</code> 的工作示例。你可以在下面阅读集成的基本步骤，但是在与你自己的应用程序集成时，建议你遵循详细的HttpSession JDBC Spring Boot Guide。
 </td>
 </tr>
 </table>
@@ -1168,8 +1248,8 @@ spring.session.jdbc.table-name=SPRING_SESSION #用于存储会话的数据库表
 <div class="sect4">
 <h5 id="_配置datasource">配置DataSource</h5>
 <div class="paragraph">
-<p>Spring Boot自动创建一个 <code>DataSource</code>，将Spring Session连接到H2数据库的嵌入式实例。在生产环境中，您需要确保更新配置以指向关系数据库。
-例如，您可以在 <code>application.properties</code> 中包含以下内容:</p>
+<p>Spring Boot自动创建一个 <code>DataSource</code>，将Spring Session连接到H2数据库的嵌入式实例。在生产环境中，你需要确保更新配置以指向关系数据库。
+例如，你可以在 <code>application.properties</code> 中包含以下内容:</p>
 </div>
 <div class="listingblock">
 <div class="title">src/main/resources/application.properties</div>
@@ -1214,7 +1294,7 @@ Spring Session支持的自定义实现。</p>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-本节描述Spring Session如何提供与 <code>HttpSession</code> 的透明集成。目的是让用户能够理解幕后发生的事情。此功能已集成，您无需自己实现此逻辑。
+本节描述Spring Session如何提供与 <code>HttpSession</code> 的透明集成。目的是让用户能够理解幕后发生的事情。此功能已集成，你无需自己实现此逻辑。
 </td>
 </tr>
 </table>
@@ -1282,7 +1362,7 @@ Spring Session支持的自定义实现。</p>
 </td>
 <td class="content">
 <a href="https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#samples">REST示例</a>提供了有关如何在REST应用程序中使用Spring Session以支持使用标头
-进行身份验证的工作示例。您可以按照以下集成的基本步骤进行操作，但建议您在与自己的应用程序集成时遵循详细的REST指南。
+进行身份验证的工作示例。你可以按照以下集成的基本步骤进行操作，但建议你在与自己的应用程序集成时遵循详细的REST指南。
 </td>
 </tr>
 </table>
@@ -1365,12 +1445,12 @@ Spring Session支持的自定义实现。</p>
 <h3 id="_httpsessionlistener">5.7. HttpSessionListener</h3>
 <div class="paragraph">
 <p>Spring Session通过声明 <code>SessionEventHttpSessionListenerAdapter</code> 将 <code>SessionDestroyedEvent</code> 和 <code>SessionCreatedEvent</code> 转换为 <code>HttpSessionEvent</code>
-来支持 <code>HttpSessionListener</code>。要使用此支持，您需要：</p>
+来支持 <code>HttpSessionListener</code>。要使用此支持，你需要：</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>确保您的 <code>SessionRepository</code> 实现支持并配置为触发 <code>SessionDestroyedEvent</code> 和 <code>SessionCreatedEvent</code>。</p>
+<p>确保你的 <code>SessionRepository</code> 实现支持并配置为触发 <code>SessionDestroyedEvent</code> 和 <code>SessionCreatedEvent</code>。</p>
 </li>
 <li>
 <p>将 <code>SessionEventHttpSessionListenerAdapter</code> 配置为Spring bean。</p>
@@ -1381,8 +1461,8 @@ Spring Session支持的自定义实现。</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>如果您正在使用 <a href="https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#httpsession-redis">HttpSession中使用Redis</a>文档记录的配置支持，那么您需要
-做的就是将每个 <code>HttpSessionListener</code> 注册为bean。例如，假设您要支持Spring Security的并发控制，并且需要使用 <code>HttpSessionEventPublisher</code>，您只需将
+<p>如果你正在使用 <a href="https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#httpsession-redis">HttpSession中使用Redis</a>文档记录的配置支持，那么你需要
+做的就是将每个 <code>HttpSessionListener</code> 注册为bean。例如，假设你要支持Spring Security的并发控制，并且需要使用 <code>HttpSessionEventPublisher</code>，你只需将
 <code>HttpSessionEventPublisher</code> 作为bean添加即可。在Java配置中，这可能如下所示：</p>
 </div>
 <div class="listingblock">
@@ -1496,7 +1576,7 @@ Spring Session支持的自定义实现。</p>
 这是通过提供Spring Security的 <code>SessionRegistry</code> 接口的自定义实现来完成的。</p>
 </div>
 <div class="paragraph">
-<p>使用Spring Security的Java配置DSL时，您可以通过 <code>SessionManagementConfigurer</code> 配置自定义 <code>SessionRegistry</code>，如下所示：</p>
+<p>使用Spring Security的Java配置DSL时，你可以通过 <code>SessionManagementConfigurer</code> 配置自定义 <code>SessionRegistry</code>，如下所示：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1525,7 +1605,7 @@ Spring Session支持的自定义实现。</p>
 </div>
 </div>
 <div class="paragraph">
-<p>这假定您还配置了Spring Session以提供返回Session实例的 <code>FindByIndexNameSessionRepository</code>。</p>
+<p>这假定你还配置了Spring Session以提供返回Session实例的 <code>FindByIndexNameSessionRepository</code>。</p>
 </div>
 <div class="paragraph">
 <p>基于XML的配置看起来像这样：</p>
@@ -1546,7 +1626,7 @@ Spring Session支持的自定义实现。</p>
 </div>
 </div>
 <div class="paragraph">
-<p>这假设您的Spring Session  <code>SessionRegistry</code> bean名为 <code>sessionRegistry</code>，它是所有 <code>SpringHttpSessionConfiguration</code> 子类使用的名称。</p>
+<p>这假设你的Spring Session  <code>SessionRegistry</code> bean名为 <code>sessionRegistry</code>，它是所有 <code>SpringHttpSessionConfiguration</code> 子类使用的名称。</p>
 </div>
 </div>
 <div class="sect2">
@@ -1562,7 +1642,7 @@ Spring Session支持的自定义实现。</p>
 <h2 id="_api文档">9. API文档</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>您可以在线浏览完整的 <a href="https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/api/">Javadoc</a>。关键API如下所述：</p>
+<p>你可以在线浏览完整的 <a href="https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/api/">Javadoc</a>。关键API如下所述：</p>
 </div>
 <div class="sect2">
 <h3 id="_session">9.1. Session</h3>
@@ -1763,7 +1843,7 @@ Spring Session支持的自定义实现。</p>
 </div>
 </div>
 <div class="paragraph">
-<p>请务必注意，没有为您配置会话到期的基础结构。这是因为会话到期之类的事情高度依赖于实现。这意味着如果您需要清理过期的会话，则您有责任清理过期的会话。</p>
+<p>请务必注意，没有为你配置会话到期的基础结构。这是因为会话到期之类的事情高度依赖于实现。这意味着如果你需要清理过期的会话，则你有责任清理过期的会话。</p>
 </div>
 </div>
 <div class="sect2">
@@ -1784,7 +1864,7 @@ Spring Session支持的自定义实现。</p>
 </div>
 </div>
 <div class="paragraph">
-<p>请务必注意，没有为您配置会话到期的基础结构。这是因为会话到期之类的事情高度依赖于实现。这意味着如果您需要清理过期的会话，则您有责任清理过期的会话。</p>
+<p>请务必注意，没有为你配置会话到期的基础结构。这是因为会话到期之类的事情高度依赖于实现。这意味着如果你需要清理过期的会话，则你有责任清理过期的会话。</p>
 </div>
 </div>
 <div class="sect2">
@@ -1816,7 +1896,7 @@ SessionRepository&lt;? <span class="directive">extends</span> Session&gt; reposi
 <h4 id="_enableredishttpsession">9.7.2. EnableRedisHttpSession</h4>
 <div class="paragraph">
 <p>在Web环境中，创建新 <code>RedisOperationsSessionRepository</code> 的最简单方法是使用 <code>@EnableRedisHttpSession</code>。可以在
-<a href="https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#samples">示例和指南</a>中找到完整的示例用法。您可以使用以下属性来自定义配置：</p>
+<a href="https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#samples">示例和指南</a>中找到完整的示例用法。你可以使用以下属性来自定义配置：</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1835,14 +1915,14 @@ SessionRepository&lt;? <span class="directive">extends</span> Session&gt; reposi
 <div class="sect4">
 <h5 id="_自定义redisserializer">自定义RedisSerializer</h5>
 <div class="paragraph">
-<p>您可以通过创建名为 <code>springSessionDefaultRedisSerializer</code> 的Bean通过实现 <code>RedisSerializer&lt;Object&gt;</code> 来自定义序列化器。</p>
+<p>你可以通过创建名为 <code>springSessionDefaultRedisSerializer</code> 的Bean通过实现 <code>RedisSerializer&lt;Object&gt;</code> 来自定义序列化器。</p>
 </div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_redis_taskexecutor">9.7.3. Redis TaskExecutor</h4>
 <div class="paragraph">
-<p>订阅 <code>RedisOperationsSessionRepository</code> 以使用 <code>RedisMessageListenerContainer</code> 从redis接收事件。您可以通过创建名为 <code>springSessionRedisTaskExecutor</code> 和/或
+<p>订阅 <code>RedisOperationsSessionRepository</code> 以使用 <code>RedisMessageListenerContainer</code> 从redis接收事件。你可以通过创建名为 <code>springSessionRedisTaskExecutor</code> 和/或
 <code>springSessionRedisSubscriptionExecutor</code> 的Bean来自定义调度这些事件的方式。有关配置redis任务执行程序的更多详细信息，请参见
 <a href="https://docs.spring.io/spring-data-redis/docs/2.0.11.RELEASE/reference/html/#redis:pubsub:subscribe:containers">此处</a>。</p>
 </div>
@@ -1926,7 +2006,7 @@ EXPIRE spring:session:expirations1439245080000 2100</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>您将注意到，设置的到期时间是会话实际到期后的5分钟。这是必要的，以便在会话到期时可以访问会话的值。会话本身在实际到期后五分钟设置到期，以确保它被清理，但仅在我们执行任何必要的处理之后。</p>
+<p>你将注意到，设置的到期时间是会话实际到期后的5分钟。这是必要的，以便在会话到期时可以访问会话的值。会话本身在实际到期后五分钟设置到期，以确保它被清理，但仅在我们执行任何必要的处理之后。</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -2013,8 +2093,8 @@ EXPIRE spring:session:expirations1439245080000 2100</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>如果您正在使用 <code>@EnableRedisHttpSession</code>，则会自动完成 <code>SessionMessageListener</code> 并启用必要的Redis Keyspace事件。但是，在安全的Redis环境中，config命令被禁用。这意味着
-Spring Session无法为您配置Redis Keyspace事件。要禁用自动配置，请将 <code>ConfigureRedisAction.NO_OP</code> 添加为bean。</p>
+<p>如果你正在使用 <code>@EnableRedisHttpSession</code>，则会自动完成 <code>SessionMessageListener</code> 并启用必要的Redis Keyspace事件。但是，在安全的Redis环境中，config命令被禁用。这意味着
+Spring Session无法为你配置Redis Keyspace事件。要禁用自动配置，请将 <code>ConfigureRedisAction.NO_OP</code> 添加为bean。</p>
 </div>
 <div class="paragraph">
 <p>例如，Java Configuration可以使用以下内容：</p>
@@ -2050,7 +2130,7 @@ Spring Session无法为您配置Redis Keyspace事件。要禁用自动配置，�
 <div class="sect4">
 <h5 id="_在redis中查看会话">在Redis中查看会话</h5>
 <div class="paragraph">
-<p>安装redis-cli后，您可以使用redis-cli检查Redis中的值。例如，在终端中输入以下内容：</p>
+<p>安装redis-cli后，你可以使用redis-cli检查Redis中的值。例如，在终端中输入以下内容：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2073,7 +2153,7 @@ redis 127.0.0.1:6379&gt; keys *
 </table>
 </div>
 <div class="paragraph">
-<p>您还可以查看每个会话的属性。</p>
+<p>你还可以查看每个会话的属性。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2118,7 +2198,7 @@ ReactiveSessionRepository&lt;? <span class="directive">extends</span> Session&gt
 <div class="sect3">
 <h4 id="_enablerediswebsession">9.8.2. EnableRedisWebSession</h4>
 <div class="paragraph">
-<p>在Web环境中，创建新 <code>ReactiveRedisOperationsSessionRepository</code> 的最简单方法是使用 <code>@EnableRedisWebSession</code>。您可以使用以下属性来自定义配置：</p>
+<p>在Web环境中，创建新 <code>ReactiveRedisOperationsSessionRepository</code> 的最简单方法是使用 <code>@EnableRedisWebSession</code>。你可以使用以下属性来自定义配置：</p>
 </div>
 <div class="ulist">
 <ul>
@@ -2143,7 +2223,7 @@ ReactiveSessionRepository&lt;? <span class="directive">extends</span> Session&gt
 <div class="sect4">
 <h5 id="_在redis中查看会话_2">在Redis中查看会话</h5>
 <div class="paragraph">
-<p>安装redis-cli后，您可以使用redis-cli检查Redis中的值。例如，在终端中输入以下内容：</p>
+<p>安装redis-cli后，你可以使用redis-cli检查Redis中的值。例如，在终端中输入以下内容：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2161,7 +2241,7 @@ redis 127.0.0.1:6379&gt; keys *
 </table>
 </div>
 <div class="paragraph">
-<p>您还可以查看每个会话的属性。</p>
+<p>你还可以查看每个会话的属性。</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2262,7 +2342,7 @@ SessionRepository&lt;? <span class="directive">extends</span> Session&gt; reposi
 <h4 id="_enablejdbchttpsession">9.11.2. EnableJdbcHttpSession</h4>
 <div class="paragraph">
 <p>在Web环境中，创建新 <code>JdbcOperationsSessionRepository</code> 的最简单方法是使用 <code>@EnableJdbcHttpSession</code>。可以在
-<a href="https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#samples">示例和指南</a>中找到完整的示例用法。您可以使用以下属性来自定义配置：</p>
+<a href="https://docs.spring.io/spring-session/docs/2.0.7.RELEASE/reference/html5/#samples">示例和指南</a>中找到完整的示例用法。你可以使用以下属性来自定义配置：</p>
 </div>
 <div class="ulist">
 <ul>
@@ -2277,14 +2357,14 @@ SessionRepository&lt;? <span class="directive">extends</span> Session&gt; reposi
 <div class="sect4">
 <h5 id="_自定义lobhandler">自定义LobHandler</h5>
 <div class="paragraph">
-<p>您可以通过创建一个名为 <code>springSessionLobHandler</code> 的Bean来实现 <code>LobHandler</code> 来自定义BLOB处理。</p>
+<p>你可以通过创建一个名为 <code>springSessionLobHandler</code> 的Bean来实现 <code>LobHandler</code> 来自定义BLOB处理。</p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_自定义conversionservice">自定义ConversionService</h5>
 <div class="paragraph">
-<p>您可以通过提供 <code>ConversionService</code> 实例来自定义会话的默认序列化和反序列化。在典型的Spring环境中工作时，将自动选择默认的ConversionService Bean（名为 <code>conversionService</code>）
-并用于序列化和反序列化。但是，您可以通过提供名为 <code>springSessionConversionService</code> 的Bean来覆盖默认的 <code>ConversionService</code>。</p>
+<p>你可以通过提供 <code>ConversionService</code> 实例来自定义会话的默认序列化和反序列化。在典型的Spring环境中工作时，将自动选择默认的ConversionService Bean（名为 <code>conversionService</code>）
+并用于序列化和反序列化。但是，你可以通过提供名为 <code>springSessionConversionService</code> 的Bean来覆盖默认的 <code>ConversionService</code>。</p>
 </div>
 </div>
 </div>
@@ -2292,14 +2372,14 @@ SessionRepository&lt;? <span class="directive">extends</span> Session&gt; reposi
 <h4 id="_存储细节_2">9.11.3. 存储细节</h4>
 <div class="paragraph">
 <p>默认情况下，此实现使用 <code>SPRING_SESSION</code> 和 <code>SPRING_SESSION_ATTRIBUTES</code> 表来存储会话。请注意，可以轻松自定义表名。在这种情况下，用于存储属性的表将使用提供的表名称命名，
-后缀为 <code>_ATTRIBUTES</code>。如果需要进一步自定义，则可以使用 <code>set*Query</code> setter方法自定义存储库使用的SQL查询。在这种情况下，您需要手动配置 <code>sessionRepository</code> bean。</p>
+后缀为 <code>_ATTRIBUTES</code>。如果需要进一步自定义，则可以使用 <code>set*Query</code> setter方法自定义存储库使用的SQL查询。在这种情况下，你需要手动配置 <code>sessionRepository</code> bean。</p>
 </div>
 <div class="paragraph">
 <p>由于各种数据库供应商之间存在差异，特别是在存储二进制数据时，请确保使用特定于数据库的SQL脚本。大多数主要数据库供应商的脚本打包为 <code>org/springframework/session/jdbc/schema-<strong>.sql</code>，
 其中 <code></strong></code> 是目标数据库类型。</p>
 </div>
 <div class="paragraph">
-<p>例如，使用PostgreSQL数据库，您将使用以下模式脚本：</p>
+<p>例如，使用PostgreSQL数据库，你将使用以下模式脚本：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2403,10 +2483,10 @@ SessionRepository&lt;? <span class="directive">extends</span> Session&gt; reposi
 <p>Java 8+</p>
 </li>
 <li>
-<p>如果您在Servlet容器（不是必需的）中运行，请使用Servlet 3.1+</p>
+<p>如果你在Servlet容器（不是必需的）中运行，请使用Servlet 3.1+</p>
 </li>
 <li>
-<p>如果您正在使用其他Spring库（不是必需的），则所需的最低版本是Spring 5.0.x.</p>
+<p>如果你正在使用其他Spring库（不是必需的），则所需的最低版本是Spring 5.0.x.</p>
 </li>
 <li>
 <p><code>@EnableRedisHttpSession</code> 需要Redis 2.8+。这是支持会话过期所必需的</p>
@@ -2446,7 +2526,7 @@ Spring的核心只有spring-jcl所需的依赖。有关在没有任何其他Spri
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-12-01 19:56:52 CST
+Last updated 2018-12-17 20:51:13 CST
 </div>
 </div>
 </body>
