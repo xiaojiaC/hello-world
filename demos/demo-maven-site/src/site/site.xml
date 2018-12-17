@@ -53,6 +53,7 @@
       <item name="Spring JPA" href="cookbook/spring-jpa.html"/>
       <item name="Spring Testing" href="cookbook/spring-test.html"/>
       <item name="Spring Boot Testing" href="cookbook/spring-boot-test.html"/>
+      <item name="Spring REST Docs" href="cookbook/spring-rest-docs.html"/>
       <item name="Springfox" href="cookbook/springfox.html"/>
     </menu>
     <!--<menu ref="reports" inherit="top" />-->

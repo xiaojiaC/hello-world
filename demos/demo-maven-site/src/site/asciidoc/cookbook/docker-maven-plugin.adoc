@@ -12,7 +12,7 @@ Version 0.21.0,2017-06-10
 
 === 运行容器
 
-使用此插件可以运行完全隔离的集成测试，因此您不需要处理共享资源。端口可以​​动态映射，并作为Maven属性提供给集成测试代码。
+使用此插件可以运行完全隔离的集成测试，因此你不需要处理共享资源。端口可以​​动态映射，并作为Maven属性提供给集成测试代码。
 
 可以一次管理多个容器，这些容器可以链接在一起或通过卷共享数据。容器是由docker创建并启动的通过<<docker:start>>目标，并使用docker进行停止和销毁通过使用<<docker：stop>>目标。
 对于集成测试，这两个目标通常分别与**pre-integration-test**和**post-integration-test**阶段相结合。建议使用__maven-failuresafe-plugin__进行集成测试，以便在测试失败时
@@ -166,7 +166,7 @@ Version 0.21.0,2017-06-10
 </plugin>
 -----
 
-当使用此插件时，您可以使用自己的包装使用专门的生命周期，以保持您的pom文件微小。有三种包装形式可供选择：
+当使用此插件时，你可以使用自己的包装使用专门的生命周期，以保持你的pom文件微小。有三种包装形式可供选择：
 
 * **docker**： 这将绑定 `docker:build` 到 `package` 阶段和 `docker:start` / `docke:stop` 分别到 `pre-` 和　`post-` 集成阶段。`docker:push` 绑定到 `deploy` 阶段。
 * **docker-build**: 很像__docker__包装，除了默认情况下没有配置集成测试。
@@ -202,7 +202,7 @@ Version 0.21.0,2017-06-10
 </pom>
 -----
 
-这将创建jar（如果有），构建Docker镜像，启动配置的Docker容器，运行集成测试，当您输入mvn install时停止配置的Docker容器。使用 `mvn deploy`，您可以另外将镜像推送到配置的Docker仓储。
+这将创建jar（如果有），构建Docker镜像，启动配置的Docker容器，运行集成测试，当你输入mvn install时停止配置的Docker容器。使用 `mvn deploy`，你可以另外将镜像推送到配置的Docker仓储。
 请注意使用自定义生命周期时必需使用 `<extensions>true</extensions>`
 
 本手册的其余部分现在将介绍如何为镜像配置插件。
@@ -375,7 +375,7 @@ Docker remote API支持通过SSL认证证书通信。该证书的路径可以由
 
 .名称的占位符
 
-指定名称时可以使用多个占位符，在运行时通过这个插件替换。此外，您还可以使用Maven本身解析的常规Maven属性。
+指定名称时可以使用多个占位符，在运行时通过这个插件替换。此外，你还可以使用Maven本身解析的常规Maven属性。
 
 .Placeholders
 |===
