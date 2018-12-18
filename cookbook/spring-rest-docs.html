@@ -612,8 +612,7 @@ $(addBlockSwitches);
 <li><a href="#getting-started-documentation-snippets">2.4. 生成文档片段</a>
 <ul class="sectlevel3">
 <li><a href="#getting-started-documentation-snippets-setup">2.4.1. 设置测试</a></li>
-<li><a href="#_在没有junit的情况下设置测试">2.4.2. 在没有JUnit的情况下设置测试</a></li>
-<li><a href="#getting-started-documentation-snippets-invoking-the-service">2.4.3. 调用RESTful服务</a></li>
+<li><a href="#getting-started-documentation-snippets-invoking-the-service">2.4.2. 调用RESTful服务</a></li>
 </ul>
 </li>
 <li><a href="#getting-started-using-the-snippets">2.5. 使用片段</a></li>
@@ -621,17 +620,106 @@ $(addBlockSwitches);
 </li>
 <li><a href="#documenting-your-api">3. 记录你的API</a>
 <ul class="sectlevel2">
-<li><a href="#documenting-your-api-hypermedia">3.1. 超媒体</a></li>
-<li><a href="#documenting-your-api-hypermedia-link-formats">3.2. 超媒体链接格式</a>
+<li><a href="#documenting-your-api-hypermedia">3.1. 超媒体</a>
 <ul class="sectlevel3">
-<li><a href="#documenting-your-api-hypermedia-ignoring-common-links">3.2.1. 忽略常见链接</a></li>
+<li><a href="#documenting-your-api-hypermedia-link-formats">3.1.1. 超媒体链接格式</a></li>
+<li><a href="#documenting-your-api-hypermedia-ignoring-common-links">3.1.2. 忽略常见链接</a></li>
 </ul>
 </li>
-<li><a href="#documenting-your-api-request-response-payloads">3.3. 请求和响应有效载荷</a>
+<li><a href="#documenting-your-api-request-response-payloads">3.2. 请求和响应有效载荷</a>
 <ul class="sectlevel3">
-<li><a href="#documenting-your-api-request-response-payloads-fields">3.3.1. 请求和响应字段</a></li>
+<li><a href="#documenting-your-api-request-response-payloads-fields">3.2.1. 请求和响应字段</a></li>
+<li><a href="#documenting-your-api-request-response-payloads-subsections">3.2.2. 记录请求或响应有效载荷的子部分</a></li>
 </ul>
 </li>
+<li><a href="#documenting-your-api-request-parameters">3.3. 请求参数</a></li>
+<li><a href="#documenting-your-api-path-parameters">3.4. 路径参数</a></li>
+<li><a href="#documenting-your-api-request-parts">3.5. 请求部分</a></li>
+<li><a href="#documenting-your-api-request-parts-payloads">3.6. 请求部分有效载荷</a>
+<ul class="sectlevel3">
+<li><a href="#documenting-your-api-request-parts-payloads-body">3.6.1. 记录请求部分的正文</a></li>
+<li><a href="#documenting-your-api-request-parts-payloads-fields">3.6.2. 记录请求部分的字段</a></li>
+</ul>
+</li>
+<li><a href="#documenting-your-api-http-headers">3.7. HTTP头</a></li>
+<li><a href="#documenting-your-api-reusing-snippets">3.8. 重用片段</a></li>
+<li><a href="#documenting-your-api-constraints">3.9. 记录约束</a>
+<ul class="sectlevel3">
+<li><a href="#documenting-your-api-constraints-finding">3.9.1. 查找约束</a></li>
+<li><a href="#documenting-your-api-constraints-describing">3.9.2. 描述约束</a></li>
+<li><a href="#_在生成的代码段中使用约束描述">3.9.3. 在生成的代码段中使用约束描述</a></li>
+</ul>
+</li>
+<li><a href="#documenting-your-api-default-snippets">3.10. 默认代码段</a></li>
+<li><a href="#documentating-your-api-parameterized-output-directories">3.11. 使用参数化输出目录</a></li>
+<li><a href="#documenting-your-api-customizing">3.12. 自定义输出</a>
+<ul class="sectlevel3">
+<li><a href="#documenting-your-api-customizing-snippets">3.12.1. 自定义生成的代码段</a></li>
+<li><a href="#documenting-your-api-customizing-including-extra-information">3.12.2. 包括额外信息</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#customizing-requests-and-responses">4. 自定义请求和响应</a>
+<ul class="sectlevel2">
+<li><a href="#customizing-requests-and-responses-preprocessors">4.1. 预处理器</a>
+<ul class="sectlevel3">
+<li><a href="#customizing-requests-and-responses-preprocessors-pretty-print">4.1.1. 漂亮的打印</a></li>
+<li><a href="#customizing-requests-and-responses-preprocessors-mask-links">4.1.2. 屏蔽链接</a></li>
+<li><a href="#customizing-requests-and-responses-preprocessors-remove-headers">4.1.3. 删除标题</a></li>
+<li><a href="#customizing-requests-and-responses-preprocessors-replace-patterns">4.1.4. 替换模式</a></li>
+<li><a href="#customizing-requests-and-responses-preprocessors-modify-request-parameters">4.1.5. 修改请求参数</a></li>
+<li><a href="#customizing-requests-and-responses-preprocessors-modify-uris">4.1.6. 修改URIs</a></li>
+<li><a href="#customizing-requests-and-responses-preprocessors-writing-your-own">4.1.7. 编写自己的预处理器</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#configuration">5. 配置</a>
+<ul class="sectlevel2">
+<li><a href="#configuration-uris">5.1. 文档化URIs</a>
+<ul class="sectlevel3">
+<li><a href="#configuration-uris-mockmvc">5.1.1. MockMvc URI自定义</a></li>
+<li><a href="#configuration-uris-rest-assured">5.1.2. REST Assured URI自定义</a></li>
+<li><a href="#configuration-uris-webtestclient">5.1.3. WebTestClient URI自定义</a></li>
+</ul>
+</li>
+<li><a href="#configuration-snippet-encoding">5.2. 片段编码</a></li>
+<li><a href="#configuration-snippet-template-format">5.3. 片段模板格式</a></li>
+<li><a href="#configuration-default-snippets">5.4. 默认代码段</a></li>
+<li><a href="#configuration-default-preprocessors">5.5. 默认操作预处理器</a></li>
+</ul>
+</li>
+<li><a href="#working-with-asciidoctor">6. 使用Asciidoctor</a>
+<ul class="sectlevel2">
+<li><a href="#working-with-asciidoctor-resources">6.1. 资源</a></li>
+<li><a href="#working-with-asciidoctor-including-snippets">6.2. 包含片段</a>
+<ul class="sectlevel3">
+<li><a href="#working-with-asciidoctor-including-snippets-operation">6.2.1. 包含操作的多个片段</a></li>
+<li><a href="#working-with-asciidoctor-including-snippets-individual">6.2.2. 包含单个片段</a></li>
+</ul>
+</li>
+<li><a href="#working-with-asciidoctor-customizing-tables">6.3. 自定义表格</a>
+<ul class="sectlevel3">
+<li><a href="#working-with-asciidoctor-customizing-tables-formatting-columns">6.3.1. 格式化列</a></li>
+<li><a href="#working-with-asciidoctor-customizing-tables-title">6.3.2. 配置标题</a></li>
+<li><a href="#working-with-asciidoctor-customizing-tables-formatting-problems">6.3.3. 避免表格格式问题</a></li>
+<li><a href="#_进一步阅读">6.3.4. 进一步阅读</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#working-with-markdown">7. 使用Markdown</a>
+<ul class="sectlevel2">
+<li><a href="#working-with-markdown-limitations">7.1. 限制</a></li>
+<li><a href="#working-with-markdown-including-snippets">7.2. 包含片段</a></li>
+</ul>
+</li>
+<li><a href="#contributing">8. 贡献</a>
+<ul class="sectlevel2">
+<li><a href="#contributing-questions">8.1. 问题</a></li>
+<li><a href="#contributing-bugs">8.2. Bugs</a></li>
+<li><a href="#contributing-enhancements">8.3. 增强功能</a></li>
 </ul>
 </li>
 </ul>
@@ -1250,9 +1338,8 @@ asciidoctor { <i class="conum" data-value="6"></i><b>(6)</b>
 <p>配置程序应用合理的默认值，并提供用于自定义配置的API。有关更多信息，请参阅<a href="#configuration">配置部分</a>。</p>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_在没有junit的情况下设置测试">2.4.2. 在没有JUnit的情况下设置测试</h4>
+<div class="sect4">
+<h5 id="_在没有junit的情况下设置测试">在没有JUnit的情况下设置测试</h5>
 <div class="paragraph">
 <p>未使用JUnit时的配置与使用时的配置大致相似。本节介绍了主要区别。 <a href="https://github.com/spring-projects/spring-restdocs/tree/v2.0.3.RELEASE/samples/testng">TestNG</a>示例说明了该方法。</p>
 </div>
@@ -1328,8 +1415,9 @@ asciidoctor { <i class="conum" data-value="6"></i><b>(6)</b>
 </div>
 </div>
 </div>
+</div>
 <div class="sect3">
-<h4 id="getting-started-documentation-snippets-invoking-the-service">2.4.3. 调用RESTful服务</h4>
+<h4 id="getting-started-documentation-snippets-invoking-the-service">2.4.2. 调用RESTful服务</h4>
 <div class="paragraph">
 <p>现在已经配置了测试框架，它可以用于调用RESTful服务并记录请求和响应。例如：</p>
 </div>
@@ -1597,11 +1685,10 @@ asciidoctor { <i class="conum" data-value="6"></i><b>(6)</b>
 <p>如果你不想记录链接，可以将其标记为已忽略。这将防止它出现在生成的片段中，同时避免上述故障。</p>
 </div>
 <div class="paragraph">
-<p>链接也可以在宽松模式下记录，任何未记录的链接都不会导致测试失败。为此，请在`org.springframework.restdocs.hypermedia.HypermediaDocumentation` 上使用 <code>relaxedLinks</code> 方法。在记录你只想关注链接子集的特定场景时，这非常有用。</p>
+<p>链接也可以在宽松模式下记录，任何未记录的链接都不会导致测试失败。为此，请在 <code>org.springframework.restdocs.hypermedia.HypermediaDocumentation</code> 上使用 <code>relaxedLinks</code> 方法。在记录你只想关注链接子集的特定场景时，这非常有用。</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="documenting-your-api-hypermedia-link-formats">3.2. 超媒体链接格式</h3>
+<div class="sect3">
+<h4 id="documenting-your-api-hypermedia-link-formats">3.1.1. 超媒体链接格式</h4>
 <div class="paragraph">
 <p>默认情况下可以理解两种链接格式：</p>
 </div>
@@ -1669,8 +1756,9 @@ asciidoctor { <i class="conum" data-value="6"></i><b>(6)</b>
 <div class="paragraph">
 <p>如果你的API以Atom或HAL以外的格式表示其链接，你可以提供自己的 <code>LinkExtractor</code> 接口实现，以从响应中提取链接。</p>
 </div>
+</div>
 <div class="sect3">
-<h4 id="documenting-your-api-hypermedia-ignoring-common-links">3.2.1. 忽略常见链接</h4>
+<h4 id="documenting-your-api-hypermedia-ignoring-common-links">3.1.2. 忽略常见链接</h4>
 <div class="paragraph">
 <p>你可能希望在概述部分中记录一次，然后在API的其他文档中忽略它们，而不是记录每个响应所共有的链接，例如使用HAL时的 <code>self</code> 和 <code>curies</code>。为此，你可以构建对<a href="#documenting-your-api-reusing-snippets">重用代码段的支持</a>，以将链接描述符添加到预先配置为忽略某些链接的代码段。例如：</p>
 </div>
@@ -1685,7 +1773,7 @@ asciidoctor { <i class="conum" data-value="6"></i><b>(6)</b>
 </div>
 </div>
 <div class="sect2">
-<h3 id="documenting-your-api-request-response-payloads">3.3. 请求和响应有效载荷</h3>
+<h3 id="documenting-your-api-request-response-payloads">3.2. 请求和响应有效载荷</h3>
 <div class="paragraph">
 <p>除了上述特定于<a href="#documenting-your-api-hypermedia">超媒体</a>的支持之外，还提供了对请求和响应有效载荷的一般文档的支持。</p>
 </div>
@@ -1693,7 +1781,7 @@ asciidoctor { <i class="conum" data-value="6"></i><b>(6)</b>
 <p>默认情况下，Spring REST Docs将自动为请求正文和响应正文生成片段。这些片段分别命名为 <code>request-body.adoc</code> 和 <code>response-body.adoc</code>。</p>
 </div>
 <div class="sect3">
-<h4 id="documenting-your-api-request-response-payloads-fields">3.3.1. 请求和响应字段</h4>
+<h4 id="documenting-your-api-request-response-payloads-fields">3.2.1. 请求和响应字段</h4>
 <div class="paragraph">
 <p>为了提供有关请求或响应有效载荷的更详细文档，提供了对有效载荷字段进行记录的支持。</p>
 </div>
@@ -2049,9 +2137,9 @@ asciidoctor { <i class="conum" data-value="6"></i><b>(6)</b>
 <div class="title">MockMvc</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java">.andDo(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">index</span><span class="delimiter">&quot;</span></span>,
-        responseFields(
-                fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">contact.email</span><span class="delimiter">&quot;</span></span>).type(JsonFieldType.STRING) <i class="conum" data-value="1"></i><b>(1)</b>
-                        .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The user's email address</span><span class="delimiter">&quot;</span></span>))));</code></pre>
+    responseFields(
+        fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">contact.email</span><span class="delimiter">&quot;</span></span>).type(JsonFieldType.STRING) <i class="conum" data-value="1"></i><b>(1)</b>
+            .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The user's email address</span><span class="delimiter">&quot;</span></span>))));</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -2084,9 +2172,9 @@ asciidoctor { <i class="conum" data-value="6"></i><b>(6)</b>
 <div class="title">REST Assured</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java">.filter(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">user</span><span class="delimiter">&quot;</span></span>, responseFields(
-        fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">contact.email</span><span class="delimiter">&quot;</span></span>)
-                .type(JsonFieldType.STRING) <i class="conum" data-value="1"></i><b>(1)</b>
-                .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The user's email address</span><span class="delimiter">&quot;</span></span>))))</code></pre>
+    fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">contact.email</span><span class="delimiter">&quot;</span></span>)
+        .type(JsonFieldType.STRING) <i class="conum" data-value="1"></i><b>(1)</b>
+        .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The user's email address</span><span class="delimiter">&quot;</span></span>))))</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -2097,8 +2185,2504 @@ asciidoctor { <i class="conum" data-value="6"></i><b>(6)</b>
 </tr>
 </table>
 </div>
+</div>
+<div class="sect4">
+<h5 id="documenting-your-api-request-response-payloads-fields-xml">XML有效载荷</h5>
+<div class="sect5">
+<h6 id="documenting-your-api-request-response-payloads-fields-xml-field-paths">XML字段路径</h6>
 <div class="paragraph">
-<p>TODO</p>
+<p>使用XPath描述XML字段路径。<code>/</code> 用于下降到子节点。</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="documenting-your-api-request-response-payloads-fields-xml-field-types">XML字段类型</h6>
+<div class="paragraph">
+<p>记录XML有效内容时，必须使用 <code>FieldDescriptor</code> 上的 <code>type(Object)</code> 方法为字段提供类型。提供的类型的 <code>toString</code> 方法的结果将在文档中使用。</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="documenting-your-api-request-response-payloads-fields-reusing-field-descriptors">重用字段描述符</h5>
+<div class="paragraph">
+<p>除了对<a href="#documenting-your-api-reusing-snippets">重用代码段</a>的一般支持之外，请求和响应代码段还允许使用路径前缀配置其他描述符。这允许一次性创建请求或响应有效载荷的重复部分的描述符，然后加以重用。</p>
+</div>
+<div class="paragraph">
+<p>考虑一个返回书籍的端点：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Pride and Prejudice</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Jane Austen</span><span class="delimiter">&quot;</span></span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>title</code> 和 <code>author</code> 的路径分别是 <code>title</code> 和 <code>author</code>。</p>
+</div>
+<div class="paragraph">
+<p>现在考虑一个返回书籍数组的端点：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">[{
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Pride and Prejudice</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Jane Austen</span><span class="delimiter">&quot;</span></span>
+},
+{
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">To Kill a Mockingbird</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Harper Lee</span><span class="delimiter">&quot;</span></span>
+}]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>title</code> 和 <code>author</code> 的路径分别是 <code>[].title</code> 和 <code>[].author</code>。单本书和书籍系列之间的唯一区别是字段的路径现在有一个 <code>[].</code> 前缀。</p>
+</div>
+<div class="paragraph">
+<p>可以创建记录书籍的描述符：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">FieldDescriptor<span class="type">[]</span> book = <span class="keyword">new</span> FieldDescriptor<span class="type">[]</span> {
+        fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Title of the book</span><span class="delimiter">&quot;</span></span>),
+        fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">author</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Author of the book</span><span class="delimiter">&quot;</span></span>) };</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>然后，它们可用于记录单本书：</p>
+</div>
+<div class="listingblock primary">
+<div class="title">MockMvc</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/books/1</span><span class="delimiter">&quot;</span></span>).accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk()).andDo(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">book</span><span class="delimiter">&quot;</span></span>, responseFields(book))); <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>使用现有描述符标记 <code>title</code> 和 <code>author</code></td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">WebTestClient</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">MockMvcWebTestClientREST Assured
+<span class="local-variable">this</span>.webTestClient.get().uri(<span class="string"><span class="delimiter">&quot;</span><span class="content">/books/1</span><span class="delimiter">&quot;</span></span>).accept(MediaType.APPLICATION_JSON)
+    .exchange().expectStatus().isOk().expectBody()
+    .consumeWith(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">book</span><span class="delimiter">&quot;</span></span>,
+        responseFields(book))); <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>使用现有描述符标记 title` 和 <code>author</code></td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">REST Assured</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">RestAssured.given(<span class="local-variable">this</span>.spec).accept(<span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>)
+    .filter(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">book</span><span class="delimiter">&quot;</span></span>, responseFields(book))) <i class="conum" data-value="1"></i><b>(1)</b>
+    .when().get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/books/1</span><span class="delimiter">&quot;</span></span>)
+    .then().assertThat().statusCode(is(<span class="integer">200</span>));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>使用现有描述符标记 title` 和 <code>author</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>记录书籍列表:</p>
+</div>
+<div class="listingblock primary">
+<div class="title">MockMvc</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/books</span><span class="delimiter">&quot;</span></span>).accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andDo(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">book</span><span class="delimiter">&quot;</span></span>,
+                responseFields(
+                        fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">[]</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">An array of books</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="1"></i><b>(1)</b>
+                                .andWithPrefix(<span class="string"><span class="delimiter">&quot;</span><span class="content">[].</span><span class="delimiter">&quot;</span></span>, book))); <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>记录数组</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>记录 <code>[].title</code> 和 <code>[].author</code> 使用前缀为 <code>[].</code> 的现有描述符。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">WebTestClient</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.webTestClient.get().uri(<span class="string"><span class="delimiter">&quot;</span><span class="content">/books</span><span class="delimiter">&quot;</span></span>).accept(MediaType.APPLICATION_JSON)
+    .exchange().expectStatus().isOk().expectBody()
+    .consumeWith(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>,
+        responseFields(
+            fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">[]</span><span class="delimiter">&quot;</span></span>)
+                .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">An array of books</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="1"></i><b>(1)</b>
+                .andWithPrefix(<span class="string"><span class="delimiter">&quot;</span><span class="content">[].</span><span class="delimiter">&quot;</span></span>, book))); <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>记录数组</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>记录 <code>[].title</code> 和 <code>[].author</code> 使用前缀为 <code>[].</code> 的现有描述符。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">REST Assured</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">RestAssured.given(<span class="local-variable">this</span>.spec).accept(<span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>)
+    .filter(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">books</span><span class="delimiter">&quot;</span></span>, responseFields(
+        fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">[]</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">An array of books</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="1"></i><b>(1)</b>
+        .andWithPrefix(<span class="string"><span class="delimiter">&quot;</span><span class="content">[].</span><span class="delimiter">&quot;</span></span>, book))) <i class="conum" data-value="2"></i><b>(2)</b>
+    .when().get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/books</span><span class="delimiter">&quot;</span></span>)
+    .then().assertThat().statusCode(is(<span class="integer">200</span>));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>记录数组</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>记录 <code>[].title</code> 和 <code>[].author</code> 使用前缀为 <code>[].</code> 的现有描述符。</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="documenting-your-api-request-response-payloads-subsections">3.2.2. 记录请求或响应有效载荷的子部分</h4>
+<div class="paragraph">
+<p>如果有效载荷很大或结构复杂，则记录有效载荷的个别部分可能很有用。REST Docs允许你通过提取并记录有效载荷的某个子部分。</p>
+</div>
+<div class="sect4">
+<h5 id="documenting-your-api-request-response-payloads-subsections-body">记录请求或响应正文的子部分</h5>
+<div class="paragraph">
+<p>考虑以下JSON响应体：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">weather</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">wind</span><span class="delimiter">&quot;</span></span>: {
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">speed</span><span class="delimiter">&quot;</span></span>: <span class="float">15.3</span>,
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">direction</span><span class="delimiter">&quot;</span></span>: <span class="float">287.0</span>
+        },
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">temperature</span><span class="delimiter">&quot;</span></span>: {
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">high</span><span class="delimiter">&quot;</span></span>: <span class="float">21.2</span>,
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">low</span><span class="delimiter">&quot;</span></span>: <span class="float">14.8</span>
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>记录 <code>temperature</code> 对象的片段可以如下产生：</p>
+</div>
+<div class="listingblock primary">
+<div class="title">MockMvc</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/locations/1</span><span class="delimiter">&quot;</span></span>).accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk()).andDo(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">location</span><span class="delimiter">&quot;</span></span>,
+                responseBody(beneathPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">weather.temperature</span><span class="delimiter">&quot;</span></span>)))); <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>生成包含响应正文子部分的片段。在 <code>org.springframework.restdocs.payload.PayloadDocumentation</code> 上使用 <code>responseBody</code> 和 <code>beneathPath</code> 静态方法。要为请求正文生成片段，可以使用 <code>requestBody</code> 替换 <code>responseBody</code>。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">WebTestClient</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.webTestClient.get().uri(<span class="string"><span class="delimiter">&quot;</span><span class="content">/locations/1</span><span class="delimiter">&quot;</span></span>).accept(MediaType.APPLICATION_JSON)
+    .exchange().expectStatus().isOk().expectBody()
+    .consumeWith(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">temperature</span><span class="delimiter">&quot;</span></span>,
+        responseBody(beneathPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">weather.temperature</span><span class="delimiter">&quot;</span></span>)))); <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>生成包含响应正文子部分的片段。在 <code>org.springframework.restdocs.payload.PayloadDocumentation</code> 上使用 <code>responseBody</code> 和`beneathPath` 静态方法。要为请求正文生成片段，可以使用 <code>requestBody</code> 替换 <code>responseBody</code>。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">REST Assured</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">RestAssured.given(<span class="local-variable">this</span>.spec).accept(<span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>)
+    .filter(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">location</span><span class="delimiter">&quot;</span></span>, responseBody(beneathPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">weather.temperature</span><span class="delimiter">&quot;</span></span>)))) <i class="conum" data-value="1"></i><b>(1)</b>
+    .when().get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/locations/1</span><span class="delimiter">&quot;</span></span>)
+    .then().assertThat().statusCode(is(<span class="integer">200</span>));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>生成包含响应正文子部分的片段。在 <code>org.springframework.restdocs.payload.PayloadDocumentation</code> 上使用 <code>responseBody</code> 和`beneathPath` 静态方法。要为请求正文生成片段，可以使用 <code>requestBody</code> 替换 <code>responseBody</code>。</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>结果生成一个包含以下内容的片段：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">temperature</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">high</span><span class="delimiter">&quot;</span></span>: <span class="float">21.2</span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">low</span><span class="delimiter">&quot;</span></span>: <span class="float">14.8</span>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>为了使代码段的名称不同，因此包含了该子部分的标识符。默认情况下，此标识符为 <code>beneath-${path}</code>。例如，上面的代码将生成一个名为 <code>response-body-beneath-weather.temperature.adoc</code> 的代码段。可以使用 <code>withSubsectionId(String)</code> 方法自定义标识符：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">responseBody(beneathPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">weather.temperature</span><span class="delimiter">&quot;</span></span>).withSubsectionId(<span class="string"><span class="delimiter">&quot;</span><span class="content">temp</span><span class="delimiter">&quot;</span></span>));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>此示例将生成名为 <code>request-body-temp.adoc</code> 的代码段。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="documenting-your-api-request-response-payloads-subsections-fields">记录请求或响应的子部分的字段</h5>
+<div class="paragraph">
+<p>除了记录请求或响应主体的子部分之外，还可以记录特定子部分中的字段。记录 <code>temperature</code> 对象（<code>high</code> 和 <code>low</code>）字段的片段可以按如下方式生成：</p>
+</div>
+<div class="listingblock primary">
+<div class="title">MockMvc</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/locations/1</span><span class="delimiter">&quot;</span></span>).accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andDo(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">location</span><span class="delimiter">&quot;</span></span>,
+                responseFields(beneathPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">weather.temperature</span><span class="delimiter">&quot;</span></span>), <i class="conum" data-value="1"></i><b>(1)</b>
+                        fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">high</span><span class="delimiter">&quot;</span></span>).description(
+                                <span class="string"><span class="delimiter">&quot;</span><span class="content">The forecast high in degrees celcius</span><span class="delimiter">&quot;</span></span>), <i class="conum" data-value="2"></i><b>(2)</b>
+                fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">low</span><span class="delimiter">&quot;</span></span>)
+                        .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The forecast low in degrees celcius</span><span class="delimiter">&quot;</span></span>))));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>生成描述 <code>weather.temperature</code> 路径下，响应有效载荷子部分中的字段的片段。在 <code>org.springframework.restdocs.payload.PayloadDocumentation</code> 上使用 <code>beneathPath</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>记录温度 <code>high</code> 和 <code>low</code> 字段。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">WebTestClient</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.webTestClient.get().uri(<span class="string"><span class="delimiter">&quot;</span><span class="content">/locations/1</span><span class="delimiter">&quot;</span></span>).accept(MediaType.APPLICATION_JSON)
+    .exchange().expectStatus().isOk().expectBody()
+    .consumeWith(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">temperature</span><span class="delimiter">&quot;</span></span>,
+        responseFields(beneathPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">weather.temperature</span><span class="delimiter">&quot;</span></span>), <i class="conum" data-value="1"></i><b>(1)</b>
+            fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">high</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The forecast high in degrees celcius</span><span class="delimiter">&quot;</span></span>), <i class="conum" data-value="2"></i><b>(2)</b>
+            fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">low</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The forecast low in degrees celcius</span><span class="delimiter">&quot;</span></span>))));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>生成描述 <code>weather.temperature</code> 路径下，响应有效载荷子部分中的字段的片段。在 <code>org.springframework.restdocs.payload.PayloadDocumentation</code> 上使用 <code>beneathPath</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>记录温度 <code>high</code> 和 <code>low</code> 字段。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">REST Assured</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">RestAssured.given(<span class="local-variable">this</span>.spec).accept(<span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>)
+    .filter(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">location</span><span class="delimiter">&quot;</span></span>, responseFields(beneathPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">weather.temperature</span><span class="delimiter">&quot;</span></span>), <i class="conum" data-value="1"></i><b>(1)</b>
+        fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">high</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The forecast high in degrees celcius</span><span class="delimiter">&quot;</span></span>), <i class="conum" data-value="2"></i><b>(2)</b>
+        fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">low</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The forecast low in degrees celcius</span><span class="delimiter">&quot;</span></span>))))
+    .when().get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/locations/1</span><span class="delimiter">&quot;</span></span>)
+    .then().assertThat().statusCode(is(<span class="integer">200</span>));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>生成描述 <code>weather.temperature</code> 路径下，响应有效载荷子部分中的字段的片段。在 <code>org.springframework.restdocs.payload.PayloadDocumentation</code> 上使用 <code>beneathPath</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>记录温度 <code>high</code> 和 <code>low</code> 字段。</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>结果生成一个片段，其中包含一个描述 <code>weather.temperature</code> 的 <code>high</code> 和 <code>low</code> 字段的表。为了使代码段的名称不同，包含该子部分的标识符。默认情况下，此标识符为 <code>beneath-${path}</code>。例如，上面的代码将生成一个名为 <code>response-fields-beneath-weather.temperature.adoc</code> 的代码段。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="documenting-your-api-request-parameters">3.3. 请求参数</h3>
+<div class="paragraph">
+<p>可以使用 <code>requestParameters</code> 记录请求的参数。请求参数可以包含在 <code>GET</code> 请求的查询字符串中。例如：</p>
+</div>
+<div class="listingblock primary">
+<div class="title">MockMvc</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/users?page=2&amp;per_page=100</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="1"></i><b>(1)</b>
+    .andExpect(status().isOk())
+    .andDo(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">users</span><span class="delimiter">&quot;</span></span>, requestParameters( <i class="conum" data-value="2"></i><b>(2)</b>
+            parameterWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">page</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The page to retrieve</span><span class="delimiter">&quot;</span></span>), <i class="conum" data-value="3"></i><b>(3)</b>
+            parameterWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">per_page</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Entries per page</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="4"></i><b>(4)</b>
+    )));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>使用查询字符串中的两个参数 <code>page</code> 和 <code>per_page</code> 执行 <code>GET</code> 请求。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>配置Spring REST Docs以生成描述请求参数的片段。在 <code>org.springframework.restdocs.request.RequestDocumentation</code> 上使用 <code>requestParameters</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>记录 <code>page</code> 参数。在 <code>org.springframework.restdocs.request.RequestDocumentation</code> 上使用 <code>parameterWithName</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>记录 <code>per_page</code> 参数。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">WebTestClient</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.webTestClient.get().uri(<span class="string"><span class="delimiter">&quot;</span><span class="content">/users?page=2&amp;per_page=100</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="1"></i><b>(1)</b>
+    .exchange().expectStatus().isOk().expectBody()
+    .consumeWith(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">users</span><span class="delimiter">&quot;</span></span>, requestParameters( <i class="conum" data-value="2"></i><b>(2)</b>
+            parameterWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">page</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The page to retrieve</span><span class="delimiter">&quot;</span></span>), <i class="conum" data-value="3"></i><b>(3)</b>
+            parameterWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">per_page</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Entries per page</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="4"></i><b>(4)</b>
+    )));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>使用查询字符串中的两个参数 <code>page</code> 和 <code>per_page</code> 执行 <code>GET</code> 请求。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>配置Spring REST Docs以生成描述请求参数的片段。在 <code>org.springframework.restdocs.request.RequestDocumentation</code> 上使用 <code>requestParameters</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>记录 <code>page</code> 参数。在 <code>org.springframework.restdocs.request.RequestDocumentation</code> 上使用 <code>parameterWithName</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>记录 <code>per_page</code> 参数。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">REST Assured</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">RestAssured.given(<span class="local-variable">this</span>.spec)
+    .filter(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">users</span><span class="delimiter">&quot;</span></span>, requestParameters( <i class="conum" data-value="1"></i><b>(1)</b>
+            parameterWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">page</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The page to retrieve</span><span class="delimiter">&quot;</span></span>), <i class="conum" data-value="2"></i><b>(2)</b>
+            parameterWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">per_page</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Entries per page</span><span class="delimiter">&quot;</span></span>)))) <i class="conum" data-value="3"></i><b>(3)</b>
+    .when().get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/users?page=2&amp;per_page=100</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="4"></i><b>(4)</b>
+    .then().assertThat().statusCode(is(<span class="integer">200</span>));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>配置Spring REST Docs以生成描述请求参数的片段。在 <code>org.springframework.restdocs.request.RequestDocumentation</code> 上使用 <code>requestParameters</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>记录 <code>page</code> 参数。在 <code>org.springframework.restdocs.request.RequestDocumentation</code> 上使用 <code>parameterWithName</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>记录 <code>per_page</code> 参数。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>使用查询字符串中的两个参数 <code>page</code> 和 <code>per_page</code> 执行 <code>GET</code> 请求。</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>请求参数也可以作为表单数据包含在 <code>POST</code> 请求的主体中：</p>
+</div>
+<div class="listingblock primary">
+<div class="title">MockMvc</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.mockMvc.perform(post(<span class="string"><span class="delimiter">&quot;</span><span class="content">/users</span><span class="delimiter">&quot;</span></span>).param(<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Tester</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="1"></i><b>(1)</b>
+    .andExpect(status().isCreated())
+    .andDo(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">create-user</span><span class="delimiter">&quot;</span></span>, requestParameters(
+            parameterWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The user's username</span><span class="delimiter">&quot;</span></span>)
+    )));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>使用单个参数 <code>username</code> 执行 <code>POST</code> 请求。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">WebTestClient</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">MultiValueMap&lt;<span class="predefined-type">String</span>, <span class="predefined-type">String</span>&gt; formData = <span class="keyword">new</span> LinkedMultiValueMap&lt;&gt;();
+formData.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Tester</span><span class="delimiter">&quot;</span></span>);
+<span class="local-variable">this</span>.webTestClient.post().uri(<span class="string"><span class="delimiter">&quot;</span><span class="content">/users</span><span class="delimiter">&quot;</span></span>).body(BodyInserters.fromFormData(formData)) <i class="conum" data-value="1"></i><b>(1)</b>
+    .exchange().expectStatus().isCreated().expectBody()
+    .consumeWith(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">create-user</span><span class="delimiter">&quot;</span></span>, requestParameters(
+        parameterWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The user's username</span><span class="delimiter">&quot;</span></span>)
+)));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>使用单个参数 <code>username</code> 执行 <code>POST</code> 请求。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">REST Assured</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">RestAssured.given(<span class="local-variable">this</span>.spec)
+    .filter(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">create-user</span><span class="delimiter">&quot;</span></span>, requestParameters(
+            parameterWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The user's username</span><span class="delimiter">&quot;</span></span>))))
+    .formParam(<span class="string"><span class="delimiter">&quot;</span><span class="content">username</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Tester</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="1"></i><b>(1)</b>
+    .when().post(<span class="string"><span class="delimiter">&quot;</span><span class="content">/users</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="2"></i><b>(2)</b>
+    .then().assertThat().statusCode(is(<span class="integer">200</span>));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>配置 <code>username</code> 参数。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>执行 <code>POST</code> 请求。</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>在这两种情况下，结果生成一个名为 <code>request-parameters.adoc</code> 的片段，其中包含一个描述资源支持的参数的表。</p>
+</div>
+<div class="paragraph">
+<p>记录请求参数时，如果请求中使用了未记录的请求参数，则测试将失败。同样，如果在请求中找不到记录的请求参数且请求参数未标记为可选，则测试也将失败。</p>
+</div>
+<div class="paragraph">
+<p>如果你不想记录请求参数，可以将其标记为已忽略。这将防止它出现在生成的片段中，同时避免上述故障。</p>
+</div>
+<div class="paragraph">
+<p>请求参数也可以在宽松模式下记录，其中任何未记录的参数都不会导致测试失败。为此，请在 <code>org.springframework.restdocs.request.RequestDocumentation</code> 上使用 <code>relaxedRequestParameters</code> 方法。在记录你只想关注的请求参数子集的特定场景时，这非常有用。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="documenting-your-api-path-parameters">3.4. 路径参数</h3>
+<div class="paragraph">
+<p>可以使用 <code>pathParameters</code> 记录请求的路径参数。例如：</p>
+</div>
+<div class="listingblock primary">
+<div class="title">MockMvc</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/locations/{latitude}/{longitude}</span><span class="delimiter">&quot;</span></span>, <span class="float">51.5072</span>, <span class="float">0.1275</span>)) <i class="conum" data-value="1"></i><b>(1)</b>
+    .andExpect(status().isOk())
+    .andDo(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">locations</span><span class="delimiter">&quot;</span></span>, pathParameters( <i class="conum" data-value="2"></i><b>(2)</b>
+            parameterWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">latitude</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The location's latitude</span><span class="delimiter">&quot;</span></span>), <i class="conum" data-value="3"></i><b>(3)</b>
+            parameterWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">longitude</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The location's longitude</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="4"></i><b>(4)</b>
+    )));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>使用两个路径参数 <code>latitude</code> 和 <code>longitude</code> 执行 <code>GET</code> 请求。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>配置Spring REST Docs以生成描述请求的路径参数的片段。在 <code>org.springframework.restdocs.request.RequestDocumentation</code> 上使用 <code>pathParameters</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>记录名为 <code>latitude</code> 的参数。在 <code>org.springframework.restdocs.request.RequestDocumentation</code> 上使用 <code>parameterWithName</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>记录名为 <code>longitude</code> 的参数。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">WebTestClient</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.webTestClient.get().uri(<span class="string"><span class="delimiter">&quot;</span><span class="content">/locations/{latitude}/{longitude}</span><span class="delimiter">&quot;</span></span>, <span class="float">51.5072</span>, <span class="float">0.1275</span>) <i class="conum" data-value="1"></i><b>(1)</b>
+    .exchange().expectStatus().isOk().expectBody()
+    .consumeWith(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">locations</span><span class="delimiter">&quot;</span></span>,
+        pathParameters( <i class="conum" data-value="2"></i><b>(2)</b>
+            parameterWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">latitude</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The location's latitude</span><span class="delimiter">&quot;</span></span>), <i class="conum" data-value="3"></i><b>(3)</b>
+            parameterWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">longitude</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The location's longitude</span><span class="delimiter">&quot;</span></span>)))); <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>使用两个路径参数 <code>latitude</code> 和 <code>longitude</code> 执行 <code>GET</code> 请求。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>配置Spring REST Docs以生成描述请求的路径参数的片段。在 <code>org.springframework.restdocs.request.RequestDocumentation</code> 上使用 <code>pathParameters</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>记录名为 <code>latitude</code> 的参数。在 <code>org.springframework.restdocs.request.RequestDocumentation</code> 上使用 <code>parameterWithName</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>记录名为 <code>longitude</code> 的参数。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">REST Assured</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">RestAssured.given(<span class="local-variable">this</span>.spec)
+    .filter(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">locations</span><span class="delimiter">&quot;</span></span>, pathParameters( <i class="conum" data-value="1"></i><b>(1)</b>
+            parameterWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">latitude</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The location's latitude</span><span class="delimiter">&quot;</span></span>), <i class="conum" data-value="2"></i><b>(2)</b>
+            parameterWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">longitude</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The location's longitude</span><span class="delimiter">&quot;</span></span>)))) <i class="conum" data-value="3"></i><b>(3)</b>
+    .when().get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/locations/{latitude}/{longitude}</span><span class="delimiter">&quot;</span></span>, <span class="float">51.5072</span>, <span class="float">0.1275</span>) <i class="conum" data-value="4"></i><b>(4)</b>
+    .then().assertThat().statusCode(is(<span class="integer">200</span>));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>配置Spring REST Docs以生成描述请求的路径参数的片段。在 <code>org.springframework.restdocs.request.RequestDocumentation</code> 上使用 <code>pathParameters</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>记录名为 <code>latitude</code> 的参数。在 <code>org.springframework.restdocs.request.RequestDocumentation</code> 上使用 <code>parameterWithName</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>记录名为 <code>longitude</code> 的参数。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>使用两个路径参数 <code>latitude</code> 和 <code>longitude</code> 执行 <code>GET</code> 请求。</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>结果生成一个名为 <code>path-parameters.adoc</code> 的片段，其中包含一个描述资源支持的路径参数的表。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+如果你正在使用MockMvc，那么为了使路径参数可用于文档，必须使用 <code>RestDocumentationRequestBuilders</code> 而不是用 <code>MockMvcRequestBuilders</code> 上的方法之一构建请求。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>记录路径参数时，如果请求中使用了未记录的路径参数，则测试将失败。同样，如果在请求中找不到记录的路径参数且路径参数未标记为可选，则测试也将失败。</p>
+</div>
+<div class="paragraph">
+<p>路径参数也可以在宽松模式下记录，其中任何未记录的参数都不会导致测试失败。为此，请在  <code>org.springframework.restdocs.request.RequestDocumentation</code> 上使用 <code>relaxedPathParameters</code> 方法。在记录你只想关注的路径参数子集的特定场景时，这非常有用。</p>
+</div>
+<div class="paragraph">
+<p>如果你不想记录路径参数，可以将其标记为已忽略。这将防止它出现在生成的片段中，同时避免上述故障。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="documenting-your-api-request-parts">3.5. 请求部分</h3>
+<div class="paragraph">
+<p>multipart请求的部分可以使用 <code>requestParts</code> 进行记录。例如：</p>
+</div>
+<div class="listingblock primary">
+<div class="title">MockMvc</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.mockMvc.perform(multipart(<span class="string"><span class="delimiter">&quot;</span><span class="content">/upload</span><span class="delimiter">&quot;</span></span>).file(<span class="string"><span class="delimiter">&quot;</span><span class="content">file</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">example</span><span class="delimiter">&quot;</span></span>.getBytes())) <i class="conum" data-value="1"></i><b>(1)</b>
+    .andExpect(status().isOk())
+    .andDo(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">upload</span><span class="delimiter">&quot;</span></span>, requestParts( <i class="conum" data-value="2"></i><b>(2)</b>
+            partWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">file</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The file to upload</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="3"></i><b>(3)</b>
+));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>使用名为 <code>file</code> 的单个部件执行 <code>POST</code> 请求。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>配置Spring REST Docs以生成描述请求部分的片段。在 <code>org.springframework.restdocs.request.RequestDocumentation</code> 上使用 <code>requestParts</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>记录名为 <code>file</code> 的部分。在 <code>org.springframework.restdocs.request.RequestDocumentation</code> 上使用 <code>partWithName</code> 静态方法。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">WebTestClient</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">MultiValueMap&lt;<span class="predefined-type">String</span>, <span class="predefined-type">Object</span>&gt; multipartData = <span class="keyword">new</span> LinkedMultiValueMap&lt;&gt;();
+multipartData.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">file</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">example</span><span class="delimiter">&quot;</span></span>.getBytes());
+<span class="local-variable">this</span>.webTestClient.post().uri(<span class="string"><span class="delimiter">&quot;</span><span class="content">/upload</span><span class="delimiter">&quot;</span></span>).body(BodyInserters.fromMultipartData(multipartData)) <i class="conum" data-value="1"></i><b>(1)</b>
+    .exchange().expectStatus().isOk().expectBody()
+    .consumeWith(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">upload</span><span class="delimiter">&quot;</span></span>, requestParts( <i class="conum" data-value="2"></i><b>(2)</b>
+        partWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">file</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The file to upload</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="3"></i><b>(3)</b>
+));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>使用名为 <code>file</code> 的单个部件执行 <code>POST</code> 请求。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>配置Spring REST Docs以生成描述请求部分的片段。在 <code>org.springframework.restdocs.request.RequestDocumentation</code> 上使用 <code>requestParts</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>记录名为 <code>file</code> 的部分。在 <code>org.springframework.restdocs.request.RequestDocumentation</code> 上使用 <code>partWithName</code> 静态方法。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">REST Assured</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">RestAssured.given(<span class="local-variable">this</span>.spec)
+    .filter(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">users</span><span class="delimiter">&quot;</span></span>, requestParts( <i class="conum" data-value="1"></i><b>(1)</b>
+            partWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">file</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The file to upload</span><span class="delimiter">&quot;</span></span>)))) <i class="conum" data-value="2"></i><b>(2)</b>
+    .multiPart(<span class="string"><span class="delimiter">&quot;</span><span class="content">file</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">example</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="3"></i><b>(3)</b>
+    .when().post(<span class="string"><span class="delimiter">&quot;</span><span class="content">/upload</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="4"></i><b>(4)</b>
+    .then().statusCode(is(<span class="integer">200</span>));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>配置Spring REST Docs以生成描述请求部分的片段。在 <code>org.springframework.restdocs.request.RequestDocumentation</code> 上使用 <code>requestParts</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>记录名为 <code>file</code> 的部分。在 <code>org.springframework.restdocs.request.RequestDocumentation</code> 上使用 <code>partWithName</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>使用名为 <code>file</code> 的部件配置请求。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>执行 <code>POST</code> 请求 <code>/upload</code>。</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>结果生成一个名为 <code>request-parts.adoc</code> 的片段，其中包含一个描述资源支持的请求部分的表。</p>
+</div>
+<div class="paragraph">
+<p>记录请求部件时，如果请求中使用了未记录的部件，则测试将失败。同样，如果在请求中找不到记录的部件且部件未标记为可选，则测试也将失败。</p>
+</div>
+<div class="paragraph">
+<p>请求部件也可以用宽松模式记录，任何未记录的部件都不会导致测试失败。为此，请在 <code>org.springframework.restdocs.request.RequestDocumentation</code> 上使用 <code>relaxedRequestParts</code> 方法。在记录你只想关注请求部分的子集的特定场景时，这非常有用。</p>
+</div>
+<div class="paragraph">
+<p>如果你不想记录请求部分，可以将其标记为已忽略。这将防止它出现在生成的片段中，同时避免上述故障。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="documenting-your-api-request-parts-payloads">3.6. 请求部分有效载荷</h3>
+<div class="paragraph">
+<p>请求部分的有效载荷可以与<a href="#documenting-your-api-request-response-payloads">请求的有效载荷</a>大致相同的方式记录，并支持记录请求部分的主体及其字段。</p>
+</div>
+<div class="sect3">
+<h4 id="documenting-your-api-request-parts-payloads-body">3.6.1. 记录请求部分的正文</h4>
+<div class="paragraph">
+<p>可以生成包含请求部分正文的片段：</p>
+</div>
+<div class="listingblock primary">
+<div class="title">MockMvc</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">MockMultipartFile image = <span class="keyword">new</span> MockMultipartFile(<span class="string"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">image.png</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">image/png</span><span class="delimiter">&quot;</span></span>,
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;&lt;png data&gt;&gt;</span><span class="delimiter">&quot;</span></span>.getBytes());
+MockMultipartFile metadata = <span class="keyword">new</span> MockMultipartFile(<span class="string"><span class="delimiter">&quot;</span><span class="content">metadata</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>,
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">{ </span><span class="char">\&quot;</span><span class="content">version</span><span class="char">\&quot;</span><span class="content">: </span><span class="char">\&quot;</span><span class="content">1.0</span><span class="char">\&quot;</span><span class="content">}</span><span class="delimiter">&quot;</span></span>.getBytes());
+
+<span class="local-variable">this</span>.mockMvc.perform(fileUpload(<span class="string"><span class="delimiter">&quot;</span><span class="content">/images</span><span class="delimiter">&quot;</span></span>).file(image).file(metadata)
+            .accept(MediaType.APPLICATION_JSON))
+    .andExpect(status().isOk())
+    .andDo(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">image-upload</span><span class="delimiter">&quot;</span></span>, requestPartBody(<span class="string"><span class="delimiter">&quot;</span><span class="content">metadata</span><span class="delimiter">&quot;</span></span>))); <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>配置Spring REST Docs以生成包含名为 <code>metadata</code> 的请求部分的主体的片段。在 <code>PayloadDocumentation</code> 上使用 <code>requestPartBody</code> 静态方法。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">WebTestClient</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">MultiValueMap&lt;<span class="predefined-type">String</span>, <span class="predefined-type">Object</span>&gt; multipartData = <span class="keyword">new</span> LinkedMultiValueMap&lt;&gt;();
+Resource imageResource = <span class="keyword">new</span> ByteArrayResource(<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;&lt;png data&gt;&gt;</span><span class="delimiter">&quot;</span></span>.getBytes()) {
+
+    <span class="annotation">@Override</span>
+    <span class="directive">public</span> <span class="predefined-type">String</span> getFilename() {
+        <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">image.png</span><span class="delimiter">&quot;</span></span>;
+    }
+
+};
+multipartData.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>, imageResource);
+multipartData.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">metadata</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Collections</span>.singletonMap(<span class="string"><span class="delimiter">&quot;</span><span class="content">version</span><span class="delimiter">&quot;</span></span>,  <span class="string"><span class="delimiter">&quot;</span><span class="content">1.0</span><span class="delimiter">&quot;</span></span>));
+
+<span class="local-variable">this</span>.webTestClient.post().uri(<span class="string"><span class="delimiter">&quot;</span><span class="content">/images</span><span class="delimiter">&quot;</span></span>).body(BodyInserters.fromMultipartData(multipartData))
+    .accept(MediaType.APPLICATION_JSON).exchange()
+    .expectStatus().isOk().expectBody()
+    .consumeWith(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">image-upload</span><span class="delimiter">&quot;</span></span>,
+            requestPartBody(<span class="string"><span class="delimiter">&quot;</span><span class="content">metadata</span><span class="delimiter">&quot;</span></span>))); <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>配置Spring REST Docs以生成包含名为 <code>metadata</code> 的请求部分的主体的片段。在 <code>PayloadDocumentation</code> 上使用 <code>requestPartBody</code> 静态方法。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">REST Assured</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Map</span>&lt;<span class="predefined-type">String</span>, <span class="predefined-type">String</span>&gt; metadata = <span class="keyword">new</span> <span class="predefined-type">HashMap</span>&lt;&gt;();
+metadata.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">version</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">1.0</span><span class="delimiter">&quot;</span></span>);
+RestAssured.given(<span class="local-variable">this</span>.spec).accept(<span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>)
+    .filter(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">image-upload</span><span class="delimiter">&quot;</span></span>, requestPartBody(<span class="string"><span class="delimiter">&quot;</span><span class="content">metadata</span><span class="delimiter">&quot;</span></span>))) <i class="conum" data-value="1"></i><b>(1)</b>
+    .when().multiPart(<span class="string"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> <span class="predefined-type">File</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">image.png</span><span class="delimiter">&quot;</span></span>), <span class="string"><span class="delimiter">&quot;</span><span class="content">image/png</span><span class="delimiter">&quot;</span></span>)
+            .multiPart(<span class="string"><span class="delimiter">&quot;</span><span class="content">metadata</span><span class="delimiter">&quot;</span></span>, metadata).post(<span class="string"><span class="delimiter">&quot;</span><span class="content">images</span><span class="delimiter">&quot;</span></span>)
+    .then().assertThat().statusCode(is(<span class="integer">200</span>));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>配置Spring REST Docs以生成包含名为 <code>metadata</code> 的请求部分的主体的片段。在 <code>PayloadDocumentation</code> 上使用 <code>requestPartBody</code> 静态方法。</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>结果生成一个 <code>request-part-${part-name}-body.adoc</code> 片段，其中包含部件的主体。例如，记录名为 <code>metadata</code> 的部件将生成名为 <code>request-part-metadata-body.adoc</code> 的代码段。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="documenting-your-api-request-parts-payloads-fields">3.6.2. 记录请求部分的字段</h4>
+<div class="paragraph">
+<p>请求部分的字段可以与<a href="#documenting-your-api-request-response-payloads-fields">请求或响应的字段</a>大致相同的方式记录：</p>
+</div>
+<div class="listingblock primary">
+<div class="title">MockMvc</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">MockMultipartFile image = <span class="keyword">new</span> MockMultipartFile(<span class="string"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">image.png</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">image/png</span><span class="delimiter">&quot;</span></span>,
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;&lt;png data&gt;&gt;</span><span class="delimiter">&quot;</span></span>.getBytes());
+MockMultipartFile metadata = <span class="keyword">new</span> MockMultipartFile(<span class="string"><span class="delimiter">&quot;</span><span class="content">metadata</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>,
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">{ </span><span class="char">\&quot;</span><span class="content">version</span><span class="char">\&quot;</span><span class="content">: </span><span class="char">\&quot;</span><span class="content">1.0</span><span class="char">\&quot;</span><span class="content">}</span><span class="delimiter">&quot;</span></span>.getBytes());
+
+<span class="local-variable">this</span>.mockMvc.perform(fileUpload(<span class="string"><span class="delimiter">&quot;</span><span class="content">/images</span><span class="delimiter">&quot;</span></span>).file(image).file(metadata)
+            .accept(MediaType.APPLICATION_JSON))
+    .andExpect(status().isOk())
+    .andDo(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">image-upload</span><span class="delimiter">&quot;</span></span>, requestPartFields(<span class="string"><span class="delimiter">&quot;</span><span class="content">metadata</span><span class="delimiter">&quot;</span></span>, <i class="conum" data-value="1"></i><b>(1)</b>
+            fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">version</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The version of the image</span><span class="delimiter">&quot;</span></span>)))); <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>配置Spring REST Docs以生成描述名为 <code>metadata</code> 的请求部分有效载荷中的字段的片段。在 ·PayloadDocumentation· 上使用 <code>requestPartFields</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>期望具有路径 <code>fieldWithPath</code> 的字段。在 <code>org.springframework.restdocs.payload.PayloadDocumentation</code> 上使用 <code>fieldWithPath</code> 静态方法。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">WebTestClient</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">MultiValueMap&lt;<span class="predefined-type">String</span>, <span class="predefined-type">Object</span>&gt; multipartData = <span class="keyword">new</span> LinkedMultiValueMap&lt;&gt;();
+Resource imageResource = <span class="keyword">new</span> ByteArrayResource(<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;&lt;png data&gt;&gt;</span><span class="delimiter">&quot;</span></span>.getBytes()) {
+
+    <span class="annotation">@Override</span>
+    <span class="directive">public</span> <span class="predefined-type">String</span> getFilename() {
+        <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">image.png</span><span class="delimiter">&quot;</span></span>;
+    }
+
+};
+multipartData.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>, imageResource);
+multipartData.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">metadata</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Collections</span>.singletonMap(<span class="string"><span class="delimiter">&quot;</span><span class="content">version</span><span class="delimiter">&quot;</span></span>,  <span class="string"><span class="delimiter">&quot;</span><span class="content">1.0</span><span class="delimiter">&quot;</span></span>));
+<span class="local-variable">this</span>.webTestClient.post().uri(<span class="string"><span class="delimiter">&quot;</span><span class="content">/images</span><span class="delimiter">&quot;</span></span>).body(BodyInserters.fromMultipartData(multipartData))
+    .accept(MediaType.APPLICATION_JSON).exchange()
+    .expectStatus().isOk().expectBody()
+    .consumeWith(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">image-upload</span><span class="delimiter">&quot;</span></span>,
+        requestPartFields(<span class="string"><span class="delimiter">&quot;</span><span class="content">metadata</span><span class="delimiter">&quot;</span></span>, <i class="conum" data-value="1"></i><b>(1)</b>
+            fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">version</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The version of the image</span><span class="delimiter">&quot;</span></span>)))); <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>配置Spring REST Docs以生成描述名为 <code>metadata</code> 的请求部分有效载荷中的字段的片段。在 ·PayloadDocumentation· 上使用 <code>requestPartFields</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>期望具有路径 <code>fieldWithPath</code> 的字段。在 <code>org.springframework.restdocs.payload.PayloadDocumentation</code> 上使用 <code>fieldWithPath</code> 静态方法。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">REST Assured</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Map</span>&lt;<span class="predefined-type">String</span>, <span class="predefined-type">String</span>&gt; metadata = <span class="keyword">new</span> <span class="predefined-type">HashMap</span>&lt;&gt;();
+metadata.put(<span class="string"><span class="delimiter">&quot;</span><span class="content">version</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">1.0</span><span class="delimiter">&quot;</span></span>);
+RestAssured.given(<span class="local-variable">this</span>.spec).accept(<span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>)
+    .filter(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">image-upload</span><span class="delimiter">&quot;</span></span>, requestPartFields(<span class="string"><span class="delimiter">&quot;</span><span class="content">metadata</span><span class="delimiter">&quot;</span></span>, <i class="conum" data-value="1"></i><b>(1)</b>
+            fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">version</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The version of the image</span><span class="delimiter">&quot;</span></span>)))) <i class="conum" data-value="2"></i><b>(2)</b>
+    .when().multiPart(<span class="string"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> <span class="predefined-type">File</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">image.png</span><span class="delimiter">&quot;</span></span>), <span class="string"><span class="delimiter">&quot;</span><span class="content">image/png</span><span class="delimiter">&quot;</span></span>)
+            .multiPart(<span class="string"><span class="delimiter">&quot;</span><span class="content">metadata</span><span class="delimiter">&quot;</span></span>, metadata).post(<span class="string"><span class="delimiter">&quot;</span><span class="content">images</span><span class="delimiter">&quot;</span></span>)
+    .then().assertThat().statusCode(is(<span class="integer">200</span>));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>配置Spring REST Docs以生成描述名为 <code>metadata</code> 的请求部分有效载荷中的字段的片段。在 ·PayloadDocumentation· 上使用 <code>requestPartFields</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>期望具有路径 <code>fieldWithPath</code> 的字段。在 <code>org.springframework.restdocs.payload.PayloadDocumentation</code> 上使用 <code>fieldWithPath</code> 静态方法。</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>结果是一个片段，其中包含一个描述部件字段的表。此代码段名为 <code>request-part-${part-name}-fields.adoc</code>。例如，记录名为 <code>metadata</code> 的部件将生成名为 <code>request-part-metadata-fields.adoc</code> 的代码段。</p>
+</div>
+<div class="paragraph">
+<p>记录字段时，如果在部件的有效载荷中找到未记录的字段，则测试将失败。同样，如果在部件的有效载荷中找不到文档字段且该字段未标记为可选，则测试也将失败。对于具有分层结构的有效载荷，记录上级字段会使其所有后代也被视为已记录。</p>
+</div>
+<div class="paragraph">
+<p>如果你不想记录字段，可以将其标记为已忽略。这将防止它出现在生成的片段中，同时避免上述故障。</p>
+</div>
+<div class="paragraph">
+<p>字段也可以在宽松模式下记录，其中任何未记录的字段都不会导致测试失败。为此，请在 <code>org.springframework.restdocs.payload.PayloadDocumentation</code> 上使用 <code>relaxedRequestPartFields</code> 方法。在记录你只想关注部件的有效载荷子集的特定场景时，这非常有用。</p>
+</div>
+<div class="paragraph">
+<p>有关描述字段，记录使用XML的有效载荷等的更多信息，请参阅有关<a href="#documenting-your-api-request-response-payloads">记录请求和响应有载荷载</a>的部分。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="documenting-your-api-http-headers">3.7. HTTP头</h3>
+<div class="paragraph">
+<p>可以使用 <code>requestHeaders</code> 和 <code>responseHeaders</code> 分别记录请求或响应头。例如：</p>
+</div>
+<div class="listingblock primary">
+<div class="title">MockMvc</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.mockMvc
+    .perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/people</span><span class="delimiter">&quot;</span></span>).header(<span class="string"><span class="delimiter">&quot;</span><span class="content">Authorization</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Basic dXNlcjpzZWNyZXQ=</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="1"></i><b>(1)</b>
+    .andExpect(status().isOk())
+    .andDo(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">headers</span><span class="delimiter">&quot;</span></span>,
+            requestHeaders( <i class="conum" data-value="2"></i><b>(2)</b>
+                    headerWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">Authorization</span><span class="delimiter">&quot;</span></span>).description(
+                            <span class="string"><span class="delimiter">&quot;</span><span class="content">Basic auth credentials</span><span class="delimiter">&quot;</span></span>)), <i class="conum" data-value="3"></i><b>(3)</b>
+            responseHeaders( <i class="conum" data-value="4"></i><b>(4)</b>
+                    headerWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">X-RateLimit-Limit</span><span class="delimiter">&quot;</span></span>).description(
+                            <span class="string"><span class="delimiter">&quot;</span><span class="content">The total number of requests permitted per period</span><span class="delimiter">&quot;</span></span>),
+                    headerWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">X-RateLimit-Remaining</span><span class="delimiter">&quot;</span></span>).description(
+                            <span class="string"><span class="delimiter">&quot;</span><span class="content">Remaining requests permitted in current period</span><span class="delimiter">&quot;</span></span>),
+                    headerWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">X-RateLimit-Reset</span><span class="delimiter">&quot;</span></span>).description(
+                            <span class="string"><span class="delimiter">&quot;</span><span class="content">Time at which the rate limit period will reset</span><span class="delimiter">&quot;</span></span>))));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>使用使用基本身份验证的 <code>Authorization</code> 标头执行 <code>GET</code> 请求</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>配置Spring REST Docs以生成描述请求头的代码段。在 <code>org.springframework.restdocs.headers.HeaderDocumentation</code> 上使用 <code>requestHeaders</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>记录授权头。在 <code>org.springframework.restdocs.headers.HeaderDocumentation</code> 上使用 <code>headerWithName</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>生成描述响应头的片段。在 <code>org.springframework.restdocs.headers.HeaderDocumentation</code> 上使用 <code>responseHeaders</code> 静态方法。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">WebTestClient</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.webTestClient
+    .get().uri(<span class="string"><span class="delimiter">&quot;</span><span class="content">/people</span><span class="delimiter">&quot;</span></span>).header(<span class="string"><span class="delimiter">&quot;</span><span class="content">Authorization</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Basic dXNlcjpzZWNyZXQ=</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="1"></i><b>(1)</b>
+    .exchange().expectStatus().isOk().expectBody()
+    .consumeWith(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">headers</span><span class="delimiter">&quot;</span></span>,
+        requestHeaders( <i class="conum" data-value="2"></i><b>(2)</b>
+            headerWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">Authorization</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Basic auth credentials</span><span class="delimiter">&quot;</span></span>)), <i class="conum" data-value="3"></i><b>(3)</b>
+        responseHeaders( <i class="conum" data-value="4"></i><b>(4)</b>
+            headerWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">X-RateLimit-Limit</span><span class="delimiter">&quot;</span></span>)
+                .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The total number of requests permitted per period</span><span class="delimiter">&quot;</span></span>),
+            headerWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">X-RateLimit-Remaining</span><span class="delimiter">&quot;</span></span>)
+                .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Remaining requests permitted in current period</span><span class="delimiter">&quot;</span></span>),
+            headerWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">X-RateLimit-Reset</span><span class="delimiter">&quot;</span></span>)
+                .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Time at which the rate limit period will reset</span><span class="delimiter">&quot;</span></span>))));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>使用使用基本身份验证的 <code>Authorization</code> 标头执行 <code>GET</code> 请求</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>配置Spring REST Docs以生成描述请求头的代码段。在 <code>org.springframework.restdocs.headers.HeaderDocumentation</code> 上使用 <code>requestHeaders</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>记录授权头。在 <code>org.springframework.restdocs.headers.HeaderDocumentation</code> 上使用 <code>headerWithName</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>生成描述响应头的片段。在 <code>org.springframework.restdocs.headers.HeaderDocumentation</code> 上使用 <code>responseHeaders</code> 静态方法。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">REST Assured</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">RestAssured.given(<span class="local-variable">this</span>.spec)
+    .filter(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">headers</span><span class="delimiter">&quot;</span></span>,
+            requestHeaders( <i class="conum" data-value="1"></i><b>(1)</b>
+                    headerWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">Authorization</span><span class="delimiter">&quot;</span></span>).description(
+                            <span class="string"><span class="delimiter">&quot;</span><span class="content">Basic auth credentials</span><span class="delimiter">&quot;</span></span>)), <i class="conum" data-value="2"></i><b>(2)</b>
+            responseHeaders( <i class="conum" data-value="3"></i><b>(3)</b>
+                    headerWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">X-RateLimit-Limit</span><span class="delimiter">&quot;</span></span>).description(
+                            <span class="string"><span class="delimiter">&quot;</span><span class="content">The total number of requests permitted per period</span><span class="delimiter">&quot;</span></span>),
+                    headerWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">X-RateLimit-Remaining</span><span class="delimiter">&quot;</span></span>).description(
+                            <span class="string"><span class="delimiter">&quot;</span><span class="content">Remaining requests permitted in current period</span><span class="delimiter">&quot;</span></span>),
+                    headerWithName(<span class="string"><span class="delimiter">&quot;</span><span class="content">X-RateLimit-Reset</span><span class="delimiter">&quot;</span></span>).description(
+                            <span class="string"><span class="delimiter">&quot;</span><span class="content">Time at which the rate limit period will reset</span><span class="delimiter">&quot;</span></span>))))
+    .header(<span class="string"><span class="delimiter">&quot;</span><span class="content">Authroization</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Basic dXNlcjpzZWNyZXQ=</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="4"></i><b>(4)</b>
+    .when().get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/people</span><span class="delimiter">&quot;</span></span>)
+    .then().assertThat().statusCode(is(<span class="integer">200</span>));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>配置Spring REST Docs以生成描述请求头的代码段。在 <code>org.springframework.restdocs.headers.HeaderDocumentation</code> 上使用 <code>requestHeaders</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>记录授权头。在 <code>org.springframework.restdocs.headers.HeaderDocumentation</code> 上使用 <code>headerWithName</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>生成描述响应头的片段。在 <code>org.springframework.restdocs.headers.HeaderDocumentation</code> 上使用 <code>responseHeaders</code> 静态方法。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>使用使用基本身份验证的 <code>Authorization</code> 标头执行 <code>GET</code> 请求</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>结果生成一个名为 <code>request-headers.adoc</code> 的片段和一个名为 <code>response-headers.adoc</code> 的片段。每个都包含一个描述标头的表。</p>
+</div>
+<div class="paragraph">
+<p>记录HTTP头时，如果在请求或响应中找不到记录的标头，则测试将失败。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="documenting-your-api-reusing-snippets">3.8. 重用片段</h3>
+<div class="paragraph">
+<p>对于记录的API来说，通常会有一些在其多个资源中都很常见的功能。为了避免在记录此类资源时重复，可以重用使用公共元素配置的 <code>Snippet</code>。</p>
+</div>
+<div class="paragraph">
+<p>首先，创建描述公共元素的 <code>Snippet</code>。例如：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">protected</span> <span class="directive">final</span> LinksSnippet pagingLinks = links(
+        linkWithRel(<span class="string"><span class="delimiter">&quot;</span><span class="content">first</span><span class="delimiter">&quot;</span></span>).optional().description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The first page of results</span><span class="delimiter">&quot;</span></span>),
+        linkWithRel(<span class="string"><span class="delimiter">&quot;</span><span class="content">last</span><span class="delimiter">&quot;</span></span>).optional().description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The last page of results</span><span class="delimiter">&quot;</span></span>),
+        linkWithRel(<span class="string"><span class="delimiter">&quot;</span><span class="content">next</span><span class="delimiter">&quot;</span></span>).optional().description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The next page of results</span><span class="delimiter">&quot;</span></span>),
+        linkWithRel(<span class="string"><span class="delimiter">&quot;</span><span class="content">prev</span><span class="delimiter">&quot;</span></span>).optional().description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The previous page of results</span><span class="delimiter">&quot;</span></span>));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>其次，使用此代码段并添加特定于资源的其他描述符。例如：</p>
+</div>
+<div class="listingblock primary">
+<div class="title">MockMvc</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>).accept(MediaType.APPLICATION_JSON))
+    .andExpect(status().isOk())
+    .andDo(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">example</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.pagingLinks.and( <i class="conum" data-value="1"></i><b>(1)</b>
+            linkWithRel(<span class="string"><span class="delimiter">&quot;</span><span class="content">alpha</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Link to the alpha resource</span><span class="delimiter">&quot;</span></span>),
+            linkWithRel(<span class="string"><span class="delimiter">&quot;</span><span class="content">bravo</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Link to the bravo resource</span><span class="delimiter">&quot;</span></span>))));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>重用 <code>pagingLinks</code> <code>Snippet</code> 调用并添加特定于正在记录的资源的描述符。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">WebTestClient</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.webTestClient.get().uri(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>).accept(MediaType.APPLICATION_JSON).exchange()
+    .expectStatus().isOk().expectBody()
+    .consumeWith(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">example</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.pagingLinks.and( <i class="conum" data-value="1"></i><b>(1)</b>
+        linkWithRel(<span class="string"><span class="delimiter">&quot;</span><span class="content">alpha</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Link to the alpha resource</span><span class="delimiter">&quot;</span></span>),
+        linkWithRel(<span class="string"><span class="delimiter">&quot;</span><span class="content">bravo</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Link to the bravo resource</span><span class="delimiter">&quot;</span></span>))));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>重用 <code>pagingLinks</code> <code>Snippet</code> 调用并添加特定于正在记录的资源的描述符。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">REST Assured</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">RestAssured.given(<span class="local-variable">this</span>.spec)
+    .accept(<span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>)
+    .filter(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">example</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.pagingLinks.and( <i class="conum" data-value="1"></i><b>(1)</b>
+            linkWithRel(<span class="string"><span class="delimiter">&quot;</span><span class="content">alpha</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Link to the alpha resource</span><span class="delimiter">&quot;</span></span>),
+            linkWithRel(<span class="string"><span class="delimiter">&quot;</span><span class="content">bravo</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Link to the bravo resource</span><span class="delimiter">&quot;</span></span>))))
+    .get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>).then().assertThat().statusCode(is(<span class="integer">200</span>));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>重用 <code>pagingLinks</code> <code>Snippet</code> 调用并添加特定于正在记录的资源的描述符。</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>该示例的结果是，<code>first</code>，<code>last</code>，<code>next</code>，<code>previous</code>，<code>alpha</code> 和 <code>bravo</code> 的链接都记录在案。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="documenting-your-api-constraints">3.9. 记录约束</h3>
+<div class="paragraph">
+<p>Spring REST Docs提供了许多可以帮助你记录约束的类。<code>ConstraintDescriptions</code> 的实例可用于访问类约束的描述消息。例如：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">void</span> example() {
+    ConstraintDescriptions userConstraints = <span class="keyword">new</span> ConstraintDescriptions(UserInput.class); <i class="conum" data-value="1"></i><b>(1)</b>
+    <span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; descriptions = userConstraints.descriptionsForProperty(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>); <i class="conum" data-value="2"></i><b>(2)</b>
+}
+
+<span class="directive">static</span> <span class="type">class</span> <span class="class">UserInput</span> {
+
+    <span class="annotation">@NotNull</span>
+    <span class="annotation">@Size</span>(min = <span class="integer">1</span>)
+    <span class="predefined-type">String</span> name;
+
+    <span class="annotation">@NotNull</span>
+    <span class="annotation">@Size</span>(min = <span class="integer">8</span>)
+    <span class="predefined-type">String</span> password;
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>为 <code>UserInput</code> 类创建 <code>ConstraintDescriptions</code> 的实例</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>获取 <code>name</code> 属性约束的描述。将得到两个描述，一个用于 <code>NotNull</code> 的约束，一个用于 <code>Size</code> 的约束。</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Spring HATEOAS示例中的 <a href="https://github.com/spring-projects/spring-restdocs/tree/v2.0.3.RELEASE/samples/rest-notes-spring-hateoas/src/test/java/com/example/notes/ApiDocumentation.java"><code>ApiDocumentation</code></a>类显示了此功能的实际应用。</p>
+</div>
+<div class="sect3">
+<h4 id="documenting-your-api-constraints-finding">3.9.1. 查找约束</h4>
+<div class="paragraph">
+<p>默认情况下，使用Bean Validation <code>Validator</code> 查找约束。目前，仅支持属性约束。你可以通过使用自定义 <code>ValidatorConstraintResolver</code> 实例创建 <code>ConstraintDescriptions</code> 来自定义使用的 <code>Validator</code>。要完全控制约束解析，可以使用自己的 <code>ConstraintResolver</code> 实现。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="documenting-your-api-constraints-describing">3.9.2. 描述约束</h4>
+<div class="paragraph">
+<p>为所有Bean Validation 2.0的约束提供了默认描述：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>AssertFalse</code></p>
+</li>
+<li>
+<p><code>AssertTrue</code></p>
+</li>
+<li>
+<p><code>DecimalMax</code></p>
+</li>
+<li>
+<p><code>DecimalMin</code></p>
+</li>
+<li>
+<p><code>Digits</code></p>
+</li>
+<li>
+<p><code>Email</code></p>
+</li>
+<li>
+<p><code>Future</code></p>
+</li>
+<li>
+<p><code>FutureOrPresent</code></p>
+</li>
+<li>
+<p><code>Max</code></p>
+</li>
+<li>
+<p><code>Min</code></p>
+</li>
+<li>
+<p><code>Negative</code></p>
+</li>
+<li>
+<p><code>NegativeOrZero</code></p>
+</li>
+<li>
+<p><code>NotBlank</code></p>
+</li>
+<li>
+<p><code>NotEmpty</code></p>
+</li>
+<li>
+<p><code>NotNull</code></p>
+</li>
+<li>
+<p><code>Null</code></p>
+</li>
+<li>
+<p><code>Past</code></p>
+</li>
+<li>
+<p><code>PastOrPresent</code></p>
+</li>
+<li>
+<p><code>Pattern</code></p>
+</li>
+<li>
+<p><code>Positive</code></p>
+</li>
+<li>
+<p><code>PositiveOrZero</code></p>
+</li>
+<li>
+<p><code>Size</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>还为Hibernate Validator的以下约束提供了默认描述：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>CodePointLength</code></p>
+</li>
+<li>
+<p><code>CreditCardNumber</code></p>
+</li>
+<li>
+<p><code>Currency</code></p>
+</li>
+<li>
+<p><code>EAN</code></p>
+</li>
+<li>
+<p><code>Email</code></p>
+</li>
+<li>
+<p><code>Length</code></p>
+</li>
+<li>
+<p><code>LuhnCheck</code></p>
+</li>
+<li>
+<p><code>Mod10Check</code></p>
+</li>
+<li>
+<p><code>Mod11Check</code></p>
+</li>
+<li>
+<p><code>NotBlank</code></p>
+</li>
+<li>
+<p><code>NotEmpty</code></p>
+</li>
+<li>
+<p><code>Currency</code></p>
+</li>
+<li>
+<p><code>Range</code></p>
+</li>
+<li>
+<p><code>SafeHtml</code></p>
+</li>
+<li>
+<p><code>URL</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>要覆盖默认描述或提供新描述，请使用基本名称 <code>org.springframework.restdocs.constraints.ConstraintDescriptions</code> 创建资源包。基于Spring HATEOAS的示例包含 <a href="https://github.com/spring-projects/spring-restdocs/tree/v2.0.3.RELEASE/samples/rest-notes-spring-hateoas/src/test/resources/org/springframework/restdocs/constraints/ConstraintDescriptions.properties">此类资源包的示例</a>。</p>
+</div>
+<div class="paragraph">
+<p>资源包中的每个键都是约束的完全限定名称加上 <code>.description</code>。例如，标准 <code>@NotNull</code> 约束的键是 <code>javax.validation.constraints.NotNull.description</code>。</p>
+</div>
+<div class="paragraph">
+<p>属性占位符引用约束的属性可以在其描述中使用。例如，<code>@Min</code> 约束的默认描述，必须有 <code>${value}</code>，它引用约束的属性 <code>value</code>。</p>
+</div>
+<div class="paragraph">
+<p>若要更多地控制约束描述解析，请使用自定义 <code>ResourceBundleConstraintDescriptionResolver</code> 创建 <code>ConstraintDescriptions</code>。要完全控制，请使用自定义 <code>ConstraintDescriptionResolver</code> 实现创建 <code>ConstraintDescriptions</code>。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_在生成的代码段中使用约束描述">3.9.3. 在生成的代码段中使用约束描述</h4>
+<div class="paragraph">
+<p>一旦你有一个约束的描述，你就可以随意在生成的代码片段中使用它们。例如，你可能希望将约束描述作为字段描述的一部分。或者，你可以将约束作为<a href="#documenting-your-api-customizing-including-extra-information">额外信息</a>包含在请求字段代码段中。基于Spring HATEOAS的示例中的 <a href="https://github.com/spring-projects/spring-restdocs/tree/v2.0.3.RELEASE/samples/rest-notes-spring-hateoas/src/test/java/com/example/notes/ApiDocumentation.java"><code>ApiDocumentation</code></a> 类说明了后一种方法。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="documenting-your-api-default-snippets">3.10. 默认代码段</h3>
+<div class="paragraph">
+<p>记录请求和响应时会自动生成许多片段。</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">片段</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">描述</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>curl-request.adoc</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">包含 <a href="https://curl.haxx.se/"><code>curl</code></a>命令，该命令等同于正在记录的MockMvc调用</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>httpie-request.adoc</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">包含 <a href="http://httpie.org/"><code>HTTPie</code></a>命令，该命令等同于正在记录的MockMvc调用</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>http-request.adoc</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">包含与正在记录的MockMvc调用等效的HTTP请求</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>http-response.adoc</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">包含返回的HTTP响应</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>request-body.adoc</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">包含已发送的请求的正文</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response-body.adoc</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">包含返回的响应的正文</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>你可以配置默认生成的片段。有关更多信息，请参阅<a href="#configuration">配置</a>部分。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="documentating-your-api-parameterized-output-directories">3.11. 使用参数化输出目录</h3>
+<div class="paragraph">
+<p>使用MockMvc或REST Assured时，可以参数化 <code>document</code> 使用的输出目录。使用WebTestClient时，无法参数化输出目录。</p>
+</div>
+<div class="paragraph">
+<p>支持以下参数：</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">参数</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">描述</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{methodName}</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">测试方法的未修改名称</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{method-name}</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">测试方法的名称，使用kebab-case格式化</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{method_name}</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">测试方法的名称，使用snake_case格式化</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{ClassName}</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">测试类的未修改简单名称</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{class-name}</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">测试类的简单名称，使用kebab-case格式化</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{class_name}</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">测试类的简单名称，使用snake_case格式化</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{step}</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">在当前测试中对服务进行的调用计数</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>例如，在测试类 <code>GettingStartedDocumentation</code> 上名为 <code>creatingANote</code> 的测试方法中的文档 <code>document("{class-name}/{method-name}")</code> 会将片段写入名为 <code>getting-started-documentation/creating-a-note</code> 的目录中。</p>
+</div>
+<div class="paragraph">
+<p>参数化输出目录与 <code>@Before</code> 方法结合使用时特别有用。它允许在安装方法中配置文档一次，然后在类中的每个测试中重用：</p>
+</div>
+<div class="listingblock primary">
+<div class="title">MockMvc</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Before</span>
+<span class="directive">public</span> <span class="type">void</span> setUp() {
+    <span class="local-variable">this</span>.mockMvc = MockMvcBuilders.webAppContextSetup(<span class="local-variable">this</span>.context)
+            .apply(documentationConfiguration(<span class="local-variable">this</span>.restDocumentation))
+            .alwaysDo(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">{method-name}/{step}/</span><span class="delimiter">&quot;</span></span>)).build();
+}</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">REST Assured</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Before</span>
+<span class="directive">public</span> <span class="type">void</span> setUp() {
+    <span class="local-variable">this</span>.spec = <span class="keyword">new</span> RequestSpecBuilder()
+            .addFilter(documentationConfiguration(<span class="local-variable">this</span>.restDocumentation))
+            .addFilter(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">{method-name}/{step}</span><span class="delimiter">&quot;</span></span>)).build();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>使用此配置后，对你正在测试的服务的每次调用都将生成<a href="#documenting-your-api-default-snippets">默认代码段</a>，而无需进一步配置。查看每个示例应用程序中的 <code>GettingStartedDocumentation</code> 类，以查看此功能的实际应用。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="documenting-your-api-customizing">3.12. 自定义输出</h3>
+<div class="sect3">
+<h4 id="documenting-your-api-customizing-snippets">3.12.1. 自定义生成的代码段</h4>
+<div class="paragraph">
+<p>Spring REST Docs使用 <a href="https://mustache.github.io/">Mustache</a>模板产生生成的片段。为Spring REST Docs可以生成的每个片段提供 <a href="https://github.com/spring-projects/spring-restdocs/tree/v2.0.3.RELEASE/spring-restdocs-core/src/main/resources/org/springframework/restdocs/templates">默认模板</a>。要自定义代码段的内容，你可以提供自己的模板。</p>
+</div>
+<div class="paragraph">
+<p>模板从 <code>org.springframework.restdocs.templates</code> 子包中的类路径加载。子包的名称由正在使用的模板格式的ID确定。默认模板格式Asciidoctor的ID是 <code>asciidoctor</code>，因此从 <code>org​​.springframework.restdocs.templates.asciidoctor</code> 加载片段。每个模板都以它将生成的代码段命名。例如，要覆盖 <code>curl-request.adoc</code> 片段的模板，请在 <code>src/test/resources/org/springframework/restdocs/templates/asciidoctor</code> 中创建名为 <code>curl-request.snippet</code> 的模板。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="documenting-your-api-customizing-including-extra-information">3.12.2. 包括额外信息</h4>
+<div class="paragraph">
+<p>有两种方法可以提供额外信息以包含在生成的代码段中：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>在描述符上使用 <code>attributes</code> 方法向其添加一个或多个属性。</p>
+</li>
+<li>
+<p>调用 <code>curlRequest</code>，<code>httpRequest</code>，<code>httpResponse</code> 等时传递一些属性。这些属性将与整个片段相关联。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>在模板渲染过程中，可以使用任何其他属性。结合自定义代码段模板，可以在生成的代码段中包含额外信息。</p>
+</div>
+<div class="paragraph">
+<p>上述的具体示例是在记录请求字段时添加约束列和标题。第一步是为你要记录的每个字段提供 <code>constraints</code> 属性，并提供 <code>title</code> 属性：</p>
+</div>
+<div class="listingblock primary">
+<div class="title">MockMvc</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">.andDo(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">create-user</span><span class="delimiter">&quot;</span></span>, requestFields(
+        attributes(key(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>).value(<span class="string"><span class="delimiter">&quot;</span><span class="content">Fields for user creation</span><span class="delimiter">&quot;</span></span>)), <i class="conum" data-value="1"></i><b>(1)</b>
+        fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The user's name</span><span class="delimiter">&quot;</span></span>)
+                .attributes(key(<span class="string"><span class="delimiter">&quot;</span><span class="content">constraints</span><span class="delimiter">&quot;</span></span>)
+                        .value(<span class="string"><span class="delimiter">&quot;</span><span class="content">Must not be null. Must not be empty</span><span class="delimiter">&quot;</span></span>)), <i class="conum" data-value="2"></i><b>(2)</b>
+        fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">email</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The user's email address</span><span class="delimiter">&quot;</span></span>)
+                .attributes(key(<span class="string"><span class="delimiter">&quot;</span><span class="content">constraints</span><span class="delimiter">&quot;</span></span>)
+                        .value(<span class="string"><span class="delimiter">&quot;</span><span class="content">Must be a valid email address</span><span class="delimiter">&quot;</span></span>))))); <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>配置请求字段代码段的 <code>title</code> 属性</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>设置 <code>name</code> 字段的 <code>constraints</code> 属性</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>设置 <code>email</code> 字段的 <code>constraints</code> 属性</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">WebTestClient</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">.consumeWith(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">create-user</span><span class="delimiter">&quot;</span></span>,
+    requestFields(
+        attributes(key(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>).value(<span class="string"><span class="delimiter">&quot;</span><span class="content">Fields for user creation</span><span class="delimiter">&quot;</span></span>)), <i class="conum" data-value="1"></i><b>(1)</b>
+        fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>)
+            .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The user's name</span><span class="delimiter">&quot;</span></span>)
+            .attributes(key(<span class="string"><span class="delimiter">&quot;</span><span class="content">constraints</span><span class="delimiter">&quot;</span></span>).value(<span class="string"><span class="delimiter">&quot;</span><span class="content">Must not be null. Must not be empty</span><span class="delimiter">&quot;</span></span>)), <i class="conum" data-value="2"></i><b>(2)</b>
+        fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">email</span><span class="delimiter">&quot;</span></span>)
+            .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The user's email address</span><span class="delimiter">&quot;</span></span>)
+            .attributes(key(<span class="string"><span class="delimiter">&quot;</span><span class="content">constraints</span><span class="delimiter">&quot;</span></span>).value(<span class="string"><span class="delimiter">&quot;</span><span class="content">Must be a valid email address</span><span class="delimiter">&quot;</span></span>))))); <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>配置请求字段代码段的 <code>title</code> 属性</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>设置 <code>name</code> 字段的 <code>constraints</code> 属性</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>设置 <code>email</code> 字段的 <code>constraints</code> 属性</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">REST Assured</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">.filter(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">create-user</span><span class="delimiter">&quot;</span></span>, requestFields(
+        attributes(key(<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>).value(<span class="string"><span class="delimiter">&quot;</span><span class="content">Fields for user creation</span><span class="delimiter">&quot;</span></span>)), <i class="conum" data-value="1"></i><b>(1)</b>
+        fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The user's name</span><span class="delimiter">&quot;</span></span>)
+                .attributes(key(<span class="string"><span class="delimiter">&quot;</span><span class="content">constraints</span><span class="delimiter">&quot;</span></span>)
+                        .value(<span class="string"><span class="delimiter">&quot;</span><span class="content">Must not be null. Must not be empty</span><span class="delimiter">&quot;</span></span>)), <i class="conum" data-value="2"></i><b>(2)</b>
+        fieldWithPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">email</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">The user's email address</span><span class="delimiter">&quot;</span></span>)
+                .attributes(key(<span class="string"><span class="delimiter">&quot;</span><span class="content">constraints</span><span class="delimiter">&quot;</span></span>)
+                        .value(<span class="string"><span class="delimiter">&quot;</span><span class="content">Must be a valid email address</span><span class="delimiter">&quot;</span></span>))))) <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>配置请求字段代码段的 <code>title</code> 属性</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>设置 <code>name</code> 字段的 <code>constraints</code> 属性</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>设置 <code>email</code> 字段的 <code>constraints</code> 属性</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>第二步是提供一个名为 <code>request-fields.snippet</code> 的自定义模板，其中包含有关生成的代码段表中字段约束的信息，并添加标题：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="adoc">.{{title}} <i class="conum" data-value="1"></i><b>(1)</b>
+|===
+|Path|Type|Description|Constraints <i class="conum" data-value="2"></i><b>(2)</b>
+
+{{#fields}}
+|{{path}}
+|{{type}}
+|{{description}}
+|{{constraints}} <i class="conum" data-value="3"></i><b>(3)</b>
+
+{{/fields}}
+|===</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>在表格中添加标题</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>添加名为“Constraints”的新列</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>在表的每一行中包含描述符的 <code>constraints</code> 属性</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="customizing-requests-and-responses">4. 自定义请求和响应</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>在某些情况下，你可能不希望完全按照发送的请求或完全按照收到的响应来记录请求。Spring REST Docs提供了许多预处理器，可用于在记录之前修改请求或响应。</p>
+</div>
+<div class="paragraph">
+<p>通过使用 <code>OperationRequestPreprocessor</code> 和/或 <code>OperationResponsePreprocessor</code> 调用 <code>document</code> 来配置预处理。可以使用预处理器上的 <code>preprocessRequest</code> 和 <code>preprocessResponse</code> 静态方法获取实例。 例如：</p>
+</div>
+<div class="listingblock primary">
+<div class="title">MockMvc</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>)).andExpect(status().isOk())
+    .andDo(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">index</span><span class="delimiter">&quot;</span></span>, preprocessRequest(removeHeaders(<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>)), <i class="conum" data-value="1"></i><b>(1)</b>
+            preprocessResponse(prettyPrint()))); <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>应用请求预处理器，该预处理器将删除名为 <code>Foo</code> 的标头。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>应用响应预处理器，以漂亮格式打印其响应内容。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">WebTestClient</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.webTestClient.get().uri(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>).exchange().expectStatus().isOk().expectBody()
+    .consumeWith(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">index</span><span class="delimiter">&quot;</span></span>,
+        preprocessRequest(removeHeaders(<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>)), <i class="conum" data-value="1"></i><b>(1)</b>
+        preprocessResponse(prettyPrint()))); <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>应用请求预处理器，该预处理器将删除名为 <code>Foo</code> 的标头。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>应用响应预处理器，以漂亮格式打印其响应内容。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">REST Assured</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">RestAssured.given(<span class="local-variable">this</span>.spec)
+    .filter(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">index</span><span class="delimiter">&quot;</span></span>, preprocessRequest(removeHeaders(<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>)), <i class="conum" data-value="1"></i><b>(1)</b>
+            preprocessResponse(prettyPrint()))) <i class="conum" data-value="2"></i><b>(2)</b>
+.when().get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>)
+.then().assertThat().statusCode(is(<span class="integer">200</span>));</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>应用请求预处理器，该预处理器将删除名为 <code>Foo</code> 的标头。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>应用响应预处理器，以漂亮格式打印其响应内容。</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>或者，你可能希望将相同的预处理器应用于每个测试。你可以通过在 <code>@Before</code> 方法中使用 <code>RestDocumentationConfigurer</code> API配置预处理器来实现。例如，从所有请求中删除 <code>Foo</code> 标头并打印所有响应：</p>
+</div>
+<div class="listingblock primary">
+<div class="title">MockMvc</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">private</span> MockMvc mockMvc;
+
+<span class="annotation">@Before</span>
+<span class="directive">public</span> <span class="type">void</span> setup() {
+    <span class="local-variable">this</span>.mockMvc = MockMvcBuilders.webAppContextSetup(<span class="local-variable">this</span>.context)
+        .apply(documentationConfiguration(<span class="local-variable">this</span>.restDocumentation).operationPreprocessors()
+            .withRequestDefaults(removeHeaders(<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="1"></i><b>(1)</b>
+            .withResponseDefaults(prettyPrint())) <i class="conum" data-value="2"></i><b>(2)</b>
+        .build();
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>应用请求预处理器，该预处理器将删除名为 <code>Foo</code> 的标头。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>应用响应预处理器，以漂亮格式打印其响应内容。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">WebTestClient</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">private</span> WebTestClient webTestClient;
+
+<span class="annotation">@Before</span>
+<span class="directive">public</span> <span class="type">void</span> setup() {
+    <span class="local-variable">this</span>.webTestClient = WebTestClient.bindToApplicationContext(<span class="local-variable">this</span>.context)
+        .configureClient()
+        .filter(documentationConfiguration(<span class="local-variable">this</span>.restDocumentation)
+            .operationPreprocessors()
+                .withRequestDefaults(removeHeaders(<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="1"></i><b>(1)</b>
+                .withResponseDefaults(prettyPrint())) <i class="conum" data-value="2"></i><b>(2)</b>
+        .build();
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>应用请求预处理器，该预处理器将删除名为 <code>Foo</code> 的标头。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>应用响应预处理器，以漂亮格式打印其响应内容。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">REST Assured</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">private</span> RequestSpecification spec;
+
+<span class="annotation">@Before</span>
+<span class="directive">public</span> <span class="type">void</span> setup() {
+    <span class="local-variable">this</span>.spec = <span class="keyword">new</span> RequestSpecBuilder()
+        .addFilter(documentationConfiguration(<span class="local-variable">this</span>.restDocumentation).operationPreprocessors()
+            .withRequestDefaults(removeHeaders(<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="1"></i><b>(1)</b>
+            .withResponseDefaults(prettyPrint())) <i class="conum" data-value="2"></i><b>(2)</b>
+        .build();
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>应用请求预处理器，该预处理器将删除名为 <code>Foo</code> 的标头。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>应用响应预处理器，以漂亮格式打印其响应内容。</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>然后，在每个测试中，可以执行特定于该测试的任何配置。例如：</p>
+</div>
+<div class="listingblock primary">
+<div class="title">MockMvc</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>))
+        .andExpect(status().isOk())
+        .andDo(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">index</span><span class="delimiter">&quot;</span></span>,
+                links(linkWithRel(<span class="string"><span class="delimiter">&quot;</span><span class="content">self</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Canonical self link</span><span class="delimiter">&quot;</span></span>))
+        ));</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">WebTestClient</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.webTestClient.get().uri(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>).exchange().expectStatus().isOk()
+    .expectBody().consumeWith(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">index</span><span class="delimiter">&quot;</span></span>,
+        links(linkWithRel(<span class="string"><span class="delimiter">&quot;</span><span class="content">self</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Canonical self link</span><span class="delimiter">&quot;</span></span>))));</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">REST Assured</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">RestAssured.given(<span class="local-variable">this</span>.spec)
+    .filter(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">index</span><span class="delimiter">&quot;</span></span>,
+        links(linkWithRel(<span class="string"><span class="delimiter">&quot;</span><span class="content">self</span><span class="delimiter">&quot;</span></span>).description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Canonical self link</span><span class="delimiter">&quot;</span></span>))))
+    .when().get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>)
+    .then().assertThat().statusCode(is(<span class="integer">200</span>));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>各种内置预处理器（包括上面说明的那些）可通过 <code>Preprocessors</code> 上的静态方法获得。请参阅<a href="#customizing-requests-and-responses-preprocessors">下文</a>了解更多详情。</p>
+</div>
+<div class="sect2">
+<h3 id="customizing-requests-and-responses-preprocessors">4.1. 预处理器</h3>
+<div class="sect3">
+<h4 id="customizing-requests-and-responses-preprocessors-pretty-print">4.1.1. 漂亮的打印</h4>
+<div class="paragraph">
+<p><code>Preprocessors</code> 上的 <code>prettyPrint</code> 格式化请求或响应的内容，使其更易于阅读。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="customizing-requests-and-responses-preprocessors-mask-links">4.1.2. 屏蔽链接</h4>
+<div class="paragraph">
+<p>如果你要记录基于超媒体的API，你可能希望鼓励客户端使用链接而不是通过使用硬编码URI来导航API。一种方法是限制文档中URI的使用。<code>Preprocessors</code> 上的 <code>maskLinks</code> 用 <code>&#8230;&#8203;</code> 替换响应中任何链接的 <code>href</code>。你也可以指定不同的替代品。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="customizing-requests-and-responses-preprocessors-remove-headers">4.1.3. 删除标题</h4>
+<div class="paragraph">
+<p><code>Preprocessors</code> 上的 <code>removeHeaders</code> 从请求或响应中删除任何标题，其中名称等于任何给定的header名称。</p>
+</div>
+<div class="paragraph">
+<p><code>Preprocessors</code> 上的 <code>removeMatchingHeaders</code> 从名称与任何给定正则表达式模式匹配的请求或响应中删除任何标头。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="customizing-requests-and-responses-preprocessors-replace-patterns">4.1.4. 替换模式</h4>
+<div class="paragraph">
+<p><code>Preprocessors</code> 上的 <code>replacePattern</code> 提供了一种用于替换请求或响应中的内容的通用机制。任何和正则表达式匹配的内容都会被替换。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="customizing-requests-and-responses-preprocessors-modify-request-parameters">4.1.5. 修改请求参数</h4>
+<div class="paragraph">
+<p><code>Preprocessors</code> 上的 <code>modifyParameters</code> 可用于添加，设置和删除请求参数。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="customizing-requests-and-responses-preprocessors-modify-uris">4.1.6. 修改URIs</h4>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+如果你使用的MockMvc或未绑定到服务器的WebTestClient，则应通过<a href="#configuration-uris">更改配置</a>来自定义URI。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><code>Preprocessors</code> 上的 <code>modifyUris</code> 可用于修改请求或响应中的任何URI。使用绑定到服务器的REST Assured或WebTestClient时，这允许你在测试本地服务实例时自定义文档中显示的URI。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="customizing-requests-and-responses-preprocessors-writing-your-own">4.1.7. 编写自己的预处理器</h4>
+<div class="paragraph">
+<p>如果其中一个内置预处理器无法满足你的需求，你可以通过实现 <code>OperationPreprocessor</code> 接口编写自己的预处理器。然后，你可以使用自定义预处理器，其方式与任何内置预处理器完全相同。</p>
+</div>
+<div class="paragraph">
+<p>如果你只想修改请求或响应的内容（正文），请考虑实现 <code>ContentModifier</code> 接口并将其与内置的 <code>ContentModifyingOperationPreprocessor</code> 一起使用。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuration">5. 配置</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="configuration-uris">5.1. 文档化URIs</h3>
+<div class="sect3">
+<h4 id="configuration-uris-mockmvc">5.1.1. MockMvc URI自定义</h4>
+<div class="paragraph">
+<p>使用MockMvc时，Spring REST Docs记录的URI的默认配置是：</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">设置</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">默认值</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Scheme</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>http</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Host</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>localhost</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Port</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>8080</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><code>MockMvcRestDocumentationConfigurer</code> 应用此配置。你可以使用其API更改一个或多个默认值以满足你的需求：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.mockMvc = MockMvcBuilders.webAppContextSetup(<span class="local-variable">this</span>.context)
+        .apply(documentationConfiguration(<span class="local-variable">this</span>.restDocumentation).uris()
+                .withScheme(<span class="string"><span class="delimiter">&quot;</span><span class="content">https</span><span class="delimiter">&quot;</span></span>)
+                .withHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">example.com</span><span class="delimiter">&quot;</span></span>)
+                .withPort(<span class="integer">443</span>))
+        .build();</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+如果端口设置为配置方案的默认端口（HTTP端口80或HTTPS端口443），则生成的片段中的任何URI将省略该端口。
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+要配置请求的上下文路径，使用 <code>MockHttpServletRequestBuilder</code> 上 <code>contextPath</code> 方法。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="configuration-uris-rest-assured">5.1.2. REST Assured URI自定义</h4>
+<div class="paragraph">
+<p>REST Assured通过发出实际的HTTP请求来测试服务。因此，必须在执行服务操作之后但在记录之前自定义URI。为此提供了<a href="#customizing-requests-and-responses-preprocessors-modify-uris">特定于REST-Assured的预处理器</a>。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="configuration-uris-webtestclient">5.1.3. WebTestClient URI自定义</h4>
+<div class="paragraph">
+<p>使用WebTestClient时，Spring REST Docs记录的URI的默认基于 <code><a href="http://localhost:8080" class="bare">http://localhost:8080</a></code>。可以使用 <code>WebTestClient.Builder</code> 上的  <a href="https://docs.spring.io/spring-framework/docs/5.0.x/javadoc-api/org/springframework/test/web/reactive/server/WebTestClient.Builder.html#baseUrl-java.lang.String-"><code>baseUrl(String)</code></a>方法自定义此基础URI：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Before</span>
+<span class="directive">public</span> <span class="type">void</span> setUp() {
+    <span class="local-variable">this</span>.webTestClient = WebTestClient.bindToApplicationContext(<span class="local-variable">this</span>.context)
+        .configureClient()
+        .baseUrl(<span class="string"><span class="delimiter">&quot;</span><span class="content">https://api.example.com</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="1"></i><b>(1)</b>
+        .filter(documentationConfiguration(<span class="local-variable">this</span>.restDocumentation)).build();
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>修改使记录的URI基于 <code><a href="https://api.example.com" class="bare">https://api.example.com</a></code>。</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-snippet-encoding">5.2. 片段编码</h3>
+<div class="paragraph">
+<p>默认的片段编码为 <code>UTF-8</code>。你可以使用 <code>RestDocumentationConfigurer</code> API更改默认代码段编码。例如，要使用 <code>ISO-8859-1</code>：</p>
+</div>
+<div class="listingblock primary">
+<div class="title">MockMvc</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.mockMvc = MockMvcBuilders.webAppContextSetup(<span class="local-variable">this</span>.context)
+        .apply(documentationConfiguration(<span class="local-variable">this</span>.restDocumentation)
+                .snippets().withEncoding(<span class="string"><span class="delimiter">&quot;</span><span class="content">ISO-8859-1</span><span class="delimiter">&quot;</span></span>))
+        .build();</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">WebTestClient</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.webTestClient = WebTestClient.bindToApplicationContext(<span class="local-variable">this</span>.context).configureClient()
+    .filter(documentationConfiguration(<span class="local-variable">this</span>.restDocumentation)
+        .snippets().withEncoding(<span class="string"><span class="delimiter">&quot;</span><span class="content">ISO-8859-1</span><span class="delimiter">&quot;</span></span>))
+    .build();</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">REST Assured</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.spec = <span class="keyword">new</span> RequestSpecBuilder()
+        .addFilter(documentationConfiguration(<span class="local-variable">this</span>.restDocumentation)
+                .snippets().withEncoding(<span class="string"><span class="delimiter">&quot;</span><span class="content">ISO-8859-1</span><span class="delimiter">&quot;</span></span>))
+        .build();</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+当Spring REST Docs将请求或响应的内容转换为String时，如果可用，将使用 <code>Content-Type</code> 标头中指定的字符集。如果没有，将使用JVM的默认 <code>Charset</code>。可以使用 <code>file.encoding</code> 系统属性配置JVM的默认 <code>Charset</code>。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-snippet-template-format">5.3. 片段模板格式</h3>
+<div class="paragraph">
+<p>默认的片段模板格式是Asciidoctor。Markdown也支持开箱即用。你可以使用 <code>RestDocumentationConfigurer</code> API更改默认格式：</p>
+</div>
+<div class="listingblock primary">
+<div class="title">MockMvc</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.mockMvc = MockMvcBuilders.webAppContextSetup(<span class="local-variable">this</span>.context)
+        .apply(documentationConfiguration(<span class="local-variable">this</span>.restDocumentation)
+                .snippets().withTemplateFormat(TemplateFormats.markdown()))
+        .build();</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">WebTestClient</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.webTestClient = WebTestClient.bindToApplicationContext(<span class="local-variable">this</span>.context).configureClient()
+    .filter(documentationConfiguration(<span class="local-variable">this</span>.restDocumentation)
+        .snippets().withTemplateFormat(TemplateFormats.markdown()))
+    .build();</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">REST Assured</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.spec = <span class="keyword">new</span> RequestSpecBuilder()
+        .addFilter(documentationConfiguration(<span class="local-variable">this</span>.restDocumentation)
+                .snippets().withTemplateFormat(TemplateFormats.markdown()))
+        .build();</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-default-snippets">5.4. 默认代码段</h3>
+<div class="paragraph">
+<p>默认情况下会生成六个片段：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>curl-request</code></p>
+</li>
+<li>
+<p><code>http-request</code></p>
+</li>
+<li>
+<p><code>http-response</code></p>
+</li>
+<li>
+<p><code>httpie-request</code></p>
+</li>
+<li>
+<p><code>request-body</code></p>
+</li>
+<li>
+<p><code>response-body</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>你可以使用 <code>RestDocumentationConfigurer</code> API在安装过程中更改默认代码段配置。例如，默认情况下仅生成 <code>curl-request</code> 代码段：</p>
+</div>
+<div class="listingblock primary">
+<div class="title">MockMvc</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.mockMvc = MockMvcBuilders.webAppContextSetup(<span class="local-variable">this</span>.context)
+        .apply(documentationConfiguration(<span class="local-variable">this</span>.restDocumentation).snippets()
+                .withDefaults(curlRequest()))
+        .build();</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">WebTestClient</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.webTestClient = WebTestClient.bindToApplicationContext(<span class="local-variable">this</span>.context)
+    .configureClient().filter(
+        documentationConfiguration(<span class="local-variable">this</span>.restDocumentation)
+            .snippets().withDefaults(curlRequest()))
+    .build();</code></pre>
+</div>
+</div>
+<div class="listingblock secondary">
+<div class="title">REST Assured</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.spec = <span class="keyword">new</span> RequestSpecBuilder()
+        .addFilter(documentationConfiguration(<span class="local-variable">this</span>.restDocumentation).snippets()
+                .withDefaults(curlRequest()))
+        .build();</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-default-preprocessors">5.5. 默认操作预处理器</h3>
+<div class="paragraph">
+<p>你可以使用 <code>RestDocumentationConfigurer</code> API在安装过程中配置默认请求和响应预处理器。例如，要从所有请求中删除 <code>Foo</code> 标头，并打印所有响应：</p>
+</div>
+<div class="listingblock primary">
+<div class="title">MockMvc</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.mockMvc = MockMvcBuilders.webAppContextSetup(<span class="local-variable">this</span>.context)
+        .apply(documentationConfiguration(<span class="local-variable">this</span>.restDocumentation)
+                .operationPreprocessors()
+                .withRequestDefaults(removeHeaders(<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="1"></i><b>(1)</b>
+                .withResponseDefaults(prettyPrint())) <i class="conum" data-value="2"></i><b>(2)</b>
+        .build();</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>应用请求预处理器，该预处理器将删除名为 <code>Foo</code> 的标头。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>应用响应预处理器，以漂亮格式打印其响应内容。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">WebTestClient</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.webTestClient = WebTestClient.bindToApplicationContext(<span class="local-variable">this</span>.context)
+    .configureClient()
+    .filter(documentationConfiguration(<span class="local-variable">this</span>.restDocumentation)
+        .operationPreprocessors()
+            .withRequestDefaults(removeHeaders(<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="1"></i><b>(1)</b>
+            .withResponseDefaults(prettyPrint())) <i class="conum" data-value="2"></i><b>(2)</b>
+    .build();</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>应用请求预处理器，该预处理器将删除名为 <code>Foo</code> 的标头。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>应用响应预处理器，以漂亮格式打印其响应内容。</td>
+</tr>
+</table>
+</div>
+<div class="listingblock secondary">
+<div class="title">REST Assured</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="local-variable">this</span>.spec = <span class="keyword">new</span> RequestSpecBuilder()
+    .addFilter(documentationConfiguration(<span class="local-variable">this</span>.restDocumentation).operationPreprocessors()
+        .withRequestDefaults(removeHeaders(<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="1"></i><b>(1)</b>
+        .withResponseDefaults(prettyPrint())) <i class="conum" data-value="2"></i><b>(2)</b>
+    .build();</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>应用请求预处理器，该预处理器将删除名为 <code>Foo</code> 的标头。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>应用响应预处理器，以漂亮格式打印其响应内容。</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="working-with-asciidoctor">6. 使用Asciidoctor</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>本节介绍使用与Spring REST Docs特别相关的Asciidoctor的任何方面。</p>
+</div>
+<div class="sect2">
+<h3 id="working-with-asciidoctor-resources">6.1. 资源</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://asciidoctor.org/docs/asciidoc-syntax-quick-reference">语法快速参考</a></p>
+</li>
+<li>
+<p><a href="http://asciidoctor.org/docs/user-manual">用户手册</a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="working-with-asciidoctor-including-snippets">6.2. 包含片段</h3>
+<div class="sect3">
+<h4 id="working-with-asciidoctor-including-snippets-operation">6.2.1. 包含操作的多个片段</h4>
+<div class="paragraph">
+<p>宏命名操作可用于导入为特定操作生成的全部或部分片段。它可以通过在项目的<a href="#getting-started-build-configuration">构建配置</a>中包含 <code>spring-restdocs-asciidoctor</code> 来实现。</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+如果你正在使用Gradle及其守护程序或支持持续构建，请不要使用 <code>org.asciidoctor.convert</code> 插件的1.5.6版。它包含一个阻止扩展可靠运行的 <a href="https://github.com/asciidoctor/asciidoctor-gradle-plugin/issues/222">回归</a>。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>宏的目标是操作的名称。在最简单的形式中，宏可用于包含操作的所有片段，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>operation::index[]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>操作宏还支持 <code>snippets</code> 属性。<code>snippets</code> 属性可用于选择应包含的片段。属性的值是以逗号分隔的列表。列表中的每个条目都应该是要包含的片段文件的名称，除去 <code>.adoc</code> 后缀。例如，只能包含curl，HTTP请求和HTTP响应片段，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>operation::index[snippets='curl-request,http-request,http-response']</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>这相当于以下内容：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="adoc">[[example_curl_request]]
+== Curl request
+
+include::{snippets}/index/curl-request.adoc[]
+
+[[example_http_request]]
+== HTTP request
+
+include::{snippets}/index/http-request.adoc[]
+
+[[example_http_response]]
+== HTTP response
+
+include::{snippets}/index/http-response.adoc[]</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="working-with-asciidoctor-including-snippets-operation-titles">章节标题</h5>
+<div class="paragraph">
+<p>对于包含使用 <code>operation</code> 的每个片段，将创建具有标题的部分。为内置代码段提供了默认标题：</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">片段</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">标题</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>curl-request</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Curl Request</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>http-request</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP request</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>http-response</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP response</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>httpie-request</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTPie request</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>links</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Links</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>request-body</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Request body</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>request-fields</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Request fields</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response-body</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Response body</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response-fields</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Response fields</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>对于上表中未列出的片段，将通过将 <code>-</code> 字符替换为空格并将第一个字母大写来生成默认标题。例如，名为 <code>custom-snippet</code> 的代码段标题为“Custom snippet”。</p>
+</div>
+<div class="paragraph">
+<p>可以使用文档属性自定义默认标题。属性的名称应为 <code>operation-{snippet}-title</code>。例如，要将 <code>curl-request</code> 代码段的标题自定义为“Example request”，请使用以下属性：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>:operation-curl-request-title: Example request</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="working-with-asciidoctor-including-snippets-individual">6.2.2. 包含单个片段</h4>
+<div class="paragraph">
+<p><a href="https://asciidoctor.org/docs/asciidoc-syntax-quick-reference/#include-files">include宏</a>用于在文档中包含单个代码段。由<a href="#getting-started-build-configuration">构建配置</a>中配置的 <code>spring-restdocs-asciidoctor</code> 自动设置的 <code>snippets</code> 属性可用于引用代码段输出目录。例如：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>include::{snippets}/index/curl-request.adoc[]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="working-with-asciidoctor-customizing-tables">6.3. 自定义表格</h3>
+<div class="paragraph">
+<p>许多代码段都包含默认配置的表格。可以通过在包含代码段时提供一些其他配置或使用自定义代码段模板来自定义表的外观。</p>
+</div>
+<div class="sect3">
+<h4 id="working-with-asciidoctor-customizing-tables-formatting-columns">6.3.1. 格式化列</h4>
+<div class="paragraph">
+<p>Asciidoctor对 <a href="https://asciidoctor.org/docs/user-manual/#cols-format">格式化表的列</a>有丰富支持。例如，可以使用cols属性指定表的列的宽度：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>[cols="1,3"] <i class="conum" data-value="1"></i><b>(1)</b>
+include::{snippets}/index/links.adoc[]</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>表的宽度将分为两列，第2列的宽度是第1列的3倍。</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="working-with-asciidoctor-customizing-tables-title">6.3.2. 配置标题</h4>
+<div class="paragraph">
+<p>可以使用前缀为 <code>.</code> 的行来指定表的标题：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>.Links <i class="conum" data-value="1"></i><b>(1)</b>
+include::{snippets}/index/links.adoc[]</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>表的标题是 <code>Links</code>。</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="working-with-asciidoctor-customizing-tables-formatting-problems">6.3.3. 避免表格格式问题</h4>
+<div class="paragraph">
+<p>Asciidoctor使用 <code>|</code> 用于分隔表格中单元格的字符。如果你想要在单元格的内容中使用一个 <code>|</code>，这可能会导致问题。通过用反斜杠转义 <code>|</code> 可以避免这个问题，即使用 <code>\|</code> 而不是 <code>|</code>。</p>
+</div>
+<div class="paragraph">
+<p>所有默认的Asciidoctor片段模板都会自动执行此转义，使用名为 <code>tableCellContent</code> 的Mustache lamba。如果你编写自己的自定义模板，则可能需要使用此lamba。例如，转义 <code>|</code> 单元格中包含 <code>description</code> 属性值的字符：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>| {{#tableCellContent}}{{description}}{{/tableCellContent}}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_进一步阅读">6.3.4. 进一步阅读</h4>
+<div class="paragraph">
+<p>有关自定义表的更多信息，请参阅 <a href="https://asciidoctor.org/docs/user-manual/#tables">Asciidoctor用户手册的表部分</a>。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="working-with-markdown">7. 使用Markdown</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>本节介绍使用Markdown与Spring REST Docs相关的任何方面。</p>
+</div>
+<div class="sect2">
+<h3 id="working-with-markdown-limitations">7.1. 限制</h3>
+<div class="paragraph">
+<p>Markdown最初是为网络写作而设计的，因此不像Asciidoctor那样适合编写文档。通常，使用构建在Markdown之上的其他工具可以克服这些限制。</p>
+</div>
+<div class="paragraph">
+<p>Markdown没有正式支持表格。Spring REST Docs的默认Markdown片段模板使用 <a href="https://michelf.ca/projects/php-markdown/extra/#table">Markdown Extra的表格格式</a>。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="working-with-markdown-including-snippets">7.2. 包含片段</h3>
+<div class="paragraph">
+<p>Markdown没有内置支持将一个Markdown文件包含在另一个中。要在文档中包含生成的Markdown代码段，你应该使用支持此功能的其他工具。一个特别适合记录API的例子是 <a href="https://github.com/tripit/slate">Slate</a>。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="contributing">8. 贡献</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring REST Docs旨在让你轻松为RESTful服务生成高质量的文档。但是，如果没有你的贡献，我们无法实现这一目标。</p>
+</div>
+<div class="sect2">
+<h3 id="contributing-questions">8.1. 问题</h3>
+<div class="paragraph">
+<p>你可以使用 <code>spring-restdocs</code> 标记在 <a href="https://stackoverflow.com/">StackOverflow</a>上询问有关Spring REST Docs的问题。同样，我们鼓励你通过回答问题来帮助你的Spring REST Docs用户。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="contributing-bugs">8.2. Bugs</h3>
+<div class="paragraph">
+<p>如果你认为自己发现了错误，请花点时间搜索 <a href="https://github.com/spring-projects/spring-restdocs/issues?q=is%3Aissue">现有问题</a>。如果没有其他人报告此问题，请 <a href="https://github.com/spring-projects/spring-restdocs/issues/new">打开</a>一个详细描述问题的新问题，理想情况下，包括一个重现它的测试。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="contributing-enhancements">8.3. 增强功能</h3>
+<div class="paragraph">
+<p>如果你希望对Spring REST Docs进行增强，那么非常欢迎pull requests。源代码在 <a href="https://github.com/spring-projects/spring-restdocs">GitHub</a>上。你可能希望搜索 <a href="https://github.com/spring-projects/spring-restdocs/issues?q=is%3Aissue">现有问题</a>并 <a href="https://github.com/spring-projects/spring-restdocs/pulls?q=is%3Apr">pull requests</a>以查看是否已在处理增强功能。你可能还需要 <a href="https://github.com/spring-projects/spring-restdocs/issues/new">打开</a>一个新问题，以便在开始工作之前讨论可能的增强功能。</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -2116,11 +4700,9 @@ asciidoctor { <i class="conum" data-value="6"></i><b>(6)</b>
 </div>
 </div>
 </div>
-</div>
-</div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-12-17 20:59:33 CST
+Last updated 2018-12-18 20:13:05 CST
 </div>
 </div>
 </body>
