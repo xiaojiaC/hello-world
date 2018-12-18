@@ -415,7 +415,7 @@ dependencies {
 === Springfox Swagger UI
 
 `springfox-swagger-ui` http://www.webjars.org/[web jar]附带 https://github.com/swagger-api/swagger-ui[Swagger UI]。
-要将其包含在标准Spring Boot应用程序中，您可以按如下方式添加依赖项：
+要将其包含在标准Spring Boot应用程序中，你可以按如下方式添加依赖项：
 
 ==== Gradle
 [source,groovy]
@@ -786,7 +786,7 @@ swagger 2.0类型。
 
 === 配置启动
 
-如果您想延迟springfox的启动，可以选择将auto-startup设置为false。要使用的属性是 `springfox.documentation.auto-startup`，
+如果你想延迟springfox的启动，可以选择将auto-startup设置为false。要使用的属性是 `springfox.documentation.auto-startup`，
 它可以作为 `-D` jvm参数或通过 `application.yml/properties` 资源文件传入。
 
 .启动属性
@@ -804,7 +804,7 @@ WARNING: 请谨慎更改此默认值为 `false`。这意味着在以线程安全
 === 通过属性覆盖描述
 
 添加了解析属性源中的属性以替换某些注解中表达式的支持。为了使用它，只需在类路径中的 `application.properties`，`application.yml`
-文件或属性文件中定义属性，其中包含您希望在已知注解中替换的值。
+文件或属性文件中定义属性，其中包含你希望在已知注解中替换的值。
 例如 `@ApModelProperty(value ="${property1.description}")` 将从可用属性中查找 `property1.description`。
 如果未找到，则将按原样呈现未解析的表达式。
 
@@ -901,7 +901,7 @@ private static final Set<String> baseTypes = newHashSet(
 
 === Docket XML配置
 
-要使用该插件，您必须创建一个使用spring的 `@Configuration` 的spring java配置类，并在xml应用程序上下文中声明。
+要使用该插件，你必须创建一个使用spring的 `@Configuration` 的spring java配置类，并在xml应用程序上下文中声明。
 
 .xml配置
 [source,xml]
@@ -1085,7 +1085,7 @@ public Model getAllThePets() {
 
 ===== 自定义 _operationId_
 
-如果您希望覆盖Springfox呈现的默认 `operationId`，您可以通过在 `@ApiOperation` 注释中提供 `nickname` 元素来实现。
+如果你希望覆盖Springfox呈现的默认 `operationId`，你可以通过在 `@ApiOperation` 注释中提供 `nickname` 元素来实现。
 
 ====== 以下这个被注解的方法 ...
 
@@ -1118,8 +1118,8 @@ public Model getAllThePets() {
 ==== 更改泛型的命名方式
 
 默认情况下，带有泛型的类型将标有'\u00ab'(<<), '\u00bb'(>>) 和逗号。这可能像是swagger-codegen的问题。
-您可以通过实现自己的 `GenericTypeNamingStrategy` 来覆盖此行为。
-例如，如果您希望将 `List<String>` 编码为“ListOfString”并将 `Map<String，Object>` 编码为“MapOfStringAndObject”，
+你可以通过实现自己的 `GenericTypeNamingStrategy` 来覆盖此行为。
+例如，如果你希望将 `List<String>` 编码为“ListOfString”并将 `Map<String，Object>` 编码为“MapOfStringAndObject”，
 则可以在插件自定义期间将 `forCodeGeneration` 选项设置为 `true`：
 
 [source,json]
