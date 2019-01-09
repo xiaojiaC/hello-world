@@ -1,0 +1,32 @@
+[
+  {
+    "_class": "xj.love.hj.demo.spring.jpa.domain.User",
+    "id": 1,
+    "gender":0,
+    "age": 20,
+    "firstName": "bob",
+    "lastName": "cui",
+    "addressId": 1,
+    "tags": "安静,乐观,强迫症"
+  },
+  {
+    "_class": "xj.love.hj.demo.spring.jpa.domain.User",
+    "id": 2,
+    "gender":1,
+    "age": 18,
+    "firstName": "sunny",
+    "lastName": "li",
+    "tags": "阳光,开朗,神仙小姐姐"
+  },
+  {
+    "_class": "xj.love.hj.demo.spring.jpa.domain.Address",
+    "id": 1,
+    "country": "中国",
+    "province": "上海",
+    "city": "上海",
+    "district": "浦东新区",
+    "zipCode": "200120",
+    "longitude": "121.53",
+    "latitude": "31.22"
+  }
+]

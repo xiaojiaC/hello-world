@@ -35,6 +35,7 @@
     <module>demo-maven-plugin</module>
     <module>demo-maven-archetype</module>
     <module>demo-spring-session</module>
+    <module>demo-spring-jpa</module>
     <module>demo-maven-site</module>
   </modules>
 
