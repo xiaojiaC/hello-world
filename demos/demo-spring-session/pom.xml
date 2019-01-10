@@ -17,6 +17,10 @@
 
   <properties>
     <main.basedir>${basedir}/../..</main.basedir>
+    <spring-session.version>2.0.2.RELEASE</spring-session.version>
+    <spring-session.api>
+      https://docs.spring.io/spring-session/docs/${spring-session.version}/api/
+    </spring-session.api>
   </properties>
 
   <dependencies>
@@ -103,4 +107,23 @@
       </plugin>
     </plugins>
   </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <links>
+            <link>${javaee.api}</link>
+            <link>${spring.api}</link>
+            <link>${spring-boot.api}</link>
+            <link>${spring-data-core.api}</link>
+            <link>${spring-jpa.api}</link>
+            <link>${spring-session.api}</link>
+          </links>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>

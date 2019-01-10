@@ -16,6 +16,16 @@
 
     <properties>
         <main.basedir>${basedir}/../..</main.basedir>
+        <querydsl.version>4.1.4</querydsl.version>
+        <spring-hateoas.version>0.24.0.RELEASE</spring-hateoas.version>
+
+        <!-- Javadoc api -->
+        <querydsl.api>
+            http://www.querydsl.com/static/querydsl/${querydsl.version}/apidocs/
+        </querydsl.api>
+        <spring-hateoas.api>
+            https://docs.spring.io/spring-hateoas/docs/${spring-hateoas.version}/api/
+        </spring-hateoas.api>
     </properties>
 
     <dependencies>
@@ -38,6 +48,7 @@
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -77,6 +88,30 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
         </plugins>
     </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <links>
+                        <link>${javaee.api}</link>
+                        <link>${spring.api}</link>
+                        <link>${spring-boot.api}</link>
+                        <link>${spring-data-core.api}</link>
+                        <link>${spring-jpa.api}</link>
+                        <link>${querydsl.api}</link>
+                        <link>${spring-hateoas.api}</link>
+                    </links>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>
