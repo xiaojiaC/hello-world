@@ -25,6 +25,12 @@
     <spring-boot.api>
       https://docs.spring.io/spring-boot/docs/${sprint-boot-dependencies.version}/api/
     </spring-boot.api>
+    <spring-data-core.api>
+      https://docs.spring.io/spring-data/commons/docs/${sprint-boot-dependencies.version}/api/
+    </spring-data-core.api>
+    <spring-jpa.api>
+      https://docs.spring.io/spring-data/jpa/docs/${sprint-boot-dependencies.version}/api/
+    </spring-jpa.api>
     <maven-plugin.api>http://maven.apache.org/ref/3.6.0/maven-plugin-api/apidocs/</maven-plugin.api>
     <maven-plugin-tools.api>http://maven.apache.org/plugin-tools/apidocs/</maven-plugin-tools.api>
   </properties>
@@ -163,6 +169,7 @@
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <configuration>
           <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+          <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
         </configuration>
       </plugin>
       <plugin>
