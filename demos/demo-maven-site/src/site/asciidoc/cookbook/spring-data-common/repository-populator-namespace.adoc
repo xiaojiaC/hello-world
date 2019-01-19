@@ -1,0 +1,16 @@
+// [appendix]
+[[populator.namespace-reference]]
+= Populators命名空间参考
+
+[[populator.namespace-dao-config]]
+== `<populator/>` 元素
+
+`<populator/>` 元素允许通过Spring Data存储库基础结构填充数据存储。footnote:[请参阅 <<repositories.create-instances.spring,XML配置>>]
+
+.属性
+|===
+| 名字 | 描述
+
+| locations
+| 用于填充存储库的对象的值的文件位置。
+|===
