@@ -43,6 +43,7 @@
     <module>demo-spring-session</module>
     <module>demo-spring-jpa</module>
     <module>demo-maven-site</module>
+    <module>demo-solr</module>
   </modules>
 
   <dependencies>
