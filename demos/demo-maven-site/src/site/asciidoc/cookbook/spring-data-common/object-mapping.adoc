@@ -1,0 +1,191 @@
+[[mapping.fundamentals]]
+= 对象映射基础
+
+本节介绍Spring Data对象映射，对象创建，字段和属性访问，可变性和不变性的基础知识。注意，本节仅适用于不使用底层数据存储的对象映射的Spring Data模块（如JPA）。另外，请务必查阅特定于存储的部分以了解特定于存储的对象映射，例如索引，自定义列或字段名称等。
+
+Spring Data对象映射的核心职责是创建域对象的实例，并将本地存储数据结构映射到这些对象上。这意味着我们需要两个基本步骤：
+
+. 通过使用其中一个公开的构造函数创建实例。
+. 填充实例所有暴露的属性。
+
+[[mapping.object-creation]]
+== 对象创建
+
+Spring Data会自动尝试检测持久化实体的构造函数，以用于实现该类型的对象。检测算法的工作原理如下：
+
+. 如果有一个无参数的构造函数，它将被使用。其他构造函数将被忽略。
+. 如果有一个有参构造函数，它将被使用。
+. 如果有多个有参构造函数，则必须使用 `@PersistenceConstructor` 指明Spring Data要使用的构造函数。
+
+值解析假定构造函数参数名称与实体的属性名称匹配，即 将执行解析就像要填充属性一样，包括映射中的所有定制（不同的数据存储列或字段名称等）。
+这还需要类文件中可用的参数名称信息或构造函数上存在的 `@ConstructorProperties` 注解。
+
+可以使用Spring Framework的 `@Value` 值注解使用特定于存储的SpEL表达式来自定义值解析。有关更多详细信息，请参阅有关存储特定映射的部分。
+
+[[mapping.object-creation.details]]
+.对象创建的内部机制
+****
+为了避免反射的开销，Spring Data对象创建使用默认情况下在运行时生成的工厂类，它将直接调用域类构造函数。即对于此示例类型：
+
+[source, java]
+----
+class Person {
+  Person(String firstname, String lastname) { … }
+}
+----
+
+我们将在运行时创建一个在语义上等效于此工厂类的工厂类：
+
+[source, java]
+----
+class PersonObjectInstantiator implements ObjectInstantiator {
+
+  Object newInstance(Object... args) {
+    return new Person((String) args[0], (String) args[1]);
+  }
+}
+----
+
+这使得我们相比反射方面性能提升了10%。要使域类符合此类优化的条件，它需要遵守一些约束：
+
+* 它不能是私有类
+* 它不能是非静态的内部类
+* 它不能是CGLib代理类
+* Spring Data使用的构造函数不能是私有的
+
+如果这些条件中的任何一个匹配，Spring Data将回退到通过反射实例化实体。
+
+****
+
+[[mapping.property-population]]
+== 属性填充
+
+一旦创建了实体的实例，Spring Data就会填充该类的所有剩余持久属性。除非已经由实体的构造函数填充（即通过使用其有参构造函数），否则将首先填充identifier属性以允许循环引用对象。之后，在实体实例上设置尚未由构造函数填充的所有非瞬态属性。为此，我们使用以下算法：
+
+[[mapping.property-population.details]]
+.属性填充的内部机制
+****
+与我们的<<mapping.object-creation.details,对象构造中的优化>>类似，我们还使用Spring Data运行时生成的访问器类与实体实例进行交互。
+
+[source, java]
+----
+class Person {
+
+  private final Long id;
+  private String firstname;
+  private @AccessType(Type.PROPERTY) String lastname;
+
+  Person() {
+    this.id = null;
+  }
+
+  Person(Long id, String firstname, String lastname) {
+    // Field assignments
+  }
+
+  Person withId(Long id) {
+    return new Person(id, this.firstname, this.lastame);
+  }
+
+  void setLastname(String lastname) {
+    this.lastname = lastname;
+  }
+}
+----
+
+.生成的属性访问器
+====
+[source, java]
+----
+class PersonPropertyAccessor implements PersistentPropertyAccessor {
+
+  private static final MethodHandle firstname;              <2>
+
+  private Person person;                                    <1>
+
+  public void setProperty(PersistentProperty property, Object value) {
+    String name = property.getName();
+
+    if ("firstname".equals(name)) {
+      firstname.invoke(person, (String) value);             <2>
+    } else if ("id".equals(name)) {
+      this.person = person.withId((Long) value);            <3>
+    } else if ("lastname".equals(name)) {
+      this.person.setLastname((String) value);              <4>
+    }
+  }
+}
+----
+<1> PropertyAccessor持有底层对象的可变实例。这是为了支持其他不可变属性的变化。
+<2> 默认情况下，Spring Data使用字段访问来读取和写入属性值。根据 `private` 字段的可见性规则，`MethodHandles` 用于与字段交互。
+<3> 该类公开了一个 `withId(...)` 方法，该方法用于设置标识符，例如将实例插入数据存储区并生成标识符时，调用 `withId(...)` 会创建一个新的 `Person` 对象。所有后续的更改都将在新实例中发生，而不影响前一个实例。
+<4> 可访属性允许直接方法调用而不使用 `MethodHandles`。
+====
+
+这使我们相比反射方面的性能提升了25%。要使域类符合此类优化的条件，它需要遵守一些约束：
+
+* 类型不能放在默认或 `java` 包下
+* 类型及其构造函数必须是 `public`
+* 内部类的类型必须是 `static`
+* 使用的Java Runtime必须允许在原始 `ClassLoader` 中声明类。Java 9和更新版本施加了某些限制。
+
+默认情况下，如果检测到限制，Spring Data会尝试使用生成的属性访问器并回退到基于反射的访问器。
+****
+
+我们来看看以下实体：
+
+.样本实体
+====
+[source,java]
+----
+class Person {
+
+  private final @Id Long id;                                                <1>
+  private final String firstname, lastname;                                 <2>
+  private final LocalDate birthday;
+  private final int age; <3>
+
+  private String comment;                                                   <4>
+  private @AccessType(Type.PROPERTY) String remarks;                        <5>
+
+  static Person of(String firstname, String lastname, LocalDate birthday) { <6>
+    return new Person(null, firstname, lastname, birthday,
+      Period.between(birthday, LocalDate.now()).getYears());
+  }
+
+  Person(Long id, String firstname, String lastname, LocalDate birthday, int age) { <6>
+    this.id = id;
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.birthday = birthday;
+    this.age = age;
+  }
+
+  Person withId(Long id) {                                                  <1>
+    return new Person(id, this.firstname, this.lastname, this.birthday);
+  }
+
+  void setRemarks(String remarks) {                                         <5>
+    this.remarks = remarks;
+  }
+}
+----
+====
+
+<1> identifier属性是final，但在构造函数中设置为null。该类公开了一个 `withId(...)` 方法，该方法用于设置标识符，例如将实例插入数据存储区并生成标识符时，原始Person实例在创建新实例时保持不变。相同的模式通常应用于存储管理的其他属性，但可能必须更改以进行持久性操作。
+<2> `firstname` 和 `lastname` 属性是可能通过getter公开的普通不可变属性。
+<3> `age` 属性是一个不可变的，但是值来自于 `birthday` 属性。根据所显示的设计，数据库值将胜过默认值，因为Spring Data使用唯一声明的构造函数。即使目的是要优先考虑计算，但重要的是这个构造函数也将 `age` 作为参数（可能忽略它），否则属性填充步骤将尝试设置 `age` 字段并由于它是不可变的而失败。
+<4> `comment` 属性是可变的，通过直接设置其字段来填充。
+<5> `remarks` 属性是可变的，并通过直接设置字段或通过调用setter方法来填充。
+<6> 该类公开了一个工厂方法和一个用于创建对象的构造函数。这里的核心思想是使用工厂方法而不是其他构造函数来避免通过 `@PersistenceConstructor` 消除构造函数的歧义。相反，在工厂方法中处理属性的默认值。
+
+
+== 一般建议
+
+* _坚持使用不可变对象_ -- 创建不可变对象很简单，因为实现对象只需要调用它的构造函数。此外，这可以避免域对象被允许客户机代码操作对象状态的setter方法打乱。如果你需要这些，请将它们设置为包保护，以便只能通过有限数量的共存类型来调用它们。仅构造函数实例化比属性填充总体快30%。
+* _提供所有参数的构造函数_ -- 即使你不能或不希望将实体建模为不可变值，提供一个将实体的所有属性(包括可变属性)作为参数的构造函数仍然是有价值的，因为这允许对象映射跳过属性填充以获得最佳性能。
+* _使用工厂方法而不是重载的构造函数来避免使用 ``@PersistenceConstructor``_ -- 使用最佳性能所需的全参数构造函数，我们通常希望公开更多的应用程序用例特定构造函数，这些构造函数省略了自动生成的标识符等内容。使用静态工厂方法公开all-args构造函数的这些变体是一种已建立的模式。
+* _确保遵守允许使用生成的实例化器和属性访问器类的约束_ --
+* _对于要生成的标识符，仍然使用final字段和wither方法组合使用_ --
+* _使用Lombok避免样板代码_ -- 由于持久性操作通常需要构造函数接受所有参数，因此它们的声明变成了对字段赋值的样板参数的繁琐重复，使用Lombok的 `@AllArgsConstructor` 可以最好地避免这种重复。
+
