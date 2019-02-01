@@ -1,0 +1,2821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.3">
+<title>使用Spring Data存储库</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<style>
+/* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
+/* Remove comment around @import statement below when using as a custom stylesheet */
+/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700";*/
+article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}
+audio,canvas,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+[hidden],template{display:none}
+script{display:none!important}
+html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
+body{margin:0}
+a{background:transparent}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+abbr[title]{border-bottom:1px dotted}
+b,strong{font-weight:bold}
+dfn{font-style:italic}
+hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}
+input[type="search"]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}
+input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+body{-webkit-font-smoothing:antialiased}
+img,object,svg{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+.center{margin-left:auto;margin-right:auto}
+.spread{width:100%}
+p.lead,.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{font-size:1.21875em;line-height:1.6}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0;direction:ltr}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:none}
+p{font-family:inherit;font-weight:400;font-size:1em;line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #ddddd8;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em;height:0}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{font-size:1em;line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol,ul.no-bullet,ol.no-bullet{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0;font-size:1em}
+ul.square li ul,ul.circle li ul,ul.disc li ul{list-style:inherit}
+ul.square{list-style-type:square}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ul.no-bullet{list-style:none}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+abbr,acronym{text-transform:uppercase;font-size:90%;color:rgba(0,0,0,.8);border-bottom:1px dotted #ddd;cursor:help}
+abbr{text-transform:none}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote cite{display:block;font-size:.9375em;color:rgba(0,0,0,.6)}
+blockquote cite:before{content:"\2014 \0020"}
+blockquote cite a,blockquote cite a:visited{color:rgba(0,0,0,.6)}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media only screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede}
+table thead,table tfoot{background:#f7f8f7;font-weight:bold}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt,table tr:nth-of-type(even){background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
+body{tab-size:4}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.clearfix:before,.clearfix:after,.float-group:before,.float-group:after{content:" ";display:table}
+.clearfix:after,.float-group:after{clear:both}
+*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+pre,pre>code{line-height:1.45;color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;text-rendering:optimizeSpeed}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menu{color:rgba(0,0,0,.8)}
+b.button:before,b.button:after{position:relative;top:-1px;font-weight:400}
+b.button:before{content:"[";padding:0 3px 0 2px}
+b.button:after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header:before,#header:after,#content:before,#content:after,#footnotes:before,#footnotes:after,#footer:before,#footer:after{content:" ";display:table}
+#header:after,#content:after,#footnotes:after,#footer:after{clear:both}
+#content{margin-top:1.25em}
+#content:before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #ddddd8}
+#header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #ddddd8;padding-bottom:8px}
+#header .details{border-bottom:1px solid #ddddd8;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:-ms-flexbox;display:-webkit-flex;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span:before{content:"\00a0\2013\00a0"}
+#header .details br+span.author:before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark:before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber:after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #ddddd8;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #efefed;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media only screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+#toc.toc2{margin-top:0!important;background-color:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #efefed;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #efefed;left:auto;right:0}}
+@media only screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:20em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:100%;background-color:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:rgba(255,255,255,.8);line-height:1.44}
+.sect1{padding-bottom:.625em}
+@media only screen and (min-width:768px){.sect1{padding-bottom:1.25em}}
+.sect1+.sect1{border-top:1px solid #efefed}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor:before,h2>a.anchor:before,h3>a.anchor:before,#toctitle>a.anchor:before,.sidebarblock>.content>.title>a.anchor:before,h4>a.anchor:before,h5>a.anchor:before,h6>a.anchor:before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock>caption.title{white-space:nowrap;overflow:visible;max-width:0}
+.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{color:rgba(0,0,0,.85)}
+table.tableblock #preamble>.sectionbody>.paragraph:first-of-type p{font-size:inherit}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #ddddd8;color:rgba(0,0,0,.6)}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border-style:solid;border-width:1px;border-color:#e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;-webkit-border-radius:4px;border-radius:4px}
+.exampleblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child{margin-bottom:0}
+.sidebarblock{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+.sidebarblock>:first-child{margin-top:0}
+.sidebarblock>:last-child{margin-bottom:0}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock pre:not(.highlight),.listingblock pre[class="highlight"],.listingblock pre[class^="highlight "],.listingblock pre.CodeRay,.listingblock pre.prettyprint{background:#f7f7f8}
+.sidebarblock .literalblock pre,.sidebarblock .listingblock pre:not(.highlight),.sidebarblock .listingblock pre[class="highlight"],.sidebarblock .listingblock pre[class^="highlight "],.sidebarblock .listingblock pre.CodeRay,.sidebarblock .listingblock pre.prettyprint{background:#f2f1f1}
+.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{-webkit-border-radius:4px;border-radius:4px;word-wrap:break-word;padding:1em;font-size:.8125em}
+.literalblock pre.nowrap,.literalblock pre[class].nowrap,.listingblock pre.nowrap,.listingblock pre[class].nowrap{overflow-x:auto;white-space:pre;word-wrap:normal}
+@media only screen and (min-width:768px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:.90625em}}
+@media only screen and (min-width:1280px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:1em}}
+.literalblock.output pre{color:#f7f7f8;background-color:rgba(0,0,0,.9)}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;-webkit-border-radius:4px;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.listingblock>.content{position:relative}
+.listingblock code[data-lang]:before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:#999}
+.listingblock:hover code[data-lang]:before{display:block}
+.listingblock.terminal pre .command:before{content:attr(data-prompt);padding-right:.5em;color:#999}
+.listingblock.terminal pre .command:not([data-prompt]):before{content:"$"}
+table.pyhltable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.pyhltable td{vertical-align:top;padding-top:0;padding-bottom:0;line-height:1.45}
+table.pyhltable td.code{padding-left:.75em;padding-right:0}
+pre.pygments .lineno,table.pyhltable td:not(.code){color:#999;padding-left:0;padding-right:.5em;border-right:1px solid #ddddd8}
+pre.pygments .lineno{display:inline-block;margin-right:.25em}
+table.pyhltable .linenodiv{background:none!important;padding-right:0!important}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock blockquote p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote:before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.5em;margin-right:.5ex;text-align:right}
+.quoteblock .quoteblock{margin-left:0;margin-right:0;padding:.5em 0;border-left:3px solid rgba(0,0,0,.6)}
+.quoteblock .quoteblock blockquote{padding:0 0 0 .75em}
+.quoteblock .quoteblock blockquote:before{display:none}
+.verseblock{margin:0 1em 1.25em 1em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract{margin:0 0 1.25em 0;display:block}
+.quoteblock.abstract blockquote,.quoteblock.abstract blockquote p{text-align:left;word-spacing:0}
+.quoteblock.abstract blockquote:before,.quoteblock.abstract blockquote p:first-of-type:before{display:none}
+table.tableblock{max-width:100%;border-collapse:separate}
+table.tableblock td>.paragraph:last-child p>p:last-child,table.tableblock th>p:last-child,table.tableblock td>p:last-child{margin-bottom:0}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all th.tableblock,table.grid-all td.tableblock{border-width:0 1px 1px 0}
+table.grid-all tfoot>tr>th.tableblock,table.grid-all tfoot>tr>td.tableblock{border-width:1px 1px 0 0}
+table.grid-cols th.tableblock,table.grid-cols td.tableblock{border-width:0 1px 0 0}
+table.grid-all *>tr>.tableblock:last-child,table.grid-cols *>tr>.tableblock:last-child{border-right-width:0}
+table.grid-rows th.tableblock,table.grid-rows td.tableblock{border-width:0 0 1px 0}
+table.grid-all tbody>tr:last-child>th.tableblock,table.grid-all tbody>tr:last-child>td.tableblock,table.grid-all thead:last-child>tr>th.tableblock,table.grid-rows tbody>tr:last-child>th.tableblock,table.grid-rows tbody>tr:last-child>td.tableblock,table.grid-rows thead:last-child>tr>th.tableblock{border-bottom-width:0}
+table.grid-rows tfoot>tr>th.tableblock,table.grid-rows tfoot>tr>td.tableblock{border-width:1px 0 0 0}
+table.frame-all{border-width:1px}
+table.frame-sides{border-width:0 1px}
+table.frame-topbot{border-width:1px 0}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{display:table-cell;line-height:1.6;background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+td>div.verse{white-space:pre}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.unstyled,ol.unnumbered,ul.checklist,ul.none{list-style-type:none}
+ul.unstyled,ol.unnumbered,ul.checklist{margin-left:.625em}
+ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1em;font-size:.85em}
+ul.checklist li>p:first-child>input[type="checkbox"]:first-child{width:1em;position:relative;top:1px}
+ul.inline{margin:0 auto .625em auto;margin-left:-1.375em;margin-right:0;padding:0;list-style:none;overflow:hidden}
+ul.inline>li{list-style:none;float:left;margin-left:1.375em;display:block}
+ul.inline>li>*{display:block}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist>table tr>td:first-of-type{padding:0 .75em;line-height:1}
+.colist>table tr>td:last-of-type{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:solid 4px #fff;-webkit-box-shadow:0 0 0 1px #ddd;box-shadow:0 0 0 1px #ddd}
+.imageblock.left,.imageblock[style*="float: left"]{margin:.25em .625em 1.25em 0}
+.imageblock.right,.imageblock[style*="float: right"]{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em 0;border-width:1px 0 0 0}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;text-indent:-1.05em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
+.gist .file-data>table td.line-data{width:99%}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background-color:#00fafa}
+.black{color:#000}
+.black-background{background-color:#000}
+.blue{color:#0000bf}
+.blue-background{background-color:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background-color:#fa00fa}
+.gray{color:#606060}
+.gray-background{background-color:#7d7d7d}
+.green{color:#006000}
+.green-background{background-color:#007d00}
+.lime{color:#00bf00}
+.lime-background{background-color:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background-color:#7d0000}
+.navy{color:#000060}
+.navy-background{background-color:#00007d}
+.olive{color:#606000}
+.olive-background{background-color:#7d7d00}
+.purple{color:#600060}
+.purple-background{background-color:#7d007d}
+.red{color:#bf0000}
+.red-background{background-color:#fa0000}
+.silver{color:#909090}
+.silver-background{background-color:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background-color:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background-color:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background-color:#fafa00}
+span.icon>.fa{cursor:default}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note:before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip:before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning:before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution:before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important:before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background-color:rgba(0,0,0,.8);-webkit-border-radius:100px;border-radius:100px;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]:after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,span.alt{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background-color:#fffef7;border-color:#e0e0dc;-webkit-box-shadow:0 1px 4px #e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@media print{@page{margin:1.25cm .75cm}
+*{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]:after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+thead{display:table-header-group}
+svg{max-width:100%}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #ddddd8!important;padding-bottom:0!important}
+.sect1{padding-bottom:0!important}
+.sect1+.sect1{border:0!important}
+#header>h1:first-child{margin-top:1.25rem}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em 0}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span:before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]:before{display:block}
+#footer{background:none!important;padding:0 .9375em}
+#footer-text{color:rgba(0,0,0,.6)!important;font-size:.9em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+<style>
+/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
+/*pre.CodeRay {background-color:#f7f7f8;}*/
+.CodeRay .line-numbers{border-right:1px solid #d8d8d8;padding:0 0.5em 0 .25em}
+.CodeRay span.line-numbers{display:inline-block;margin-right:.5em;color:rgba(0,0,0,.3)}
+.CodeRay .line-numbers strong{color:rgba(0,0,0,.4)}
+table.CodeRay{border-collapse:separate;border-spacing:0;margin-bottom:0;border:0;background:none}
+table.CodeRay td{vertical-align: top;line-height:1.45}
+table.CodeRay td.line-numbers{text-align:right}
+table.CodeRay td.line-numbers>pre{padding:0;color:rgba(0,0,0,.3)}
+table.CodeRay td.code{padding:0 0 0 .5em}
+table.CodeRay td.code>pre{padding:0}
+.CodeRay .debug{color:#fff !important;background:#000080 !important}
+.CodeRay .annotation{color:#007}
+.CodeRay .attribute-name{color:#000080}
+.CodeRay .attribute-value{color:#700}
+.CodeRay .binary{color:#509}
+.CodeRay .comment{color:#998;font-style:italic}
+.CodeRay .char{color:#04d}
+.CodeRay .char .content{color:#04d}
+.CodeRay .char .delimiter{color:#039}
+.CodeRay .class{color:#458;font-weight:bold}
+.CodeRay .complex{color:#a08}
+.CodeRay .constant,.CodeRay .predefined-constant{color:#008080}
+.CodeRay .color{color:#099}
+.CodeRay .class-variable{color:#369}
+.CodeRay .decorator{color:#b0b}
+.CodeRay .definition{color:#099}
+.CodeRay .delimiter{color:#000}
+.CodeRay .doc{color:#970}
+.CodeRay .doctype{color:#34b}
+.CodeRay .doc-string{color:#d42}
+.CodeRay .escape{color:#666}
+.CodeRay .entity{color:#800}
+.CodeRay .error{color:#808}
+.CodeRay .exception{color:inherit}
+.CodeRay .filename{color:#099}
+.CodeRay .function{color:#900;font-weight:bold}
+.CodeRay .global-variable{color:#008080}
+.CodeRay .hex{color:#058}
+.CodeRay .integer,.CodeRay .float{color:#099}
+.CodeRay .include{color:#555}
+.CodeRay .inline{color:#000}
+.CodeRay .inline .inline{background:#ccc}
+.CodeRay .inline .inline .inline{background:#bbb}
+.CodeRay .inline .inline-delimiter{color:#d14}
+.CodeRay .inline-delimiter{color:#d14}
+.CodeRay .important{color:#555;font-weight:bold}
+.CodeRay .interpreted{color:#b2b}
+.CodeRay .instance-variable{color:#008080}
+.CodeRay .label{color:#970}
+.CodeRay .local-variable{color:#963}
+.CodeRay .octal{color:#40e}
+.CodeRay .predefined{color:#369}
+.CodeRay .preprocessor{color:#579}
+.CodeRay .pseudo-class{color:#555}
+.CodeRay .directive{font-weight:bold}
+.CodeRay .type{font-weight:bold}
+.CodeRay .predefined-type{color:inherit}
+.CodeRay .reserved,.CodeRay .keyword {color:#000;font-weight:bold}
+.CodeRay .key{color:#808}
+.CodeRay .key .delimiter{color:#606}
+.CodeRay .key .char{color:#80f}
+.CodeRay .value{color:#088}
+.CodeRay .regexp .delimiter{color:#808}
+.CodeRay .regexp .content{color:#808}
+.CodeRay .regexp .modifier{color:#808}
+.CodeRay .regexp .char{color:#d14}
+.CodeRay .regexp .function{color:#404;font-weight:bold}
+.CodeRay .string{color:#d20}
+.CodeRay .string .string .string{background:#ffd0d0}
+.CodeRay .string .content{color:#d14}
+.CodeRay .string .char{color:#d14}
+.CodeRay .string .delimiter{color:#d14}
+.CodeRay .shell{color:#d14}
+.CodeRay .shell .delimiter{color:#d14}
+.CodeRay .symbol{color:#990073}
+.CodeRay .symbol .content{color:#a60}
+.CodeRay .symbol .delimiter{color:#630}
+.CodeRay .tag{color:#008080}
+.CodeRay .tag-special{color:#d70}
+.CodeRay .variable{color:#036}
+.CodeRay .insert{background:#afa}
+.CodeRay .delete{background:#faa}
+.CodeRay .change{color:#aaf;background:#007}
+.CodeRay .head{color:#f8f;background:#505}
+.CodeRay .insert .insert{color:#080}
+.CodeRay .delete .delete{color:#800}
+.CodeRay .change .change{color:#66f}
+.CodeRay .head .head{color:#f4f}
+</style>
+<style>
+.hidden {
+	display: none;
+}
+
+.switch {
+	border-width: 1px 1px 0 1px;
+	border-style: solid;
+	border-color: #7a2518;
+	display: inline-block;
+}
+
+.switch--item {
+	padding: 10px;
+	background-color: #ffffff;
+	color: #7a2518;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.switch--item:not(:first-child) {
+	border-width: 0 0 0 1px;
+	border-style: solid;
+	border-color: #7a2518;
+}
+
+.switch--item.selected {
+	background-color: #7a2519;
+	color: #ffffff;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
+<script type="text/javascript">
+function addBlockSwitches() {
+	$('.primary').each(function() {
+		primary = $(this);
+		createSwitchItem(primary, createBlockSwitch(primary)).item.addClass("selected");
+		primary.children('.title').remove();
+	});
+	$('.secondary').each(function(idx, node) {
+		secondary = $(node);
+		primary = findPrimary(secondary);
+		switchItem = createSwitchItem(secondary, primary.children('.switch'));
+		switchItem.content.addClass('hidden');
+		findPrimary(secondary).append(switchItem.content);
+		secondary.remove();
+	});
+}
+
+function createBlockSwitch(primary) {
+	blockSwitch = $('<div class="switch"></div>');
+	primary.prepend(blockSwitch);
+	return blockSwitch;
+}
+
+function findPrimary(secondary) {
+	candidate = secondary.prev();
+	while (!candidate.is('.primary')) {
+		candidate = candidate.prev();
+	}
+	return candidate;
+}
+
+function createSwitchItem(block, blockSwitch) {
+	blockName = block.children('.title').text();
+	content = block.children('.content').first().append(block.next('.colist'));
+	item = $('<div class="switch--item">' + blockName + '</div>');
+	item.on('click', '', content, function(e) {
+		$(this).addClass('selected');
+		$(this).siblings().removeClass('selected');
+		e.data.siblings('.content').addClass('hidden');
+		e.data.removeClass('hidden');
+	});
+	blockSwitch.append(item);
+	return {'item': item, 'content': content};
+}
+
+$(addBlockSwitches);
+</script>
+
+</head>
+<body id="repositories" class="book toc2 toc-left">
+<div id="header">
+<h1>使用Spring Data存储库</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#repositories.core-concepts">1. 核心概念</a></li>
+<li><a href="#repositories.query-methods">2. 查询方法</a></li>
+<li><a href="#repositories.definition">3. 定义存储库接口</a>
+<ul class="sectlevel2">
+<li><a href="#repositories.definition-tuning">3.1. 微调存储库定义</a></li>
+<li><a href="#repositories.nullability">3.2. 存储库方法的null处理</a></li>
+<li><a href="#repositories.multiple-modules">3.3. 使用具有多个Spring Data模块的存储库</a></li>
+</ul>
+</li>
+<li><a href="#repositories.query-methods.details">4. 定义查询方法</a>
+<ul class="sectlevel2">
+<li><a href="#repositories.query-methods.query-lookup-strategies">4.1. 查询查找策略</a></li>
+<li><a href="#repositories.query-methods.query-creation">4.2. 查询创建</a></li>
+<li><a href="#repositories.query-methods.query-property-expressions">4.3. 属性表达式</a></li>
+<li><a href="#repositories.special-parameters">4.4. 特殊参数处理</a></li>
+<li><a href="#repositories.limit-query-result">4.5. 限制查询结果</a></li>
+<li><a href="#repositories.query-streaming">4.6. 流式查询结果</a></li>
+<li><a href="#repositories.query-async">4.7. 异步查询结果</a></li>
+</ul>
+</li>
+<li><a href="#repositories.create-instances">5. 创建存储库实例</a>
+<ul class="sectlevel2">
+<li><a href="#repositories.create-instances.spring">5.1. XML配置</a></li>
+<li><a href="#repositories.create-instances.java-config">5.2. Java配置</a></li>
+<li><a href="#repositories.create-instances.standalone">5.3. 独立使用</a></li>
+</ul>
+</li>
+<li><a href="#repositories.custom-implementations">6. Spring Data Repositories的自定义实现</a>
+<ul class="sectlevel2">
+<li><a href="#repositories.single-repository-behavior">6.1. 自定义单个存储库</a></li>
+<li><a href="#repositories.customize-base-repository">6.2. 自定义基础Repository</a></li>
+</ul>
+</li>
+<li><a href="#core.domain-events">7. 从聚合根发布事件</a></li>
+<li><a href="#core.extensions">8. Spring Data扩展</a>
+<ul class="sectlevel2">
+<li><a href="#core.extensions.querydsl">8.1. Querydsl扩展</a></li>
+<li><a href="#core.web">8.2. Web支持</a></li>
+<li><a href="#core.repository-populators">8.3. 存储库填充</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Data存储库抽象的目标是 <strong>显着减少为各种持久性存储实现数据访问层所需的样板代码量</strong>。</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Spring Data存储库文档和你的模块。</p>
+</div>
+<div class="paragraph">
+<p>本章介绍Spring Data存储库的核心概念和接口。本章中的信息来自Spring Data Commons模块。
+它使用Java Persistence API（JPA）模块的配置和代码示例。
+你应该将XML名称空间声明和要扩展的类型调整为你所使用的特定模块的等效项。
+<a href="#repositories.namespace-reference">命名空间参考</a> 涵盖了XML配置参考，支持存储库API的所有Spring Data模块都支持XML配置。
+<a href="#repository-query-keywords">存储库查询关键字</a> 涵盖了存储库抽象支持的查询方法关键字。有关模块特定功能的详细信息，请参阅本文档该模块的章节。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="repositories.core-concepts">1. 核心概念</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Data存储库抽象中的中央接口是 <code>Repository</code>。它将域类以及域类的ID类型作为类型参数进行管理。
+此接口主要用作标记接口，用于捕获要使用的类型，并帮助你发现实现它的接口。
+<code>CrudRepository</code> 为正在管理的实体类提供复杂的CRUD功能。</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 1. <code>CrudRepository</code> 接口</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">interface</span> <span class="class">CrudRepository</span>&lt;T, ID <span class="directive">extends</span> <span class="predefined-type">Serializable</span>&gt;
+  <span class="directive">extends</span> Repository&lt;T, ID&gt; {
+
+  &lt;S <span class="directive">extends</span> T&gt; S save(S entity);      <i class="conum" data-value="1"></i><b>(1)</b>
+
+  Optional&lt;T&gt; findById(ID primaryKey); <i class="conum" data-value="2"></i><b>(2)</b>
+
+  <span class="predefined-type">Iterable</span>&lt;T&gt; findAll();               <i class="conum" data-value="3"></i><b>(3)</b>
+
+  <span class="type">long</span> count();                        <i class="conum" data-value="4"></i><b>(4)</b>
+
+  <span class="type">void</span> delete(T entity);               <i class="conum" data-value="5"></i><b>(5)</b>
+
+  <span class="type">boolean</span> existsById(ID primaryKey);   <i class="conum" data-value="6"></i><b>(6)</b>
+
+  <span class="comment">// … 省略了更多功能</span>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>保存给定的实体。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>返回由给定ID标识的实体。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>返回所有实体。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>返回实体数量。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>删除给定的实体。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>指示给定ID的实体是否存在。</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+我们还提供特定于持久性技术的抽象，例如 <code>JpaRepository</code> 或 <code>MongoRepository</code>。
+除了相当通用的持久性技术无关的接口（如 <code>CrudRepository</code> ）之外，
+这些接口还扩展了 <code>CrudRepository</code> 并公开了特定于底层持久性技术的功能。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>在 <code>CrudRepository</code> 之上，有一个 <code>PagingAndSortingRepository</code> 抽象，它添加了额外的方法来简化对实体的分页访问：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 2. <code>PagingAndSortingRepository</code> 接口</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">interface</span> <span class="class">PagingAndSortingRepository</span>&lt;T, ID <span class="directive">extends</span> <span class="predefined-type">Serializable</span>&gt;
+  <span class="directive">extends</span> CrudRepository&lt;T, ID&gt; {
+
+  <span class="predefined-type">Iterable</span>&lt;T&gt; findAll(Sort sort);
+
+  Page&lt;T&gt; findAll(<span class="predefined-type">Pageable</span> pageable);
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>要访问 <code>User</code> 的第二页且每页20个，你可以执行以下操作：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">PagingAndSortingRepository&lt;User, <span class="predefined-type">Long</span>&gt; repository = <span class="comment">// … 获得对bean的访问权限</span>
+Page&lt;User&gt; users = repository.findAll(<span class="keyword">new</span> PageRequest(<span class="integer">1</span>, <span class="integer">20</span>)); <span class="comment">// 注意第一页从0开始</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>除查询方法外，还可以使用计数和删除查询的查询派生。</p>
+</div>
+<div class="paragraph">
+<p>以下列表显示派生计数查询的接口定义：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 3. 派生计数查询</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> CrudRepository&lt;User, <span class="predefined-type">Long</span>&gt; {
+
+  <span class="type">long</span> countByLastname(<span class="predefined-type">String</span> lastname);
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>以下列表显示了派生删除查询的接口定义：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 4. 派生删除查询</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> CrudRepository&lt;User, <span class="predefined-type">Long</span>&gt; {
+
+  <span class="type">long</span> deleteByLastname(<span class="predefined-type">String</span> lastname);
+
+  <span class="predefined-type">List</span>&lt;User&gt; removeByLastname(<span class="predefined-type">String</span> lastname);
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="repositories.query-methods">2. 查询方法</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>标准CRUD功能存储库通常对底层数据存储库进行查询。使用Spring Data，声明这些查询将分为四个步骤：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>声明继承 <code>Repository</code> 或其子接口之一的接口，并键入它应处理的域类和ID类型，如以下示例所示：</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">PersonRepository</span> <span class="directive">extends</span> Repository&lt;Person, <span class="predefined-type">Long</span>&gt; { <span class="error">…</span> }</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>在接口中声明查询方法。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">PersonRepository</span> <span class="directive">extends</span> Repository&lt;Person, <span class="predefined-type">Long</span>&gt; {
+  <span class="predefined-type">List</span>&lt;Person&gt; findByLastname(<span class="predefined-type">String</span> lastname);
+}</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>设置Spring以使用 <a href="#repositories.create-instances.java-config">Java配置</a> 或
+<a href="#repositories.create-instances">XML配置</a> 为这些接口创建代理实例。</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>要使用Java配置，请创建类似于以下内容的类：</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">org.springframework.data.jpa.repository.config.EnableJpaRepositories</span>;
+
+<span class="annotation">@EnableJpaRepositories</span>
+<span class="type">class</span> <span class="class">Config</span> {}</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>要使用XML配置，请定义类似于以下内容的bean：</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="preprocessor">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="tag">&lt;beans</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/beans</span><span class="delimiter">&quot;</span></span>
+   <span class="attribute-name">xmlns:xsi</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.w3.org/2001/XMLSchema-instance</span><span class="delimiter">&quot;</span></span>
+   <span class="attribute-name">xmlns:jpa</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/data/jpa</span><span class="delimiter">&quot;</span></span>
+   <span class="attribute-name">xsi:schemaLocation</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/beans</span>
+     <span class="content">http://www.springframework.org/schema/beans/spring-beans.xsd</span>
+     <span class="content">http://www.springframework.org/schema/data/jpa</span>
+     <span class="content">http://www.springframework.org/schema/data/jpa/spring-jpa.xsd</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+
+   <span class="tag">&lt;jpa:repositories</span> <span class="attribute-name">base-package</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.repositories</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+
+<span class="tag">&lt;/beans&gt;</span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>在此示例中使用JPA命名空间。如果对任何其他存储使用存储库抽象，则需要将其声明为特定于存储模块的相应命名空间。
+换句话说，例如你使用MongoDB则需要将 <code>jpa</code> 更改为 <code>mongodb</code>。</p>
+</div>
+<div class="paragraph">
+<p>+
+另请注意，JavaConfig配置未显式设置包，因为默认情况下使用带该注解的类的包。
+要自定义要扫描的包，请使用特定于数据存储库的 <code>@Enable${store}Repositories</code> 注解的 <code>basePackage</code> 属性。</p>
+</div>
+</li>
+<li>
+<p>注入存储库实例并使用它，如以下示例所示：</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">SomeClient</span> {
+
+  <span class="directive">private</span> <span class="directive">final</span> PersonRepository repository;
+
+  SomeClient(PersonRepository repository) {
+    <span class="local-variable">this</span>.repository = repository;
+  }
+
+  <span class="type">void</span> doSomething() {
+    <span class="predefined-type">List</span>&lt;Person&gt; persons = repository.findByLastname(<span class="string"><span class="delimiter">&quot;</span><span class="content">Matthews</span><span class="delimiter">&quot;</span></span>);
+  }
+}</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>以下各节详细说明了每个步骤：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#repositories.definition">定义存储库接口</a></p>
+</li>
+<li>
+<p><a href="#repositories.query-methods.details">定义查询方法</a></p>
+</li>
+<li>
+<p><a href="#repositories.create-instances">创建存储库实例</a></p>
+</li>
+<li>
+<p><a href="#repositories.custom-implementations">Spring Data Repositories的自定义实现</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="repositories.definition">3. 定义存储库接口</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>首先，定义特定于域类的存储库接口。接口必须扩展 <code>Repository</code> 并键入域类和ID类型。如果要公开该域类型的CRUD方法，请扩展 <code>CrudRepository</code> 而不是 <code>Repository</code>。</p>
+</div>
+<div class="sect2">
+<h3 id="repositories.definition-tuning">3.1. 微调存储库定义</h3>
+<div class="paragraph">
+<p>通常，存储库接口扩展了 <code>Repository</code>，<code>CrudRepository</code> 或 <code>PagingAndSortingRepository</code>。或者，如果你不想扩展Spring Data接口，还可以使用 <code>@RepositoryDe​​finition</code> 标注存储库接口。扩展 <code>CrudRepository</code> 暴露了一整套操作实体的方法。如果你希望对所公开的方法有选择性，请将要从
+<code>CrudRepository</code> 公开的方法复制到域存储库中。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+这样做可以让你在提供的Spring Data Repositories功能之上定义自己的抽象存储库。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>以下示例显示如何有选择地公开CRUD方法（在本例中为 <code>findById</code> 和 <code>save</code>）：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 5. 有选择地暴露CRUD方法</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@NoRepositoryBean</span>
+<span class="type">interface</span> <span class="class">MyBaseRepository</span>&lt;T, ID <span class="directive">extends</span> <span class="predefined-type">Serializable</span>&gt; <span class="directive">extends</span> Repository&lt;T, ID&gt; {
+
+  Optional&lt;T&gt; findById(ID id);
+
+  &lt;S <span class="directive">extends</span> T&gt; S save(S entity);
+}
+
+<span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> MyBaseRepository&lt;User, <span class="predefined-type">Long</span>&gt; {
+  User findByEmailAddress(EmailAddress emailAddress);
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>在前面的示例中，你为所有域存储库定义了一个公共基本接口，并公开了 <code>findById(&#8230;&#8203;)</code> 以及 <code>save(&#8230;&#8203;)</code>。这些方法被路由到Spring Data提供的所选存储的基本存储库实现中（例如，如果你使用JPA，则实现是SimpleJpaRepository），因为它们与 <code>CrudRepository</code> 中的方法签名匹配。因此，<code>UserRepository</code> 现在可以保存用户，按ID查找单个用户，通过电子邮件地址查找用户。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+中间存储库接口需要添加 <code>@NoRepositoryBean</code> 注解。它会确保Spring Data不应在运行时创建该存储库接口的实例。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="repositories.nullability">3.2. 存储库方法的null处理</h3>
+<div class="paragraph">
+<p>从Spring Data 2.0开始，可以使用Java 8的 <code>Optional</code> 来指示存储库的CRUD方法所返回单个实例可能缺少值。
+除此之外，Spring Data支持在查询方法上返回以下包装类型：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>com.google.common.base.Optional</code></p>
+</li>
+<li>
+<p><code>scala.Option</code></p>
+</li>
+<li>
+<p><code>io.vavr.control.Option</code></p>
+</li>
+<li>
+<p><code>javaslang.control.Option</code> (已弃用，不推荐使用Javaslang)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>或者，查询方法可以选择根本不使用包装类型。然后通过返回 <code>null</code> 来指示缺少查询结果。
+保证返回集合，集合替代，包装器和流的存储库方法永远不会返回 <code>null</code>，而是返回相应的空表示。
+有关详细信息，请参阅 “<a href="#repository-query-return-types">存储库查询返回类型</a>”。</p>
+</div>
+<div class="sect3">
+<h4 id="repositories.nullability.annotations">3.2.1. 可空性注解</h4>
+<div class="paragraph">
+<p>你可以使用 {docSpringBaseUrl}/core.html#null-safety[Spring Framework的可空性注解] 来表达存储库方法的可空性约束。
+它们在运行时提供了一种 <strong>工具友好</strong> 的方法和opt-in <code>null</code> 检查，如下所示：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>{javadocSpringBaseUrl}/org/springframework/lang/NonNullApi.html[<code>@NonNullApi</code>]: 在包级别上使用，
+以声明参数和返回值的默认行为是不接受或生成 <code>null</code> 值。</p>
+</li>
+<li>
+<p>{javadocSpringBaseUrl}/org/springframework/lang/NonNull.html[<code>@NonNull</code>]: 用于不能为 <code>null</code> 的参数或返回值
+（对于 <code>@NonNullApi</code> 适用的参数和返回值则不需要再加）。</p>
+</li>
+<li>
+<p>{javadocSpringBaseUrl}/org/springframework/lang/Nullable.html[<code>@Nullable</code>]: 用于可以为 <code>null</code> 的参数或返回值。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Spring注解是使用 <a href="https://jcp.org/en/jsr/detail?id=305">JSR 305</a>注解进行元注释的（一种隐匿的但广泛传播的JSR）。
+JSR 305元注释允许 <a href="https://www.jetbrains.com/help/idea/nullable-and-notnull-annotations.html">IDEA</a>，
+<a href="https://help.eclipse.org/oxygen/index.jsp?topic=/org.eclipse.jdt.doc.user/tasks/task-using_external_null_annotations.htm">Eclipse</a>和
+<a href="https://kotlinlang.org/docs/reference/java-interop.html#null-safety-and-platform-types">Kotlin</a>
+等工具供应商以通用方式提供null安全支持，而无需对Spring注解进行硬编码支持。要为查询方法启用运行时检查可空性约束，
+需要在 <code>package-info.java</code> 中使用Spring的 <code>@NonNullApi</code> 来激活包级别的非可空性，如以下示例所示：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 6. 在package-info.java中声明不可为空性</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@org</span>.springframework.lang.NonNullApi
+<span class="keyword">package</span> <span class="namespace">com.acme</span>;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>一旦存在非空默认，就会在运行时验证存储库查询方法调用的可空性约束。如果查询执行结果违反了定义的约束，则抛出异常。
+这种情况发生在当方法返回null但声明为非可空时（默认情况下，在存储库所在的包中定义了注解）。
+如果你想再次选择使某方法可以返回为 <code>null</code> 的结果，请在该方法上选择使用 <code>@Nullable</code>。使用本节开头提到的结果包装器类型
+则继续按预期工作：将空结果转换为表示缺席的 <code>Optional</code> 值。</p>
+</div>
+<div class="paragraph">
+<p>以下示例显示了刚才描述的许多技术：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 7. 使用不同的可空性约束</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">package</span> <span class="namespace">com.acme</span>;                                                       <i class="conum" data-value="1"></i><b>(1)</b>
+
+<span class="keyword">import</span> <span class="include">org.springframework.lang.Nullable</span>;
+
+<span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> Repository&lt;User, <span class="predefined-type">Long</span>&gt; {
+
+  User getByEmailAddress(EmailAddress emailAddress);                    <i class="conum" data-value="2"></i><b>(2)</b>
+
+  <span class="annotation">@Nullable</span>
+  User findByEmailAddress(<span class="annotation">@Nullable</span> EmailAddress emailAdress);          <i class="conum" data-value="3"></i><b>(3)</b>
+
+  Optional&lt;User&gt; findOptionalByEmailAddress(EmailAddress emailAddress); <i class="conum" data-value="4"></i><b>(4)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>存储库包（或子包）中，我们已定义了非空行为。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>当执行的查询未产生结果时，抛出 <code>EmptyResultDataAccessException</code>。
+当传递给方法的 <code>emailAddress</code> 为 <code>null</code> 时，抛出 <code>IllegalArgumentException</code>。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>当执行的查询未产生结果时返回 <code>null</code>。同时接受 <code>null</code> 作为 <code>emailAddress</code> 的值。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>当执行的查询没有产生结果时返回 <code>Optional.empty()</code>。当传递给方法的 <code>emailAddress</code> 为 <code>null</code> 时，抛出 <code>IllegalArgumentException</code>。</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="repositories.nullability.kotlin">3.2.2. 基于Kotlin的存储库中的可空性</h4>
+<div class="paragraph">
+<p>Kotlin对语言中的可空性约束进行了定义。Kotlin代码编译为字节码，它不通过方法签名表达可空性约束，而是通过编译元数据表达。
+确保在项目中包含 <code>kotlin-reflect</code> JAR，以便对Kotlin的可空性约束进行内省。
+Spring Data存储库使用语言机制来定义这些约束以应用相同的运行时检查，如下所示：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 8. 在Kotlin存储库中使用可空性约束</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="kotlin">interface UserRepository : Repository&lt;User, String&gt; {
+
+  fun findByUsername(username: String): User     <i class="conum" data-value="1"></i><b>(1)</b>
+
+  fun findByFirstname(firstname: String?): User? <i class="conum" data-value="2"></i><b>(2)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>该方法将参数和结果都定义为非可空（Kotlin默认值）。Kotlin编译器拒绝将 <code>null</code> 传递给方法以进行方法调用。
+如果查询执行产生空结果，则抛出 <code>EmptyResultDataAccessException</code>。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>此方法对firstname参数接受 <code>null</code>，如果查询执行不生成结果，则返回 <code>null</code>。</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="repositories.multiple-modules">3.3. 使用具有多个Spring Data模块的存储库</h3>
+<div class="paragraph">
+<p>在应用程序中使用唯一的Spring Data模块会使事情变得简单，因为定义范围内的所有存储库接口都绑定到该Spring Data模块。
+有时，应用程序需要使用多个Spring Data模块。在这种情况下，存储库定义必须区分持久性技术。
+当它在类路径上检测到多种存储库工厂时，Spring Data进入严格的存储库配置模式。
+严格配置使用存储库或域类的详细信息来确定存储库定义的Spring Data模块绑定：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>如果存储库定义 <a href="#repositories.multiple-modules.types">继承了特定于模块的存储库</a>，那么它是特定Spring Data模块的有效候选者。</p>
+</li>
+<li>
+<p>如果使用 <a href="#repositories.multiple-modules.annotations">特定于模块的类型注解</a> 对域类进行注释，则它是特定Spring Data模块的有效候选者。Spring Data模块接受第三方注解
+（例如JPA的 <code>@Entity</code>）或存储库已提供的自定义注解（例如Spring Data MongoDB和Spring Data Elasticsearch的 <code>@Document</code>）。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>以下示例显示了使用特定于模块的接口的存储库（在本例中为JPA）：</p>
+</div>
+<div id="repositories.multiple-modules.types" class="exampleblock">
+<div class="title">Example 9. 使用特定于模块的接口的存储库定义</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">MyRepository</span> <span class="directive">extends</span> JpaRepository&lt;User, <span class="predefined-type">Long</span>&gt; { }
+
+<span class="annotation">@NoRepositoryBean</span>
+<span class="type">interface</span> <span class="class">MyBaseRepository</span>&lt;T, ID <span class="directive">extends</span> <span class="predefined-type">Serializable</span>&gt; <span class="directive">extends</span> JpaRepository&lt;T, ID&gt; {
+  <span class="error">…</span>
+}
+
+<span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> MyBaseRepository&lt;User, <span class="predefined-type">Long</span>&gt; {
+  <span class="error">…</span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>MyRepository</code> 和 <code>UserRepository</code> 在其类型层次结构中继承 <code>JpaRepository</code>，因此它们是Spring Data JPA模块的有效候选者。</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>以下示例显示了使用通用接口的存储库：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 10. 使用通用接口的存储库定义</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">AmbiguousRepository</span> <span class="directive">extends</span> Repository&lt;User, <span class="predefined-type">Long</span>&gt; {
+ <span class="error">…</span>
+}
+
+<span class="annotation">@NoRepositoryBean</span>
+<span class="type">interface</span> <span class="class">MyBaseRepository</span>&lt;T, ID <span class="directive">extends</span> <span class="predefined-type">Serializable</span>&gt; <span class="directive">extends</span> CrudRepository&lt;T, ID&gt; {
+  <span class="error">…</span>
+}
+
+<span class="type">interface</span> <span class="class">AmbiguousUserRepository</span> <span class="directive">extends</span> MyBaseRepository&lt;User, <span class="predefined-type">Long</span>&gt; {
+  <span class="error">…</span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>AmbiguousRepository</code> 和 <code>AmbiguousUserRepository</code> 在其类型层次结构中继承 <code>Repository</code> 和 <code>CrudRepository</code>。
+虽然在使用单一的Spring Data模块时这是完全正常的，但是多个模块时无法区分这些存储库应该绑定到哪个特定的Spring Data。</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>以下示例显示了使用带注解的域类的存储库：</p>
+</div>
+<div id="repositories.multiple-modules.annotations" class="exampleblock">
+<div class="title">Example 11. 使用带注解的域类的存储库</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">PersonRepository</span> <span class="directive">extends</span> Repository&lt;Person, <span class="predefined-type">Long</span>&gt; {
+ <span class="error">…</span>
+}
+
+<span class="annotation">@Entity</span>
+<span class="type">class</span> <span class="class">Person</span> {
+  <span class="error">…</span>
+}
+
+<span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> Repository&lt;User, <span class="predefined-type">Long</span>&gt; {
+ <span class="error">…</span>
+}
+
+<span class="annotation">@Document</span>
+<span class="type">class</span> <span class="class">User</span> {
+  <span class="error">…</span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>PersonRepository</code> 引用 <code>Person</code>，它使用JPA <code>@Entity</code> 注解进行批注，因此该存储库显然属于Spring Data JPA。
+<code>UserRepository</code> 引用 <code>User</code>，它使用Spring Data MongoDB的 <code>@Document</code> 注解进行注释。</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>以下错误示例显示了使用具有混合注解的域类的存储库：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 12. 使用具有混合注解的域类的存储库定义</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">JpaPersonRepository</span> <span class="directive">extends</span> Repository&lt;Person, <span class="predefined-type">Long</span>&gt; {
+ <span class="error">…</span>
+}
+
+<span class="type">interface</span> <span class="class">MongoDBPersonRepository</span> <span class="directive">extends</span> Repository&lt;Person, <span class="predefined-type">Long</span>&gt; {
+ <span class="error">…</span>
+}
+
+<span class="annotation">@Entity</span>
+<span class="annotation">@Document</span>
+<span class="type">class</span> <span class="class">Person</span> {
+  <span class="error">…</span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>此示例显示了使用JPA和Spring Data MongoDB注释的域类。它定义了两个存储库，<code>JpaPersonRepository</code> 和 <code>MongoDBPersonRepository</code>。
+一个用于JPA，另一个用于MongoDB用法。Spring Data不再能够将存储库分开，从而导致未定义的行为。</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="#repositories.multiple-modules.types">存储库类型详细信息</a> 和 <a href="#repositories.multiple-modules.annotations">区分域类注释</a>
+用于严格存储库配置，以识别特定Spring Data模块的存储库候选。在同一域类型上使用多个持久性技术特定的注解是可能的，
+并允许跨多种持久性技术重用域类型。但是，Spring Data不再能够确定用于绑定存储库的唯一模块。</p>
+</div>
+<div class="paragraph">
+<p>区分存储库的最后一种方法是使用存储库基础包。基础包定义了扫描存储库接口定义的起点，这意味着你需要手动将存储库定义放在相应的包中。
+默认情况下，基于注解驱动的配置使用该配置类的包，但 <a href="#repositories.create-instances.spring">基于XML的配置</a> 中的基本包是必需手动配置的。</p>
+</div>
+<div class="paragraph">
+<p>以下示例显示了注解驱动的基础包配置：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 13. 注解驱动的基础包配置</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@EnableJpaRepositories</span>(basePackages = <span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.repositories.jpa</span><span class="delimiter">&quot;</span></span>)
+<span class="annotation">@EnableMongoRepositories</span>(basePackages = <span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.repositories.mongo</span><span class="delimiter">&quot;</span></span>)
+<span class="type">interface</span> <span class="class">Configuration</span> { }</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="repositories.query-methods.details">4. 定义查询方法</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>存储库代理有两种方法可以从方法名称派生特定于仓储的查询：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>从方法名称派生查询。</p>
+</li>
+<li>
+<p>使用手动定义的查询。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>可用选项取决于实际仓储。但是，必须有一个策略来决定如何创建实际查询。下一节将介绍可用策略选项。</p>
+</div>
+<div class="sect2">
+<h3 id="repositories.query-methods.query-lookup-strategies">4.1. 查询查找策略</h3>
+<div class="paragraph">
+<p>存储库基础结构可以使用以下策略来解析查询。使用XML配置，你可以通过 <code>query-lookup-strategy</code> 属性在命名空间配置策略。
+对于Java配置，你可以使用 <code>Enable${store}Repositories</code> 注解的 <code>queryLookupStrategy</code> 属性。特定仓储可能不支持某些策略。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>CREATE</code> 尝试从查询方法名称构造特定于仓储的查询。一般方法是从方法名称中删除一组已知的前缀，并解析方法的其余部分。
+你可以在 <a href="#repositories.query-methods.query-creation">查询创建</a> 中阅读有关查询构造的更多信息。</p>
+</li>
+<li>
+<p><code>USE_DECLARED_QUERY</code> 尝试查找声明的查询，如果找不到，则抛出异常。查询可以通过声明注解来定义，也可以通过其他方式声明。
+查阅特定仓储的文档以查找该仓储​​存储的可用选项。如果存储库基础结构在引导时未找到该方法的声明查询，则启动将失败。</p>
+</li>
+<li>
+<p><code>CREATE_IF_NOT_FOUND</code>（默认）结合 <code>CREATE</code> 和 <code>USE_DECLARED_QUERY</code>。它首先查找声明的查询，如果没有找到声明的查询，
+它会创建一个基于自定义方法名称的查询。这是默认的查找策略，因此，如果你未明确配置任何内容，则使用此策略。
+它允许通过方法名称快速查询，还可以根据需要引入声明的查询来自定义这些查询。</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="repositories.query-methods.query-creation">4.2. 查询创建</h3>
+<div class="paragraph">
+<p>Spring Data存储库基础结构中的查询构建器机制对于构建对存储库实体的约束查询很有用。该机制剥离来自于方法的前缀
+<code>find&#8230;&#8203;By</code>，<code>read&#8230;&#8203;By</code>，<code>query&#8230;&#8203;By</code>，<code>count&#8230;&#8203;By</code>，和 <code>get&#8230;&#8203;By</code> 并解析其余部分。
+introduction子句可以包含更多表达式，例如 <code>Distinct</code> 在要创建的查询上设置去重标志。但是，
+第一个 <code>By</code> 用作分隔符来指示实际条件的开始。在最基本的层面上，你可以在实体属性上定义条件，并将它们与 <code>And</code> 和 <code>Or</code> 连接起来。
+以下示例显示了如何创建大量查询：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 14. 从方法名称创建查询</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">PersonRepository</span> <span class="directive">extends</span> Repository&lt;User, <span class="predefined-type">Long</span>&gt; {
+
+  <span class="predefined-type">List</span>&lt;Person&gt; findByEmailAddressAndLastname(EmailAddress emailAddress, <span class="predefined-type">String</span> lastname);
+
+  <span class="comment">// 为查询启用distinct标志</span>
+  <span class="predefined-type">List</span>&lt;Person&gt; findDistinctPeopleByLastnameOrFirstname(<span class="predefined-type">String</span> lastname, <span class="predefined-type">String</span> firstname);
+  <span class="predefined-type">List</span>&lt;Person&gt; findPeopleDistinctByLastnameOrFirstname(<span class="predefined-type">String</span> lastname, <span class="predefined-type">String</span> firstname);
+
+  <span class="comment">// 启用忽略单个属性的大小写</span>
+  <span class="predefined-type">List</span>&lt;Person&gt; findByLastnameIgnoreCase(<span class="predefined-type">String</span> lastname);
+  <span class="comment">// 启用忽略所有合适属性的大小写</span>
+  <span class="predefined-type">List</span>&lt;Person&gt; findByLastnameAndFirstnameAllIgnoreCase(<span class="predefined-type">String</span> lastname, <span class="predefined-type">String</span> firstname);
+
+  <span class="comment">// 为查询启用静态ORDER BY</span>
+  <span class="predefined-type">List</span>&lt;Person&gt; findByLastnameOrderByFirstnameAsc(<span class="predefined-type">String</span> lastname);
+  <span class="predefined-type">List</span>&lt;Person&gt; findByLastnameOrderByFirstnameDesc(<span class="predefined-type">String</span> lastname);
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>解析方法的实际结果取决于你为其创建查询的持久性存储。但是，有一些一般要注意的事项：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>表达式通常是属性遍历与可以连接的运算符相结合。你可以将属性表达式与 <code>AND</code> 和 <code>OR</code> 组合使用。
+对于属性表达式，你还可以获得诸如 <code>Between</code>，<code>LessThan</code>，<code>GreaterThan</code> 和 <code>Like</code> 之类的运算符的支持。
+支持的运算符可能因仓储而异，因此请参阅参考文档的相应部分。</p>
+</li>
+<li>
+<p>方法解析器支持为各个属性设置 <code>IgnoreCase</code> 标志（例如，<code>findByLastnameIgnoreCase(&#8230;&#8203;)</code>）或支持忽略大小写的类型的所有属性
+（通常是String实例 - 例如，<code>findByLastnameAndFirstnameAllIgnoreCase(&#8230;&#8203;)</code>）。是否支持忽略大小写可能因仓储而异，
+因此请参阅参考文档中有关特定于仓储的查询方法的相关章节。</p>
+</li>
+<li>
+<p>你可以通过将 <code>OrderBy</code> 子句附加到查询方法的引用属性以提供排序方向（<code>Asc</code> 或 <code>Desc</code>）来应用静态排序。
+要创建支持动态排序的查询方法，请参阅 <a href="#repositories.special-parameters">特殊参数处理</a>。</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="repositories.query-methods.query-property-expressions">4.3. 属性表达式</h3>
+<div class="paragraph">
+<p>属性表达式只能引用被管理实体的直接属性，如前面的例子所示。在创建查询时，你已确保已解析的属性是托管域类的属性。
+但是，你也可以通过遍历嵌套属性来定义约束。请考虑以下方法签名：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">List</span>&lt;Person&gt; findByAddressZipCode(ZipCode zipCode);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>假设 <code>Person</code> 有一个带 <code>ZipCode</code> 的 <code>Address</code>。在这种情况下，该方法创建属性遍历 <code>x.address.zipCode</code>。
+解析算法首先将整个部分（<code>AddressZipCode</code>）解释为属性，并检查域类中是否具有该名称的属性（未大写）。如果查找成功，则使用该属性。
+如果没有，算法 <strong>自右向左</strong> 在方法签名属性的驼峰处进行切割，分成头部和尾部，并试图找到相应的属性 -
+在我们的示例中是 <code>AddressZip</code> 和 <code>Code</code>。如果算法找到具有该头部的属性，则会采用尾部并继续从那里构建查询树（以刚才描述的方式将尾部分开）。
+如果第一个分割不匹配，算法会将分割点左移（Address，ZipCode）并继续检测。</p>
+</div>
+<div class="paragraph">
+<p>虽然这适用于大多数情况，算法有可能选择错误的属性。假设 <code>Person</code> 类也有一个 <code>addressZip</code> 属性。
+算法将在第一轮拆分中命中并选择错误的属性，然后失败（因为 <code>addressZip</code> 的类型可能没有 <code>code</code> 属性）。</p>
+</div>
+<div class="paragraph">
+<p>要解决这种歧义，可以在方法名称中使用 <code>_</code> 来手动定义遍历点。所以我们的方法名称如下：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">List</span>&lt;Person&gt; findByAddress_ZipCode(ZipCode zipCode);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>因为我们将下划线字符视为保留字符，因此我们强烈建议你遵循标准的Java命名约定（即，不在属性名称中使用下划线，而使用驼峰）。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="repositories.special-parameters">4.4. 特殊参数处理</h3>
+<div class="paragraph">
+<p>要处理查询中的参数，请定义方法参数，如前面示例中所示。除此之外，基础结构还可识别某些特定类型（如 <code>Pageable</code> 和 <code>Sort</code>），
+以动态地对查询应用分页和排序。以下示例演示了这些功能：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 15. 在查询方法中使用 <code>Pageable</code>，<code>Slice</code> 和 <code>Sort</code></div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Page&lt;User&gt; findByLastname(<span class="predefined-type">String</span> lastname, <span class="predefined-type">Pageable</span> pageable);
+
+Slice&lt;User&gt; findByLastname(<span class="predefined-type">String</span> lastname, <span class="predefined-type">Pageable</span> pageable);
+
+<span class="predefined-type">List</span>&lt;User&gt; findByLastname(<span class="predefined-type">String</span> lastname, Sort sort);
+
+<span class="predefined-type">List</span>&lt;User&gt; findByLastname(<span class="predefined-type">String</span> lastname, <span class="predefined-type">Pageable</span> pageable);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>第一种方法允许你将 <code>org.springframework.data.domain.Pageable</code> 实例传递给查询方法，以动态地将分页添加到静态定义的查询中。
+<code>Page</code> 知道可用的总元素数和总页数。内部通过触发 <code>count</code> 查询来实现计算总数。由于这可能很昂贵（取决于所使用的仓储），
+你可以改为返回 <code>Slice</code>。<code>Slice</code> 只知道是否还有下一个 <code>Slice</code> 可用，这在遍历更大的结果集时可能就足够了。</p>
+</div>
+<div class="paragraph">
+<p>排序选项也通过 <code>Pageable</code> 实例处理。如果只需要排序，请在方法中添加 <code>org.springframework.data.domain.Sort</code> 参数。
+如你所见，也可以返回 <code>List</code>。在这种情况下，不会创建构建实际分页实例所需的其他元数据（这反过来意味着它不会发出必要的附加计数查询）。
+相反，它限制查询仅查找给定范围的实体。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+要了解实体究竟有多少页，你必须触发额外的计数查询。默认情况下，此查询是从你实际触发的查询派生的。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="repositories.limit-query-result">4.5. 限制查询结果</h3>
+<div class="paragraph">
+<p>查询方法的结果可以通过使用 <code>first</code> 或 <code>top</code> 关键字来限制，这些关键字可以互换使用。
+可选的数值可以附加到 <code>top</code> 或 <code>first</code>，以指定要返回的最大结果集的大小。如果省略该数字，则假定结果大小为1。
+以下示例显示如何限制查询大小：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 16. 使用Top和First限制查询的结果大小</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">User findFirstByOrderByLastnameAsc();
+
+User findTopByOrderByAgeDesc();
+
+Page&lt;User&gt; queryFirst10ByLastname(<span class="predefined-type">String</span> lastname, <span class="predefined-type">Pageable</span> pageable);
+
+Slice&lt;User&gt; findTop3ByLastname(<span class="predefined-type">String</span> lastname, <span class="predefined-type">Pageable</span> pageable);
+
+<span class="predefined-type">List</span>&lt;User&gt; findFirst10ByLastname(<span class="predefined-type">String</span> lastname, Sort sort);
+
+<span class="predefined-type">List</span>&lt;User&gt; findTop10ByLastname(<span class="predefined-type">String</span> lastname, <span class="predefined-type">Pageable</span> pageable);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>限制表达式也支持 <code>Distinct</code> 关键字。此外，对于将结果集限制为一个实例的查询，支持使用 <code>Optional</code> 关键字将结果包装。</p>
+</div>
+<div class="paragraph">
+<p>如果将分页或切片应用于限制查询分页（以及可用页数的计算），则将其应用于已限制的结果集中。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+通过使用 <code>Sort</code> 参数将结果与动态排序结合使用，可以用于表达最小“K”个元素以及最大“K”个元素的查询方法。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="repositories.query-streaming">4.6. 流式查询结果</h3>
+<div class="paragraph">
+<p>可以使用Java 8 <code>Stream&lt;T&gt;</code> 作为返回类型以递增方式处理查询方法的结果，而不是将查询结果包装在 <code>Stream</code> 中，
+使用数据存储的特定方法执行流式处理，如以下示例所示：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 17. 使用Java 8 <code>Stream&lt;T&gt;</code> 流式传输查询结果</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Query</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">select u from User u</span><span class="delimiter">&quot;</span></span>)
+Stream&lt;User&gt; findAllByCustomQueryAndStream();
+
+Stream&lt;User&gt; readAllByFirstnameNotNull();
+
+<span class="annotation">@Query</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">select u from User u</span><span class="delimiter">&quot;</span></span>)
+Stream&lt;User&gt; streamAllPaged(<span class="predefined-type">Pageable</span> pageable);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>Stream</code> 可能会包装基础数据存储特定的资源，因此必须在使用后关闭。
+你可以使用 <code>close</code> 方法或使用Java 7 <code>try-with-resources</code> 块手动关闭 <code>Stream</code>，如以下示例所示：
+</td>
+</tr>
+</table>
+</div>
+<div class="exampleblock">
+<div class="title">Example 18. 使用try-with-resources块关闭 <code>Stream&lt;T&gt;</code></div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">try</span> (Stream&lt;User&gt; stream = repository.findAllByCustomQueryAndStream()) {
+  stream.forEach(<span class="error">…</span>);
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+当前并非所有Spring Data模块都支持 <code>Stream&lt;T&gt;</code> 作为返回类型。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="repositories.query-async">4.7. 异步查询结果</h3>
+<div class="paragraph">
+<p>可以使用 {docSpringBaseUrl}/integration.html#scheduling[Spring的异步方法执行功能]
+异步运行存储库查询。这意味着该方法在调用时立即返回，而实际的查询执行发生在已提交给Spring <code>TaskExecutor</code> 的任务中。
+异步查询执行与响应式查询执行不同，不应混合使用。有关响应式查询支持的更多详细信息，请参阅特定于存储库的文档。
+以下示例显示了一些异步查询：</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Async</span>
+<span class="predefined-type">Future</span>&lt;User&gt; findByFirstname(<span class="predefined-type">String</span> firstname);               <i class="conum" data-value="1"></i><b>(1)</b>
+
+<span class="annotation">@Async</span>
+CompletableFuture&lt;User&gt; findOneByFirstname(<span class="predefined-type">String</span> firstname); <i class="conum" data-value="2"></i><b>(2)</b>
+
+<span class="annotation">@Async</span>
+ListenableFuture&lt;User&gt; findOneByLastname(<span class="predefined-type">String</span> lastname);    <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>使用 <code>java.util.concurrent.Future</code> 作为返回类型。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>使用Java 8 <code>java.util.concurrent.CompletableFuture</code> 作为返回类型。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>使用 <code>org.springframework.util.concurrent.ListenableFuture</code> 作为返回类型。</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="repositories.create-instances">5. 创建存储库实例</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>在本节中，你将为定义的存储库接口创建实例和bean定义。一种方法是使用随每个支持存储库机制的Spring Data模块一起提供的Spring命名空间，
+尽管我们通常建议使用Java配置。</p>
+</div>
+<div class="sect2">
+<h3 id="repositories.create-instances.spring">5.1. XML配置</h3>
+<div class="paragraph">
+<p>每个Spring Data模块都包含一个存储库元素，允许你定义Spring扫描的基础包，如以下示例所示：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 19. 通过XML启用Spring Data存储库</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="preprocessor">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="tag">&lt;beans:beans</span> <span class="attribute-name">xmlns:beans</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/beans</span><span class="delimiter">&quot;</span></span>
+  <span class="attribute-name">xmlns:xsi</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.w3.org/2001/XMLSchema-instance</span><span class="delimiter">&quot;</span></span>
+  <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/data/jpa</span><span class="delimiter">&quot;</span></span>
+  <span class="attribute-name">xsi:schemaLocation</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/beans</span>
+    <span class="content">http://www.springframework.org/schema/beans/spring-beans.xsd</span>
+    <span class="content">http://www.springframework.org/schema/data/jpa</span>
+    <span class="content">http://www.springframework.org/schema/data/jpa/spring-jpa.xsd</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;repositories</span> <span class="attribute-name">base-package</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.repositories</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+
+<span class="tag">&lt;/beans:beans&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>在前面的示例中，指示Spring扫描 <code>com.acme.repositories</code> 及其所有子包，以查找继承 <code>Repository</code> 或其子接口的接口。
+对于找到的每个接口，基础结构都会注册特定于持久性技术的 <code>FactoryBean</code>，以创建相应代理去处理查询方法调用。
+每个bean都以接口名称命名（首字母小写），因此 <code>UserRepository</code> 的接口将在 <code>userRepository</code> 下注册。
+<code>base-package</code> 属性允许使用通配符，以便你可以定义扫描包的模式。</p>
+</div>
+<div class="sect3">
+<h4 id="_使用过滤器">5.1.1. 使用过滤器</h4>
+<div class="paragraph">
+<p>默认情况下，基础结构会选择位于已配置的基本包下，继承特定于持久性技术的 <code>Repository</code> 子接口的每个接口，并为其创建一个bean实例。
+但是，你可能希望对某些接口为其创建bean实例，进行更细粒度的控制。为此，请在 <code>&lt;repositories/&gt;</code> 元素中使用
+<code>&lt;include-filter/&gt;</code> 和 <code>&lt;exclude-filter/&gt;</code> 元素。语义完全等同于Spring的上下文命名空间中的元素。
+有关详细信息，请参阅这些元素的 {docSpringBaseUrl}/core.html#beans-scanning-filters[Spring参考文档]。</p>
+</div>
+<div class="paragraph">
+<p>例如，要排除某些接口从而不实例化为存储库bean，可以使用以下配置：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 20. 使用exclude-filter元素</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;repositories</span> <span class="attribute-name">base-package</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.repositories</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+  <span class="tag">&lt;context:exclude-filter</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">regex</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">expression</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">.*SomeRepository</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="tag">&lt;/repositories&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>前面的示例排除了以 <code>SomeRepository</code> 结尾的所有接口的实例化。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="repositories.create-instances.java-config">5.2. Java配置</h3>
+<div class="paragraph">
+<p>还可以通过在JavaConfig类上使用特定于仓储的 <code>@Enable${store}Repositories</code> 注解来启用某种存储库基础设施。
+有关Spring容器的基于Java的配置的介绍，请参阅 {docSpringBaseUrl}/core.html#beans-java[Spring参考文档中的JavaConfig]。</p>
+</div>
+<div class="paragraph">
+<p>启用S​​pring Data存储库的示例配置类似于以下内容：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 21. 基于注解的存储库配置示例</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
+<span class="annotation">@EnableJpaRepositories</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.repositories</span><span class="delimiter">&quot;</span></span>)
+<span class="type">class</span> <span class="class">ApplicationConfiguration</span> {
+
+  <span class="annotation">@Bean</span>
+  EntityManagerFactory entityManagerFactory() {
+    <span class="comment">// …</span>
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+上面的示例使用特定JPA的注解，你可以根据实际使用的存储库模块进行更改。这同样适用于 <code>EntityManagerFactory</code> bean的定义。
+请参阅有关特定于仓储的配置的部分。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="repositories.create-instances.standalone">5.3. 独立使用</h3>
+<div class="paragraph">
+<p>你还可以在Spring容器之外使用存储库基础结构 - 例如，在CDI环境中。你仍然需要在类路径中使用一些Spring库，
+但通常也可以通过编程方式设置存储库。提供存储库支持的Spring Data模块提供了一个特定于持久性技术的 <code>RepositoryFactory</code>，
+你可以按如下方式使用它：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 22. 存储库工厂的独立使用</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">RepositoryFactorySupport factory = <span class="error">…</span> <span class="comment">// 在这里实例化工厂</span>
+UserRepository repository = factory.getRepository(UserRepository.class);</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="repositories.custom-implementations">6. Spring Data Repositories的自定义实现</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>本节介绍存储库自定义以及片段如何构成复合存储库。</p>
+</div>
+<div class="paragraph">
+<p>当查询方法需要不同的行为或无法通过查询派生实现时，则需要提供自定义实现。
+Spring Data存储库允许你提供自定义存储库代码，并将其与通用CRUD抽象和查询方法功能集成。</p>
+</div>
+<div class="sect2">
+<h3 id="repositories.single-repository-behavior">6.1. 自定义单个存储库</h3>
+<div class="paragraph">
+<p>要使用自定义功能丰富存储库，必须首先定义片段接口和自定义功能的实现，如以下示例所示：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 23. 自定义存储库功能的片段接口</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">CustomizedUserRepository</span> {
+  <span class="type">void</span> someCustomMethod(User user);
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>然后，你可以让存储库接口继承片段接口，如以下示例所示：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 24. 自定义存储库功能的实现</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">CustomizedUserRepositoryImpl</span> <span class="directive">implements</span> CustomizedUserRepository {
+
+  <span class="directive">public</span> <span class="type">void</span> someCustomMethod(User user) {
+    <span class="comment">// 你的自定义实现</span>
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+为片段接口实现类的名字添加 <code>Impl</code> 后缀很重要。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>实现本身不依赖于Spring Data，可以是常规的Spring bean。因此，你可以使用标准依赖项注入行为来注入对其他bean
+（例如JdbcTemplate）的引用等等。</p>
+</div>
+<div class="paragraph">
+<p>你可以让存储库接口继承自片段接口，如以下示例所示：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 25. 存储库接口的更改</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> CrudRepository&lt;User, <span class="predefined-type">Long</span>&gt;, CustomizedUserRepository {
+
+  <span class="comment">// 在这里声明查询方法</span>
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>使用存储库接口继承片段接口可以组合CRUD和自定义功能，并使其可供客户端使用。</p>
+</div>
+<div class="paragraph">
+<p>Spring Data存储库通过使用构成存储库组合的片段来实现。片段是基本存储库，特定功能方面（如 <a href="#core.extensions.querydsl">QueryDsl</a>），
+自定义接口及其实现。每次向存储库接口添加接口时，都可以通过添加片段来增强组合。每个Spring Data模块都提供了基本存储库和存储库方面的实现。</p>
+</div>
+<div class="paragraph">
+<p>以下示例显示了自定义接口及其实现：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 26. 片段与它们的实现</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">HumanRepository</span> {
+  <span class="type">void</span> someHumanMethod(User user);
+}
+
+<span class="type">class</span> <span class="class">HumanRepositoryImpl</span> <span class="directive">implements</span> HumanRepository {
+
+  <span class="directive">public</span> <span class="type">void</span> someHumanMethod(User user) {
+    <span class="comment">// 你的自定义实现</span>
+  }
+}
+
+<span class="type">interface</span> <span class="class">ContactRepository</span> {
+
+  <span class="type">void</span> someContactMethod(User user);
+
+  User anotherContactMethod(User user);
+}
+
+<span class="type">class</span> <span class="class">ContactRepositoryImpl</span> <span class="directive">implements</span> ContactRepository {
+
+  <span class="directive">public</span> <span class="type">void</span> someContactMethod(User user) {
+    <span class="comment">// 你的自定义实现</span>
+  }
+
+  <span class="directive">public</span> User anotherContactMethod(User user) {
+    <span class="comment">// 你的自定义实现</span>
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>以下示例显示了继承 <code>CrudRepository</code> 的自定义存储库的接口：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 27. 存储库接口的更改</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> CrudRepository&lt;User, <span class="predefined-type">Long</span>&gt;, HumanRepository, ContactRepository {
+
+  <span class="comment">// 在这里声明查询方法</span>
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>存储库可以由多个自定义实现组成，这些实现按其声明的顺序导入。自定义实现的优先级高于基本实现和存储库方面实现。
+如果两个片段提供相同的方法签名，则此排序机制允许你覆盖基本存储库和存储库方面的方法并解决歧义。
+存储库片段不限于在单个存储库接口中使用。多个存储库可以使用相同的片段接口，以便你在不同的存储库中重用自定义功能。</p>
+</div>
+<div class="paragraph">
+<p>以下示例显示了存储库片段及其实现：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 28. 片段覆盖 <code>save(&#8230;&#8203;)</code></div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">CustomizedSave</span>&lt;T&gt; {
+  &lt;S <span class="directive">extends</span> T&gt; S save(S entity);
+}
+
+<span class="type">class</span> <span class="class">CustomizedSaveImpl</span>&lt;T&gt; <span class="directive">implements</span> CustomizedSave&lt;T&gt; {
+
+  <span class="directive">public</span> &lt;S <span class="directive">extends</span> T&gt; S save(S entity) {
+    <span class="comment">// 你的自定义实现</span>
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>以下示例显示了使用前面的存储库片段的存储库：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 29. 自定义存储库接口</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> CrudRepository&lt;User, <span class="predefined-type">Long</span>&gt;, CustomizedSave&lt;User&gt; {
+}
+
+<span class="type">interface</span> <span class="class">PersonRepository</span> <span class="directive">extends</span> CrudRepository&lt;Person, <span class="predefined-type">Long</span>&gt;, CustomizedSave&lt;Person&gt; {
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_配置">6.1.1. 配置</h4>
+<div class="paragraph">
+<p>如果使用命名空间配置，则存储库基础结构会通过尝试扫描其找到存储库的包下面的类来自动检测片段的自定义实现。
+这些类需要遵循命名约定 - 将命名空间元素配置的 <code>repository-impl-postfix</code> 属性值，后缀到片段接口实现类的名称。
+此后缀默认为 <code>Impl</code>。以下示例显示了使用默认后缀的存储库以及为后缀设置自定义值的存储库：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 30. 配置示例</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;repositories</span> <span class="attribute-name">base-package</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.repository</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+
+<span class="tag">&lt;repositories</span> <span class="attribute-name">base-package</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.repository</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">repository-impl-postfix</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">MyPostfix</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>前面示例中的第一个配置尝试查找名为 <code>com.acme.repository.CustomizedUserRepositoryImpl</code> 的类，以充当自定义存储库实现。
+第二个示例则尝试查找 <code>com.acme.repository.CustomizedUserRepositoryMyPostfix</code>。</p>
+</div>
+<div class="sect4">
+<h5 id="repositories.single-repository-behaviour.ambiguity">解决歧义</h5>
+<div class="paragraph">
+<p>如果在不同的包中找到具有匹配类名的多个实现，则Spring Data使用bean名来标识要使用的bean。</p>
+</div>
+<div class="paragraph">
+<p>给定前面显示的 <code>CustomizedUserRepository</code> 的以下两个自定义实现，则会选择使用第一个实现。
+它的bean名称是 <code>customizedUserRepositoryImpl</code>，它与片段接口（<code>CustomizedUserRepository</code> + <code>Impl</code> 后缀）的名称相匹配。</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 31. 解决有歧义的多个实现</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">package</span> <span class="namespace">com.acme.impl.one</span>;
+
+<span class="type">class</span> <span class="class">CustomizedUserRepositoryImpl</span> <span class="directive">implements</span> CustomizedUserRepository {
+
+  <span class="comment">// 你的自定义实现</span>
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">package</span> <span class="namespace">com.acme.impl.two</span>;
+
+<span class="annotation">@Component</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">specialCustomImpl</span><span class="delimiter">&quot;</span></span>)
+<span class="type">class</span> <span class="class">CustomizedUserRepositoryImpl</span> <span class="directive">implements</span> CustomizedUserRepository {
+
+  <span class="comment">// 你的自定义实现</span>
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>如果使用 <code>@Component("specialCustom")</code> 注解 <code>UserRepository</code> 接口，那么，bean名称加上 <code>Impl</code> 将与 <code>com.acme.impl.two</code>
+中为存储库实现定义的名称相匹配，而不再使用第一个名称。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="repositories.manual-wiring">手动接线</h5>
+<div class="paragraph">
+<p>如果你的自定义实现仅使用基于注解的配置和自动装配，则前面展示的方法效果很好，因为它被视为任何其他Spring bean。
+如果你的实现片段bean需要特殊布线，你可以声明bean并根据 <a href="#repositories.single-repository-behaviour.ambiguity">前一节</a>
+中描述的约定对其进行命名。然后，基础结构按名称引用手动定义的bean定义，而不是自己创建一个。
+以下示例显示如何手动接线自定义实现：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 32. 手动接线自定义实现</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;repositories</span> <span class="attribute-name">base-package</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.repository</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+
+<span class="tag">&lt;beans:bean</span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">userRepositoryImpl</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">…</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+  <span class="comment">&lt;!-- 进一步配置 --&gt;</span>
+<span class="tag">&lt;/beans:bean&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="repositories.customize-base-repository">6.2. 自定义基础Repository</h3>
+<div class="paragraph">
+<p>当你要自定义基本存储库行为以便所有存储库都受到影响时，<a href="#repositories.manual-wiring">上一节</a> 中描述的方法需要自定义每个存储库接口。
+要改为更改所有存储库的行为，可以创建一个继承特定于持久性技术的存储库基类的实现。然后，此类充当存储库代理的自定义基类，如以下示例所示：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 33. 自定义存储库基类</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">MyRepositoryImpl</span>&lt;T, ID <span class="directive">extends</span> <span class="predefined-type">Serializable</span>&gt;
+  <span class="directive">extends</span> SimpleJpaRepository&lt;T, ID&gt; {
+
+  <span class="directive">private</span> <span class="directive">final</span> EntityManager entityManager;
+
+  MyRepositoryImpl(JpaEntityInformation entityInformation,
+                          EntityManager entityManager) {
+    <span class="local-variable">super</span>(entityInformation, entityManager);
+
+    <span class="comment">// 持有EntityManager可以使用新引入的方法</span>
+    <span class="local-variable">this</span>.entityManager = entityManager;
+  }
+
+  <span class="annotation">@Transactional</span>
+  <span class="directive">public</span> &lt;S <span class="directive">extends</span> T&gt; S save(S entity) {
+    <span class="comment">// 在这里实施自定义</span>
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+该类需要具有特定于存储库工厂实现中，所使用的超类的构造函数。如果存储库基类具有多个构造函数，
+则覆盖含有 <code>EntityInformation</code> 和存储特定基础结构对象的构造函数（例如 <code>EntityManager</code> 或模板类）。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>最后一步是使Spring Data基础结构了解你自定义的存储库基类。在Java配置中，你可以使用 <code>@Enable${store}Repositories</code> 注解的
+<code>repositoryBaseClass</code> 属性来执行此操作，如以下示例所示：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 34. 使用JavaConfig配置自定义存储库基类</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
+<span class="annotation">@EnableJpaRepositories</span>(repositoryBaseClass = MyRepositoryImpl.class)
+<span class="type">class</span> <span class="class">ApplicationConfiguration</span> { <span class="error">…</span> }</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>XML命名空间中提供了相应的属性，如以下示例所示：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 35. 使用XML配置自定义存储库基类</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;repositories</span> <span class="attribute-name">base-package</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.repository</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">base-class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">….MyRepositoryImpl</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="core.domain-events">7. 从聚合根发布事件</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>由存储库管理的实体是聚合根。在域驱动设计应用程序中，这些聚合根通常会发布域事件。
+Spring Data提供了一个名为 <code>@DomainEvents</code> 的注解，你可以在聚合根的方法上使用它来使该发布尽可能简单，如下示：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 36. 公开来自聚合根的域事件</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">AnAggregateRoot</span> {
+
+    <span class="annotation">@DomainEvents</span>                <i class="conum" data-value="1"></i><b>(1)</b>
+    <span class="predefined-type">Collection</span>&lt;<span class="predefined-type">Object</span>&gt; domainEvents() {
+        <span class="comment">// … 返回要在此处发布的事件</span>
+    }
+
+    <span class="annotation">@AfterDomainEventPublication</span> <i class="conum" data-value="2"></i><b>(2)</b>
+    <span class="type">void</span> callbackMethod() {
+       <span class="comment">// … 可能会清理域事件列表</span>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>使用 <code>@DomainEvents</code> 的方法可以返回单个事件实例或事件集合。它不能携带任何参数。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>在所有事件发布后，我们有一个使用 <code>@AfterDomainEventPublication</code> 注解的方法。
+它可用于潜在地清除要发布的事件列表（以及其他用途）。</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>每次调用一个Spring Data存储库 <code>save(&#8230;&#8203;)</code> 方法时都会调用这些方法。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="core.extensions">8. Spring Data扩展</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>本节介绍了一组Spring Data扩展，它们可以在各种上下文中使用Spring Data。目前，大多数集成都针对Spring MVC。</p>
+</div>
+<div class="sect2">
+<h3 id="core.extensions.querydsl">8.1. Querydsl扩展</h3>
+<div class="paragraph">
+<p><a href="http://www.querydsl.com/">Querydsl</a>是一个框架，可以通过其流式API构建静态类型的SQL类查询。</p>
+</div>
+<div class="paragraph">
+<p>几个Spring Data模块通过 <code>QuerydslPredicateExecutor</code> 提供与Querydsl的集成，如以下示例所示：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 37. QuerydslPredicateExecutor接口</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">interface</span> <span class="class">QuerydslPredicateExecutor</span>&lt;T&gt; {
+
+  Optional&lt;T&gt; findById(<span class="predefined-type">Predicate</span> predicate);  <i class="conum" data-value="1"></i><b>(1)</b>
+
+  <span class="predefined-type">Iterable</span>&lt;T&gt; findAll(<span class="predefined-type">Predicate</span> predicate);   <i class="conum" data-value="2"></i><b>(2)</b>
+
+  <span class="type">long</span> count(<span class="predefined-type">Predicate</span> predicate);            <i class="conum" data-value="3"></i><b>(3)</b>
+
+  <span class="type">boolean</span> exists(<span class="predefined-type">Predicate</span> predicate);        <i class="conum" data-value="4"></i><b>(4)</b>
+
+  <span class="comment">// … 省略了更多功能</span>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>查找并返回与 <code>Predicate</code> 匹配的单个实体。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>查找并返回与 <code>Predicate</code> 匹配的所有实体。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>返回与 <code>Predicate</code> 匹配的实体数。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>返回是否存在与 <code>Predicate</code> 匹配的实体。</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>要使用Querydsl支持，请在存储库接口上扩展 <code>QuerydslPredicateExecutor</code>，如以下示例所示：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 38. 在存储库中集成Querydsl</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> CrudRepository&lt;User, <span class="predefined-type">Long</span>&gt;, QuerydslPredicateExecutor&lt;User&gt; {
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>上面的示例允许你使用Querydsl <code>Predicate</code> 实例编写类型安全查询，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Predicate</span> predicate = user.firstname.equalsIgnoreCase(<span class="string"><span class="delimiter">&quot;</span><span class="content">dave</span><span class="delimiter">&quot;</span></span>)
+        .and(user.lastname.startsWithIgnoreCase(<span class="string"><span class="delimiter">&quot;</span><span class="content">mathews</span><span class="delimiter">&quot;</span></span>));
+
+userRepository.findAll(predicate);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="core.web">8.2. Web支持</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+本节包含Spring Data web支持的文档，因为它在Spring Data Commons的当前（及更高版本）版本中已实现。
+由于新引入的支持更改了许多内容，因此我们在 <a href="#web.legacy">web 遗留</a> 中保留了以前行为的文档。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>支持存储库编程模型的Spring Data模块具有各种Web支持。与Web相关的组件需要Spring MVC JAR位于类路径上。
+其中一些甚至提供与 <a href="https://github.com/SpringSource/spring-hateoas">Spring HATEOAS</a>的集成。
+通常，通过在JavaConfig配置类中使用 <code>@EnableSpringDataWebSupport</code> 注解来启用集成支持，如以下示例所示：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 39. 启用S​​pring Data Web支持</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
+<span class="annotation">@EnableWebMvc</span>
+<span class="annotation">@EnableSpringDataWebSupport</span>
+<span class="type">class</span> <span class="class">WebConfiguration</span> {}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p><code>@EnableSpringDataWebSupport</code> 注解注册了一些我们稍后会讨论的组件。它还将检测类路径上的Spring HATEOAS，
+并为它注册集成组件（如果存在）。</p>
+</div>
+<div class="paragraph">
+<p>或者，如果使用XML配置，请将 <code>SpringDataWebConfiguration</code> 或 <code>HateoasAwareSpringDataWebConfiguration</code> 注册为Spring bean，
+如以下示例所示（对于 <code>SpringDataWebConfiguration</code>）：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 40. 以XML配置启用Spring Data Web支持</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;bean</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">org.springframework.data.web.config.SpringDataWebConfiguration</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+
+<span class="comment">&lt;!-- 如果你使用Spring HATEOAS，请注册这个而不是前者 --&gt;</span>
+<span class="tag">&lt;bean</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">org.springframework.data.web.config.HateoasAwareSpringDataWebConfiguration</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="core.web.basic">8.2.1. 基本Web支持</h4>
+<div class="paragraph">
+<p><a href="#core.web">上一节</a> 中显示的配置注册了一些基本组件：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>一个 <code>DomainClassConverter</code> 让Spring MVC从请求参数或路径变量中解析存储库管理的域类实例。</p>
+</li>
+<li>
+<p><code>HandlerMethodArgumentResolver</code> 实现让Spring MVC从请求参数中解析 <code>Pageable</code> 和 <code>Sort</code> 实例。</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="core.web.basic.domain-class-converter">DomainClassConverter</h5>
+<div class="paragraph">
+<p><code>DomainClassConverter</code> 允许你直接在Spring MVC控制器方法签名中使用域类型，这样你就不需要通过存储库手动查找实例，如以下示例所示：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 41. 在方法签名中使用域类型的Spring MVC控制器</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Controller</span>
+<span class="annotation">@RequestMapping</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">/users</span><span class="delimiter">&quot;</span></span>)
+<span class="type">class</span> <span class="class">UserController</span> {
+
+  <span class="annotation">@RequestMapping</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">/{id}</span><span class="delimiter">&quot;</span></span>)
+  <span class="predefined-type">String</span> showUserForm(<span class="annotation">@PathVariable</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>) User user, Model model) {
+
+    model.addAttribute(<span class="string"><span class="delimiter">&quot;</span><span class="content">user</span><span class="delimiter">&quot;</span></span>, user);
+    <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">userForm</span><span class="delimiter">&quot;</span></span>;
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>如你所见，该方法直接接收 <code>User</code> 实例，无需进一步查找。可以通过让Spring MVC首先将路径变量转换为域类的id类型来解析实例，
+并最终通过在为域类型注册的存储库实例上调用 <code>findById(&#8230;&#8203;)</code> 来访问实例。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+目前，存储库必须实现 <code>CrudRepository</code> 才有资格被发现并进行转换。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="core.web.basic.paging-and-sorting">为了分页和排序的 <code>HandlerMethodArgumentResolvers</code></h5>
+<div class="paragraph">
+<p><a href="#core.web.basic.domain-class-converter">上一节</a> 中显示的配置代码段还注册了 <code>PageableHandlerMethodArgumentResolver</code>
+以及 <code>SortHandlerMethodArgumentResolver</code> 的实例。注册启用 <code>Pageable</code> 和 <code>Sort</code> 作为有效的控制器方法参数，如以下示例所示：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 42. 使用 <code>Pageable</code> 作为控制器方法参数</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Controller</span>
+<span class="annotation">@RequestMapping</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">/users</span><span class="delimiter">&quot;</span></span>)
+<span class="type">class</span> <span class="class">UserController</span> {
+
+  <span class="directive">private</span> <span class="directive">final</span> UserRepository repository;
+
+  UserController(UserRepository repository) {
+    <span class="local-variable">this</span>.repository = repository;
+  }
+
+  <span class="annotation">@RequestMapping</span>
+  <span class="predefined-type">String</span> showUsers(Model model, <span class="predefined-type">Pageable</span> pageable) {
+
+    model.addAttribute(<span class="string"><span class="delimiter">&quot;</span><span class="content">users</span><span class="delimiter">&quot;</span></span>, repository.findAll(pageable));
+    <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">users</span><span class="delimiter">&quot;</span></span>;
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>前面的方法签名导致Spring MVC尝试使用以下默认配置从请求参数派生 <code>Pageable</code> 实例：</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 1. 为 <code>Pageable</code> 实例评估请求参数</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">page</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">要检索的页码。0索引开始并默认为0。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">size</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">要检索的每页元素数。默认为20。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sort</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">应按格式 <code>property,property(,ASC|DESC)</code> 排序的属性。默认排序方向是升序。
+如果要切换方向，请使用多个 <code>sort</code> 参数 - 例如，<code>?sort=firstname&amp;sort=lastname,asc</code>。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>要自定义此行为，请分别注册实现 <code>PageableHandlerMethodArgumentResolverCustomizer</code> 接口或
+<code>SortHandlerMethodArgumentResolverCustomizer</code> 接口的bean。调用其 <code>customize()</code> 方法，让你更改设置，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Bean</span> SortHandlerMethodArgumentResolverCustomizer sortCustomizer() {
+    <span class="keyword">return</span> s -&gt; s.setPropertyDelimiter(<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;--&gt;</span><span class="delimiter">&quot;</span></span>);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>如果设置现有 <code>MethodArgumentResolver</code> 的属性不足以满足你的需要，继承 <code>SpringDataWebConfiguration</code> 或启用HATEOAS的等效项，
+覆盖 <code>pageableResolver()</code> 或 <code>sortResolver()</code> 方法，并导入自定义配置文件，而不是使用 <code>@Enable</code> 注解。</p>
+</div>
+<div class="paragraph">
+<p>如果你需要从请求中解析多个 <code>Pageable</code> 或 <code>Sort</code> 实例（例如，对于多个表），你可以使用Spring的 <code>@Qualifier</code> 注解来区分彼此。
+然后，请求参数必须以 <code>${qualifier}_</code> 为前缀。以下示例显示了生成的方法签名：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">String</span> showUsers(Model model,
+      <span class="annotation">@Qualifier</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">thing1</span><span class="delimiter">&quot;</span></span>) <span class="predefined-type">Pageable</span> first,
+      <span class="annotation">@Qualifier</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">thing2</span><span class="delimiter">&quot;</span></span>) <span class="predefined-type">Pageable</span> second) { <span class="error">…</span> }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你必须填充 <code>thing1_page</code> 和 <code>thing2_page</code> 等等。</p>
+</div>
+<div class="paragraph">
+<p>传递给方法的默认 <code>Pageable</code> 相当于 <code>new PageRequest(0,20)</code>，但可以通过在 <code>Pageable</code> 参数上使用 <code>@PageableDefault</code>
+注解进行自定义。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="core.web.pageables">对 <code>Pageables</code> 的超媒体支持</h5>
+<div class="paragraph">
+<p>Spring HATEOAS附带了一个表示模型类（<code>PagedResources</code>），它允许使用必要的 <code>Page</code> 元数据丰富 <code>Page</code> 实例的内容以生成允许客户端
+轻松浏览页面的链接。将 <code>Page</code> 转换为 <code>PagedResources</code> 是通过Spring HATEOAS <code>ResourceAssembler</code> 接口的实现完成的，
+该接口称为 <code>PagedResourcesAssembler</code>。以下示例显示如何将 <code>PagedResourcesAssembler</code> 用作控制器方法参数：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 43. 使用 <code>PagedResourcesAssembler</code> 作为控制器方法参数</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Controller</span>
+<span class="type">class</span> <span class="class">PersonController</span> {
+
+  <span class="annotation">@Autowired</span> PersonRepository repository;
+
+  <span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/persons</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.GET)
+  HttpEntity&lt;PagedResources&lt;Person&gt;&gt; persons(<span class="predefined-type">Pageable</span> pageable,
+    PagedResourcesAssembler assembler) {
+
+    Page&lt;Person&gt; persons = repository.findAll(pageable);
+    <span class="keyword">return</span> <span class="keyword">new</span> ResponseEntity&lt;&gt;(assembler.toResources(persons), HttpStatus.OK);
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>如上例所示启用配置，可以将 <code>PagedResourcesAssembler</code> 用作控制器方法参数。在其上调用 <code>toResources(…)</code> 具有以下效果：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Page</code> 的内容成为 <code>PagedResources</code> 实例的内容。</p>
+</li>
+<li>
+<p><code>PagedResources</code> 对象获取一个附加的 <code>PageMetadata</code> 实例，并使用来自 <code>Page</code> 和底层 <code>PageRequest</code> 的信息填充它。</p>
+</li>
+<li>
+<p>根据页面的状态，<code>PagedResources</code> 可能会显示并附加下一页的链接。链接指向方法映射到的URI。添加到方法的分页参数与
+<code>PageableHandlerMethodArgumentResolver</code> 的设置相匹配，以确保稍后可以解析链接。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>假设我们在数据库中有30个 <code>Person</code> 实例。你现在可以触发请求（<code>GET <a href="http://localhost:8080/persons" class="bare">http://localhost:8080/persons</a></code>）并查看到
+类似于以下内容的输出：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">links</span><span class="delimiter">&quot;</span></span> : [
+    {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">rel</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">next</span><span class="delimiter">&quot;</span></span>,
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">href</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8080/persons?page=1&amp;size=20
+    }
+  ],
+  </span><span class="delimiter">&quot;</span></span><span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">t</span><span class="error">e</span><span class="error">n</span><span class="error">t</span><span class="string"><span class="delimiter">&quot;</span><span class="content"> : [
+     … // 此处呈现20个Person实例
+  ],
+  </span><span class="delimiter">&quot;</span></span><span class="error">p</span><span class="error">a</span><span class="error">g</span><span class="error">e</span><span class="error">M</span><span class="error">e</span><span class="error">t</span><span class="error">a</span><span class="error">d</span><span class="error">a</span><span class="error">t</span><span class="error">a</span><span class="string"><span class="delimiter">&quot;</span><span class="content"> : {
+    </span><span class="delimiter">&quot;</span></span><span class="error">s</span><span class="error">i</span><span class="error">z</span><span class="error">e</span><span class="string"><span class="delimiter">&quot;</span><span class="content"> : 20,
+    </span><span class="delimiter">&quot;</span></span><span class="error">t</span><span class="error">o</span><span class="error">t</span><span class="error">a</span><span class="error">l</span><span class="error">E</span><span class="error">l</span><span class="error">e</span><span class="error">m</span><span class="error">e</span><span class="error">n</span><span class="error">t</span><span class="error">s</span><span class="string"><span class="delimiter">&quot;</span><span class="content"> : 30,
+    </span><span class="delimiter">&quot;</span></span><span class="error">t</span><span class="error">o</span><span class="error">t</span><span class="error">a</span><span class="error">l</span><span class="error">P</span><span class="error">a</span><span class="error">g</span><span class="error">e</span><span class="error">s</span><span class="string"><span class="delimiter">&quot;</span><span class="content"> : 2,
+    </span><span class="delimiter">&quot;</span></span><span class="error">n</span><span class="error">u</span><span class="error">m</span><span class="error">b</span><span class="error">e</span><span class="error">r</span><span class="string"><span class="delimiter">&quot;</span><span class="content"> : 0
+  }
+}</span></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你会看到组装者生成了正确的URI，并且还选择了默认配置以将参数解析为即将发出的请求的 <code>Pageable</code>。
+这意味着，如果更改该配置，链接将遵循设置自动更改。默认情况下，组装者指向它所调用的控制器方法，
+但可以通过交换自定义链接来自定义链接以构建分页链接，这会用到重载的 <code>PagedResourcesAssembler.toResource(&#8230;&#8203;)</code> 方法。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="core.web.binding">Web数据绑定支持</h5>
+<div class="paragraph">
+<p>Spring Data投影（在<a href="#projections">Projections</a>中描述）可用于通过使用 <a href="http://goessner.net/articles/JsonPath/">JSONPath</a>
+表达式来绑定传入的请求有效载荷（需要 <a href="https://github.com/json-path/JsonPath">Jayway JsonPath</a>或
+<a href="https://www.w3.org/TR/xpath-31/">XPath</a>表达式（需要 <a href="https://xmlbeam.org/">XmlBeam</a>），如以下示例所示：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 44. 使用JSONPath或XPath表达式绑定HTTP有效载荷</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ProjectedPayload</span>
+<span class="directive">public</span> <span class="type">interface</span> <span class="class">UserPayload</span> {
+
+  <span class="annotation">@XBRead</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">//firstname</span><span class="delimiter">&quot;</span></span>)
+  <span class="annotation">@JsonPath</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$..firstname</span><span class="delimiter">&quot;</span></span>)
+  <span class="predefined-type">String</span> getFirstname();
+
+  <span class="annotation">@XBRead</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">/lastname</span><span class="delimiter">&quot;</span></span>)
+  <span class="annotation">@JsonPath</span>({ <span class="string"><span class="delimiter">&quot;</span><span class="content">$.lastname</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">$.user.lastname</span><span class="delimiter">&quot;</span></span> })
+  <span class="predefined-type">String</span> getLastname();
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>前面示例中显示的类型可以用作Spring MVC处理程序方法参数，也可以在 <code>RestTemplate</code> 方法之一上使用 <code>ParameterizedTypeReference</code>。
+前面的方法声明将尝试在给定文档中的任何位置查找 <code>firstname</code>。<code>lastname</code> XML查找在传入文档的顶级执行。
+JSON变体首先尝试顶级 <code>lastname</code>，但如果前者没有返回值，也会尝试查找嵌套在 <code>user</code> 子文档中的 <code>lastname</code>。
+这样，可以轻松地减轻源文档结构的变化，而无需客户端调用公开的方法（通常是基于类的有效负载绑定的缺点）。</p>
+</div>
+<div class="paragraph">
+<p>如<a href="#projections">Projections</a>中所述，支持嵌套投影。如果方法返回复杂的非接口类型，则使用Jackson <code>ObjectMapper</code> 映射最终值。</p>
+</div>
+<div class="paragraph">
+<p>对于Spring MVC，只要开启 <code>@EnableSpringDataWebSupport</code> 注解，就会自动注册必要的转换器，并且类路径上可以使用所需的依赖项。
+要与 <code>RestTemplate</code> 一起使用，请手动注册 <code>ProjectingJackson2HttpMessageConverter</code>（JSON）或 <code>XmlBeamHttpMessageConverter</code>。</p>
+</div>
+<div class="paragraph">
+<p>有关更多信息，请参阅 {exampleProjectBaseUrl}[Spring Data Examples]典范存储库中的
+{exampleProjectBaseUrl}/tree/master/web/projection[Web投影示例]。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="core.web.type-safe">Querydsl Web支持</h5>
+<div class="paragraph">
+<p>对于那些具有 <a href="http://www.querydsl.com/">QueryDSL</a>集成的仓储，可以从 <code>Request</code> 查询字符串中包含的属性派生查询。</p>
+</div>
+<div class="paragraph">
+<p>请考虑以下查询字符串：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="text">?firstname=Dave&amp;lastname=Matthews</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>给定前面示例中的 <code>User</code> 对象，可以使用 <code>QuerydslPredicateArgumentResolver</code> 将查询字符串解析为以下值:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="text">QUser.user.firstname.eq(&quot;Dave&quot;).and(QUser.user.lastname.eq(&quot;Matthews&quot;))</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+在类路径中找到Querydsl时，将自动启用该功能以及 <code>@EnableSpringDataWebSupport</code>。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>将 <code>@QuerydslPredicate</code> 添加到方法签名提供了一个可立即使用的谓词，可以使用 <code>QuerydslPredicateExecutor</code> 运行。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+通常从方法的返回类型中解析类型信息。由于该信息不一定与域类型匹配，因此使用QuerydslPredicate的root属性可能是个好主意。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>以下示例显示如何在方法签名中使用 <code>@QuerydslPredicate</code>：</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Controller</span>
+<span class="type">class</span> <span class="class">UserController</span> {
+
+  <span class="annotation">@Autowired</span> UserRepository repository;
+
+  <span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.GET)
+  <span class="predefined-type">String</span> index(Model model, <span class="annotation">@QuerydslPredicate</span>(root = User.class) <span class="predefined-type">Predicate</span> predicate,    <i class="conum" data-value="1"></i><b>(1)</b>
+          <span class="predefined-type">Pageable</span> pageable, <span class="annotation">@RequestParam</span> MultiValueMap&lt;<span class="predefined-type">String</span>, <span class="predefined-type">String</span>&gt; parameters) {
+
+    model.addAttribute(<span class="string"><span class="delimiter">&quot;</span><span class="content">users</span><span class="delimiter">&quot;</span></span>, repository.findAll(predicate, pageable));
+
+    <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">index</span><span class="delimiter">&quot;</span></span>;
+  }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>将查询字符串参数解析为匹配 <code>User</code> 的 <code>Predicate</code>。</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>默认绑定如下：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Object</code> 在简单属性上做 <code>eq</code>。</p>
+</li>
+<li>
+<p><code>Object</code> 在集合是否有某属性上做 <code>contains</code>。</p>
+</li>
+<li>
+<p><code>Collection</code> 在简单的属性上做 <code>in</code>。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>可以通过 <code>@QuerydslPredicate</code> 的 <code>bindings</code> 属性或通过使用Java 8默认方法并将 <code>QuerydslBinderCustomizer</code>
+方法添加到存储库接口来自定义这些绑定。</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> CrudRepository&lt;User, <span class="predefined-type">String</span>&gt;,
+                                 QuerydslPredicateExecutor&lt;User&gt;,                <i class="conum" data-value="1"></i><b>(1)</b>
+                                 QuerydslBinderCustomizer&lt;QUser&gt; {               <i class="conum" data-value="2"></i><b>(2)</b>
+
+  <span class="annotation">@Override</span>
+  <span class="keyword">default</span> <span class="type">void</span> customize(QuerydslBindings bindings, QUser user) {
+
+    bindings.bind(user.username).first((path, value) -&gt; path.contains(value))    <i class="conum" data-value="3"></i><b>(3)</b>
+    bindings.bind(<span class="predefined-type">String</span>.class)
+      .first((StringPath path, <span class="predefined-type">String</span> value) -&gt; path.containsIgnoreCase(value)); <i class="conum" data-value="4"></i><b>(4)</b>
+    bindings.excluding(user.password);                                           <i class="conum" data-value="5"></i><b>(5)</b>
+  }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>QuerydslPredicateExecutor</code> 提供对包含 <code>Predicate</code> 的特定查找器方法的访问。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>存储库接口上定义的 <code>QuerydslBinderCustomizer</code> 会自动获取并快捷方式 <code>@QuerydslPredicate(bindings=…​)</code>。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>将 <code>username</code> 属性的绑定定义为简单 <code>contains</code> 绑定。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>将 <code>String</code> 属性的默认绑定定义为忽略大小写的 <code>contains</code> 匹配。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>从 <code>Predicate</code> 解析中排除 <code>password</code> 属性。</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="core.repository-populators">8.3. 存储库填充</h3>
+<div class="paragraph">
+<p>如果使用Spring JDBC模块，你可能熟悉使用SQL脚本填充 <code>DataSource</code> 的支持。虽然它不使用SQL作为数据定义语言，
+但它在存储库级别上提供了类似的抽象，因为它必须与具体存储无关。因此，填充程序支持XML（通过Spring的OXM抽象）和JSON（通过Jackson）
+来定义用于填充存储库的数据。</p>
+</div>
+<div class="paragraph">
+<p>假设你有一个文件 <code>data.json</code>，其中包含以下内容：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 45. 以JSON定义的数据</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">[
+    {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">_class</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.Person</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">firstname</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">Dave</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">lastname</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">Matthews</span><span class="delimiter">&quot;</span></span>
+    },
+    {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">_class</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.Person</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">firstname</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">Carter</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">lastname</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">Beauford</span><span class="delimiter">&quot;</span></span>
+    }
+]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>你可以使用Spring Data Commons中提供的存储库命名空间的 <code>populator</code> 元素来填充存储库。
+要将前面的数据填充到 <code>PersonRepository</code>，请声明类似于以下内容的populator：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 46. 声明Jackson存储库populator</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="preprocessor">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="tag">&lt;beans</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/beans</span><span class="delimiter">&quot;</span></span>
+  <span class="attribute-name">xmlns:xsi</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.w3.org/2001/XMLSchema-instance</span><span class="delimiter">&quot;</span></span>
+  <span class="attribute-name">xmlns:repository</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/data/repository</span><span class="delimiter">&quot;</span></span>
+  <span class="attribute-name">xsi:schemaLocation</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/beans</span>
+    <span class="content">http://www.springframework.org/schema/beans/spring-beans.xsd</span>
+    <span class="content">http://www.springframework.org/schema/data/repository</span>
+    <span class="content">http://www.springframework.org/schema/data/repository/spring-repository.xsd</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;repository:jackson2-populator</span> <span class="attribute-name">locations</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:data.json</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+
+<span class="tag">&lt;/beans&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>上述声明会导致由Jackson <code>ObjectMapper</code> 来读取和反序列化 <code>data.json</code> 文件。</p>
+</div>
+<div class="paragraph">
+<p>通过检查JSON文档的 <code>\_class</code> 属性来解组JSON对象的类型。基础结构最终选择适当的存储库来处理反序列化后的对象。</p>
+</div>
+<div class="paragraph">
+<p>可以使用 <code>unmarshaller-populator</code> 元素声明使用XML来定义填充存储库的数据，可将其配置为使用Spring OXM中提供的
+可选XML marshaller之一。有关详细信息，请参阅 {docSpringBaseUrl}/data-access.html#oxm[Spring参考文档]。
+以下示例说明如何使用JAXB解组存储库填充：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 47. 使用JAXB解组的存储库populator</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="preprocessor">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="tag">&lt;beans</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/beans</span><span class="delimiter">&quot;</span></span>
+  <span class="attribute-name">xmlns:xsi</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.w3.org/2001/XMLSchema-instance</span><span class="delimiter">&quot;</span></span>
+  <span class="attribute-name">xmlns:repository</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/data/repository</span><span class="delimiter">&quot;</span></span>
+  <span class="attribute-name">xmlns:oxm</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/oxm</span><span class="delimiter">&quot;</span></span>
+  <span class="attribute-name">xsi:schemaLocation</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/beans</span>
+    <span class="content">http://www.springframework.org/schema/beans/spring-beans.xsd</span>
+    <span class="content">http://www.springframework.org/schema/data/repository</span>
+    <span class="content">http://www.springframework.org/schema/data/repository/spring-repository.xsd</span>
+    <span class="content">http://www.springframework.org/schema/oxm</span>
+    <span class="content">http://www.springframework.org/schema/oxm/spring-oxm.xsd</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;repository:unmarshaller-populator</span> <span class="attribute-name">locations</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:data.json</span><span class="delimiter">&quot;</span></span>
+    <span class="attribute-name">unmarshaller-ref</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">unmarshaller</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+
+  <span class="tag">&lt;oxm:jaxb2-marshaller</span> <span class="attribute-name">contextPath</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+
+<span class="tag">&lt;/beans&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2019-01-19 08:44:04 CST
+</div>
+</div>
+</body>
+</html>

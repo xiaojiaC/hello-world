@@ -5,8 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="Version 0.21.0,2017-06-10">
-<title>fabric8io/docker-maven-plugin</title>
+<title>对象映射基础</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -590,657 +589,330 @@ $(addBlockSwitches);
 </script>
 
 </head>
-<body class="book toc2 toc-left">
+<body id="mapping.fundamentals" class="book toc2 toc-left">
 <div id="header">
-<h1>fabric8io/docker-maven-plugin</h1>
-<div class="details">
-<span id="author" class="author">Version 0.21.0,2017-06-10</span><br>
-</div>
+<h1>对象映射基础</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_介绍">1. 介绍</a>
-<ul class="sectlevel2">
-<li><a href="#_构建镜像">1.1. 构建镜像</a></li>
-<li><a href="#_运行容器">1.2. 运行容器</a></li>
-<li><a href="#_配置">1.3. 配置</a></li>
-<li><a href="#_样例">1.4. 样例</a></li>
-<li><a href="#_1_5_特征">1.5. 1.5. 特征</a></li>
-</ul>
-</li>
-<li><a href="#_安装">2. 安装</a></li>
-<li><a href="#_全局配置">3. 全局配置</a></li>
-<li><a href="#_镜像配置">4. 镜像配置</a></li>
+<li><a href="#mapping.object-creation">1. 对象创建</a></li>
+<li><a href="#mapping.property-population">2. 属性填充</a></li>
+<li><a href="#_一般建议">3. 一般建议</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
-<div class="sect1">
-<h2 id="_介绍">1. 介绍</h2>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>这是一个用于管理Docker镜像和容器的Maven插件。它关注Docker构建集成的两个主要方面：</p>
-</div>
-<div class="sect2">
-<h3 id="_构建镜像">1.1. 构建镜像</h3>
-<div class="paragraph">
-<p>此插件的一个目的是创建持有实际应用程序的Docker镜像。这是通过<a href="#docker:build">[docker:build]</a>目标完成。将构建工件及其依赖项包含在镜像中很容易。因此，此插件使用<em>maven-assembly-plugin</em>中的汇编
-描述符格式来指定将从镜像中的子目录添加的内容(默认为 <code>\maven</code> )。使用此插件构建的镜像可以通过<a href="#docker:push">[docker:push]</a>到公共或私人Docker仓储。</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_运行容器">1.2. 运行容器</h3>
-<div class="paragraph">
-<p>使用此插件可以运行完全隔离的集成测试，因此你不需要处理共享资源。端口可以​​动态映射，并作为Maven属性提供给集成测试代码。</p>
+<p>本节介绍Spring Data对象映射，对象创建，字段和属性访问，可变性和不变性的基础知识。注意，本节仅适用于不使用底层数据存储的对象映射的Spring Data模块（如JPA）。另外，请务必查阅特定于存储的部分以了解特定于存储的对象映射，例如索引，自定义列或字段名称等。</p>
 </div>
 <div class="paragraph">
-<p>可以一次管理多个容器，这些容器可以链接在一起或通过卷共享数据。容器是由docker创建并启动的通过<a href="#docker:start">[docker:start]</a>目标，并使用docker进行停止和销毁通过使用<a href="#docker：stop">[docker：stop]</a>目标。
-对于集成测试，这两个目标通常分别与<strong>pre-integration-test</strong>和<strong>post-integration-test</strong>阶段相结合。建议使用<em>maven-failuresafe-plugin</em>进行集成测试，以便在测试失败时
-停止docker容器。</p>
+<p>Spring Data对象映射的核心职责是创建域对象的实例，并将本地存储数据结构映射到这些对象上。这意味着我们需要两个基本步骤：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>通过使用其中一个公开的构造函数创建实例。</p>
+</li>
+<li>
+<p>填充实例所有暴露的属性。</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mapping.object-creation">1. 对象创建</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Data会自动尝试检测持久化实体的构造函数，以用于实现该类型的对象。检测算法的工作原理如下：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>如果有一个无参数的构造函数，它将被使用。其他构造函数将被忽略。</p>
+</li>
+<li>
+<p>如果有一个有参构造函数，它将被使用。</p>
+</li>
+<li>
+<p>如果有多个有参构造函数，则必须使用 <code>@PersistenceConstructor</code> 指明Spring Data要使用的构造函数。</p>
+</li>
+</ol>
 </div>
 <div class="paragraph">
-<p>为了正确隔离，容器暴露端口可以动态和灵活地映射到本地主机端口。在容器启动后，很容易指定一个Maven属性，该属性将被动态分配的端口填充。然后可以将其用作连接到应用程序的集成测试的参数。</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_配置">1.3. 配置</h3>
-<div class="paragraph">
-<p>插件配置包含全局部分和 <code>&lt;images&gt;</code> 列表中的镜像特定配置列表，其中每个镜像在 <code>&lt;image&gt;</code> 标签内定义。见<a href="#下面">[下面]</a>的例子。</p>
+<p>值解析假定构造函数参数名称与实体的属性名称匹配，即 将执行解析就像要填充属性一样，包括映射中的所有定制（不同的数据存储列或字段名称等）。
+这还需要类文件中可用的参数名称信息或构造函数上存在的 <code>@ConstructorProperties</code> 注解。</p>
 </div>
 <div class="paragraph">
-<p><a href="#全局部分">[全局部分]</a>包含适用于所有镜像的配置，如Docker URL或与Docker主机进行通信的SSL证书的路径。</p>
+<p>可以使用Spring Framework的 <code>@Value</code> 值注解使用特定于存储的SpEL表达式来自定义值解析。有关更多详细信息，请参阅有关存储特定映射的部分。</p>
+</div>
+<div id="mapping.object-creation.details" class="sidebarblock">
+<div class="content">
+<div class="title">对象创建的内部机制</div>
+<div class="paragraph">
+<p>为了避免反射的开销，Spring Data对象创建使用默认情况下在运行时生成的工厂类，它将直接调用域类构造函数。即对于此示例类型：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">Person</span> {
+  Person(<span class="predefined-type">String</span> firstname, <span class="predefined-type">String</span> lastname) { <span class="error">…</span> }
+}</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>然后，每个具体的镜像配置有三个部分：</p>
+<p>我们将在运行时创建一个在语义上等效于此工厂类的工厂类：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">PersonObjectInstantiator</span> <span class="directive">implements</span> ObjectInstantiator {
+
+  <span class="predefined-type">Object</span> newInstance(<span class="predefined-type">Object</span>... args) {
+    <span class="keyword">return</span> <span class="keyword">new</span> Person((<span class="predefined-type">String</span>) args[<span class="integer">0</span>], (<span class="predefined-type">String</span>) args[<span class="integer">1</span>]);
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>这使得我们相比反射方面性能提升了10%。要使域类符合此类优化的条件，它需要遵守一些约束：</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>包含镜像名称和别名的一般镜像部分。</p>
+<p>它不能是私有类</p>
 </li>
 <li>
-<p>指定如何构建图像的&lt;<a href="#build">[build]</a>&gt;配置。</p>
+<p>它不能是非静态的内部类</p>
 </li>
 <li>
-<p>描述如何创建和启动容器的&lt;<a href="#run">[run]</a>&gt;配置。</p>
+<p>它不能是CGLib代理类</p>
+</li>
+<li>
+<p>Spring Data使用的构造函数不能是私有的</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p><code>&lt;build&gt;</code> 和 <code>&lt;run&gt;</code> 配置是可选的，可以省略。</p>
+<p>如果这些条件中的任何一个匹配，Spring Data将回退到通过反射实例化实体。</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_样例">1.4. 样例</h3>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mapping.property-population">2. 属性填充</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>在以下示例中，指定了两个镜像。一个是Docker Hub的官方PostgreSQL 9映像，内部引用别名“database”。它只有一个&lt;<a href="#run">[run]</a>&gt;部分，它声明启动应该等待直到给定的文本模式在日志输出中匹配。
-接下来是一个“service”图像，它有一个&lt;<a href="#build">[build]</a>&gt;部分。它创建一个在 <code>/maven</code> 目录中具有工件和依赖关系的镜像（并且使用assembly描述符指定）。此外，它还指定了容器的启动命令，该命令在此
-示例中通过组件描述符从复制的jar文件中触发一个微服务器。它还暴露端口8080。在 <code>&lt;run&gt;</code> 部分，此端口映射到动态选择的端口，然后分配给Maven属性 <code>${tomcat.port}</code>。该属性可以用于例如
-通过集成测试来访问该微服务器。重要的部分是 <code>&lt;links&gt;</code> 部分，表示具有“database”别名的映像链接到“service”容器中，该容器可以通常以Docker方式访问内部端口（通过以 <code>DB_</code> 为前缀的环境变量）。</p>
+<p>一旦创建了实体的实例，Spring Data就会填充该类的所有剩余持久属性。除非已经由实体的构造函数填充（即通过使用其有参构造函数），否则将首先填充identifier属性以允许循环引用对象。之后，在实体实例上设置尚未由构造函数填充的所有非瞬态属性。为此，我们使用以下算法：</p>
 </div>
+<div id="mapping.property-population.details" class="sidebarblock">
+<div class="content">
+<div class="title">属性填充的内部机制</div>
 <div class="paragraph">
-<p>可以以任何顺序指定镜像，插件将处理正确的启动顺序（如果检测到循环依赖关系，则会保留）</p>
+<p>与我们的<a href="#mapping.object-creation.details">对象构造中的优化</a>类似，我们还使用Spring Data运行时生成的访问器类与实体实例进行交互。</p>
 </div>
 <div class="listingblock">
-<div class="title">Example plugin configuration</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;configuration&gt;</span>
-  <span class="tag">&lt;images&gt;</span>
-    <span class="tag">&lt;image&gt;</span>
-      <span class="tag">&lt;alias&gt;</span>service<span class="tag">&lt;/alias&gt;</span> <i class="conum" data-value="1"></i><b>(1)</b>
-      <span class="tag">&lt;name&gt;</span>fabric8/docker-demo:${project.version}<span class="tag">&lt;/name&gt;</span>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">Person</span> {
 
-      <span class="tag">&lt;build&gt;</span> <i class="conum" data-value="2"></i><b>(2)</b>
-         <span class="tag">&lt;from&gt;</span>java:8<span class="tag">&lt;/from&gt;</span> <i class="conum" data-value="3"></i><b>(3)</b>
-         <span class="tag">&lt;assembly&gt;</span>
-           <span class="tag">&lt;descriptor&gt;</span>docker-assembly.xml<span class="tag">&lt;/descriptor&gt;</span> <i class="conum" data-value="4"></i><b>(4)</b>
-         <span class="tag">&lt;/assembly&gt;</span>
-         <span class="tag">&lt;cmd&gt;</span> <i class="conum" data-value="5"></i><b>(5)</b>
-            <span class="tag">&lt;shell&gt;</span>java -jar /maven/service.jar<span class="tag">&lt;/shell&gt;</span>
-         <span class="tag">&lt;/cmd&gt;</span>
-      <span class="tag">&lt;/build&gt;</span>
+  <span class="directive">private</span> <span class="directive">final</span> <span class="predefined-type">Long</span> id;
+  <span class="directive">private</span> <span class="predefined-type">String</span> firstname;
+  <span class="directive">private</span> <span class="annotation">@AccessType</span>(<span class="predefined-type">Type</span>.PROPERTY) <span class="predefined-type">String</span> lastname;
 
-      <span class="tag">&lt;run&gt;</span> <i class="conum" data-value="6"></i><b>(6)</b>
-         <span class="tag">&lt;ports&gt;</span> <i class="conum" data-value="7"></i><b>(7)</b>
-           <span class="tag">&lt;port&gt;</span>tomcat.port:8080<span class="tag">&lt;/port&gt;</span>
-         <span class="tag">&lt;/ports&gt;</span>
-         <span class="tag">&lt;wait&gt;</span> <i class="conum" data-value="8"></i><b>(8)</b>
-           <span class="tag">&lt;http&gt;</span>
-              <span class="tag">&lt;url&gt;</span>http://localhost:${tomcat.port}/access<span class="tag">&lt;/url&gt;</span>
-           <span class="tag">&lt;/http&gt;</span>
-           <span class="tag">&lt;time&gt;</span>10000<span class="tag">&lt;/time&gt;</span>
-         <span class="tag">&lt;/wait&gt;</span>
-         <span class="tag">&lt;links&gt;</span> <i class="conum" data-value="9"></i><b>(9)</b>
-           <span class="tag">&lt;link&gt;</span>database:db<span class="tag">&lt;/link&gt;</span>
-         <span class="tag">&lt;/links&gt;</span>
-       <span class="tag">&lt;/run&gt;</span>
-    <span class="tag">&lt;/image&gt;</span>
+  Person() {
+    <span class="local-variable">this</span>.id = <span class="predefined-constant">null</span>;
+  }
 
-    <span class="tag">&lt;image&gt;</span>
-      <span class="tag">&lt;alias&gt;</span>database<span class="tag">&lt;/alias&gt;</span> <i class="conum" data-value="10"></i><b>(10)</b>
-      <span class="tag">&lt;name&gt;</span>postgres:9<span class="tag">&lt;/name&gt;</span>
-      <span class="tag">&lt;run&gt;</span>
-        <span class="tag">&lt;wait&gt;</span> <i class="conum" data-value="11"></i><b>(11)</b>
-          <span class="tag">&lt;log&gt;</span>database system is ready to accept connections<span class="tag">&lt;/log&gt;</span>
-          <span class="tag">&lt;time&gt;</span>20000<span class="tag">&lt;/time&gt;</span>
-        <span class="tag">&lt;/wait&gt;</span>
-      <span class="tag">&lt;/run&gt;</span>
-    <span class="tag">&lt;/image&gt;</span>
-  <span class="tag">&lt;/images&gt;</span>
-<span class="tag">&lt;/configuration&gt;</span></code></pre>
+  Person(<span class="predefined-type">Long</span> id, <span class="predefined-type">String</span> firstname, <span class="predefined-type">String</span> lastname) {
+    <span class="comment">// Field assignments</span>
+  }
+
+  Person withId(<span class="predefined-type">Long</span> id) {
+    <span class="keyword">return</span> <span class="keyword">new</span> Person(id, <span class="local-variable">this</span>.firstname, <span class="local-variable">this</span>.lastame);
+  }
+
+  <span class="type">void</span> setLastname(<span class="predefined-type">String</span> lastname) {
+    <span class="local-variable">this</span>.lastname = lastname;
+  }
+}</code></pre>
+</div>
+</div>
+<div class="exampleblock">
+<div class="title">Example 1. 生成的属性访问器</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">PersonPropertyAccessor</span> <span class="directive">implements</span> PersistentPropertyAccessor {
+
+  <span class="directive">private</span> <span class="directive">static</span> <span class="directive">final</span> MethodHandle firstname;              <i class="conum" data-value="2"></i><b>(2)</b>
+
+  <span class="directive">private</span> Person person;                                    <i class="conum" data-value="1"></i><b>(1)</b>
+
+  <span class="directive">public</span> <span class="type">void</span> setProperty(PersistentProperty property, <span class="predefined-type">Object</span> value) {
+    <span class="predefined-type">String</span> name = property.getName();
+
+    <span class="keyword">if</span> (<span class="string"><span class="delimiter">&quot;</span><span class="content">firstname</span><span class="delimiter">&quot;</span></span>.equals(name)) {
+      firstname.invoke(person, (<span class="predefined-type">String</span>) value);             <i class="conum" data-value="2"></i><b>(2)</b>
+    } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>.equals(name)) {
+      <span class="local-variable">this</span>.person = person.withId((<span class="predefined-type">Long</span>) value);            <i class="conum" data-value="3"></i><b>(3)</b>
+    } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string"><span class="delimiter">&quot;</span><span class="content">lastname</span><span class="delimiter">&quot;</span></span>.equals(name)) {
+      <span class="local-variable">this</span>.person.setLastname((<span class="predefined-type">String</span>) value);              <i class="conum" data-value="4"></i><b>(4)</b>
+    }
+  }
+}</code></pre>
 </div>
 </div>
 <div class="colist arabic">
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>具有别名“service”和名字是 <code>fabric8/docker-demo:${project.version}</code> 的Java服务的镜像配置</td>
+<td>PropertyAccessor持有底层对象的可变实例。这是为了支持其他不可变属性的变化。</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td><a href="#构建配置">[构建配置]</a>定义了如何创建Docker镜像</td>
+<td>默认情况下，Spring Data使用字段访问来读取和写入属性值。根据 <code>private</code> 字段的可见性规则，<code>MethodHandles</code> 用于与字段交互。</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>基本镜像，在这种情况下为 <code>java：8</code></td>
+<td>该类公开了一个 <code>withId(&#8230;&#8203;)</code> 方法，该方法用于设置标识符，例如将实例插入数据存储区并生成标识符时，调用 <code>withId(&#8230;&#8203;)</code> 会创建一个新的 <code>Person</code> 对象。所有后续的更改都将在新实例中发生，而不影响前一个实例。</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>可以使用<a href="#assembly描述符">[assembly描述符]</a>指定镜像的内容</td>
+<td>可访属性允许直接方法调用而不使用 <code>MethodHandles</code>。</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>这使我们相比反射方面的性能提升了25%。要使域类符合此类优化的条件，它需要遵守一些约束：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>类型不能放在默认或 <code>java</code> 包下</p>
+</li>
+<li>
+<p>类型及其构造函数必须是 <code>public</code></p>
+</li>
+<li>
+<p>内部类的类型必须是 <code>static</code></p>
+</li>
+<li>
+<p>使用的Java Runtime必须允许在原始 <code>ClassLoader</code> 中声明类。Java 9和更新版本施加了某些限制。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>默认情况下，如果检测到限制，Spring Data会尝试使用生成的属性访问器并回退到基于反射的访问器。</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>我们来看看以下实体：</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 2. 样本实体</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">Person</span> {
+
+  <span class="directive">private</span> <span class="directive">final</span> <span class="annotation">@Id</span> <span class="predefined-type">Long</span> id;                                                <i class="conum" data-value="1"></i><b>(1)</b>
+  <span class="directive">private</span> <span class="directive">final</span> <span class="predefined-type">String</span> firstname, lastname;                                 <i class="conum" data-value="2"></i><b>(2)</b>
+  <span class="directive">private</span> <span class="directive">final</span> LocalDate birthday;
+  <span class="directive">private</span> <span class="directive">final</span> <span class="type">int</span> age; <i class="conum" data-value="3"></i><b>(3)</b>
+
+  <span class="directive">private</span> <span class="predefined-type">String</span> comment;                                                   <i class="conum" data-value="4"></i><b>(4)</b>
+  <span class="directive">private</span> <span class="annotation">@AccessType</span>(<span class="predefined-type">Type</span>.PROPERTY) <span class="predefined-type">String</span> remarks;                        <i class="conum" data-value="5"></i><b>(5)</b>
+
+  <span class="directive">static</span> Person of(<span class="predefined-type">String</span> firstname, <span class="predefined-type">String</span> lastname, LocalDate birthday) { <i class="conum" data-value="6"></i><b>(6)</b>
+    <span class="keyword">return</span> <span class="keyword">new</span> Person(<span class="predefined-constant">null</span>, firstname, lastname, birthday,
+      Period.between(birthday, LocalDate.now()).getYears());
+  }
+
+  Person(<span class="predefined-type">Long</span> id, <span class="predefined-type">String</span> firstname, <span class="predefined-type">String</span> lastname, LocalDate birthday, <span class="type">int</span> age) { <i class="conum" data-value="6"></i><b>(6)</b>
+    <span class="local-variable">this</span>.id = id;
+    <span class="local-variable">this</span>.firstname = firstname;
+    <span class="local-variable">this</span>.lastname = lastname;
+    <span class="local-variable">this</span>.birthday = birthday;
+    <span class="local-variable">this</span>.age = age;
+  }
+
+  Person withId(<span class="predefined-type">Long</span> id) {                                                  <i class="conum" data-value="1"></i><b>(1)</b>
+    <span class="keyword">return</span> <span class="keyword">new</span> Person(id, <span class="local-variable">this</span>.firstname, <span class="local-variable">this</span>.lastname, <span class="local-variable">this</span>.birthday);
+  }
+
+  <span class="type">void</span> setRemarks(<span class="predefined-type">String</span> remarks) {                                         <i class="conum" data-value="5"></i><b>(5)</b>
+    <span class="local-variable">this</span>.remarks = remarks;
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>identifier属性是final，但在构造函数中设置为null。该类公开了一个 <code>withId(&#8230;&#8203;)</code> 方法，该方法用于设置标识符，例如将实例插入数据存储区并生成标识符时，原始Person实例在创建新实例时保持不变。相同的模式通常应用于存储管理的其他属性，但可能必须更改以进行持久性操作。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>firstname</code> 和 <code>lastname</code> 属性是可能通过getter公开的普通不可变属性。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>age</code> 属性是一个不可变的，但是值来自于 <code>birthday</code> 属性。根据所显示的设计，数据库值将胜过默认值，因为Spring Data使用唯一声明的构造函数。即使目的是要优先考虑计算，但重要的是这个构造函数也将 <code>age</code> 作为参数（可能忽略它），否则属性填充步骤将尝试设置 <code>age</code> 字段并由于它是不可变的而失败。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>comment</code> 属性是可变的，通过直接设置其字段来填充。</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>创建容器时运行的<a href="#默认命令">[默认命令]</a></td>
+<td><code>remarks</code> 属性是可变的，并通过直接设置字段或通过调用setter方法来填充。</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="6"></i><b>6</b></td>
-<td><a href="#运行配置">[运行配置]</a>定义如何从此镜像创建容器</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="7"></i><b>7</b></td>
-<td><a href="#端口映射">[端口映射]</a>定义容器端口应如何映射到主机端口</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="8"></i><b>8</b></td>
-<td><a href="#等待">[等待]</a>部分，这是启动服务是否准备就绪的检查</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="9"></i><b>9</b></td>
-<td><a href="#网络链接">[网络链接]</a>描述了此服务的容器如何链接到数据库容器</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="10"></i><b>10</b></td>
-<td>第二个镜像是一个纯粹的数据库映像，只需要运行（因此没有&lt;build&gt;部分）。别名被上面的网络链接部分使用</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="11"></i><b>11</b></td>
-<td>在启动Docker容器时，请等待相应的输出出现在stdout上。</td>
+<td>该类公开了一个工厂方法和一个用于创建对象的构造函数。这里的核心思想是使用工厂方法而不是其他构造函数来避免通过 <code>@PersistenceConstructor</code> 消除构造函数的歧义。相反，在工厂方法中处理属性的默认值。</td>
 </tr>
 </table>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_1_5_特征">1.5. 1.5. 特征</h3>
-<div class="paragraph">
-<p>其他一些亮点，按随机顺序排列：</p>
 </div>
+<div class="sect1">
+<h2 id="_一般建议">3. 一般建议</h2>
+<div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p>自动拉动图像并使用进度指示器</p>
+<p><em>坚持使用不可变对象</em>&#8201;&#8212;&#8201;创建不可变对象很简单，因为实现对象只需要调用它的构造函数。此外，这可以避免域对象被允许客户机代码操作对象状态的setter方法打乱。如果你需要这些，请将它们设置为包保护，以便只能通过有限数量的共存类型来调用它们。仅构造函数实例化比属性填充总体快30%。</p>
 </li>
 <li>
-<p>基于时间等待容器启动，URL的可达性或日志输出中的模式</p>
+<p><em>提供所有参数的构造函数</em>&#8201;&#8212;&#8201;即使你不能或不希望将实体建模为不可变值，提供一个将实体的所有属性(包括可变属性)作为参数的构造函数仍然是有价值的，因为这允许对象映射跳过属性填充以获得最佳性能。</p>
 </li>
 <li>
-<p>支持SSL<a href="#认证">[认证]</a>和OpenShift凭证</p>
+<p><em>使用工厂方法而不是重载的构造函数来避免使用 <code>@PersistenceConstructor</code></em>&#8201;&#8212;&#8201;使用最佳性能所需的全参数构造函数，我们通常希望公开更多的应用程序用例特定构造函数，这些构造函数省略了自动生成的标识符等内容。使用静态工厂方法公开all-args构造函数的这些变体是一种已建立的模式。</p>
 </li>
 <li>
-<p>Docker machine 支持</p>
+<p><em>确保遵守允许使用生成的实例化器和属性访问器类的约束</em>&#8201;&#8212;&#8201;</p>
 </li>
 <li>
-<p>灵活的注册表处理（即注册表可以指定为元数据）</p>
+<p><em>对于要生成的标识符，仍然使用final字段和wither方法组合使用</em>&#8201;&#8212;&#8201;</p>
 </li>
 <li>
-<p>在 <code>\~/.m2/settings.xml</code> (即在pom.xml之外)中声明<a href="#加密">[加密]</a>的注册表密码，用于推送或拉取镜像</p>
-</li>
-<li>
-<p>彩色输出</p>
-</li>
-<li>
-<p><a href="#检测">[检测]</a>项目变更和镜像自动再造</p>
-</li>
-<li>
-<p><a href="#属性">[属性]</a>作为XML配置的替代</p>
-</li>
-<li>
-<p>支持Docker守护程序通过TCP和Unix套接字接受http或https请求</p>
+<p><em>使用Lombok避免样板代码</em>&#8201;&#8212;&#8201;由于持久性操作通常需要构造函数接受所有参数，因此它们的声明变成了对字段赋值的样板参数的繁琐重复，使用Lombok的 <code>@AllArgsConstructor</code> 可以最好地避免这种重复。</p>
 </li>
 </ul>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_安装">2. 安装</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>该插件可从Maven Central获得，可以连接到集成<strong>pre-</strong>和<strong>post-</strong>阶段，如下所示。配置和可用目标如下所述。</p>
-</div>
-<div class="listingblock">
-<div class="title">Example</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;plugin&gt;</span>
-  <span class="tag">&lt;groupId&gt;</span>io.fabric8<span class="tag">&lt;/groupId&gt;</span>
-  <span class="tag">&lt;artifactId&gt;</span>docker-maven-plugin<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>0.21.0<span class="tag">&lt;/version&gt;</span>
-
-  <span class="tag">&lt;configuration&gt;</span>
-     ....
-     <span class="tag">&lt;images&gt;</span>
-        <span class="comment">&lt;!-- A single's image configuration --&gt;</span>
-        <span class="tag">&lt;image&gt;</span>
-           ....
-        <span class="tag">&lt;/image&gt;</span>
-        ....
-     <span class="tag">&lt;/images&gt;</span>
-  <span class="tag">&lt;/configuration&gt;</span>
-
-  <span class="comment">&lt;!-- Connect start/stop to pre- and
-       post-integration-test phase, respectively if you want to start
-       your docker containers during integration tests --&gt;</span>
-  <span class="tag">&lt;executions&gt;</span>
-    <span class="tag">&lt;execution&gt;</span>
-       <span class="tag">&lt;id&gt;</span>start<span class="tag">&lt;/id&gt;</span>
-       <span class="tag">&lt;phase&gt;</span>pre-integration-test<span class="tag">&lt;/phase&gt;</span>
-       <span class="tag">&lt;goals&gt;</span>
-         <span class="comment">&lt;!-- &quot;build&quot; should be used to create the images with the
-              artifact --&gt;</span>
-         <span class="tag">&lt;goal&gt;</span>build<span class="tag">&lt;/goal&gt;</span>
-         <span class="tag">&lt;goal&gt;</span>start<span class="tag">&lt;/goal&gt;</span>
-       <span class="tag">&lt;/goals&gt;</span>
-    <span class="tag">&lt;/execution&gt;</span>
-    <span class="tag">&lt;execution&gt;</span>
-       <span class="tag">&lt;id&gt;</span>stop<span class="tag">&lt;/id&gt;</span>
-       <span class="tag">&lt;phase&gt;</span>post-integration-test<span class="tag">&lt;/phase&gt;</span>
-       <span class="tag">&lt;goals&gt;</span>
-         <span class="tag">&lt;goal&gt;</span>stop<span class="tag">&lt;/goal&gt;</span>
-      <span class="tag">&lt;/goals&gt;</span>
-    <span class="tag">&lt;/execution&gt;</span>
-  <span class="tag">&lt;/executions&gt;</span>
-<span class="tag">&lt;/plugin&gt;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>当使用此插件时，你可以使用自己的包装使用专门的生命周期，以保持你的pom文件微小。有三种包装形式可供选择：</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>docker</strong>： 这将绑定 <code>docker:build</code> 到 <code>package</code> 阶段和 <code>docker:start</code> / <code>docke:stop</code> 分别到 <code>pre-</code> 和　<code>post-</code> 集成阶段。<code>docker:push</code> 绑定到 <code>deploy</code> 阶段。</p>
-</li>
-<li>
-<p><strong>docker-build</strong>: 很像<em>docker</em>包装，除了默认情况下没有配置集成测试。</p>
-</li>
-<li>
-<p><strong>docker-tar</strong>: 创建一个所谓的<em>Docker tar</em>存档，它用作工件，以后可以用于构建镜像。它基本上包含一个 <code>Dockerfile</code> 和支持文件。有关详细信息，请参阅<a href="#docker:source">[docker:source]</a>。</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>这些maven packaging定义包括jar生命周期方法，因此它们非常适合于简单的Microservice样式项目。</p>
-</div>
-<div class="listingblock">
-<div class="title">Example</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;pom&gt;</span>
-  <span class="tag">&lt;artifactId&gt;</span>demo<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>0.0.1<span class="tag">&lt;/version&gt;</span>
-  <span class="tag">&lt;packaging&gt;</span>docker<span class="tag">&lt;/packaging&gt;</span>
-  ...
-  <span class="tag">&lt;build&gt;</span>
-    <span class="tag">&lt;plugins&gt;</span>
-      <span class="tag">&lt;plugin&gt;</span>
-        <span class="tag">&lt;groupId&gt;</span>io.fabric8<span class="tag">&lt;/groupId&gt;</span>
-        <span class="tag">&lt;artifactId&gt;</span>docker-maven-plugin<span class="tag">&lt;/artifactId&gt;</span>
-        <span class="tag">&lt;extensions&gt;</span>true<span class="tag">&lt;/extensions&gt;</span>
-        <span class="tag">&lt;configuration&gt;</span>
-          <span class="tag">&lt;images&gt;</span>
-            <span class="tag">&lt;image&gt;</span>
-            ...
-            <span class="tag">&lt;/image&gt;</span>
-          <span class="tag">&lt;/images&gt;</span>
-        <span class="tag">&lt;/configuration&gt;</span>
-      <span class="tag">&lt;/plugin&gt;</span>
-    <span class="tag">&lt;/plugins&gt;</span>
-    ....
-  <span class="tag">&lt;/build&gt;</span>
-<span class="tag">&lt;/pom&gt;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>这将创建jar（如果有），构建Docker镜像，启动配置的Docker容器，运行集成测试，当你输入mvn install时停止配置的Docker容器。使用 <code>mvn deploy</code>，你可以另外将镜像推送到配置的Docker仓储。
-请注意使用自定义生命周期时必需使用 <code>&lt;extensions&gt;true&lt;/extensions&gt;</code></p>
-</div>
-<div class="paragraph">
-<p>本手册的其余部分现在将介绍如何为镜像配置插件。</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_全局配置">3. 全局配置</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>全局配置参数指定的整体行为，如连接到Docker主机。括号内给出相应的系统属性，可用于从外部设置它。</p>
-</div>
-<div class="paragraph">
-<p>docker-maven-plugin插件使用Docker remote API，你的Docker守护进程必须指定URL。URL可以由dockerHost或机器配置中指定，或由 <code>DOCKER_HOST</code> 环境变量。</p>
-</div>
-<div class="paragraph">
-<p>Docker remote API支持通过SSL认证证书通信。该证书的路径可以由certPath或机器配置中指定，或由 <code>DOCKER_CERT_PATH</code> 环境变量。</p>
-</div>
-<table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 1. Global Configuration</caption>
-<colgroup>
-<col style="width: 33%;">
-<col style="width: 33%;">
-<col style="width: 33%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Element</th>
-<th class="tableblock halign-left valign-top">Description</th>
-<th class="tableblock halign-left valign-top">Property</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>apiVersion</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">如果你使用的是旧版本的Docker不与当前默认使用与服务器通信的兼容,则使用这个变量</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">docker.apiVersion</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>authConfig</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">pull或push Docker注册表的认证信息。对于安全性，有专门的一节介绍<a href="#身份验证">[身份验证]</a></p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>autoCreateCustomNetworks</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">如果在镜像的运行配置中提供自定义网络，在 <code>docker:start</code> 期间自动创建Docker网络，并在 <code>docker:stop</code> 时自动移除它，默认值是 <code>false</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">docker.autoCreateCustomNetworks</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>autoPull</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">决定如何pull丢失的基本镜像或启动镜像:
-</p><p class="tableblock">* on: 自动下载任何丢失的镜像（默认）
-* off: 关闭自动拉取
-* always: 即使在本地已经存在，也总是要拉镜像
-* once: 对于多模块构建，只检查一次镜像并将其应用到整个构建过程中
-</p><p class="tableblock">默认情况下，在控制台上输出一个进度表，在批处理模式中使用Maven(选项 <code>-B</code>)时省略。一个非常简单的进度表是采用无彩色输出（即 <code>-Ddocker.useColor=false</code>）</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">docker.autoPull</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>certPath</strong></p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>dockerHost</strong></p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>filter</strong></p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>logDate</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">用于打印容器日志的日期格式。这种配置可以由单独的运行配置覆盖，会在下文描述。<a href="#Logging">[Logging]</a>中描述了格式。</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">docker.logDate</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>logStdout</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">如果设置为true对于所有容器记录到标准输出，则不管是否指定日志输出文件。见<a href="#Logging">[Logging]</a></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">docker.logStdout</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>machine</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Docker machine配置。看<a href="#Docker Machine">[Docker Machine]</a>的可能值</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>maxConnections</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">可以打开Docker主机的并行连接数。为了解析日志输出，需要保持一个连接（对于wait特性也是如此。），所以不要把这个数字放低。默认值为100，应该适合大多数情况</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">docker.maxConnections</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>outputDirectory</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">此插件将使用的默认输出目录。默认值是 <code>target/docker</code> 和仅用于目标 <code>docker:build</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">docker.target.dir</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>portPropertyFile</strong></p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>registry</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">在全局指定一个用于pull和push镜像的注册表。有关详细信息，请参见<a href="#注册表处理">[注册表处理]</a></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">docker.registry</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>skip</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">完全跳过插件的执行</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">docker.skip</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>skipBuild</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">如果没有设置, <code>docker:build</code> 时镜像将被建立(设置时也意味着 <code>skip.tag</code> )</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">docker.skip.build</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>skipPush</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">如果设置，<code>docker:push</code> 时不推送任何镜像</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">docker.skip.push</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>skipRun</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">如果设置，<code>docker:start</code> 或 <code>docker:run</code> 时将不创建和开启任何容器</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">docker.skip.run</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>skipTag</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">如果设置为true，这个插件不会添加任何标签到 <code>docker:build</code> 构建的镜像</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">docker.skip.tag</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>skipMachine</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">在任何情况下不使用docker machine</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">docker.skip.machine</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>sourceDirectory</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">包含插件使用的assembly描述符的默认目录。默认值是 <code>src/main/docker</code> 。这个选项仅和 <code>docker:build</code> 相关</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">docker.source.dir</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>useColor</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">是否使用彩色日志输出。默认情况下，在控制台上运行时打开此开关，否则关闭。</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">docker.useColor</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>verbose</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">用于在标准输出上打开详细输出的布尔属性。这包括像build步骤时的详细信息。默认为false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">docker.verbose</p></td>
-</tr>
-</tbody>
-</table>
-<div class="listingblock">
-<div class="title">Example</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;configuration&gt;</span>
-   <span class="tag">&lt;dockerHost&gt;</span>https://localhost:2376<span class="tag">&lt;/dockerHost&gt;</span>
-   <span class="tag">&lt;certPath&gt;</span>src/main/dockerCerts<span class="tag">&lt;/certPath&gt;</span>
-   <span class="tag">&lt;useColor&gt;</span>true<span class="tag">&lt;/useColor&gt;</span>
-   .....
-<span class="tag">&lt;/configuration&gt;</span></code></pre>
-</div>
-</div>
-<table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 2. Docker Machine Options</caption>
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Element</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>name</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Docker machine的名字。默认是 <code>default</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>autoCreate</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">如果设置为true，Docker machine会自动创建。默认为 <code>false</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>createOptions</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">在自动创建Docker machine时，使用的Docker machine的选项Map。看docker machine文档了解更多可能选项</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_镜像配置">4. 镜像配置</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>插件的配置以<em>镜像</em>为中心。这些配置是在配置中的每一个镜像中指定的，每个镜像使用一个 <code>&lt;image&gt;</code> 元素。</p>
-</div>
-<div class="paragraph">
-<p><code>&lt;image&gt;</code> 元素可以包含以下子元素：</p>
-</div>
-<table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 3. Image Configuration</caption>
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Element</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>name</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">每个 <code>&lt;image&gt;</code> 配置具有强制性，唯一的docker仓库名称。这可以包括注册表和tag部分，但也包括占位符参数。请看下面的详细说明。</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>alias</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">可用于在此配置中标示镜像的快捷名称。当将镜像link在一起或用全局<strong>image</strong>配置元素指定时，就会使用此方法。</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><a href="#registry">[registry]</a></strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">用于此映像的注册表。如果 <code>name</code> 已经包含注册表，则优先使用。有关详细信息，请参见<a href="#注册表处理">[注册表处理]</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><a href="#build">[build]</a></strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">在做<a href="#docker:build">[docker:build]</a>时包含所有配置方面的元素。如果只从注册表中提取镜像，则可以省略此元素，例如对数据库镜像等集成测试的支持。</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><a href="#run">[run]</a></strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">描述容器应该如何创建和运行在 <code>docker:start</code> 时的元素。如果此映像仅被用做<em>数据容器</em>(也就是说只被安装为卷)，则可以忽略该部分。</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><a href="#external">[external]</a></strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">外部配置的规范作为基于XML的配置 <code>&lt;run&gt;</code> 和 <code>&lt;build&gt;</code> 的替代方式。它包含一个 <code>&lt;type&gt;</code> 元素，指定用于获取配置的处理程序。详细信息请参见<a href="#外部配置">[外部配置]</a></p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<div class="title">名称的占位符</div>
-<p>指定名称时可以使用多个占位符，在运行时通过这个插件替换。此外，你还可以使用Maven本身解析的常规Maven属性。</p>
-</div>
-<table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 4. Placeholders</caption>
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Placeholder</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>%g</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Maven group名称的最后一部分，经过简化，以便可以作为GitHub上的用户名。只有在最后一个点之后的才会使用。例如，对于一个组 <code>io.fabric8</code> 这个占位符将插入 <code>fabric8</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>%a</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">artefact id的一个简化版本，以便它可以用作Docker镜像名称的一部分。也就是说，它被转换全小写格式(根据Docker的要求)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>%v</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">项目版本。<code>${project.version}</code> 的同义词</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>%l</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">如果项目版本以 <code>-SNAPSHOT</code> 结束，那么这个占位符是 <code>latest</code>，否则是它的完整版本（与%v相同）。</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>%t</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">如果项目版本以 <code>-SNAPSHOT</code> 结束，这个占位符解析为 <code>snapshot-&lt;timestamp&gt;</code>。时间戳具有日期格式 <code>yymmdd-hhmmss-ssss</code> (例如 <code>snapshot-</code>)。
-这一特性在oder的开发过程中特别有用，以避免在镜像被更新时发生冲突。不过，你需要注意自己事后清理旧镜像。</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>必须存在 <code>&lt;build&gt;</code> 或 <code>&lt;run&gt;</code> 部分。这些都在相应的目标部分中详细说明。</p>
-</div>
-<div class="listingblock">
-<div class="title">Example</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;configuration&gt;</span>
-  ....
-  <span class="tag">&lt;images&gt;</span>
-    <span class="tag">&lt;image&gt;</span>
-      <span class="tag">&lt;name&gt;</span>%g/docker-demo:0.1<span class="tag">&lt;/name&gt;</span>
-      <span class="tag">&lt;alias&gt;</span>service<span class="tag">&lt;/alias&gt;</span>
-      <span class="tag">&lt;run&gt;</span>....<span class="tag">&lt;/run&gt;</span>
-      <span class="tag">&lt;build&gt;</span>....<span class="tag">&lt;/build&gt;</span>
-    <span class="tag">&lt;/image&gt;</span>
-  <span class="tag">&lt;/images&gt;</span>
-<span class="tag">&lt;/configuration&gt;</span></code></pre>
-</div>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-<a href="https://dmp.fabric8.io">原文链接</a>
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-01-02 08:28:38 CST
+Last updated 2019-01-19 08:14:32 CST
 </div>
 </div>
 </body>
