@@ -51,6 +51,7 @@
       <item name="Pro Git" href="https://progit.bootcss.com/"/>
       <item name="Spring Session" href="cookbook/spring-session.html"/>
       <item name="Spring Data JPA" href="cookbook/spring-data-jpa.html"/>
+      <item name="Spring Data Solr" href="cookbook/spring-data-solr.html"/>
       <item name="Spring Testing" href="cookbook/spring-test.html"/>
       <item name="Spring Boot Testing" href="cookbook/spring-boot-test.html"/>
       <item name="Spring REST Docs" href="cookbook/spring-rest-docs.html"/>
