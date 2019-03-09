@@ -1,0 +1,373 @@
+= 表格
+:attributeOptions: http://methods.co.nz/asciidoc/chunked/apf.html
+:docbookxsl: http://www.sagehill.net/docbookxsl/Tables.html
+:dblatex: http://dblatex.sourceforge.net/doc/manual/ch03s05.html
+:paragraphs: http://methods.co.nz/asciidoc/chunked/ch15.html
+:delimitedBlocks: http://methods.co.nz/asciidoc/chunked/ch16.html
+:table: http://methods.co.nz/asciidoc/chunked/ch23.html
+:blockElementDefinitions: http://methods.co.nz/asciidoc/chunked/ch32.html
+:doctype: book
+:toc: left
+:toclevels: 3
+:icons: font
+
+AsciiDoc表语法的外观和行为与其他分隔块类型相似，并支持标准 {blockElementDefinitions}[块配置条目]。格式化易于阅读，同样重要的是，易于输入。
+
+* 可以使用内置的可自定义样式格式化单元格和列。
+* 可以在列和单元格上设置水平和垂直单元格对齐。
+* 支持水平和垂直单元格的合并。
+
+.谨慎使用表格
+****
+当技术用户首次开始创建文档时，表（包括列跨越和表嵌套）通常被认为非常重要。实际情况是表格很少使用，即使在技术文档中也是如此。
+
+试试这个练习：翻阅你的技术书籍库，你会惊讶于实际上很少使用表格，更不用说包含块元素（如段落或列表）或合并单元格的表格。这不是偶然的，如数字，表格在正常的文件流程之外 - 表格用于咨询而不是阅读。
+
+表是为显示面向列的表格数据而设计的，通常只应用于表格。
+****
+
+[[table.examples]]
+== 表样例
+
+.简单的表
+[width="15%"]
+|=======
+|1 |2 |A
+|3 |4 |B
+|5 |6 |C
+|=======
+
+AsciiDoc源:
+
+[source,asciidoc]
+----
+[width="15%"]
+|=======
+|1 |2 |A
+|3 |4 |B
+|5 |6 |C
+|=======
+----
+
+.使用强大，等宽和强调样式格式化的列
+[width="50%",cols=">s,^m,e",frame="topbot",options="header,footer"]
+|==========================
+|      2+|Columns 2 and 3
+|1       |Item 1  |Item 1
+|2       |Item 2  |Item 2
+|3       |Item 3  |Item 3
+|4       |Item 4  |Item 4
+|footer 1|footer 2|footer 3
+|==========================
+
+AsciiDoc源:
+
+[source,asciidoc]
+----
+[width="50%",cols=">s,^m,e",frame="topbot",options="header,footer"]
+|==========================
+|      2+|Columns 2 and 3
+|1       |Item 1  |Item 1
+|2       |Item 2  |Item 2
+|3       |Item 3  |Item 3
+|4       |Item 4  |Item 4
+|footer 1|footer 2|footer 3
+|==========================
+----
+
+.水平和垂直源数据
+[width="80%",cols="3,^2,^2,10",options="header"]
+|=========================================================
+|Date |Duration |Avg HR |Notes
+
+|22-Aug-08 |10:24 | 157 |
+Worked out MSHR (max sustainable heart rate) by going hard
+for this interval.
+
+|22-Aug-08 |23:03 | 152 |
+Back-to-back with previous interval.
+
+|24-Aug-08 |40:00 | 145 |
+Moderately hard interspersed with 3x 3min intervals (2min
+hard + 1min really hard taking the HR up to 160).
+
+|=========================================================
+
+AsciiDoc源:
+
+[source,asciidoc]
+----
+[width="80%",cols="3,^2,^2,10",options="header"]
+|=========================================================
+|Date |Duration |Avg HR |Notes
+
+|22-Aug-08 |10:24 | 157 |
+Worked out MSHR (max sustainable heart rate) by going hard
+for this interval.
+
+|22-Aug-08 |23:03 | 152 |
+Back-to-back with previous interval.
+
+|24-Aug-08 |40:00 | 145 |
+Moderately hard interspersed with 3x 3min intervals (2min
+hard + 1min really hard taking the HR up to 160).
+
+|=========================================================
+----
+
+.包含外部源CSV数据的表
+[cols="^1,4*2",options="header"]
+|====
+| ID | Customer Name | Contact Name | Customer Address | Phone
+| AROUT | Around the Horn | Thomas Hardy | 120 Hanover Sq. London | (171) 555-7788
+| BERGS | Berglunds snabbkop | Christina Berglund | Berguvsvagen 8 Lulea | 0921-12 34 65
+|====
+
+AsciiDoc源:
+
+[source,asciidoc]
+----
+[format="csv",cols="^1,4*2",options="header"]
+|===================================================
+ID,Customer Name,Contact Name,Customer Address,Phone
+include::customers.csv[]
+|===================================================
+----
+
+.列合并，对齐和样式
+[cols="e,m,^,>s",width="25%"]
+|============================
+|1 >s|2 |3 |4
+^|5 2.2+^.^|6 .3+<.>m|7
+^|8
+|9 2+>|10
+|============================
+
+AsciiDoc源:
+
+[source,asciidoc]
+----
+[cols="e,m,^,>s",width="25%"]
+|============================
+|1 >s|2 |3 |4
+^|5 2.2+^.^|6 .3+<.>m|7
+^|8
+|9 2+>|10
+|============================
+----
+
+[[table.data_formats]]
+== 表输入数据格式
+
+AsciiDoc表数据可以是 __psv__，__dsv__或__csv__格式。默认表格式为__psv__。
+
+AsciiDoc __psv（前缀分隔值）__和__dsv（分隔符分隔值）__格式是面向单元格的 - 表被视为一系列单元格 - 没有明确的行分隔符。
+
+* __psv__使用分隔符为每个单元格添加前缀，而__dsv__使用分隔符分隔单元格。
+* __psv__和__dsv__分隔符是Python正则表达式。
+* 默认的__psv__分隔符包含与命名的正则表达式组相关的<<table.cell_specifiers,单元格说明符>>。
+* 默认的__dsv__分隔符是 `:` | `\n`（冒号或换行符）。
+* __psv__和__dsv__单元格分隔符可以通过在它们前面加上反斜杠字符进行转义。
+
+这里有四个__psv__单元格（第二个项目合并两列;最后一个包含一个转义分隔符）：
+
+[source]
+----
+|One 2+|Two and three |A \| separator character
+----
+
+__csv__是通常用于导入和导出电子表格和数据库数据的标准行导向__逗号分隔值（CSV）__格式。
+
+[[table.attributes]]
+== 表属性
+
+可以通过以下属性自定义表：
+
+format::
+__psv__（默认值），__dsv__或__csv__（请参阅<<table.data_formats,表数据格式>>）。
+
+separator::
+单元格分隔符。Python正则表达式（__psv__和__dsv__格式）或单个字符（__csv__格式）。
+
+frame::
+定义表格边框，可以采用以下值：__topbot__（顶部和底部），__all__（所有边），__none__和__side__（左边和右边）。默认值为__all__。
+
+grid::
+定义在表行和列之间绘制的网格线。__grid__属性值可以是以下任何值：__none__，__cols__，__rows__和__all__。默认值为__all__。
+
+align::
+使用__align__属性在页面上水平对齐表格（仅适用于HTML输出，对DocBook输出没有影响）。以下值有效：__left__，__right__和__center__。
+
+float::
+使用__float__属性在页面上向左或向右浮动表格（仅适用于HTML输出，对DocBook输出没有影响）。浮动仅与表__width__属性值小于100％一起才有意义（否则表将占用所有可用空间）。__float__和__align__属性是互斥的。使用 `unfloat::[]` 块宏来停止浮动。
+
+halign::
+使用__halign__属性水平对齐表中的所有单元格。以下值有效：__left__，__right__和__center__（默认为__left__）。可由<<table.column_specifiers,列说明符>>和<<table.cell_specifiers,单元格说明符>>覆盖。
+
+valign::
+使用__valign__属性垂直对齐表格中的所有单元格。以下值有效：__top__，__bottom__和__middle__（默认为__top__）。可由<<table.column_specifiers,列说明符>>和<<table.cell_specifiers,单元格说明符>>覆盖。
+
+options::
+__options__属性可以包含逗号分隔值，例如：__header,footer__。默认情况下，页眉和页脚行被省略。有关可用表选项的完整列表，请参阅 {attributeOptions}[属性选项]。
+
+cols::
+__cols__属性是以逗号分隔的列说明符列表。例如 `cols="2<p,2*,4p,>"`。
+
+* 如果__cols__存在，则必须指定所有列。
+* 如果未指定__cols__属性，则列数将计算为表的**第一行**中的数据项数。
+* __cols__属性的简并形式是一个整数，用于指定列数，例如 `cols=4`。
+
+width::
+__width__属性表示为百分比值（"1%"…"99%"）。width指定相对于可用宽度的表格宽度。HTML后端使用此值来设置表格宽度属性。使用DocBook有点复杂，请参阅侧边栏<<,DocBook表格宽度>>。
+
+filter::
+__filter__属性定义为每个单元调用的外部shell命令。内置的asciidoc表样式是使用过滤器实现的。
+
+[[table.docbook_widths]]
+.DocBook表格宽度
+****
+AsciiDoc docbook后端生成CALS表。CALS表不支持表宽度属性 - 表格宽度只能通过指定绝对列宽来控制。
+
+指定绝对列宽不是媒体独立的，因为不同的表示媒体具有不同的物理尺寸。为了解决这个限制， {docbookxsl}#TableWidth[DocBook XSL样式表]和 {dblatex}#sec-table-width[dblatex]都实现了表宽处理指令，用于将表宽度设置为可用宽度的百分比。如果__width__属性与比例列宽度一起设置，则AsciiDoc会发出这些处理指令（AsciiDoc docbook后端__pageunits__属性默认为 `{asterisk}`）。
+
+要生成具有绝对列宽的DocBook表，请将__pageunits__属性设置为CALS绝对单位（如__pt__），并将__pagewidth__属性设置为与表示媒体的宽度相匹配。
+****
+
+[[table.column_specifiers]]
+== 列说明符
+
+列说明符定义在表<<table.attributes,cols属性>>中，用以说明如何呈现列。列说明符由可选的列乘数后跟可选的对齐，宽度和样式值组成，格式如下：
+
+[source]
+----
+[<multiplier>*][<align>][<width>][<style>]
+----
+
+* 所有组件都是可选的。乘数必须是第一个，样式必须是最后一个。`<align>` 或 `<width>` 的顺序并不重要。
+* 列 `<width>` 可以是整数比例值（1...）或百分比（1%...100%）。默认值为1.为确保跨不同后端的可移植性，不提供绝对列宽（不要与以百分比和绝对单位都可用的输出列宽<<table.markup_attributes,标记属性>>混淆）。
+* `<align>` 列对齐说明符的格式如下：
+
+[source]
+----
+[<horizontal>][.<vertical>]
+----
+
+其中 `<horizo​​ntal>` 和 `<vertical>` 是以下字符之一：`<`，`^` 或 `>` 分别代表水平对齐左，中，右或垂直对齐上，中和下。
+
+* `<multiplier>` 可用于指定重复列，例如 `cols="4*<"` 指定四个左对齐列。默认乘数值为1。
+* `<style>` 名称指定用于标记列单元格的<<table.styles,表格样式>>（如果你愿意，可以使用完整样式名称，但通常用第一个字母就足够了）。
+* 列特定样式不应用于标题行。
+
+[[table.cell_specifiers]]
+== 单元格说明符
+
+单元格说明符允许__psv__格式化表格中的单个单元格进行合并，复制，对齐和样式化。单元格说明符前缀__psv__分隔符为 `|`，格式如下：
+
+[source]
+----
+[<span>*|+][<align>][<style>]
+----
+
+* `<span>` 指定水平和垂直单元格跨度（`+` 运算符）或单元格复制的次数（`*` 运算符）。`<span>` 的格式如下：
+
+[source]
+----
+[<colspan>][.<rowspan>]
+----
+
+其中 `<colspan>` 和 `<rowspan>` 是指定要跨越的列数和行数的整数。
+
+* `<align>` 指定水平和垂直单元格对齐方式与<<table.column_specifiers,列说明符>>中的相同。
+* `<style>` 值是<<table.styles,表格样式>>名称的第一个字母。
+
+例如，以下__psv__格式的单元格将跨越两列，文本将居中并强调：
+
+[source]
+----
+2+^e| Cell text
+----
+
+[[table.styles]]
+== 表格样式
+
+表样式可以应用于整个表（通过在表的属性列表中设置样式属性）或基于每列（通过在表的<<table.attributes,cols属性>>中指定样式）。可以使用以下预定义样式格式化表数据：
+
+default::
+默认样式：AsciiDoc内联文本格式；空行被视为分段符。
+
+emphasis::
+像默认一样，但强调（斜体）所有文字。
+
+monospaced::
+与默认值一样，但所有文本都采用等宽字体。
+
+strong::
+像默认一样，但所有文字都是粗体。
+
+header::
+应用与表头相同的样式。通常用于在第一列中创建垂直标题。
+
+asciidoc::
+使用此样式表单元格可以包含文档部分中允许的任何AsciiDoc元素。此样式将 `asciidoc(1)` 作为处理单元格内容的过滤器运行。另请参阅 {table}#X83[Docbook表限制]。
+
+literal::
+没有文字格式；等宽字体；保留所有换行符（与AsciiDoc {delimitedBlocks}#X65[LiteralBlock]元素相同）。
+
+verse::
+保留所有换行符（就像AsciiDoc {paragraphs}#X94[段落样式]一样）。
+
+[[table.markup_attributes]]
+== 标记属性
+
+AsciiDoc为表标记模板和标记提供了许多属性。替换__colspec__单元格数据标记时，可以使用列特定的属性。
+
+pageunits::
+仅限DocBook后端。指定表列绝对宽度单位。默认为 `*`。
+
+pagewidth::
+仅限DocBook后端。以__pageunit__为单位的标准输出页宽。用于计算CALS表的绝对列和表宽度。默认为 __425__。
+
+tableabswidth::
+根据__width__和__pagewidth__属性计算的整数值。在__pageunit__单位下。
+
+tablepcwidth::
+表宽度表示为可用宽度的百分比。整数值（0..100）。
+
+colabswidth::
+从__cols__列宽度，__width __和__pagewidth__属性计算的整数值。在__pageunit__单位下。
+
+colpcwidth::
+列宽表示为表宽的百分比。整数值（0..100）。
+
+colcount::
+表列总数。
+
+rowcount::
+表行总数。
+
+halign::
+水平单元格内容对齐：__left__, __right__或__center__。
+
+valign::
+垂直单元格内容对齐：__top__, __bottom__或__middle__。
+
+colnumber, colstart::
+单元格占用的最左列的编号（1...）。
+
+colend::
+单元格占用的最右列的编号（1...）。
+
+colspan::
+单元格应跨越的列数。
+
+rowspan::
+单元格应跨越的行数（1...）。
+
+morerows::
+单元格应跨越的额外行数（0...）。
+
+[[table.nested]]
+== 嵌套表
+另一个__psv__分隔符 `!` 可以在嵌套表中使用（而不是 `|`）。这允许单级表嵌套。包含嵌套表的列必须使用asciidoc样式。可以在 `./examples/website/newtables.txt` 中找到一个示例。
+
+TIP: http://methods.co.nz/asciidoc/chunked/ch23.html[原文链接]

@@ -1,0 +1,2194 @@
+[[objectorientation]]
+= 面向对象
+:jls: https://docs.oracle.com/javase/specs/jls/se8/html/
+:javase8DefaultMethods: https://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html
+
+本章介绍Groovy编程语言的面向对象。
+
+== 类型
+=== 原始类型
+
+Groovy支持与Java语言规范定义的原始类型相同的原始类型：
+
+* 整数类型：`byte`（8位），`short`（16位），`int`（32位）和 `long`（64位）
+* 浮点类型：`float`（32位）和 `double`（64位）
+* `boolean` 类型（`true` 或 `false`）
+* `char` 类型（16位，可用作数字类型，表示UTF-16代码）
+
+虽然Groovy声明并将原始字段和变量存储为基元，但因为它将对象用于所有内容，所以它会自动对基元进行引用。就像Java一样，它使用的包装器也是如此
+
+.原始类型的包装类
+|===
+| 原始类型 | 包装类
+| boolean | Boolean
+| char | Character
+| short | Short
+| int | Integer
+| long | Long
+| float | Float
+| double | Double
+|===
+
+这是一个使用 `int` 的例子
+
+[source,groovy]
+----
+class Foo {
+  static int i
+}
+
+assert Foo.class.getDeclaredField('i').type == int.class
+assert Foo.i.class != int.class && Foo.i.class == Integer.class
+----
+
+现在你可能会担心这意味着每次在对基元的引用上使用数学运算符时，你将承担拆箱和装箱基元的成本。但事实并非如此，因为Groovy会将你的运算符编译为其<<operators.operator_overloading,方法等价物>>并使用它们。此外，Groovy在调用接受原语参数的Java方法时，会自动拆箱到基元类型，并自动装箱从Java方法返回的值。但请注意，Java的方法解析存在一些差异。
+
+=== 类
+
+Groovy类与Java类非常相似，并且与JVM级别的Java兼容。它们可能有方法，字段和属性（想想JavaBean属性但是比其样板代码少）。类和类成员可以使用与Java中相同的修饰符（public，protected，private，static等），在源代码级别有一些细微差别，稍后会对其进行解释。
+
+Groovy类与Java对应类之间的主要区别是：
+
+* 没有可见性修饰符的类或方法会自动公开（可以使用特殊注解来实现包私有可见性）。
+* 没有可见性修饰符的字段会自动转换为属性，这样可以减少冗长的代码，因为不需要显式的getter和setter方法。有关此方面的更多信息将在<<objectorientation.fields,字段和属性部分>>中介绍。
+* 类不需要与源文件定义具有相同的基本名称，但在大多数情况下强烈建议使用它们（另请参阅有关脚本的下一点）。
+* 一个源文件可能包含一个或多个类（但如果文件包含不在类中的任何代码，则将其视为脚本）。脚本只是具有一些特殊约定的类，并且与源文件具有相同的名称（因此不要在脚本中包含与脚本源文件同名的类定义）。
+
+以下代码提供了一个示例类：
+
+[source,groovy]
+----
+class Person {                       // <1>
+
+    String name                      // <2>
+    Integer age
+
+    def increaseAge(Integer years) { // <3>
+        this.age += years
+    }
+}
+----
+<1> 类开头，名为 `Person`
+<2> 字符串字段和名为 `name` 的属性
+<3> 方法定义
+
+==== 普通类
+
+普通类指的是顶级和具体的类。这意味着它们可以在没有任何其他类或脚本限制的情况下实例化。这样，它们只能是公共的（即使可以抑制public关键字）。通过使用new关键字调用其构造函数来实例化类，如下面的代码段所示：
+
+[source,groovy]
+----
+def p = new Person()
+----
+
+==== 内部类
+
+内部类在另一个类中定义。封闭类可以像往常一样使用内部类。另一方面，内部类可以访问其封闭类的成员，即使它们是私有的。封闭类以外的类不允许访问内部类。这是一个例子：
+
+[source,groovy]
+----
+class Outer {
+    private String privateStr
+
+    def callInnerMethod() {
+        new Inner().methodA()        // <1>
+    }
+
+    class Inner {                    // <2>
+        def methodA() {
+            println "${privateStr}." // <3>
+        }
+    }
+}
+----
+<1> 内部类被实例化并调用其方法
+<2> 内部类定义，在其封闭类中
+<3> 即使是私有的，内部类也可以访问封闭类的私有字段
+
+使用内部类有一些原因：
+
+* 它们通过将内部类隐藏在其他类中来增加封装，当这些类不需要知道它时。这也导致更清洁的包装和工作空间。
+* 它们通过对仅由一个类使用的类进行分组来提供良好的组织。
+* 它们导致更易维护的代码，因为内部类紧邻使用它们的类。
+
+在某些情况下，内部类是接口的实现，其外部类需要调用其方法。下面的代码通过使用线程来说明这一点，这很常见。
+
+[source,groovy]
+----
+class Outer2 {
+    private String privateStr = 'some string'
+
+    def startThread() {
+       new Thread(new Inner2()).start()
+    }
+
+    class Inner2 implements Runnable {
+        void run() {
+            println "${privateStr}."
+        }
+    }
+}
+----
+
+请注意，类 `Inner2` 的定义仅用于提供 `run` 方法到类 `Outer2` 的实现。在这种情况下，匿名内部类有助于消除冗长。
+
+===== 匿名内部类
+
+内部类的最后一个示例可以使用匿名内部类进行简化。使用以下代码可以实现相同的功能。
+
+[source,groovy]
+----
+class Outer3 {
+    private String privateStr = 'some string'
+
+    def startThread() {
+        new Thread(new Runnable() {      // <1>
+            void run() {
+                println "${privateStr}."
+            }
+        }).start()                       // <2>
+    }
+}
+----
+<1> 与上一节的最后一个例子相比，`new Inner2()` 被 `new Runnable()` 及其所有实现所取代
+<2> 正常调用 `start` 方法
+
+因此，不需要定义仅使用一次的新类。
+
+==== 抽象类
+
+抽象类表示通用概念，因此，它们无法实例化，被创建为子类。他们的成员包括字段/属性和抽象或具体方法。抽象方法没有实现，必须由具体的子类实现。
+
+[source,groovy]
+----
+abstract class Abstract {         // <1>
+    String name
+
+    abstract def abstractMethod() // <2>
+
+    def concreteMethod() {
+        println 'concrete'
+    }
+}
+----
+<1> 必须使用 `abstract` 关键字声明抽象类
+<2> 抽象方法也必须用 `abstract` 关键字声明
+
+通常将抽象类与接口进行比较。但是选择一个或另一个至少有两个重要的区别。首先，虽然抽象类可能包含字段/属性和具体方法，但接口可能只包含抽象方法（方法签名）。而且，一个类可以实现几个接口，而它只可以继承一个抽象或不抽象类。
+
+=== 接口
+
+接口定义了类需要遵循的契约。接口仅定义需要实现的方法列表，但不定义方法实现。
+
+[source,groovy]
+----
+interface Greeter {                      // <1>
+    void greet(String name)              // <2>
+}
+----
+<1> 需要使用 `interface` 关键字声明接口
+<2> 接口只定义方法签名
+
+接口的方法总是公开的。在接口中使用 `protected` 或 `private` 方法是错误的：
+
+[source,groovy]
+----
+interface Greeter {
+    protected void greet(String name)           // <1>
+}
+----
+<1> 使用 `protected` 会报编译时错误
+
+如果类在其 `implements` 列表中定义了接口或者其任何超类实现了接口，则该类**实现**了某接口：
+
+[source,groovy]
+----
+class SystemGreeter implements Greeter {               // <1>
+    void greet(String name) {                          // <2>
+        println "Hello $name"
+    }
+}
+
+def greeter = new SystemGreeter()
+assert greeter instanceof Greeter                       // <3>
+----
+<1> `SystemGreeter` 使用 `implements` 关键字声明 `Greeter` 接口
+<2> 然后实现所需的 `greet` 方法
+<3> `SystemGreeter` 的任何实例也是 `Greeter` 接口的实例
+
+接口可以继承另一个接口：
+
+[source,groovy]
+----
+interface ExtendedGreeter extends Greeter {              // <1>
+    void sayBye(String name)
+}
+----
+<1> `ExtendedGreeter` 接口使用 `extends` 关键字继承 `Greeter` 接口
+
+值得注意的是，对于一个类是一个接口的实例，它必须是显式声明的。例如，以下类定义 `greet` 方法，因为它在 `Greeter` 接口中声明，但未在其接口中声明实现 `Greeter`：
+
+[source,groovy]
+----
+class DefaultGreeter {
+    void greet(String name) { println "Hello" }
+}
+
+greeter = new DefaultGreeter()
+assert !(greeter instanceof Greeter)
+----
+
+换句话说，Groovy没有定义结构类型。但是，可以使用 `as` 强转运算符使对象的实例在运行时实现接口：
+
+[source,groovy]
+----
+greeter = new DefaultGreeter()                              // <1>
+coerced = greeter as Greeter                                // <2>
+assert coerced instanceof Greeter                           // <3>
+----
+<1> 创建一个不实现该接口的 `DefaultGreeter` 实例
+<2> 在运行时将实例强制转换为 `Greeter`
+<3> 强转后的实例实现了 `Greeter` 接口
+
+你可以看到有两个不同的对象：一个是源对象，一个 `DefaultGreeter` 实例，它不实现接口。另一个是 `Greeter` 的一个实例，它委托给强转对象。
+
+Groovy接口不支持Java 8接口等默认实现。如果你正在寻找类似（但不相等）的东西，则<<objectorientation.traits,特征>>接近接口，但允许默认实现以及本手册中描述的其他重要功能。
+
+=== 构造函数
+
+构造函数是用于初始化具有特定状态的对象的特殊方法。与普通方法一样，只要每个构造函数具有唯一的类型签名，类就可以声明多个构造函数。如果对象在构造期间不需要任何参数，则可以使用无参构造函数。如果没有提供构造函数，Groovy编译器将提供一个空的无参数构造函数。
+
+Groovy支持两种调用样式：
+
+* __位置参数__的使用方式与使用Java构造函数的方式类似
+* __命名参数__允许你在调用构造函数时指定参数名称
+
+==== 位置参数
+
+要使用位置参数创建对象，相应的类需要声明一个或多个构造函数。在多个构造函数的情况下，每个构造函数必须具有唯一的类型签名。构造函数也可以使用 {groovyJavaDocBaseUrl}?groovy/transform/TupleConstructor.html[`groovy.transform.TupleConstructor`]注解添加到类中。
+
+通常，一旦声明了至少一个构造函数，该类只能通过调用其构造函数来实例化。值得注意的是，在这种情况下，你通常无法使用命名参数创建类。Groovy支持命名参数，只要该类包含一个无参数构造函数或提供一个构造函数，该构造函数将 `Map` 参数作为第一个（也可能是唯一的）参数 - 有关详细信息，请参阅下一节。
+
+使用声明的构造函数有三种形式。第一个是普通的Java方式，使用 `new` 关键字。其他的方式依赖于将列表强制转换为所需类型。在这种情况下，可以强制使用 `as` 关键字并通过静态键入变量。
+
+[source,groovy]
+----
+class PersonConstructor {
+    String name
+    Integer age
+
+    PersonConstructor(name, age) {               // <1>
+        this.name = name
+        this.age = age
+    }
+}
+
+def person1 = new PersonConstructor('Marie', 1)  // <2>
+def person2 = ['Marie', 2] as PersonConstructor  // <3>
+PersonConstructor person3 = ['Marie', 3]         // <4>
+----
+<1> 构造函数声明
+<2> 构造函数调用，经典的Java方式
+<3> 使用 `as` 关键字强转的构造函数用法
+<4> 构造函数的使用，在赋值时使用强转
+
+==== 命名参数
+
+如果没有声明（或无参数）构造函数，则可以通过以映射（属性/值对）的形式传递参数来创建对象。在需要允许多个参数组合的情况下，这可以派上用场。否则，通过使用传统的位置参数，有必要声明所有可能的构造函数。有一个构造函数，其中第一个（也许只是唯一的）参数是一个 `Map` 参数也是支持的 - 这样的构造函数也可以使用 {groovyJavaDocBaseUrl}?groovy/transform/MapConstructor.html[`groovy.transform.MapConstructor`]注解标注。
+
+[source,groovy]
+----
+class PersonWOConstructor {                                  // <1>
+    String name
+    Integer age
+}
+
+def person4 = new PersonWOConstructor()                      // <2>
+def person5 = new PersonWOConstructor(name: 'Marie')         // <3>
+def person6 = new PersonWOConstructor(age: 1)                // <4>
+def person7 = new PersonWOConstructor(name: 'Marie', age: 2) // <5>
+----
+<1> 没有声明构造函数
+<2> 实例化中没有给出参数
+<3> 实例化中给出的 `name` 参数
+<4> 实例化中给出的 `age` 参数
+<5> 实例化中给出的 `name` 和 `age` 参数
+
+然而，重要的是要强调，这种方法为构造函数调用者提供了更多的功能，同时增加了调用者的责任，以使名称和值类型正确。因此，如果需要更大的控制，则可能优选使用位置参数来声明构造函数。
+
+[NOTE]
+====
+* 虽然上面的示例没有提供构造函数，但你也可以提供无参数构造函数或第一个参数是 `Map` 的构造函数（最常见的是它是唯一的参数）。
+* 当没有声明（或无参数）构造函数时，Groovy通过调用no-arg构造函数替换命名的构造函数调用，然后调用每个提供的命名属性的setter。
+* 当第一个参数是Map时，Groovy将所有命名参数组合到Map中（无论排序如何）并将Map作为第一个参数提供。如果你的属性被声明为 `final`，那么这可能是一个很好的方法（因为它们将在构造函数中设置而不是在setter之后设置）。
+* 你可以通过提供位置构造函数以及no-arg或Map构造函数来支持命名和位置构造。
+* 你可以通过使用构造函数来支持混合构造，其中第一个参数是 `Map`，但也有其他位置参数。请谨慎使用此方式。
+====
+
+=== 方法
+
+Groovy方法与其他语言非常相似。一些特点将在下一小节中展示。
+
+==== 方法定义
+
+使用返回类型或使用 `def` 关键字定义方法，以使返回类型无类型化。方法还可以接收任意数量的参数，这些参数可能没有显式声明其类型。Java修饰符可以正常使用，如果没有提供可见性修饰符，则该方法是公共的。
+
+Groovy中的方法总是返回一些值。如果未提供 `return` 语句，则将返回在执行的最后一行中计算的值。例如，请注意以下方法都不使用 `return` 关键字。
+
+[source,groovy]
+----
+def someMethod() { 'method called' }                           // <1>
+String anotherMethod() { 'another method called' }             // <2>
+def thirdMethod(param1) { "$param1 passed" }                   // <3>
+static String fourthMethod(String param1) { "$param1 passed" } // <4>
+----
+<1> 声明没有返回类型且没有参数的方法
+<2> 具有显式返回类型且无参数的方法
+<3> 没有定义参数类型的方法
+<4> 带 `String` 参数的静态方法
+
+==== 命名参数
+
+与构造函数一样，也可以使用命名参数调用常规方法。为了支持这种表示法，使用了一种约定，其中方法的第一个参数是 `Map`。在方法体中，可以像在普通Map中一样访问参数值（`map.key`）。如果该方法只有一个 `Map` 参数，则必须命名所有提供的参数。
+
+[source,groovy]
+----
+def foo(Map args) { "${args.name}: ${args.age}" }
+foo(name: 'Marie', age: 1)
+----
+
+===== 混合命名和位置参数
+
+命名参数可以与位置参数混合。在这种情况下，除了将 `Map` 参数作为第一个参数之外，相同的约定也适用，所讨论的方法将根据需要具有其他位置参数。调用方法时提供的位置参数必须按顺序排列。命名参数可以在任何位置。它们被分组到Map中并自动作为第一个参数提供。
+
+[source,groovy]
+----
+def foo(Map args, Integer number) { "${args.name}: ${args.age}, and the number is ${number}" }
+foo(name: 'Marie', age: 1, 23)  // <1>
+foo(23, name: 'Marie', age: 1)  // <2>
+----
+<1> 使用 `Integer` 类型的附加 `number` 参数调用方法
+<2> 改变了参数的顺序调用方法
+
+如果我们没有 `Map` 作为第一个参数，那么必须为该参数提供Map而不是命名参数。如果不这样做将导致 `groovy.lang.MissingMethodException`：
+
+[source,groovy]
+----
+def foo(Integer number, Map args) { "${args.name}: ${args.age}, and the number is ${number}" }
+foo(name: 'Marie', age: 1, 23)  // <1>
+----
+<1> 方法调用抛出 `groovy.lang.MissingMethodException: No signature of method: foo() is applicable for argument types: (LinkedHashMap, Integer) values: [[name:Marie, age:1], 23]`，因为命名参数 `Map` 参数未定义为第一个参数
+
+如果我们使用显式 `Map` 参数替换命名参数，则可以避免上述异常：
+
+[source,groovy]
+----
+def foo(Integer number, Map args) { "${args.name}: ${args.age}, and the number is ${number}" }
+foo(23, [name: 'Marie', age: 1])  // <1>
+----
+<1> 显式 `Map` 参数代替命名参数使调用有效
+
+虽然Groovy允许你混合命名和位置参数，但它可能会导致不必要的混淆。谨慎混合命名和位置参数。
+
+==== 默认参数
+
+默认参数使参数可选。如果未提供参数，则该方法采用默认值。
+
+[source,groovy]
+----
+def foo(String par1, Integer par2 = 1) { [name: par1, age: par2] }
+assert foo('Marie').age == 1
+----
+
+==== 可变参数
+
+Groovy支持具有可变数量参数的方法。它们的定义如下：`def foo(p1, …​, pn, T…​ args)`。这里 `foo` 默认支持 `n` 个参数，但是还有一个未指定数量（超过 `n`）的其他参数。
+
+[source,groovy]
+----
+def foo(Object... args) { args.length }
+assert foo() == 0
+assert foo(1) == 1
+assert foo(1, 2) == 2
+----
+
+这个例子定义了一个方法 `foo`，它可以接受任意数量的参数，包括根本没有参数。`args.length` 将返回给定的参数数量。Groovy允许 `T[]` 作为 `T...` 的替代符号。这意味着任何带有数组作为最后一个参数的方法都被Groovy看作是一个可以获取可变数量参数的方法。
+
+[source,groovy]
+----
+def foo(Object[] args) { args.length }
+assert foo() == 0
+assert foo(1) == 1
+assert foo(1, 2) == 2
+----
+
+如果使用 `null` 调用可变参数方法作为其参数，则参数将为 `null`，而不是长度为1的数组，其中 `null` 为唯一元素。
+
+[source,groovy]
+----
+def foo(Object... args) { args }
+assert foo(null) == null
+----
+
+如果使用数组作为参数调用可变参数方法，则参数将是该数组而不是包含给定数组作为唯一元素的长度为1的数组。
+
+[source,groovy]
+----
+def foo(Object... args) { args }
+Integer[] ints = [1, 2]
+assert foo(ints) == [1, 2]
+----
+
+另一个重点是可变参数与方法重载相结合。在方法重载的情况下，Groovy将选择最具体的方法。例如，如果方法 `foo` 采用类型为 `T` 的可变参数，而另一个方法 `foo` 也采用类型为 `T` 的一个参数，则第二种方法是首选方法。
+
+[source,groovy]
+----
+def foo(Object... args) { 1 }
+def foo(Object x) { 2 }
+assert foo() == 1
+assert foo(1) == 2
+assert foo(1, 2) == 1
+----
+
+==== 方法选择算法
+
+(TBD)
+
+==== 异常声明
+
+Groovy自动允许你将检查异常视为非检查异常。这意味着你不需要声明任何方法可能抛出的检查异常，如以下示例所示，如果找不到该文件，则会抛出 `FileNotFoundException`：
+
+[source,groovy]
+----
+def badRead() {
+    new File('doesNotExist.txt').text
+}
+
+shouldFail(FileNotFoundException) {
+    badRead()
+}
+----
+
+你也不需要在 `try/catch` 块中将上一个示例中的 `badRead` 方法的调用包围起来 - 尽管如果你愿意，你可以自由地执行此操作。
+
+如果你希望声明代码可能抛出的任何异常（选中或以其他方式），你可以自由地执行此操作。添加异常不会改变从任何其他Groovy代码中使用代码的方式，但可以被视为代码读者的文档。异常将成为字节码中方法声明的一部分，因此如果你的代码可能是从Java调用的，那么包含它们可能会很有用。以下示例说明了使用显式检查异常声明：
+
+[source,groovy]
+----
+def badRead() throws FileNotFoundException {
+    new File('doesNotExist.txt').text
+}
+
+shouldFail(FileNotFoundException) {
+    badRead()
+}
+----
+
+=== 字段和属性
+
+==== 字段
+
+字段是类或特征的成员，具有：
+
+* 强制__访问修饰符__（`public`, `protected` 或 `private`）
+* 一个或多个可选__修饰符__（`static`, `final`, `synchronized`）
+* 可选__类型__
+* 强制__名称__
+
+[source,groovy]
+----
+class Data {
+    private int id                                  // <1>
+    protected String description                    // <2>
+    public static final boolean DEBUG = false       // <3>
+}
+----
+<1> 一个名为 `id` 的 `private` 字段，类型为 `int`
+<2> 一个名为 `description` 的 `protected` 字段，类型为 `String`
+<3> 一个名为 `DEBUG` 的 `public static final` 字段，类型为 `boolean`
+
+可以在声明时直接初始化字段：
+
+[source,groovy]
+----
+class Data {
+    private String id = IDGenerator.next() // <1>
+    // ...
+}
+----
+<1> 使用 `IDGenerator.next()` 初始化私有字段 `id`
+
+可以省略字段的类型声明。然而，这被认为是一种不好的做法，一般来说，对字段使用强类型是个好主意：
+
+[source,groovy]
+----
+class BadPractice {
+    private mapping                         // <1>
+}
+class GoodPractice {
+    private Map<String,String> mapping      // <2>
+}
+----
+<1> 字段 `mapping` 不声明类型
+<2> 字段 `mapping` 具有强类型
+
+如果你想稍后使用可选类型检查，则两者之间的区别很重要。它对文档也很重要。但是在某些情况下，如脚本或者如果你想依赖鸭子类型，省略类型可能会很有趣。
+
+==== 属性
+
+属性是类的外部可见特征。不仅仅使用公共字段来表示这些特性（提供更有限的抽象并限制重构的可能性），Java中的典型约定是遵循JavaBean约定，即使用私有字段和getter/setter方法的组合来表示属性。Groovy遵循这些相同的约定，但提供了一种更简单的方法来定义属性。你可以使用以下内容定义属性：
+
+* 缺省访问修饰符（不是 `public`, `protected` 或 `private`）
+* 一个或多个可选__修饰符__（`static`, `final`, `synchronized`）
+* 可选__类型__
+* 强制__名称__
+
+然后Groovy将适当地生成getter/setter。例如：
+
+[source,groovy]
+----
+class Person {
+    String name                             // <1>
+    int age                                 // <2>
+}
+----
+<1> 创建一个支持 `private String name` 字段，一个 `getName` 和一个 `setName` 方法
+<2> 创建一个支持 `private int age` 字段，一个 `getAge` 和一个 `setAge` 方法
+
+如果属性被声明为 `final`，则不会生成setter方法：
+
+[source,groovy]
+----
+class Person {
+    final String name                   // <1>
+    final int age                       // <2>
+    Person(String name, int age) {
+        this.name = name                // <3>
+        this.age = age                  // <4>
+    }
+}
+----
+<1> 定义 `String` 类型的只读属性
+<2> 定义 `int` 类型的只读属性
+<3> 将 `name` 参数指定给 `name` 字段
+<4> 将 `age` 参数指定给 `age` 字段
+
+属性按名称访问，并将透明地调用getter或setter，除非代码位于定义属性的类中：
+
+[source,groovy]
+----
+class Person {
+    String name
+    void name(String name) {
+        this.name = "Wonder$name"       // <1>
+    }
+    String wonder() {
+        this.name                       // <2>
+    }
+}
+def p = new Person()
+p.name = 'Marge'                        // <3>
+assert p.name == 'Marge'                // <4>
+p.name('Marge')                         // <5>
+assert p.wonder() == 'WonderMarge'      // <6>
+----
+<1> `this.name` 将直接访问该字段，因为该属性是从定义它的类中访问的
+<2> 类似地，直接在 `name` 字段上进行读取访问
+<3> 对属性的写访问是在 `Person` 类之外完成的，因此它将隐式调用 `setName`
+<4> 对属性的读访问是在 `Person` 类之外完成的，因此它将隐式调用 `getName`
+<5> 这将调用 `Person` 上的 `name` 方法，该方法执行对该字段的直接访问
+<6> 这将调用 `Person` 上的 `wonder` 方法，该方法对该字段执行直接读访问
+
+值得注意的是，直接访问支持字段的这种行为是为了防止在定义属性的类中使用属​​性访问语法时堆栈溢出。
+
+由于实例的元 `properties` 字段，可以列出类的所有属性：
+
+[source,groovy]
+----
+class Person {
+    String name
+    int age
+}
+def p = new Person()
+assert p.properties.keySet().containsAll(['name','age'])
+----
+
+按照惯例，即使没有支持字段，Groovy也会识别属性，前提是存在遵循Java Bean规范的getter或setter方法。例如：
+
+[source,groovy]
+----
+class PseudoProperties {
+    // a pseudo property "name"
+    void setName(String name) {}
+    String getName() {}
+
+    // a pseudo read-only property "age"
+    int getAge() { 42 }
+
+    // a pseudo write-only property "groovy"
+    void setGroovy(boolean groovy) {  }
+}
+def p = new PseudoProperties()
+p.name = 'Foo'                      // <1>
+assert p.age == 42                  // <2>
+p.groovy = true                     // <3>
+----
+<1> 允许写 `p.name`，因为有一个伪属性 `name`
+<2> 允许读取 `p.age`，因为存在伪只读属性 `age`
+<3> 允许写 `p.groovy`，因为有一个伪只写属性 `groovy`
+
+这种语法糖是Groovy编写的众多DSLs的核心。
+
+=== 注解
+
+==== 注解定义
+
+注解是一种专用于注释代码元素的特殊接口。注解是一种超接口是 {javase8DocBaseUrl}?java/lang/annotation/Annotation.html[`Annotation`]接口的类型。使用 `@interface` 关键字以与接口非常相似的方式声明注解：
+
+[source,groovy]
+----
+@interface SomeAnnotation {}
+----
+
+注解可以以没有实体和可选默认值的方法形式定义成员。可能的成员类型仅限于：
+
+* 原始类型
+* {javase8DocBaseUrl}?java/lang/String.html[`String`]
+* {javase8DocBaseUrl}?java/lang/Class.html[`Class`]
+* 一个 {javase8DocBaseUrl}?java/lang/Enum.html[枚举]
+* 另一种 {javase8DocBaseUrl}?java/lang/annotation/Annotation.html[注解类型]
+* 或任何上述数组
+
+例如：
+
+[source,groovy]
+----
+@interface SomeAnnotation {
+    String value()                          // <1>
+}
+@interface SomeAnnotation {
+    String value() default 'something'      // <2>
+}
+@interface SomeAnnotation {
+    int step()                              // <3>
+}
+@interface SomeAnnotation {
+    Class appliesTo()                       // <4>
+}
+@interface SomeAnnotation {}
+@interface SomeAnnotations {
+    SomeAnnotation[] value()                // <5>
+}
+enum DayOfWeek { mon, tue, wed, thu, fri, sat, sun }
+@interface Scheduled {
+    DayOfWeek dayOfWeek()                   // <6>
+}
+----
+<1> 定义 `String` 类型的值成员的注解
+<2> 定义 `String` 类型的值成员的注解，其默认值为 `something`
+<3> 定义类型为基本类型 `int` 的 `step` 成员的注解
+<4> 定义 `Class` 类型的 `applyTo` 成员的注解
+<5> 定义 `value` 成员的注解，该类型是另一个注解类型的数组
+<6> 定义 `dayOfWeek` 成员的注解，其类型是枚举类型 `DayOfWeek`
+
+与Java语言不同，在Groovy中，注解可用于更改语言的语义。AST转换尤其如此，它将基于注解生成代码。
+
+==== 注释放置
+
+注解可以应用于代码的各种元素上：
+
+[source,groovy]
+----
+@SomeAnnotation                 // <1>
+void someMethod() {
+    // ...
+}
+
+@SomeAnnotation                 // <2>
+class SomeClass {}
+
+@SomeAnnotation String var      // <3>
+----
+<1> `@SomeAnnotation` 应用于 `someMethod` 方法
+<2> `@SomeAnnotation` 应用于 `SomeClass` 类
+<3> `@SomeAnnotation` 应用于 `var` 变量
+
+为了限制注解可以应用的范围，有必要在注解定义上声明 `Target` 注解。例如，以下是如何声明可以将注解应用于类或方法：
+
+[source,groovy]
+----
+import java.lang.annotation.ElementType
+import java.lang.annotation.Target
+
+@Target([ElementType.METHOD, ElementType.TYPE])     // <1>
+@interface SomeAnnotation {}                        // <2>
+----
+<1> `@Target` 注解用于注释带有范围的注解。
+<2> 因此，只允许在 `TYPE` 或 `METHOD` 上使用 `@SomeAnnotation`
+
+{javase8DocBaseUrl}?java/lang/annotation/ElementType.html[ElementType]枚举中提供了可能的target列表。
+
+Groovy不支持Java 8中引入的 {javase8DocBaseUrl}?java/lang/annotation/ElementType.html#TYPE_PARAMETER[TYPE_PARAMETER]和 {javase8DocBaseUrl}?java/lang/annotation/ElementType.html#TYPE_USE[TYPE_USE]元素类型。
+
+==== 注解成员值
+
+使用注解时，至少需要设置所有没有默认值的成员。例如：
+
+[source,groovy]
+----
+@interface Page {
+    int statusCode()
+}
+
+@Page(statusCode=404)
+void notFound() {
+    // ...
+}
+----
+
+但是，如果成员 `value` 是唯一被设置的值，则可以在注解值的声明中省略 `value=`：
+
+[source,groovy]
+----
+@interface Page {
+    String value()
+    int statusCode() default 200
+}
+
+@Page(value='/home')                    // <1>
+void home() {
+    // ...
+}
+
+@Page('/users')                         // <2>
+void userList() {
+    // ...
+}
+
+@Page(value='error',statusCode=404)     // <3>
+void notFound() {
+    // ...
+}
+----
+<1> 我们可以省略 `statusCode`，因为它有一个默认值，但需要设置 `value`
+<2> 因为 `value` 是没有默认值的唯一需要强制设置的成员，所以我们可以省略 `value=`
+<3> 如果需要设置 `value` 和 `statusCode`，则对于默认 `value` 成员需要使用 `value=`
+
+==== 保留策略
+
+注解的可见性取决于其保留策略。使用 {javase8DocBaseUrl}?java/lang/annotation/Retention.html[`Retention`]注解设置注解的保留策略：
+
+[source,groovy]
+----
+import java.lang.annotation.Retention
+import java.lang.annotation.RetentionPolicy
+
+@Retention(RetentionPolicy.SOURCE)                   // <1>
+@interface SomeAnnotation {}                         // <2>
+----
+<1> `@Retention` 注解注释 `@SomeAnnotation` 注解
+<2> 因此 `@SomeAnnotation` 将保留 `SOURCE`
+
+{javase8DocBaseUrl}?java/lang/annotation/RetentionPolicy.html[RetentionPolicy]枚举中提供了可能的保留目标和描述的列表。如何选择通常取决于你是否希望注解在编译时或运行时可见。
+
+==== 闭包注解参数
+
+Groovy中注解的一个有趣特性是你可以使用闭包作为注解值。因此，注解可以与各种表达式一起使用，并且仍然具有IDE支持。例如，想象一下你希望基于JDK版本或OS等环境约束执行某些方法的框架。可以编写以下代码：
+
+[source,groovy]
+----
+class Tasks {
+    Set result = []
+    void alwaysExecuted() {
+        result << 1
+    }
+    @OnlyIf({ jdk>=6 })
+    void supportedOnlyInJDK6() {
+        result << 'JDK 6'
+    }
+    @OnlyIf({ jdk>=7 && windows })
+    void requiresJDK7AndWindows() {
+        result << 'JDK 7 Windows'
+    }
+}
+----
+
+要使 `@OnlyIf` 注解接受 `Closure` 作为参数，你只需将 `value` 声明为 `Class`：
+
+[source,groovy]
+----
+@Retention(RetentionPolicy.RUNTIME)
+@interface OnlyIf {
+    Class value()                    // <1>
+}
+----
+
+为了完成该示例，让我们编写一个使用该注解的示例运行器：
+
+[source,groovy]
+----
+class Runner {
+    static <T> T run(Class<T> taskClass) {
+        def tasks = taskClass.newInstance()                                         // <1>
+        def params = [jdk:6, windows: false]                                        // <2>
+        tasks.class.declaredMethods.each { m ->                                     // <3>
+            if (Modifier.isPublic(m.modifiers) && m.parameterTypes.length == 0) {   // <4>
+                def onlyIf = m.getAnnotation(OnlyIf)                                // <5>
+                if (onlyIf) {
+                    Closure cl = onlyIf.value().newInstance(tasks,tasks)            // <6>
+                    cl.delegate = params                                            // <7>
+                    if (cl()) {                                                     // <8>
+                        m.invoke(tasks)                                             // <9>
+                    }
+                } else {
+                    m.invoke(tasks)                                                 // <10>
+                }
+            }
+        }
+        tasks                                                                       // <11>
+    }
+}
+----
+<1> 创建作为参数传递的类的新实例（任务类）
+<2> 模拟JDK 6且非Windows的环境
+<3> 迭代任务类的所有声明的方法
+<4> 如果方法是公开的并且无参数
+<5> 尝试找到 `@OnlyIf` 注解
+<6> 如果找到它获取 `value` 并从中创建一个新的 `Closure`
+<7> 将闭包的 `delegate` 设置为我们的环境变量
+<8> 调用闭包，这是注解闭包。它将返回一个 `boolean` 值
+<9> 如果是 `true`，则调用方法
+<10> 如果该方法未使用 `@OnlyIf` 注解，则无论如何都要执行该方法
+<11> 之后，返回任务对象
+
+然后Runner可以这样使用：
+
+[source,groovy]
+----
+def tasks = Runner.run(Tasks)
+assert tasks.result == [1, 'JDK 6'] as Set
+----
+
+==== 元注解
+
+===== 声明元注解
+
+元注解（也称为注解别名）是在编译时由其他注解替换的注解（一个元注解是一个或多个注解的别名）。元注解可用于减少涉及多个注解的代码的大小。
+
+让我们从一个简单的例子开始。想象一下，你有 `@Service` 和 `@Transactional` 注解，并且你想用两者注解一个类：
+
+[source,groovy]
+----
+@Service
+@Transactional
+class MyTransactionalService {}
+----
+
+考虑到可以添加到同一个类的注解的倍增，元注解可以通过使用具有完全相同语义的单个注解来减少两个注解。例如，我们可能想要写这个：
+
+[source,groovy]
+----
+@TransactionalService                           // <1>
+class MyTransactionalService {}
+----
+<1> `@TransactionalService` 是一个元注解
+
+元注解被声明为常规注解，但使用 `@AnnotationCollector` 和它正在收集的注解列表进行注解。在我们的例子中，可以编写 `@TransactionalService` 注解：
+
+[source,groovy]
+----
+@Service                                        // <1>
+@Transactional                                  // <2>
+@AnnotationCollector                            // <3>
+@interface TransactionalService {
+}
+----
+<1> 使用 `@Service` 注解元注解
+<2> 使用 `@Transactional` 注解元注解
+<3> 使用 `@AnnotationCollector` 注解元注解
+
+===== 元注解的行为
+
+Groovy支持__预编译和源表单__元注解。这意味着你的元注解可能已预编译，或者你可以将其与你当前正在编译的源代码树放在同一个源代码树中。
+
+TIP: 元注解是仅限Groovy的功能。你没有机会使用元注解来注释Java类，并希望它与Groovy中的相同。同样，你不能在Java中编写元注解：元注解定义和使用都必须是Groovy代码。但是，你可以愉快地在元注解中收集Java注解和Groovy注解。
+
+当Groovy编译器遇到使用元注解注释的类时，它会将其替换为收集的注解。因此，在我们之前的示例中，它将使用 `@Transactional` 和 `@Service` 替换 `@TransactionalService`：
+
+[source,groovy]
+----
+def annotations = MyTransactionalService.annotations*.annotationType()
+assert (Service in annotations)
+assert (Transactional in annotations)
+----
+
+在__语义分析__编译阶段期间执行从元注解到收集的注解的转换。
+
+除了用收集的注解替换别名之外，元注解还能够处理它们，包括参数。
+
+===== 元注解参数
+
+元注解可以收集具有参数的注解。为了说明这一点，我们将设想两个注解，每个注解都接受一个参数：
+
+[source,groovy]
+----
+@Timeout(after=3600)
+@Dangerous(type='explosive')
+----
+
+并且假设你想要创建名为 `@Explosive` 的元注解：
+
+[source,groovy]
+----
+@Timeout(after=3600)
+@Dangerous(type='explosive')
+@AnnotationCollector
+public @interface Explosive {}
+----
+
+默认情况下，当替换注解时，它们将获得**在别名中定义**的注解参数值。更有趣的是，元注解支持覆盖特定值：
+
+[source,groovy]
+----
+@Explosive(after=0)                 // <1>
+class Bomb {}
+----
+<1> 作为 `@Explosive` 参数提供的 `after` 值会覆盖 `@Timeout` 注解中定义的值
+
+如果两个注解定义相同的参数名称，则默认处理器会将注解值复制到接受此参数的所有注解：
+
+[source,groovy]
+----
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Foo {
+   String value()                                   // <1>
+}
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Bar {
+    String value()                                  // <2>
+}
+
+@Foo
+@Bar
+@AnnotationCollector
+public @interface FooBar {}                         // <3>
+
+@Foo('a')
+@Bar('b')
+class Bob {}                                        // <4>
+
+assert Bob.getAnnotation(Foo).value() == 'a'        // <5>
+println Bob.getAnnotation(Bar).value() == 'b'       // <6>
+
+@FooBar('a')
+class Joe {}                                        // <7>
+assert Joe.getAnnotation(Foo).value() == 'a'        // <8>
+println Joe.getAnnotation(Bar).value() == 'a'       // <9>
+----
+<1> `@Foo` 注解定义 `String` 类型的 `value` 成员
+<2> `@Bar` 注解也定义 `String` 类型的 `value` 成员
+<3> `@FooBar` 元注解聚合 `@Foo` 和 `@Bar`
+<4> 类 `Bob` 用 `@Foo` 和 `@Bar` 注解
+<5> `Bob` 上 `@Foo` 注解的值是 `a`
+<6> 而 `Bob` 上 `@Bar` 注解的值是 `b`
+<7> 类 `Joe` 使用 `@FooBar` 进行注解
+<8> `Joe` 上 `@Foo` 注解的值是 `a`
+<9> 而 `Joe` 上 `@Bar` 注解的值也是 `a`
+
+在第二种情况下，元注解值被复制到 `@Foo` 和 `@Bar` 注解中。
+
+如果收集的注解定义具有不兼容类型的相同成员，则为编译时错误。例如，如果在前面的示例中 `@Foo` 定义了 `String` 类型的值，但 `@Bar` 定义了 `int` 类型的值。
+
+但是，可以自定义元注解的行为，并描述如何扩展收集的注解。我们稍后会看看如何做到这一点，但首先要有一个高级处理选项来涵盖。
+
+===== 处理重复注解
+
+`@AnnotationCollector` 注解支持 `mode` 参数，该参数可用于更改默认处理器在存在重复注解时如何处理注解替换。
+
+TIP: 自定义处理器（下面讨论）可能支持也可能不支持此参数。
+
+例如，假设你创建了一个包含 `@ToString` 注解的元注解，然后将元注解放在已经具有显式 `@ToString` 注解的类上。这应该是一个错误吗？是否应该同时应用这两个注解？一个优先于另一个吗？没有正确的答案。在某些情况下，任何这些答案都可能是正确的。因此，不是试图抢占一个正确的方法来处理重复的注解问题，Groovy让你编写自己的自定义元注解处理器（下面介绍），让你在AST转换中编写你喜欢的任何检查逻辑 - 这是聚合的常用目标。话虽如此，通过简单地设置 `mode`，可以在任何额外的编码中自动处理许多通常预期的场景。`mode` 参数的行为由所选的 `AnnotationCollectorMode` 枚举值确定，并在下表中进行了总结。
+
+|===
+| 模式 | 说明
+| DUPLICATE | 始终会插入注解集合中的注解。运行所有转换后，如果存在多个注解（不包括具有 `SOURCE` 保留策略的注解），则会出错。
+| PREFER_COLLECTOR | 将添加来自收集器的注解，并将删除具有相同名称的任何现有注解。
+| PREFER_COLLECTOR_MERGED | 将添加来自收集器的注解，并且将删除具有相同名称的任何现有注解，但现有注解中找到的任何新参数将合并到添加的注解中。
+| PREFER_EXPLICIT | 如果找到任何具有相同名称的现有注解，则将忽略来自收集器的注解。
+| PREFER_EXPLICIT_MERGED | 如果找到任何具有相同名称的现有注解，则会忽略来自收集器的注解，但收集器注解上的任何新参数都将添加到现有注解中。
+|===
+
+===== 自定义注解处理器
+
+自定义注解处理器将允许你选择如何将元注解扩展为收集的注解。在这种情况下，元注解的行为完全取决于你。要做到这一点，你必须：
+
+* 创建一个元注解处理器，继承自 {groovyJavaDocBaseUrl}?org/codehaus/groovy/transform/AnnotationCollectorTransform.html[`AnnotationCollectorTransform`]
+* 在元注解中声明要使用的处理器
+
+为了说明这一点，我们将探讨如何实现元注解 `@CompileDynamic`。
+
+`@CompileDynamic` 是一个元注解，它将自身扩展为 `@CompileStatic(TypeCheckingMode.SKIP)`。问题是默认的元注解处理器不支持枚举，注解值 `TypeCheckingMode.SKIP` 是其中之一。
+
+这里天真的实现是行不通的：
+
+[source,groovy]
+----
+@CompileStatic(TypeCheckingMode.SKIP)
+@AnnotationCollector
+public @interface CompileDynamic {}
+----
+
+相反，我们将这样定义：
+
+[source,groovy]
+----
+@AnnotationCollector(processor = "org.codehaus.groovy.transform.CompileDynamicProcessor")
+public @interface CompileDynamic {
+}
+----
+
+你可能会注意到的第一件事是我们的注解不再使用 `@CompileStatic` 进行标注。这样做的原因是我们依赖于 `processor` 参数，它引用了一个将**生成**注解的类。
+
+以下是自定义处理器的实现方式：
+
+.CompileDynamicProcessor.groovy
+[source,groovy]
+----
+@CompileStatic                                                                  // <1>
+class CompileDynamicProcessor extends AnnotationCollectorTransform {            // <2>
+    private static final ClassNode CS_NODE = ClassHelper.make(CompileStatic)    // <3>
+    private static final ClassNode TC_NODE = ClassHelper.make(TypeCheckingMode) // <4>
+
+    List<AnnotationNode> visit(AnnotationNode collector,                        // <5>
+                               AnnotationNode aliasAnnotationUsage,             // <6>
+                               AnnotatedNode aliasAnnotated,                    // <7>
+                               SourceUnit source) {                             // <8>
+        def node = new AnnotationNode(CS_NODE)                                  // <9>
+        def enumRef = new PropertyExpression(
+            new ClassExpression(TC_NODE), "SKIP")                               // <10>
+        node.addMember("value", enumRef)                                        // <11>
+        Collections.singletonList(node)                                         // <12>
+    }
+}
+----
+<1> 我们的自定义处理器是用Groovy编写的，为了更好的编译性能，我们使用静态编译
+<2> 自定义处理器必须继承自 {groovyJavaDocBaseUrl}?org/codehaus/groovy/transform/AnnotationCollectorTransform.html[`AnnotationCollectorTransform`]
+<3> 创建一个表示 `@CompileStatic` 注解类型的类节点
+<4> 创建一个表示 `TypeCheckingMode` 枚举类型的类节点
+<5> `collector` 是元注解中的 `@AnnotationCollector` 节点。通常未使用。
+<6> `aliasAnnotationUsage` 是要扩展的元注解，这里是 `@CompileDynamic`
+<7> `aliasAnnotated` 是使用元注解进行注释的节点
+<8> `sourceUnit` 是正在编译的 `SourceUnit`
+<9> 我们为 `@CompileStatic` 创建一个新的注解节点
+<10> 我们创建一个等同于 `TypeCheckingMode.SKIP` 的表达式
+<11> 我们将该表达式添加到注解节点，现在是 `@CompileStatic(TypeCheckingMode.SKIP)`
+<12> 返回生成的注解
+
+在示例中，`visit` 方法是唯一必须重写的方法。它旨在返回将添加到使用元注解注释的节点的注解节点列表。在这个例子中，我们返回一个对应于 `@CompileStatic(TypeCheckingMode.SKIP)` 的单个注解。
+
+=== 继承
+
+(TBD)
+
+=== 泛型
+
+(TBD)
+
+[[objectorientation.traits]]
+== 特征
+
+特征是语言的结构构造，允许：
+
+* 行为构成
+* 接口的运行时实现
+* 行为重载
+* 兼容静态类型的检查和编译
+
+它们可以被视为承载**默认实现**和**状态**的**接口**。使用 `trait` 关键字定义特征：
+
+[source,groovy]
+----
+trait FlyingAbility {                          // <1>
+        String fly() { "I'm flying!" }         // <2>
+}
+----
+<1> 声明特征
+<2> 声明特征内的方法
+
+然后它可以像使用 `implements` 关键字的普通接口一样使用：
+
+[source,groovy]
+----
+class Bird implements FlyingAbility {}          // <1>
+def b = new Bird()                              // <2>
+assert b.fly() == "I'm flying!"                 // <3>
+----
+<1> 将特征 `FlyingAbility` 添加到 `Bird` 类功能中
+<2> 实例化一个新的 `Bird`
+<3> `Bird` 类自动获取 `FlyingAbility` 特性的行为
+
+特征允许从简单的组合到测试的各种功能，本节将对此进行详细介绍。
+
+=== 方法
+
+==== 公共方法
+
+声明特征中的方法可以像类中的任何常规方法一样：
+
+[source,groovy]
+----
+trait FlyingAbility {                          // <1>
+        String fly() { "I'm flying!" }         // <2>
+}
+----
+<1> 声明特征
+<2> 声明特征内的方法
+
+==== 抽象方法
+
+另外，特征也可以声明__抽象方法__，因此需要在实现特征的类中实现：
+
+[source,groovy]
+----
+trait Greetable {
+    abstract String name()                              // <1>
+    String greeting() { "Hello, ${name()}!" }           // <2>
+}
+----
+<1> 实现类必须声明 `name` 方法
+<2> 可以与具体方法混合使用
+
+然后可以像这样使用特征：
+
+[source,groovy]
+----
+class Person implements Greetable {                     // <1>
+    String name() { 'Bob' }                             // <2>
+}
+
+def p = new Person()
+assert p.greeting() == 'Hello, Bob!'                    // <3>
+----
+<1> 实现特征 `Greetable`
+<2> 由于 `name` 是抽象的，因此需要实现它
+<3> 然后可以调用 `greeting`
+
+==== 私有方法
+
+特征也可以定义私有方法。这些方法不会出现在特征接口契约中：
+
+[source,groovy]
+----
+trait Greeter {
+    private String greetingMessage() {                      // <1>
+        'Hello from a private method!'
+    }
+    String greet() {
+        def m = greetingMessage()                           // <2>
+        println m
+        m
+    }
+}
+class GreetingMachine implements Greeter {}                 // <3>
+def g = new GreetingMachine()
+assert g.greet() == "Hello from a private method!"          // <4>
+try {
+    assert g.greetingMessage()                              // <5>
+} catch (MissingMethodException e) {
+    println "greetingMessage is private in trait"
+}
+----
+<1> 在特征中定义私有方法 `greetingMessage`
+<2> 公共的 `greet` 消息默认调用 `greetingMessage`
+<3> 创建一个实现特征的类
+<4> 调用 `greet`
+<5> 但不能调用 `greetingMessage`
+
+==== Final方法
+
+如果我们有一个实现特征的类，概念上来自特征方法的实现被“继承”到类中。但实际上，没有包含此类实现的基类。相反，它们直接织入进类中。方法的final修饰符仅指示编织方法的修饰符。虽然允许使用相同的签名继承和覆盖或多次继承方法，但混合了final和non-final变体的方法可能被认为是糟糕的风格，但是Groovy并不禁止这种情况。应用常规方法选择，使用的修饰符将从结果方法中确定。如果你想要无法覆盖的特征实现方法，你可以考虑创建一个实现所需特征的基类。
+
+=== this的含义
+
+`this` 代表了实现的实例。把特征想象成一个超类。这意味着当你写：
+
+[source,groovy]
+----
+trait Introspector {
+    def whoAmI() { this }
+}
+class Foo implements Introspector {}
+def foo = new Foo()
+----
+
+然后调用：
+
+[source,groovy]
+----
+foo.whoAmI()
+----
+
+将返回相同的实例：
+
+[source,groovy]
+----
+assert foo.whoAmI().is(foo)
+----
+
+=== 接口
+
+Traits可以实现接口，在这种情况下，接口是使用 `implements` 关键字声明的：
+
+[source,groovy]
+----
+interface Named {                                       // <1>
+    String name()
+}
+trait Greetable implements Named {                      // <2>
+    String greeting() { "Hello, ${name()}!" }
+}
+class Person implements Greetable {                     // <3>
+    String name() { 'Bob' }                             // <4>
+}
+
+def p = new Person()
+assert p.greeting() == 'Hello, Bob!'                    // <5>
+assert p instanceof Named                               // <6>
+assert p instanceof Greetable                           // <7>
+----
+<1> 声明一个正常接口
+<2> 添加 `Named` 到已实现接口的列表
+<3> 声明一个实现 `Greetable` 特征的类
+<4> 实现缺少的 `name` 方法
+<5> `greeting` 的实现来自特征
+<6> 确保 `Person` 实现 `Named` 接口
+<7> 确保 `Person` 实现 `Greetable` 特征
+
+=== 属性
+
+特征可以定义属性，如下例所示：
+
+[source,groovy]
+----
+trait Named {
+    String name                             // <1>
+}
+class Person implements Named {}            // <2>
+def p = new Person(name: 'Bob')             // <3>
+assert p.name == 'Bob'                      // <4>
+assert p.getName() == 'Bob'                 // <5>
+----
+<1> 在特征中声明 `name` 属性
+<2> 声明一个实现特征的类
+<3> 该属性自动可见
+<4> 它可以使用常规属性访问器访问
+<5> 或使用常规的getter语法
+
+=== 字段
+
+==== 私有字段
+
+由于特征允许使用私有方法，因此使用私有字段来存储状态也很有趣。你可以这么做：
+
+[source,groovy]
+----
+trait Counter {
+    private int count = 0                   // <1>
+    int count() { count += 1; count }       // <2>
+}
+class Foo implements Counter {}             // <3>
+def f = new Foo()
+assert f.count() == 1                       // <4>
+assert f.count() == 2
+----
+<1> 在特征中声明私有字段 `count`
+<2> 声明一个公共方法 `count`，它递增计数器并返回它
+<3> 声明一个实现 `Counter` 特征的类
+<4> `count` 方法可以使用私有字段来保持状态
+
+这是与 {javase8DefaultMethods}[Java 8接口默认方法]的主要区别。虽然默认方法不带状态，但特征可以。此外，从Java 6开始就支持Groovy中的特性，因为它们的实现不依赖于默认方法。这意味着即使从Java类可以看到特征作为常规接口，该接口也不会有默认方法，只有抽象方法。
+
+==== 公共字段
+
+公共字段的工作方式与私有字段相同，但为了避免 http://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem[菱形问题]，字段名称将在实现类中重新映射：
+
+[source,groovy]
+----
+trait Named {
+    public String name                      // <1>
+}
+class Person implements Named {}            // <2>
+def p = new Person()                        // <3>
+p.Named__name = 'Bob'                       // <4>
+----
+<1> 在特征中声明一个公共**字段**
+<2> 声明一个实现特征的类
+<3> 创建该类的实例
+<4> 公共字段可用，但已重命名
+
+字段的名称取决于特征的完全限定名称。包中的所有点（`.`）都用下划线（`_`）替换，最后的字段名称包含双下划线。因此，如果字段的类型是 `String`，则包的名称是 `my.package`，特征的名称是 `Foo`，字段的名称是 `bar`，在实现类中，公共字段将显示为：
+
+[source,groovy]
+----
+String my_package_Foo__bar
+----
+
+虽然特征支持公共字段，但不建议使用它们并将其视为不良做法。
+
+=== 行为的构成
+
+特征可以被用来以一种可控的方式实现多重继承。例如，我们可以具有以下特征：
+
+[source,groovy]
+----
+trait FlyingAbility {                          // <1>
+        String fly() { "I'm flying!" }         // <2>
+}
+trait SpeakingAbility {
+    String speak() { "I'm speaking!" }
+}
+----
+
+还有一个实现这两个特征的类：
+
+[source,groovy]
+----
+class Duck implements FlyingAbility, SpeakingAbility {} // <1>
+
+def d = new Duck()                                      // <2>
+assert d.fly() == "I'm flying!"                         // <3>
+assert d.speak() == "I'm speaking!"                     // <4>
+----
+<1> `Duck` 类实现了 `FlyingAbility` 和 `SpeakingAbility`
+<2> 创建一个新的 `Duck` 实例
+<3> 我们可以从 `FlyingAbility` 调用方法 `fly`
+<4> 而且也可以从 `SpeakingAbility` 调用方法 `speak`
+
+Traits鼓励在对象之间重用功能，并通过现有行为的组合创建新类。
+
+=== 重载默认方法
+
+Traits为方法提供默认实现，但可以在实现类中覆盖它们。例如，我们可以略微改变上面的例子，有一个嘎嘎叫的鸭子：
+
+[source,groovy]
+----
+class Duck implements FlyingAbility, SpeakingAbility {
+    String quack() { "Quack!" }                         // <1>
+    String speak() { quack() }                          // <2>
+}
+
+def d = new Duck()
+assert d.fly() == "I'm flying!"                         // <3>
+assert d.quack() == "Quack!"                            // <4>
+assert d.speak() == "Quack!"                            // <5>
+----
+<1> 定义一个特定于 `Duck` 的方法，名为 `quack`
+<2> 覆盖 `speak` 的默认实现，以便使用 `quack` 代替
+<3> 从默认实现中，鸭子仍在飞行
+<4> `quack` 来自 `Duck` 类
+<5> 不再使用 `SpeakingAbility` 的默认实现 `speak`
+
+=== 继承特征
+==== 简单继承
+
+特征可以继承另一个特征，在这种情况下，你必须使用 `extends` 关键字：
+
+[source,groovy]
+----
+trait Named {
+    String name                                     // <1>
+}
+trait Polite extends Named {                        // <2>
+    String introduce() { "Hello, I am $name" }      // <3>
+}
+class Person implements Polite {}
+def p = new Person(name: 'Alice')                   // <4>
+assert p.introduce() == 'Hello, I am Alice'         // <5>
+----
+<1> `Named` 特征定义单个 `name` 属性
+<2> `Polite` 特征继承了 `Named` 特征
+<3> `Polite` 添加了一个新方法，可以访问超级特征的 `name` 属性
+<4> `name` 属性在实现 `Polite` 的 `Person` 类中可见
+<5> 就像 `introduce` 方法一样
+
+==== 多重继承
+
+或者，特征可以继承多个其它特征。在这种情况下，必须在 `implements` 子句中声明所有超级特征：
+
+[source,groovy]
+----
+trait WithId {                                      // <1>
+    Long id
+}
+trait WithName {                                    // <2>
+    String name
+}
+trait Identified implements WithId, WithName {}     // <3>
+----
+<1> `WithId` 特征定义 `id` 属性
+<2> `WithName` 特征定义 `name` 属性
+<3> `Identified` 是一个继承 `WithId` 和 `WithName` 的特征
+
+=== 鸭子类型和特征
+
+==== 动态代码
+
+Traits可以调用任何动态代码，就像普通的Groovy类一样。这意味着你可以在方法体中调用应该存在于实现类中的方法，而无需在接口中显式声明它们。这意味着traits与duck typing完全兼容：
+
+[source,groovy]
+----
+trait SpeakingDuck {
+    String speak() { quack() }                      // <1>
+}
+class Duck implements SpeakingDuck {
+    String methodMissing(String name, args) {
+        "${name.capitalize()}!"                     // <2>
+    }
+}
+def d = new Duck()
+assert d.speak() == 'Quack!'                        // <3>
+----
+<1> `SpeakingDuck` 期望定义 `quack` 方法
+<2> `Duck` 类确实使用 `methodMissing` 实现了该方法
+<3> 调用 `speak` 方法会触发一个由 `methodMissing` 处理的 `quack` 调用
+
+==== 特征中的动态方法
+
+特征也可以实现MOP方法，例如 `methodMissing` 或 `propertyMissing`，在这种情况下，实现类将继承特征的行为，如下例所示：
+
+[source,groovy]
+----
+trait DynamicObject {                               // <1>
+    private Map props = [:]
+    def methodMissing(String name, args) {
+        name.toUpperCase()
+    }
+    def propertyMissing(String prop) {
+        props[prop]
+    }
+    void setProperty(String prop, Object value) {
+        props[prop] = value
+    }
+}
+
+class Dynamic implements DynamicObject {
+    String existingProperty = 'ok'                  // <2>
+    String existingMethod() { 'ok' }                // <3>
+}
+def d = new Dynamic()
+assert d.existingProperty == 'ok'                   // <4>
+assert d.foo == null                                // <5>
+d.foo = 'bar'                                       // <6>
+assert d.foo == 'bar'                               // <7>
+assert d.existingMethod() == 'ok'                   // <8>
+assert d.someMethod() == 'SOMEMETHOD'               // <9>
+----
+<1> 创建一个实现几个MOP方法的特征
+<2> `Dynamic` 类定义了一个属性
+<3> `Dynamic` 类定义了一个方法
+<4> 调用现有属性将从 `Dynamic` 调用该方法
+<5> 调用不存在的属性将从特征中调用 `propertyMissing` 方法
+<6> 将调用在特征上定义的 `setProperty`
+<7> 将调用在特征上定义的 `getProperty`
+<8> 在 `Dynamic` 上调用现有方法
+<9> 调用一个不存在的方法出发特征上的 `methodMissing`
+
+=== 多继承冲突
+
+==== 默认冲突解决方案
+
+一个类可以实现多个特征。如果某个特征定义了一个方法与另一个特征中的方法具有相同的签名，那么我们就会发生冲突：
+
+[source,groovy]
+----
+trait A {
+    String exec() { 'A' }               // <1>
+}
+trait B {
+    String exec() { 'B' }               // <2>
+}
+class C implements A,B {}               // <3>
+----
+<1> trait `A` 定义一个名为 `exec` 的方法，返回一个 `String`
+<2> trait `B` 定义了相同的方法
+<3> `C` 类实现两种特征
+
+在这种情况下，默认行为是 `implements` 子句中最后声明的trait的方法获胜。这里，`B` 在 `A` 之后声明，所以 `B` 的方法将被选中：
+
+[source,groovy]
+----
+def c = new C()
+assert c.exec() == 'B'
+----
+
+==== 用户冲突解决
+
+如果此行为不是你想要的行为，你可以使用 `Trait.super.foo` 语法显式选择要调用的方法。在上面的例子中，我们可以通过写这个来确保调用特征 `A` 的方法：
+
+[source,groovy]
+----
+class C implements A,B {
+    String exec() { A.super.exec() }    // <1>
+}
+def c = new C()
+assert c.exec() == 'A'                  // <2>
+----
+<1> 明确从特征 `A` 中调用 `exec`
+<2> 从 `A` 调用版本，而不是使用默认的解决方案，即从 `B` 调用版本
+
+=== 运行时实现特征
+
+==== 在运行时实现特征
+
+Groovy还支持在运行时动态实现特征。它允许你使用特征“装饰”现有对象。举个例子，让我们从这个特征和下面的类开始：
+
+[source,groovy]
+----
+trait Extra {
+    String extra() { "I'm an extra method" }            // <1>
+}
+class Something {                                       // <2>
+    String doSomething() { 'Something' }                // <3>
+}
+----
+<1> `Extra` 特征定义了一个 `extra` 的方法
+<2> `Something` 类没有实现 `Extra` 特征
+<3> `Something` 只定义了一个方法 `doSomething`
+
+如果我们这样做：
+
+[source,groovy]
+----
+def s = new Something()
+s.extra()
+----
+
+对 `extra` 的调用会失败，因为 `Something` 没有实现 `Extra`。可以使用以下语法在运行时执行此操作：
+
+[source,groovy]
+----
+def s = new Something() as Extra                        // <1>
+s.extra()                                               // <2>
+s.doSomething()                                         // <3>
+----
+<1> 使用 **as** 关键字在**运行时**将对象强制转换为特征
+<2> 然后可以在对象上调用 `extra`
+<3> 并且 `doSomething` 仍然可以调用
+
+将对象强制转换为特征时，操作的结果不是同一个实例。保证强转对象将实现原始对象实现的特征和接口，但结果将不是原始类的实例。
+
+==== 一次实现多个特征
+
+如果你需要一次实现多个特征，可以使用 `withTraits` 方法而不是 `as` 关键字：
+
+[source,groovy]
+----
+trait A { void methodFromA() {} }
+trait B { void methodFromB() {} }
+
+class C {}
+
+def c = new C()
+c.methodFromA()                     // <1>
+c.methodFromB()                     // <2>
+def d = c.withTraits A, B           // <3>
+d.methodFromA()                     // <4>
+d.methodFromB()                     // <5>
+----
+<1> 对 `methodFromA` 的调用将失败，因为 `C` 没有实现 `A`
+<2> 对 `methodFromB` 的调用将失败，因为 `C` 没有实现 `B`
+<3> `withTrait` 将 `c` 包装成实现 `A` 和 `B` 的东西
+<4> `methodFromA` 调用现在将通过，因为 `d` 实现了 `A`
+<5> `methodFromB` 调用现在将通过，因为 `d` 也实现了 `B`
+
+将对象强制转换为多个特征时，操作的结果不是同一个实例。保证强转对象将实现原始对象实现的特征和接口，但结果将不是原始类的实例。
+
+=== 链接行为
+
+Groovy支持**可堆叠**特征的概念。如果当前特征不能处理消息，则从一个特征委托给另一个特征。为了说明这一点，让我们设想一个像这样的消息处理程序接口：
+
+[source,groovy]
+----
+interface MessageHandler {
+    void on(String message, Map payload)
+}
+----
+
+然后，你可以通过应用小行为来组成消息处理程序。例如，让我们以特征的形式定义一个默认处理程序：
+
+[source,groovy]
+----
+trait DefaultHandler implements MessageHandler {
+    void on(String message, Map payload) {
+        println "Received $message with payload $payload"
+    }
+}
+----
+
+然后任何类都可以通过实现trait继承默认处理程序的行为：
+
+[source,groovy]
+----
+class SimpleHandler implements DefaultHandler {}
+----
+
+现在，除了默认处理程序之外，如果要记录所有消息，该怎么办？一种选择是这样写：
+
+[source,groovy]
+----
+class SimpleHandlerWithLogging implements DefaultHandler {
+    void on(String message, Map payload) {                                  // <1>
+        println "Seeing $message with payload $payload"                     // <2>
+        DefaultHandler.super.on(message, payload)                           // <3>
+    }
+}
+----
+<1> 显式实现 `on` 方法
+<2> 执行日志记录
+<3> 继续委派 `DefaultHandler` 特征调用
+
+这有效，但这种方法有缺点：
+
+* 日志记录逻辑绑定到“具体”处理程序
+* 我们在 `on` 方法中有一个对 `DefaultHandler` 的显式引用，这意味着如果我们碰巧改变了类实现的特征，代码就会被破坏
+
+作为替代方案，我们可以编写另一个特征，其责任仅限于记录日志：
+
+[source,groovy]
+----
+trait LoggingHandler implements MessageHandler {                       // <1>
+    void on(String message, Map payload) {
+        println "Seeing $message with payload $payload"                // <2>
+        super.on(message, payload)                                     // <3>
+    }
+}
+----
+<1> 日志处理程序本身就是一个处理程序
+<2> 打印它收到的消息
+<3> 然后 `super` 使它将调用委托给链中的下一个特征
+
+然后我们的类可以重写为：
+
+[source,groovy]
+----
+class HandlerWithLogger implements DefaultHandler, LoggingHandler {}
+def loggingHandler = new HandlerWithLogger()
+loggingHandler.on('test logging', [:])
+----
+
+将打印：
+
+[source,groovy]
+----
+Seeing test logging with payload [:]
+Received test logging with payload [:]
+----
+
+由于优先级规则意味着 `LoggerHandler` 因为最后声明而获胜，因此对 `on` 的调用将使用 `LoggingHandler` 中的实现。但后者有一个 `super` 调用，这意味着委托给链中的下一个特征。这里，下一个特性是 `DefaultHandler`，因此**两者**都将被调用：
+
+如果我们添加第三个处理程序，这个方法将更有趣，该处理程序负责处理以 `say` 开头的消息：
+
+[source,groovy]
+----
+trait SayHandler implements MessageHandler {
+    void on(String message, Map payload) {
+        if (message.startsWith("say")) {                      // <1>
+            println "I say ${message - 'say'}!"
+        } else {
+            super.on(message, payload)                        // <2>
+        }
+    }
+}
+----
+<1> 处理程序特定的前提条件
+<2> 如果不满足前提条件，则将消息传递给链中的下一个处理程序
+
+然后我们的最终处理程序如下所示：
+
+[source,groovy]
+----
+class Handler implements DefaultHandler, SayHandler, LoggingHandler {}
+def h = new Handler()
+h.on('foo', [:])
+h.on('sayHello', [:])
+----
+
+意味着：
+
+* 消息将首先通过日志记录处理程序
+* 日志记录处理程序调用 `super`，它将委托给下一个处理程序，即 `SayHandler`
+* 如果消息以 `say` 开头，那么处理程序将使用该消息
+* 如果不是，`say` 处理程序委托给链中的下一个处理程序
+
+这种方法非常强大，因为它允许你编写彼此不了解的处理程序，并允许你按照所需的顺序组合它们。例如，如果我们执行代码，它将打印：
+
+[source,groovy]
+----
+Seeing foo with payload [:]
+Received foo with payload [:]
+Seeing sayHello with payload [:]
+I say Hello!
+----
+
+但是如果我们将日志记录处理程序移动到链中的第二个，则输出是不同的：
+
+[source,groovy]
+----
+class AlternateHandler implements DefaultHandler, LoggingHandler, SayHandler {}
+h = new AlternateHandler()
+h.on('foo', [:])
+h.on('sayHello', [:])
+----
+
+将打印：
+
+[source,groovy]
+----
+Seeing foo with payload [:]
+Received foo with payload [:]
+I say Hello!
+----
+
+原因是现在，由于 `SayHandler` 在不调用 `super` 的情况下使用了消息，因此不再调用日志记录处理程序。
+
+==== 特征内部的super语义
+
+如果一个类实现了多个特征并且调用了一个不合格的 `super`，那么:
+
+. 如果该类实现了另一个特征，则该调用将委托给链中的下一个特征
+. 如果链中没有任何特征，`super` 指的是实现类的超类（__this__）
+
+例如，由于这种行为可用于装饰final类：
+
+[source,groovy]
+----
+trait Filtering {                                       // <1>
+    StringBuilder append(String str) {                  // <2>
+        def subst = str.replace('o','')                 // <3>
+        super.append(subst)                             // <4>
+    }
+    String toString() { super.toString() }              // <5>
+}
+def sb = new StringBuilder().withTraits Filtering       // <6>
+sb.append('Groovy')
+assert sb.toString() == 'Grvy'                          // <7>
+----
+<1> 定义一个名为 `Filtering` 的特性，会在运行时应用于 `StringBuilder`
+<2> 重新定义 `append` 方法
+<3> 从字符串中删除所有 'o'
+<4> 然后委托给 `super`
+<5> 如果调用 `toString`，则委托给 `super.toString`
+<6> `StringBuilder` 实例上的 `Filtering` 特征的运行时实现
+<7> 已追加的字符串将不再包含字母 `o`
+
+在这个例子中，当遇到 `super.append` 时，目标对象没有实现其他特性，因此被调用的方法是原始的 `append` 方法，也就是 `StringBuilder` 中的方法。`toString` 使用相同的技巧，因此将生成的代理对象的字符串表示形式委托给 `StringBuilder` 实例的 `toString`。
+
+=== 高级特性
+
+==== SAM类型强转
+
+如果特征定义了单个抽象方法，则它是SAM（单一抽象方法）类型强转的候选者。例如，想象以下特征：
+
+[source,groovy]
+----
+trait Greeter {
+    String greet() { "Hello $name" }        // <1>
+    abstract String getName()               // <2>
+}
+----
+<1> `greet` 方法不是抽象的，并调用抽象方法 `getName`
+<2> `getName` 是一个抽象方法
+
+由于 `getName` 是 `Greeter` 特征中的单个抽象方法，因此你可以编写：
+
+[source,groovy]
+----
+Greeter greeter = { 'Alice' }               // <1>
+----
+<1> 闭包“成为” `getName` 单个抽象方法的实现
+
+甚至：
+
+[source,groovy]
+----
+void greet(Greeter g) { println g.greet() } // <1>
+greet { 'Alice' }                           // <2>
+----
+<1> `great` 方法接受 `SAM` 类型 `Greeter` 作为参数
+<2> 我们可以用一个闭包直接调用它
+
+==== 与Java 8默认方法的差异
+
+在Java 8中，接口可以具有方法的默认实现。如果类实现了接口并且没有为默认方法提供实现，则选择接口的实现。特征行为相同但有一个主要区别：如果类在其接口列表中声明特征**并且** **无论**超类有没有提供实现，则**始终**使用特征的实现。
+
+如果要覆盖已实现的方法的行为，可以使用此功能以非常精确的方式组合行为。
+
+为了说明这个概念，让我们从这个简单的例子开始：
+
+[source,groovy]
+----
+import groovy.transform.CompileStatic
+import org.codehaus.groovy.control.CompilerConfiguration
+import org.codehaus.groovy.control.customizers.ASTTransformationCustomizer
+import org.codehaus.groovy.control.customizers.ImportCustomizer
+
+class SomeTest extends GroovyTestCase {
+    def config
+    def shell
+
+    void setup() {
+        config = new CompilerConfiguration()
+        shell = new GroovyShell(config)
+    }
+    void testSomething() {
+        assert shell.evaluate('1+1') == 2
+    }
+    void otherTest() { /* ... */ }
+}
+----
+
+在这个例子中，我们创建了一个简单的测试用例，它使用两个属性（`config` 和 `shell`）并在多个测试方法中使用它们。现在假设你想要测试相同的东西，但使用另一个不同的编译器配置。一种选择是创建 `SomeTest` 的子类：
+
+[source,groovy]
+----
+class AnotherTest extends SomeTest {
+    void setup() {
+        config = new CompilerConfiguration()
+        config.addCompilationCustomizers( ... )
+        shell = new GroovyShell(config)
+    }
+}
+----
+
+它可以工作，但是如果你实际上有多个测试类，并且你想测试所有这些测试类的新配置呢？然后，你必须为每个测试类创建一个不同的子类：
+
+[source,groovy]
+----
+class YetAnotherTest extends SomeTest {
+    void setup() {
+        config = new CompilerConfiguration()
+        config.addCompilationCustomizers( ... )
+        shell = new GroovyShell(config)
+    }
+}
+----
+
+然后你看到的是两个测试的 `setup` 方法是相同的。那么，另一种选择是创建一个特征：
+
+[source,groovy]
+----
+trait MyTestSupport {
+    void setup() {
+        config = new CompilerConfiguration()
+        config.addCompilationCustomizers( new ASTTransformationCustomizer(CompileStatic) )
+        shell = new GroovyShell(config)
+    }
+}
+----
+
+然后在子类中使用它：
+
+[source,groovy]
+----
+class AnotherTest extends SomeTest implements MyTestSupport {}
+class YetAnotherTest extends SomeTest2 implements MyTestSupport {}
+...
+----
+
+这将允许我们大幅减少样板代码，并降低忘记更改 `setup` 代码的风险，以防我们决定更改它。即使 `setup` 已经在超类中实现，由于测试类在其接口列表中声明了特征，因此行为将从特征实现中借用！
+
+当你无权访问超类源代码时，此功能特别有用。它可以用于mock方法或强制子类中方法的特定实现。它允许你重构代码以将重写的逻辑保留在单个特征中，并通过实现它来继承新行为。当然，另一种方法是在你使用新代码的**每个**地方覆盖该方法。
+
+值得注意的是，如果使用运行时特征，则特征中的方法**始终**优先于代理对象的方法：
+
+[source,groovy]
+----
+class Person {
+    String name                                         // <1>
+}
+trait Bob {
+    String getName() { 'Bob' }                          // <2>
+}
+
+def p = new Person(name: 'Alice')
+assert p.name == 'Alice'                                // <3>
+def p2 = p as Bob                                       // <4>
+assert p2.name == 'Bob'                                 // <5>
+----
+<1> `Person` 类定义一个 `name` 属性，该属性导致生成 `getName` 方法
+<2> `Bob` 是一个将 `getName` 定义为返回 `Bob` 的特征
+<3> 默认对象将返回 __Alice__
+<4> `p2` 在运行时强转 `p` 为 `Bob`
+<5> `getName` 返回 __Bob__，因为 `getName` 取自特征
+
+同样，不要忘记动态特征强制返回一个新的对象，它仅实现原始接口以及特征。
+
+=== 与mixin的差异
+
+mixin有几个概念上的差异，因为它们在Groovy中可用。请注意，我们讨论的是运行时mixins，而不是 `@Mixin` 注解，它被弃用以支持traits。
+
+首先，在字节码中可以看到特征中定义的方法：
+
+* 在内部，特征表示为接口（没有默认或静态方法）和几个辅助类
+* 这意味着实现特征的对象有效地实现了一个__接口__
+* 这些方法在Java中是可见的
+* 它们与类型检查和静态编译兼容
+
+相反，通过mixin添加的方法仅在运行时可见：
+
+[source,groovy]
+----
+class A { String methodFromA() { 'A' } }        // <1>
+class B { String methodFromB() { 'B' } }        // <2>
+A.metaClass.mixin B                             // <3>
+def o = new A()
+assert o.methodFromA() == 'A'                   // <4>
+assert o.methodFromB() == 'B'                   // <5>
+assert o instanceof A                           // <6>
+assert !(o instanceof B)                        // <7>
+----
+<1> 类 `A` 定义 `methodFromA`
+<2> 类 `B` 定义 `methodFromB`
+<3> 把 `B` 混合进 `A`
+<4> 我们可以调用 `methodFromA`
+<5> 我们也可以调用 `methodFromB`
+<6> 该对象是 `A` 的一个实例
+<7> 但它**不**是 `B` 的实例
+
+最后一点实际上非常重要，并说明了一个mixins比traits更有优势的地方：实例**不会**被修改，所以如果你将某个类混合到另一个类中，则不会生成第三个类，并且响应 `A` 的方法将继续响应 `A`，即使它是混合的。
+
+=== 静态方法，属性和字段
+
+以下说明需谨慎。静态成员支持正在进行中，仍在进行实验。以下信息仅适用于2.5.6。
+
+可以在特征中定义静态方法，但它有许多限制：
+
+* 含静态方法的特征无法静态编译或类型检查。动态访问所有静态方法，属性和字段（这是JVM的限制）。
+* 静态方法不会出现在每个特征的生成接口中。
+* 特征被解释为实现类的__模板__，这意味着每个实现类将获得自己的静态方法，属性和字段。因此，在特征上声明的静态成员不属于特征，而是属于它的实现类。
+* 你通常不应混合使用相同签名的静态和实例方法。适用于应用特征的常规规则（包括多重继承冲突解决）。如果选择的方法是静态的，但某些已实现的特征具有实例变量，则会发生编译错误。如果选择的方法是实例变量，则将忽略静态变量（对于这种情况，行为类似于Java接口中的静态方法）。
+
+让我们从一个简单的例子开始：
+
+[source,groovy]
+----
+trait TestHelper {
+    public static boolean CALLED = false        // <1>
+    static void init() {                        // <2>
+        CALLED = true                           // <3>
+    }
+}
+class Foo implements TestHelper {}
+Foo.init()                                      // <4>
+assert Foo.TestHelper__CALLED                   // <5>
+----
+<1> 在特征中声明静态字段
+<2> 在特征中也声明了静态方法
+<3> __在__特征内更新静态字段
+<4> 静态方法 `init` 可用于实现类
+<5> 重新映射静态字段以避免菱形问题
+
+像往常一样，不建议使用公共字段。无论如何，如果你想要这么做，你必须明白以下代码会失败：
+
+[source,groovy]
+----
+Foo.CALLED = true
+----
+
+因为在特征本身上没有定义静态字段 `CALLED`。同样，如果你有两个不同的实现类，则每个类都会获得一个不同的静态字段：
+
+[source,groovy]
+----
+class Bar implements TestHelper {}              // <1>
+class Baz implements TestHelper {}              // <2>
+Bar.init()                                      // <3>
+assert Bar.TestHelper__CALLED                   // <4>
+assert !Baz.TestHelper__CALLED                  // <5>
+----
+<1> 类 `Bar` 实现了特征
+<2> 类 `Baz` 也实现了该特征
+<3> 只在 `Bar` 上调用 `init`
+<4> `Bar` 上的静态字段 `CALLED` 已更新
+<5> 但 `Baz` 上的静态字段 `CALLED` 不是真，因为它是**互不相同**的
+
+=== 状态继承的陷阱
+
+我们已经看到特征是有状态的。特征可以定义字段或属性，但是当类实现特征时，它会基于每个特征获取这些字段/属性。请考虑以下示例：
+
+[source,groovy]
+----
+trait IntCouple {
+    int x = 1
+    int y = 2
+    int sum() { x+y }
+}
+----
+
+该特征定义了两个属性 `x` 和 `y`，以及 `sum` 方法。现在让我们创建一个实现特征的类：
+
+[source,groovy]
+----
+class BaseElem implements IntCouple {
+    int f() { sum() }
+}
+def base = new BaseElem()
+assert base.f() == 3
+----
+
+调用 `f` 的结果是 `3`，因为委托在具有状态的特征中求和。但是如果我们这样写呢？
+
+[source,groovy]
+----
+class Elem implements IntCouple {
+    int x = 3                                       // <1>
+    int y = 4                                       // <2>
+    int f() { sum() }                               // <3>
+}
+def elem = new Elem()
+----
+<1> 覆盖属性 `x`
+<2> 覆盖属性 `y`
+<3> 从特征中调用 `sum`
+
+如果你调用 `elem.f()`，预期的输出是多少？实际上它是：
+
+[source,groovy]
+----
+assert elem.f() == 3
+----
+
+原因是 `sum` 方法访问特征的字段。所以它使用了特征中定义的 `x` 和 `y` 值。如果要使用实现类中的值，则需要使用getter和setter取消引用字段，如上一个示例所示：
+
+[source,groovy]
+----
+rait IntCouple {
+    int x = 1
+    int y = 2
+    int sum() { getX()+getY() }
+}
+
+class Elem implements IntCouple {
+    int x = 3
+    int y = 4
+    int f() { sum() }
+}
+def elem = new Elem()
+assert elem.f() == 7
+----
+
+=== 自我类型
+==== 特征的类型约束
+
+有时你会想要写一个只能应用于某种类型的特征。例如，你可能希望在扩展另一个类的类上应用特征，这个类是你无法控制的，并且仍然可以调用这些方法。为了说明这一点，让我们从这个例子开始：
+
+[source,groovy]
+----
+class CommunicationService {
+    static void sendMessage(String from, String to, String message) {       // <1>
+        println "$from sent [$message] to $to"
+    }
+}
+
+class Device { String id }                                                  // <2>
+
+trait Communicating {
+    void sendMessage(Device to, String message) {
+        CommunicationService.sendMessage(id, to.id, message)                // <3>
+    }
+}
+
+class MyDevice extends Device implements Communicating {}                   // <4>
+
+def bob = new MyDevice(id:'Bob')
+def alice = new MyDevice(id:'Alice')
+bob.sendMessage(alice,'secret')                                             // <5>
+----
+<1> 不可控的 `Service` 类（在库中，...）定义了一个 `sendMessage` 方法
+<2> 不可控的 `Device` 类（在库中，......）
+<3> 为可以调用服务的设备定义通信特征
+<4> 将 `MyDevice` 定义为通信设备
+<5> 调用特征中的方法，并解析 `id`
+
+这里很清楚，`Communicating` 特征只能应用于设备。但是，没有明确的契约来表明，因为特征不能继承类。但是，代码编译和运行完全正常，因为特征方法中的 `id` 将动态解析。问题在于没有任何东西阻止特征被应用于任何**不**是 `Device` 的类。任何具有 `id` 的类都可以工作，而任何没有 `id` 属性的类都会导致运行时错误。
+
+如果你想在特征上启用类型检查或应用 `@CompileStatic`，问题就更复杂了：因为特征对自身不是 `Device` 一无所知，所以类型检查器会抱怨它没有找到 `id` 属性。
+
+一种可能性是在特征中明确添加 `getId` 方法，但它不会解决所有问题。如果方法需要将 `this` 作为参数，并且实际上要求它是 `Device`，该怎么办？
+
+[source,groovy]
+----
+class SecurityService {
+    static void check(Device d) { if (d.id==null) throw new SecurityException() }
+}
+----
+
+如果你希望能够在特征中调用 `this`，那么你将明确需要将 `this` 转换为 `Device`。如果到处都使用显式强制转换 `this`，这将很快变得不可读。
+
+==== `@SelfType` 注解
+
+为了使这个契约显式化，并使类型检查器知道它__自己的类型__，Groovy提供了一个 `@SelfType` 注解，它将：
+
+* 让你声明实现此特征的类必须继承或实现的类型
+* 如果不满足这些类型约束，则抛出编译时错误
+
+所以在前面的例子中，我们可以使用 `@groovy.transform.SelfType` 注解来fix特征：
+
+[source,groovy]
+----
+@SelfType(Device)
+@CompileStatic
+trait Communicating {
+    void sendMessage(Device to, String message) {
+        SecurityService.check(this)
+        CommunicationService.sendMessage(id, to.id, message)
+    }
+}
+----
+
+现在，如果你尝试在**不是**设备的类上实现此特征，则会发生编译时错误：
+
+[source,groovy]
+----
+class MyDevice implements Communicating {} // 忘记继承 Device
+----
+
+将抛出错误：
+
+[source,groovy]
+----
+class 'MyDevice' implements trait 'Communicating' but does not extend self type class 'Device'
+----
+
+总之，自我类型是一种强有力的方式来宣布对特征的约束，而不必直接在特征中声明契约或不得不在任何地方使用强制类型转换，从而保持关注点的分离尽可能的紧密。
+
+=== 限制
+
+==== 与AST转换的兼容性
+
+特征不与AST转换正式兼容。其中一些，如 `@CompileStatic` 将应用于特征本身（而不是实现类），而其他一些将同时应用于实现类和特征。绝对不能保证AST转换会像普通类一样在特征上运行，因此使用它需要你自担风险！
+
+==== 前缀和后缀操作
+
+在特征中，如果更新特征的字段，则不允许使用前缀和后缀操作：
+
+[source,groovy]
+----
+trait Counting {
+    int x
+    void inc() {
+        x++                             // <1>
+    }
+    void dec() {
+        --x                             // <2>
+    }
+}
+class Counter implements Counting {}
+def c = new Counter()
+c.inc()
+----
+<1> `x` 在特征内定义，不允许后缀自增
+<2> `x` 在特征内定义，不允许前缀自减
+
+解决方法是使用 `+=` 运算符。
+
+TIP: http://www.groovy-lang.org/objectorientation.html[原文链接]
