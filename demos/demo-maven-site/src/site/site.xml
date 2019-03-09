@@ -44,8 +44,10 @@
     </menu>
     <menu name="FAQ">
       <item name="Maven Plugin" href="faq/maven-plugin.html"/>
+      <item name="Groovy Differences With Java" href="quickstart/groovy-diff-java.html"/>
     </menu>
     <menu name="Cookbook">
+      <item name="AsciiDoc Table" href="cookbook/asciidoc-table.html"/>
       <item name="Maven Plugin" href="quickstart/maven-plugin.html"/>
       <item name="Docker Maven Plugin" href="cookbook/docker-maven-plugin.html"/>
       <item name="Pro Git" href="https://progit.bootcss.com/"/>
@@ -56,6 +58,7 @@
       <item name="Spring Boot Testing" href="cookbook/spring-boot-test.html"/>
       <item name="Spring REST Docs" href="cookbook/spring-rest-docs.html"/>
       <item name="Springfox" href="cookbook/springfox.html"/>
+      <item name="Groovy" href="cookbook/groovy.html"/>
     </menu>
     <!--<menu ref="reports" inherit="top" />-->
   </body>

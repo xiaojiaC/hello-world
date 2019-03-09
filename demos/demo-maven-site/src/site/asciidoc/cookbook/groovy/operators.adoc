@@ -1,0 +1,964 @@
+[[operators]]
+= 运算符
+:jslDocBaseUrl: https://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html
+
+本章介绍Groovy编程语言的运算符。
+
+== 算术运算符
+
+Groovy支持你在数学和其他编程语言（如Java）中找到的常用算术运算符。支持所有Java算术运算符。我们将在以下示例中介绍它们。
+
+=== 普通算术运算符
+
+Groovy中提供了以下二元算术运算符：
+
+|===
+| 运算符 | 用途 | 备注
+| `+` | 加 |
+| `-` | 减 |
+| `*` | 乘 |
+| `/` | 除 | 使用 `intdiv()` 进行整数除法，有关除法的返回类型的更多信息，请参阅有关 <<syntax.integer_division,整数除法>> 的部分。
+| `%` | 取余 |
+| `{asterisk}{asterisk}` | 求幂 | 有关操作返回类型的更多信息，请参阅有关 <<syntax.power_operator,幂次运算>> 的部分。
+|===
+
+以下是这些运算符的一些使用示例：
+
+[source,groovy]
+----
+assert  1  + 2 == 3
+assert  4  - 3 == 1
+assert  3  * 5 == 15
+assert  3  / 2 == 1.5
+assert 10  % 3 == 1
+assert  2 ** 3 == 8
+----
+
+=== 一元运算符
+
+`+` 和 `-` 运算符也可作为一元运算符使用：
+
+[source,groovy]
+----
+assert +3 == 3
+assert -4 == 0 - 4
+
+assert -(-1) == 1  // <1>
+----
+<1> 请注意使用括号括起表达式用以将一元减号应用于该被包围表达式。
+
+就一元算术运算符而言，`++`（自增）和 `--` （自减）运算符在前缀和后缀表示法中均可用：
+
+[source,groovy]
+----
+def a = 2
+def b = a++ * 3             // <1>
+
+assert a == 3 && b == 6
+
+def c = 3
+def d = c-- * 2             // <2>
+
+assert c == 2 && d == 6
+
+def e = 1
+def f = ++e + 3             // <3>
+
+assert e == 2 && f == 5
+
+def g = 4
+def h = --g + 1             // <4>
+
+assert g == 3 && h == 4
+----
+<1> 先计算表达式并赋值给 `b` 后，再增加 `a`
+<2> 先计算表达式并赋值给 `d` 后，再减少 `c`
+<3> 先增加 `e`，再计算表达式并赋值给 `f`
+<4> 先减少 `g`，再计算表达式并赋值给 `h`
+
+=== 赋值算术运算符
+
+我们在上面看到的二元算术运算符也可以在其赋值形式中使用：
+
+* `+=`
+* `-=`
+* `*=`
+* `/=`
+* `%=`
+* `**=`
+
+让我们看看他们的行为：
+
+[source,groovy]
+----
+def a = 4
+a += 3
+
+assert a == 7
+
+def b = 5
+b -= 3
+
+assert b == 2
+
+def c = 5
+c *= 3
+
+assert c == 15
+
+def d = 10
+d /= 2
+
+assert d == 5
+
+def e = 10
+e %= 3
+
+assert e == 1
+
+def f = 3
+f **= 2
+
+assert f == 9
+----
+
+== 关系运算符
+
+关系运算符允许对象之间的比较，以知道两个对象是相同还是不同，或者一个对象是否大于，小于或等于另一个。
+
+以下运算符可用：
+
+|===
+| 运算符 | 用途
+| `==` | 相等
+| `!=` | 不等
+| `{lt}` | 小于
+| `{lt}=` | 小于或等于
+| `{gt}` | 大于
+| `{gt}=` | 大于或等于
+|===
+
+以下是使用这些运算符进行简单数字比较的一些示例：
+
+[source,groovy]
+----
+assert 1 + 2 == 3
+assert 3 != 4
+
+assert -2 < 3
+assert 2 <= 2
+assert 3 <= 4
+
+assert 5 > 1
+assert 5 >= -2
+----
+
+== 逻辑运算符
+
+Groovy为布尔表达式提供了三个逻辑运算符：
+
+* `&&`: 逻辑"与"
+* `||`: 逻辑"或"
+* `!`: 逻辑"非"
+
+让我们用以下例子来说明它们：
+
+[source,groovy]
+----
+assert !false           // <1>
+assert true && true     // <2>
+assert true || false    // <3>
+----
+<1> false的非是真
+<2> true与true是真
+<3> true或false是真
+
+=== 优先级
+
+逻辑“非”具有比逻辑“与”更高的优先级。
+
+[source,groovy]
+----
+assert (!false && false) == false   // <1>
+----
+<1> 这里断言是真的（因为括号中的表达式是假的），因为“非”的优先级高于“与”，所以“非”只适用于第一个“false”术语；否则，它将应用于“与”后的结果，将其变为真，并且断言将失败
+
+逻辑“与”具有比逻辑“或”更高的优先级。
+
+[source,groovy]
+----
+assert true || true && false        // <1>
+----
+<1> 这里断言是真的，因为“与”的优先级高于“或”，因此“或”最后执行并返回true；否则，“与”将执行最后并返回false，并且断言将失败
+
+=== 短路
+
+逻辑 `||` 运算符支持短路：如果左操作数为真，则它知道结果在任何情况下都为真，因此它不会计算右操作数。仅当左操作数为false时，才会评估右操作数。
+
+同样对于逻辑 `&&` 运算符：如果左操作数为false，则它知道结果在任何情况下都将为false，因此它不会计算右操作数。仅当左操作数为真时才会评估右操作数。
+
+[source,groovy]
+----
+boolean checkIfCalled() {   // <1>
+    called = true
+}
+
+called = false
+true || checkIfCalled()
+assert !called              // <2>
+
+called = false
+false || checkIfCalled()
+assert called               // <3>
+
+called = false
+false && checkIfCalled()
+assert !called              // <4>
+
+called = false
+true && checkIfCalled()
+assert called               // <5>
+----
+<1> 我们创建了一个函数，无论何时调用它，都会将被 `called` 标志设置为true
+<2> 在该情况下，我们确认如果 `||` 运算符的左操作数为真，则不调用该函数，`||` 会短路右操作数的评估
+<3> 在该情况下，左操作数为false，因此调用该函数，我们的标志现在被设置为真
+<4> 同样对于 `&&`，我们确认函数没有被调用，因为左操作数为假
+<5> 但是左操作数为真时调用了该函数
+
+== 位运算符
+
+Groovy提供4个按位运算符：
+
+* `&`：按位"与"
+* `|`：按位"或"
+* `^`：按位"异或"
+* `~`：按位"取反"
+
+按位运算符可以应用于 `byte` 或 `int` 并返回 `int`：
+
+[source,groovy]
+----
+int a = 0b00101010
+assert a == 42
+int b = 0b00001000
+assert b == 8
+assert (a & a) == a                     // <1>
+assert (a & b) == b                     // <2>
+assert (a | a) == a                     // <3>
+assert (a | b) == a                     // <4>
+
+int mask = 0b11111111                   // <5>
+assert ((a ^ a) & mask) == 0b00000000   // <6>
+assert ((a ^ b) & mask) == 0b00100010   // <7>
+assert ((~a) & mask)    == 0b11010101   // <8>
+----
+<1> 按位与
+<2> 按位与，并返回公共位
+<3> 按位或
+<4> 按位或，并返回所有 '1' 位
+<5> 设置掩码以仅检查最后8位
+<6> 自身按位异或返回0
+<7> 按位异或
+<8> 按位取反
+
+值得注意的是，基本类型的内部表示遵循Java {jslDocBaseUrl}[语言规范]。特别是，原始类型是有符号的，这意味着对于按位取反，使用掩码仅检索必要的位总是好的。
+
+在Groovy中，按位运算符具有<<operators.operator_overloading,可重载>>的特性，这意味着你可以为任何类型的对象定义这些运算符的行为。
+
+== 条件运算符
+
+=== 否定运算符
+
+“否定”运算符用感叹号（!）表示，并反转底层布尔表达式的结果。特别是，可以将否定运算符与<<semantics.groovy_truth,Groovy-Truth>>结合起来：
+
+[source,groovy]
+----
+assert (!true)    == false                      // <1>
+assert (!'foo')   == false                      // <2>
+assert (!'')      == true                       // <3>
+----
+<1> `true` 的否定是 `false`
+<2> 'foo'是一个非空字符串，计算结果为 `true`，因此否定返回 `false`
+<3> ''是一个空字符串，计算结果为 `false`，因此否定返回 `true`
+
+=== 三元运算符
+
+三元运算符是一个快捷表达式，相当于if/else分支为某变量赋值：
+
+[source,groovy]
+----
+if (string!=null && string.length()>0) {
+    result = 'Found'
+} else {
+    result = 'Not found'
+}
+----
+
+你可以写：
+
+[source,groovy]
+----
+result = (string!=null && string.length()>0) ? 'Found' : 'Not found'
+----
+
+三元运算符也与<<semantics.groovy_truth,Groovy-Truth>>兼容，因此你可以使其更简单：
+
+[source,groovy]
+----
+result = string ? 'Found' : 'Not found'
+----
+
+=== Elvis运算符
+
+“Elvis运算符”是三元运算符的简写。这方面的一个实例是，如果表达式解析为 `false`-ish（如<<semantics.groovy_truth,Groovy-Truth>>中），则返回“合理的默认值”。一个简单的例子可能如下所示：
+
+[source,groovy]
+----
+displayName = user.name ? user.name : 'Anonymous'   // <1>
+displayName = user.name ?: 'Anonymous'              // <2>
+----
+<1> 使用三元运算符，你必须重复要赋值的值
+<2> 使用Elvis运算符，如果不是 `false`-ish，则使用已测试的值
+
+使用Elvis运算符可以减少代码的详细程度，并消除复制条件和真返回值中测试的表达式的需要，减少重构时出错的风险。
+
+== 对象运算符
+
+=== 安全导航运算符
+
+安全导航运算符用于避免 `NullPointerException`。通常，在引用对象时，可能需要在访问对象的方法或属性之前验证它是否为 `null`。为了避免这种情况，安全导航运算符将只返回 `null` 而不是抛出异常，如下所示：
+
+[source,groovy]
+----
+def person = Person.find { it.id == 123 }    // <1>
+def name = person?.name                      // <2>
+assert name == null                          // <3>
+----
+<1> `find` 将返回一个 `null` 实例
+<2> 使用null-safe运算符可防止出现 `NullPointerException`
+<3> 结果为 `null`
+
+=== 直接字段访问运算符
+
+通常在Groovy中，当你编写这样的代码时：
+
+[source,groovy]
+----
+class User {
+    public final String name                 // <1>
+    User(String name) { this.name = name}
+    String getName() { "Name: $name" }       // <2>
+}
+def user = new User('Bob')
+assert user.name == 'Name: Bob'              // <3>
+----
+<1> 公共字段 `name`
+<2> 返回自定义 `name` 字符串的getter
+<3> 调用getter
+
+`user.name` 调用触发对同名属性的调用，也就是说，在此处调用 `name` 的getter。如果要检索字段而不是调用getter，可以使用直接字段访问运算符：
+
+[source,groovy]
+----
+assert user.@name == 'Bob'                   // <1>
+----
+<1> 使用 `.@` 访问字段而不是getter
+
+[[operators.method-pointer-operator]]
+=== 方法指针运算符
+
+方法指针运算符（`.&`）调用用于存储对变量中方法的引用，以便稍后调用它：
+
+[source,groovy]
+----
+def str = 'example of method reference'            // <1>
+def fun = str.&toUpperCase                         // <2>
+def upper = fun()                                  // <3>
+assert upper == str.toUpperCase()                  // <4>
+----
+<1> `str` 变量包含一个 `String`
+<2> 我们在名为 `fun` 的变量上存储 `str` 实例上的 `toUpperCase` 方法的引用
+<3> `fun` 可以像常规方法一样调用
+<4> 我们可以检查结果是否与我们直接在 `str` 上调用它的结果相同
+
+使用方法指针有许多优点。首先，这种方法指针的类型是 `groovy.lang.Closure`，因此它可以在任何地方使用闭包。特别是，它适合转换现有方法以满足策略模式的需要：
+
+[source,groovy]
+----
+def transform(List elements, Closure action) {                    // <1>
+    def result = []
+    elements.each {
+        result << action(it)
+    }
+    result
+}
+String describe(Person p) {                                       // <2>
+    "$p.name is $p.age"
+}
+def action = this.&describe                                       // <3>
+def list = [
+    new Person(name: 'Bob',   age: 42),
+    new Person(name: 'Julia', age: 35)]                           // <4>
+assert transform(list, action) == ['Bob is 42', 'Julia is 35']    // <5>
+----
+<1> `transform` 方法获取列表的每个元素并调用它们的 `action` 闭包，返回一个新列表
+<2> 我们定义一个接收 `Person` 并返回 `String` 的函数
+<3> 我们在该函数上创建一个方法指针
+<4> 我们创建了我们想要收集描述符的元素列表
+<5> 方法指针可以在包含 `Closure` 参数类型的函数中使用
+
+方法指针由接收器和方法名称绑定。参数在运行时解析，这意味着如果你有多个具有相同名称的方法，则语法没有区别，只有在运行时才会调用相应方法的解析：
+
+[source,groovy]
+----
+def doSomething(String str) { str.toUpperCase() }    // <1>
+def doSomething(Integer x) { 2*x }                   // <2>
+def reference = this.&doSomething                    // <3>
+assert reference('foo') == 'FOO'                     // <4>
+assert reference(123)   == 246                       // <5>
+----
+<1> 定义一个重载的 `doSomething` 方法，接受 `String` 作为参数
+<2> 定义一个重载的 `doSomething` 方法，接受 `Integer` 作为参数
+<3> 在 `doSomething` 上创建单个方法指针，而不指定参数类型
+<4> 使用带有 `String` 的方法指针调用 `doSomething` 的 `String` 版本
+<5> 使用带有 `Integer` 的方法指针调用 `doSomething` 的 `Integer` 版本
+
+== 正则表达式运算符
+
+=== 模式运算符
+
+模式运算符（`~`）提供了一种创建 `java.util.regex.Pattern` 实例的简单方法：
+
+[source,groovy]
+----
+def p = ~/foo/
+assert p instanceof Pattern
+----
+
+通常，你会发现模式运算符在一个slashy字符串中有一个表达式，模式运算符可以与Groovy中的任何类型的 `String` 一起使用：
+
+[source,groovy]
+----
+p = ~'foo'                                                        // <1>
+p = ~"foo"                                                        // <2>
+p = ~$/dollar/slashy $ string/$                                   // <3>
+p = ~"${pattern}"                                                 // <4>
+----
+<1> 使用单引号字符串
+<2> 使用双引号字符串
+<3> 美元slashy字符串允许你使用斜杠和美元符号而不必转义它们
+<4> 你也可以使用GString！
+
+=== 查找运算符
+
+或者构建模式，你可以直接使用查找运算符 `=~` 来构建 `java.util.regex.Matcher` 实例：
+
+[source,groovy]
+----
+def text = "some text to match"
+def m = text =~ /match/                                  // <1>
+assert m instanceof Matcher                              // <2>
+if (!m) {                                                // <3>
+    throw new RuntimeException("Oops, text not found!")
+}
+----
+<1> `=~` 使用右侧的模式为 `text` 变量创建匹配器
+<2> `=~` 返回类型是 `Matcher`
+<3> 相当于调用 `if (!m.find())`
+
+由于 `Matcher` 通过调用其 `find` 方法强制转换为 `boolean`，因此 `=~` 运算符与Perl's `=~` 运算符的简单用法一致，当它作为谓词出现时（`if`，`while` 等）。
+
+=== 匹配运算符
+
+匹配运算符（`==~`）是查找运算符的略微变化，它不返回 `Matcher` 而是返回布尔值，并且需要输入字符串的严格匹配：
+
+[source,groovy]
+----
+m = text ==~ /match/                             // <1>
+assert m instanceof Boolean                      // <2>
+if (m) {                                         // <3>
+    throw new RuntimeException("Should not reach that point!")
+}
+----
+<1> `==~` 将主题与正则表达式严格匹配
+<2> `==~` 返回类型因此是 `boolean`
+<3> 相当于调用 `if (text ==~ /match/)`
+
+== 其他运算符
+
+=== 传播运算符
+
+Spread-dot Operator（`*.`）​​通常缩写为Spread Operator，用于在聚合对象的所有条目上执行同一操作。它相当于对每个条目调用操作并将结果收集到列表中：
+
+[source,groovy]
+----
+class Car {
+    String make
+    String model
+}
+def cars = [
+       new Car(make: 'Peugeot', model: '508'),
+       new Car(make: 'Renault', model: 'Clio')]       // <1>
+def makes = cars*.make                                // <2>
+assert makes == ['Peugeot', 'Renault']                // <3>
+----
+<1> 建立 `Car` 条目列表。该列表是对象的集合。
+<2> 在列表中调用spread运算符，访问每个条目的 `make` 属性
+<3> 返回与 `make` 项集合对应的字符串列表
+
+表达式 `cars*.make` 相当于 `cars.collect{ it.make }`。当引用的属性不是包含列表的属性时，Groovy的GPath表示法允许短路，在这种情况下，它会自动传播。在前面提到的情况下，也可以使用表达式 `cars.make` ，但通常建议保留显式spread-dot运算符。
+
+传播运算符是null安全的，这意味着如果集合的元素为null，它将返回null而不是抛出 `NullPointerException`：
+
+[source,groovy]
+----
+cars = [
+   new Car(make: 'Peugeot', model: '508'),
+   null,                                              // <1>
+   new Car(make: 'Renault', model: 'Clio')]
+assert cars*.make == ['Peugeot', null, 'Renault']     // <2>
+assert null*.make == null                             // <3>
+----
+<1> 构建一个列表，其中的一个元素为 `null`
+<2> 使用传播运算符**不**会抛出 `NullPointerException`
+<3> 接收方也可能为null，在这种情况下返回值为 `null`
+
+传播运算符可用于任何实现 `Iterable` 接口的类：
+
+[source,groovy]
+----
+class Component {
+    Long id
+    String name
+}
+class CompositeObject implements Iterable<Component> {
+    def components = [
+        new Component(id: 1, name: 'Foo'),
+        new Component(id: 2, name: 'Bar')]
+
+    @Override
+    Iterator<Component> iterator() {
+        components.iterator()
+    }
+}
+def composite = new CompositeObject()
+assert composite*.id == [1,2]
+assert composite*.name == ['Foo','Bar']
+----
+
+在处理本身包含聚合数据结构的聚合时，可使用spread-dot运算符的多次调用（此处为 `cars*.models*.name`）：
+
+[source,groovy]
+----
+class Make {
+    String name
+    List<Model> models
+}
+
+@Canonical
+class Model {
+    String name
+}
+
+def cars = [
+    new Make(name: 'Peugeot',
+             models: [new Model('408'), new Model('508')]),
+    new Make(name: 'Renault',
+             models: [new Model('Clio'), new Model('Captur')])
+]
+
+def makes = cars*.name
+assert makes == ['Peugeot', 'Renault']
+
+def models = cars*.models*.name
+assert models == [['408', '508'], ['Clio', 'Captur']]
+assert models.sum() == ['408', '508', 'Clio', 'Captur'] // flatten one level
+assert models.flatten() == ['408', '508', 'Clio', 'Captur'] // flatten all levels (one in this case)
+----
+
+考虑对集合的集合使用 `collectNested` DGM方法而不是spread-dot运算符：
+
+[source,groovy]
+----
+class Car {
+    String make
+    String model
+}
+def cars = [
+   [
+       new Car(make: 'Peugeot', model: '408'),
+       new Car(make: 'Peugeot', model: '508')
+   ], [
+       new Car(make: 'Renault', model: 'Clio'),
+       new Car(make: 'Renault', model: 'Captur')
+   ]
+]
+def models = cars.collectNested{ it.model }
+assert models == [['408', '508'], ['Clio', 'Captur']]
+----
+
+==== 传播方法参数
+
+在某些情况下，可以在需要适应方法参数的列表中找到方法调用的参数。在这种情况下，你可以使用传播运算符来调用该方法。例如，假设你有以下方法签名：
+
+[source,groovy]
+----
+int function(int x, int y, int z) {
+    x*y+z
+}
+----
+
+那么如果你有以下列表：
+
+[source,groovy]
+----
+def args = [4,5,6]
+----
+
+你可以在不必定义中间变量的情况下调用该方法：
+
+[source,groovy]
+----
+assert function(*args) == 26
+----
+
+甚至可以将普通参数与传播参数混合：
+
+[source,groovy]
+----
+args = [4]
+assert function(*args,5,6) == 26
+----
+
+==== 传播列表元素
+
+在列表中使用时，传播运算符就像将展开元素内容内联到列表中一样：
+
+[source,groovy]
+----
+def items = [4,5]                      // <1>
+def list = [1,2,3,*items,6]            // <2>
+assert list == [1,2,3,4,5,6]           // <3>
+----
+<1> `items` 是一个列表
+<2> 我们想直接将 `items` 列表的内容插入到 `list` 中，而无需调用 `addAll`
+<3> `items` 的内容已内联到 `list` 中
+
+==== 传播映射元素
+
+传播映射运算符的工作方式与传播列表运算符类似，但对于映射，它允许你将映射的内容内联到另一个映射中，如下例所示：
+
+[source,groovy]
+----
+def m1 = [c:3, d:4]                  // <1>
+def map = [a:1, b:2, *:m1]           // <2>
+assert map == [a:1, b:2, c:3, d:4]   // <3>
+----
+<1> `m1` 是我们想要内联的映射
+<2> 我们使用 `*:m1` 表示法将 `m1` 的内容传播到 `map` 中
+<3> `map` 包含 `m1` 的所有元素
+
+传播映射运算符是位置相关的，如以下示例所示：
+
+[source,groovy]
+----
+def m1 = [c:3, d:4]                   // <1>
+def map = [a:1, b:2, *:m1, d: 8]      // <2>
+assert map == [a:1, b:2, c:3, d:8]    // <3>
+----
+<1> `m1` 是我们想要内联的映射
+<2> 我们使用 `{asterisk}:m1` 表示法将 `m1` 的内容传播到 `map` 中，但传播**后**重新定义键 `d`
+<3> `map` 包含所有预期的键，但 `d` 被重新定义
+
+=== 范围运算符
+
+Groovy支持范围的概念，并提供一个符号（`..`）来创建对象范围：
+
+[source,groovy]
+----
+def range = 0..5                                    // <1>
+assert (0..5).collect() == [0, 1, 2, 3, 4, 5]       // <2>
+assert (0..<5).collect() == [0, 1, 2, 3, 4]         // <3>
+assert (0..5) instanceof List                       // <4>
+assert (0..5).size() == 6                           // <5>
+----
+<1> 一个简单的整数范围，存储在局部变量中
+<2> 一个 `IntRange`，包含边界
+<3> 一个 `IntRange`，排除上限值
+<4> `groovy.lang.Range` 实现了 `List` 接口
+<5> 你可以在上面调用 `size` 方法
+
+范围实现是轻量级的，这意味着只存储下限和上限。你可以从具有 `next()` 和 `previous()` 方法的任何 `Comparable` 对象创建范围，以确定范围中的下一个/上一个条目。例如，你可以通过以下方式创建一系列字符：
+
+[source,groovy]
+----
+assert ('a'..'d').collect() == ['a','b','c','d']
+----
+
+=== 飞船运算符
+
+宇宙飞船运算符（`{lt}={gt}`）委托调用 `compareTo` 方法：
+
+[source,groovy]
+----
+assert (1 <=> 1) == 0
+assert (1 <=> 2) == -1
+assert (2 <=> 1) == 1
+assert ('a' <=> 'z') == -1
+----
+
+[[operators.subscript-operator]]
+=== 下标运算符
+
+下标运算符是 `getAt` 或 `putAt` 的简写符号，具体取决于你是在赋值的左侧还是右侧使用它：
+
+[source,groovy]
+----
+def list = [0,1,2,3,4]
+assert list[2] == 2                         // <1>
+list[2] = 4                                 // <2>
+assert list[0..2] == [0,1,4]                // <3>
+list[0..2] = [6,6,6]                        // <4>
+assert list == [6,6,6,3,4]                  // <5>
+----
+<1> 可以用 `[2]` 代替 `getAt(2)`
+<2> 如果在赋值符号的左侧，将调用 `putAt`
+<3> `getAt` 还支持范围
+<4> `putAt` 也是如此
+<5> 变异后的列表
+
+下标运算符与 `getAt`/`putAt` 的自定义实现相结合是解构对象的便捷方法：
+
+[source,groovy]
+----
+class User {
+    Long id
+    String name
+    def getAt(int i) {                                             // <1>
+        switch (i) {
+            case 0: return id
+            case 1: return name
+        }
+        throw new IllegalArgumentException("No such element $i")
+    }
+    void putAt(int i, def value) {                                 // <2>
+        switch (i) {
+            case 0: id = value; return
+            case 1: name = value; return
+        }
+        throw new IllegalArgumentException("No such element $i")
+    }
+}
+def user = new User(id: 1, name: 'Alex')                           // <3>
+assert user[0] == 1                                                // <4>
+assert user[1] == 'Alex'                                           // <5>
+user[1] = 'Bob'                                                    // <6>
+assert user.name == 'Bob'                                          // <7>
+----
+<1> `User` 类定义了一个自定义 `getAt` 实现
+<2> `User` 类定义了一个自定义 `putAt` 实现
+<3> 创建一个示例用户
+<4> 使用索引为0的下标运算符检索用户id
+<5> 使用索引为1的下标运算符检索用户name
+<6> 我们可以使用下标运算符写入属性值，这要归功于 `putAt` 的委托
+<7> 并检查它是否真的已更改 `name` 属性
+
+=== 成员运算符
+
+成员运算符（`in`）等同于调用 `isCase` 方法。在 `List` 的上下文中，它等同于调用 `contains`，如下例所示：
+
+[source,groovy]
+----
+def list = ['Grace','Rob','Emmy']
+assert ('Emmy' in list)                     // <1>
+----
+<1> 相当于调用 `list.contains('Emmy')` 或 `list.isCase('Emmy')`
+
+=== 身份运算符
+
+在Groovy中，使用 `==` 来测试相等性与在Java中使用相同的运算符不同。在Groovy中，它调用 `equals`。如果要比较引用相等性，则应使用如下例所示：
+
+[source,groovy]
+----
+def list1 = ['Groovy 1.8','Groovy 2.0','Groovy 2.3']        // <1>
+def list2 = ['Groovy 1.8','Groovy 2.0','Groovy 2.3']        // <2>
+assert list1 == list2                                       // <3>
+assert !list1.is(list2)                                     // <4>
+----
+<1> 创建字符串列表
+<2> 创建另一个包含相同元素的字符串列表
+<3> 使用 `==`，我们测试对象相等性
+<4> 但是使用 `is`，我们可以检查引用是不同的
+
+=== 强转运算符
+
+强转运算符（`as`）是casting的变体。强制将对象从一种类型转换为另一种类型而不兼容赋值。我们来举个例子：
+
+[source,groovy]
+----
+Integer x = 123
+String s = (String) x                                   // <1>
+----
+<1> `Integer` 不能赋值给 `String`，因此它会在运行时产生 `ClassCastException`
+
+这可以通过使用强转运算符来修复：
+
+[source,groovy]
+----
+Integer x = 123
+String s = x as String                                  // <1>
+----
+<1> `Integer` 不能赋值给 `String`，但使用 `as` 会将其强制转换为 `String`
+
+当一个对象被强制转换为另一个对象时，除非目标类型与源类型相同，否则强转将返回一个**新**对象。转换规则因源和目标类型而异，如果没有找到转换规则，强转可能会失败。可用 `asType` 方法实现自定义转换规则：
+
+[source,groovy]
+----
+class Identifiable {
+    String name
+}
+class User {
+    Long id
+    String name
+    def asType(Class target) {                                              // <1>
+        if (target == Identifiable) {
+            return new Identifiable(name: name)
+        }
+        throw new ClassCastException("User cannot be coerced into $target")
+    }
+}
+def u = new User(name: 'Xavier')                                            // <2>
+def p = u as Identifiable                                                   // <3>
+assert p instanceof Identifiable                                            // <4>
+assert !(p instanceof User)                                                 // <5>
+----
+<1> `User` 类定义从 `User` 到 `Identifiable` 的自定义转换规则
+<2> 我们创建一个 `User` 实例
+<3> 我们将 `User` 实例强制转换为 `Identifiable`
+<4> 目标实例是 `Identifiable` 类型
+<5> 目标不再是 `User` 类型的实例
+
+=== 钻石运算符
+
+钻石运算符（`<>`）是一个仅用于语法的运算符，用于支持与Java 7中相同名称的运算符的兼容性。它用于指示应从声明中推断泛型类型：
+
+[source,groovy]
+----
+List<String> strings = new LinkedList<>()
+----
+
+在动态Groovy中，这是完全无用的。在静态类型检查的Groovy中，它也是可选的，因为Groovy类型检查器会执行类型推断，不管这个操作符是否存在。
+
+=== 调用运算符
+
+调用运算符（`()`）用于隐式调用名为 `call` 的方法。对于定义调用方法的任何对象，可以省略 `.call` 部分并使用调用运算符：
+
+[source,groovy]
+----
+class MyCallable {
+    int call(int x) {           // <1>
+        2*x
+    }
+}
+
+def mc = new MyCallable()
+assert mc.call(2) == 4          // <2>
+assert mc(2) == 4               // <3>
+----
+<1> `MyCallable` 定义了一个名为 `call` 的方法。请注意，它不需要实现 `java.util.concurrent.Callable`
+<2> 我们可以使用经典方法调用语法来调用该方法
+<3> 或者我们可以通过调用运算符省略 `.call`
+
+== 运算符优先级
+
+下表按优先顺序列出了所有常规运算符。
+
+|===
+| 级别 | 运算符 | 名称
+.6+| 1 | `new` `()` | 对象创建，显式小括号
+    | `()` `{}` `[]` | 方法调用，闭包，列表/映射
+    | `.` `.&` `.@` | 成员访问，方法闭包，字段/属性访问
+    | `?.` `{asterisk}` `{asterisk}.` `{asterisk}:` | 安全解引用，spread, spread-dot, spread-map
+    | `~` `!` `(type)` | 按位否定/模式，逻辑非，类型转换
+    | `[]` `++` `--` | 列表/数组/映射索引访问，后置自增/自减
+| 2 | `{asterisk}{asterisk}` | 求幂
+| 3 | `++` `--` `+` `-` | 前置自增/自减，正，负
+| 4 | `*` `/` `%` | 乘法，除法，取余
+| 5 | `+` `-` | 加法，减法
+| 6 | `<<` `>>` `>>>` `..` `..<` | 左移，右移，无符号右移，范围，排除上限范围
+| 7 | `<` `{lt}=` `>` `{gt}=` `in` `instanceof` `as` | 小于，小于等于，大于，大于等于，in，instanceof，类型强转
+.2+| 8 | `==` `!=` `{lt}={gt}` | 等于，不等于，比较
+    | `=~` `==~` | 查找正则表达式，匹配正则表达式
+| 9 | `&` | 二进制按位与
+| 10 | `^` | 二进制按位异或
+| 11 | `{vbar}` | 二进制按位或
+| 12 | `&&` | 逻辑与
+| 13 | `{vbar}{vbar}` | 逻辑或
+.2+| 14 | `? :` | 三元条件
+     | `?:` | elvis运算符
+| 15 | `=` `**=` `*=` `/=` `%=` `+=` `-=` `{lt}{lt}=` `{gt}{gt}=` `{gt}{gt}{gt}=` `&=` `^=` `{vbar}=` | 各种赋值
+|===
+
+[[operators.operator_overloading]]
+== 运算符重载
+
+Groovy允许你重载各种运算符，以便它们可以与你自己的类一起使用。考虑这个简单的类：
+
+[source,groovy]
+----
+class Bucket {
+    int size
+
+    Bucket(int size) { this.size = size }
+
+    Bucket plus(Bucket other) {                     // <1>
+        return new Bucket(this.size + other.size)
+    }
+}
+----
+<1> `Bucket` 实现了一个名为 `plus()` 的特殊方法
+
+只需实现 `plus()` 方法，`Bucket` 类现在可以与 `+` 运算符一起使用，如下所示：
+
+[source,groovy]
+----
+def b1 = new Bucket(4)
+def b2 = new Bucket(11)
+assert (b1 + b2).size == 15                         // <1>
+----
+<1> 两个 `Bucket` 对象可以与 `+` 运算符一起进行加运算
+
+所有（非比较器）Groovy运算符都有一个相应的方法，你可以在自己的类中实现。唯一的要求是你的方法是公共的，具有正确的名称，并具有正确的参数数量。参数类型取决于你希望在运算符右侧支持的类型。例如，你可以支持该声明：
+
+[source,groovy]
+----
+assert (b1 + 11).size == 15
+----
+
+通过使用此签名实现 `plus()` 方法：
+
+[source,groovy]
+----
+Bucket plus(int capacity) {
+    return new Bucket(this.size + capacity)
+}
+----
+
+以下是运算符及其对应方法的完整列表：
+
+|===
+| 运算符 | 方法 | 运算符 | 方法
+| `+` | a.plus(b) | `a[b]` | a.getAt(b)
+| `-` | a.minus(b) | `a[b] = c` | a.putAt(b, c)
+| `*` | a.multiply(b) | `a in b` | b.inCase(a)
+| `/` | a.div(b) | `<<` | a.leftShift(b)
+| `%` | a.mod(b) | `>>` | a.rightShift(b)
+| `{asterisk}{asterisk}` | a.power(b) | `>>>` | a.rightShiftUnsigned(b)
+| `{vbar}` | a.or(b) | `++` | a.next()
+| `&` | a.and(b) | `--` | a.previous()
+| `^` | a.xor(b) | `+a` | a.positive()
+| `as` | a.asType(b) | `-a` | a.negative()
+| `a()` | a.call() | `~a` | a.bitwiseNegate()
+|===
+
+TIP: http://www.groovy-lang.org/operators.html[原文链接]
