@@ -45,6 +45,9 @@
     <menu name="FAQ">
       <item name="Maven Plugin" href="faq/maven-plugin.html"/>
       <item name="Groovy Differences With Java" href="quickstart/groovy-diff-java.html"/>
+      <item name="Nginx Module: ngx_http_upstream_module" href="quickstart/nginx/http-upstream-module.html"/>
+      <item name="Nginx WebSocket Proxying" href="quickstart/nginx/websocket-proxying.html"/>
+      <item name="ProGuard Obfuscation Options" href="quickstart/proguard/obfuscation-options.html"/>
     </menu>
     <menu name="Cookbook">
       <item name="AsciiDoc Table" href="cookbook/asciidoc-table.html"/>
