@@ -98,11 +98,11 @@ public class GreetingMojo extends AbstractMojo
 `install` | 在本地存储库中安装插件`jar`
 `deploy` | 将插件`jar`部署到远程存储库
 
-有关更多详细信息，您可以查看[`maven-plugin`打包的详细绑定](https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_maven-plugin_packaging)。
+有关更多详细信息，你可以查看[`maven-plugin`打包的详细绑定](https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_maven-plugin_packaging)。
 
 ### 执行你的第一个Mojo
 
-执行新插件的最直接方法是直接在命令行上指定插件`goal`。为此，您需要在项目中配置`hello-maven-plugin`插件：
+执行新插件的最直接方法是直接在命令行上指定插件`goal`。为此，你需要在项目中配置`hello-maven-plugin`插件：
 
 ```xml
 ...
@@ -118,13 +118,13 @@ public class GreetingMojo extends AbstractMojo
 ...
 ```
 
-而且，您需要以下列形式指定完全合格的`goal`：
+而且，你需要以下列形式指定完全合格的`goal`：
 
 ```shell
 mvn groupId:artifactId:version:goal
 ```
 
-例如，要在示例插件中运行简单的`mojo`，您可以在命令行中输入`mvn sample.plugin:hello-maven-plugin:1.0-SNAPSHOT:sayhi`。
+例如，要在示例插件中运行简单的`mojo`，你可以在命令行中输入`mvn sample.plugin:hello-maven-plugin:1.0-SNAPSHOT:sayhi`。
 
 **提示**：运行独立`goal`不需要指定版本。
 
@@ -133,8 +133,8 @@ mvn groupId:artifactId:version:goal
 有几种方法可以减少命令所需的输入量：
 
 - 如果需要运行本地存储库中安装最新版本的插件，则可以省略其版本号。所以只需使用`mvn sample.plugin:hello-maven-plugin:sayhi`来运行你的插件。
-- 您可以为插件指定一个缩短的前缀，例如`mvn hello:sayhi`。如果您遵循使用`${prefix}-maven-plugin` 或 `maven-${prefix}-plugin`（插件是`Apache Maven`项目的一部分）的约定，则会自动完成此操作。您还可以通过其他配置分配一个特定前缀 - 有关更多信息，请参阅[插件前缀映射简介](https://maven.apache.org/guides/introduction/introduction-to-plugin-prefix-mapping.html)。
-- 最后，您还可以将插件的`groupId`添加到默认搜索的`groupId`列表中。为此，您需要将以下内容添加到`${user.home}/.m2/settings.xml`文件中:
+- 你可以为插件指定一个缩短的前缀，例如`mvn hello:sayhi`。如果你遵循使用`${prefix}-maven-plugin` 或 `maven-${prefix}-plugin`（插件是`Apache Maven`项目的一部分）的约定，则会自动完成此操作。你还可以通过其他配置分配一个特定前缀 - 有关更多信息，请参阅[插件前缀映射简介](https://maven.apache.org/guides/introduction/introduction-to-plugin-prefix-mapping.html)。
+- 最后，你还可以将插件的`groupId`添加到默认搜索的`groupId`列表中。为此，你需要将以下内容添加到`${user.home}/.m2/settings.xml`文件中:
 
     ```xml
     <pluginGroups>
@@ -144,7 +144,7 @@ mvn groupId:artifactId:version:goal
 
 #### 将Mojo附加到构建生命周期
 
-您还可以配置插件以将特定`goal`附加到构建生命周期的特定`phase`。这是一个例子：
+你还可以配置插件以将特定`goal`附加到构建生命周期的特定`phase`。这是一个例子：
 
 ```xml
   <build>
@@ -310,7 +310,7 @@ mvn archetype:generate \
 
 ##### 枚举
 
-也可以使用枚举类型参数。首先，您需要定义枚举类型，然后可以在参数定义中使用枚举类型：
+也可以使用枚举类型参数。首先，你需要定义枚举类型，然后可以在参数定义中使用枚举类型：
 
 ```java
     public enum Color {
@@ -332,7 +332,7 @@ mvn archetype:generate \
 <myColor>GREEN</myColor>
 ```
 
-您还可以使用枚举类型中的元素作为`defaultValues`，如下所示：
+你还可以使用枚举类型中的元素作为`defaultValues`，如下所示：
 
 ```java
     public enum Color {
@@ -463,7 +463,7 @@ mvn archetype:generate \
 
 ## 使用Setters
 
-您不限于使用私有字段映射，如果您试图让`Mojos`在`Maven`的上下文之外也可以被重复使用，那么这是很好的。对于上面的示例，我们可以使用**下划线**约定命名我们的私有字段，并提供可使用的setter配置映射机制。所以我们的`Mojo`看起来如下示：
+你不限于使用私有字段映射，如果你试图让`Mojos`在`Maven`的上下文之外也可以被重复使用，那么这是很好的。对于上面的示例，我们可以使用**下划线**约定命名我们的私有字段，并提供可使用的setter配置映射机制。所以我们的`Mojo`看起来如下示：
 
 ```java
 public class MyQueryMojo extends AbstractMojo {
