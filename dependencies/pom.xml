@@ -27,6 +27,8 @@
     <dubbo.version>2.6.2</dubbo.version>
     <jquery.version>3.1.1</jquery.version>
     <bootstrap.version>4.1.0</bootstrap.version>
+    <stomp-websocket.version>2.3.3</stomp-websocket.version>
+    <socketjs-client.version>1.0.2</socketjs-client.version>
     <jesque.version>2.1.2</jesque.version>
     <json-lib.version>2.4</json-lib.version>
     <xom.version>1.2.5</xom.version>
@@ -151,6 +153,16 @@
         <groupId>org.webjars</groupId>
         <artifactId>bootstrap</artifactId>
         <version>${bootstrap.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.webjars</groupId>
+        <artifactId>sockjs-client</artifactId>
+        <version>${socketjs-client.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.webjars</groupId>
+        <artifactId>stomp-websocket</artifactId>
+        <version>${stomp-websocket.version}</version>
       </dependency>
       <dependency>
         <groupId>com.alibaba</groupId>
