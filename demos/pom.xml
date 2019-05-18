@@ -46,6 +46,7 @@
     <module>demo-solr</module>
     <module>demo-websocket</module>
     <module>demo-file-uploader</module>
+    <module>demo-jwt</module>
   </modules>
 
   <dependencies>
