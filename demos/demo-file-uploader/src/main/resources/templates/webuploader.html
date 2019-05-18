@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>webuploader demo</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/libs/bootstrap-3.3.7/css/bootstrap.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/libs/webuploader-0.1.5/webuploader.css}">
+</head>
+<body>
+<div id="uploader" class="wu-example">
+  <div class="btn-group" role="group">
+    <div id="picker">选择文件</div>
+    <button id="uploadBtn" class="btn btn-default">开始上传</button>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <ul id="uploaded-files" class="list-group"></ul>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" th:src="@{/libs/jquery-3.4.0/jquery.js}"></script>
+<script type="text/javascript" th:src="@{/libs/webuploader-0.1.5/webuploader.js}"></script>
+<script type="text/javascript">
+		var $list=$("#uploaded-files"); // 上传信息展示区
+		var $btn=$("#uploadBtn");       // 上传按钮
+		var btnState = 'pending';       // 初始按钮状态
+
+		function mergeChunks(file) {
+		    $.ajax({
+            type: 'POST',
+            // async: false, // 同步
+            // headers: file.token, // 请求token
+            url: '/api/files/merge',
+            data: {
+                md5: file.md5,
+                name: file.name,
+                size: file.size
+            },
+            success: function(response) {
+                // 刷新页面文件列表
+            },
+            error: function(xhr, textStatus, errorThrown) {
+            }
+        });
+		}
+
+		WebUploader.Uploader.register({
+			  "before-send-file" : "beforeSendFile",
+			  "before-send" : "beforeSend",
+			  "after-send-file" : "afterSendFile",
+		}, {
+        beforeSendFile : function(file) { // 1：所有分块进行上传之前调用
+            var deferred = WebUploader.Deferred();
+            this.owner
+                .md5File(file) // 计算文件的唯一标记
+                .progress(function(percentage) {
+                    $('#' + file.id).find("span.state").text("正在读取文件信息...");
+                }).then(function(val) {
+                    file.md5 = val;
+                    $('#' + file.id).find("span.state").text("成功获取文件信息...");
+
+                    console.log('在这里初始化分片');
+
+                    deferred.resolve();
+                });
+            return deferred.promise();
+        },
+        beforeSend : function(block) { // 2：每个分块上传之前调用
+            var deferred = WebUploader.Deferred();
+
+            // this.owner.md5File(block.blob) // 计算分片的唯一标记
+            // this.owner.md5File(block.file, block.start, block.end)
+
+            this.owner.options.formData = { // 扩展请求参数
+                md5: block.file.md5,
+                index: block.chunk
+            }
+            deferred.resolve();
+            return deferred.promise();
+        },
+        afterSendFile : function(file) { // 3：所有分块发送成功后调用
+        }
+		});
+
+		var uploader = WebUploader.create({
+        swf: 'webuploader-0.1.5//Uploader.swf', // swf文件路径
+        server: 'api/files/upload', // 文件接收服务端
+        dnd: '#uploader',
+        pick: { // 选择文件的按钮。内部根据当前运行时创建，可能是input元素，也可能是flash。
+          id: '#picker',
+          multiple: true
+        },
+        auto: true,
+        resize: true, // 不压缩image。默认如果是jpeg，文件上传前会压缩一把再上传。
+
+        method: 'POST',
+        fileVal: 'file',
+
+        threads: 2,
+        chunked: true,
+        chunkSize: 1 * 1024 * 1024,
+        chunkRetry: 1,
+        fileSingleSizeLimit: 100 * 1024 * 1024,
+
+        accept : {
+          extensions : "txt,jpg,jpeg,bmp,png,zip,rar,war,pdf,doc,docx,ppt,pptx,xls,xlsx,rvt",
+          mimeTypes : '.txt,.jpg,.jpeg,.bmp,.png,.zip,.rar,.war,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.rvt'
+        }
+		});
+
+		uploader.on('uploadBeforeSend', function(block, data, headers) {
+		    // headers = $.extend(headers, block.file.token); // 请求token
+		});
+
+		uploader.on('fileQueued', function(file) {
+			  $list.append('<li id="' + file.id + '" class="list-group-item list-group-item-info">'
+							+ '<span class="info">' + file.name + ' </span>'
+							+ '<span class="state">等待上传...</span></li>');
+		});
+
+		uploader.on('uploadProgress', function(file, percentage) {
+			  $('#' + file.id).find('span.state').text('上传中 ' + Math.round(percentage * 100) + '%');
+		});
+
+		uploader.on('uploadSuccess', function(file, response) {
+		    if (response != null && response != '') {
+            if (response.code == 200) {
+                $('#' + file.id).find('span.state').text('已上传');
+                return;
+            }
+		    }
+		    file.setStatus('error');
+		});
+
+		uploader.on('uploadError', function(file, reason) {
+			  $('#' + file.id).find('span.state').text('上传出错');
+			  file.setStatus('error', reason);
+		});
+
+		uploader.on('uploadComplete', function(file) {
+			  $('#' + file.id).find('.progress').fadeOut();
+			  if (file.status != 'error') {
+			      mergeChunks(file);
+			  }
+		});
+
+		uploader.on('all', function(type) {
+        if (type === 'startUpload') {
+            btnState = 'uploading';
+        } else if (type === 'stopUpload') {
+            btnState = 'paused';
+        } else if (type === 'uploadFinished') {
+            btnState = 'done';
+        }
+
+        if (btnState === 'uploading') {
+            $btn.text('暂停上传');
+        } else {
+            $btn.text('开始上传');
+        }
+		});
+
+		$btn.on('click', function(){
+        if (btnState === 'uploading'){
+            uploader.stop(true);
+        } else {
+            uploader.upload();
+        }
+		});
+</script>
+</body>
+</html>

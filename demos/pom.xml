@@ -45,6 +45,7 @@
     <module>demo-maven-site</module>
     <module>demo-solr</module>
     <module>demo-websocket</module>
+    <module>demo-file-uploader</module>
   </modules>
 
   <dependencies>
