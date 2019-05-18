@@ -12,6 +12,9 @@ import org.apache.commons.codec.digest.Md5Crypt;
  */
 public final class Md5Util {
 
+    /**
+     * 密码前缀
+     */
     public static final String PREFIX_PWD = "demo-jwt";
 
     private Md5Util() {

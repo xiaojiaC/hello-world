@@ -11,6 +11,9 @@ public final class ApiConstants {
     private ApiConstants() {
     }
 
+    /**
+     * 基础包名
+     */
     public static final String BASE_PACKAGE = "xj.love.hj.demo.jwt";
 
     /**
@@ -27,6 +30,9 @@ public final class ApiConstants {
      * 授权请求头，格式如：Authorization: Bearer <token>
      */
     public static final String HEADER_NAME_AUTH = "Authorization";
+    /**
+     * 授权请求头值前缀
+     */
     public static final String HEADER_VALUE_PREFIX_AUTH = "Bearer ";
 
 }
