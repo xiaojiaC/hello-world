@@ -47,6 +47,7 @@
     <module>demo-websocket</module>
     <module>demo-file-uploader</module>
     <module>demo-jwt</module>
+    <module>demo-ast</module>
   </modules>
 
   <dependencies>
