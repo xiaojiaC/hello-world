@@ -1,10 +1,14 @@
 # 如何运行
 
-- 执行`cd ./demo-ast-papa; mvn clean install`安装自定义注解处理器jar到本地库；
-- 执行`cd ../demo-ast-test; mvn clean compile`编译测试代码（使用了自定义注解）；
-  - 执行`javap target/classes/xj/love/hj/demo/ast/test/pojo/Sample.class`，查看对`@Getter`注解处理结果；
-  - 执行`javap target/classes/xj/love/hj/demo/ast/test/pojo/SampleBuilder.class`，查看对`@Builder`注解处理结果；
-- 运行`java -cp target/classes xj.love.hj.demo.ast.test.Application`查看结果。
+- 执行`mvn clean install -DskipTests=true`编译`demo-ast`项目；
+- 会安装`demo-asj-papa`模块自定义注解处理器jar到本地库；
+  - 在该模块下执行`javap target/classes/xj/love/hj/demo/ast/test/pojo/Sample.class`，查看对`@Getter`注解处理结果；
+  - 在该模块下执行`javap target/classes/xj/love/hj/demo/ast/test/pojo/SampleBuilder.class`，查看对`@Builder`注解处理结果；
+- 会安装`demo-jvmti-agent`模块自定义java agent jar到本地库；
+  - 启动`Application`类（增加jvm参数: -javaagent:${workspace}\hello-world\demos\demo-ast\demo-jvmti-agent\target\demo-jvmti-agent-1.0.0-SNAPSHOT.jar），
+  浏览器访问 http://localhost:8080/samples?name=sunny 在控制台查看启动时动态加载agent处理。
+  - 启动`AgentLoader`类（增加cmd参数: demo.ast.test.Application ${workspace}\hello-world\demos\demo-ast\demo-jvmti-agent\target\demo-jvmti-agent-1.0.0-SNAPSHOT.jar），
+  再次在浏览器访问 http://localhost:8080/samples?name=sunny 在控制台查看启动后动态加载agent处理。
 
 ## 禁用IDEA错误提示
 
@@ -13,6 +17,10 @@
 # javac编译步骤
 
 ![javac](./images/javac.png)
+
+# java agent原理
+
+![javaagent](./images/java-agent.png)
 
 # 插件化注解处理API使用步骤
 
@@ -29,3 +37,6 @@
 
 > [JSR 269: Pluggable Annotation Processing API](https://jcp.org/en/jsr/detail?id=269)
 & [Lombok reduces your boilerplate code](https://blog.frankel.ch/lombok-reduces-your-boilerplate-code/)
+& [JVM Tool API](https://docs.oracle.com/javase/7/docs/platform/jvmti/jvmti.html)
+& [java.lang.instrument](https://docs.oracle.com/javase/8/docs/api/java/lang/instrument/package-summary.html)
+& [byte buddy](https://github.com/raphw/byte-buddy)

@@ -21,6 +21,7 @@
 
   <modules>
     <module>demo-ast-papa</module>
+    <module>demo-jvmti-agent</module>
     <module>demo-ast-test</module>
   </modules>
 </project>
