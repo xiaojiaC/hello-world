@@ -53,6 +53,7 @@
     <flatten-maven-plugin.version>1.0.1</flatten-maven-plugin.version>
     <xml-maven-plugin.version>1.0.2</xml-maven-plugin.version>
     <build-helper-maven-plugin.version>3.0.0</build-helper-maven-plugin.version>
+    <maven-shade-plugin.version>2.4.3</maven-shade-plugin.version>
     <jacoco-maven.plugin>0.8.2</jacoco-maven.plugin>
     <findbugs-maven-plugin.version>3.0.4</findbugs-maven-plugin.version>
     <maven-checkstyle-plugin.version>3.0.0</maven-checkstyle-plugin.version>
@@ -308,6 +309,11 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>build-helper-maven-plugin</artifactId>
           <version>${build-helper-maven-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>${maven-shade-plugin.version}</version>
         </plugin>
         <plugin>
           <groupId>org.springframework.boot</groupId>

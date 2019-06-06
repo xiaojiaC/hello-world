@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Premain-Class: xj.love.hj.demo.jvmti.agent.TimerAgent
+Agent-Class: xj.love.hj.demo.jvmti.agent.TimerAgent
+Can-Redefine-Classes: true
+Can-Retransform-Classes: true
