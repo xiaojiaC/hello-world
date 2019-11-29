@@ -1,0 +1,419 @@
+= fabric8io/docker-maven-plugin
+Version 0.21.0,2017-06-10
+
+== 介绍
+
+这是一个用于管理Docker镜像和容器的Maven插件。它关注Docker构建集成的两个主要方面：
+
+=== 构建镜像
+
+此插件的一个目的是创建持有实际应用程序的Docker镜像。这是通过<<docker:build>>目标完成。将构建工件及其依赖项包含在镜像中很容易。因此，此插件使用__maven-assembly-plugin__中的汇编
+描述符格式来指定将从镜像中的子目录添加的内容(默认为 `{backslash}maven` )。使用此插件构建的镜像可以通过<<docker:push>>到公共或私人Docker仓储。
+
+=== 运行容器
+
+使用此插件可以运行完全隔离的集成测试，因此你不需要处理共享资源。端口可以​​动态映射，并作为Maven属性提供给集成测试代码。
+
+可以一次管理多个容器，这些容器可以链接在一起或通过卷共享数据。容器是由docker创建并启动的通过<<docker:start>>目标，并使用docker进行停止和销毁通过使用<<docker：stop>>目标。
+对于集成测试，这两个目标通常分别与**pre-integration-test**和**post-integration-test**阶段相结合。建议使用__maven-failuresafe-plugin__进行集成测试，以便在测试失败时
+停止docker容器。
+
+为了正确隔离，容器暴露端口可以动态和灵活地映射到本地主机端口。在容器启动后，很容易指定一个Maven属性，该属性将被动态分配的端口填充。然后可以将其用作连接到应用程序的集成测试的参数。
+
+=== 配置
+
+插件配置包含全局部分和 `<images>` 列表中的镜像特定配置列表，其中每个镜像在 `<image>` 标签内定义。见<<下面>>的例子。
+
+<<全局部分>>包含适用于所有镜像的配置，如Docker URL或与Docker主机进行通信的SSL证书的路径。
+
+然后，每个具体的镜像配置有三个部分：
+
+* 包含镜像名称和别名的一般镜像部分。
+* 指定如何构建图像的<<<build>>>配置。
+* 描述如何创建和启动容器的<<<run>>>配置。
+
+`<build>` 和 `<run>` 配置是可选的，可以省略。
+
+=== 样例
+
+在以下示例中，指定了两个镜像。一个是Docker Hub的官方PostgreSQL 9映像，内部引用别名“database”。它只有一个<<<run>>>部分，它声明启动应该等待直到给定的文本模式在日志输出中匹配。
+接下来是一个“service”图像，它有一个<<<build>>>部分。它创建一个在 `/maven` 目录中具有工件和依赖关系的镜像（并且使用assembly描述符指定）。此外，它还指定了容器的启动命令，该命令在此
+示例中通过组件描述符从复制的jar文件中触发一个微服务器。它还暴露端口8080。在 `<run>` 部分，此端口映射到动态选择的端口，然后分配给Maven属性 `${tomcat.port}`。该属性可以用于例如
+通过集成测试来访问该微服务器。重要的部分是 `<links>` 部分，表示具有“database”别名的映像链接到“service”容器中，该容器可以通常以Docker方式访问内部端口（通过以 `DB_` 为前缀的环境变量）。
+
+可以以任何顺序指定镜像，插件将处理正确的启动顺序（如果检测到循环依赖关系，则会保留）
+
+[source,xml]
+.Example plugin configuration
+----
+<configuration>
+  <images>
+    <image>
+      <alias>service</alias> <!--1-->
+      <name>fabric8/docker-demo:${project.version}</name> 
+
+      <build> <!--2-->
+         <from>java:8</from> <!--3-->
+         <assembly>
+           <descriptor>docker-assembly.xml</descriptor> <!--4-->
+         </assembly>
+         <cmd> <!--5-->
+            <shell>java -jar /maven/service.jar</shell>
+         </cmd>
+      </build>
+
+      <run> <!--6-->
+         <ports> <!--7-->
+           <port>tomcat.port:8080</port>
+         </ports>
+         <wait> <!--8-->
+           <http>
+              <url>http://localhost:${tomcat.port}/access</url>
+           </http>
+           <time>10000</time>
+         </wait>
+         <links> <!--9-->
+           <link>database:db</link>
+         </links>
+       </run>
+    </image>
+
+    <image>
+      <alias>database</alias> <!--10-->
+      <name>postgres:9</name>
+      <run>
+        <wait> <!--11-->
+          <log>database system is ready to accept connections</log>
+          <time>20000</time>
+        </wait>
+      </run>
+    </image>
+  </images>
+</configuration>
+----
+<1> 具有别名“service”和名字是 `fabric8/docker-demo:${project.version}` 的Java服务的镜像配置
+<2> <<构建配置>>定义了如何创建Docker镜像
+<3> 基本镜像，在这种情况下为 `java：8`
+<4> 可以使用<<assembly描述符>>指定镜像的内容
+<5> 创建容器时运行的<<默认命令>>
+<6> <<运行配置>>定义如何从此镜像创建容器
+<7> <<端口映射>>定义容器端口应如何映射到主机端口
+<8> <<等待>>部分，这是启动服务是否准备就绪的检查
+<9> <<网络链接>>描述了此服务的容器如何链接到数据库容器
+<10> 第二个镜像是一个纯粹的数据库映像，只需要运行（因此没有<build>部分）。别名被上面的网络链接部分使用
+<11> 在启动Docker容器时，请等待相应的输出出现在stdout上。
+
+=== 1.5. 特征
+
+其他一些亮点，按随机顺序排列：
+
+* 自动拉动图像并使用进度指示器
+* 基于时间等待容器启动，URL的可达性或日志输出中的模式
+* 支持SSL<<认证>>和OpenShift凭证
+* Docker machine 支持
+* 灵活的注册表处理（即注册表可以指定为元数据）
+* 在 `\~/.m2/settings.xml` (即在pom.xml之外)中声明<<加密>>的注册表密码，用于推送或拉取镜像
+* 彩色输出
+* <<检测>>项目变更和镜像自动再造
+* <<属性>>作为XML配置的替代
+* 支持Docker守护程序通过TCP和Unix套接字接受http或https请求
+
+== 安装
+
+该插件可从Maven Central获得，可以连接到集成**pre-**和**post-**阶段，如下所示。配置和可用目标如下所述。
+
+[source,xml]
+.Example
+-----
+<plugin>
+  <groupId>io.fabric8</groupId>
+  <artifactId>docker-maven-plugin</artifactId>
+  <version>0.21.0</version>
+
+  <configuration>
+     ....
+     <images>
+        <!-- A single's image configuration -->
+        <image>
+           ....
+        </image>
+        ....
+     </images>
+  </configuration>
+
+  <!-- Connect start/stop to pre- and
+       post-integration-test phase, respectively if you want to start
+       your docker containers during integration tests -->
+  <executions>
+    <execution>
+       <id>start</id>
+       <phase>pre-integration-test</phase>
+       <goals>
+         <!-- "build" should be used to create the images with the
+              artifact -->
+         <goal>build</goal>
+         <goal>start</goal>
+       </goals>
+    </execution>
+    <execution>
+       <id>stop</id>
+       <phase>post-integration-test</phase>
+       <goals>
+         <goal>stop</goal>
+      </goals>
+    </execution>
+  </executions>
+</plugin>
+-----
+
+当使用此插件时，你可以使用自己的包装使用专门的生命周期，以保持你的pom文件微小。有三种包装形式可供选择：
+
+* **docker**： 这将绑定 `docker:build` 到 `package` 阶段和 `docker:start` / `docke:stop` 分别到 `pre-` 和　`post-` 集成阶段。`docker:push` 绑定到 `deploy` 阶段。
+* **docker-build**: 很像__docker__包装，除了默认情况下没有配置集成测试。
+* **docker-tar**: 创建一个所谓的__Docker tar__存档，它用作工件，以后可以用于构建镜像。它基本上包含一个 `Dockerfile` 和支持文件。有关详细信息，请参阅<<docker:source>>。
+
+这些maven packaging定义包括jar生命周期方法，因此它们非常适合于简单的Microservice样式项目。
+
+[source,xml]
+.Example
+-----
+<pom>
+  <artifactId>demo</artifactId>
+  <version>0.0.1</version>
+  <packaging>docker</packaging>
+  ...
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>io.fabric8</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <images>
+            <image>
+            ...
+            </image>
+          </images>
+        </configuration>
+      </plugin>
+    </plugins>
+    ....
+  </build>
+</pom>
+-----
+
+这将创建jar（如果有），构建Docker镜像，启动配置的Docker容器，运行集成测试，当你输入mvn install时停止配置的Docker容器。使用 `mvn deploy`，你可以另外将镜像推送到配置的Docker仓储。
+请注意使用自定义生命周期时必需使用 `<extensions>true</extensions>`
+
+本手册的其余部分现在将介绍如何为镜像配置插件。
+
+== 全局配置
+
+全局配置参数指定的整体行为，如连接到Docker主机。括号内给出相应的系统属性，可用于从外部设置它。
+
+docker-maven-plugin插件使用Docker remote API，你的Docker守护进程必须指定URL。URL可以由dockerHost或机器配置中指定，或由 `DOCKER_HOST` 环境变量。
+
+Docker remote API支持通过SSL认证证书通信。该证书的路径可以由certPath或机器配置中指定，或由 `DOCKER_CERT_PATH` 环境变量。
+
+.Global Configuration
+|===
+| Element | Description | Property
+
+| **apiVersion**
+| 如果你使用的是旧版本的Docker不与当前默认使用与服务器通信的兼容,则使用这个变量
+| docker.apiVersion
+
+| **authConfig**
+| pull或push Docker注册表的认证信息。对于安全性，有专门的一节介绍<<身份验证>>
+|
+
+| **autoCreateCustomNetworks**
+| 如果在镜像的运行配置中提供自定义网络，在 `docker:start` 期间自动创建Docker网络，并在 `docker:stop` 时自动移除它，默认值是 `false`
+| docker.autoCreateCustomNetworks
+
+| **autoPull** 
+| 决定如何pull丢失的基本镜像或启动镜像:
+
+* on: 自动下载任何丢失的镜像（默认）
+* off: 关闭自动拉取
+* always: 即使在本地已经存在，也总是要拉镜像
+* once: 对于多模块构建，只检查一次镜像并将其应用到整个构建过程中
+
+默认情况下，在控制台上输出一个进度表，在批处理模式中使用Maven(选项 `-B`)时省略。一个非常简单的进度表是采用无彩色输出（即 `-Ddocker.useColor=false`）
+| docker.autoPull
+
+| **certPath**
+|
+|
+
+| **dockerHost**
+|
+|
+
+| **filter**
+|
+|
+
+| **logDate**
+| 用于打印容器日志的日期格式。这种配置可以由单独的运行配置覆盖，会在下文描述。<<Logging>>中描述了格式。
+| docker.logDate
+
+| **logStdout**
+| 如果设置为true对于所有容器记录到标准输出，则不管是否指定日志输出文件。见<<Logging>>
+| docker.logStdout
+
+| **machine**
+| Docker machine配置。看<<Docker Machine>>的可能值
+|
+
+| **maxConnections**
+| 可以打开Docker主机的并行连接数。为了解析日志输出，需要保持一个连接（对于wait特性也是如此。），所以不要把这个数字放低。默认值为100，应该适合大多数情况
+| docker.maxConnections
+
+| **outputDirectory**
+| 此插件将使用的默认输出目录。默认值是 `target/docker` 和仅用于目标 `docker:build`
+| docker.target.dir
+
+| **portPropertyFile**
+| 
+|
+
+| **registry**
+| 在全局指定一个用于pull和push镜像的注册表。有关详细信息，请参见<<注册表处理>>
+| docker.registry
+
+| **skip**
+| 完全跳过插件的执行
+| docker.skip
+
+| **skipBuild**
+| 如果没有设置, `docker:build` 时镜像将被建立(设置时也意味着 `skip.tag` )
+| docker.skip.build
+
+| **skipPush**
+| 如果设置，`docker:push` 时不推送任何镜像
+| docker.skip.push
+
+| **skipRun**
+| 如果设置，`docker:start` 或 `docker:run` 时将不创建和开启任何容器
+| docker.skip.run
+
+| **skipTag**
+| 如果设置为true，这个插件不会添加任何标签到 `docker:build` 构建的镜像
+| docker.skip.tag
+
+| **skipMachine**
+| 在任何情况下不使用docker machine
+| docker.skip.machine
+
+| **sourceDirectory**
+| 包含插件使用的assembly描述符的默认目录。默认值是 `src/main/docker` 。这个选项仅和 `docker:build` 相关
+| docker.source.dir
+
+| **useColor**
+| 是否使用彩色日志输出。默认情况下，在控制台上运行时打开此开关，否则关闭。
+| docker.useColor
+
+| **verbose**
+| 用于在标准输出上打开详细输出的布尔属性。这包括像build步骤时的详细信息。默认为false
+| docker.verbose
+|===
+
+[source,xml]
+.Example
+----
+<configuration>
+   <dockerHost>https://localhost:2376</dockerHost>
+   <certPath>src/main/dockerCerts</certPath>
+   <useColor>true</useColor>
+   .....
+</configuration>
+----
+
+.Docker Machine Options
+|===
+| Element | Description
+
+| **name**
+| Docker machine的名字。默认是 `default`
+
+| **autoCreate**
+| 如果设置为true，Docker machine会自动创建。默认为 `false`
+
+| **createOptions**
+| 在自动创建Docker machine时，使用的Docker machine的选项Map。看docker machine文档了解更多可能选项
+|===
+
+== 镜像配置
+
+插件的配置以__镜像__为中心。这些配置是在配置中的每一个镜像中指定的，每个镜像使用一个 `<image>` 元素。
+
+`<image>` 元素可以包含以下子元素：
+
+.Image Configuration
+|===
+| Element | Description
+
+| **name**
+| 每个 `<image>` 配置具有强制性，唯一的docker仓库名称。这可以包括注册表和tag部分，但也包括占位符参数。请看下面的详细说明。
+
+| **alias**
+| 可用于在此配置中标示镜像的快捷名称。当将镜像link在一起或用全局**image**配置元素指定时，就会使用此方法。
+
+| **<<registry>>**
+| 用于此映像的注册表。如果 `name` 已经包含注册表，则优先使用。有关详细信息，请参见<<注册表处理>>
+
+| **<<build>>**
+| 在做<<docker:build>>时包含所有配置方面的元素。如果只从注册表中提取镜像，则可以省略此元素，例如对数据库镜像等集成测试的支持。
+
+| **<<run>>**
+| 描述容器应该如何创建和运行在 `docker:start` 时的元素。如果此映像仅被用做__数据容器__(也就是说只被安装为卷)，则可以忽略该部分。
+
+| **<<external>>**
+| 外部配置的规范作为基于XML的配置 `<run>` 和 `<build>` 的替代方式。它包含一个 `<type>` 元素，指定用于获取配置的处理程序。详细信息请参见<<外部配置>>
+|===
+
+.名称的占位符
+
+指定名称时可以使用多个占位符，在运行时通过这个插件替换。此外，你还可以使用Maven本身解析的常规Maven属性。
+
+.Placeholders
+|===
+| Placeholder | Description
+
+| **%g**
+| Maven group名称的最后一部分，经过简化，以便可以作为GitHub上的用户名。只有在最后一个点之后的才会使用。例如，对于一个组 `io.fabric8` 这个占位符将插入 `fabric8`
+
+| **%a**
+| artefact id的一个简化版本，以便它可以用作Docker镜像名称的一部分。也就是说，它被转换全小写格式(根据Docker的要求)
+
+| **%v**
+| 项目版本。`${project.version}` 的同义词
+
+| **%l**
+| 如果项目版本以 `-SNAPSHOT` 结束，那么这个占位符是 `latest`，否则是它的完整版本（与%v相同）。
+
+| **%t**
+| 如果项目版本以 `-SNAPSHOT` 结束，这个占位符解析为 `snapshot-<timestamp>`。时间戳具有日期格式 `yymmdd-hhmmss-ssss` (例如 `snapshot-`)。
+这一特性在oder的开发过程中特别有用，以避免在镜像被更新时发生冲突。不过，你需要注意自己事后清理旧镜像。
+|===
+
+必须存在 `<build>` 或 `<run>` 部分。这些都在相应的目标部分中详细说明。
+
+[source,xml]
+.Example
+----
+<configuration>
+  ....
+  <images>
+    <image>
+      <name>%g/docker-demo:0.1</name>
+      <alias>service</alias>
+      <run>....</run>
+      <build>....</build>
+    </image>
+  </images>
+</configuration>
+----
+
+TIP: https://dmp.fabric8.io[原文链接]

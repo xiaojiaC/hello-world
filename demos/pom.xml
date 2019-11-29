@@ -25,13 +25,30 @@
     <spring-boot.api>
       https://docs.spring.io/spring-boot/docs/${sprint-boot-dependencies.version}/api/
     </spring-boot.api>
+    <spring-data-core.api>
+      https://docs.spring.io/spring-data/commons/docs/${sprint-boot-dependencies.version}/api/
+    </spring-data-core.api>
+    <spring-jpa.api>
+      https://docs.spring.io/spring-data/jpa/docs/${sprint-boot-dependencies.version}/api/
+    </spring-jpa.api>
     <maven-plugin.api>http://maven.apache.org/ref/3.6.0/maven-plugin-api/apidocs/</maven-plugin.api>
     <maven-plugin-tools.api>http://maven.apache.org/plugin-tools/apidocs/</maven-plugin-tools.api>
   </properties>
 
   <modules>
     <module>demo-dubbo</module>
+    <module>demo-hello-java</module>
     <module>demo-maven-plugin</module>
+    <module>demo-maven-archetype</module>
+    <module>demo-spring-session</module>
+    <module>demo-spring-jpa</module>
+    <module>demo-maven-site</module>
+    <module>demo-solr</module>
+    <module>demo-websocket</module>
+    <module>demo-file-uploader</module>
+    <module>demo-jwt</module>
+    <module>demo-ast</module>
+    <module>demo-jmh</module>
   </modules>
 
   <dependencies>
@@ -125,6 +142,7 @@
               <goal>report-integration</goal>
             </goals>
           </execution>
+          <!-- 暂时禁用覆盖率检查
           <execution>
             <id>default-check</id>
             <goals>
@@ -145,6 +163,7 @@
               </rules>
             </configuration>
           </execution>
+          -->
         </executions>
       </plugin>
     </plugins>
@@ -156,6 +175,7 @@
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <configuration>
           <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+          <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
         </configuration>
       </plugin>
       <plugin>
@@ -176,6 +196,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-pmd-plugin</artifactId>
       </plugin>
+      <!-- Unable to locate Source XRef to link to - DISABLED -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jxr-plugin</artifactId>

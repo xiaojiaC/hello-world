@@ -27,6 +27,13 @@
     <dubbo.version>2.6.2</dubbo.version>
     <jquery.version>3.1.1</jquery.version>
     <bootstrap.version>4.1.0</bootstrap.version>
+    <stomp-websocket.version>2.3.3</stomp-websocket.version>
+    <socketjs-client.version>1.0.2</socketjs-client.version>
+    <jesque.version>2.1.2</jesque.version>
+    <json-lib.version>2.4</json-lib.version>
+    <xom.version>1.2.5</xom.version>
+    <cglib.version>3.2.6</cglib.version>
+    <springfox.version>2.9.2</springfox.version>
     <!-- Plugin versions -->
     <maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
     <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
@@ -35,6 +42,7 @@
     <maven-failsafe-plugin.version>2.22.0</maven-failsafe-plugin.version>
     <maven-pmd-plugin.version>3.10.0</maven-pmd-plugin.version>
     <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+    <maven-apt-plugin.version>1.0.4</maven-apt-plugin.version>
     <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
     <maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
     <maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
@@ -45,6 +53,7 @@
     <flatten-maven-plugin.version>1.0.1</flatten-maven-plugin.version>
     <xml-maven-plugin.version>1.0.2</xml-maven-plugin.version>
     <build-helper-maven-plugin.version>3.0.0</build-helper-maven-plugin.version>
+    <maven-shade-plugin.version>2.4.3</maven-shade-plugin.version>
     <jacoco-maven.plugin>0.8.2</jacoco-maven.plugin>
     <findbugs-maven-plugin.version>3.0.4</findbugs-maven-plugin.version>
     <maven-checkstyle-plugin.version>3.0.0</maven-checkstyle-plugin.version>
@@ -117,7 +126,7 @@
         <artifactId>starter-web-quick</artifactId>
         <version>${revision}</version>
       </dependency>
-      <!-- Other -->
+      <!-- Maven plugin -->
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-plugin-api</artifactId>
@@ -135,6 +144,7 @@
         <version>${maven-plugin-annotations.version}</version>
         <scope>provided</scope>
       </dependency>
+      <!-- Other -->
       <dependency>
         <groupId>org.webjars</groupId>
         <artifactId>jquery</artifactId>
@@ -146,6 +156,16 @@
         <version>${bootstrap.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.webjars</groupId>
+        <artifactId>sockjs-client</artifactId>
+        <version>${socketjs-client.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.webjars</groupId>
+        <artifactId>stomp-websocket</artifactId>
+        <version>${stomp-websocket.version}</version>
+      </dependency>
+      <dependency>
         <groupId>com.alibaba</groupId>
         <artifactId>druid</artifactId>
         <version>${druid.version}</version>
@@ -154,6 +174,27 @@
         <groupId>com.alibaba</groupId>
         <artifactId>dubbo</artifactId>
         <version>${dubbo.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.greghaines</groupId>
+        <artifactId>jesque</artifactId>
+        <version>${jesque.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>cglib</groupId>
+        <artifactId>cglib</artifactId>
+        <version>${cglib.version}</version>
+      </dependency>
+      <!-- Doc -->
+      <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger2</artifactId>
+        <version>${springfox.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger-ui</artifactId>
+        <version>${springfox.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -212,6 +253,11 @@
           <version>${maven-source-plugin.version}</version>
         </plugin>
         <plugin>
+          <groupId>com.mysema.maven</groupId>
+          <artifactId>maven-apt-plugin</artifactId>
+          <version>${maven-apt-plugin.version}</version>
+        </plugin>
+        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
           <version>${maven-resources-plugin.version}</version>
@@ -263,6 +309,11 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>build-helper-maven-plugin</artifactId>
           <version>${build-helper-maven-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>${maven-shade-plugin.version}</version>
         </plugin>
         <plugin>
           <groupId>org.springframework.boot</groupId>

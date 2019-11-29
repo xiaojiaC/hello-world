@@ -1,0 +1,2466 @@
+= Spring REST Docs
+:springRestDocsVersion: 2.0.3.RELEASE
+:springVersion: 5.0.x
+:springBootVersion: 2.1.0.RELEASE
+Version {springRestDocsVersion}
+:toclevels: 3
+
+// docs
+:docSpringBaseUrl: https://docs.spring.io/spring-framework/docs/{springVersion}
+:javadocSpringBaseUrl:  {docSpringBaseUrl}/javadoc-api
+:docSpringTestBaseUrl: {docSpringBaseUrl}/spring-framework-reference/testing.html
+:docSpringBootBaseUrl: https://docs.spring.io/spring-boot/docs/{springBootVersion}/reference/htmlsingle
+:docAsciidocBaseUrl: https://asciidoctor.org/docs/asciidoc-syntax-quick-reference
+
+// examples
+:srcSpringRestDocsBaseUrl: https://github.com/spring-projects/spring-restdocs
+:srcSpringRestDocs: {srcSpringRestDocsBaseUrl}/tree/v{springRestDocsVersion}
+:sampleSpringRestDocs: {srcSpringRestDocs}/samples
+
+通过将手写文档与使用Spring MVC Test生成的自动生成的片段相结合，记录RESTful服务。
+
+[[introduction]]
+== 介绍
+
+Spring REST Docs的目的是帮助你为RESTful服务生成准确且可读的文档。
+
+编写高质量的文档很困难。缓解这种困难的一种方法是使用非常适合工作的工具。为此，Spring REST Docs默认使用 
+http://asciidoctor.org/[Asciidoctor]。Asciidoctor处理纯文本并生成HTML，样式和布局以满足你的需求。如果你愿意，还可以将Spring REST Docs配置为使用Markdown。
+
+Spring REST Docs使用由Spring MVC<<spring-test.adoc#spring-mvc-test-framework,测试框架>>，Spring WebFlux的 {docSpringTestBaseUrl}#webtestclient[`WebTestClient`]或 http://rest-assured.io/[REST Assured 3]编写测试产生的片段。
+这种测试驱动的方法有助于保证服务文档的准确性。如果代码段不正确，则生成代码段的测试将失败。
+
+记录RESTful服务主要是描述其资源。每个资源描述的两个关键部分是它消耗的HTTP请求的详细信息以及它产生的HTTP响应。Spring REST Docs允许你使用这些资源以及HTTP请求和响应，从而使你的文档免受服务实现的内部细节的影响。这种分离可以帮助你记录服务的API而不是其实现。它还使你可以在不必重新编写文档的情况下变更实现。
+
+[[getting-started]]
+== 入门
+
+本节介绍如何开始使用Spring REST Docs。
+
+[[getting-started-sample-applications]]
+=== 样例应用
+
+如果你想直接进入，可以使用许多示例应用程序：
+
+[cols="3,2,10"]
+.MockMvc
+|===
+|  样例 | 构建系统 | 描述 
+
+| {sampleSpringRestDocs}/rest-notes-spring-data-rest[Spring Data REST]
+| Maven
+| 演示为使用Spring Data REST实现的服务创建入门指南和API指南。
+
+| {sampleSpringRestDocs}/rest-notes-spring-hateoas[Spring HATEOAS]
+| Gradle
+| 演示为使用Spring HATEOAS实现的服务创建入门指南和API指南。
+|===
+
+[cols="3,2,10"]
+.WebTestClient
+|===
+| 样例 | 构建系统 | 描述 
+
+| {sampleSpringRestDocs}/web-test-client[WebTestClient]
+| Gradle
+| 演示Spring REST Docs与Spring WebFlux的WebTestClient的使用。
+|===
+
+[cols="3,2,10"]
+.REST Assured
+|===
+| 样例 | 构建系统 | 描述 
+
+| {sampleSpringRestDocs}/rest-notes-grails[Grails]
+| Gradle
+| 演示使用 https://grails.org/[Grails]和 https://github.com/spockframework/spock[Spock]的Spring REST Docs。
+
+| {sampleSpringRestDocs}/rest-assured[REST Assured]
+| Gradle
+| 演示使用 http://rest-assured.io/[REST Assured]的Spring REST Docs。
+|===
+
+[cols="3,2,10"]
+.Advanced
+|===
+|样例 | 构建系统 | 描述 
+
+| {sampleSpringRestDocs}/rest-notes-slate[Slate]
+| Gradle
+| 演示使用Markdown和 https://github.com/tripit/slate[Slate]的Spring REST Docs。
+
+| {sampleSpringRestDocs}/testng[TestNG]
+| Gradle
+| 演示使用 http://testng.org/[TestNG]的Spring REST Docs。
+
+| {sampleSpringRestDocs}/junit5[JUnit 5]
+| Gradle
+| 演示使用 http://junit.org/junit5/[JUnit 5]的Spring REST Docs。
+|===
+
+[[getting-started-requirements]]
+=== 要求
+
+Spring REST Docs具有以下最低要求：
+
+- Java 8
+- Spring Framework 5 (5.0.2或更高版本)
+
+此外，`spring-restdocs-restassured` 模块具有以下最低要求：
+
+- REST Assured 3.0
+
+[[getting-started-build-configuration]]
+=== 构建配置
+
+使用Spring REST Docs的第一步是配置项目的构建。 {sampleSpringRestDocs}/rest-notes-spring-hateoas[Spring HATEOAS]和 {sampleSpringRestDocs}/rest-notes-spring-data-rest[Spring Data REST]示例分别包含一个 `build.gradle` 和 `pom.xml`，你可能希望将其用作参考。配置的关键部分如下所述。
+
+.Maven
+[source,xml,indent=0,role="primary"]
+----
+<dependency> 
+    <groupId>org.springframework.restdocs</groupId>
+    <artifactId>spring-restdocs-mockmvc</artifactId>
+    <version>2.0.3.RELEASE</version>
+    <scope>test</scope>
+</dependency>
+
+<build>
+    <plugins>
+        <plugin> 
+            <groupId>org.asciidoctor</groupId>
+            <artifactId>asciidoctor-maven-plugin</artifactId>
+            <version>1.5.3</version>
+            <executions>
+                <execution>
+                    <id>generate-docs</id>
+                    <phase>prepare-package</phase> 
+                    <goals>
+                        <goal>process-asciidoc</goal>
+                    </goals>
+                    <configuration>
+                        <backend>html</backend>
+                        <doctype>book</doctype>
+                    </configuration>
+                </execution>
+            </executions>
+            <dependencies>
+                <dependency> 
+                    <groupId>org.springframework.restdocs</groupId>
+                    <artifactId>spring-restdocs-asciidoctor</artifactId>
+                    <version>2.0.3.RELEASE</version>
+                </dependency>
+            </dependencies>
+        </plugin>
+    </plugins>
+</build>
+----
+
+.Gradle
+[source,gradle,indent=0,role="secondary"]
+----
+plugins { <1>
+    id "org.asciidoctor.convert" version "1.5.3"
+}
+
+dependencies {
+    asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.3.RELEASE' <2>
+    testCompile 'org.springframework.restdocs:spring-restdocs-mockmvc:2.0.3.RELEASE' <3>
+}
+
+ext { <4>
+    snippetsDir = file('build/generated-snippets')
+}
+
+test { <5>
+    outputs.dir snippetsDir
+}
+
+asciidoctor { <6>
+    inputs.dir snippetsDir <7>
+    dependsOn test <8>
+}
+----
+<1> 应用Asciidoctor插件。
+<2> 在 `asciidoctor` 配置中添加对 `spring-restdocs-asciidoctor` 的依赖。这将自动配置要在 `.adoc` 文件中使用的 `snippets` 属性，使其指向 `build/generated-snippets`。它还允许你使用 `operation` 块宏。
+<3> 在 `testCompile` 配置中添加对 `spring-restdocs-mockmvc` 的依赖。如果要使用REST Assured而不是MockMvc，请添加 `spring-restdocs-restassured` 依赖项。
+<4> 配置属性以定义生成的片段的输出位置。
+<5> 配置 `test` 任务以将片段目录添加为输出。
+<6> 配置 `asciidoctor` 任务。
+<7> 将片段目录配置为输入。
+<8> 使任务依赖于测试任务，以便在创建文档之前运行测试。
+
+[[getting-started-build-configuration-packaging-the-documentation]]
+==== 打包文档
+
+你可能希望将生成的文档打包在项目的jar文件中，例如将其作为Spring Boot的 {docSpringBootBaseUrl}/#boot-features-spring-mvc-static-content[静态内容]。为此，请配置项目的构建：
+
+. 在构建jar之前生成文档
+. 生成的文档包含在jar中
+
+.Maven
+[source,xml,indent=0,role="primary"]
+----
+<plugin> <1>
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctor-maven-plugin</artifactId>
+    <!-- … -->
+</plugin>
+<plugin> <2>
+    <artifactId>maven-resources-plugin</artifactId>
+    <version>2.7</version>
+    <executions>
+        <execution>
+            <id>copy-resources</id>
+            <phase>prepare-package</phase>
+            <goals>
+                <goal>copy-resources</goal>
+            </goals>
+            <configuration> <3>
+                <outputDirectory>
+                    ${project.build.outputDirectory}/static/docs
+                </outputDirectory>
+                <resources>
+                    <resource>
+                        <directory>
+                            ${project.build.directory}/generated-docs
+                        </directory>
+                    </resource>
+                </resources>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+----
+<1> 现有的Asciidoctor插件声明。 
+<2> 必须在Asciidoctor插件之后声明资源插件，因为它们绑定到同一阶段（`prepare-package`），并且资源插件必须在Asciidoctor插件之后运行，以确保文档在复制之前生成。
+<3> 将生成的文档复制到构建输出的 `static/docs` 目录中，该目录将包含在jar文件中。
+
+.Gradle
+[source,gradle,indent=0,role="secondary"]
+----
+bootJar {
+    dependsOn asciidoctor <1>
+    from ("${asciidoctor.outputDir}/html5") { <2>
+        into 'static/docs'
+    }
+}
+----
+<1> 确保在构建jar之前生成了文档。
+<2> 将生成的文档复制到jar的 `static/docs` 目录中。
+
+[[getting-started-documentation-snippets]]
+=== 生成文档片段
+
+Spring REST Docs使用Spring MVC<<spring-test.adoc#spring-mvc-test-framework,测试框架>>，Spring WebFlux的 {docSpringTestBaseUrl}#webtestclient[`WebTestClient`]或 http://rest-assured.io/[REST Assured]来向你正在记录的服务发出请求。然后，它会为请求和生成的响应生成文档片段。
+
+[[getting-started-documentation-snippets-setup]]
+==== 设置测试
+
+具体如何设置测试取决于你使用的测试框架。Spring REST Docs为JUnit 4和JUnit 5提供了一流的支持。其它测试框架也被支持，如TestNG，但需要稍微更多的设置。
+
+[[getting-started-documentation-snippets-setup-junit]]
+===== 设置JUnit 4测试
+
+使用JUnit 4时，生成文档片段的第一步是声明一个 `public JUnitRestDocumentation` 字段，并将其标注为JUnit `@Rule`。
+
+[source,java]
+----
+@Rule
+public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation();
+----
+
+默认情况下，`JUnitRestDocumentation` 规则会根据项目的构建工具自动配置输出目录：
+
+|===
+| 构建工具 | 输出目录 
+| Maven | `target/generated-snippets`
+| Gradle | `build/generated-snippets`
+|===
+
+在创建 `JUnitRestDocumentation` 实例时，可以通过提供输出目录来覆盖默认值：
+
+[source,java]
+----
+@Rule
+public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("custom");
+----
+
+接下来，提供 `@Before` 方法来配置MockMvc，WebTestClient或REST Assured：
+
+.MockMvc
+[source,java,indent=0,role="primary"]
+----
+private MockMvc mockMvc;
+
+@Autowired
+private WebApplicationContext context;
+
+@Before
+public void setUp() {
+    this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
+            .apply(documentationConfiguration(this.restDocumentation)) <1>
+            .build();
+}
+----
+<1> 使用 `MockMvcRestDocumentationConfigurer` 配置 `MockMvc` 实例。可以从 `org.springframework.restdocs.mockmvc.MockMvcRestDocumentation` 上的 `documentationConfiguration()` 静态方法获取此类的实例。
+
+.WebTestClient
+[source,java,indent=0,role="secondary"]
+----
+private WebTestClient webTestClient;
+
+@Autowired
+private WebApplicationContext context;
+
+@Before
+public void setUp() {
+    this.webTestClient = WebTestClient.bindToApplicationContext(this.context)
+            .configureClient()
+            .filter(documentationConfiguration(this.restDocumentation)) <1>
+            .build();
+}
+----
+<1> 通过将 `WebTestclientRestDocumentationConfigurer` 添加为 `ExchangeFilterFunction` 来配置 `WebTestClient` 实例。可以从 `org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation` 上的 `documentationConfiguration()` 静态方法获取此类的实例。
+
+.REST Assured
+[source,java,indent=0,role="secondary"]
+----
+private RequestSpecification spec;
+
+@Before
+public void setUp() {
+    this.spec = new RequestSpecBuilder().addFilter(
+            documentationConfiguration(this.restDocumentation)) <1>
+            .build();
+}
+----
+<1> 通过添加 `RestAssuredRestDocumentationConfigurer` 作为 `Filter` 来配置REST Assured。可以从 `org.springframework.restdocs.restassured3` 包中的 `RestAssuredRestDocumentation` 上的 `documentationConfiguration()` 静态方法获取此类的实例。
+
+配置程序应用合理的默认值，并提供用于自定义配置的API。有关更多信息，请参阅<<configuration,配置部分>>。
+
+[[getting-started-documentation-snippets-setup-junit-5]]
+===== 设置JUnit 5测试
+
+使用JUnit 5时，生成文档片段的第一步是将 `RestDocumentationExtension` 应用于测试类：
+
+[source,java]
+----
+@ExtendWith(RestDocumentationExtension.class)
+public class JUnit5ExampleTests {
+----
+
+为了测试典型的Spring应用程序，还应该应用 `SpringExtension`：
+
+[source,java]
+----
+@ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
+public class JUnit5ExampleTests {
+----
+
+`RestDocumentationExtension` 会根据项目的构建工具自动配置输出目录：
+
+|===
+| 构建工具 | 输出目录 
+| Maven | `target/generated-snippets`
+| Gradle | `build/generated-snippets`
+|===
+
+接下来，提供 `@BeforeEach` 方法来配置MockMvc，WebTestClient或REST Assured：
+
+.MockMvc
+[source,java,indent=0,role="primary"]
+----
+private MockMvc mockMvc;
+
+@BeforeEach
+public void setUp(WebApplicationContext webApplicationContext,
+        RestDocumentationContextProvider restDocumentation) {
+    this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+            .apply(documentationConfiguration(restDocumentation)) <1>
+            .build();
+}
+----
+<1> 使用 `MockMvcRestDocumentationConfigurer` 配置 `MockMvc` 实例。可以从 `org.springframework.restdocs.mockmvc.MockMvcRestDocumentation` 上的 `documentationConfiguration()` 静态方法获取此类的实例。
+
+.WebTestClient
+[source,java,indent=0,role="secondary"]
+----
+private WebTestClient webTestClient;
+
+@BeforeEach
+public void setUp(WebApplicationContext webApplicationContext,
+        RestDocumentationContextProvider restDocumentation) {
+    this.webTestClient = WebTestClient.bindToApplicationContext(webApplicationContext)
+            .configureClient()
+            .filter(documentationConfiguration(restDocumentation)) <1>
+            .build();
+}
+----
+<1> 通过将 `WebTestclientRestDocumentationConfigurer` 添加为 `ExchangeFilterFunction` 来配置 `WebTestClient` 实例。可以从 `org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation` 上的 `documentationConfiguration()` 静态方法获取此类的实例。
+
+.REST Assured
+[source,java,indent=0,role="secondary"]
+----
+private RequestSpecification spec;
+
+@Before
+public void setUp(RestDocumentationContextProvider restDocumentation) {
+    this.spec = new RequestSpecBuilder()
+            .addFilter(documentationConfiguration(restDocumentation)) <1>
+            .build();
+}
+----
+通过添加 `RestAssuredRestDocumentationConfigurer` 作为 `Filter` 来配置REST Assured。可以从 `org.springframework.restdocs.restassured3` 包中的 `RestAssuredRestDocumentation` 上的 `documentationConfiguration()` 静态方法获取此类的实例。
+
+配置程序应用合理的默认值，并提供用于自定义配置的API。有关更多信息，请参阅<<configuration,配置部分>>。
+
+===== 在没有JUnit的情况下设置测试
+
+未使用JUnit时的配置与使用时的配置大致相似。本节介绍了主要区别。 {sampleSpringRestDocs}/testng[TestNG]示例说明了该方法。
+
+第一个区别是应该使用 `ManualRestDocumentation` 代替 `JUnitRestDocumentation`，并且不需要 `@Rule` 注解：
+
+[source,java]
+----
+private ManualRestDocumentation restDocumentation = new ManualRestDocumentation();
+----
+
+其次，必须在每次测试之前调用 `ManualRestDocumentation.beforeTest(Class，String)`。这可以作为配置MockMvc，WebTestClient或REST Assured的方法的一部分来完成：
+
+.MockMvc
+[source,java,indent=0,role="primary"]
+----
+private MockMvc mockMvc;
+
+@Autowired
+private WebApplicationContext context;
+
+@BeforeMethod
+public void setUp(Method method) {
+    this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
+            .apply(documentationConfiguration(this.restDocumentation))
+            .build();
+    this.restDocumentation.beforeTest(getClass(), method.getName());
+}
+----
+
+.WebTestClient
+[source,java,indent=0,role="secondary"]
+----
+private WebTestClient webTestClient;
+
+@Autowired
+private WebApplicationContext context;
+
+@BeforeMethod
+public void setUp(Method method) {
+    this.webTestClient = WebTestClient.bindToApplicationContext(this.context)
+            .configureClient()
+            .filter(documentationConfiguration(this.restDocumentation)) 
+            .build();
+    this.restDocumentation.beforeTest(getClass(), method.getName());
+}
+----
+
+.REST Assured
+[source,java,indent=0,role="secondary"]
+----
+private RequestSpecification spec;
+
+@BeforeMethod
+public void setUp(Method method) {
+    this.spec = new RequestSpecBuilder().addFilter(
+            documentationConfiguration(this.restDocumentation))
+            .build();
+    this.restDocumentation.beforeTest(getClass(), method.getName());
+}
+----
+
+最后，每次测试后都必须调用 `ManualRestDocumentation.afterTest`。例如，使用TestNG：
+
+[source,java]
+----
+@AfterMethod
+public void tearDown() {
+    this.restDocumentation.afterTest();
+}
+----
+
+[[getting-started-documentation-snippets-invoking-the-service]]
+==== 调用RESTful服务
+
+现在已经配置了测试框架，它可以用于调用RESTful服务并记录请求和响应。例如：
+
+.MockMvc
+[source,java,indent=0,role="primary"]
+----
+this.mockMvc.perform(get("/").accept(MediaType.APPLICATION_JSON)) <1>
+    .andExpect(status().isOk()) <2>
+    .andDo(document("index")); <3>
+----
+<1> 调用服务的根（`/`）并指示接收 `application/json` 响应。
+<2> 断言服务产生了预期的响应。
+<3> 记录对服务的调用，将片段写入名为 `index` 的目录，该目录将位于已配置的输出目录下。片段由 `RestDocumentationResultHandler` 编写。可以从 `org.springframework.restdocs.mockmvc.MockMvcRestDocumentation` 上的 `document` 静态方法获取此类的实例。
+
+.WebTestClient
+[source,java,indent=0,role="secondary"]
+----
+this.webTestClient.get().uri("/").accept(MediaType.APPLICATION_JSON) <1>
+        .exchange().expectStatus().isOk() <2>
+        .expectBody().consumeWith(document("index")); <3>
+----
+<1> 调用服务的根（`/`）并指示接收 `application/json` 响应。
+<2> 断言服务产生了预期的响应。
+<3> 记录对服务的调用，将片段写入名为 `index` 的目录，该目录将位于已配置的输出目录下。这些片段由 `ExchangeResult` 的 `Consumer ` 编写。这样的消费者可以从 `org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation` 上的 `document` 静态方法获得。
+
+.REST Assured
+[source,java,indent=0,role="secondary"]
+----
+RestAssured.given(this.spec) <1>
+        .accept("application/json") <2>
+        .filter(document("index")) <3>
+        .when().get("/") <4>
+        .then().assertThat().statusCode(is(200)); <5>
+----
+<1> 应用在 `@Before` 方法中初始化的规范。
+<2> 指示需要 `application/json` 响应。
+<3> 记录对服务的调用，将片段写入名为 `index` 的目录，该目录将位于已配置的输出目录下。片段由 `RestDocumentationFilter` 编写。可以从 `org.springframework.restdocs.restassured3` 包中的 `RestAssuredRestDocumentation` 上的 `document` 静态方法获取此类的实例。
+<4> 调用服务的根（`/`）。
+<5> 断言服务产生预期的响应。
+
+默认情况下，会写入六个片段：
+
+- `<output-directory>/index/curl-request.adoc`
+- `<output-directory>/index/http-request.adoc`
+- `<output-directory>/index/http-response.adoc`
+- `<output-directory>/index/httpie-request.adoc`
+- `<output-directory>/index/request-body.adoc`
+- `<output-directory>/index/response-body.adoc`
+
+有关这些以及Spring REST Docs可以生成的其他代码段的更多信息，请参阅<<documenting-your-api,记录你的API>>。
+
+[[getting-started-using-the-snippets]]
+=== 使用片段
+
+在使用生成的代码段之前，必须创建 `.adoc` 源文件。只需要文件具有 `.adoc` 后缀，你可以将文件名命名为任意名称。结果HTML文件将具有相同的名称，但后缀为 `.html`。源文件和生成的HTML文件的默认位置取决于你使用的是Maven还是Gradle：
+
+|===
+|构建工具 | 源文件 | 生成的文件
+| Maven | `src/main/asciidoc/{asterisk}.adoc` | `target/generated-docs/{asterisk}.html`
+| Gradle | `src/docs/asciidoc/{asterisk}.adoc` | `build/asciidoc/html5/{asterisk}.html`
+|===
+
+然后，可以使用 {docAsciidocBaseUrl}/#include-files[include宏]将生成的片段包含在上面手动创建的Asciidoctor文件中。由构建配置中配置的 `spring-restdocs-asciidoctor` 自动设置的 `snippets` 属性可用于引用代码段输出目录。例如：
+
+[source,adoc]
+----
+\include::{snippets}/index/curl-request.adoc[]
+----
+
+[[documenting-your-api]]
+== 记录你的API
+
+本节提供有关使用Spring REST Docs记录API的更多详细信息。
+
+[[documenting-your-api-hypermedia]]
+=== 超媒体
+
+Spring REST Docs支持在 https://en.wikipedia.org/wiki/HATEOAS[基于Hypermedia]的API中记录链接：
+
+.MockMvc
+[source,java,indent=0,role="primary"]
+----
+this.mockMvc.perform(get("/").accept(MediaType.APPLICATION_JSON))
+    .andExpect(status().isOk())
+    .andDo(document("index", links( <1>
+            linkWithRel("alpha").description("Link to the alpha resource"), <2>
+            linkWithRel("bravo").description("Link to the bravo resource")))); <3>
+----
+<1> 配置Spring REST Docs以生成描述响应链接的片段。在 `org.springframework.restdocs.hypermedia.HypermediaDocumentation` 上使用 `links` 静态方法。
+<2> 期望一个rel为 `alpha` 的链接。在 `org.springframework.restdocs.hypermedia.HypermediaDocumentation` 上使用 `linkWithRel` 静态方法。
+<3> 期待一个rel为 `bravo` 的链接。
+
+.WebTestClient
+[source,java,indent=0,role="secondary"]
+----
+this.webTestClient.get().uri("/").accept(MediaType.APPLICATION_JSON).exchange()
+    .expectStatus().isOk().expectBody()
+    .consumeWith(document("index",links( <1>
+            linkWithRel("alpha").description("Link to the alpha resource"), <2>
+            linkWithRel("bravo").description("Link to the bravo resource")))); <3>
+----
+<1> 配置Spring REST Docs以生成描述响应链接的片段。在 `org.springframework.restdocs.hypermedia.HypermediaDocumentation` 上使用 `links` 静态方法。
+<2> 期望一个rel为 `alpha` 的链接。在 `org.springframework.restdocs.hypermedia.HypermediaDocumentation` 上使用 `linkWithRel` 静态方法。
+<3> 期待一个rel为 `bravo` 的链接。
+
+.REST Assured
+[source,java,indent=0,role="secondary"]
+----
+RestAssured.given(this.spec)
+    .accept("application/json")
+    .filter(document("index", links( <1>
+            linkWithRel("alpha").description("Link to the alpha resource"), <2>
+            linkWithRel("bravo").description("Link to the bravo resource")))) <3>
+    .get("/").then().assertThat().statusCode(is(200));
+----
+<1> 配置Spring REST Docs以生成描述响应链接的片段。在 `org.springframework.restdocs.hypermedia.HypermediaDocumentation` 上使用 `links` 静态方法。
+<2> 期望一个rel为 `alpha` 的链接。在 `org.springframework.restdocs.hypermedia.HypermediaDocumentation` 上使用 `linkWithRel` 静态方法。
+<3> 期待一个rel为 `bravo` 的链接。
+
+结果是生成一个名为 `links.adoc` 的片段，其中包含一个描述资源链接的表。
+
+TIP: 如果响应中的链接具有 `title`，则可以从其描述符中省略 `description`，并且将使用 `title`。如果省略 `description` 并且链接没有 `title`，则会发生错误。
+
+记录链接时，如果在响应中找到未记录的链接，则测试将失败。同样，如果在响应中找不到记录的链接且链接尚未标记为可选，则测试也将失败。
+
+如果你不想记录链接，可以将其标记为已忽略。这将防止它出现在生成的片段中，同时避免上述故障。
+
+链接也可以在宽松模式下记录，任何未记录的链接都不会导致测试失败。为此，请在 `org.springframework.restdocs.hypermedia.HypermediaDocumentation` 上使用 `relaxedLinks` 方法。在记录你只想关注链接子集的特定场景时，这非常有用。
+
+[[documenting-your-api-hypermedia-link-formats]]
+==== 超媒体链接格式
+
+默认情况下可以理解两种链接格式：
+
+- Atom - 链接应该在名为 `links` 的数组中。当响应的内容类型与 `application/json` 兼容时，默认使用。
+- HAL  - 链接应该位于名为 `_links` 的map中。当响应的内容类型与 `application/hal+json` 兼容时，默认使用。
+
+如果你使用Atom或HAL格式的链接但具有不同的响应内容类型，则可以为链接提供内置的 `LinkExtractor` 实现之一。例如：
+
+.MockMvc
+[source,java,indent=0,role="primary"]
+----
+.andDo(document("index", links(halLinks(), <1>
+        linkWithRel("alpha").description("Link to the alpha resource"),
+        linkWithRel("bravo").description("Link to the bravo resource"))));
+----
+<1> 表明链接是HAL格式。在 `org.springframework.restdocs.hypermedia.HypermediaDocumentation` 上使用 `halLinks` 静态方法。
+
+.WebTestClient
+[source,java,indent=0,role="secondary"]
+----
+.consumeWith(document("index",links(halLinks(), <1>
+        linkWithRel("alpha").description("Link to the alpha resource"),
+        linkWithRel("bravo").description("Link to the bravo resource"))));
+----
+<1> 表明链接是HAL格式。在 `org.springframework.restdocs.hypermedia.HypermediaDocumentation` 上使用 `halLinks` 静态方法。
+
+.REST Assured
+[source,java,indent=0,role="secondary"]
+----
+.filter(document("index", links(halLinks(), <1>
+        linkWithRel("alpha").description("Link to the alpha resource"),
+        linkWithRel("bravo").description("Link to the bravo resource"))))
+----
+<1> 表明链接是HAL格式。在 `org.springframework.restdocs.hypermedia.HypermediaDocumentation` 上使用 `halLinks` 静态方法。
+
+如果你的API以Atom或HAL以外的格式表示其链接，你可以提供自己的 `LinkExtractor` 接口实现，以从响应中提取链接。
+
+[[documenting-your-api-hypermedia-ignoring-common-links]]
+==== 忽略常见链接
+
+你可能希望在概述部分中记录一次，然后在API的其他文档中忽略它们，而不是记录每个响应所共有的链接，例如使用HAL时的 `self` 和 `curies`。为此，你可以构建对<<documenting-your-api-reusing-snippets,重用代码段的支持>>，以将链接描述符添加到预先配置为忽略某些链接的代码段。例如：
+
+[source,java]
+----
+public static LinksSnippet links(LinkDescriptor... descriptors) {
+    return HypermediaDocumentation.links(linkWithRel("self").ignored().optional(),
+            linkWithRel("curies").ignored()).and(descriptors);
+}
+----
+
+[[documenting-your-api-request-response-payloads]]
+=== 请求和响应有效载荷
+
+除了上述特定于<<documenting-your-api-hypermedia,超媒体>>的支持之外，还提供了对请求和响应有效载荷的一般文档的支持。
+
+默认情况下，Spring REST Docs将自动为请求正文和响应正文生成片段。这些片段分别命名为 `request-body.adoc` 和 `response-body.adoc`。
+
+[[documenting-your-api-request-response-payloads-fields]]
+==== 请求和响应字段
+
+为了提供有关请求或响应有效载荷的更详细文档，提供了对有效载荷字段进行记录的支持。
+
+考虑以下有效载荷：
+
+[source,json]
+----
+{
+    "contact": {
+        "name": "Jane Doe",
+        "email": "jane.doe@example.com"
+    }
+}
+----
+
+它的字段可以这样记录：
+
+.MockMvc
+[source,java,indent=0,role="primary"]
+----
+this.mockMvc.perform(get("/user/5").accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andDo(document("index",
+            responseFields( <1>
+                fieldWithPath("contact.email").description("The user's email address"), <2>
+                fieldWithPath("contact.name").description("The user's name")))); <3>
+----
+<1> 配置Spring REST Docs以生成可描述响应有效载荷中字段的代码段。要记录请求，可以使用 `requestFields`。两者都是 `org.springframework.restdocs.payload.PayloadDocumentation` 上的静态方法。
+<2> 期望具有路径 `contact.email` 的字段。在 `org.springframework.restdocs.payload.PayloadDocumentation` 上使用 `fieldWithPath` 静态方法
+<3> 期望具有路径 `contact.name` 的字段。
+
+.WebTestClient
+[source,java,indent=0,role="secondary"]
+----
+this.webTestClient.get().uri("user/5").accept(MediaType.APPLICATION_JSON)
+    .exchange().expectStatus().isOk().expectBody()
+    .consumeWith(document("user",
+        responseFields( <1>
+            fieldWithPath("contact.email").description("The user's email address"), <2>
+            fieldWithPath("contact.name").description("The user's name")))); <3>
+----
+<1> 配置Spring REST Docs以生成可描述响应有效载荷中字段的代码段。要记录请求，可以使用 `requestFields`。两者都是 `org.springframework.restdocs.payload.PayloadDocumentation` 上的静态方法。
+<2> 期望具有路径 `contact.email` 的字段。在 `org.springframework.restdocs.payload.PayloadDocumentation` 上使用 `fieldWithPath` 静态方法
+<3> 期望具有路径 `contact.name` 的字段。
+
+.REST Assured
+[source,java,indent=0,role="secondary"]
+----
+RestAssured.given(this.spec).accept("application/json")
+    .filter(document("user", responseFields( <1>
+            fieldWithPath("contact.name").description("The user's name"), <2>
+            fieldWithPath("contact.email").description("The user's email address")))) <3>
+    .when().get("/user/5")
+    .then().assertThat().statusCode(is(200));
+----
+<1> 配置Spring REST Docs以生成可描述响应有效载荷中字段的代码段。要记录请求，可以使用 `requestFields`。两者都是 `org.springframework.restdocs.payload.PayloadDocumentation` 上的静态方法。
+<2> 期望具有路径 `contact.email` 的字段。在 `org.springframework.restdocs.payload.PayloadDocumentation` 上使用 `fieldWithPath` 静态方法
+<3> 期望具有路径 `contact.name` 的字段。
+
+结果是生成一个片段，其中包含一个描述字段的表。对于请求，此代码段名为 `request-fields.adoc`。对于响应，此片段名为 `response-fields.adoc`。
+
+记录字段时，如果在有效载荷中找到未记录的字段，则测试将失败。同样，如果在有效载荷中找不到记录的字段且该字段未标记为可选，则测试也将失败。
+
+如果你不想提供所有字段的详细文档，则可以记录有效载荷的整个子部分。例如：
+
+.MockMvc
+[source,java,indent=0,role="primary"]
+----
+this.mockMvc.perform(get("/user/5").accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andDo(document("index",
+            responseFields(
+                subsectionWithPath("contact").description("The user's contact details")))); <1>
+----
+<1> 使用路径 `contact` 记录子部分。`contact.email` 和 `contact.name` 现在被视为已被记录。在 `org.springframework.restdocs.payload.PayloadDocumentation` 上使用 `subsectionWithPath` 静态方法。
+
+.WebTestClient
+[source,java,indent=0,role="secondary"]
+----
+this.webTestClient.get().uri("user/5").accept(MediaType.APPLICATION_JSON)
+    .exchange().expectStatus().isOk().expectBody()
+    .consumeWith(document("user",
+        responseFields(
+            subsectionWithPath("contact").description("The user's contact details")))); <1>
+----
+<1> 使用路径 `contact` 记录子部分。`contact.email` 和 `contact.name` 现在被视为已被记录。在 `org.springframework.restdocs.payload.PayloadDocumentation` 上使用 `subsectionWithPath` 静态方法。
+
+.REST Assured
+[source,java,indent=0,role="secondary"]
+----
+RestAssured.given(this.spec).accept("application/json")
+    .filter(document("user", responseFields(
+            subsectionWithPath("contact").description("The user's contact details")))) <1>
+    .when().get("/user/5")
+    .then().assertThat().statusCode(is(200));
+----
+<1> 使用路径 `contact` 记录子部分。`contact.email` 和 `contact.name` 现在被视为已被记录。在 `org.springframework.restdocs.payload.PayloadDocumentation` 上使用 `subsectionWithPath` 静态方法。
+
+`subsectionWithPath` 可用于提供有效载荷特定部分的高级概述。然后可以<<documenting-your-api-request-response-payloads-subsections,生成>>单独的，更详细的子部分文档。
+
+如果你根本不想记录字段或子部分，则可以将其标记为已忽略。这将防止它出现在生成的片段中，同时避免上述故障。
+
+字段也可以在宽松模式下记录，其中任何未记录的字段都不会导致测试失败。为此，请在 `org.springframework.restdocs.payload.PayloadDocumentation` 上使用 `relaxedRequestFields` 和 `relaxedResponseFields` 方法。在记录你只想关注有效载荷子集的特定场景时，这非常有用。
+
+TIP: 默认情况下，Spring REST Docs将假定你正在记录的有效载荷是JSON。如果要记录XML有效内容，请求或响应的内容类型必须与 `application/xml` 兼容。
+
+[[documenting-your-api-request-response-payloads-fields-json]]
+===== JSON有效载荷中的字段
+
+[[documenting-your-api-request-response-payloads-fields-json-field-paths]]
+====== JSON字段路径
+
+JSON字段路径使用点表示法或括号表示法。点符号使用'.'分离路径中的每个键，例如，`a.b`。括号表示法将每个键包装在方括号和单引号中，例如，`['a']['b']`。在任何一种情况下，`[]` 用于标识数组。点符号更简洁，但括号表示法可以使用在一个键名称内，例如 `['a.b']`。两种不同的符号可以在同一条路径中使用，例如，`a['b']`。
+
+使用此JSON作为有效载荷：
+
+[source,json]
+----
+{
+    "a":{
+        "b":[
+            {
+                "c":"one"
+            },
+            {
+                "c":"two"
+            },
+            {
+                "d":"three"
+            }
+        ],
+        "e.dot" : "four"
+    }
+}
+----
+
+以下路径均存在：
+
+|===
+| 路径 | 值 
+| `a` | 包含 `b` 的对象
+| `a.b` | 包含三个对象的数组
+| `['a']['b']` | 包含三个对象的数组
+| `a['b']` | 包含三个对象的数组
+| `['a'].b` | 包含三个对象的数组
+| `a.b[]` | 包含三个对象的数组
+| `a.b[].c` | 包含字符串 `one` 和 `two` 的数组
+| `a.b[].d` | 字符串 `three`
+| `a['e.dot']` | 字符串 `four`
+| `['a']['e.dot']` | 字符串 `four`
+|===
+
+还可以记录在其根目录中使用数组的有效载荷。路径 `[]` 将引用整个数组。然后，你可以使用括号或点表示法来标识数组条目中的字段。例如，`[].id` 对应于以下数组中找到的每个对象的 `id` 字段：
+
+[source,json]
+----
+[
+    {
+        "id":1
+    },
+    {
+        "id":2
+    }
+]
+----
+
+你可以使用 `{asterisk}` 作为通配符来匹配具有不同名称的字段。例如，`user.{asterisk}.role` 可用于记录以下JSON中每个用户的角色：
+
+[source,json]
+----
+{
+    "users":{
+        "ab12cd34":{
+            "role": "Administrator"
+        },
+        "12ab34cd":{
+            "role": "Guest"
+        }
+    }
+}
+----
+
+[[documenting-your-api-request-response-payloads-fields-json-field-types]]
+===== JSON字段类型
+
+记录字段时，Spring REST Docs将尝试通过检查有效载荷来确定其类型。支持七种不同类型：
+
+|===
+| 类型 | 描述
+| `array` | 每次出现的字段的值都是一个数组 
+| `boolean` | 每次出现的字段的值都是布尔值（`true` 或 `false`）
+| `object` | 每次出现的字段的值都是一个对象
+| `number` | 每次出现的字段的值都是一个数字
+| `null` | 每次出现该字段的值为 `null`
+| `string` | 每次出现的字段的值都是一个字符串
+| `varies` | 该字段在有效载荷中多次出现，具有各种不同类型
+|===
+
+也可以使用 `FieldDescriptor` 上的 `type(Object)` 方法显式设置类型，提供的对象的 `toString` 方法的结果将在文档中使用。通常，将使用 `JsonFieldType` 枚举的值之一：
+
+.MockMvc
+[source,java,indent=0,role="primary"]
+----
+.andDo(document("index",
+    responseFields(
+        fieldWithPath("contact.email").type(JsonFieldType.STRING) <1>
+            .description("The user's email address"))));
+----
+<1> 将字段的类型设置为 `String`。
+
+.WebTestClient
+[source,java,indent=0,role="secondary"]
+----
+.consumeWith(document("user",
+    responseFields(
+        fieldWithPath("contact.email")
+            .type(JsonFieldType.STRING) <1>
+            .description("The user's email address"))));
+----
+<1> 将字段的类型设置为 `String`。
+
+.REST Assured
+[source,java,indent=0,role="secondary"]
+----
+.filter(document("user", responseFields(
+    fieldWithPath("contact.email")
+        .type(JsonFieldType.STRING) <1>
+        .description("The user's email address"))))
+----
+<1> 将字段的类型设置为 `String`。
+
+[[documenting-your-api-request-response-payloads-fields-xml]]
+===== XML有效载荷
+
+[[documenting-your-api-request-response-payloads-fields-xml-field-paths]]
+====== XML字段路径
+
+使用XPath描述XML字段路径。`/` 用于下降到子节点。
+
+[[documenting-your-api-request-response-payloads-fields-xml-field-types]]
+====== XML字段类型
+
+记录XML有效内容时，必须使用 `FieldDescriptor` 上的 `type(Object)` 方法为字段提供类型。提供的类型的 `toString` 方法的结果将在文档中使用。
+
+[[documenting-your-api-request-response-payloads-fields-reusing-field-descriptors]]
+===== 重用字段描述符
+
+除了对<<documenting-your-api-reusing-snippets,重用代码段>>的一般支持之外，请求和响应代码段还允许使用路径前缀配置其他描述符。这允许一次性创建请求或响应有效载荷的重复部分的描述符，然后加以重用。
+
+考虑一个返回书籍的端点：
+
+[source,json]
+----
+{
+    "title": "Pride and Prejudice",
+    "author": "Jane Austen"
+}
+----
+
+`title` 和 `author` 的路径分别是 `title` 和 `author`。
+
+现在考虑一个返回书籍数组的端点：
+
+[source,json]
+----
+[{
+    "title": "Pride and Prejudice",
+    "author": "Jane Austen"
+},
+{
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee"
+}]
+----
+
+`title` 和 `author` 的路径分别是 `[].title` 和 `[].author`。单本书和书籍系列之间的唯一区别是字段的路径现在有一个 `[].` 前缀。
+
+可以创建记录书籍的描述符：
+
+[source,java]
+----
+FieldDescriptor[] book = new FieldDescriptor[] {
+        fieldWithPath("title").description("Title of the book"),
+        fieldWithPath("author").description("Author of the book") };
+----
+
+然后，它们可用于记录单本书：
+
+[source,java,indent=0,role="primary"]
+.MockMvc
+----
+this.mockMvc.perform(get("/books/1").accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk()).andDo(document("book", responseFields(book))); <1>
+----
+<1> 使用现有描述符标记 `title` 和 `author`
+
+[source,java,indent=0,role="secondary"]
+.WebTestClient
+----
+MockMvcWebTestClientREST Assured
+this.webTestClient.get().uri("/books/1").accept(MediaType.APPLICATION_JSON)
+    .exchange().expectStatus().isOk().expectBody()
+    .consumeWith(document("book",
+        responseFields(book))); <1>
+----
+<1> 使用现有描述符标记 title` 和 `author`
+
+[source,java,indent=0,role="secondary"]
+.REST Assured
+----
+RestAssured.given(this.spec).accept("application/json")
+    .filter(document("book", responseFields(book))) <1>
+    .when().get("/books/1")
+    .then().assertThat().statusCode(is(200));
+----
+<1> 使用现有描述符标记 title` 和 `author`
+
+记录书籍列表:
+
+[source,java,indent=0,role="primary"]
+.MockMvc
+----
+this.mockMvc.perform(get("/books").accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andDo(document("book",
+                responseFields(
+                        fieldWithPath("[]").description("An array of books")) <1>
+                                .andWithPrefix("[].", book))); <2>
+----
+<1> 记录数组
+<2> 记录 `[].title` 和 `[].author` 使用前缀为 `[].` 的现有描述符。
+
+[source,java,indent=0,role="secondary"]
+.WebTestClient
+----
+this.webTestClient.get().uri("/books").accept(MediaType.APPLICATION_JSON)
+    .exchange().expectStatus().isOk().expectBody()
+    .consumeWith(document("books",
+        responseFields(
+            fieldWithPath("[]")
+                .description("An array of books")) <1>
+                .andWithPrefix("[].", book))); <2>
+----
+<1> 记录数组
+<2> 记录 `[].title` 和 `[].author` 使用前缀为 `[].` 的现有描述符。
+
+[source,java,indent=0,role="secondary"]
+.REST Assured
+----
+RestAssured.given(this.spec).accept("application/json")
+    .filter(document("books", responseFields(
+        fieldWithPath("[]").description("An array of books")) <1>
+        .andWithPrefix("[].", book))) <2>
+    .when().get("/books")
+    .then().assertThat().statusCode(is(200));
+----
+<1> 记录数组
+<2> 记录 `[].title` 和 `[].author` 使用前缀为 `[].` 的现有描述符。
+
+[[documenting-your-api-request-response-payloads-subsections]]
+==== 记录请求或响应有效载荷的子部分
+
+如果有效载荷很大或结构复杂，则记录有效载荷的个别部分可能很有用。REST Docs允许你通过提取并记录有效载荷的某个子部分。
+
+[[documenting-your-api-request-response-payloads-subsections-body]]
+===== 记录请求或响应正文的子部分
+
+考虑以下JSON响应体：
+
+[source,json]
+----
+{
+    "weather": {
+        "wind": {
+            "speed": 15.3,
+            "direction": 287.0
+        },
+        "temperature": {
+            "high": 21.2,
+            "low": 14.8
+        }
+    }
+}
+----
+
+记录 `temperature` 对象的片段可以如下产生：
+
+[source,java,indent=0,role="primary"]
+.MockMvc
+----
+this.mockMvc.perform(get("/locations/1").accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk()).andDo(document("location",
+                responseBody(beneathPath("weather.temperature")))); <1>
+----
+<1> 生成包含响应正文子部分的片段。在 `org.springframework.restdocs.payload.PayloadDocumentation` 上使用 `responseBody` 和 `beneathPath` 静态方法。要为请求正文生成片段，可以使用 `requestBody` 替换 `responseBody`。
+
+[source,java,indent=0,role="secondary"]
+.WebTestClient
+----
+this.webTestClient.get().uri("/locations/1").accept(MediaType.APPLICATION_JSON)
+    .exchange().expectStatus().isOk().expectBody()
+    .consumeWith(document("temperature",
+        responseBody(beneathPath("weather.temperature")))); <1>
+----
+<1> 生成包含响应正文子部分的片段。在 `org.springframework.restdocs.payload.PayloadDocumentation` 上使用 `responseBody` 和`beneathPath` 静态方法。要为请求正文生成片段，可以使用 `requestBody` 替换 `responseBody`。
+
+[source,java,indent=0,role="secondary"]
+.REST Assured
+----
+RestAssured.given(this.spec).accept("application/json")
+    .filter(document("location", responseBody(beneathPath("weather.temperature")))) <1>
+    .when().get("/locations/1")
+    .then().assertThat().statusCode(is(200));
+----
+<1> 生成包含响应正文子部分的片段。在 `org.springframework.restdocs.payload.PayloadDocumentation` 上使用 `responseBody` 和`beneathPath` 静态方法。要为请求正文生成片段，可以使用 `requestBody` 替换 `responseBody`。
+
+结果生成一个包含以下内容的片段：
+
+[source,json]
+----
+{
+    "temperature": {
+        "high": 21.2,
+        "low": 14.8
+    }
+}
+----
+
+为了使代码段的名称不同，因此包含了该子部分的标识符。默认情况下，此标识符为 `beneath-${path}`。例如，上面的代码将生成一个名为 `response-body-beneath-weather.temperature.adoc` 的代码段。可以使用 `withSubsectionId(String)` 方法自定义标识符：
+
+[source,java]
+----
+responseBody(beneathPath("weather.temperature").withSubsectionId("temp"));
+----
+
+此示例将生成名为 `request-body-temp.adoc` 的代码段。
+
+[[documenting-your-api-request-response-payloads-subsections-fields]]
+===== 记录请求或响应的子部分的字段
+
+除了记录请求或响应主体的子部分之外，还可以记录特定子部分中的字段。记录 `temperature` 对象（`high` 和 `low`）字段的片段可以按如下方式生成：
+
+[source,java,indent=0,role="primary"]
+.MockMvc
+----
+this.mockMvc.perform(get("/locations/1").accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andDo(document("location",
+                responseFields(beneathPath("weather.temperature"), <1>
+                        fieldWithPath("high").description(
+                                "The forecast high in degrees celcius"), <2>
+                fieldWithPath("low")
+                        .description("The forecast low in degrees celcius"))));
+----
+<1> 生成描述 `weather.temperature` 路径下，响应有效载荷子部分中的字段的片段。在 `org.springframework.restdocs.payload.PayloadDocumentation` 上使用 `beneathPath` 静态方法。
+<2> 记录温度 `high` 和 `low` 字段。
+
+[source,java,indent=0,role="secondary"]
+.WebTestClient
+----
+this.webTestClient.get().uri("/locations/1").accept(MediaType.APPLICATION_JSON)
+    .exchange().expectStatus().isOk().expectBody()
+    .consumeWith(document("temperature",
+        responseFields(beneathPath("weather.temperature"), <1>
+            fieldWithPath("high").description("The forecast high in degrees celcius"), <2>
+            fieldWithPath("low").description("The forecast low in degrees celcius"))));
+----
+<1> 生成描述 `weather.temperature` 路径下，响应有效载荷子部分中的字段的片段。在 `org.springframework.restdocs.payload.PayloadDocumentation` 上使用 `beneathPath` 静态方法。
+<2> 记录温度 `high` 和 `low` 字段。
+
+[source,java,indent=0,role="secondary"]
+.REST Assured
+----
+RestAssured.given(this.spec).accept("application/json")
+    .filter(document("location", responseFields(beneathPath("weather.temperature"), <1>
+        fieldWithPath("high").description("The forecast high in degrees celcius"), <2>
+        fieldWithPath("low").description("The forecast low in degrees celcius"))))
+    .when().get("/locations/1")
+    .then().assertThat().statusCode(is(200));
+----
+<1> 生成描述 `weather.temperature` 路径下，响应有效载荷子部分中的字段的片段。在 `org.springframework.restdocs.payload.PayloadDocumentation` 上使用 `beneathPath` 静态方法。
+<2> 记录温度 `high` 和 `low` 字段。
+
+结果生成一个片段，其中包含一个描述 `weather.temperature` 的 `high` 和 `low` 字段的表。为了使代码段的名称不同，包含该子部分的标识符。默认情况下，此标识符为 `beneath-${path}`。例如，上面的代码将生成一个名为 `response-fields-beneath-weather.temperature.adoc` 的代码段。
+
+[[documenting-your-api-request-parameters]]
+=== 请求参数
+
+可以使用 `requestParameters` 记录请求的参数。请求参数可以包含在 `GET` 请求的查询字符串中。例如：
+
+[source,java,indent=0,role="primary"]
+.MockMvc
+----
+this.mockMvc.perform(get("/users?page=2&per_page=100")) <1>
+    .andExpect(status().isOk())
+    .andDo(document("users", requestParameters( <2>
+            parameterWithName("page").description("The page to retrieve"), <3>
+            parameterWithName("per_page").description("Entries per page") <4>
+    )));
+----
+<1> 使用查询字符串中的两个参数 `page` 和 `per_page` 执行 `GET` 请求。
+<2> 配置Spring REST Docs以生成描述请求参数的片段。在 `org.springframework.restdocs.request.RequestDocumentation` 上使用 `requestParameters` 静态方法。
+<3> 记录 `page` 参数。在 `org.springframework.restdocs.request.RequestDocumentation` 上使用 `parameterWithName` 静态方法。
+<4> 记录 `per_page` 参数。
+
+
+[source,java,indent=0,role="secondary"]
+.WebTestClient
+----
+this.webTestClient.get().uri("/users?page=2&per_page=100") <1>
+    .exchange().expectStatus().isOk().expectBody()
+    .consumeWith(document("users", requestParameters( <2>
+            parameterWithName("page").description("The page to retrieve"), <3>
+            parameterWithName("per_page").description("Entries per page") <4>
+    )));
+----
+<1> 使用查询字符串中的两个参数 `page` 和 `per_page` 执行 `GET` 请求。
+<2> 配置Spring REST Docs以生成描述请求参数的片段。在 `org.springframework.restdocs.request.RequestDocumentation` 上使用 `requestParameters` 静态方法。
+<3> 记录 `page` 参数。在 `org.springframework.restdocs.request.RequestDocumentation` 上使用 `parameterWithName` 静态方法。
+<4> 记录 `per_page` 参数。
+
+
+[source,java,indent=0,role="secondary"]
+.REST Assured
+----
+RestAssured.given(this.spec)
+    .filter(document("users", requestParameters( <1>
+            parameterWithName("page").description("The page to retrieve"), <2>
+            parameterWithName("per_page").description("Entries per page")))) <3>
+    .when().get("/users?page=2&per_page=100") <4>
+    .then().assertThat().statusCode(is(200));
+----
+<1> 配置Spring REST Docs以生成描述请求参数的片段。在 `org.springframework.restdocs.request.RequestDocumentation` 上使用 `requestParameters` 静态方法。
+<2> 记录 `page` 参数。在 `org.springframework.restdocs.request.RequestDocumentation` 上使用 `parameterWithName` 静态方法。
+<3> 记录 `per_page` 参数。
+<4> 使用查询字符串中的两个参数 `page` 和 `per_page` 执行 `GET` 请求。
+
+请求参数也可以作为表单数据包含在 `POST` 请求的主体中：
+
+[source,java,indent=0,role="primary"]
+.MockMvc
+----
+this.mockMvc.perform(post("/users").param("username", "Tester")) <1>
+    .andExpect(status().isCreated())
+    .andDo(document("create-user", requestParameters(
+            parameterWithName("username").description("The user's username")
+    )));
+----
+<1> 使用单个参数 `username` 执行 `POST` 请求。
+
+
+[source,java,indent=0,role="secondary"]
+.WebTestClient
+----
+MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+formData.add("username", "Tester");
+this.webTestClient.post().uri("/users").body(BodyInserters.fromFormData(formData)) <1>
+    .exchange().expectStatus().isCreated().expectBody()
+    .consumeWith(document("create-user", requestParameters(
+        parameterWithName("username").description("The user's username")
+)));
+----
+<1> 使用单个参数 `username` 执行 `POST` 请求。
+
+
+[source,java,indent=0,role="secondary"]
+.REST Assured
+----
+RestAssured.given(this.spec)
+    .filter(document("create-user", requestParameters(
+            parameterWithName("username").description("The user's username"))))
+    .formParam("username", "Tester") <1>
+    .when().post("/users") <2>
+    .then().assertThat().statusCode(is(200));
+----
+<1> 配置 `username` 参数。
+<2> 执行 `POST` 请求。
+
+在这两种情况下，结果生成一个名为 `request-parameters.adoc` 的片段，其中包含一个描述资源支持的参数的表。
+
+记录请求参数时，如果请求中使用了未记录的请求参数，则测试将失败。同样，如果在请求中找不到记录的请求参数且请求参数未标记为可选，则测试也将失败。
+
+如果你不想记录请求参数，可以将其标记为已忽略。这将防止它出现在生成的片段中，同时避免上述故障。
+
+请求参数也可以在宽松模式下记录，其中任何未记录的参数都不会导致测试失败。为此，请在 `org.springframework.restdocs.request.RequestDocumentation` 上使用 `relaxedRequestParameters` 方法。在记录你只想关注的请求参数子集的特定场景时，这非常有用。
+
+[[documenting-your-api-path-parameters]]
+=== 路径参数
+
+可以使用 `pathParameters` 记录请求的路径参数。例如：
+
+[source,java,indent=0,role="primary"]
+.MockMvc
+----
+this.mockMvc.perform(get("/locations/{latitude}/{longitude}", 51.5072, 0.1275)) <1>
+    .andExpect(status().isOk())
+    .andDo(document("locations", pathParameters( <2>
+            parameterWithName("latitude").description("The location's latitude"), <3>
+            parameterWithName("longitude").description("The location's longitude") <4>
+    )));
+----
+<1> 使用两个路径参数 `latitude` 和 `longitude` 执行 `GET` 请求。
+<2> 配置Spring REST Docs以生成描述请求的路径参数的片段。在 `org.springframework.restdocs.request.RequestDocumentation` 上使用 `pathParameters` 静态方法。
+<3> 记录名为 `latitude` 的参数。在 `org.springframework.restdocs.request.RequestDocumentation` 上使用 `parameterWithName` 静态方法。
+<4> 记录名为 `longitude` 的参数。
+
+[source,java,indent=0,role="secondary"]
+.WebTestClient
+----
+this.webTestClient.get().uri("/locations/{latitude}/{longitude}", 51.5072, 0.1275) <1>
+    .exchange().expectStatus().isOk().expectBody()
+    .consumeWith(document("locations",
+        pathParameters( <2>
+            parameterWithName("latitude").description("The location's latitude"), <3>
+            parameterWithName("longitude").description("The location's longitude")))); <4>
+----
+<1> 使用两个路径参数 `latitude` 和 `longitude` 执行 `GET` 请求。
+<2> 配置Spring REST Docs以生成描述请求的路径参数的片段。在 `org.springframework.restdocs.request.RequestDocumentation` 上使用 `pathParameters` 静态方法。
+<3> 记录名为 `latitude` 的参数。在 `org.springframework.restdocs.request.RequestDocumentation` 上使用 `parameterWithName` 静态方法。
+<4> 记录名为 `longitude` 的参数。
+
+[source,java,indent=0,role="secondary"]
+.REST Assured
+----
+RestAssured.given(this.spec)
+    .filter(document("locations", pathParameters( <1>
+            parameterWithName("latitude").description("The location's latitude"), <2>
+            parameterWithName("longitude").description("The location's longitude")))) <3>
+    .when().get("/locations/{latitude}/{longitude}", 51.5072, 0.1275) <4>
+    .then().assertThat().statusCode(is(200));
+----
+<1> 配置Spring REST Docs以生成描述请求的路径参数的片段。在 `org.springframework.restdocs.request.RequestDocumentation` 上使用 `pathParameters` 静态方法。
+<2> 记录名为 `latitude` 的参数。在 `org.springframework.restdocs.request.RequestDocumentation` 上使用 `parameterWithName` 静态方法。
+<3> 记录名为 `longitude` 的参数。
+<4> 使用两个路径参数 `latitude` 和 `longitude` 执行 `GET` 请求。
+
+结果生成一个名为 `path-parameters.adoc` 的片段，其中包含一个描述资源支持的路径参数的表。
+
+TIP: 如果你正在使用MockMvc，那么为了使路径参数可用于文档，必须使用 `RestDocumentationRequestBuilders` 而不是用 `MockMvcRequestBuilders` 上的方法之一构建请求。
+
+记录路径参数时，如果请求中使用了未记录的路径参数，则测试将失败。同样，如果在请求中找不到记录的路径参数且路径参数未标记为可选，则测试也将失败。
+
+路径参数也可以在宽松模式下记录，其中任何未记录的参数都不会导致测试失败。为此，请在  `org.springframework.restdocs.request.RequestDocumentation` 上使用 `relaxedPathParameters` 方法。在记录你只想关注的路径参数子集的特定场景时，这非常有用。
+
+如果你不想记录路径参数，可以将其标记为已忽略。这将防止它出现在生成的片段中，同时避免上述故障。
+
+[[documenting-your-api-request-parts]]
+=== 请求部分
+
+multipart请求的部分可以使用 `requestParts` 进行记录。例如：
+
+[source,java,indent=0,role="primary"]
+.MockMvc
+----
+this.mockMvc.perform(multipart("/upload").file("file", "example".getBytes())) <1>
+    .andExpect(status().isOk())
+    .andDo(document("upload", requestParts( <2>
+            partWithName("file").description("The file to upload")) <3>
+));
+----
+<1> 使用名为 `file` 的单个部件执行 `POST` 请求。
+<2> 配置Spring REST Docs以生成描述请求部分的片段。在 `org.springframework.restdocs.request.RequestDocumentation` 上使用 `requestParts` 静态方法。
+<3> 记录名为 `file` 的部分。在 `org.springframework.restdocs.request.RequestDocumentation` 上使用 `partWithName` 静态方法。
+
+
+[source,java,indent=0,role="secondary"]
+.WebTestClient
+----
+MultiValueMap<String, Object> multipartData = new LinkedMultiValueMap<>();
+multipartData.add("file", "example".getBytes());
+this.webTestClient.post().uri("/upload").body(BodyInserters.fromMultipartData(multipartData)) <1>
+    .exchange().expectStatus().isOk().expectBody()
+    .consumeWith(document("upload", requestParts( <2>
+        partWithName("file").description("The file to upload")) <3>
+));
+----
+<1> 使用名为 `file` 的单个部件执行 `POST` 请求。
+<2> 配置Spring REST Docs以生成描述请求部分的片段。在 `org.springframework.restdocs.request.RequestDocumentation` 上使用 `requestParts` 静态方法。
+<3> 记录名为 `file` 的部分。在 `org.springframework.restdocs.request.RequestDocumentation` 上使用 `partWithName` 静态方法。
+
+
+
+[source,java,indent=0,role="secondary"]
+.REST Assured
+----
+RestAssured.given(this.spec)
+    .filter(document("users", requestParts( <1>
+            partWithName("file").description("The file to upload")))) <2>
+    .multiPart("file", "example") <3>
+    .when().post("/upload") <4>
+    .then().statusCode(is(200));
+----
+<1> 配置Spring REST Docs以生成描述请求部分的片段。在 `org.springframework.restdocs.request.RequestDocumentation` 上使用 `requestParts` 静态方法。
+<2> 记录名为 `file` 的部分。在 `org.springframework.restdocs.request.RequestDocumentation` 上使用 `partWithName` 静态方法。
+<3> 使用名为 `file` 的部件配置请求。
+<4> 执行 `POST` 请求 `/upload`。
+
+结果生成一个名为 `request-parts.adoc` 的片段，其中包含一个描述资源支持的请求部分的表。
+
+记录请求部件时，如果请求中使用了未记录的部件，则测试将失败。同样，如果在请求中找不到记录的部件且部件未标记为可选，则测试也将失败。
+
+请求部件也可以用宽松模式记录，任何未记录的部件都不会导致测试失败。为此，请在 `org.springframework.restdocs.request.RequestDocumentation` 上使用 `relaxedRequestParts` 方法。在记录你只想关注请求部分的子集的特定场景时，这非常有用。
+
+如果你不想记录请求部分，可以将其标记为已忽略。这将防止它出现在生成的片段中，同时避免上述故障。
+
+[[documenting-your-api-request-parts-payloads]]
+=== 请求部分有效载荷
+
+请求部分的有效载荷可以与<<documenting-your-api-request-response-payloads,请求的有效载荷>>大致相同的方式记录，并支持记录请求部分的主体及其字段。
+
+[[documenting-your-api-request-parts-payloads-body]]
+==== 记录请求部分的正文
+
+可以生成包含请求部分正文的片段：
+
+[source,java,indent=0,role="primary"]
+.MockMvc
+----
+MockMultipartFile image = new MockMultipartFile("image", "image.png", "image/png",
+        "<<png data>>".getBytes());
+MockMultipartFile metadata = new MockMultipartFile("metadata", "",
+        "application/json", "{ \"version\": \"1.0\"}".getBytes());
+
+this.mockMvc.perform(fileUpload("/images").file(image).file(metadata)
+            .accept(MediaType.APPLICATION_JSON))
+    .andExpect(status().isOk())
+    .andDo(document("image-upload", requestPartBody("metadata"))); <1>
+----
+<1> 配置Spring REST Docs以生成包含名为 `metadata` 的请求部分的主体的片段。在 `PayloadDocumentation` 上使用 `requestPartBody` 静态方法。
+
+
+
+[source,java,indent=0,role="secondary"]
+.WebTestClient
+----
+MultiValueMap<String, Object> multipartData = new LinkedMultiValueMap<>();
+Resource imageResource = new ByteArrayResource("<<png data>>".getBytes()) {
+
+    @Override
+    public String getFilename() {
+        return "image.png";
+    }
+
+};
+multipartData.add("image", imageResource);
+multipartData.add("metadata", Collections.singletonMap("version",  "1.0"));
+
+this.webTestClient.post().uri("/images").body(BodyInserters.fromMultipartData(multipartData))
+    .accept(MediaType.APPLICATION_JSON).exchange()
+    .expectStatus().isOk().expectBody()
+    .consumeWith(document("image-upload",
+            requestPartBody("metadata"))); <1>
+----
+<1> 配置Spring REST Docs以生成包含名为 `metadata` 的请求部分的主体的片段。在 `PayloadDocumentation` 上使用 `requestPartBody` 静态方法。
+
+[source,java,indent=0,role="secondary"]
+.REST Assured
+----
+Map<String, String> metadata = new HashMap<>();
+metadata.put("version", "1.0");
+RestAssured.given(this.spec).accept("application/json")
+    .filter(document("image-upload", requestPartBody("metadata"))) <1>
+    .when().multiPart("image", new File("image.png"), "image/png")
+            .multiPart("metadata", metadata).post("images")
+    .then().assertThat().statusCode(is(200));
+----
+<1> 配置Spring REST Docs以生成包含名为 `metadata` 的请求部分的主体的片段。在 `PayloadDocumentation` 上使用 `requestPartBody` 静态方法。
+
+结果生成一个 `request-part-${part-name}-body.adoc` 片段，其中包含部件的主体。例如，记录名为 `metadata` 的部件将生成名为 `request-part-metadata-body.adoc` 的代码段。
+
+[[documenting-your-api-request-parts-payloads-fields]]
+==== 记录请求部分的字段
+
+请求部分的字段可以与<<documenting-your-api-request-response-payloads-fields,请求或响应的字段>>大致相同的方式记录：
+
+[source,java,indent=0,role="primary"]
+.MockMvc
+----
+MockMultipartFile image = new MockMultipartFile("image", "image.png", "image/png",
+        "<<png data>>".getBytes());
+MockMultipartFile metadata = new MockMultipartFile("metadata", "",
+        "application/json", "{ \"version\": \"1.0\"}".getBytes());
+
+this.mockMvc.perform(fileUpload("/images").file(image).file(metadata)
+            .accept(MediaType.APPLICATION_JSON))
+    .andExpect(status().isOk())
+    .andDo(document("image-upload", requestPartFields("metadata", <1>
+            fieldWithPath("version").description("The version of the image")))); <2>
+----
+<1> 配置Spring REST Docs以生成描述名为 `metadata` 的请求部分有效载荷中的字段的片段。在 ·PayloadDocumentation· 上使用 `requestPartFields` 静态方法。
+<2> 期望具有路径 `fieldWithPath` 的字段。在 `org.springframework.restdocs.payload.PayloadDocumentation` 上使用 `fieldWithPath` 静态方法。
+
+[source,java,indent=0,role="secondary"]
+.WebTestClient
+----
+MultiValueMap<String, Object> multipartData = new LinkedMultiValueMap<>();
+Resource imageResource = new ByteArrayResource("<<png data>>".getBytes()) {
+
+    @Override
+    public String getFilename() {
+        return "image.png";
+    }
+
+};
+multipartData.add("image", imageResource);
+multipartData.add("metadata", Collections.singletonMap("version",  "1.0"));
+this.webTestClient.post().uri("/images").body(BodyInserters.fromMultipartData(multipartData))
+    .accept(MediaType.APPLICATION_JSON).exchange()
+    .expectStatus().isOk().expectBody()
+    .consumeWith(document("image-upload",
+        requestPartFields("metadata", <1>
+            fieldWithPath("version").description("The version of the image")))); <2>
+----
+<1> 配置Spring REST Docs以生成描述名为 `metadata` 的请求部分有效载荷中的字段的片段。在 ·PayloadDocumentation· 上使用 `requestPartFields` 静态方法。
+<2> 期望具有路径 `fieldWithPath` 的字段。在 `org.springframework.restdocs.payload.PayloadDocumentation` 上使用 `fieldWithPath` 静态方法。
+
+
+[source,java,indent=0,role="secondary"]
+.REST Assured
+----
+Map<String, String> metadata = new HashMap<>();
+metadata.put("version", "1.0");
+RestAssured.given(this.spec).accept("application/json")
+    .filter(document("image-upload", requestPartFields("metadata", <1>
+            fieldWithPath("version").description("The version of the image")))) <2>
+    .when().multiPart("image", new File("image.png"), "image/png")
+            .multiPart("metadata", metadata).post("images")
+    .then().assertThat().statusCode(is(200));
+----
+<1> 配置Spring REST Docs以生成描述名为 `metadata` 的请求部分有效载荷中的字段的片段。在 ·PayloadDocumentation· 上使用 `requestPartFields` 静态方法。
+<2> 期望具有路径 `fieldWithPath` 的字段。在 `org.springframework.restdocs.payload.PayloadDocumentation` 上使用 `fieldWithPath` 静态方法。
+
+结果是一个片段，其中包含一个描述部件字段的表。此代码段名为 `request-part-${part-name}-fields.adoc`。例如，记录名为 `metadata` 的部件将生成名为 `request-part-metadata-fields.adoc` 的代码段。
+
+记录字段时，如果在部件的有效载荷中找到未记录的字段，则测试将失败。同样，如果在部件的有效载荷中找不到文档字段且该字段未标记为可选，则测试也将失败。对于具有分层结构的有效载荷，记录上级字段会使其所有后代也被视为已记录。
+
+如果你不想记录字段，可以将其标记为已忽略。这将防止它出现在生成的片段中，同时避免上述故障。
+
+字段也可以在宽松模式下记录，其中任何未记录的字段都不会导致测试失败。为此，请在 `org.springframework.restdocs.payload.PayloadDocumentation` 上使用 `relaxedRequestPartFields` 方法。在记录你只想关注部件的有效载荷子集的特定场景时，这非常有用。
+
+有关描述字段，记录使用XML的有效载荷等的更多信息，请参阅有关<<documenting-your-api-request-response-payloads,记录请求和响应有载荷载>>的部分。
+
+[[documenting-your-api-http-headers]]
+=== HTTP头
+
+可以使用 `requestHeaders` 和 `responseHeaders` 分别记录请求或响应头。例如：
+
+[source,java,indent=0,role="primary"]
+.MockMvc
+----
+this.mockMvc
+    .perform(get("/people").header("Authorization", "Basic dXNlcjpzZWNyZXQ=")) <1>
+    .andExpect(status().isOk())
+    .andDo(document("headers",
+            requestHeaders( <2>
+                    headerWithName("Authorization").description(
+                            "Basic auth credentials")), <3>
+            responseHeaders( <4>
+                    headerWithName("X-RateLimit-Limit").description(
+                            "The total number of requests permitted per period"),
+                    headerWithName("X-RateLimit-Remaining").description(
+                            "Remaining requests permitted in current period"),
+                    headerWithName("X-RateLimit-Reset").description(
+                            "Time at which the rate limit period will reset"))));
+----
+<1> 使用使用基本身份验证的 `Authorization` 标头执行 `GET` 请求
+<2> 配置Spring REST Docs以生成描述请求头的代码段。在 `org.springframework.restdocs.headers.HeaderDocumentation` 上使用 `requestHeaders` 静态方法。
+<3> 记录授权头。在 `org.springframework.restdocs.headers.HeaderDocumentation` 上使用 `headerWithName` 静态方法。
+<4> 生成描述响应头的片段。在 `org.springframework.restdocs.headers.HeaderDocumentation` 上使用 `responseHeaders` 静态方法。
+
+
+[source,java,indent=0,role="secondary"]
+.WebTestClient
+----
+this.webTestClient
+    .get().uri("/people").header("Authorization", "Basic dXNlcjpzZWNyZXQ=") <1>
+    .exchange().expectStatus().isOk().expectBody()
+    .consumeWith(document("headers",
+        requestHeaders( <2>
+            headerWithName("Authorization").description("Basic auth credentials")), <3>
+        responseHeaders( <4>
+            headerWithName("X-RateLimit-Limit")
+                .description("The total number of requests permitted per period"),
+            headerWithName("X-RateLimit-Remaining")
+                .description("Remaining requests permitted in current period"),
+            headerWithName("X-RateLimit-Reset")
+                .description("Time at which the rate limit period will reset"))));
+----
+<1> 使用使用基本身份验证的 `Authorization` 标头执行 `GET` 请求
+<2> 配置Spring REST Docs以生成描述请求头的代码段。在 `org.springframework.restdocs.headers.HeaderDocumentation` 上使用 `requestHeaders` 静态方法。
+<3> 记录授权头。在 `org.springframework.restdocs.headers.HeaderDocumentation` 上使用 `headerWithName` 静态方法。
+<4> 生成描述响应头的片段。在 `org.springframework.restdocs.headers.HeaderDocumentation` 上使用 `responseHeaders` 静态方法。
+
+
+[source,java,indent=0,role="secondary"]
+.REST Assured
+----
+RestAssured.given(this.spec)
+    .filter(document("headers",
+            requestHeaders( <1>
+                    headerWithName("Authorization").description(
+                            "Basic auth credentials")), <2>
+            responseHeaders( <3>
+                    headerWithName("X-RateLimit-Limit").description(
+                            "The total number of requests permitted per period"),
+                    headerWithName("X-RateLimit-Remaining").description(
+                            "Remaining requests permitted in current period"),
+                    headerWithName("X-RateLimit-Reset").description(
+                            "Time at which the rate limit period will reset"))))
+    .header("Authroization", "Basic dXNlcjpzZWNyZXQ=") <4>
+    .when().get("/people")
+    .then().assertThat().statusCode(is(200));
+----
+<1> 配置Spring REST Docs以生成描述请求头的代码段。在 `org.springframework.restdocs.headers.HeaderDocumentation` 上使用 `requestHeaders` 静态方法。
+<2> 记录授权头。在 `org.springframework.restdocs.headers.HeaderDocumentation` 上使用 `headerWithName` 静态方法。
+<3> 生成描述响应头的片段。在 `org.springframework.restdocs.headers.HeaderDocumentation` 上使用 `responseHeaders` 静态方法。
+<4> 使用使用基本身份验证的 `Authorization` 标头执行 `GET` 请求
+
+结果生成一个名为 `request-headers.adoc` 的片段和一个名为 `response-headers.adoc` 的片段。每个都包含一个描述标头的表。
+
+记录HTTP头时，如果在请求或响应中找不到记录的标头，则测试将失败。
+
+[[documenting-your-api-reusing-snippets]]
+=== 重用片段
+
+对于记录的API来说，通常会有一些在其多个资源中都很常见的功能。为了避免在记录此类资源时重复，可以重用使用公共元素配置的 `Snippet`。
+
+首先，创建描述公共元素的 `Snippet`。例如：
+
+[source,java]
+----
+protected final LinksSnippet pagingLinks = links(
+        linkWithRel("first").optional().description("The first page of results"),
+        linkWithRel("last").optional().description("The last page of results"),
+        linkWithRel("next").optional().description("The next page of results"),
+        linkWithRel("prev").optional().description("The previous page of results"));
+----
+
+其次，使用此代码段并添加特定于资源的其他描述符。例如：
+
+[source,java,indent=0,role="primary"]
+.MockMvc
+----
+this.mockMvc.perform(get("/").accept(MediaType.APPLICATION_JSON))
+    .andExpect(status().isOk())
+    .andDo(document("example", this.pagingLinks.and( <1>
+            linkWithRel("alpha").description("Link to the alpha resource"),
+            linkWithRel("bravo").description("Link to the bravo resource"))));
+
+----
+<1> 重用 `pagingLinks` `Snippet` 调用并添加特定于正在记录的资源的描述符。
+
+[source,java,indent=0,role="secondary"]
+.WebTestClient
+----
+this.webTestClient.get().uri("/").accept(MediaType.APPLICATION_JSON).exchange()
+    .expectStatus().isOk().expectBody()
+    .consumeWith(document("example", this.pagingLinks.and( <1>
+        linkWithRel("alpha").description("Link to the alpha resource"),
+        linkWithRel("bravo").description("Link to the bravo resource"))));
+----
+<1> 重用 `pagingLinks` `Snippet` 调用并添加特定于正在记录的资源的描述符。
+
+[source,java,indent=0,role="secondary"]
+.REST Assured
+----
+RestAssured.given(this.spec)
+    .accept("application/json")
+    .filter(document("example", this.pagingLinks.and( <1>
+            linkWithRel("alpha").description("Link to the alpha resource"),
+            linkWithRel("bravo").description("Link to the bravo resource"))))
+    .get("/").then().assertThat().statusCode(is(200));
+----
+<1> 重用 `pagingLinks` `Snippet` 调用并添加特定于正在记录的资源的描述符。
+
+该示例的结果是，`first`，`last`，`next`，`previous`，`alpha` 和 `bravo` 的链接都记录在案。
+
+[[documenting-your-api-constraints]]
+=== 记录约束
+
+Spring REST Docs提供了许多可以帮助你记录约束的类。`ConstraintDescriptions` 的实例可用于访问类约束的描述消息。例如：
+
+[source,java]
+----
+public void example() {
+    ConstraintDescriptions userConstraints = new ConstraintDescriptions(UserInput.class); <1>
+    List<String> descriptions = userConstraints.descriptionsForProperty("name"); <2>
+}
+
+static class UserInput {
+
+    @NotNull
+    @Size(min = 1)
+    String name;
+
+    @NotNull
+    @Size(min = 8)
+    String password;
+
+}
+----
+<1> 为 `UserInput` 类创建 `ConstraintDescriptions` 的实例
+<2> 获取 `name` 属性约束的描述。将得到两个描述，一个用于 `NotNull` 的约束，一个用于 `Size` 的约束。
+
+Spring HATEOAS示例中的 {sampleSpringRestDocs}/rest-notes-spring-hateoas/src/test/java/com/example/notes/ApiDocumentation.java[`ApiDocumentation`]类显示了此功能的实际应用。
+
+[[documenting-your-api-constraints-finding]]
+==== 查找约束
+
+默认情况下，使用Bean Validation `Validator` 查找约束。目前，仅支持属性约束。你可以通过使用自定义 `ValidatorConstraintResolver` 实例创建 `ConstraintDescriptions` 来自定义使用的 `Validator`。要完全控制约束解析，可以使用自己的 `ConstraintResolver` 实现。
+
+[[documenting-your-api-constraints-describing]]
+==== 描述约束
+
+为所有Bean Validation 2.0的约束提供了默认描述：
+
+- `AssertFalse`
+- `AssertTrue`
+- `DecimalMax`
+- `DecimalMin`
+- `Digits`
+- `Email`
+- `Future`
+- `FutureOrPresent`
+- `Max`
+- `Min`
+- `Negative`
+- `NegativeOrZero`
+- `NotBlank`
+- `NotEmpty`
+- `NotNull`
+- `Null`
+- `Past`
+- `PastOrPresent`
+- `Pattern`
+- `Positive`
+- `PositiveOrZero`
+- `Size`
+
+还为Hibernate Validator的以下约束提供了默认描述：
+
+- `CodePointLength`
+- `CreditCardNumber`
+- `Currency`
+- `EAN`
+- `Email`
+- `Length`
+- `LuhnCheck`
+- `Mod10Check`
+- `Mod11Check`
+- `NotBlank`
+- `NotEmpty`
+- `Currency`
+- `Range`
+- `SafeHtml`
+- `URL`
+
+要覆盖默认描述或提供新描述，请使用基本名称 `org.springframework.restdocs.constraints.ConstraintDescriptions` 创建资源包。基于Spring HATEOAS的示例包含 {sampleSpringRestDocs}/rest-notes-spring-hateoas/src/test/resources/org/springframework/restdocs/constraints/ConstraintDescriptions.properties[此类资源包的示例]。
+
+资源包中的每个键都是约束的完全限定名称加上 `.description`。例如，标准 `@NotNull` 约束的键是 `javax.validation.constraints.NotNull.description`。
+
+属性占位符引用约束的属性可以在其描述中使用。例如，`@Min` 约束的默认描述，必须有 `${value}`，它引用约束的属性 `value`。
+
+若要更多地控制约束描述解析，请使用自定义 `ResourceBundleConstraintDescriptionResolver` 创建 `ConstraintDescriptions`。要完全控制，请使用自定义 `ConstraintDescriptionResolver` 实现创建 `ConstraintDescriptions`。
+
+==== 在生成的代码段中使用约束描述
+一旦你有一个约束的描述，你就可以随意在生成的代码片段中使用它们。例如，你可能希望将约束描述作为字段描述的一部分。或者，你可以将约束作为<<documenting-your-api-customizing-including-extra-information,额外信息>>包含在请求字段代码段中。基于Spring HATEOAS的示例中的 {sampleSpringRestDocs}/rest-notes-spring-hateoas/src/test/java/com/example/notes/ApiDocumentation.java[`ApiDocumentation`] 类说明了后一种方法。
+
+[[documenting-your-api-default-snippets]]
+=== 默认代码段
+
+记录请求和响应时会自动生成许多片段。
+
+|===
+| 片段 | 描述
+| `curl-request.adoc` | 包含 https://curl.haxx.se/[`curl`]命令，该命令等同于正在记录的MockMvc调用
+| `httpie-request.adoc` | 包含 http://httpie.org/[`HTTPie`]命令，该命令等同于正在记录的MockMvc调用
+| `http-request.adoc` | 包含与正在记录的MockMvc调用等效的HTTP请求
+| `http-response.adoc` | 包含返回的HTTP响应
+| `request-body.adoc` | 包含已发送的请求的正文
+| `response-body.adoc` | 包含返回的响应的正文
+|===
+
+你可以配置默认生成的片段。有关更多信息，请参阅<<configuration,配置>>部分。
+
+[[documentating-your-api-parameterized-output-directories]]
+=== 使用参数化输出目录
+
+使用MockMvc或REST Assured时，可以参数化 `document` 使用的输出目录。使用WebTestClient时，无法参数化输出目录。
+
+支持以下参数：
+
+|===
+| 参数 | 描述 
+| `{methodName}` | 测试方法的未修改名称
+| `{method-name}` | 测试方法的名称，使用kebab-case格式化
+| `{method_name}` | 测试方法的名称，使用snake_case格式化
+| `{ClassName}` | 测试类的未修改简单名称
+| `{class-name}` | 测试类的简单名称，使用kebab-case格式化
+| `{class_name}` | 测试类的简单名称，使用snake_case格式化
+| `{step}` | 在当前测试中对服务进行的调用计数
+|===
+
+例如，在测试类 `GettingStartedDocumentation` 上名为 `creatingANote` 的测试方法中的文档 `document("{class-name}/{method-name}")` 会将片段写入名为 `getting-started-documentation/creating-a-note` 的目录中。
+
+参数化输出目录与 `@Before` 方法结合使用时特别有用。它允许在安装方法中配置文档一次，然后在类中的每个测试中重用：
+
+[source,java,indent=0,role="primary"]
+.MockMvc
+----
+@Before
+public void setUp() {
+    this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
+            .apply(documentationConfiguration(this.restDocumentation))
+            .alwaysDo(document("{method-name}/{step}/")).build();
+}
+----
+
+
+[source,java,indent=0,role="secondary"]
+.REST Assured
+----
+@Before
+public void setUp() {
+    this.spec = new RequestSpecBuilder()
+            .addFilter(documentationConfiguration(this.restDocumentation))
+            .addFilter(document("{method-name}/{step}")).build();
+}
+----
+
+使用此配置后，对你正在测试的服务的每次调用都将生成<<documenting-your-api-default-snippets,默认代码段>>，而无需进一步配置。查看每个示例应用程序中的 `GettingStartedDocumentation` 类，以查看此功能的实际应用。
+
+[[documenting-your-api-customizing]]
+=== 自定义输出
+
+[[documenting-your-api-customizing-snippets]]
+==== 自定义生成的代码段
+
+Spring REST Docs使用 https://mustache.github.io/[Mustache]模板产生生成的片段。为Spring REST Docs可以生成的每个片段提供 {srcSpringRestDocs}/spring-restdocs-core/src/main/resources/org/springframework/restdocs/templates[默认模板]。要自定义代码段的内容，你可以提供自己的模板。
+
+模板从 `org.springframework.restdocs.templates` 子包中的类路径加载。子包的名称由正在使用的模板格式的ID确定。默认模板格式Asciidoctor的ID是 `asciidoctor`，因此从 `org​​.springframework.restdocs.templates.asciidoctor` 加载片段。每个模板都以它将生成的代码段命名。例如，要覆盖 `curl-request.adoc` 片段的模板，请在 `src/test/resources/org/springframework/restdocs/templates/asciidoctor` 中创建名为 `curl-request.snippet` 的模板。
+
+[[documenting-your-api-customizing-including-extra-information]]
+==== 包括额外信息
+
+有两种方法可以提供额外信息以包含在生成的代码段中：
+
+. 在描述符上使用 `attributes` 方法向其添加一个或多个属性。
+. 调用 `curlRequest`，`httpRequest`，`httpResponse` 等时传递一些属性。这些属性将与整个片段相关联。
+
+在模板渲染过程中，可以使用任何其他属性。结合自定义代码段模板，可以在生成的代码段中包含额外信息。
+
+上述的具体示例是在记录请求字段时添加约束列和标题。第一步是为你要记录的每个字段提供 `constraints` 属性，并提供 `title` 属性：
+
+[source,java,indent=0,role="primary"]
+.MockMvc
+----
+.andDo(document("create-user", requestFields(
+        attributes(key("title").value("Fields for user creation")), <1>
+        fieldWithPath("name").description("The user's name")
+                .attributes(key("constraints")
+                        .value("Must not be null. Must not be empty")), <2>
+        fieldWithPath("email").description("The user's email address")
+                .attributes(key("constraints")
+                        .value("Must be a valid email address"))))); <3>
+----
+<1> 配置请求字段代码段的 `title` 属性
+<2> 设置 `name` 字段的 `constraints` 属性
+<3> 设置 `email` 字段的 `constraints` 属性
+
+
+[source,java,indent=0,role="secondary"]
+.WebTestClient
+----
+.consumeWith(document("create-user",
+    requestFields(
+        attributes(key("title").value("Fields for user creation")), <1> 
+        fieldWithPath("name")
+            .description("The user's name")
+            .attributes(key("constraints").value("Must not be null. Must not be empty")), <2> 
+        fieldWithPath("email")
+            .description("The user's email address")
+            .attributes(key("constraints").value("Must be a valid email address"))))); <3> 
+----
+<1> 配置请求字段代码段的 `title` 属性
+<2> 设置 `name` 字段的 `constraints` 属性
+<3> 设置 `email` 字段的 `constraints` 属性
+
+[source,java,indent=0,role="secondary"]
+.REST Assured
+----
+.filter(document("create-user", requestFields(
+        attributes(key("title").value("Fields for user creation")), <1>
+        fieldWithPath("name").description("The user's name")
+                .attributes(key("constraints")
+                        .value("Must not be null. Must not be empty")), <2>
+        fieldWithPath("email").description("The user's email address")
+                .attributes(key("constraints")
+                        .value("Must be a valid email address"))))) <3>
+----
+<1> 配置请求字段代码段的 `title` 属性
+<2> 设置 `name` 字段的 `constraints` 属性
+<3> 设置 `email` 字段的 `constraints` 属性
+
+第二步是提供一个名为 `request-fields.snippet` 的自定义模板，其中包含有关生成的代码段表中字段约束的信息，并添加标题：
+
+[source,adoc]
+----
+.{{title}} <1>
+|===
+|Path|Type|Description|Constraints <2>
+
+{{#fields}}
+|{{path}}
+|{{type}}
+|{{description}}
+|{{constraints}} <3>
+
+{{/fields}}
+|===
+----
+<1> 在表格中添加标题
+<2> 添加名为“Constraints”的新列
+<3> 在表的每一行中包含描述符的 `constraints` 属性
+
+[[customizing-requests-and-responses]]
+== 自定义请求和响应
+
+在某些情况下，你可能不希望完全按照发送的请求或完全按照收到的响应来记录请求。Spring REST Docs提供了许多预处理器，可用于在记录之前修改请求或响应。
+
+通过使用 `OperationRequestPreprocessor` 和/或 `OperationResponsePreprocessor` 调用 `document` 来配置预处理。可以使用预处理器上的 `preprocessRequest` 和 `preprocessResponse` 静态方法获取实例。 例如：
+
+[source,java,indent=0,role="primary"]
+.MockMvc
+----
+this.mockMvc.perform(get("/")).andExpect(status().isOk())
+    .andDo(document("index", preprocessRequest(removeHeaders("Foo")), <1>
+            preprocessResponse(prettyPrint()))); <2>
+----
+<1> 应用请求预处理器，该预处理器将删除名为 `Foo` 的标头。
+<2> 应用响应预处理器，以漂亮格式打印其响应内容。
+
+[source,java,indent=0,role="secondary"]
+.WebTestClient
+----
+this.webTestClient.get().uri("/").exchange().expectStatus().isOk().expectBody()
+    .consumeWith(document("index",
+        preprocessRequest(removeHeaders("Foo")), <1>
+        preprocessResponse(prettyPrint()))); <2>
+----
+<1> 应用请求预处理器，该预处理器将删除名为 `Foo` 的标头。
+<2> 应用响应预处理器，以漂亮格式打印其响应内容。
+
+[source,java,indent=0,role="secondary"]
+.REST Assured
+----
+RestAssured.given(this.spec)
+    .filter(document("index", preprocessRequest(removeHeaders("Foo")), <1>
+            preprocessResponse(prettyPrint()))) <2>
+.when().get("/")
+.then().assertThat().statusCode(is(200));
+----
+<1> 应用请求预处理器，该预处理器将删除名为 `Foo` 的标头。
+<2> 应用响应预处理器，以漂亮格式打印其响应内容。
+
+或者，你可能希望将相同的预处理器应用于每个测试。你可以通过在 `@Before` 方法中使用 `RestDocumentationConfigurer` API配置预处理器来实现。例如，从所有请求中删除 `Foo` 标头并打印所有响应：
+
+[source,java,indent=0,role="primary"]
+.MockMvc
+----
+private MockMvc mockMvc;
+
+@Before
+public void setup() {
+    this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
+        .apply(documentationConfiguration(this.restDocumentation).operationPreprocessors()
+            .withRequestDefaults(removeHeaders("Foo")) <1>
+            .withResponseDefaults(prettyPrint())) <2>
+        .build();
+}
+----
+<1> 应用请求预处理器，该预处理器将删除名为 `Foo` 的标头。
+<2> 应用响应预处理器，以漂亮格式打印其响应内容。
+
+[source,java,indent=0,role="secondary"]
+.WebTestClient
+----
+private WebTestClient webTestClient;
+
+@Before
+public void setup() {
+    this.webTestClient = WebTestClient.bindToApplicationContext(this.context)
+        .configureClient()
+        .filter(documentationConfiguration(this.restDocumentation)
+            .operationPreprocessors()
+                .withRequestDefaults(removeHeaders("Foo")) <1> 
+                .withResponseDefaults(prettyPrint())) <2>
+        .build();
+}
+----
+<1> 应用请求预处理器，该预处理器将删除名为 `Foo` 的标头。
+<2> 应用响应预处理器，以漂亮格式打印其响应内容。
+
+[source,java,indent=0,role="secondary"]
+.REST Assured
+----
+private RequestSpecification spec;
+
+@Before
+public void setup() {
+    this.spec = new RequestSpecBuilder()
+        .addFilter(documentationConfiguration(this.restDocumentation).operationPreprocessors()
+            .withRequestDefaults(removeHeaders("Foo")) <1>
+            .withResponseDefaults(prettyPrint())) <2>
+        .build();
+}
+----
+<1> 应用请求预处理器，该预处理器将删除名为 `Foo` 的标头。
+<2> 应用响应预处理器，以漂亮格式打印其响应内容。
+
+然后，在每个测试中，可以执行特定于该测试的任何配置。例如：
+
+[source,java,indent=0,role="primary"]
+.MockMvc
+----
+this.mockMvc.perform(get("/"))
+        .andExpect(status().isOk())
+        .andDo(document("index",
+                links(linkWithRel("self").description("Canonical self link"))
+        ));
+----
+
+[source,java,indent=0,role="secondary"]
+.WebTestClient
+----
+this.webTestClient.get().uri("/").exchange().expectStatus().isOk()
+    .expectBody().consumeWith(document("index",
+        links(linkWithRel("self").description("Canonical self link"))));
+----
+
+[source,java,indent=0,role="secondary"]
+.REST Assured
+----
+RestAssured.given(this.spec)
+    .filter(document("index",
+        links(linkWithRel("self").description("Canonical self link"))))
+    .when().get("/")
+    .then().assertThat().statusCode(is(200));
+----
+
+各种内置预处理器（包括上面说明的那些）可通过 `Preprocessors` 上的静态方法获得。请参阅<<customizing-requests-and-responses-preprocessors,下文>>了解更多详情。
+
+[[customizing-requests-and-responses-preprocessors]]
+=== 预处理器
+
+[[customizing-requests-and-responses-preprocessors-pretty-print]]
+==== 漂亮的打印
+
+`Preprocessors` 上的 `prettyPrint` 格式化请求或响应的内容，使其更易于阅读。
+
+[[customizing-requests-and-responses-preprocessors-mask-links]]
+==== 屏蔽链接
+
+如果你要记录基于超媒体的API，你可能希望鼓励客户端使用链接而不是通过使用硬编码URI来导航API。一种方法是限制文档中URI的使用。`Preprocessors` 上的 `maskLinks` 用 `...` 替换响应中任何链接的 `href`。你也可以指定不同的替代品。
+
+[[customizing-requests-and-responses-preprocessors-remove-headers]]
+==== 删除标题
+
+`Preprocessors` 上的 `removeHeaders` 从请求或响应中删除任何标题，其中名称等于任何给定的header名称。
+
+`Preprocessors` 上的 `removeMatchingHeaders` 从名称与任何给定正则表达式模式匹配的请求或响应中删除任何标头。
+
+[[customizing-requests-and-responses-preprocessors-replace-patterns]]
+==== 替换模式
+
+`Preprocessors` 上的 `replacePattern` 提供了一种用于替换请求或响应中的内容的通用机制。任何和正则表达式匹配的内容都会被替换。
+
+[[customizing-requests-and-responses-preprocessors-modify-request-parameters]]
+==== 修改请求参数
+
+`Preprocessors` 上的 `modifyParameters` 可用于添加，设置和删除请求参数。
+
+[[customizing-requests-and-responses-preprocessors-modify-uris]]
+==== 修改URIs
+
+TIP: 如果你使用的MockMvc或未绑定到服务器的WebTestClient，则应通过<<configuration-uris,更改配置>>来自定义URI。
+
+`Preprocessors` 上的 `modifyUris` 可用于修改请求或响应中的任何URI。使用绑定到服务器的REST Assured或WebTestClient时，这允许你在测试本地服务实例时自定义文档中显示的URI。
+
+[[customizing-requests-and-responses-preprocessors-writing-your-own]]
+==== 编写自己的预处理器
+
+如果其中一个内置预处理器无法满足你的需求，你可以通过实现 `OperationPreprocessor` 接口编写自己的预处理器。然后，你可以使用自定义预处理器，其方式与任何内置预处理器完全相同。
+
+如果你只想修改请求或响应的内容（正文），请考虑实现 `ContentModifier` 接口并将其与内置的 `ContentModifyingOperationPreprocessor` 一起使用。
+
+[[configuration]]
+== 配置
+
+[[configuration-uris]]
+=== 文档化URIs
+
+[[configuration-uris-mockmvc]]
+==== MockMvc URI自定义
+
+使用MockMvc时，Spring REST Docs记录的URI的默认配置是：
+
+|===
+| 设置 | 默认值
+| Scheme | `http`
+| Host | `localhost`
+| Port | `8080`
+|===
+
+`MockMvcRestDocumentationConfigurer` 应用此配置。你可以使用其API更改一个或多个默认值以满足你的需求：
+
+[source,java]
+----
+this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
+        .apply(documentationConfiguration(this.restDocumentation).uris()
+                .withScheme("https")
+                .withHost("example.com")
+                .withPort(443))
+        .build();
+----
+
+NOTE: 如果端口设置为配置方案的默认端口（HTTP端口80或HTTPS端口443），则生成的片段中的任何URI将省略该端口。
+
+TIP: 要配置请求的上下文路径，使用 `MockHttpServletRequestBuilder` 上 `contextPath` 方法。
+
+[[configuration-uris-rest-assured]]
+==== REST Assured URI自定义
+
+REST Assured通过发出实际的HTTP请求来测试服务。因此，必须在执行服务操作之后但在记录之前自定义URI。为此提供了<<customizing-requests-and-responses-preprocessors-modify-uris,特定于REST-Assured的预处理器>>。
+
+[[configuration-uris-webtestclient]]
+==== WebTestClient URI自定义
+
+使用WebTestClient时，Spring REST Docs记录的URI的默认基于 `http://localhost:8080`。可以使用 `WebTestClient.Builder` 上的  {javadocSpringBaseUrl}/org/springframework/test/web/reactive/server/WebTestClient.Builder.html#baseUrl-java.lang.String-[`baseUrl(String)`]方法自定义此基础URI：
+
+[source,java]
+----
+@Before
+public void setUp() {
+    this.webTestClient = WebTestClient.bindToApplicationContext(this.context)
+        .configureClient()
+        .baseUrl("https://api.example.com") <1>
+        .filter(documentationConfiguration(this.restDocumentation)).build();
+}
+----
+<1> 修改使记录的URI基于 `https://api.example.com`。
+
+[[configuration-snippet-encoding]]
+=== 片段编码
+
+默认的片段编码为 `UTF-8`。你可以使用 `RestDocumentationConfigurer` API更改默认代码段编码。例如，要使用 `ISO-8859-1`：
+
+[source,java,indent=0,role="primary"]
+.MockMvc
+----
+this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
+        .apply(documentationConfiguration(this.restDocumentation)
+                .snippets().withEncoding("ISO-8859-1"))
+        .build();
+----
+
+
+[source,java,indent=0,role="secondary"]
+.WebTestClient
+----
+this.webTestClient = WebTestClient.bindToApplicationContext(this.context).configureClient()
+    .filter(documentationConfiguration(this.restDocumentation)
+        .snippets().withEncoding("ISO-8859-1"))
+    .build();
+----
+
+
+[source,java,indent=0,role="secondary"]
+.REST Assured
+----
+this.spec = new RequestSpecBuilder()
+        .addFilter(documentationConfiguration(this.restDocumentation)
+                .snippets().withEncoding("ISO-8859-1"))
+        .build();
+----
+
+TIP: 当Spring REST Docs将请求或响应的内容转换为String时，如果可用，将使用 `Content-Type` 标头中指定的字符集。如果没有，将使用JVM的默认 `Charset`。可以使用 `file.encoding` 系统属性配置JVM的默认 `Charset`。
+
+[[configuration-snippet-template-format]]
+=== 片段模板格式
+
+默认的片段模板格式是Asciidoctor。Markdown也支持开箱即用。你可以使用 `RestDocumentationConfigurer` API更改默认格式：
+
+[source,java,indent=0,role="primary"]
+.MockMvc
+----
+this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
+        .apply(documentationConfiguration(this.restDocumentation)
+                .snippets().withTemplateFormat(TemplateFormats.markdown()))
+        .build();
+----
+
+[source,java,indent=0,role="secondary"]
+.WebTestClient
+----
+this.webTestClient = WebTestClient.bindToApplicationContext(this.context).configureClient()
+    .filter(documentationConfiguration(this.restDocumentation)
+        .snippets().withTemplateFormat(TemplateFormats.markdown()))
+    .build();
+----
+
+[source,java,indent=0,role="secondary"]
+.REST Assured
+----
+this.spec = new RequestSpecBuilder()
+        .addFilter(documentationConfiguration(this.restDocumentation)
+                .snippets().withTemplateFormat(TemplateFormats.markdown()))
+        .build();
+----
+
+[[configuration-default-snippets]]
+=== 默认代码段
+
+默认情况下会生成六个片段：
+
+- `curl-request`
+- `http-request`
+- `http-response`
+- `httpie-request`
+- `request-body`
+- `response-body`
+
+你可以使用 `RestDocumentationConfigurer` API在安装过程中更改默认代码段配置。例如，默认情况下仅生成 `curl-request` 代码段：
+
+[source,java,indent=0,role="primary"]
+.MockMvc
+----
+this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
+        .apply(documentationConfiguration(this.restDocumentation).snippets()
+                .withDefaults(curlRequest()))
+        .build();
+----
+
+
+[source,java,indent=0,role="secondary"]
+.WebTestClient
+----
+this.webTestClient = WebTestClient.bindToApplicationContext(this.context)
+    .configureClient().filter(
+        documentationConfiguration(this.restDocumentation)
+            .snippets().withDefaults(curlRequest()))
+    .build();
+----
+
+
+[source,java,indent=0,role="secondary"]
+.REST Assured
+----
+this.spec = new RequestSpecBuilder()
+        .addFilter(documentationConfiguration(this.restDocumentation).snippets()
+                .withDefaults(curlRequest()))
+        .build();
+----
+
+[[configuration-default-preprocessors]]
+=== 默认操作预处理器
+
+你可以使用 `RestDocumentationConfigurer` API在安装过程中配置默认请求和响应预处理器。例如，要从所有请求中删除 `Foo` 标头，并打印所有响应：
+
+[source,java,indent=0,role="primary"]
+.MockMvc
+----
+this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
+        .apply(documentationConfiguration(this.restDocumentation)
+                .operationPreprocessors()
+                .withRequestDefaults(removeHeaders("Foo")) <1>
+                .withResponseDefaults(prettyPrint())) <2>
+        .build();
+----
+<1> 应用请求预处理器，该预处理器将删除名为 `Foo` 的标头。
+<2> 应用响应预处理器，以漂亮格式打印其响应内容。
+
+
+[source,java,indent=0,role="secondary"]
+.WebTestClient
+----
+this.webTestClient = WebTestClient.bindToApplicationContext(this.context)
+    .configureClient()
+    .filter(documentationConfiguration(this.restDocumentation)
+        .operationPreprocessors()
+            .withRequestDefaults(removeHeaders("Foo")) <1>
+            .withResponseDefaults(prettyPrint())) <2>
+    .build();
+----
+<1> 应用请求预处理器，该预处理器将删除名为 `Foo` 的标头。
+<2> 应用响应预处理器，以漂亮格式打印其响应内容。
+
+[source,java,indent=0,role="secondary"]
+.REST Assured
+----
+this.spec = new RequestSpecBuilder()
+    .addFilter(documentationConfiguration(this.restDocumentation).operationPreprocessors()
+        .withRequestDefaults(removeHeaders("Foo")) <1>
+        .withResponseDefaults(prettyPrint())) <2>
+    .build();
+----
+<1> 应用请求预处理器，该预处理器将删除名为 `Foo` 的标头。
+<2> 应用响应预处理器，以漂亮格式打印其响应内容。
+
+[[working-with-asciidoctor]]
+== 使用Asciidoctor
+
+本节介绍使用与Spring REST Docs特别相关的Asciidoctor的任何方面。
+
+[[working-with-asciidoctor-resources]]
+=== 资源
+
+- http://asciidoctor.org/docs/asciidoc-syntax-quick-reference[语法快速参考]
+- http://asciidoctor.org/docs/user-manual[用户手册]
+
+[[working-with-asciidoctor-including-snippets]]
+=== 包含片段
+
+[[working-with-asciidoctor-including-snippets-operation]]
+==== 包含操作的多个片段
+
+宏命名操作可用于导入为特定操作生成的全部或部分片段。它可以通过在项目的<<getting-started-build-configuration,构建配置>>中包含 `spring-restdocs-asciidoctor` 来实现。
+
+WARNING: 如果你正在使用Gradle及其守护程序或支持持续构建，请不要使用 `org.asciidoctor.convert` 插件的1.5.6版。它包含一个阻止扩展可靠运行的 https://github.com/asciidoctor/asciidoctor-gradle-plugin/issues/222[回归]。
+
+宏的目标是操作的名称。在最简单的形式中，宏可用于包含操作的所有片段，如以下示例所示：
+
+[source,indent=0]
+----
+operation::index[]
+----
+
+操作宏还支持 `snippets` 属性。`snippets` 属性可用于选择应包含的片段。属性的值是以逗号分隔的列表。列表中的每个条目都应该是要包含的片段文件的名称，除去 `.adoc` 后缀。例如，只能包含curl，HTTP请求和HTTP响应片段，如以下示例所示：
+
+[source,indent=0]
+----
+operation::index[snippets='curl-request,http-request,http-response']
+----
+
+这相当于以下内容：
+
+[source,adoc,indent=0]
+----
+[[example_curl_request]]
+== Curl request
+
+\include::{snippets}/index/curl-request.adoc[]
+
+[[example_http_request]]
+== HTTP request
+
+\include::{snippets}/index/http-request.adoc[]
+
+[[example_http_response]]
+== HTTP response
+
+\include::{snippets}/index/http-response.adoc[]
+----
+
+[[working-with-asciidoctor-including-snippets-operation-titles]]
+===== 章节标题
+
+对于包含使用 `operation` 的每个片段，将创建具有标题的部分。为内置代码段提供了默认标题：
+
+|===
+| 片段 | 标题 
+| `curl-request` | Curl Request
+| `http-request` | HTTP request
+| `http-response` | HTTP response
+| `httpie-request` | HTTPie request
+| `links` | Links
+| `request-body` | Request body
+| `request-fields` | Request fields
+| `response-body` | Response body
+| `response-fields` | Response fields
+|===
+
+对于上表中未列出的片段，将通过将 `-` 字符替换为空格并将第一个字母大写来生成默认标题。例如，名为 `custom-snippet` 的代码段标题为“Custom snippet”。
+
+可以使用文档属性自定义默认标题。属性的名称应为 `operation-{snippet}-title`。例如，要将 `curl-request` 代码段的标题自定义为“Example request”，请使用以下属性：
+
+[source,indent=0]
+----
+:operation-curl-request-title: Example request
+----
+
+[[working-with-asciidoctor-including-snippets-individual]]
+==== 包含单个片段
+
+{docAsciidocBaseUrl}/#include-files[include宏]用于在文档中包含单个代码段。由<<getting-started-build-configuration,构建配置>>中配置的 `spring-restdocs-asciidoctor` 自动设置的 `snippets` 属性可用于引用代码段输出目录。例如：
+
+[source,indent=0]
+----
+\include::{snippets}/index/curl-request.adoc[]
+----
+
+[[working-with-asciidoctor-customizing-tables]]
+=== 自定义表格
+
+许多代码段都包含默认配置的表格。可以通过在包含代码段时提供一些其他配置或使用自定义代码段模板来自定义表的外观。
+
+[[working-with-asciidoctor-customizing-tables-formatting-columns]]
+==== 格式化列
+
+Asciidoctor对 https://asciidoctor.org/docs/user-manual/#cols-format[格式化表的列]有丰富支持。例如，可以使用cols属性指定表的列的宽度：
+
+[source,indent=0]
+----
+[cols="1,3"] <1>
+\include::{snippets}/index/links.adoc[]
+----
+<1> 表的宽度将分为两列，第2列的宽度是第1列的3倍。
+
+[[working-with-asciidoctor-customizing-tables-title]]
+==== 配置标题
+
+可以使用前缀为 `.` 的行来指定表的标题：
+
+[source,indent=0]
+----
+.Links <1>
+\include::{snippets}/index/links.adoc[]
+----
+<1> 表的标题是 `Links`。
+
+[[working-with-asciidoctor-customizing-tables-formatting-problems]]
+==== 避免表格格式问题
+
+Asciidoctor使用 `|` 用于分隔表格中单元格的字符。如果你想要在单元格的内容中使用一个 `|`，这可能会导致问题。通过用反斜杠转义 `|` 可以避免这个问题，即使用 `\|` 而不是 `|`。
+
+所有默认的Asciidoctor片段模板都会自动执行此转义，使用名为 `tableCellContent` 的Mustache lamba。如果你编写自己的自定义模板，则可能需要使用此lamba。例如，转义 `|` 单元格中包含 `description` 属性值的字符：
+
+[source,indent=0]
+----
+| {{#tableCellContent}}{{description}}{{/tableCellContent}}
+----
+
+==== 进一步阅读
+
+有关自定义表的更多信息，请参阅 https://asciidoctor.org/docs/user-manual/#tables[Asciidoctor用户手册的表部分]。
+
+[[working-with-markdown]]
+== 使用Markdown
+
+本节介绍使用Markdown与Spring REST Docs相关的任何方面。
+
+[[working-with-markdown-limitations]]
+=== 限制
+
+Markdown最初是为网络写作而设计的，因此不像Asciidoctor那样适合编写文档。通常，使用构建在Markdown之上的其他工具可以克服这些限制。
+
+Markdown没有正式支持表格。Spring REST Docs的默认Markdown片段模板使用 https://michelf.ca/projects/php-markdown/extra/#table[Markdown Extra的表格格式]。
+
+
+[[working-with-markdown-including-snippets]]
+=== 包含片段
+
+Markdown没有内置支持将一个Markdown文件包含在另一个中。要在文档中包含生成的Markdown代码段，你应该使用支持此功能的其他工具。一个特别适合记录API的例子是 https://github.com/tripit/slate[Slate]。
+
+[[contributing]]
+== 贡献
+
+Spring REST Docs旨在让你轻松为RESTful服务生成高质量的文档。但是，如果没有你的贡献，我们无法实现这一目标。
+
+[[contributing-questions]]
+=== 问题
+
+你可以使用 `spring-restdocs` 标记在 https://stackoverflow.com/[StackOverflow]上询问有关Spring REST Docs的问题。同样，我们鼓励你通过回答问题来帮助你的Spring REST Docs用户。
+
+[[contributing-bugs]]
+=== Bugs
+
+如果你认为自己发现了错误，请花点时间搜索 {srcSpringRestDocsBaseUrl}/issues?q=is%3Aissue[现有问题]。如果没有其他人报告此问题，请 {srcSpringRestDocsBaseUrl}/issues/new[打开]一个详细描述问题的新问题，理想情况下，包括一个重现它的测试。
+
+[[contributing-enhancements]]
+=== 增强功能 
+
+如果你希望对Spring REST Docs进行增强，那么非常欢迎pull requests。源代码在 {srcSpringRestDocsBaseUrl}[GitHub]上。你可能希望搜索 {srcSpringRestDocsBaseUrl}/issues?q=is%3Aissue[现有问题]并 {srcSpringRestDocsBaseUrl}/pulls?q=is%3Apr[pull requests]以查看是否已在处理增强功能。你可能还需要 {srcSpringRestDocsBaseUrl}/issues/new[打开]一个新问题，以便在开始工作之前讨论可能的增强功能。
+
+TIP: https://docs.spring.io/spring-restdocs/docs/{springRestDocsVersion}/reference/html5[原文链接]

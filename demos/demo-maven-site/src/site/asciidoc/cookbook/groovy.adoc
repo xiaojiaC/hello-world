@@ -1,0 +1,17 @@
+= Groovy
+:groovyVersion: 2.5.6
+:javaDocBaseUrl: https://docs.oracle.com/javase/7/docs/api/java/math
+:javase8DocBaseUrl: https://docs.oracle.com/javase/8/docs/api/index.html
+:groovyDocBaseUrl: http://docs.groovy-lang.org/{groovyVersion}/html/documentation
+:groovyJavaDocBaseUrl: http://docs.groovy-lang.org/{groovyVersion}/html/gapi/index.html
+:doctype: book
+:toc: left
+:toclevels: 4
+:icons: font
+
+include::cookbook/groovy/syntax.adoc[leveloffset=+1]
+include::cookbook/groovy/operators.adoc[leveloffset=+1]
+include::cookbook/groovy/program-structure.adoc[leveloffset=+1]
+include::cookbook/groovy/object-orientation.adoc[leveloffset=+1]
+include::cookbook/groovy/closures.adoc[leveloffset=+1]
+include::cookbook/groovy/semantics.adoc[leveloffset=+1]

@@ -1,0 +1,44 @@
+// [appendix]
+[[repository-query-return-types]]
+= 存储库查询返回类型
+
+== 支持的查询返回类型
+
+下表列出了Spring Data存储库通常支持的返回类型。但是，请查阅特定于存储库的文档以获取支持的返回类型的确切列表，
+因为特定存储库可能不支持此处列出的某些类型。
+
+NOTE: 地理空间类型（例如 `GeoResult`，`GeoResults` 和 `GeoPage`）仅适用于支持地理空间查询的数据存储。
+
+.查询返回类型
+|===
+| 返回类型 | 描述
+| void | 表示没有返回值。
+| Primitives | Java原语。
+| Wrapper types | Java包装器类型。
+| T | 一个特定的实体。期望查询方法最多返回一个结果。如果未找到结果，则返回 `null`。
+多个结果会触发 `IncorrectResultSizeDataAccessException`。
+| Iterator<T> | 迭代器。
+| Collection<T> | 集合。
+| List<T> | 列表。
+| Optional<T> | Java 8或Guava `Optional`。期望查询方法最多返回一个结果。如果未找到结果，
+则返回 `Optional.empty()` 或 `Optional.absent()`。多个结果会触发 `IncorrectResultSizeDataAccessException`。
+| Option<T> | Scala或Javaslang `Option` 类型。语义上与前面描述的Java 8的 `Optional` 相同。
+| Stream<T> | Java 8流 `Stream`。
+| Future<T> | `Future`。期望使用 `@Async` 注解的方法，并且需要启用Spring的异步方法执行功能。
+| CompletableFuture<T> | Java 8 `CompletableFuture`。期望使用 `@Async` 注解的方法，并且需要启用Spring的异步方法执行功能。
+| ListenableFuture | `org.springframework.util.concurrent.ListenableFuture`。
+期望使用 `@Async` 注解的方法，并且需要启用Spring的异步方法执行功能。
+| Slice | 数据块切片，指示是否有更多数据可用。需要 `Pageable` 方法参数。
+| Page<T> | 带有附加信息的切片，例如结果总数。需要 `Pageable` 方法参数。
+| GeoResult<T> | 带有附加信息的结果条目，例如到参考位置的距离。
+| GeoResults<T> | 带有附加信息的 `GeoResult<T>` 列表，例如到参考位置的平均距离。
+| GeoPage<T> | 包含 `GeoResult<T>` 的页，例如到参考位置的平均距离。
+| Mono<T> |  https://projectreactor.io/[Project Reactor] `Mono` 使用响应式存储库发射零或一个元素 。期望查询方法最多返回一个结果。
+如果未找到结果，则返回 `Mono.empty()`。多个结果会触发 `IncorrectResultSizeDataAccessException`。
+| Flux<T> | https://projectreactor.io/[Project Reactor] `Flux` 使用响应式存储库发射零个，一个或多个元素。返回 `Flux` 的查询也可以发出无限数量的元素。
+| Single<T> | https://github.com/ReactiveX/RxJava[RxJava] `Single` 使用响应式存储库发射单个元素。期望查询方法最多返回一个结果。如果未找到结果，则返回 `Mono.empty()`。
+多个结果会触发 `IncorrectResultSizeDataAccessException`。
+| Maybe<T> | https://github.com/ReactiveX/RxJava[RxJava] `Maybe` 使用响应式存储库发射零个或一个元素。期望查询方法最多返回一个结果。如果未找到结果，
+则返回 `Mono.empty()`。多个结果会触发 `IncorrectResultSizeDataAccessException`。
+| Flowable<T> | https://github.com/ReactiveX/RxJava[RxJava] `Flowable` 使用响应式存储库发射零个，一个或多个元素。返回 `Flowable` 的查询也可以发出无限数量的元素。
+|===

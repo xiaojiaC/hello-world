@@ -16,6 +16,14 @@
     <url>https://github.com/xiaojiaC/hello-world/issues</url>
   </issueManagement>
 
+  <!-- https://issues.sonatype.org/browse/OSSRH-44015 -->
+  <!-- com.github.xiaojiac has been prepared, now user(s) xiaojiaC can:
+     Deploy snapshot artifacts into repository https://oss.sonatype.org/content/repositories/snapshots
+     Deploy release artifacts into the staging repository https://oss.sonatype.org/service/local/staging/deploy/maven2
+     Promote staged artifacts into repository 'Releases'
+     Download snapshot and release artifacts from group https://oss.sonatype.org/content/groups/public
+     Download snapshot, release and staged artifacts from staging group https://oss.sonatype.org/content/groups/staging
+  -->
   <distributionManagement>
     <repository>
       <id>maven-release</id>
@@ -141,4 +149,45 @@
       </build>
     </profile>
   </profiles>
+
+  <repositories>
+    <repository>
+      <id>spring-io</id>
+      <url>http://repo.spring.io/release/</url>
+    </repository>
+    <repository>
+      <id>maven-release</id>
+      <name>Nexus Releases</name>
+      <url>http://127.0.0.1:8081/repository/sunny.releases/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>maven-snapshot</id>
+      <name>Nexus Snapshots</name>
+      <url>http://127.0.0.1:8081/repository/sunny.snapshot/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>maven-release</id>
+      <name>Nexus Releases</name>
+      <url>http://127.0.0.1:8081/repository/sunny.releases/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>maven-snapshot</id>
+      <name>Nexus Snapshots</name>
+      <url>http://127.0.0.1:8081/repository/sunny.snapshot/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
 </project>

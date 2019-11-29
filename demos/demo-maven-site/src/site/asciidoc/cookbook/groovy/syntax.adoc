@@ -1,0 +1,1132 @@
+= 语法
+:groovySemanticsDocBaseUrl: http://docs.groovy-lang.org/{groovyVersion}/html/documentation/core-semantics.html
+
+本章介绍Groovy编程语言的语法。语言的语法源自Java语法，但是使用Groovy的特定构造对其进行了增强，并允许某些简化。
+
+== 注释
+=== 单行注释
+
+[source,groovy]
+----
+// a standalone single line comment
+println "hello" // a comment till the end of the line
+----
+
+=== 多行注释
+
+[source,groovy]
+----
+/* a standalone multiline comment
+   spanning two lines */
+println "hello" /* a multiline comment starting
+                   at the end of a statement */
+println 1 /* one */ + 2 /* two */
+----
+
+=== GroovyDoc注释
+
+与多行注释类似，GroovyDoc注释是多行的，但以 `/{asterisk}{asterisk}` 开头，以 `{asterisk}/` 结尾。第一个GroovyDoc注释行后面的行可以选择以星号 `{asterisk}` 开头。这些注释在：
+
+* 类型定义（类，接口，枚举，注解）
+* 字段和属性定义
+* 方法定义
+
+虽然编译器不会抱怨GroovyDoc注释与上述语言元素没有关联，但是你应该在它之前添加注释。
+
+[source,groovy]
+----
+/**
+ * A Class description
+ */
+class Person {
+    /** the name of the person */
+    String name
+
+    /**
+     * Creates a greeting method for a certain person.
+     *
+     * @param otherPerson the person to greet
+     * @return a greeting message
+     */
+    String greet(String otherPerson) {
+       "Hello ${otherPerson}"
+    }
+}
+----
+
+GroovyDoc遵循与Java自己的JavaDoc相同的约定。因此，你将能够使用与JavaDoc相同的标记。
+
+=== Shebang行
+
+除了单行注释之外，还有一个特殊的行注释，通常称为UNIX系统可以理解的shebang行，它允许脚本直接从命令行运行，前提是你已经安装了Groovy发行版并且 `groovy` 命令在 `PATH` 可用。
+
+[source,groovy]
+----
+#!/usr/bin/env groovy
+println "Hello from the shebang line"
+----
+
+`#` 字符必须是文件的第一个字符。任何缩进都会产生编译错误。
+
+== 关键字
+
+以下列表表示Groovy语言的所有关键字：
+
+.关键字
+|===
+| as | assert | break | case
+| catch | class | const | continue
+| def | default | do | else
+| enum | extends | false | finally
+| import | in | instanceof | interface
+| new | null | package | return
+| super | switch | this | throw
+| throws | trait | true | try
+| while | | |
+|===
+
+== 标识符
+=== 普通标识符
+
+标识符以字母，美元符号或下划线开头，不能以数字开头；然后后续字符可以包含字母和数字。
+
+一个字母可以在以下范围内：
+
+* 'a' - 'z' (小写ascii字母)
+* 'A' - 'Z' (大写ascii字母)
+* '\u00C0' - '\u00D6'
+* '\u00D8' - '\u00F6'
+* '\u00F8' - '\u00FF'
+* '\u0100' - '\uFFFE'
+
+以下是有效标识符的一些示例（此处为变量名称）：
+
+[source,groovy]
+----
+def name
+def item3
+def with_underscore
+def $dollarStart
+----
+
+但以下是无效标识符：
+
+[source,groovy]
+----
+def 3tier
+def a+b
+def a#b
+----
+
+`.` 后的所有关键字都是有效的标识符：
+
+[source,groovy]
+----
+foo.as
+foo.assert
+foo.break
+foo.case
+foo.catch
+----
+
+=== 引号标识符
+
+引号标识符出现在点表达式的 `.` 之后。例如，`person.name` 表达式的 `name` 部分可以用 `person."name"` 或 `person.'name'` 引用。当某些标识符包含Java语言规范禁止但在Groovy允许的非法引用字符时，这一点尤其有趣。例如，破折号，空格，感叹号等字符。
+
+[source,groovy]
+----
+def map = [:]
+
+map."an identifier with a space and double quotes" = "ALLOWED"
+map.'with-dash-signs-and-single-quotes' = "ALLOWED"
+
+assert map."an identifier with a space and double quotes" == "ALLOWED"
+assert map.'with-dash-signs-and-single-quotes' == "ALLOWED"
+----
+
+正如我们将在下面的<<all-strings,字符串部分>>中看到的，Groovy提供了不同的字符串文字。`.` 后实际允许所有类型的字符串：
+
+[source,groovy]
+----
+map.'single quote'
+map."double quote"
+map.'''triple single quote'''
+map."""triple double quote"""
+map./slashy string/
+map.$/dollar slashy string/$
+----
+
+普通字符串和Groovy的GStrings（插值字符串）之间存在差异，因为在后一种情况下，插值将插入到最终字符串中以评估整个标识符的值：
+
+[source,groovy]
+----
+def firstname = "Homer"
+map."Simpson-${firstname}" = "Homer Simpson"
+
+assert map.'Simpson-Homer' == "Homer Simpson"
+----
+
+[[all-strings]]
+== 字符串
+
+Groovy允许你实例化 `java.lang.String` 对象，以及GStrings（`groovy.lang.GString`），它们在其他编程语言中也被称为插值字符串。
+
+=== 单引号字符串
+
+单引号字符串是由单引号括起来的一系列字符：
+
+[source,groovy]
+----
+'a single quoted string'
+----
+
+单引号字符串是普通的 `java.lang.String`，不支持插值。
+
+=== 字符串连接
+
+所有Groovy字符串都可以用 `+` 运算符连接：
+
+[source,groovy]
+----
+assert 'ab' == 'a' + 'b'
+----
+
+=== 三重单引号字符串
+
+[source,groovy]
+----
+'''a triple single quoted string'''
+----
+
+三重单引号字符串是普通的 `java.lang.String`，不支持插值。
+
+三重单引号字符串是多行的。你可以跨越行边界跨字符串的内容，而无需将字符串拆分为多个部分，不再需要连接或换行字符：
+
+如果你的代码是缩进的，例如在类方法体中，则字符串将包含缩进的空格。Groovy Development Kit包含使用 `String#stripIndent()` 方法剥离缩进的方法，以及 `String#stripMargin()` 方法使用分隔符来标识要从字符串开头删除的文本。
+
+创建如下字符串时：
+
+[source,groovy]
+----
+def startingAndEndingWithANewline = '''
+line one
+line two
+line three
+'''
+----
+
+你会注意到结果字符串包含换行符作为第一个字符。可以通过使用反斜杠转义换行来剥离该字符：
+
+[source,groovy]
+----
+def strippedFirstNewline = '''\
+line one
+line two
+line three
+'''
+
+assert !strippedFirstNewline.startsWith('\n')
+----
+
+==== 转义特殊字符
+
+你可以使用反斜杠字符转义单引号，以避免终止字符串文字：
+
+[source,groovy]
+----
+'an escaped single quote: \' needs a backslash'
+----
+
+你可以使用双反斜杠来转义转义字符本身：
+
+[source,groovy]
+----
+'an escaped escape character: \\ needs a double backslash'
+----
+
+一些特殊字符也使用反斜杠作为转义字符：
+
+|===
+| 转义序列 | 字符
+| '\t' | 制表符
+| '\b' | 退格符
+| '\n' | 换行符
+| '\r' | 回车符
+| '\f' | 换页符
+| '\\' | 反斜线
+| '\'' | 单引号（单引号和三重单引号字符串）
+| '\"' | 双引号（双引号和三重双引号字符串）
+|===
+
+==== Unicode转义序列
+
+对于键盘上不存在的字符，可以使用unicode转义序列：一个反斜杠，后跟'u'，然后是4个十六进制数字。
+
+例如，欧元货币符号可以表示为：
+
+[source,groovy]
+----
+'The Euro currency symbol: \u20AC'
+----
+
+=== 双引号字符串
+
+双引号字符串是由双引号括起来的一系列字符：
+
+[source,groovy]
+----
+"a double quoted string"
+----
+
+如果没有插值表达式，双引号字符串是普通的 `java.lang.String`，但如果存在插值则是 `groovy.lang.GString` 实例。
+
+要转义双引号，可以使用反斜杠字符："A double quote: \""。
+
+==== 字符串插值
+
+除了单引号和三重单引号字符串之外，任何Groovy表达式都可以在所有字符串文字中进行插值。插值是在对字符串求值时将字符串中的占位符替换为其值的行为。占位符表达式由 `${}` 包围，或者以 `$` 为前缀的点表达式。当GString被传递给以String为参数的方法时，通过调用该表达式上的 `toString()`，将占位符内的表达式值计算为其字符串表示形式。
+
+这里有一个字符串，其占位符引用局部变量：
+
+[source,groovy]
+----
+def name = 'Guillaume' // a plain string
+def greeting = "Hello ${name}"
+
+assert greeting.toString() == 'Hello Guillaume'
+----
+
+任何Groovy表达式都是有效的，正如我们在本例中可以看到的算术表达式：
+
+[source,groovy]
+----
+def sum = "The sum of 2 and 3 equals ${2 + 3}"
+assert sum.toString() == 'The sum of 2 and 3 equals 5'
+----
+
+不仅在 `${}` 占位符之间允许表达式，语句也可以。但是，语句的值只是 `null`。因此，如果在该占位符中插入了多个语句，则最后一个语句应以某种方式返回要插入的有意义值。例如，"The sum of 1 and 2 is equal to ${def a = 1; def b = 2; a + b}" 是支持的并且按预期工作但是一个好的做法通常是坚持在GString占位符中使用简单表达式。
+
+除了 `${}` 占位符之外，我们还可以使用一个单独的 `$` 符号作为点表达式的前缀：
+
+[source,groovy]
+----
+def person = [name: 'Guillaume', age: 36]
+assert "$person.name is $person.age years old" == 'Guillaume is 36 years old'
+----
+
+但只有 `a.b`，`a.b.c` 等形式的点表达式才有效，包含括号的表达式（如方法调用，闭包的花括号或算术运算符）将无效。给定以下数字的变量定义：
+
+[source,groovy]
+----
+def number = 3.14
+----
+
+以下语句将抛出 `groovy.lang.MissingPropertyException`，因为Groovy认为你正在尝试访问该数字的 `toString` 方法，但该方法不存在：
+
+[source,groovy]
+----
+shouldFail(MissingPropertyException) {
+    println "$number.toString()"
+}
+----
+
+如果你需要在GString中转义 `$` 或 `${}` 占位符，使它们看起来没有插值，你只需要使用 `\` 反斜杠字符来转义美元符号即可：
+
+[source,groovy]
+----
+assert '${name}' == "\${name}"
+----
+
+==== 内插闭包表达式的特例
+
+到目前为止，我们已经看到我们可以在 `${}` 占位符内插入任意表达式，但是闭包表达式有一个特殊的情况和符号。当占位符包含箭头 `${→}` 时，表达式实际上是一个闭包表达式 -
+你可以将其视为一个闭包，前面有一个美元符号：
+
+[source,groovy]
+----
+def sParameterLessClosure = "1 + 2 == ${-> 3}" // <1>
+assert sParameterLessClosure == '1 + 2 == 3'
+
+def sOneParamClosure = "1 + 2 == ${ w -> w << 3}" // <2>
+assert sOneParamClosure == '1 + 2 == 3'
+----
+<1> 该闭包是一个无参数的闭包，它不带参数。
+<2> 该闭包采用一个 `java.io.StringWriter` 参数，你可以使用 `<<` 左移运算符向其追加内容。在任何一种情况下，两个占位符都是嵌入式闭包。
+
+从外观上看，它看起来像是一种定义要插入的表达式的更冗长的方式，但是闭包与单纯的表达式相比具有一个有趣的优势：惰性评估。
+
+让我们考虑以下示例：
+
+[source,groovy]
+----
+def number = 1 // <1>
+def eagerGString = "value == ${number}"
+def lazyGString = "value == ${ -> number }"
+
+assert eagerGString == "value == 1" // <2>
+assert lazyGString ==  "value == 1" // <3>
+
+number = 2 // <4>
+assert eagerGString == "value == 1" // <5>
+assert lazyGString ==  "value == 2" // <6>
+----
+<1> 我们定义一个包含 `1` 的 `number` 变量，然后我们在两个GStrings中插入，作为 `eagerGString` 中的表达式和 `lazyGString` 中的闭包。
+<2> 我们希望结果字符串包含 `eagerGString` 的相同字符串值 `1`。
+<3> 对于 `lazyGString` 也是如此。
+<4> 然后我们将变量的值更改为新数字。
+<5> 使用简单的插值表达式，该值实际上是在创建GString时绑定的。
+<6> 但是使用闭包表达式时，会在每次将GString强制转换为String时调用闭包，从而生成包含新数字值的更新字符串。
+
+带有多个参数的嵌入式闭包表达式将在运行时生成异常。仅允许具有零个或一个参数的闭包。
+
+==== 与Java的互操作性
+
+当一个方法（无论是用Java还是Groovy实现）需要 `java.lang.String`，但我们传递一个 `groovy.lang.GString` 实例时，GString的 `toString()` 方法会被自动且透明地调用。
+
+[source,groovy]
+----
+String takeString(String message) {         // <4>
+    assert message instanceof String        // <5>
+    return message
+}
+
+def message = "The message is ${'hello'}"   // <1>
+assert message instanceof GString           // <2>
+
+def result = takeString(message)            // <3>
+assert result instanceof String
+assert result == 'The message is hello'
+----
+<1> 我们创建一个GString变量。
+<2> 我们仔细检查它是GString的一个实例。
+<3> 然后我们将该GString传递给一个以String作为参数的方法。
+<4> `takeString()` 方法的签名显式地表明它的唯一参数是 `String`。
+<5> 我们还验证参数确实是 `String` 而不是 `GString`。
+
+==== GString和String的哈希码
+
+尽管可以使用插值字符串代替普通Java字符串，但它们与字符串的不同之处在于：它们的hashCodes不同。普通Java字符串是不可变的，而GString的结果字符串表示形式可能会有所不同，具体取决于其内插值。即使对于相同的结果字符串，GStrings和Strings也没有相同的hashCode。
+
+[source,groovy]
+----
+assert "one: ${1}".hashCode() != "one: 1".hashCode()
+----
+
+应该避免使用GString作为Map的键，特别是当我们试图检索与String而不是GString关联的值时。
+
+[source,groovy]
+----
+def key = "a"
+def m = ["${key}": "letter ${key}"]     // <1>
+
+assert m["a"] == null     // <2>
+----
+<1> 使用初始键值对创建映射，其键是GString
+<2> 当我们尝试使用String键获取值时，我们将找不到它，因为Strings和GString具有不同的hashCode值
+
+=== 三重双引号字符串
+
+三重双引号字符串的行为类似于双引号字符串，只是它们是多行的，就像三重单引号字符串一样。
+
+[source,groovy]
+----
+def name = 'Groovy'
+def template = """
+    Dear Mr ${name},
+
+    You're the winner of the lottery!
+
+    Yours sincerly,
+
+    Dave
+"""
+
+assert template.toString().contains('Groovy')
+----
+
+双引号和单引号都不需要在三重双引号字符串中进行转义。
+
+=== Slashy字符串
+
+除了通常引用的字符串之外，Groovy还提供了使用 `/` 作为分隔符的字符串。Slashy字符串对于定义正则表达式和模式特别有用，因为不需要转义反斜杠。
+
+一个slashy字符串的示例：
+
+[source,groovy]
+----
+def fooPattern = /.*foo.*/
+assert fooPattern == '.*foo.*'
+----
+
+只需使用反斜杠转义正斜杠：
+
+[source,groovy]
+----
+def escapeSlash = /The character \/ is a forward slash/
+assert escapeSlash == 'The character / is a forward slash'
+----
+
+Slashy字符串可以是多行的：
+
+[source,groovy]
+----
+def multilineSlashy = /one
+    two
+    three/
+
+assert multilineSlashy.contains('\n')
+----
+
+Slashy字符串也可以插值（即GString）：
+
+[source,groovy]
+----
+def color = 'blue'
+def interpolatedSlashy = /a ${color} car/
+
+assert interpolatedSlashy == 'a blue car'
+----
+
+有一些问题需要注意。
+
+空的slashy字符串不能用双正斜杠表示，因为Groovy解析器将其理解为行注释。这就是为什么以下断言实际上不会编译，因为它看起来像一个未完成语句：
+
+[source,groovy]
+----
+assert '' == //
+----
+
+由于slashy字符串的设计主要是为了简化regexp，所以像 `$()` 这样的GStrings中的一些错误也适用于slashy字符串。
+
+=== 美元slashy字符串
+
+美元slashy字符串是多行GStrings，以 `$/` 开头和以 `/$` 结束。转义字符是美元符号，它可以转义另一个美元或正斜杠。但是，美元或正斜杠都不需要被转义，除非你要转义字符串子序列中的美元符号，该子序列以GString占位符序列开头，或者如果你需要转义序列，该子序列将以一个美元slashy字符串结束分隔符 `/$` 开始。
+
+这是一个例子：
+
+[source,groovy]
+----
+def name = "Guillaume"
+def date = "April, 1st"
+
+def dollarSlashy = $/
+    Hello $name,
+    today we're ${date}.
+
+    $ dollar sign
+    $$ escaped dollar sign
+    \ backslash
+    / forward slash
+    $/ escaped forward slash
+    $$$/ escaped opening dollar slashy
+    $/$$ escaped closing dollar slashy
+/$
+
+assert [
+    'Guillaume',
+    'April, 1st',
+    '$ dollar sign',
+    '$ escaped dollar sign',
+    '\\ backslash',
+    '/ forward slash',
+    '/ escaped forward slash',
+    '$/ escaped opening dollar slashy',
+    '/$ escaped closing dollar slashy'
+].every { dollarSlashy.contains(it) }
+----
+
+=== 字符串总结
+
+|===
+| 字符串名称 | 字符串语法 | 可插值 | 可多行 | 转义字符
+| 单引号     | `'…​'`     |       |        |  `\`
+| 三重单引号 | `'''…​'''` |       |    `√` |  `\`
+| 双引号     | `"…​"`     |   `√` |        |  `\`
+| 三重双引号 | `"""…​"""` |   `√` |    `√` |  `\`
+| Slashy     | `/…​/`    |   `√` |    `√`  |  `\`
+| 美元Slashy | `$/…​/$` |  `√`  |    `√`  |  `$`
+|===
+
+=== 字符
+
+与Java不同，Groovy没有明确的字符文字。但是，你可以通过三种不同的方式明确地将Groovy字符串设置为字符：
+
+[source,groovy]
+----
+char c1 = 'A' // <1>
+assert c1 instanceof Character
+
+def c2 = 'B' as char // <2>
+assert c2 instanceof Character
+
+def c3 = (char)'C' // <3>
+assert c3 instanceof Character
+----
+<1> 通过指定 `char` 类型来显式声明包含字符的变量
+<2> 通过使用 `as` 运算符类型强转
+<3> 通过使用强制转换为 `char` 的操作
+
+当字符保存在变量中时，选项一很有趣，而当必须将char值作为方法调用的参数传递时，其他两个选项更有趣。
+
+== 数字
+
+Groovy支持不同类型的整数和浮点数，由通常的Java类型 `Number` 支持。
+
+=== 整数
+
+整数类型与Java中相同：
+
+* `byte`
+* `char`
+* `short`
+* `int`
+* `long`
+* `java.lang.BigInteger`
+
+你可以使用以下声明创建这些类型的整数：
+
+[source,groovy]
+----
+// primitive types
+byte  b = 1
+char  c = 2
+short s = 3
+int   i = 4
+long  l = 5
+
+// infinite precision
+BigInteger bi =  6
+----
+
+如果用 `def` 关键字使用可选类型，则整数的类型将有所不同：它会适应能容纳这个数字的包装类型。
+
+对于正数：
+
+[source,groovy]
+----
+def a = 1
+assert a instanceof Integer
+
+// Integer.MAX_VALUE
+def b = 2147483647
+assert b instanceof Integer
+
+// Integer.MAX_VALUE + 1
+def c = 2147483648
+assert c instanceof Long
+
+// Long.MAX_VALUE
+def d = 9223372036854775807
+assert d instanceof Long
+
+// Long.MAX_VALUE + 1
+def e = 9223372036854775808
+assert e instanceof BigInteger
+----
+
+以及负数：
+
+[source,groovy]
+----
+def na = -1
+assert na instanceof Integer
+
+// Integer.MIN_VALUE
+def nb = -2147483648
+assert nb instanceof Integer
+
+// Integer.MIN_VALUE - 1
+def nc = -2147483649
+assert nc instanceof Long
+
+// Long.MIN_VALUE
+def nd = -9223372036854775808
+assert nd instanceof Long
+
+// Long.MIN_VALUE - 1
+def ne = -9223372036854775809
+assert ne instanceof BigInteger
+----
+
+==== 可选的非十进制表示
+
+数字也可以用二进制，八进制，十六进制和十进制数表示。
+
+===== 二进制数
+
+二进制数字以 `0b` 前缀开头：
+
+[source,groovy]
+----
+int xInt = 0b10101111
+assert xInt == 175
+
+short xShort = 0b11001001
+assert xShort == 201 as short
+
+byte xByte = 0b11
+assert xByte == 3 as byte
+
+long xLong = 0b101101101101
+assert xLong == 2925l
+
+BigInteger xBigInteger = 0b111100100001
+assert xBigInteger == 3873g
+
+int xNegativeInt = -0b10101111
+assert xNegativeInt == -175
+----
+
+===== 八进制数
+
+八进制数以 `0` 前缀开头，后跟八进制数字。
+
+[source,groovy]
+----
+int xInt = 077
+assert xInt == 63
+
+short xShort = 011
+assert xShort == 9 as short
+
+byte xByte = 032
+assert xByte == 26 as byte
+
+long xLong = 0246
+assert xLong == 166l
+
+BigInteger xBigInteger = 01111
+assert xBigInteger == 585g
+
+int xNegativeInt = -077
+assert xNegativeInt == -63
+----
+
+===== 十六进制数
+
+十六进制数以 `0x` 前缀开头，后跟十六进制数字。
+
+[source,groovy]
+----
+int xInt = 0x77
+assert xInt == 119
+
+short xShort = 0xaa
+assert xShort == 170 as short
+
+byte xByte = 0x3a
+assert xByte == 58 as byte
+
+long xLong = 0xffff
+assert xLong == 65535l
+
+BigInteger xBigInteger = 0xaaaa
+assert xBigInteger == 43690g
+
+Double xDouble = new Double('0x1.0p0')
+assert xDouble == 1.0d
+
+int xNegativeInt = -0x77
+assert xNegativeInt == -119
+----
+
+=== 小数
+
+小数类型与Java中的相同：
+
+* `float`
+* `double`
+* `java.lang.BigDecimal`
+
+你可以使用以下声明创建这些类型的小数：
+
+[source,groovy]
+----
+// primitive types
+float  f = 1.234
+double d = 2.345
+
+// infinite precision
+BigDecimal bd =  3.456
+----
+
+小数可以使用指数，`e` 或 `E` 指数字母，后跟可选符号，以及表示指数的整数：
+
+[source,groovy]
+----
+assert 1e3  ==  1_000.0
+assert 2E4  == 20_000.0
+assert 3e+1 ==     30.0
+assert 4E-2 ==      0.04
+assert 5e-1 ==      0.5
+----
+
+为了方便地进行精确的小数计算，Groovy选择 `java.lang.BigDecimal` 作为其小数类型。此外，支持 `float` 和 `double`，但需要显式类型声明，类型强转或类型后缀。即使 `BigDecimal` 是小数的默认值，也可以在 `float` 或 `double` 作为参数类型的方法或闭包中接受这样的数字。
+
+小数不能使用二进制，八进制或十六进制表示来表示。
+
+=== 数字下划线
+
+在编写长数字字面量时，很难弄清楚某些数字是如何组合在一起的，例如成千上万的单词组等。通过允许你在数字字面量中放置下划线，可以更容易地发现这些组：
+
+[source,groovy]
+----
+long creditCardNumber = 1234_5678_9012_3456L
+long socialSecurityNumbers = 999_99_9999L
+double monetaryAmount = 12_345_132.12
+long hexBytes = 0xFF_EC_DE_5E
+long hexWords = 0xFFEC_DE5E
+long maxLong = 0x7fff_ffff_ffff_ffffL
+long alsoMaxLong = 9_223_372_036_854_775_807L
+long bytes = 0b11010010_01101001_10010100_10010010
+----
+
+=== 数字类型后缀
+
+我们可以通过给定后缀（见下表，大小写均可以）来强制一个数字（包括二进制，八进制和十六进制）具有特定类型。
+
+|===
+| 类型 | 后缀
+| BigInteger | 	`G` 或 `g`
+| Long | `L` 或 `l`
+| Integer | `I` 或 `i`
+| BigDecimal | `G` 或 `g`
+| Double | `D` 或 `d`
+| Float | `F` 或 `f`
+|===
+
+例子:
+
+[source,groovy]
+----
+assert 42I == new Integer('42')
+assert 42i == new Integer('42') // lowercase i more readable
+assert 123L == new Long("123") // uppercase L more readable
+assert 2147483648 == new Long('2147483648') // Long type used, value too large for an Integer
+assert 456G == new BigInteger('456')
+assert 456g == new BigInteger('456')
+assert 123.45 == new BigDecimal('123.45') // default BigDecimal type used
+assert 1.200065D == new Double('1.200065')
+assert 1.234F == new Float('1.234')
+assert 1.23E23D == new Double('1.23E23')
+assert 0b1111L.class == Long // binary
+assert 0xFFi.class == Integer // hexadecimal
+assert 034G.class == BigInteger // octal
+----
+
+[[syntax.math-operations]]
+=== 数学运算
+
+虽然稍后会介绍<<operators,运算符>>，但讨论数学运算的行为以及它们的结果类型是很重要的。
+
+除法和幂次运算除外(如下所述)：
+
+* `byte`，`char`，`short` 和 `int` 相互之间的二进制操作结果是 `int`
+* 涉及 `long` 和 `byte`，`char`，`short`，`int` 的二进制操作结果都是 `long`
+* 涉及 `BigInteger` 和任何其他整数类型的二进制运算结果都是 `BigInteger`
+* 涉及 `BigDecimal` 和 `byte`，`char`，`short`，`int` 和 `BigInteger` 的二进制操作结果为 `BigDecimal`
+* `float`，`double` 和 `BigDecimal` 之间的二进制运算操作结果是 `double`
+* 两个 `BigDecimal` 之间的二进制运算操作结果是 `BigDecimal`
+
+下表总结了这些规则：
+
+|===
+|            | byte | char | short | int | long | BigInteger | float  | double | BigDecimal
+| byte       | int  | int  | int   | int | long | BigInteger | double | double | BigDecimal
+| char       |      | int  | int   | int | long | BigInteger | double | double | BigDecimal
+| short      |      |      | int   | int | long | BigInteger | double | double | BigDecimal
+| int        |      |      |       | int | long | BigInteger | double | double | BigDecimal
+| long       |      |      |       |     | long | BigInteger | double | double | BigDecimal
+| BigInteger |      |      |       |     |      | BigInteger | double | double | BigDecimal
+| float      |      |      |       |     |      |            | double | double | double
+| double     |      |      |       |     |      |            |        | double | double
+| BigDecimal |      |      |       |     |      |            |        |        | BigDecimal
+|===
+
+由于Groovy的运算符重载，通常的算术运算符也适用于 `BigInteger` 和 `BigDecimal`，与Java不同，在Java中必须使用显式方法来操作这些数字。
+
+[[syntax.integer_division]]
+==== 除法运算符的情况
+
+如果操作数是 `float` 或 `double`，则除法运算符 `/`（和 `/=` 用于除法和赋值）产生 `double` 结果，否则产生 `BigDecimal` 结果（当两个操作数都是整数类型 `short`，`char`，`byte`， `int`，`long`，`BigInteger` 或 `BigDecimal` 的任意组合时）。
+
+如果除法是精确的，则使用 `divide()` 方法执行 `BigDecimal` 除法（即产生可以在相同精度和比例的范围内表示的结果），或者使用 `MathContext`，其精度为两个操作数的最大 {javaDocBaseUrl}/BigDecimal.html#precision()[精度] 加上10的额外精度，以及最大值为10的 {javaDocBaseUrl}/BigDecimal.html#scale()[刻度] 和操作数刻度的最大值。
+
+精度：所有数字的个数，刻度：小数点后面的数字个数。
+
+NOTE: 对于像Java中的整数除法，你应该使用 `intdiv()` 方法，因为Groovy不提供专用的整数除法运算符符号。
+
+[[syntax.power_operator]]
+==== 幂次运算符的情况
+
+幂运算由 `{asterisk}{asterisk}` 运算符表示，有两个参数：基数和指数。幂操作的结果取决于其操作数和操作的结果（特别是如果结果可以表示为整数值）。
+
+Groovy的幂操作使用以下规则来确定结果类型：
+
+* 如果指数是一个小数值
+** 如果结果可以表示为 `Integer`，则返回一个 `Integer`
+** 否则，如果结果可以表示为 `Long`，则返回 `Long`
+** 否则返回 `Double`
+* 如果指数是一个整数值
+** 如果指数严格为负，则如果结果值适合该类型，则返回 `Integer`，`Long` 或 `Double`
+** 如果指数是正数或零
+*** 如果基数是 `BigDecimal`，则返回 `BigDecimal` 结果值
+*** 如果基数是 `BigInteger`，则返回 `BigInteger` 结果值
+*** 如果基数是 `Integer`，那么如果结果值适合它则返回 `Integer`，否则返回 `BigInteger`
+*** 如果基数是 `Long`，那么如果结果值适合它则返回 `Long`，否则返回 `BigInteger`
+
+我们可以用几个例子说明这些规则：
+
+[source,groovy]
+----
+// base和exponent是整数，结果可以用Integer表示
+assert    2    **   3    instanceof Integer    //  8
+assert   10    **   9    instanceof Integer    //  1_000_000_000
+
+// base是long，所以结果用Long表示（尽管它可能适合Integer）
+assert    5L   **   2    instanceof Long       //  25
+
+// 结果不能表示为Integer或Long，因此返回BigInteger
+assert  100    **  10    instanceof BigInteger //  10e20
+assert 1234    ** 123    instanceof BigInteger //  170515806212727042875...
+
+// base是BigDecimal，指数是负int，但结果可以表示为Integer
+assert    0.5  **  -2    instanceof Integer    //  4
+
+// base是int，而exponent是一个负float，但同样结果可以表示为Integer
+assert    1    **  -0.3f instanceof Integer    //  1
+
+// base是int，而exponent是一个负int，但结果表示为Double（基数和指数实际上都转换为double）
+assert   10    **  -1    instanceof Double     //  0.1
+
+// base是BigDecimal，exponent是int，所以返回一个BigDecimal
+assert    1.2  **  10    instanceof BigDecimal //  6.1917364224
+
+// base是float或double，exponent是int，但结果只能表示为Double
+assert    3.4f **   5    instanceof Double     //  454.35430372146965
+assert    5.6d **   2    instanceof Double     //  31.359999999999996
+
+// 指数是小数值，结果只能表示为Double
+assert    7.8  **   1.9  instanceof Double     //  49.542708423868476
+assert    2    **   0.1f instanceof Double     //  1.0717734636432956
+----
+
+== 布尔
+
+Boolean是一种特殊的数据类型，用于表示真值：`true` 和 `false`。将此数据类型用于跟踪真/假条件的简单标志。
+
+布尔值可以存储在变量中，赋值到字段中，就像任何其他数据类型一样：
+
+[source,groovy]
+----
+def myBooleanVariable = true
+boolean untypedBooleanVar = false
+booleanField = true
+----
+
+`true` 和 `false` 是唯一两个原始布尔值。但是更复杂的布尔表达式可以使用逻辑运算符表示。
+
+此外，Groovy具有 {groovySemanticsDocBaseUrl}#Groovy-Truth[特殊规则]（通常称为Groovy Truth），用于将非布尔对象强制转换为布尔值。
+
+== 列表
+
+Groovy使用逗号分隔的值列表（用方括号括起来）来表示列表。Groovy列表是普通的JDK `java.util.List`，因为Groovy没有定义自己的集合类。默认情况下，定义列表时使用的具体列表实现是 `java.util.ArrayList`，除非你决定另行指定，我们将在后面看到。
+
+[source,groovy]
+----
+def numbers = [1, 2, 3]         // <1>
+
+assert numbers instanceof List  // <2>
+assert numbers.size() == 3      // <3>
+----
+<1> 我们定义一个用逗号分隔的列表编号，并用方括号括起来，然后我们将该列表分配给一个变量
+<2> 该列表是Java的 `java.util.List` 接口的实例
+<3> 可以使用 `size()` 方法查询列表的大小，并显示我们的列表包含3个元素
+
+在上面的示例中，我们使用了同类列表，但你也可以创建包含异构类型值的列表：
+
+[source,groovy]
+----
+def heterogeneous = [1, "a", true]  // <1>
+----
+<1> 这里的列表包含数字，字符串和布尔值
+
+我们提到默认情况下，列表实际上是 `java.util.ArrayList` 的实例，但是可以为我们的列表使用不同的支持类型，这要归功于使用 `as` 类型强制操作符，或者使用变量的显式类型声明：
+
+[source,groovy]
+----
+def arrayList = [1, 2, 3]
+assert arrayList instanceof java.util.ArrayList
+
+def linkedList = [2, 3, 4] as LinkedList    // <1>
+assert linkedList instanceof java.util.LinkedList
+
+LinkedList otherLinked = [3, 4, 5]          // <2>
+assert otherLinked instanceof java.util.LinkedList
+----
+<1> 使用 `as` 类型强制操作符来显式声明是 `java.util.LinkedList` 类型
+<2> 使用变量的显式类型声明是 `java.util.LinkedList` 类型
+
+你可以使用带有正索引的 `[]` 下标运算符（用于读取和设置值）访问列表元素，或负索引访问列表末尾的元素以及范围切片，并使用 `<<` 左移运算符将元素附加到列表：
+
+[source,groovy]
+----
+def letters = ['a', 'b', 'c', 'd']
+
+assert letters[0] == 'a'     // <1>
+assert letters[1] == 'b'
+
+assert letters[-1] == 'd'    // <2>
+assert letters[-2] == 'c'
+
+letters[2] = 'C'             // <3>
+assert letters[2] == 'C'
+
+letters << 'e'               // <4>
+assert letters[ 4] == 'e'
+assert letters[-1] == 'e'
+
+assert letters[1, 3] == ['b', 'd']         // <5>
+assert letters[2..4] == ['C', 'd', 'e']    // <6>
+----
+<1> 访问列表的第一个元素（从零开始计数）
+<2> 使用负索引访问列表的最后一个元素：-1是列表末尾的第一个元素
+<3> 使用赋值为列表的第三个元素设置新值
+<4> 使用 `<<` 左移运算符在列表的末尾追加一个元素
+<5> 一次访问两个元素，返回包含这两个元素的新列表
+<6> 使用范围从列表中访问从开始到结束元素位置的一系列值
+
+由于列表本质上可以是异构的，因此列表还可以包含其他列表来创建多维列表：
+
+[source,groovy]
+----
+def multi = [[0, 1], [2, 3]]     // <1>
+assert multi[1][0] == 2          // <2>
+----
+<1> 定义数字列表的列表
+<2> 访问第二个列表的第一个元素
+
+== 数组
+
+Groovy的数组重用了列表表示法，但是为了制作这样的数组，你需要通过强转或类型声明来明确地定义数组的类型。
+
+[source,groovy]
+----
+String[] arrStr = ['Ananas', 'Banana', 'Kiwi']  // <1>
+
+assert arrStr instanceof String[]    // <2>
+assert !(arrStr instanceof List)
+
+def numArr = [1, 2, 3] as int[]      // <3>
+
+assert numArr instanceof int[]       // <4>
+assert numArr.size() == 3
+----
+<1> 使用显式变量类型声明定义字符串数组
+<2> 断言我们创建了一个字符串数组
+<3> 使用 `as` 运算符创建一个int数组
+<4> 断言我们创建了一个int数组
+
+你还可以创建多维数组：
+
+[source,groovy]
+----
+def matrix3 = new Integer[3][3]         // <1>
+assert matrix3.size() == 3
+
+Integer[][] matrix2                     // <2>
+matrix2 = [[1, 2], [3, 4]]
+assert matrix2 instanceof Integer[][]
+----
+<1> 你可以定义新数组的边界
+<2> 或者声明一个数组而不指定其边界
+
+对数组元素的访问遵循与列表相同的表示法：
+
+[source,groovy]
+----
+String[] names = ['Cédric', 'Guillaume', 'Jochen', 'Paul']
+assert names[0] == 'Cédric'     // <1>
+
+names[2] = 'Blackdrag'          // <2>
+assert names[2] == 'Blackdrag'
+----
+<1> 检索数组的第一个元素
+<2> 将数组的第三个元素的值设置为新值
+
+Groovy不支持Java的数组初始化表示法，因为花括号可能会被Groovy误解为闭包的符号。
+
+== 映射
+
+有时在其他语言中称为字典或关联数组，Groovy具有映射功能。映射将键与值相关联，使用冒号分隔键和值，使用逗号分隔每个键/值对，以及用方括号括起的整个键和值。
+
+[source,groovy]
+----
+def colors = [red: '#FF0000', green: '#00FF00', blue: '#0000FF']   // <1>
+
+assert colors['red'] == '#FF0000'    // <2>
+assert colors.green  == '#00FF00'    // <3>
+
+colors['pink'] = '#FF00FF'           // <4>
+colors.yellow  = '#FFFF00'           // <5>
+
+assert colors.pink == '#FF00FF'
+assert colors['yellow'] == '#FFFF00'
+----
+<1> 我们定义了一个字符串颜色名称的映射，与其十六进制编码的html颜色相关联
+<2> 我们使用下标表示法来检查与 `red` 键相关联的内容
+<3> 也可以使用属性表示法来断言 `green` 颜色的十六进制表示
+<4> 同样，我们可以使用下标符号来添加新的键/值对
+<5> 或者属性表示法，添加 `yellow` 键/值对
+
+当使用键的名称时，我们实际上在映射中定义了 `String` 键。Groovy创建的映射实际上是 `java.util.LinkedHashMap` 的实例。
+
+如果你尝试访问映射中不存在的键：
+
+[source,groovy]
+----
+assert colors.unknown == null
+----
+
+你将检索到 `null` 结果。
+
+在上面的示例中，我们使用了字符串键，但你也可以使用其他类型的值作为键：
+
+[source,groovy]
+----
+def numbers = [1: 'one', 2: 'two']
+
+assert numbers[1] == 'one'
+----
+
+在这里，我们使用数字作为键，因为数字可以明确地被识别为数字，因此Groovy不会像我们之前的示例中那样创建字符串键。但是考虑一下你要传递一个变量代替键的情况，让该变量的值成为键：
+
+[source,groovy]
+----
+def key = 'name'
+def person = [key: 'Guillaume']      // <1>
+
+assert !person.containsKey('name')   // <2>
+assert person.containsKey('key')     // <3>
+----
+<1> 与 `'Guillaume'` 名称关联的 `key` 实际上是 `"key"` 字符串，而不是与 `key` 变量关联的值
+<2> 映射不包含 `'name'` 键
+<3> 相反，映射包含 `'key'` 键
+
+你还可以传递带引号的字符串以及键：["name": "Guillaume"]。如果你的键字符串不是有效的标识符，那么这是必需的，例如，如果你想创建一个包含哈希的字符串键，如：["street-name": "Main street"]。
+
+当你需要在映射定义中将变量值作为键传递时，必须用括号括起变量或表达式：
+
+[source,groovy]
+----
+person = [(key): 'Guillaume']        // <1>
+
+assert person.containsKey('name')    // <2>
+assert !person.containsKey('key')    // <3>
+----
+<1> 这一次，我们用括号括起键变量，指示解析器传递变量而不是定义字符串键
+<2> 映射确实包含 `name` 键
+<3> 但是映射不像以前那样包含 `key` 键
+
+
+TIP: http://www.groovy-lang.org/syntax.html[原文链接]

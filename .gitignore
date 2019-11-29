@@ -3,7 +3,9 @@
 *.class
 
 # Log file
+/log/
 *.log
+*.log.*
 
 # Package Files #
 *.jar
@@ -54,7 +56,7 @@ atlassian-ide-plugin.xml
 .idea/httpRequests
 
 ### Eclipse template
-
+*.project
 .metadata
 bin/
 tmp/
@@ -63,6 +65,8 @@ tmp/
 *.swp
 *~.nib
 local.properties
+*.project
+*.classpath
 .settings/
 .loadpath
 .recommenders

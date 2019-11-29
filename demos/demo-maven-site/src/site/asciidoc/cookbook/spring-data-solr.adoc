@@ -1,0 +1,1222 @@
+= Spring Data Solr
+Version 4.0.4.RELEASE
+:docSpringBaseUrl: https://docs.spring.io/spring/docs/current/spring-framework-reference
+:doctype: book
+:toc: left
+:toclevels: 3
+
+[[preface]]
+== 前言
+
+针对Apache Solr项目的Spring Data将核心Spring概念应用于使用Apache Solr搜索引擎开发解决方案。我们提供了一个“模板”作为存储和查询文档的高级抽象。
+你会注意到与Spring Framework中mongodb支持的相似之处。
+
+=== 项目元数据
+
+* 版本控制 - https://github.com/spring-projects/spring-data-solr
+* Bug追踪 - https://jira.spring.io/browse/DATASOLR
+* Release仓库 - https://repo.spring.io/libs-release
+* Milestone仓库 - https://repo.spring.io/libs-milestone
+* Snapshot仓库 - https://repo.spring.io/libs-snapshot
+
+=== 要求
+
+需要Java 8运行时和 https://lucene.apache.org/solr/[Apache Solr] 6.6。最好是6.6.x版本。
+
+[source,xml]
+----
+<dependency>
+  <groupId>org.apache.solr</groupId>
+  <artifactId>solr-solrj</artifactId>
+  <version>${solr.version}</version>
+</dependency>
+----
+
+include::cookbook/spring-data-common/repositories.adoc[leveloffset=+1]
+
+[[solr.repositories]]
+== Solr存储库
+
+以下包含Solr存储库实现的详细信息。
+
+[[solr.namespace]]
+=== Spring命名空间
+
+Spring Data Solr模块包含一个自定义命名空间，允许定义存储库bean以及实例化 `SolrClient` 元素。
+
+使用 `repositories` 元素查找Spring Data存储库，如<<repositories.create-instances,创建存储库实例>>中所述。
+
+.使用命名空间设置Solr存储库
+====
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:solr="http://www.springframework.org/schema/data/solr"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/data/solr
+    http://www.springframework.org/schema/data/solr/spring-solr.xsd">
+
+  <solr:repositories base-package="com.acme.repositories" />
+</beans>
+----
+====
+
+使用 `solr-server` 或 `embedded-solr-server` 元素在上下文中注册 `SolrClient` 的实例。
+
+.使用命名空间的HttpSolrClient
+====
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:solr="http://www.springframework.org/schema/data/solr"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/data/solr
+    http://www.springframework.org/schema/data/solr/spring-solr.xsd">
+
+  <solr:solr-client id="solrClient" url="http://locahost:8983/solr" />
+</beans>
+----
+====
+
+.使用命名空间的LBSolrClient
+====
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:solr="http://www.springframework.org/schema/data/solr"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/data/solr
+    http://www.springframework.org/schema/data/solr/spring-solr.xsd">
+
+  <solr:solr-client id="solrClient" url="http://locahost:8983/solr,http://localhost:8984/solr" />
+</beans>
+----
+====
+
+.使用命名空间的EmbeddedSolrServer
+====
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:solr="http://www.springframework.org/schema/data/solr"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/data/solr
+    http://www.springframework.org/schema/data/solr/spring-solr.xsd">
+
+  <solr:embedded-solr-server id="solrClient" solrHome="classpath:com/acme/solr" />
+</beans>
+----
+====
+
+[[solr.annotation]]
+=== 基于注解的配置
+
+可以通过XML命名空间和通过Java配置使用注解来激活Spring Data Solr存储库支持。
+
+
+.使用JavaConfig的Spring Data Solr存储库
+====
+[source,java]
+----
+@Configuration
+@EnableSolrRepositories
+class ApplicationConfig {
+
+  @Bean
+  public SolrClient solrClient() {
+    EmbeddedSolrServerFactory factory = new EmbeddedSolrServerFactory("classpath:com/acme/solr");
+    return factory.getSolrServer();
+  }
+
+  @Bean
+  public SolrOperations solrTemplate() {
+    return new SolrTemplate(solrClient());
+  }
+}
+----
+====
+
+上面的配置设置了 `SolrTemplate` 使用的 `EmbeddedSolrServer`。Spring Data Solr存储库使用 `@EnableSolrRepositories` 注解激活，该注解基本上具有与XML命名空间相同的属性。
+如果未配置基础包，则将使用配置类所在的基础包。
+
+[[solr.cdi]]
+=== 使用CDI设置Solr存储库
+
+你还可以使用CDI设置Spring Data Solr存储库，如以下示例所示：
+
+.使用Java配置的Spring Data Solr存储库
+====
+[source,java]
+----
+class SolrTemplateProducer {
+
+  @Produces
+  @ApplicationScoped
+  public SolrOperations createSolrTemplate() {
+    return new SolrTemplate(new EmbeddedSolrServerFactory("classpath:com/acme/solr"));
+  }
+}
+
+class ProductService {
+
+  private ProductRepository repository;
+
+  public Page<Product> findAvailableProductsByName(String name, Pageable pageable) {
+    return repository.findByAvailableTrueAndNameStartingWith(name, pageable);
+  }
+
+  @Inject
+  public void setRepository(ProductRepository repository) {
+    this.repository = repository;
+  }
+}
+----
+====
+
+[[solr.transactions]]
+=== 事务支持
+
+Solr支持服务器级别的事务意味着创建，更新，删除操作，自上次提交/优化/回滚以来在服务器上排队并最终一次性提交/优化/回滚。
+Spring Data Solr存储库将在完成时参与Spring被管理事务的提交/回滚更改。
+
+====
+[source,java]
+----
+@Transactional
+public Product save(Product product) {
+  Product savedProduct = jpaRepository.save(product);
+  solrRepository.save(savedProduct);
+  return savedProduct;
+}
+----
+====
+
+[[solr.query-methods]]
+=== 查询方法
+
+本节介绍如何使用Java类中的方法创建查询。
+
+[[solr.query-methods.finders]]
+==== 查询查找策略
+
+Solr模块支持手动将查询定义为 `String` 或将其从方法名称派生。
+
+NOTE: 目前没有QueryDSL支持。
+
+===== 声明式查询
+
+从方法名称派生查询并不总是合适的，并且可能导致不可读的方法名称。在这种情况下，你可以使用Solr命名查询（请参阅“<<solr.query-methods.named-queries,使用命名查询>>”）或使用 `@Query` 注解（请参阅“<<solr.query-methods.at-query,使用 `@Query` 注解>>”）。
+
+[[solr.query-methods.criterions]]
+==== 查询创建
+
+通常，Solr的查询创建机制的工作方式如<<repositories.query-methods,查询方法>>中所述。以下示例显示了Solr查询方法：
+
+.从方法名称创建查询
+====
+[source,java]
+----
+public interface ProductRepository extends Repository<Product, String> {
+  List<Product> findByNameAndPopularity(String name, Integer popularity);
+}
+----
+====
+
+前面的示例转换为以下Solr查询：
+
+====
+[source]
+----
+q=name:?0 AND popularity:?1
+----
+====
+
+下表描述了Solr支持的关键字：
+
+[cols="1,2,3", options="header"]
+.方法名称中支持的关键字
+|===
+| 关键字
+| 样例
+| Solr查询字符串
+
+| `And`
+| `findByNameAndPopularity`
+| `q=name:?0 AND popularity:?1`
+
+| `Or`
+| `findByNameOrPopularity`
+| `q=name:?0 OR popularity:?1`
+
+| `Is`
+| `findByName`
+| `q=name:?0`
+
+| `Not`
+| `findByNameNot`
+| `q=-name:?0`
+
+| `IsNull`
+| `findByNameIsNull`
+| `q=-name:[* TO *]`
+
+| `IsNotNull`
+| `findByNameIsNotNull`
+| `q=name:[* TO *]`
+
+| `Between`
+| `findByPopularityBetween`
+| `q=popularity:[?0 TO ?1]`
+
+| `LessThan`
+| `findByPopularityLessThan`
+| `q=popularity:[* TO ?0}`
+
+| `LessThanEqual`
+| `findByPopularityLessThanEqual`
+| `q=popularity:[* TO ?0]`
+
+| `GreaterThan`
+| `findByPopularityGreaterThan`
+| `q=popularity:{?0 TO *]`
+
+| `GreaterThanEqual`
+| `findByPopularityGreaterThanEqual`
+| `q=popularity:[?0 TO *]`
+
+| `Before`
+| `findByLastModifiedBefore`
+| `q=last_modified:[* TO ?0}`
+
+| `After`
+| `findByLastModifiedAfter`
+| `q=last_modified:{?0 TO *]`
+
+| `Like`
+| `findByNameLike`
+| `q=name:?0*`
+
+| `NotLike`
+| `findByNameNotLike`
+| `q=-name:?0*`
+
+| `StartingWith`
+| `findByNameStartingWith`
+| `q=name:?0*`
+
+| `EndingWith`
+| `findByNameEndingWith`
+| `q=name:*?0`
+
+| `Containing`
+| `findByNameContaining`
+| `q=name:*?0*`
+
+| `Matches`
+| `findByNameMatches`
+| `q=name:?0`
+
+| `In`
+| `findByNameIn(Collection<String>
+										names)`
+| `q=name:(?0... )`
+
+| `NotIn`
+| `findByNameNotIn(Collection<String>
+										names)`
+| `q=-name:(?0... )`
+
+| `Within`
+| `findByStoreWithin(Point, Distance)`
+| `q={!geofilt pt=?0.latitude,?0.longitude sfield=store
+										d=?1}`
+
+| `Near`
+| `findByStoreNear(Point, Distance)`
+| `q={!bbox pt=?0.latitude,?0.longitude sfield=store
+										d=?1}`
+
+| `Near`
+| `findByStoreNear(Box)`
+| `q=store[?0.start.latitude,?0.start.longitude TO
+										?0.end.latitude,?0.end.longitude]`
+
+| `True`
+| `findByAvailableTrue`
+| `q=inStock:true`
+
+| `False`
+| `findByAvailableFalse`
+| `q=inStock:false`
+
+| `OrderBy`
+| `findByAvailableTrueOrderByNameDesc`
+| `q=inStock:true&sort=name desc`
+|===
+
+NOTE: 集合类型可以与'Like'，'Not Like'，'Starting With'，'Ending With' 和 'Containing' 一起使用。
+
+[source,java]
+----
+Page<Product> findByNameLike(Collection<String> name);
+----
+
+[[solr.query-methods.at-query]]
+==== 使用 `@Query` 注解
+
+使用命名查询（请参阅“<<solr.query-methods.named-queries,使用命名查询>>”）来声明实体查询是一种有效的方法，适用于少量查询。由于查询本身与执行它们的Java方法相关联，因此你实际上可以使用Spring Data Solr `@Query` 注解直接绑定它们。以下示例使用 `@Query` 注解声明查询：
+
+.使用 `@Query` 注解在方法上声明查询
+====
+[source,java]
+----
+public interface ProductRepository extends SolrRepository<Product, String> {
+  @Query("inStock:?0")
+  List<Product> findByAvailable(Boolean available);
+}
+----
+====
+
+[[solr.query-methods.named-queries]]
+==== 使用命名查询
+
+命名查询可以保存在属性文件中并连接到相应的方法。你应该记住“<<repositories.query-methods.query-lookup-strategies,
+查询查找策略>>”中描述的命名约定或使用 `@Query`。以下示例显示如何在属性文件中声明命名查询：
+
+.在属性文件中声明命名查询
+====
+[source]
+----
+Product.findByNamedQuery=popularity:?0
+Product.findByName=name:?0
+----
+====
+
+以下示例使用前面示例中声明的 `findByName` 命名查询：
+
+[source,java]
+----
+public interface ProductRepository extends SolrCrudRepository<Product, String> {
+
+  List<Product> findByNamedQuery(Integer popularity);
+
+  @Query(name = "Product.findByName")
+  List<Product> findByAnnotatedNamedQuery(String name);
+
+}
+----
+
+[[solr.mapping]]
+=== 文档映射
+
+尽管SolrJ中已经支持实体映射，但Spring Data Solr附带了自己的映射机制（在下一节中描述）。
+
+NOTE: `DocumentObjectBinder` 具有卓越的性能。因此，如果你不需要自定义映射，我们建议你使用它。你可以通过在 `SolrTemplate` 中注册 `SolrJConverter` 来切换到 `DocumentObjectBinder`。
+
+include::cookbook/spring-data-common/object-mapping.adoc[leveloffset=+3]
+
+[[solr.mapping.mappingSolr]]
+==== `MappingSolrConverter`
+
+`MappingSolrConverter` 允许你为 `SolrDocument` 和 `SolrInputDocument` 以及嵌套在bean中的其他类型注册自定义转换器。转换器与 `DocumentObjectBinder` 不是100%兼容，并且 `@Indexed` 必须添加 `readonly = true` 来忽略写入Solr的字段。以下示例映射文档中的许多字段：
+
+.样本文档映射
+====
+[source]
+----
+public class Product {
+  @Field
+  private String simpleProperty;
+
+  @Field("somePropertyName")
+  private String namedPropery;
+
+  @Field
+  private List<String> listOfValues;
+
+  @Indexed(readonly = true)
+  @Field("property_*")
+  private List<String> ignoredFromWriting;
+
+  @Field("mappedField_*")
+  private Map<String, List<String>> mappedFieldValues;
+
+  @Dynamic
+  @Field("dynamicMappedField_*")
+  private Map<String, String> dynamicMappedFieldValues;
+
+  @Field
+  private GeoLocation location;
+
+}
+----
+====
+
+下表描述了可以使用 `MappingSolrConverter` 映射的属性：
+
+[cols="1,3", options="header"]
+|===
+| 属性
+| 写映射
+
+| simpleProperty
+| `<field name="simpleProperty">value</field>`
+
+| namedPropery
+| `<field name="somePropertyName">value</field>`
+
+| listOfValues
+| `<field name="listOfValues">value 1</field>` 
+`<field name="listOfValues">value 2</field>` 
+`<field name="listOfValues">value 3</field>`
+
+| ignoredFromWriting
+| `//not written to document`
+
+| mappedFieldValues
+| `<field name="mapentry[0].key">mapentry[0].value[0]</field>` 
+`<field name="mapentry[0].key">mapentry[0].value[1]</field>` 
+`<field name="mapentry[1].key">mapentry[1].value[0]</field>`
+
+| dynamicMappedFieldValues
+| `<field name="'dynamicMappedField_' + mapentry[0].key">mapentry[0].value[0]</field>` 
+`<field name="'dynamicMappedField_' + mapentry[0].key">mapentry[0].value[1]</field>` 
+`<field name="'dynamicMappedField_' + mapentry[1].key">mapentry[1].value[0]</field>`
+
+| location
+| `<field name="location">48.362893,14.534437</field>`
+|===
+
+你可以通过向 `SolrTemplate` 添加 `CustomConversions` 并使用你自己的 `Converter` 实现对其进行初始化来注册自定义转换器，如以下示例所示：
+
+====
+[source,xml]
+----
+<bean id="solrConverter" class="org.springframework.data.solr.core.convert.MappingSolrConverter">
+  <constructor-arg>
+	  <bean class="org.springframework.data.solr.core.mapping.SimpleSolrMappingContext" />
+  </constructor-arg>
+  <property name="customConversions" ref="customConversions" />
+</bean>
+
+<bean id="customConversions" class="org.springframework.data.solr.core.convert.SolrCustomConversions">
+  <constructor-arg>
+	  <list>
+		  <bean class="com.acme.MyBeanToSolrInputDocumentConverter" />
+	  </list>
+  </constructor-arg>
+</bean>
+
+<bean id="solrTemplate" class="org.springframework.data.solr.core.SolrTemplate">
+  <constructor-arg ref="solrClient" />
+  <property name="solrConverter" ref="solrConverter" />
+</bean>
+----
+====
+
+[[solr.misc]]
+== 其他Solr操作支持
+
+本章介绍了无法通过存储库接口直接访问的Solr操作（如分面）的其他支持。建议将这些操作添加为自定义实现，如<<repositories.custom-implementations,Spring Data Repositories的自定义实现>>中所述。
+
+[[solr.misc.collection-name]]
+=== 集合/内核名称
+
+使用 `@SolrDocument` 注解，可以通过为其提供静态值或使用 {docSpringBaseUrl}/core.html#expressions[SpEL]进行动态评估来自定义使用的集合名称。
+
+====
+[source,java]
+----
+@SolrDocument(collection = "techproducts")
+class StaticCollectionName { ... }
+
+@SolrDocument(collection = "#{@someBean.getCollectionName()}")
+class DynamicCollectionName { ... }
+----
+====
+
+NOTE: 使用 `@SolrDocument` 注解的类型可通过表达式中的 `targetType` 变量获得。
+
+[[solr.misc.partialUpdates]]
+=== 原子更新
+
+PartialUpdates 可以使用实现 `Update` 的 `PartialUpdate` 完成。
+
+====
+[source,java]
+----
+PartialUpdate update = new PartialUpdate("id", "123");
+update.add("name", "updated-name");
+solrTemplate.saveBean("collection-1", update);
+----
+====
+
+[[solr.misc.projection]]
+=== 投影
+
+通过在 `@Query` 中使用字段值应用投影。
+
+====
+[source,java]
+----
+@Query(fields = { "name", "id" })
+List<ProductBean> findByNameStartingWith(String name);
+----
+====
+
+[[solr.misc.faceting]]
+=== 分面
+
+使用 `SolrRepository` 无法直接应用分面，但 `SolrTemplate` 支持此功能。以下示例显示了一个分面查询：
+
+====
+[source,java]
+----
+FacetQuery query = new SimpleFacetQuery(new Criteria(Criteria.WILDCARD).expression(Criteria.WILDCARD))
+  .setFacetOptions(new FacetOptions().addFacetOnField("name").setFacetLimit(5));
+FacetPage<Product> page = solrTemplate.queryForFacetPage("collection-1", query, Product.class);
+----
+====
+
+字段或查询的分面也可以使用 `@Facet` 定义。请记住，结果是 `FacetPage`。
+
+NOTE: 使用 `@Facet` 可以定义使用输入参数作为值的占位符。
+
+以下示例使用 `@Facet` 注解定义分面查询：
+
+====
+[source,java]
+----
+@Query(value = "*:*")
+@Facet(fields = { "name" }, limit = 5)
+FacetPage<Product> findAllFacetOnName(Pageable page);
+----
+====
+
+以下示例显示了另一个分面查询，其前缀为：
+
+====
+[source,java]
+----
+@Query(value = "popularity:?0")
+@Facet(fields = { "name" }, limit = 5, prefix="?1")
+FacetPage<Product> findByPopularityFacetOnName(int popularity, String prefix, Pageable page);
+----
+====
+
+Solr允许基于每个字段定义分面参数。要向定义的字段添加特殊分面选项，请使用 `FieldWithFacetParameters`，如以下示例所示：
+
+====
+[source,java]
+----
+// produces: f.name.facet.prefix=spring
+FacetOptions options = new FacetOptions();
+options.addFacetOnField(new FieldWithFacetParameters("name").setPrefix("spring"));
+----
+====
+
+[[solr.misc.faceting.range]]
+==== 区间分面
+
+你可以通过在 `FacetOptions` 上配置所需范围来创建区间分面查询。你可以通过创建 `FacetOptions` 实例，将选项设置为 `FacetQuery`，并通过 `SolrTemplate` 查询分面页来请求范围，如下所示：
+
+====
+[source,java]
+----
+FacetOptions facetOptions = new FacetOptions()
+  .addFacetByRange(
+     new FieldWithNumericRangeParameters("price", 5, 20, 5)
+       .setHardEnd(true)
+       .setInclude(FacetRangeInclude.ALL)
+  )
+  .addFacetByRange(
+    new FieldWithDateRangeParameters("release", new Date(1420070400), new Date(946684800), "+1YEAR")
+      .setInclude(FacetRangeInclude.ALL)
+      .setOther(FacetRangeOther.BEFORE)
+  );
+facetOptions.setFacetMinCount(0);
+
+Criteria criteria = new SimpleStringCriteria("*:*");
+SimpleFacetQuery facetQuery = new SimpleFacetQuery(criteria).setFacetOptions(facetOptions);
+FacetPage<ExampleSolrBean> statResultPage = solrTemplate.queryForFacetPage("collection-1", facetQuery, ExampleSolrBean.class);
+----
+====
+
+分面区间请求有两种字段实现:
+
+* Numeric Facet Range: Used to perform range faceting over numeric fields. To request range faceting, you can use an instance of the `org.springframework.data.solr.core.query.FacetOptions.FieldWithNumericRangeParameters` class. Its instantiation requires a field name, a start value (number), an end value (number), and a gap (number);
+* Date Facet Range: Used to perform range faceting over date fields. To request range faceting, you can use an instance of the `org.springframework.data.solr.core.query.FacetOptions.FieldWithDateRangeParameters` class. Its instantiation requires a field name, a start value (date), an end value (date), and a gap (string). You can define the gap for this kind of field by using `org.apache.solr.util.DateMathParser` (for example, `+6MONTHS+3DAYS/DAY` means six months and three days in the future, rounded down to the nearest day).
+
+Additionally, the following properties can be configured for a field with range parameters (`org.springframework.data.solr.core.query.FacetOptions.FieldWithRangeParameters`):
+
+* Hard End: `setHardEnd(Boolean)` defines whether the last range should be abruptly ended even if the end does not satisfy `(start - end) % gap = 0`.
+* Include: `setInclude(org.apache.solr.common.params.FacetParams.FacetRangeInclude)` defines how boundaries (lower and upper) should be handled (exclusive or inclusive) on range facet requests.
+* Other: `setOther(org.apache.solr.common.params.FacetParams.FacetRangeOther)` defines the additional (other) counts for the range facet (such as count of documents that are before the start of the range facet, after the end of the range facet, or even between the start and the end).
+
+[[solr.misc.faceting.pivot]]
+==== 支点分面
+
+还支持支点分面（决策树），可以使用 `@Facet` 注解查询，如下所示：
+
+====
+[source,java]
+----
+public interface {
+
+  @Facet(pivots = @Pivot({ "category", "dimension" }, pivotMinCount = 0))
+  FacetPage<Product> findByTitle(String title, Pageable page);
+
+  @Facet(pivots = @Pivot({ "category", "dimension" }))
+  FacetPage<Product> findByDescription(String description, Pageable page);
+
+}
+----
+====
+
+或者，可以使用 `SolrTemplate` 查询，如下所示：
+
+====
+[source,java]
+----
+FacetQuery facetQuery = new SimpleFacetQuery(new SimpleStringCriteria("title:foo"));
+FacetOptions facetOptions = new FacetOptions();
+facetOptions.setFacetMinCount(0);
+facetOptions.addFacetOnPivot("category","dimension");
+facetQuery.setFacetOptions(facetOptions);
+FacetPage<Product> facetResult = solrTemplate.queryForFacetPage("collection-1", facetQuery, Product.class);
+----
+====
+
+要检索数据透视结果，请使用 `getPivot` 方法，如下所示：
+
+====
+[source,java]
+----
+List<FacetPivotFieldEntry> pivot = facetResult.getPivot(new SimplePivotField("categories","available"));
+----
+====
+
+[[solr.misc.terms]]
+=== 词项
+
+词项向量不能直接在 `SolrRepository` 中使用，但可以通过 `SolrTemplate` 应用。请记住，结果是 `TermsPage`。以下示例显示如何创建词项查询：
+
+====
+[source,java]
+----
+TermsQuery query = SimpleTermsQuery.queryBuilder().fields("name").build();
+TermsPage page = solrTemplate.queryForTermsPage("collection-1", query);
+----
+====
+
+[[solr.misc.group]]
+=== 结果分组/字段折叠
+
+结果分组不能直接在 `SolrRepository` 中使用，但可以通过 `SolrTemplate` 应用。请记住，结果是 `GroupPage`。以下示例显示如何创建结果组：
+
+====
+[source,java]
+----
+Field field = new SimpleField("popularity");
+Function func = ExistsFunction.exists("description");
+Query query = new SimpleQuery("inStock:true");
+
+SimpleQuery groupQuery = new SimpleQuery(new SimpleStringCriteria("*:*"));
+GroupOptions groupOptions = new GroupOptions()
+	.addGroupByField(field)
+	.addGroupByFunction(func)
+	.addGroupByQuery(query);
+groupQuery.setGroupOptions(groupOptions);
+
+GroupPage<Product> page = solrTemplate.queryForGroupPage("collection-1", query, Product.class);
+
+GroupResult<Product> fieldGroup = page.getGroupResult(field);
+GroupResult<Product> funcGroup = page.getGroupResult(func);
+GroupResult<Product> queryGroup = page.getGroupResult(query);
+----
+====
+
+[[solr.misc.fieldStats]]
+=== 字段统计
+
+字段统计信息用于检索Solr给定字段的统计信息（`max`, `min`, `sum`, `count`, `mean`, `missing`, `stddev` 和 `distinct` 计算）。你可以为查询提供 `StatsOptions`，并从返回的 `StatsPage` 中读取 `FieldStatsResult`。例如，你可以使用 `SolrTemplate`，如下所示：
+
+====
+[source,java]
+----
+// simple field stats
+StatsOptions statsOptions = new StatsOptions().addField("price");
+
+// query
+SimpleQuery statsQuery = new SimpleQuery("*:*");
+statsQuery.setStatsOptions(statsOptions);
+StatsPage<Product> statsPage = solrTemplate.queryForStatsPage("collection-1", statsQuery, Product.class);
+
+// retrieving stats info
+FieldStatsResult priceStatResult = statResultPage.getFieldStatsResult("price");
+Object max = priceStatResult.getMax();
+Long missing = priceStatResult.getMissing();
+----
+====
+
+你可以通过使用 `@Stats` 注解存储库方法来实现相同的结果，如下所示：
+
+====
+[source,java]
+----
+@Query("name:?0")
+@Stats(value = { "price" })
+StatsPage<Product> findByName(String name, Pageable page);
+----
+====
+
+还支持不同的计算和faceting：
+
+====
+[source,java]
+----
+// for distinct calculation
+StatsOptions statsOptions = new StatsOptions()
+    .addField("category")
+    // for distinct calculation
+    .setCalcDistinct(true)
+    // for faceting
+    .addFacet("availability");
+
+// query
+SimpleQuery statsQuery = new SimpleQuery("*:*");
+statsQuery.setStatsOptions(statsOptions);
+StatsPage<Product> statsPage = solrTemplate.queryForStatsPage("collection-1", statsQuery, Product.class);
+
+// field stats
+FieldStatsResult categoryStatResult = statResultPage.getFieldStatsResult("category");
+
+// retrieving distinct
+List<Object> categoryValues = priceStatResult.getDistinctValues();
+Long distinctCount = categoryStatResult.getDistinctCount();
+
+// retrieving faceting
+Map<String, StatsResult> availabilityFacetResult = categoryStatResult.getFacetStatsResult("availability");
+Long availableCount = availabilityFacetResult.get("true").getCount();
+----
+====
+
+前面示例的带注解（并因此更短）的版本如下：
+
+====
+[source,java]
+----
+@Query("name:?0")
+@Stats(value = "category", facets = { "availability" }, calcDistinct = true)
+StatsPage<Product> findByName(String name);
+----
+====
+
+为了执行选择性faceting或选择性不同的计算，你可以使用 `@SelectiveStats`，如下所示：
+
+====
+[source,java]
+----
+// selective distinct faceting
+...
+Field facetField = getFacetField();
+StatsOptions statsOptions = new StatsOptions()
+    .addField("price")
+    .addField("category").addSelectiveFacet("name").addSelectiveFacet(facetField);
+...
+// or annotating repository method as follows
+...
+@Stats(value = "price", selective = @SelectiveStats(field = "category", facets = { "name", "available" }))
+...
+
+// selective distinct calculation
+...
+StatsOptions statsOptions = new StatsOptions()
+    .addField("price")
+    .addField("category").setSelectiveCalcDistinct(true);
+...
+// or annotating repository method as follows
+...
+@Stats(value = "price", selective = @SelectiveStats(field = "category", calcDistinct = true))
+...
+----
+====
+
+[[solr.misc.filter]]
+=== 过滤查询
+
+过滤查询可提高查询速度，但不会影响文档分数。我们建议将地理空间搜索实现为过滤查询。
+
+NOTE: 在Solr中，除非另有说明，否则所有距离单位均为千米，点数为纬度和经度。
+
+以下示例显示了地理点的过滤查询（在本例中为奥地利）：
+
+====
+[source,java]
+----
+Query query = new SimpleQuery(new Criteria("category").is("supercalifragilisticexpialidocious"));
+FilterQuery fq = new SimpleFilterQuery(new Criteria("store")
+  .near(new Point(48.305478, 14.286699), new Distance(5)));
+query.addFilterQuery(fq);
+----
+====
+
+你还可以使用 `@Query` 定义简单的过滤查询。
+
+NOTE: 使用 `@Query` 可以定义使用输入参数作为值的占位符。
+
+以下示例显示了带占位符的查询（`*:*`）：
+
+====
+[source,java]
+----
+@Query(value = "*:*", filters = { "inStock:true", "popularity:[* TO 3]" })
+List<Product> findAllFilterAvailableTrueAndPopularityLessThanEqual3();
+----
+====
+
+[[solr.misc.timeAllowed]]
+=== 搜索完成所允许的时间
+
+你可以设置搜索完成所允许的时间。此值仅适用于搜索，而不适用于一般的请求。时间以毫秒为单位。小于或等于零的值意味着没有时间限制。如果有的话，可能会返回部分结果。以下示例将搜索时间限制为100毫秒：
+
+====
+[source,java]
+----
+Query query = new SimpleQuery(new SimpleStringCriteria("field_1:value_1"));
+// Allowing maximum of 100ms for this search
+query.setTimeAllowed(100);
+----
+====
+
+[[solr.misc.boost]]
+=== 提升文档分数
+
+你可以提高匹配条件的文档分数以影响结果顺序。你可以通过设置 `Criteria` 上的boost或使用 `@Boost` 来获取派生查询来实现。以下示例提升了 `findByNameOrDescription` 查询的 `name` 参数：
+
+====
+[source,java]
+----
+Page<Product> findByNameOrDescription(@Boost(2) String name, String description);
+----
+====
+
+[[solr.misc.boost.index-time]]
+==== 索引时间提升
+
+基于文档和基于字段的索引时间提升已从Apache Solr 7中删除，因此也从Apache Solr 4.x的Spring Data中删除。
+
+[[solr.misc.requesthandler]]
+=== 选择请求处理器
+
+你可以直接在 `Query` 中通过 `qt` 参数选择请求处理器，或者在方法签名中添加 `@Query`。以下示例通过添加 `@Query` 来实现：
+
+====
+[source,java]
+----
+@Query(requestHandler = "/instock")
+Page<Product> findByNameOrDescription(String name, String description);
+----
+====
+
+[[solr.misc.join]]
+=== 使用连接
+
+你可以通过定义 `Query` 的 `Join` 属性在一个Solr核心中使用连接。
+
+NOTE: 在Solr 4.x之前无法使用连接。
+
+以下示例显示了如何使用连接：
+
+====
+[source,java]
+----
+SimpleQuery query = new SimpleQuery(new SimpleStringCriteria("text:ipod"));
+query.setJoin(Join.from("manu_id_s").to("id"));
+----
+====
+
+[[solr.misc.highlighting]]
+=== 高亮显示
+
+要高亮显示搜索结果中的匹配项，可以将 `HighlightOptions` 添加到 `SimpleHighlightQuery`。提供没有任何其他属性的 `HighlightOptions`
+会在 `SolrDocument` 中的所有字段上高亮显示。
+
+NOTE: 你可以通过将 `FieldWithHighlightParameters` 添加到 `HighlightOptions` 来设置特定于字段的高亮参数。
+
+以下示例为查询中的所有字段设置高亮显示：
+
+====
+[source,java]
+----
+SimpleHighlightQuery query = new SimpleHighlightQuery(new SimpleStringCriteria("name:with"));
+query.setHighlightOptions(new HighlightOptions());
+HighlightPage<Product> page = solrTemplate.queryForHighlightPage("collection-1", query, Product.class);
+----
+====
+
+并非所有参数都可通过setter和getter获得，但可以直接添加。
+
+以下示例在两个字段上设置高亮显示：
+
+====
+[source,java]
+----
+SimpleHighlightQuery query = new SimpleHighlightQuery(new SimpleStringCriteria("name:with"));
+query.setHighlightOptions(new HighlightOptions().addHighlightParameter("hl.bs.country", "at"));
+----
+====
+
+要将高亮显示应用于派生查询，可以使用 `@Highlight`。如果没有定义 `fields`，则高亮显示应用于所有字段。
+
+====
+[source,java]
+----
+@Highlight(prefix = "<b>", postfix = "</b>")
+HighlightPage<Product> findByName(String name, Pageable page);
+----
+====
+
+[[solr.misc.spellcheck]]
+=== 拼写检查
+
+拼写检查根据实际查询提供搜索词建议。有关详细信息，请参阅 https://cwiki.apache.org/confluence/display/solr/Spell+Checking[Solr指南]。
+
+==== 拼写检查选项
+
+设置 `SpellcheckOptions` 后，拼写检查查询参数将添加到请求中，如以下示例所示：
+
+====
+[source,java]
+----
+SimpleQuery q = new SimpleQuery("name:gren");
+q.setSpellcheckOptions(SpellcheckOptions.spellcheck()               <1>
+  .dictionaries("dict1", "dict2")                                   <2>
+  .count(5)                                                         <3>
+  .extendedResults());                                              <4>
+q.setRequestHandler("/spell");                                      <5>
+
+SpellcheckedPage<Product> found = template.query(q, Product.class); <6>
+----
+<1> 通过设置 `SpellcheckOptions` 启用拼写检查。设置 `spellcheck = on` 请求参数。
+<2> 设置用于查找的词典。
+<3> 设置要返回的最大建议数。
+<4> 启用扩展结果，包括术语频率等。
+<5> 设置请求处理器，该处理程序必须能够处理建议。
+<6> 运行查询。
+====
+
+==== `@Spellcheck`
+
+`@Spellcheck` 注解允许在存储库级别使用拼写检查功能。以下示例显示了如何使用它：
+
+====
+[source,java]
+----
+public interface ProductRepository extends Repository<Product, String> {
+
+  @Query(requestHandler = "/spell")
+  @Spellcheck(dictionaries = { "dict1", "dic2" }, count=5, extendedResults = true)
+  SpellcheckedPage<Product> findByName(String name, Pageable page);
+
+}
+----
+====
+
+[[solr.misc.functions]]
+=== 使用函数
+
+Solr支持查询中的几个函数表达式，并包含许多函数。你可以通过实现 `Function` 来添加自定义函数。下表列出了支持的功能：
+
+[cols="1,2", options="header"]
+.函数
+|===
+| 类
+| Solr函数
+
+| `CurrencyFunction`
+| `currency(field_name,[CODE])`
+
+| `DefaultValueFunction`
+| `def(field\|function,defaultValue)`
+
+| `DistanceFunction`
+| `dist(power, pointA, pointB)`
+
+| `DivideFunction`
+| `div(x,y)`
+
+| `ExistsFunction`
+| `exists(field\|function)`
+
+| `GeoDistanceFunction`
+| `geodist(sfield, latitude, longitude)`
+
+| `GeoHashFunction`
+| `geohash(latitude, longitude)`
+
+| `IfFunction`
+| `if(value\|field\|function,trueValue,falseValue)`
+
+| `MaxFunction`
+| `max(field\|function,value)`
+
+| `NotFunction`
+| `not(field\|function)`
+
+| `ProductFunction`
+| `product(x,y,...)`
+
+| `QueryFunction`
+| `query(x)`
+
+| `TermFrequencyFunction`
+| `termfreq(field,term)`
+|===
+
+
+以下示例使用 `QueryFunction`：
+
+====
+[source,java]
+----
+SimpleQuery query = new SimpleQuery(new SimpleStringCriteria("text:ipod"));
+query.addFilterQuery(new FilterQuery(Criteria.where(QueryFunction.query("name:sol*"))));
+----
+====
+
+[[solr.misc.realtimeGet]]
+=== 实时获取
+
+实时获取允许使用唯一密钥检索任何文档的最新版本，而无需重新打开搜索者。
+
+NOTE: 实时获取依赖于更新日志功能。
+
+以下示例显示了实时获取：
+
+.实时获取
+====
+[source,java]
+----
+Optional<Product> product = solrTemplate.getById("collection-1", "123", Product.class);
+----
+====
+
+你可以通过提供一组 `ids` 来检索多个文档，如下所示：
+
+.实时多重获取
+====
+[source,java]
+----
+Collection<String> ids = Arrays.asList("123", "134");
+Collection<Product> products = solrTemplate.getByIds("collection-1", ids, Product.class);
+----
+====
+
+[[solr.misc.specialFields]]
+=== 特殊字段
+
+Solr包括许多特殊字段，包括得分字段。
+
+==== `@Score`
+
+为了加载查询结果的得分信息，你可以添加一个带有 `@Score` 注解的字段，指示该属性包含文档的得分。
+
+NOTE: 得分属性需要是数字，并且每个文档只能出现一次。
+
+以下示例显示了包含得分字段的文档：
+
+====
+[source,java]
+----
+public class MyEntity {
+
+    @Id
+    private String id;
+
+    @Score
+    private Float score;
+
+    // setters and getters ...
+
+}
+----
+====
+
+[[solr.misc.child-documents]]
+=== 嵌套文档
+
+嵌套文档允许父子关系中的其他文档内的文档。
+
+嵌套文档需要与父文档一起编制索引，并且不能单独更新。但是，嵌套文档在索引中显示为单个文档。解析父子关系是在查询时完成的。
+
+要指示属性应被视为嵌套对象，必须使用 `@o.a.s.c.solrj.beans.Field(child=true)` 或 `@o.s.d.s.core.mapping.ChildDocument` 进行注解。以下示例使用 `@ChildDocument` 注解：
+
+====
+[source,java]
+----
+public class Book {
+
+    @Id String id;
+    @Indexed("type_s") String type;
+    @Indexed("title_t") String title;
+    @Indexed("author_s") String author;
+    @Indexed("publisher_s") String publisher;
+
+    @ChildDocument List<Review> reviews;      <1>
+
+    // setters and getters ...
+
+}
+
+public class Review {
+
+    @Id String id;                            <2>
+    @Indexed("type_s") String type;
+    @Indexed("review_dt") Date date;
+    @Indexed("stars_i") int stars;
+    @Indexed("author_s") String author;
+    @Indexed("comment_t") String comment;
+
+}
+----
+<1> 多个子文档可以与父文档关联，或使用域类型存储单个关系。
+<2> 请注意，嵌套文档还需要分配唯一的 `id`。
+====
+
+假设 `Book#type` 是 `book`，`Review#type` 解析为 `review`，可以通过改变 `fl` 查询参数来检索 `book` 及其子关系 `reviews`，如下例所示：
+
+====
+[source,java]
+----
+Query query = new SimpleQuery(where("id").is("theWayOfKings"));
+query.addProjectionOnField(new SimpleField("*"));
+query.addProjectionOnField(new SimpleField("[child parentFilter=type_s:book]")); <1>
+
+return solrTemplate.queryForObject("books", query, Book.class);
+----
+<1> 父过滤器始终在索引中定义完整的父文档集，而不是单个文档的父文档。
+====
+
+[[appendix]]
+== 附录
+
+// :numbered!:
+include::cookbook/spring-data-common/repository-namespace.adoc[leveloffset=+2]
+include::cookbook/spring-data-common/repository-populator-namespace.adoc[leveloffset=+2]
+include::cookbook/spring-data-common/repository-query-keywords.adoc[leveloffset=+2]
+include::cookbook/spring-data-common/repository-query-return-types.adoc[leveloffset=+2]
+
+TIP: https://docs.spring.io/spring-data/solr/docs/3.0.13.RELEASE/reference/html/[原文链接]
