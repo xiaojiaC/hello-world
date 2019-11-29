@@ -152,6 +152,10 @@
 
   <repositories>
     <repository>
+      <id>spring-io</id>
+      <url>http://repo.spring.io/release/</url>
+    </repository>
+    <repository>
       <id>maven-release</id>
       <name>Nexus Releases</name>
       <url>http://127.0.0.1:8081/repository/sunny.releases/</url>

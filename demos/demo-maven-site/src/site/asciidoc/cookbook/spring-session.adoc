@@ -5,6 +5,7 @@ Version 2.0.7.RELEASE
 
 Spring Session提供了用于管理用户会话信息的API和实现。
 
+[[overview]]
 == 简介
 
 Spring Session提供了用于管理用户会话信息的API和实现，同时还使支持集群会话变得微不足道，而不依赖于特定于应用程序容器的解决方案。

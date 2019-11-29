@@ -5,8 +5,9 @@ Version 2.9.2-SNAPSHOT
 :springfoxRfc6570Version: 1.0.0
 :doctype: book
 :toc: left
+:source-highlighter: coderay
 
-
+[[introduction]]
 == 介绍
 
 Springfox的java库套件都是关于使用 http://projects.spring.io/spring-framework[Spring系列项目]自动生成JSON API的机器和人类

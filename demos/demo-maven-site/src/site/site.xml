@@ -54,6 +54,7 @@
       <item name="Maven Plugin" href="quickstart/maven-plugin.html"/>
       <item name="Docker Maven Plugin" href="cookbook/docker-maven-plugin.html"/>
       <item name="Pro Git" href="https://progit.bootcss.com/"/>
+      <item name="Spring Core" href="cookbook/spring-core.html"/>
       <item name="Spring Session" href="cookbook/spring-session.html"/>
       <item name="Spring Data JPA" href="cookbook/spring-data-jpa.html"/>
       <item name="Spring Data Solr" href="cookbook/spring-data-solr.html"/>
