@@ -1,0 +1,14 @@
+= Spring Documentation
+:toc:
+:toc-title:
+
+Hmm, the gate of Spring :-)
+
+* <<spring-core.adoc#beans,Spring Core>>
+* <<spring-session.adoc#overview,Spring Session>>
+* <<spring-test.adoc#testing-introduction,Spring Testing>>
+* <<spring-boot-test.adoc#boot-features-testing,Spring Boot Testing>>
+* <<spring-data-jpa.adoc#project,Spring Data JPA>>
+* <<spring-data-solr.adoc#preface,Spring Data Solr>>
+* <<spring-rest-docs.adoc#introduction,Spring Rest Docs>>
+* <<springfox.adoc#introduction,Springfox>>

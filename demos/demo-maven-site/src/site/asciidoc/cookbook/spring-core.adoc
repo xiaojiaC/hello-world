@@ -1,0 +1,35 @@
+[[spring-core]]
+= 核心技术
+:version: 5.2.1.RELEASE
+Version {version}
+:toc: left
+:toclevels: 4
+:tabsize: 4
+:docinfo: shared
+:docinfo1:
+:idprefix:
+:idseparator: -
+:linkcss: true
+:stylesdir: css
+:stylesheet: spring.css
+:highlightjsdir: js/highlight
+:highlightjs-theme: atom-one-dark-reasonable
+//:imagesdir: spring-core/images
+:javaDocJavaSE6: http://download.oracle.com/javase/6/docs/api
+:docSpring: https://docs.spring.io/spring-framework/docs/{version}/javadoc-api/org/springframework
+:docSpringIntegration: {docSpring}/integration.html
+:toolSTS: https://spring.io/tools/sts
+:toolIDEA: http://www.jetbrains.com/idea/
+
+参考文档的这一部分涵盖了Spring框架必不可少的所有技术。
+
+其中最重要的是Spring框架的控制反转（IoC）容器。对Spring框架的IoC容器进行彻底的介绍之后，将全面介绍Spring的面向切面的编程（AOP）技术。Spring框架拥有自己的AOP框架，该框架在概念上易于理解，并且成功解决了Java企业编程中AOP要求的80%的难题。
+
+还提供了Spring与AspectJ的集成（目前，在功能上最丰富，Java企业领域中最成熟的AOP实现）。
+
+include::cookbook/spring-core/beans.adoc[leveloffset=+1]
+
+++++
+<script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
+<script type="text/javascript" src="js/toc.js"></script>
+++++

@@ -5,6 +5,7 @@ Version 4.0.4.RELEASE
 :toc: left
 :toclevels: 3
 
+[[preface]]
 == 前言
 
 针对Apache Solr项目的Spring Data将核心Spring概念应用于使用Apache Solr搜索引擎开发解决方案。我们提供了一个“模板”作为存储和查询文档的高级抽象。
