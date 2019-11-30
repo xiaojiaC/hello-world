@@ -418,97 +418,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .show-for-print{display:inherit!important}}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
-<style>
-/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
-/*pre.CodeRay {background-color:#f7f7f8;}*/
-.CodeRay .line-numbers{border-right:1px solid #d8d8d8;padding:0 0.5em 0 .25em}
-.CodeRay span.line-numbers{display:inline-block;margin-right:.5em;color:rgba(0,0,0,.3)}
-.CodeRay .line-numbers strong{color:rgba(0,0,0,.4)}
-table.CodeRay{border-collapse:separate;border-spacing:0;margin-bottom:0;border:0;background:none}
-table.CodeRay td{vertical-align: top;line-height:1.45}
-table.CodeRay td.line-numbers{text-align:right}
-table.CodeRay td.line-numbers>pre{padding:0;color:rgba(0,0,0,.3)}
-table.CodeRay td.code{padding:0 0 0 .5em}
-table.CodeRay td.code>pre{padding:0}
-.CodeRay .debug{color:#fff !important;background:#000080 !important}
-.CodeRay .annotation{color:#007}
-.CodeRay .attribute-name{color:#000080}
-.CodeRay .attribute-value{color:#700}
-.CodeRay .binary{color:#509}
-.CodeRay .comment{color:#998;font-style:italic}
-.CodeRay .char{color:#04d}
-.CodeRay .char .content{color:#04d}
-.CodeRay .char .delimiter{color:#039}
-.CodeRay .class{color:#458;font-weight:bold}
-.CodeRay .complex{color:#a08}
-.CodeRay .constant,.CodeRay .predefined-constant{color:#008080}
-.CodeRay .color{color:#099}
-.CodeRay .class-variable{color:#369}
-.CodeRay .decorator{color:#b0b}
-.CodeRay .definition{color:#099}
-.CodeRay .delimiter{color:#000}
-.CodeRay .doc{color:#970}
-.CodeRay .doctype{color:#34b}
-.CodeRay .doc-string{color:#d42}
-.CodeRay .escape{color:#666}
-.CodeRay .entity{color:#800}
-.CodeRay .error{color:#808}
-.CodeRay .exception{color:inherit}
-.CodeRay .filename{color:#099}
-.CodeRay .function{color:#900;font-weight:bold}
-.CodeRay .global-variable{color:#008080}
-.CodeRay .hex{color:#058}
-.CodeRay .integer,.CodeRay .float{color:#099}
-.CodeRay .include{color:#555}
-.CodeRay .inline{color:#000}
-.CodeRay .inline .inline{background:#ccc}
-.CodeRay .inline .inline .inline{background:#bbb}
-.CodeRay .inline .inline-delimiter{color:#d14}
-.CodeRay .inline-delimiter{color:#d14}
-.CodeRay .important{color:#555;font-weight:bold}
-.CodeRay .interpreted{color:#b2b}
-.CodeRay .instance-variable{color:#008080}
-.CodeRay .label{color:#970}
-.CodeRay .local-variable{color:#963}
-.CodeRay .octal{color:#40e}
-.CodeRay .predefined{color:#369}
-.CodeRay .preprocessor{color:#579}
-.CodeRay .pseudo-class{color:#555}
-.CodeRay .directive{font-weight:bold}
-.CodeRay .type{font-weight:bold}
-.CodeRay .predefined-type{color:inherit}
-.CodeRay .reserved,.CodeRay .keyword {color:#000;font-weight:bold}
-.CodeRay .key{color:#808}
-.CodeRay .key .delimiter{color:#606}
-.CodeRay .key .char{color:#80f}
-.CodeRay .value{color:#088}
-.CodeRay .regexp .delimiter{color:#808}
-.CodeRay .regexp .content{color:#808}
-.CodeRay .regexp .modifier{color:#808}
-.CodeRay .regexp .char{color:#d14}
-.CodeRay .regexp .function{color:#404;font-weight:bold}
-.CodeRay .string{color:#d20}
-.CodeRay .string .string .string{background:#ffd0d0}
-.CodeRay .string .content{color:#d14}
-.CodeRay .string .char{color:#d14}
-.CodeRay .string .delimiter{color:#d14}
-.CodeRay .shell{color:#d14}
-.CodeRay .shell .delimiter{color:#d14}
-.CodeRay .symbol{color:#990073}
-.CodeRay .symbol .content{color:#a60}
-.CodeRay .symbol .delimiter{color:#630}
-.CodeRay .tag{color:#008080}
-.CodeRay .tag-special{color:#d70}
-.CodeRay .variable{color:#036}
-.CodeRay .insert{background:#afa}
-.CodeRay .delete{background:#faa}
-.CodeRay .change{color:#aaf;background:#007}
-.CodeRay .head{color:#f8f;background:#505}
-.CodeRay .insert .insert{color:#080}
-.CodeRay .delete .delete{color:#800}
-.CodeRay .change .change{color:#66f}
-.CodeRay .head .head{color:#f4f}
-</style>
 <style>
 .hidden {
 	display: none;
@@ -599,7 +508,7 @@ $(addBlockSwitches);
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_介绍">1. 介绍</a>
+<li><a href="#introduction">1. 介绍</a>
 <ul class="sectlevel2">
 <li><a href="#_历史">1.1. 历史</a></li>
 <li><a href="#_目标">1.2. 目标</a></li>
@@ -652,7 +561,7 @@ $(addBlockSwitches);
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_介绍">1. 介绍</h2>
+<h2 id="introduction">1. 介绍</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Springfox的java库套件都是关于使用 <a href="http://projects.spring.io/spring-framework">Spring系列项目</a>自动生成JSON API的机器和人类
@@ -731,24 +640,24 @@ $(addBlockSwitches);
 <div class="listingblock">
 <div class="title">Release</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">repositories {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">repositories {
   jcenter()
 }
 
 dependencies {
-    compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.springfox:springfox-swagger2:{releaseVersion}</span><span class="delimiter">&quot;</span></span>
+    compile "io.springfox:springfox-swagger2:{releaseVersion}"
 }</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Snapshot</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">repositories {
-   maven { url <span class="string"><span class="delimiter">'</span><span class="content">http://oss.jfrog.org/artifactory/oss-snapshot-local/</span><span class="delimiter">'</span></span> }
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">repositories {
+   maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
 
 dependencies {
-    compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.springfox:springfox-swagger2:{snapshotVersion}</span><span class="delimiter">&quot;</span></span>
+    compile "io.springfox:springfox-swagger2:{snapshotVersion}"
 }</code></pre>
 </div>
 </div>
@@ -758,37 +667,37 @@ dependencies {
 <div class="listingblock">
 <div class="title">Release</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;repositories&gt;</span>
-    <span class="tag">&lt;repository&gt;</span>
-      <span class="tag">&lt;id&gt;</span>jcenter-snapshots<span class="tag">&lt;/id&gt;</span>
-      <span class="tag">&lt;name&gt;</span>jcenter<span class="tag">&lt;/name&gt;</span>
-      <span class="tag">&lt;url&gt;</span>https://jcenter.bintray.com/<span class="tag">&lt;/url&gt;</span>
-    <span class="tag">&lt;/repository&gt;</span>
-<span class="tag">&lt;/repositories&gt;</span>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;repositories&gt;
+    &lt;repository&gt;
+      &lt;id&gt;jcenter-snapshots&lt;/id&gt;
+      &lt;name&gt;jcenter&lt;/name&gt;
+      &lt;url&gt;https://jcenter.bintray.com/&lt;/url&gt;
+    &lt;/repository&gt;
+&lt;/repositories&gt;
 
-<span class="tag">&lt;dependency&gt;</span>
-    <span class="tag">&lt;groupId&gt;</span>io.springfox<span class="tag">&lt;/groupId&gt;</span>
-    <span class="tag">&lt;artifactId&gt;</span>springfox-swagger2<span class="tag">&lt;/artifactId&gt;</span>
-    <span class="tag">&lt;version&gt;</span>{releaseVersion}<span class="tag">&lt;/version&gt;</span>
-<span class="tag">&lt;/dependency&gt;</span></code></pre>
+&lt;dependency&gt;
+    &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+    &lt;artifactId&gt;springfox-swagger2&lt;/artifactId&gt;
+    &lt;version&gt;{releaseVersion}&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Snapshot</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;repositories&gt;</span>
-    <span class="tag">&lt;repository&gt;</span>
-      <span class="tag">&lt;id&gt;</span>jcenter-snapshots<span class="tag">&lt;/id&gt;</span>
-      <span class="tag">&lt;name&gt;</span>jcenter<span class="tag">&lt;/name&gt;</span>
-      <span class="tag">&lt;url&gt;</span>http://oss.jfrog.org/artifactory/oss-snapshot-local/<span class="tag">&lt;/url&gt;</span>
-    <span class="tag">&lt;/repository&gt;</span>
-<span class="tag">&lt;/repositories&gt;</span>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;repositories&gt;
+    &lt;repository&gt;
+      &lt;id&gt;jcenter-snapshots&lt;/id&gt;
+      &lt;name&gt;jcenter&lt;/name&gt;
+      &lt;url&gt;http://oss.jfrog.org/artifactory/oss-snapshot-local/&lt;/url&gt;
+    &lt;/repository&gt;
+&lt;/repositories&gt;
 
-<span class="tag">&lt;dependency&gt;</span>
-    <span class="tag">&lt;groupId&gt;</span>io.springfox<span class="tag">&lt;/groupId&gt;</span>
-    <span class="tag">&lt;artifactId&gt;</span>springfox-swagger2<span class="tag">&lt;/artifactId&gt;</span>
-    <span class="tag">&lt;version&gt;</span>{snapshotVersion}<span class="tag">&lt;/version&gt;</span>
-<span class="tag">&lt;/dependency&gt;</span></code></pre>
+&lt;dependency&gt;
+    &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+    &lt;artifactId&gt;springfox-swagger2&lt;/artifactId&gt;
+    &lt;version&gt;{snapshotVersion}&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -802,305 +711,154 @@ dependencies {
 <h3 id="_springfox_spring_mvc和spring_boot">3.1. Springfox Spring MVC和Spring Boot</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
-  <td class="line-numbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
-87
-88
-89
-90
-91
-92
-93
-94
-95
-96
-97
-98
-99
-100
-101
-102
-103
-104
-105
-106
-107
-108
-109
-110
-111
-112
-113
-114
-115
-116
-117
-118
-119
-120
-121
-122
-123
-124
-125
-126
-127
-128
-129
-130
-131
-132
-133
-134
-135
-136
-137
-138
-139
-140
-141
-142
-143
-144
-145
-146
-147
-148
-</pre></td>
-  <td class="code"><pre><span class="keyword">package</span> <span class="namespace">springfox.springconfig</span>;
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">package springfox.springconfig;
 
-<span class="keyword">import</span> <span class="include">com.fasterxml.classmate.TypeResolver</span>;
-<span class="keyword">import</span> <span class="include">org.joda.time.LocalDate</span>;
-<span class="keyword">import</span> <span class="include">org.springframework.beans.factory.annotation.Autowired</span>;
-<span class="keyword">import</span> <span class="include">org.springframework.boot.SpringApplication</span>;
-<span class="keyword">import</span> <span class="include">org.springframework.boot.autoconfigure.SpringBootApplication</span>;
-<span class="keyword">import</span> <span class="include">org.springframework.context.ApplicationContext</span>;
-<span class="keyword">import</span> <span class="include">org.springframework.context.annotation.Bean</span>;
-<span class="keyword">import</span> <span class="include">org.springframework.context.annotation.ComponentScan</span>;
-<span class="keyword">import</span> <span class="include">org.springframework.http.ResponseEntity</span>;
-<span class="keyword">import</span> <span class="include">org.springframework.web.bind.annotation.RequestMethod</span>;
-<span class="keyword">import</span> <span class="include">org.springframework.web.context.request.async.DeferredResult</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.builders.ParameterBuilder</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.builders.PathSelectors</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.builders.RequestHandlerSelectors</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.builders.ResponseMessageBuilder</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.schema.ModelRef</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.schema.WildcardType</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.service.ApiKey</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.service.AuthorizationScope</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.service.SecurityReference</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.service.Tag</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.spi.DocumentationType</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.spi.service.contexts.SecurityContext</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.spring.web.plugins.Docket</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.DocExpansion</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.ModelRendering</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.OperationsSorter</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.SecurityConfiguration</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.SecurityConfigurationBuilder</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.TagsSorter</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.UiConfiguration</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.UiConfigurationBuilder</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.swagger2.annotations.EnableSwagger2</span>;
-<span class="keyword">import</span> <span class="include">springfox.petstore.controller.PetController</span>;
+import com.fasterxml.classmate.TypeResolver;
+import org.joda.time.LocalDate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.request.async.DeferredResult;
+import springfox.documentation.builders.ParameterBuilder;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.WildcardType;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.Tag;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.web.DocExpansion;
+import springfox.documentation.swagger.web.ModelRendering;
+import springfox.documentation.swagger.web.OperationsSorter;
+import springfox.documentation.swagger.web.SecurityConfiguration;
+import springfox.documentation.swagger.web.SecurityConfigurationBuilder;
+import springfox.documentation.swagger.web.TagsSorter;
+import springfox.documentation.swagger.web.UiConfiguration;
+import springfox.documentation.swagger.web.UiConfigurationBuilder;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import springfox.petstore.controller.PetController;
 
-<span class="keyword">import</span> <span class="include">java.util.List</span>;
+import java.util.List;
 
-<span class="keyword">import</span> <span class="include">static</span> <span class="include">com.google.common.collect.Lists</span>.*;
-<span class="keyword">import</span> <span class="include">static</span> <span class="include">springfox.documentation.schema.AlternateTypeRules</span>.*;
+import static com.google.common.collect.Lists.*;
+import static springfox.documentation.schema.AlternateTypeRules.*;
 
-<span class="annotation">@SpringBootApplication</span>
-<span class="annotation">@EnableSwagger2</span> <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="annotation">@ComponentScan</span>(basePackageClasses = {
+@SpringBootApplication
+@EnableSwagger2 <i class="conum" data-value="1"></i><b>(1)</b>
+@ComponentScan(basePackageClasses = {
     PetController.class
 }) <i class="conum" data-value="2"></i><b>(2)</b>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">Swagger2SpringBoot</span> {
+public class Swagger2SpringBoot {
 
-  <span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> main(<span class="predefined-type">String</span><span class="type">[]</span> args) {
+  public static void main(String[] args) {
     ApplicationContext ctx = SpringApplication.run(Swagger2SpringBoot.class, args);
   }
 
 
-  <span class="annotation">@Bean</span>
-  <span class="directive">public</span> Docket petApi() {
-    <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2) <i class="conum" data-value="3"></i><b>(3)</b>
+  @Bean
+  public Docket petApi() {
+    return new Docket(DocumentationType.SWAGGER_2) <i class="conum" data-value="3"></i><b>(3)</b>
         .select() <i class="conum" data-value="4"></i><b>(4)</b>
           .apis(RequestHandlerSelectors.any()) <i class="conum" data-value="5"></i><b>(5)</b>
           .paths(PathSelectors.any()) <i class="conum" data-value="6"></i><b>(6)</b>
           .build() <i class="conum" data-value="7"></i><b>(7)</b>
-        .pathMapping(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="8"></i><b>(8)</b>
-        .directModelSubstitute(LocalDate.class, <span class="predefined-type">String</span>.class) <i class="conum" data-value="9"></i><b>(9)</b>
+        .pathMapping("/") <i class="conum" data-value="8"></i><b>(8)</b>
+        .directModelSubstitute(LocalDate.class, String.class) <i class="conum" data-value="9"></i><b>(9)</b>
         .genericModelSubstitutes(ResponseEntity.class)
         .alternateTypeRules(
             newRule(typeResolver.resolve(DeferredResult.class,
-                typeResolver.resolve(ResponseEntity.class, <span class="predefined-type">WildcardType</span>.class)),
-                typeResolver.resolve(<span class="predefined-type">WildcardType</span>.class))) <i class="conum" data-value="10"></i><b>(10)</b>
-        .useDefaultResponseMessages(<span class="predefined-constant">false</span>) <i class="conum" data-value="11"></i><b>(11)</b>
+                typeResolver.resolve(ResponseEntity.class, WildcardType.class)),
+                typeResolver.resolve(WildcardType.class))) <i class="conum" data-value="10"></i><b>(10)</b>
+        .useDefaultResponseMessages(false) <i class="conum" data-value="11"></i><b>(11)</b>
         .globalResponseMessage(RequestMethod.GET, <i class="conum" data-value="12"></i><b>(12)</b>
-            newArrayList(<span class="keyword">new</span> ResponseMessageBuilder()
-                .code(<span class="integer">500</span>)
-                .message(<span class="string"><span class="delimiter">&quot;</span><span class="content">500 message</span><span class="delimiter">&quot;</span></span>)
-                .responseModel(<span class="keyword">new</span> ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">Error</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="13"></i><b>(13)</b>
+            newArrayList(new ResponseMessageBuilder()
+                .code(500)
+                .message("500 message")
+                .responseModel(new ModelRef("Error")) <i class="conum" data-value="13"></i><b>(13)</b>
                 .build()))
         .securitySchemes(newArrayList(apiKey())) <i class="conum" data-value="14"></i><b>(14)</b>
         .securityContexts(newArrayList(securityContext())) <i class="conum" data-value="15"></i><b>(15)</b>
-        .enableUrlTemplating(<span class="predefined-constant">true</span>) <i class="conum" data-value="21"></i><b>(21)</b>
+        .enableUrlTemplating(true) <i class="conum" data-value="21"></i><b>(21)</b>
         .globalOperationParameters( <i class="conum" data-value="22"></i><b>(22)</b>
-            newArrayList(<span class="keyword">new</span> ParameterBuilder()
-                .name(<span class="string"><span class="delimiter">&quot;</span><span class="content">someGlobalParameter</span><span class="delimiter">&quot;</span></span>)
-                .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Description of someGlobalParameter</span><span class="delimiter">&quot;</span></span>)
-                .modelRef(<span class="keyword">new</span> ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>))
-                .parameterType(<span class="string"><span class="delimiter">&quot;</span><span class="content">query</span><span class="delimiter">&quot;</span></span>)
-                .required(<span class="predefined-constant">true</span>)
+            newArrayList(new ParameterBuilder()
+                .name("someGlobalParameter")
+                .description("Description of someGlobalParameter")
+                .modelRef(new ModelRef("string"))
+                .parameterType("query")
+                .required(true)
                 .build()))
-        .tags(<span class="keyword">new</span> Tag(<span class="string"><span class="delimiter">&quot;</span><span class="content">Pet Service</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">All apis relating to pets</span><span class="delimiter">&quot;</span></span>))  <i class="conum" data-value="23"></i><b>(23)</b>
+        .tags(new Tag("Pet Service", "All apis relating to pets"))  <i class="conum" data-value="23"></i><b>(23)</b>
         .additionalModels(typeResolver.resolve(AdditionalModel.class))  <i class="conum" data-value="24"></i><b>(24)</b>
         ;
   }
 
-  <span class="annotation">@Autowired</span>
-  <span class="directive">private</span> TypeResolver typeResolver;
+  @Autowired
+  private TypeResolver typeResolver;
 
-  <span class="directive">private</span> ApiKey apiKey() {
-    <span class="keyword">return</span> <span class="keyword">new</span> ApiKey(<span class="string"><span class="delimiter">&quot;</span><span class="content">mykey</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">api_key</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">header</span><span class="delimiter">&quot;</span></span>); <i class="conum" data-value="16"></i><b>(16)</b>
+  private ApiKey apiKey() {
+    return new ApiKey("mykey", "api_key", "header"); <i class="conum" data-value="16"></i><b>(16)</b>
   }
 
-  <span class="directive">private</span> SecurityContext securityContext() {
-    <span class="keyword">return</span> SecurityContext.builder()
+  private SecurityContext securityContext() {
+    return SecurityContext.builder()
         .securityReferences(defaultAuth())
-        .forPaths(PathSelectors.regex(<span class="string"><span class="delimiter">&quot;</span><span class="content">/anyPath.*</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="17"></i><b>(17)</b>
+        .forPaths(PathSelectors.regex("/anyPath.*")) <i class="conum" data-value="17"></i><b>(17)</b>
         .build();
   }
 
-  <span class="predefined-type">List</span>&lt;SecurityReference&gt; defaultAuth() {
+  List&lt;SecurityReference&gt; defaultAuth() {
     AuthorizationScope authorizationScope
-        = <span class="keyword">new</span> AuthorizationScope(<span class="string"><span class="delimiter">&quot;</span><span class="content">global</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">accessEverything</span><span class="delimiter">&quot;</span></span>);
-    AuthorizationScope<span class="type">[]</span> authorizationScopes = <span class="keyword">new</span> AuthorizationScope[<span class="integer">1</span>];
-    authorizationScopes[<span class="integer">0</span>] = authorizationScope;
-    <span class="keyword">return</span> newArrayList(
-        <span class="keyword">new</span> SecurityReference(<span class="string"><span class="delimiter">&quot;</span><span class="content">mykey</span><span class="delimiter">&quot;</span></span>, authorizationScopes)); <i class="conum" data-value="18"></i><b>(18)</b>
+        = new AuthorizationScope("global", "accessEverything");
+    AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+    authorizationScopes[0] = authorizationScope;
+    return newArrayList(
+        new SecurityReference("mykey", authorizationScopes)); <i class="conum" data-value="18"></i><b>(18)</b>
   }
 
-  <span class="annotation">@Bean</span>
+  @Bean
   SecurityConfiguration security() {
-    <span class="keyword">return</span> SecurityConfigurationBuilder.builder() <i class="conum" data-value="19"></i><b>(19)</b>
-        .clientId(<span class="string"><span class="delimiter">&quot;</span><span class="content">test-app-client-id</span><span class="delimiter">&quot;</span></span>)
-        .clientSecret(<span class="string"><span class="delimiter">&quot;</span><span class="content">test-app-client-secret</span><span class="delimiter">&quot;</span></span>)
-        .realm(<span class="string"><span class="delimiter">&quot;</span><span class="content">test-app-realm</span><span class="delimiter">&quot;</span></span>)
-        .appName(<span class="string"><span class="delimiter">&quot;</span><span class="content">test-app</span><span class="delimiter">&quot;</span></span>)
-        .scopeSeparator(<span class="string"><span class="delimiter">&quot;</span><span class="content">,</span><span class="delimiter">&quot;</span></span>)
-        .additionalQueryStringParams(<span class="predefined-constant">null</span>)
-        .useBasicAuthenticationWithAccessCodeGrant(<span class="predefined-constant">false</span>)
+    return SecurityConfigurationBuilder.builder() <i class="conum" data-value="19"></i><b>(19)</b>
+        .clientId("test-app-client-id")
+        .clientSecret("test-app-client-secret")
+        .realm("test-app-realm")
+        .appName("test-app")
+        .scopeSeparator(",")
+        .additionalQueryStringParams(null)
+        .useBasicAuthenticationWithAccessCodeGrant(false)
         .build();
   }
 
-  <span class="annotation">@Bean</span>
+  @Bean
   UiConfiguration uiConfig() {
-    <span class="keyword">return</span> UiConfigurationBuilder.builder() <i class="conum" data-value="20"></i><b>(20)</b>
-        .deepLinking(<span class="predefined-constant">true</span>)
-        .displayOperationId(<span class="predefined-constant">false</span>)
-        .defaultModelsExpandDepth(<span class="integer">1</span>)
-        .defaultModelExpandDepth(<span class="integer">1</span>)
+    return UiConfigurationBuilder.builder() <i class="conum" data-value="20"></i><b>(20)</b>
+        .deepLinking(true)
+        .displayOperationId(false)
+        .defaultModelsExpandDepth(1)
+        .defaultModelExpandDepth(1)
         .defaultModelRendering(ModelRendering.EXAMPLE)
-        .displayRequestDuration(<span class="predefined-constant">false</span>)
+        .displayRequestDuration(false)
         .docExpansion(DocExpansion.NONE)
-        .filter(<span class="predefined-constant">false</span>)
-        .maxDisplayedTags(<span class="predefined-constant">null</span>)
+        .filter(false)
+        .maxDisplayedTags(null)
         .operationsSorter(OperationsSorter.ALPHA)
-        .showExtensions(<span class="predefined-constant">false</span>)
+        .showExtensions(false)
         .tagsSorter(TagsSorter.ALPHA)
         .supportedSubmitMethods(UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS)
-        .validatorUrl(<span class="predefined-constant">null</span>)
+        .validatorUrl(null)
         .build();
   }
 
-}</pre></td>
-</tr></table></code></pre>
+}</code></pre>
 </div>
 </div>
 </div>
@@ -1121,12 +879,12 @@ dependencies {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">//This guava code snippet</span>
-<span class="predefined-type">List</span>&lt;Something&gt; guavaList = newArrayList(<span class="keyword">new</span> Something());
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">//This guava code snippet
+List&lt;Something&gt; guavaList = newArrayList(new Something());
 
-<span class="comment">//... is equivalent to</span>
-<span class="predefined-type">List</span>&lt;Something&gt; list = <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;();
-list.add(<span class="keyword">new</span> Something());</code></pre>
+//... is equivalent to
+List&lt;Something&gt; list = new ArrayList&lt;&gt;();
+list.add(new Something());</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1268,8 +1026,8 @@ list.add(<span class="keyword">new</span> Something());</code></pre>
 <h4 id="_gradle_2">3.3.1. Gradle</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-    compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.springfox:springfox-data-rest:2.9.2</span><span class="delimiter">&quot;</span></span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">dependencies {
+    compile "io.springfox:springfox-data-rest:2.9.2"
 }</code></pre>
 </div>
 </div>
@@ -1278,11 +1036,11 @@ list.add(<span class="keyword">new</span> Something());</code></pre>
 <h4 id="_maven_2">3.3.2. Maven</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
-    <span class="tag">&lt;groupId&gt;</span>io.springfox<span class="tag">&lt;/groupId&gt;</span>
-    <span class="tag">&lt;artifactId&gt;</span>springfox-data-rest<span class="tag">&lt;/artifactId&gt;</span>
-    <span class="tag">&lt;version&gt;</span>2.9.2<span class="tag">&lt;/version&gt;</span>
-<span class="tag">&lt;/dependency&gt;</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+    &lt;artifactId&gt;springfox-data-rest&lt;/artifactId&gt;
+    &lt;version&gt;2.9.2&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1297,8 +1055,8 @@ list.add(<span class="keyword">new</span> Something());</code></pre>
 <h4 id="_java_config">3.3.3. java config</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// 对于java配置</span>
-<span class="annotation">@Import</span>({ ... springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration.class, ...})</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">// 对于java配置
+@Import({ ... springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration.class, ...})</code></pre>
 </div>
 </div>
 </div>
@@ -1309,7 +1067,7 @@ list.add(<span class="keyword">new</span> Something());</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;bean</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration.class</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean class="springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration.class" /&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -1333,8 +1091,8 @@ list.add(<span class="keyword">new</span> Something());</code></pre>
 <h4 id="_gradle_3">3.4.1. Gradle</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-    compile <span class="string"><span class="delimiter">&quot;</span><span class="content">io.springfox:springfox-bean-validators:2.9.2</span><span class="delimiter">&quot;</span></span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">dependencies {
+    compile "io.springfox:springfox-bean-validators:2.9.2"
 }</code></pre>
 </div>
 </div>
@@ -1343,11 +1101,11 @@ list.add(<span class="keyword">new</span> Something());</code></pre>
 <h4 id="_maven_3">3.4.2. Maven</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
-    <span class="tag">&lt;groupId&gt;</span>io.springfox<span class="tag">&lt;/groupId&gt;</span>
-    <span class="tag">&lt;artifactId&gt;</span>springfox-bean-validators<span class="tag">&lt;/artifactId&gt;</span>
-    <span class="tag">&lt;version&gt;</span>2.9.2<span class="tag">&lt;/version&gt;</span>
-<span class="tag">&lt;/dependency&gt;</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+    &lt;artifactId&gt;springfox-bean-validators&lt;/artifactId&gt;
+    &lt;version&gt;2.9.2&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1362,8 +1120,8 @@ list.add(<span class="keyword">new</span> Something());</code></pre>
 <h4 id="_java_config_2">3.4.3. java config</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// 对于java配置</span>
-<span class="annotation">@Import</span>({ ... springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration.class, ...})</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">// 对于java配置
+@Import({ ... springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration.class, ...})</code></pre>
 </div>
 </div>
 </div>
@@ -1374,7 +1132,7 @@ list.add(<span class="keyword">new</span> Something());</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;bean</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean class="springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration" /&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -1389,8 +1147,8 @@ list.add(<span class="keyword">new</span> Something());</code></pre>
 <h4 id="_gradle_4">3.5.1. Gradle</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-    compile <span class="string"><span class="delimiter">'</span><span class="content">io.springfox:springfox-swagger-ui:2.9.2</span><span class="delimiter">'</span></span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">dependencies {
+    compile 'io.springfox:springfox-swagger-ui:2.9.2'
 }</code></pre>
 </div>
 </div>
@@ -1399,11 +1157,11 @@ list.add(<span class="keyword">new</span> Something());</code></pre>
 <h4 id="_maven_4">3.5.2. Maven</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
-    <span class="tag">&lt;groupId&gt;</span>io.springfox<span class="tag">&lt;/groupId&gt;</span>
-    <span class="tag">&lt;artifactId&gt;</span>springfox-swagger-ui<span class="tag">&lt;/artifactId&gt;</span>
-    <span class="tag">&lt;version&gt;</span>2.9.2<span class="tag">&lt;/version&gt;</span>
-<span class="tag">&lt;/dependency&gt;</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+    &lt;artifactId&gt;springfox-swagger-ui&lt;/artifactId&gt;
+    &lt;version&gt;2.9.2&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1491,8 +1249,8 @@ list.add(<span class="keyword">new</span> Something());</code></pre>
 <h4 id="_gradle_5">3.6.1. Gradle</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-    compile <span class="string"><span class="delimiter">'</span><span class="content">io.springfox.ui:springfox-swagger-ui-rfc6570:1.0.0</span><span class="delimiter">'</span></span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">dependencies {
+    compile 'io.springfox.ui:springfox-swagger-ui-rfc6570:1.0.0'
 }</code></pre>
 </div>
 </div>
@@ -1501,11 +1259,11 @@ list.add(<span class="keyword">new</span> Something());</code></pre>
 <h4 id="_maven_5">3.6.2. Maven</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
-    <span class="tag">&lt;groupId&gt;</span>io.springfox.ui<span class="tag">&lt;/groupId&gt;</span>
-    <span class="tag">&lt;artifactId&gt;</span>springfox-swagger-ui-rfc6570<span class="tag">&lt;/artifactId&gt;</span>
-    <span class="tag">&lt;version&gt;</span>1.0.0<span class="tag">&lt;/version&gt;</span>
-<span class="tag">&lt;/dependency&gt;</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;io.springfox.ui&lt;/groupId&gt;
+    &lt;artifactId&gt;springfox-swagger-ui-rfc6570&lt;/artifactId&gt;
+    &lt;version&gt;1.0.0&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -1537,58 +1295,58 @@ OAuth2和基于cookie的身份验证。（来源：https://github.com/evser[@evs
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">  <span class="directive">protected</span> <span class="type">void</span> configure(HttpSecurity http) <span class="directive">throws</span> <span class="exception">Exception</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">  protected void configure(HttpSecurity http) throws Exception {
     http.authorizeRequests()
         .anyRequest().authenticated()
-        .and().exceptionHandling().accessDeniedHandler(<span class="keyword">new</span> AccessDeniedHandlerImpl())
-        .and().logout().logoutSuccessHandler(<span class="keyword">new</span> HttpStatusReturningLogoutSuccessHandler())
+        .and().exceptionHandling().accessDeniedHandler(new AccessDeniedHandlerImpl())
+        .and().logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
         .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         .and()
-        .addFilterBefore(ssoFilter(ApplicationConfiguration.API_BASE_PATH + <span class="string"><span class="delimiter">&quot;</span><span class="content">/login</span><span class="delimiter">&quot;</span></span>), BasicAuthenticationFilter.class)
+        .addFilterBefore(ssoFilter(ApplicationConfiguration.API_BASE_PATH + "/login"), BasicAuthenticationFilter.class)
         .requiresChannel().anyRequest().requireSecure();
   }
 
-  <span class="annotation">@Bean</span>
-  <span class="directive">public</span> FilterRegistrationBean oauth2ClientFilterRegistration(OAuth2ClientContextFilter filter) {
-    FilterRegistrationBean frb = <span class="keyword">new</span> FilterRegistrationBean();
+  @Bean
+  public FilterRegistrationBean oauth2ClientFilterRegistration(OAuth2ClientContextFilter filter) {
+    FilterRegistrationBean frb = new FilterRegistrationBean();
     frb.setFilter(filter);
     frb.setOrder(SecurityProperties.DEFAULT_FILTER_ORDER);
-    <span class="keyword">return</span> frb;
+    return frb;
   }
 
-  <span class="annotation">@Bean</span>
-  <span class="annotation">@ConfigurationProperties</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">oauth2.client</span><span class="delimiter">&quot;</span></span>)
-  <span class="directive">public</span> OAuth2ProtectedResourceDetails authDetails() {
-    <span class="keyword">return</span> <span class="keyword">new</span> AuthorizationCodeResourceDetails();
+  @Bean
+  @ConfigurationProperties("oauth2.client")
+  public OAuth2ProtectedResourceDetails authDetails() {
+    return new AuthorizationCodeResourceDetails();
   }
 
-  <span class="annotation">@Bean</span>
-  <span class="directive">public</span> SecurityConfiguration swaggerSecurityConfiguration() {
-    <span class="keyword">return</span> <span class="keyword">new</span> SecurityConfiguration(<span class="string"><span class="delimiter">&quot;</span><span class="content">client-id</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">client-secret</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">realm</span><span class="delimiter">&quot;</span></span>,
-        <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">{{X-XSRF-COOKIE}}</span><span class="delimiter">&quot;</span></span>, ApiKeyVehicle.HEADER, <span class="string"><span class="delimiter">&quot;</span><span class="content">X-XSRF-TOKEN</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">,</span><span class="delimiter">&quot;</span></span>);
+  @Bean
+  public SecurityConfiguration swaggerSecurityConfiguration() {
+    return new SecurityConfiguration("client-id", "client-secret", "realm",
+        "", "{{X-XSRF-COOKIE}}", ApiKeyVehicle.HEADER, "X-XSRF-TOKEN", ",");
   }
 
-  <span class="directive">private</span> <span class="predefined-type">Filter</span> ssoFilter(<span class="predefined-type">String</span> path) {
-    OAuth2ClientAuthenticationProcessingFilter oAuth2ClientAuthenticationFilter = <span class="keyword">new</span> OAuth2ClientAuthenticationProcessingFilter(path);
-    OAuth2RestTemplate oAuth2RestTemplate = <span class="keyword">new</span> OAuth2RestTemplate(authDetails(), oauth2ClientContext);
-    DefaultRedirectStrategy defaultRedirectStrategy = <span class="keyword">new</span> DefaultRedirectStrategy();
+  private Filter ssoFilter(String path) {
+    OAuth2ClientAuthenticationProcessingFilter oAuth2ClientAuthenticationFilter = new OAuth2ClientAuthenticationProcessingFilter(path);
+    OAuth2RestTemplate oAuth2RestTemplate = new OAuth2RestTemplate(authDetails(), oauth2ClientContext);
+    DefaultRedirectStrategy defaultRedirectStrategy = new DefaultRedirectStrategy();
     oAuth2ClientAuthenticationFilter.setRestTemplate(oAuth2RestTemplate);
     oAuth2ClientAuthenticationFilter.setTokenServices(resourceServerTokenServices);
     oAuth2ClientAuthenticationFilter.setAuthenticationSuccessHandler(
         (request, response, authentication) -&gt; {
-          <span class="predefined-type">String</span> redirectUrl = request.getParameter(REDIRECT_URL_PARAM);
-          <span class="keyword">if</span> (redirectUrl == <span class="predefined-constant">null</span>) {
+          String redirectUrl = request.getParameter(REDIRECT_URL_PARAM);
+          if (redirectUrl == null) {
             redirectUrl = DEFAULT_REDIRECT_URL;
-          } <span class="keyword">else</span> {
-            <span class="keyword">if</span> (!redirectUrlValidator.validateRedirectUrl(redirectUrl)) {
+          } else {
+            if (!redirectUrlValidator.validateRedirectUrl(redirectUrl)) {
               request.setAttribute(MESSAGE_ATTRIBUTE_NAME,
-                  messageSource.getMessage(<span class="string"><span class="delimiter">&quot;</span><span class="content">ivalid.redirect.url</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> <span class="predefined-type">String</span><span class="type">[]</span> { redirectUrl }, LocaleContextHolder.getLocale()));
+                  messageSource.getMessage("ivalid.redirect.url", new String[] { redirectUrl }, LocaleContextHolder.getLocale()));
               response.sendError(HttpStatus.FORBIDDEN.value());
             }
           }
           defaultRedirectStrategy.sendRedirect(request, response, redirectUrl);
         });
-    <span class="keyword">return</span> oAuth2ClientAuthenticationFilter;
+    return oAuth2ClientAuthenticationFilter;
   }</code></pre>
 </div>
 </div>
@@ -1597,37 +1355,37 @@ OAuth2和基于cookie的身份验证。（来源：https://github.com/evser[@evs
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">  <span class="annotation">@Bean</span>
-  <span class="directive">public</span> Docket api() <span class="directive">throws</span> <span class="exception">IOException</span>, <span class="exception">URISyntaxException</span> {
-    <span class="directive">final</span> <span class="predefined-type">List</span>&lt;ResponseMessage&gt; globalResponses = <span class="predefined-type">Arrays</span>.asList(
-        <span class="keyword">new</span> ResponseMessageBuilder()
-            .code(<span class="integer">200</span>)
-            .message(<span class="string"><span class="delimiter">&quot;</span><span class="content">OK</span><span class="delimiter">&quot;</span></span>)
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">  @Bean
+  public Docket api() throws IOException, URISyntaxException {
+    final List&lt;ResponseMessage&gt; globalResponses = Arrays.asList(
+        new ResponseMessageBuilder()
+            .code(200)
+            .message("OK")
             .build(),
-        <span class="keyword">new</span> ResponseMessageBuilder()
-            .code(<span class="integer">400</span>)
-            .message(<span class="string"><span class="delimiter">&quot;</span><span class="content">Bad Request</span><span class="delimiter">&quot;</span></span>)
+        new ResponseMessageBuilder()
+            .code(400)
+            .message("Bad Request")
             .build(),
-        <span class="keyword">new</span> ResponseMessageBuilder()
-            .code(<span class="integer">500</span>)
-            .message(<span class="string"><span class="delimiter">&quot;</span><span class="content">Internal Error</span><span class="delimiter">&quot;</span></span>)
+        new ResponseMessageBuilder()
+            .code(500)
+            .message("Internal Error")
             .build());
-    <span class="directive">final</span> ApiInfo apiInfo = <span class="keyword">new</span> ApiInfo(<span class="string"><span class="delimiter">&quot;</span><span class="content">REST API</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> <span class="predefined-type">BufferedReader</span>(<span class="keyword">new</span> <span class="predefined-type">InputStreamReader</span>(getClass().getResourceAsStream(CHANGELOG_FILENAME)))
+    final ApiInfo apiInfo = new ApiInfo("REST API", new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(CHANGELOG_FILENAME)))
         .lines()
-        .collect(Collectors.joining(<span class="predefined-type">System</span>.lineSeparator())),
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">1.0.0-RC1</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> Contact(<span class="string"><span class="delimiter">&quot;</span><span class="content">team</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">bla@bla.com</span><span class="delimiter">&quot;</span></span>), <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Collections</span>.emptyList());
-    <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2),
-        .securitySchemes(<span class="predefined-type">Arrays</span>.asList(<span class="keyword">new</span> ApiKey(<span class="string"><span class="delimiter">&quot;</span><span class="content">Token Access</span><span class="delimiter">&quot;</span></span>, HttpHeaders.AUTHORIZATION, In.HEADER.name()))))
-        .useDefaultResponseMessages(<span class="predefined-constant">false</span>)
+        .collect(Collectors.joining(System.lineSeparator())),
+        "1.0.0-RC1", "", new Contact("team", "", "bla@bla.com"), "", "", Collections.emptyList());
+    return new Docket(DocumentationType.SWAGGER_2),
+        .securitySchemes(Arrays.asList(new ApiKey("Token Access", HttpHeaders.AUTHORIZATION, In.HEADER.name()))))
+        .useDefaultResponseMessages(false)
         .globalResponseMessage(RequestMethod.GET, globalResponses)
         .globalResponseMessage(RequestMethod.POST, globalResponses)
         .globalResponseMessage(RequestMethod.DELETE, globalResponses)
         .globalResponseMessage(RequestMethod.PATCH, globalResponses)
         .select()
-        .apis(RequestHandlerSelectors.basePackage(<span class="string"><span class="delimiter">&quot;</span><span class="content">com.controller</span><span class="delimiter">&quot;</span></span>))
+        .apis(RequestHandlerSelectors.basePackage("com.controller"))
         .build()
         .apiInfo(apiInfo)
-        .directModelSubstitute(Temporal.class, <span class="predefined-type">String</span>.class);
+        .directModelSubstitute(Temporal.class, String.class);
   }</code></pre>
 </div>
 </div>
@@ -1650,7 +1408,7 @@ OAuth2和基于cookie的身份验证。（来源：https://github.com/evser[@evs
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="ascii">  +-----------------------------------------------------------------------------------------+
+<pre class="highlightjs highlight"><code class="language-ascii" data-lang="ascii">  +-----------------------------------------------------------------------------------------+
   |                                  springfox-core                                         |
   |                                                                                         |
   | Contains the internal service and schema description models along with their builders.  |
@@ -1810,32 +1568,32 @@ OAuth2和基于cookie的身份验证。（来源：https://github.com/evser[@evs
 <div class="listingblock">
 <div class="title">配置示例</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">  <span class="keyword">import</span> <span class="include">static</span> <span class="include">springfox.documentation.builders.PathSelectors</span>.*;
-  <span class="keyword">import</span> <span class="include">static</span> <span class="include">com.google.common.base.Predicates</span>.*;
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">  import static springfox.documentation.builders.PathSelectors.*;
+  import static com.google.common.base.Predicates.*;
 
-  <span class="annotation">@Bean</span>
-  <span class="directive">public</span> Docket swaggerSpringMvcPlugin() {
-    <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)
-            .groupName(<span class="string"><span class="delimiter">&quot;</span><span class="content">business-api</span><span class="delimiter">&quot;</span></span>)
+  @Bean
+  public Docket swaggerSpringMvcPlugin() {
+    return new Docket(DocumentationType.SWAGGER_2)
+            .groupName("business-api")
             .select()
-               <span class="comment">//Ignores controllers annotated with @CustomIgnore</span>
-              .apis(not(withClassAnnotation(CustomIgnore.class)) <span class="comment">//Selection by RequestHandler</span>
-              .paths(paths()) <span class="comment">// and by paths</span>
+               //Ignores controllers annotated with @CustomIgnore
+              .apis(not(withClassAnnotation(CustomIgnore.class)) //Selection by RequestHandler
+              .paths(paths()) // and by paths
               .build()
             .apiInfo(apiInfo())
             .securitySchemes(securitySchemes())
             .securityContext(securityContext());
   }
 
-  <span class="comment">//Here is an example where we select any api that matches one of these paths</span>
-  <span class="directive">private</span> <span class="predefined-type">Predicate</span>&lt;<span class="predefined-type">String</span>&gt; paths() {
-    <span class="keyword">return</span> or(
-        regex(<span class="string"><span class="delimiter">&quot;</span><span class="content">/business.*</span><span class="delimiter">&quot;</span></span>),
-        regex(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some.*</span><span class="delimiter">&quot;</span></span>),
-        regex(<span class="string"><span class="delimiter">&quot;</span><span class="content">/contacts.*</span><span class="delimiter">&quot;</span></span>),
-        regex(<span class="string"><span class="delimiter">&quot;</span><span class="content">/pet.*</span><span class="delimiter">&quot;</span></span>),
-        regex(<span class="string"><span class="delimiter">&quot;</span><span class="content">/springsRestController.*</span><span class="delimiter">&quot;</span></span>),
-        regex(<span class="string"><span class="delimiter">&quot;</span><span class="content">/test.*</span><span class="delimiter">&quot;</span></span>));
+  //Here is an example where we select any api that matches one of these paths
+  private Predicate&lt;String&gt; paths() {
+    return or(
+        regex("/business.*"),
+        regex("/some.*"),
+        regex("/contacts.*"),
+        regex("/pet.*"),
+        regex("/springsRestController.*"),
+        regex("/test.*"));
   }</code></pre>
 </div>
 </div>
@@ -2080,13 +1838,13 @@ swagger 2.0类型。</p>
 <div class="listingblock">
 <div class="title">示例数据类型覆盖</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// 如果com.qualified.ReplaceWith是可以使用Class.forName(...)创建的类，将替换原始类型</span>
-<span class="annotation">@ApiModelProperty</span>(dataType = <span class="string"><span class="delimiter">&quot;</span><span class="content">com.qualified.ReplacedWith</span><span class="delimiter">&quot;</span></span>)
-<span class="directive">public</span> Original getOriginal() { ... }
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">// 如果com.qualified.ReplaceWith是可以使用Class.forName(...)创建的类，将替换原始类型
+@ApiModelProperty(dataType = "com.qualified.ReplacedWith")
+public Original getOriginal() { ... }
 
-<span class="comment">// 如果ReplaceWith不是可以使用Class.forName(...)创建的类，将保留原始类型</span>
-<span class="annotation">@ApiModelProperty</span>(dataType = <span class="string"><span class="delimiter">&quot;</span><span class="content">ReplaceWith</span><span class="delimiter">&quot;</span></span>)
-<span class="directive">public</span> Original getAnotherOriginal() { ... }</code></pre>
+// 如果ReplaceWith不是可以使用Class.forName(...)创建的类，将保留原始类型
+@ApiModelProperty(dataType = "ReplaceWith")
+public Original getAnotherOriginal() { ... }</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -2105,21 +1863,21 @@ swagger 2.0类型。</p>
 <div class="listingblock">
 <div class="title">原始类型</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="directive">private</span> <span class="directive">static</span> <span class="directive">final</span> <span class="predefined-type">Set</span>&lt;<span class="predefined-type">String</span>&gt; baseTypes = newHashSet(
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">int</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">date</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">double</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">float</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">boolean</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">byte</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">object</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">long</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">date-time</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">__file</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">biginteger</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">bigdecimal</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">uuid</span><span class="delimiter">&quot;</span></span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">private static final Set&lt;String&gt; baseTypes = newHashSet(
+      "int",
+      "date",
+      "string",
+      "double",
+      "float",
+      "boolean",
+      "byte",
+      "object",
+      "long",
+      "date-time",
+      "__file",
+      "biginteger",
+      "bigdecimal",
+      "uuid"
 );</code></pre>
 </div>
 </div>
@@ -2132,28 +1890,28 @@ swagger 2.0类型。</p>
 <div class="listingblock">
 <div class="title">xml配置</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="comment">&lt;!-- 必需，指示springfox可以访问spring的RequestMappingHandlerMapping  --&gt;</span>
-<span class="tag">&lt;mvc:annotation-driven</span><span class="tag">/&gt;</span>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;!-- 必需，指示springfox可以访问spring的RequestMappingHandlerMapping  --&gt;
+&lt;mvc:annotation-driven/&gt;
 
-<span class="comment">&lt;!-- 必需，指示可在@Configuration类上启用Spring后处理 --&gt;</span>
-<span class="tag">&lt;context:annotation-config</span><span class="tag">/&gt;</span>
+&lt;!-- 必需，指示可在@Configuration类上启用Spring后处理 --&gt;
+&lt;context:annotation-config/&gt;
 
-<span class="tag">&lt;bean</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.yourapp.configuration.MySwaggerConfig</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span></code></pre>
+&lt;bean class="com.yourapp.configuration.MySwaggerConfig"/&gt;</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">配置bean拉入xml配置</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
-<span class="annotation">@EnableSwagger</span> <span class="comment">// 加载框架所需的spring bean</span>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">MySwaggerConfig</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Configuration
+@EnableSwagger // 加载框架所需的spring bean
+public class MySwaggerConfig {
 
-   <span class="comment">/**
+   /**
     * 每个Docket bean都被swagger-mvc框架选中 - 允许多个swagger组，​​即相同的代码库，多个swagger资源列表
-    */</span>
-   <span class="annotation">@Bean</span>
-   <span class="directive">public</span> Docket customDocket(){
-      <span class="keyword">return</span> <span class="keyword">new</span> Docket(); <span class="comment">// 一些定制在这里</span>
+    */
+   @Bean
+   public Docket customDocket(){
+      return new Docket(); // 一些定制在这里
    }
 
 }</code></pre>
@@ -2175,22 +1933,22 @@ swagger 2.0类型。</p>
 <div class="listingblock">
 <div class="title">Java配置</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
-<span class="annotation">@EnableWebMvc</span> <span class="comment">// NOTE: 仅在非spring-boot应用程序中需要</span>
-<span class="annotation">@EnableSwagger2</span>
-<span class="annotation">@ComponentScan</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">com.myapp.controllers</span><span class="delimiter">&quot;</span></span>)
-<span class="directive">public</span> <span class="type">class</span> <span class="class">CustomJavaPluginConfig</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Configuration
+@EnableWebMvc // NOTE: 仅在非spring-boot应用程序中需要
+@EnableSwagger2
+@ComponentScan("com.myapp.controllers")
+public class CustomJavaPluginConfig {
 
 
-   <span class="annotation">@Bean</span>
-   <span class="directive">public</span> Docket customImplementation(){
-      <span class="keyword">return</span> <span class="keyword">new</span> Docket()
+   @Bean
+   public Docket customImplementation(){
+      return new Docket()
             .apiInfo(apiInfo());
-            <span class="comment">//... 更多自定义配置</span>
+            //... 更多自定义配置
 
    }
 
-   <span class="comment">//...</span>
+   //...
 }</code></pre>
 </div>
 </div>
@@ -2234,24 +1992,24 @@ swagger 2.0类型。</p>
 <div class="listingblock">
 <div class="title">SomeController.java</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">Find pet by Status</span><span class="delimiter">&quot;</span></span>,
-    notes = <span class="string"><span class="delimiter">&quot;</span><span class="content">${SomeController.findPetsByStatus.notes}</span><span class="delimiter">&quot;</span></span>...) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/findByStatus</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.GET, params = {<span class="string"><span class="delimiter">&quot;</span><span class="content">status</span><span class="delimiter">&quot;</span></span>})
-<span class="directive">public</span> Pet findPetsByStatus(
-    <span class="annotation">@ApiParam</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">${SomeController.findPetsByStatus.status}</span><span class="delimiter">&quot;</span></span>, <i class="conum" data-value="2"></i><b>(2)</b>
-        required = <span class="predefined-constant">true</span>,...)
-    <span class="annotation">@RequestParam</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">status</span><span class="delimiter">&quot;</span></span>,
-        defaultValue=<span class="string"><span class="delimiter">&quot;</span><span class="content">${SomeController.findPetsByStatus.status.default}</span><span class="delimiter">&quot;</span></span>) <span class="predefined-type">String</span> status) { <i class="conum" data-value="3"></i><b>(3)</b>
-    <span class="comment">//...</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@ApiOperation(value = "Find pet by Status",
+    notes = "${SomeController.findPetsByStatus.notes}"...) <i class="conum" data-value="1"></i><b>(1)</b>
+@RequestMapping(value = "/findByStatus", method = RequestMethod.GET, params = {"status"})
+public Pet findPetsByStatus(
+    @ApiParam(value = "${SomeController.findPetsByStatus.status}", <i class="conum" data-value="2"></i><b>(2)</b>
+        required = true,...)
+    @RequestParam("status",
+        defaultValue="${SomeController.findPetsByStatus.status.default}") String status) { <i class="conum" data-value="3"></i><b>(3)</b>
+    //...
 }
 
-<span class="annotation">@ApiOperation</span>(notes = <span class="string"><span class="delimiter">&quot;</span><span class="content">Operation 2</span><span class="delimiter">&quot;</span></span>, value = <span class="string"><span class="delimiter">&quot;</span><span class="content">${SomeController.operation2.value}</span><span class="delimiter">&quot;</span></span>...) <i class="conum" data-value="4"></i><b>(4)</b>
-<span class="annotation">@ApiImplicitParams</span>(
-    <span class="annotation">@ApiImplicitParam</span>(name=<span class="string"><span class="delimiter">&quot;</span><span class="content">header1</span><span class="delimiter">&quot;</span></span>, value=<span class="string"><span class="delimiter">&quot;</span><span class="content">${SomeController.operation2.header1}</span><span class="delimiter">&quot;</span></span>, ...) <i class="conum" data-value="5"></i><b>(5)</b>
+@ApiOperation(notes = "Operation 2", value = "${SomeController.operation2.value}"...) <i class="conum" data-value="4"></i><b>(4)</b>
+@ApiImplicitParams(
+    @ApiImplicitParam(name="header1", value="${SomeController.operation2.header1}", ...) <i class="conum" data-value="5"></i><b>(5)</b>
 )
-<span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">operation2</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.POST)
-<span class="directive">public</span> ResponseEntity&lt;<span class="predefined-type">String</span>&gt; operation2() {
-    <span class="keyword">return</span> ResponseEntity.ok(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>);
+@RequestMapping(value = "operation2", method = RequestMethod.POST)
+public ResponseEntity&lt;String&gt; operation2() {
+    return ResponseEntity.ok("");
 }</code></pre>
 </div>
 </div>
@@ -2285,9 +2043,9 @@ swagger 2.0类型。</p>
 <div class="listingblock">
 <div class="title">SomeModel.java</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">  <span class="directive">public</span> <span class="type">class</span> <span class="class">SomeModel</span> {
-    <span class="annotation">@ApiModelProperty</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">${SomeModel.someProperty}</span><span class="delimiter">&quot;</span></span>, ...) <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="directive">private</span> <span class="type">long</span> someProperty;
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">  public class SomeModel {
+    @ApiModelProperty(value = "${SomeModel.someProperty}", ...) <i class="conum" data-value="1"></i><b>(1)</b>
+    private long someProperty;
   }</code></pre>
 </div>
 </div>
@@ -2305,7 +2063,7 @@ swagger 2.0类型。</p>
 <div class="listingblock">
 <div class="title">application.properties</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="properties">SomeController.findPetsByStatus.notes=Finds pets by status
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">SomeController.findPetsByStatus.notes=Finds pets by status
 SomeController.findPetsByStatus.status=Status could be one of ...
 SomeController.operation2.header1=Header for bla bla...
 SomeController.operation2.value=Operation 2 do something...
@@ -2352,9 +2110,9 @@ Springfox会将 <code>getPetsUsingGET</code> 渲染为operationId。</p>
 <div class="listingblock">
 <div class="title">方法的标准注解</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>)
-<span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/pets</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.GET)
-<span class="directive">public</span> Model getAllThePets() {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@ApiOperation(value = "")
+@RequestMapping(value = "/pets", method = RequestMethod.GET)
+public Model getAllThePets() {
     ...
 }</code></pre>
 </div>
@@ -2365,12 +2123,12 @@ Springfox会将 <code>getPetsUsingGET</code> 渲染为operationId。</p>
 <div class="listingblock">
 <div class="title">默认渲染的operationID</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="json"><span class="key"><span class="delimiter">&quot;</span><span class="content">paths</span><span class="delimiter">&quot;</span></span>: {
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">/pets</span><span class="delimiter">&quot;</span></span>: {
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">get</span><span class="delimiter">&quot;</span></span>: {
-            <span class="error">.</span><span class="error">.</span><span class="error">.</span>
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">operationId</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">getAllThePetsUsingGET</span><span class="delimiter">&quot;</span></span>
-      <span class="error">.</span><span class="error">.</span><span class="error">.</span>
+<pre class="highlightjs highlight"><code class="language-json" data-lang="json">"paths": {
+  "/pets": {
+    "get": {
+            ...
+      "operationId":"getAllThePetsUsingGET"
+      ...
     }
   }
 }</code></pre>
@@ -2388,9 +2146,9 @@ Springfox会将 <code>getPetsUsingGET</code> 渲染为operationId。</p>
 <div class="listingblock">
 <div class="title">nickname会覆盖默认的operationId</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, nickname = <span class="string"><span class="delimiter">&quot;</span><span class="content">getMeAllThePetsPlease</span><span class="delimiter">&quot;</span></span>)
-<span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/pets</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.GET)
-<span class="directive">public</span> Model getAllThePets() {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@ApiOperation(value = "", nickname = "getMeAllThePetsPlease")
+@RequestMapping(value = "/pets", method = RequestMethod.GET)
+public Model getAllThePets() {
     ...
 }</code></pre>
 </div>
@@ -2401,12 +2159,12 @@ Springfox会将 <code>getPetsUsingGET</code> 渲染为operationId。</p>
 <div class="listingblock">
 <div class="title">默认渲染的operationID</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="json"><span class="key"><span class="delimiter">&quot;</span><span class="content">paths</span><span class="delimiter">&quot;</span></span>: {
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">/pets</span><span class="delimiter">&quot;</span></span>: {
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">get</span><span class="delimiter">&quot;</span></span>: {
-            <span class="error">.</span><span class="error">.</span><span class="error">.</span>
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">operationId</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">getMeAllThePetsPlease</span><span class="delimiter">&quot;</span></span>
-      <span class="error">.</span><span class="error">.</span><span class="error">.</span>
+<pre class="highlightjs highlight"><code class="language-json" data-lang="json">"paths": {
+  "/pets": {
+    "get": {
+            ...
+      "operationId":"getMeAllThePetsPlease"
+      ...
     }
   }
 }</code></pre>
@@ -2425,7 +2183,7 @@ Springfox会将 <code>getPetsUsingGET</code> 渲染为operationId。</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="json"> <span class="error">d</span><span class="error">o</span><span class="error">c</span><span class="error">k</span><span class="error">e</span><span class="error">t</span><span class="error">.</span><span class="error">f</span><span class="error">o</span><span class="error">r</span><span class="error">C</span><span class="error">o</span><span class="error">d</span><span class="error">e</span><span class="error">G</span><span class="error">e</span><span class="error">n</span><span class="error">e</span><span class="error">r</span><span class="error">a</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">(</span><span class="value">true</span><span class="error">|</span><span class="value">false</span><span class="error">)</span><span class="error">;</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-json" data-lang="json"> docket.forCodeGeneration(true|false);</code></pre>
 </div>
 </div>
 </div>
@@ -2487,10 +2245,8 @@ Springfox会将 <code>getPetsUsingGET</code> 渲染为operationId。</p>
 </div>
 </div>
 </div>
-<div id="footer">
-<div id="footer-text">
-Last updated 2019-01-02 08:28:38 CST
-</div>
-</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
+<script>hljs.initHighlighting()</script>
 </body>
 </html>

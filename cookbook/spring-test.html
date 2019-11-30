@@ -418,97 +418,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .show-for-print{display:inherit!important}}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
-<style>
-/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
-/*pre.CodeRay {background-color:#f7f7f8;}*/
-.CodeRay .line-numbers{border-right:1px solid #d8d8d8;padding:0 0.5em 0 .25em}
-.CodeRay span.line-numbers{display:inline-block;margin-right:.5em;color:rgba(0,0,0,.3)}
-.CodeRay .line-numbers strong{color:rgba(0,0,0,.4)}
-table.CodeRay{border-collapse:separate;border-spacing:0;margin-bottom:0;border:0;background:none}
-table.CodeRay td{vertical-align: top;line-height:1.45}
-table.CodeRay td.line-numbers{text-align:right}
-table.CodeRay td.line-numbers>pre{padding:0;color:rgba(0,0,0,.3)}
-table.CodeRay td.code{padding:0 0 0 .5em}
-table.CodeRay td.code>pre{padding:0}
-.CodeRay .debug{color:#fff !important;background:#000080 !important}
-.CodeRay .annotation{color:#007}
-.CodeRay .attribute-name{color:#000080}
-.CodeRay .attribute-value{color:#700}
-.CodeRay .binary{color:#509}
-.CodeRay .comment{color:#998;font-style:italic}
-.CodeRay .char{color:#04d}
-.CodeRay .char .content{color:#04d}
-.CodeRay .char .delimiter{color:#039}
-.CodeRay .class{color:#458;font-weight:bold}
-.CodeRay .complex{color:#a08}
-.CodeRay .constant,.CodeRay .predefined-constant{color:#008080}
-.CodeRay .color{color:#099}
-.CodeRay .class-variable{color:#369}
-.CodeRay .decorator{color:#b0b}
-.CodeRay .definition{color:#099}
-.CodeRay .delimiter{color:#000}
-.CodeRay .doc{color:#970}
-.CodeRay .doctype{color:#34b}
-.CodeRay .doc-string{color:#d42}
-.CodeRay .escape{color:#666}
-.CodeRay .entity{color:#800}
-.CodeRay .error{color:#808}
-.CodeRay .exception{color:inherit}
-.CodeRay .filename{color:#099}
-.CodeRay .function{color:#900;font-weight:bold}
-.CodeRay .global-variable{color:#008080}
-.CodeRay .hex{color:#058}
-.CodeRay .integer,.CodeRay .float{color:#099}
-.CodeRay .include{color:#555}
-.CodeRay .inline{color:#000}
-.CodeRay .inline .inline{background:#ccc}
-.CodeRay .inline .inline .inline{background:#bbb}
-.CodeRay .inline .inline-delimiter{color:#d14}
-.CodeRay .inline-delimiter{color:#d14}
-.CodeRay .important{color:#555;font-weight:bold}
-.CodeRay .interpreted{color:#b2b}
-.CodeRay .instance-variable{color:#008080}
-.CodeRay .label{color:#970}
-.CodeRay .local-variable{color:#963}
-.CodeRay .octal{color:#40e}
-.CodeRay .predefined{color:#369}
-.CodeRay .preprocessor{color:#579}
-.CodeRay .pseudo-class{color:#555}
-.CodeRay .directive{font-weight:bold}
-.CodeRay .type{font-weight:bold}
-.CodeRay .predefined-type{color:inherit}
-.CodeRay .reserved,.CodeRay .keyword {color:#000;font-weight:bold}
-.CodeRay .key{color:#808}
-.CodeRay .key .delimiter{color:#606}
-.CodeRay .key .char{color:#80f}
-.CodeRay .value{color:#088}
-.CodeRay .regexp .delimiter{color:#808}
-.CodeRay .regexp .content{color:#808}
-.CodeRay .regexp .modifier{color:#808}
-.CodeRay .regexp .char{color:#d14}
-.CodeRay .regexp .function{color:#404;font-weight:bold}
-.CodeRay .string{color:#d20}
-.CodeRay .string .string .string{background:#ffd0d0}
-.CodeRay .string .content{color:#d14}
-.CodeRay .string .char{color:#d14}
-.CodeRay .string .delimiter{color:#d14}
-.CodeRay .shell{color:#d14}
-.CodeRay .shell .delimiter{color:#d14}
-.CodeRay .symbol{color:#990073}
-.CodeRay .symbol .content{color:#a60}
-.CodeRay .symbol .delimiter{color:#630}
-.CodeRay .tag{color:#008080}
-.CodeRay .tag-special{color:#d70}
-.CodeRay .variable{color:#036}
-.CodeRay .insert{background:#afa}
-.CodeRay .delete{background:#faa}
-.CodeRay .change{color:#aaf;background:#007}
-.CodeRay .head{color:#f8f;background:#505}
-.CodeRay .insert .insert{color:#080}
-.CodeRay .delete .delete{color:#800}
-.CodeRay .change .change{color:#66f}
-.CodeRay .head .head{color:#f4f}
-</style>
 <style>
 .hidden {
 	display: none;
@@ -1186,9 +1095,9 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ContextConfiguration</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">/test-config.xml</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">XmlApplicationContextTests</span> {
-    <span class="comment">// class body...</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@ContextConfiguration("/test-config.xml") <i class="conum" data-value="1"></i><b>(1)</b>
+public class XmlApplicationContextTests {
+    // class body...
 }</code></pre>
 </div>
 </div>
@@ -1209,9 +1118,9 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ContextConfiguration</span>(classes = TestConfig.class) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">ConfigClassApplicationContextTests</span> {
-    <span class="comment">// class body...</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@ContextConfiguration(classes = TestConfig.class) <i class="conum" data-value="1"></i><b>(1)</b>
+public class ConfigClassApplicationContextTests {
+    // class body...
 }</code></pre>
 </div>
 </div>
@@ -1233,9 +1142,9 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ContextConfiguration</span>(initializers = CustomContextIntializer.class) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">ContextInitializerTests</span> {
-    <span class="comment">// class body...</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@ContextConfiguration(initializers = CustomContextIntializer.class) <i class="conum" data-value="1"></i><b>(1)</b>
+public class ContextInitializerTests {
+    // class body...
 }</code></pre>
 </div>
 </div>
@@ -1260,9 +1169,9 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ContextConfiguration</span>(locations = <span class="string"><span class="delimiter">&quot;</span><span class="content">/test-context.xml</span><span class="delimiter">&quot;</span></span>, loader = CustomContextLoader.class) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">CustomLoaderXmlApplicationContextTests</span> {
-    <span class="comment">// class body...</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@ContextConfiguration(locations = "/test-context.xml", loader = CustomContextLoader.class) <i class="conum" data-value="1"></i><b>(1)</b>
+public class CustomLoaderXmlApplicationContextTests {
+    // class body...
 }</code></pre>
 </div>
 </div>
@@ -1307,10 +1216,10 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ContextConfiguration</span>
-<span class="annotation">@WebAppConfiguration</span> <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">WebAppTests</span> {
-    <span class="comment">// class body...</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@ContextConfiguration
+@WebAppConfiguration <i class="conum" data-value="1"></i><b>(1)</b>
+public class WebAppTests {
+    // class body...
 }</code></pre>
 </div>
 </div>
@@ -1332,10 +1241,10 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ContextConfiguration</span>
-<span class="annotation">@WebAppConfiguration</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:test-web-resources</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">WebAppTests</span> {
-    <span class="comment">// class body...</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@ContextConfiguration
+@WebAppConfiguration("classpath:test-web-resources") <i class="conum" data-value="1"></i><b>(1)</b>
+public class WebAppTests {
+    // class body...
 }</code></pre>
 </div>
 </div>
@@ -1365,24 +1274,24 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ContextHierarchy</span>({
-    <span class="annotation">@ContextConfiguration</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">/parent-config.xml</span><span class="delimiter">&quot;</span></span>),
-    <span class="annotation">@ContextConfiguration</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">/child-config.xml</span><span class="delimiter">&quot;</span></span>)
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@ContextHierarchy({
+    @ContextConfiguration("/parent-config.xml"),
+    @ContextConfiguration("/child-config.xml")
 })
-<span class="directive">public</span> <span class="type">class</span> <span class="class">ContextHierarchyTests</span> {
-    <span class="comment">// class body...</span>
+public class ContextHierarchyTests {
+    // class body...
 }</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@WebAppConfiguration</span>
-<span class="annotation">@ContextHierarchy</span>({
-    <span class="annotation">@ContextConfiguration</span>(classes = AppConfig.class),
-    <span class="annotation">@ContextConfiguration</span>(classes = WebConfig.class)
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@WebAppConfiguration
+@ContextHierarchy({
+    @ContextConfiguration(classes = AppConfig.class),
+    @ContextConfiguration(classes = WebConfig.class)
 })
-<span class="directive">public</span> <span class="type">class</span> <span class="class">WebIntegrationTests</span> {
-    <span class="comment">// class body...</span>
+public class WebIntegrationTests {
+    // class body...
 }</code></pre>
 </div>
 </div>
@@ -1406,10 +1315,10 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ContextConfiguration</span>
-<span class="annotation">@ActiveProfiles</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">dev</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">DeveloperTests</span> {
-    <span class="comment">// class body...</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@ContextConfiguration
+@ActiveProfiles("dev") <i class="conum" data-value="1"></i><b>(1)</b>
+public class DeveloperTests {
+    // class body...
 }</code></pre>
 </div>
 </div>
@@ -1430,10 +1339,10 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ContextConfiguration</span>
-<span class="annotation">@ActiveProfiles</span>({<span class="string"><span class="delimiter">&quot;</span><span class="content">dev</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">integration</span><span class="delimiter">&quot;</span></span>}) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">DeveloperIntegrationTests</span> {
-    <span class="comment">// class body...</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@ContextConfiguration
+@ActiveProfiles({"dev", "integration"}) <i class="conum" data-value="1"></i><b>(1)</b>
+public class DeveloperIntegrationTests {
+    // class body...
 }</code></pre>
 </div>
 </div>
@@ -1483,10 +1392,10 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ContextConfiguration</span>
-<span class="annotation">@TestPropertySource</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">/test.properties</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">MyIntegrationTests</span> {
-    <span class="comment">// class body...</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@ContextConfiguration
+@TestPropertySource("/test.properties") <i class="conum" data-value="1"></i><b>(1)</b>
+public class MyIntegrationTests {
+    // class body...
 }</code></pre>
 </div>
 </div>
@@ -1507,10 +1416,10 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ContextConfiguration</span>
-<span class="annotation">@TestPropertySource</span>(properties = { <span class="string"><span class="delimiter">&quot;</span><span class="content">timezone = GMT</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">port: 4242</span><span class="delimiter">&quot;</span></span> }) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">MyIntegrationTests</span> {
-    <span class="comment">// class body...</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@ContextConfiguration
+@TestPropertySource(properties = { "timezone = GMT", "port: 4242" }) <i class="conum" data-value="1"></i><b>(1)</b>
+public class MyIntegrationTests {
+    // class body...
 }</code></pre>
 </div>
 </div>
@@ -1551,9 +1460,9 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@DirtiesContext</span>(classMode = BEFORE_CLASS) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">FreshContextTests</span> {
-    <span class="comment">// 一些需要新Spring容器的测试</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@DirtiesContext(classMode = BEFORE_CLASS) <i class="conum" data-value="1"></i><b>(1)</b>
+public class FreshContextTests {
+    // 一些需要新Spring容器的测试
 }</code></pre>
 </div>
 </div>
@@ -1578,9 +1487,9 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@DirtiesContext</span> <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">ContextDirtyingTests</span> {
-    <span class="comment">// 一些测试导致Spring容器变脏</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@DirtiesContext <i class="conum" data-value="1"></i><b>(1)</b>
+public class ContextDirtyingTests {
+    // 一些测试导致Spring容器变脏
 }</code></pre>
 </div>
 </div>
@@ -1605,9 +1514,9 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@DirtiesContext</span>(classMode = BEFORE_EACH_TEST_METHOD) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">FreshContextTests</span> {
-    <span class="comment">// 一些需要新Spring容器的测试</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD) <i class="conum" data-value="1"></i><b>(1)</b>
+public class FreshContextTests {
+    // 一些需要新Spring容器的测试
 }</code></pre>
 </div>
 </div>
@@ -1632,9 +1541,9 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@DirtiesContext</span>(classMode = AFTER_EACH_TEST_METHOD) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">FreshContextTests</span> {
-    <span class="comment">// 一些测试导致Spring容器变脏</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@DirtiesContext(classMode = AFTER_EACH_TEST_METHOD) <i class="conum" data-value="1"></i><b>(1)</b>
+public class FreshContextTests {
+    // 一些测试导致Spring容器变脏
 }</code></pre>
 </div>
 </div>
@@ -1659,10 +1568,10 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@DirtiesContext</span>(methodMode = BEFORE_METHOD) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="annotation">@Test</span>
-<span class="directive">public</span> <span class="type">void</span> testProcessWhichRequiresFreshAppCtx() {
-    <span class="comment">// 一些需要新Spring容器的逻辑</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@DirtiesContext(methodMode = BEFORE_METHOD) <i class="conum" data-value="1"></i><b>(1)</b>
+@Test
+public void testProcessWhichRequiresFreshAppCtx() {
+    // 一些需要新Spring容器的逻辑
 }</code></pre>
 </div>
 </div>
@@ -1687,10 +1596,10 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@DirtiesContext</span>(methodMode = BEFORE_METHOD) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="annotation">@Test</span>
-<span class="directive">public</span> <span class="type">void</span> testProcessWhichRequiresFreshAppCtx() {
-    <span class="comment">// 一些导致Spring容器变脏的逻辑</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@DirtiesContext(methodMode = BEFORE_METHOD) <i class="conum" data-value="1"></i><b>(1)</b>
+@Test
+public void testProcessWhichRequiresFreshAppCtx() {
+    // 一些导致Spring容器变脏的逻辑
 }</code></pre>
 </div>
 </div>
@@ -1714,20 +1623,20 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ContextHierarchy</span>({
-    <span class="annotation">@ContextConfiguration</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">/parent-config.xml</span><span class="delimiter">&quot;</span></span>),
-    <span class="annotation">@ContextConfiguration</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">/child-config.xml</span><span class="delimiter">&quot;</span></span>)
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@ContextHierarchy({
+    @ContextConfiguration("/parent-config.xml"),
+    @ContextConfiguration("/child-config.xml")
 })
-<span class="directive">public</span> <span class="type">class</span> <span class="class">BaseTests</span> {
-    <span class="comment">// class body...</span>
+public class BaseTests {
+    // class body...
 }
 
-<span class="directive">public</span> <span class="type">class</span> <span class="class">ExtendedTests</span> <span class="directive">extends</span> BaseTests {
+public class ExtendedTests extends BaseTests {
 
-    <span class="annotation">@Test</span>
-    <span class="annotation">@DirtiesContext</span>(hierarchyMode = CURRENT_LEVEL) <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="directive">public</span> <span class="type">void</span> test() {
-        <span class="comment">// 一些导致子上下文被弄脏的逻辑</span>
+    @Test
+    @DirtiesContext(hierarchyMode = CURRENT_LEVEL) <i class="conum" data-value="1"></i><b>(1)</b>
+    public void test() {
+        // 一些导致子上下文被弄脏的逻辑
     }
 }</code></pre>
 </div>
@@ -1760,10 +1669,10 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ContextConfiguration</span>
-<span class="annotation">@TestExecutionListeners</span>({CustomTestExecutionListener.class, AnotherTestExecutionListener.class}) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">CustomTestExecutionListenerTests</span> {
-    <span class="comment">// class body...</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@ContextConfiguration
+@TestExecutionListeners({CustomTestExecutionListener.class, AnotherTestExecutionListener.class}) <i class="conum" data-value="1"></i><b>(1)</b>
+public class CustomTestExecutionListenerTests {
+    // class body...
 }</code></pre>
 </div>
 </div>
@@ -1795,10 +1704,10 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Commit</span> <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="annotation">@Test</span>
-<span class="directive">public</span> <span class="type">void</span> testProcessWithoutRollback() {
-    <span class="comment">// ...</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Commit <i class="conum" data-value="1"></i><b>(1)</b>
+@Test
+public void testProcessWithoutRollback() {
+    // ...
 }</code></pre>
 </div>
 </div>
@@ -1831,10 +1740,10 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Rollback</span>(<span class="predefined-constant">false</span>) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="annotation">@Test</span>
-<span class="directive">public</span> <span class="type">void</span> testProcessWithoutRollback() {
-    <span class="comment">// ...</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Rollback(false) <i class="conum" data-value="1"></i><b>(1)</b>
+@Test
+public void testProcessWithoutRollback() {
+    // ...
 }</code></pre>
 </div>
 </div>
@@ -1863,9 +1772,9 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@BeforeTransaction</span> <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="type">void</span> beforeTransaction() {
-    <span class="comment">// 在事务开始之前要执行的逻辑</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@BeforeTransaction <i class="conum" data-value="1"></i><b>(1)</b>
+void beforeTransaction() {
+    // 在事务开始之前要执行的逻辑</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1893,9 +1802,9 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@AfterTransaction</span> <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="type">void</span> afterTransaction() {
-    <span class="comment">// 在事务结束后要执行的逻辑</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@AfterTransaction <i class="conum" data-value="1"></i><b>(1)</b>
+void afterTransaction() {
+    // 在事务结束后要执行的逻辑</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1918,10 +1827,10 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Test</span>
-<span class="annotation">@Sql</span>({<span class="string"><span class="delimiter">&quot;</span><span class="content">/test-schema.sql</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/test-user-data.sql</span><span class="delimiter">&quot;</span></span>}) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="directive">public</span> <span class="type">void</span> userTest {
-    <span class="comment">// 执行依赖于测试schema和测试数据的代码</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Test
+@Sql({"/test-schema.sql", "/test-user-data.sql"}) <i class="conum" data-value="1"></i><b>(1)</b>
+public void userTest {
+    // 执行依赖于测试schema和测试数据的代码
 }</code></pre>
 </div>
 </div>
@@ -1948,13 +1857,13 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Test</span>
-<span class="annotation">@Sql</span>(
-    scripts = <span class="string"><span class="delimiter">&quot;</span><span class="content">/test-user-data.sql</span><span class="delimiter">&quot;</span></span>,
-    config = <span class="annotation">@SqlConfig</span>(commentPrefix = <span class="string"><span class="delimiter">&quot;</span><span class="content">`</span><span class="delimiter">&quot;</span></span>, separator = <span class="string"><span class="delimiter">&quot;</span><span class="content">@@</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Test
+@Sql(
+    scripts = "/test-user-data.sql",
+    config = @SqlConfig(commentPrefix = "`", separator = "@@") <i class="conum" data-value="1"></i><b>(1)</b>
 )
-<span class="directive">public</span> <span class="type">void</span> userTest {
-    <span class="comment">// 执行依赖于测试数据的代码</span>
+public void userTest {
+    // 执行依赖于测试数据的代码
 }</code></pre>
 </div>
 </div>
@@ -1980,13 +1889,13 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Test</span>
-<span class="annotation">@SqlGroup</span>({ <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="annotation">@Sql</span>(scripts = <span class="string"><span class="delimiter">&quot;</span><span class="content">/test-schema.sql</span><span class="delimiter">&quot;</span></span>, config = <span class="annotation">@SqlConfig</span>(commentPrefix = <span class="string"><span class="delimiter">&quot;</span><span class="content">`</span><span class="delimiter">&quot;</span></span>)),
-    <span class="annotation">@Sql</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">/test-user-data.sql</span><span class="delimiter">&quot;</span></span>)
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Test
+@SqlGroup({ <i class="conum" data-value="1"></i><b>(1)</b>
+    @Sql(scripts = "/test-schema.sql", config = @SqlConfig(commentPrefix = "`")),
+    @Sql("/test-user-data.sql")
 )}
-<span class="directive">public</span> <span class="type">void</span> userTest {
-    <span class="comment">// 执行使用测试schema和测试数据的代码</span>
+public void userTest {
+    // 执行使用测试schema和测试数据的代码
 }</code></pre>
 </div>
 </div>
@@ -2103,10 +2012,10 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@IfProfileValue</span>(name=<span class="string"><span class="delimiter">&quot;</span><span class="content">java.vendor</span><span class="delimiter">&quot;</span></span>, value=<span class="string"><span class="delimiter">&quot;</span><span class="content">Oracle Corporation</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="annotation">@Test</span>
-<span class="directive">public</span> <span class="type">void</span> testProcessWhichRunsOnlyOnOracleJvm() {
-    <span class="comment">// 一些逻辑应该只在Oracle公司的Java VM上运行</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@IfProfileValue(name="java.vendor", value="Oracle Corporation") <i class="conum" data-value="1"></i><b>(1)</b>
+@Test
+public void testProcessWhichRunsOnlyOnOracleJvm() {
+    // 一些逻辑应该只在Oracle公司的Java VM上运行
 }</code></pre>
 </div>
 </div>
@@ -2127,10 +2036,10 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@IfProfileValue</span>(name=<span class="string"><span class="delimiter">&quot;</span><span class="content">test-groups</span><span class="delimiter">&quot;</span></span>, values={<span class="string"><span class="delimiter">&quot;</span><span class="content">unit-tests</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">integration-tests</span><span class="delimiter">&quot;</span></span>}) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="annotation">@Test</span>
-<span class="directive">public</span> <span class="type">void</span> testProcessWhichRunsForUnitOrIntegrationTestGroups() {
-    <span class="comment">// 一些逻辑应该仅针对单元测试和集成测试组运行</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@IfProfileValue(name="test-groups", values={"unit-tests", "integration-tests"}) <i class="conum" data-value="1"></i><b>(1)</b>
+@Test
+public void testProcessWhichRunsForUnitOrIntegrationTestGroups() {
+    // 一些逻辑应该仅针对单元测试和集成测试组运行
 }</code></pre>
 </div>
 </div>
@@ -2156,9 +2065,9 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ProfileValueSourceConfiguration</span>(CustomProfileValueSource.class) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">CustomProfileValueSourceTests</span> {
-    <span class="comment">// class body...</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@ProfileValueSourceConfiguration(CustomProfileValueSource.class) <i class="conum" data-value="1"></i><b>(1)</b>
+public class CustomProfileValueSourceTests {
+    // class body...
 }</code></pre>
 </div>
 </div>
@@ -2185,9 +2094,9 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Timed</span>(millis = <span class="integer">1000</span>) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="directive">public</span> <span class="type">void</span> testProcessWithOneSecondTimeout() {
-    <span class="comment">// 执行时间不应超过1秒的逻辑</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Timed(millis = 1000) <i class="conum" data-value="1"></i><b>(1)</b>
+public void testProcessWithOneSecondTimeout() {
+    // 执行时间不应超过1秒的逻辑
 }</code></pre>
 </div>
 </div>
@@ -2219,10 +2128,10 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Repeat</span>(<span class="integer">10</span>) <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="annotation">@Test</span>
-<span class="directive">public</span> <span class="type">void</span> testProcessRepeatedly() {
-    <span class="comment">// ...</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Repeat(10) <i class="conum" data-value="1"></i><b>(1)</b>
+@Test
+public void testProcessRepeatedly() {
+    // ...
 }</code></pre>
 </div>
 </div>
@@ -2336,17 +2245,17 @@ TestContext框架与使用中的实际测试框架无关，它允许在各种环
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@RunWith</span>(SpringRunner.class)
-<span class="annotation">@ContextConfiguration</span>({<span class="string"><span class="delimiter">&quot;</span><span class="content">/app-config.xml</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/test-data-access-config.xml</span><span class="delimiter">&quot;</span></span>})
-<span class="annotation">@ActiveProfiles</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">dev</span><span class="delimiter">&quot;</span></span>)
-<span class="annotation">@Transactional</span>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">OrderRepositoryTests</span> { }
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@RunWith(SpringRunner.class)
+@ContextConfiguration({"/app-config.xml", "/test-data-access-config.xml"})
+@ActiveProfiles("dev")
+@Transactional
+public class OrderRepositoryTests { }
 
-<span class="annotation">@RunWith</span>(SpringRunner.class)
-<span class="annotation">@ContextConfiguration</span>({<span class="string"><span class="delimiter">&quot;</span><span class="content">/app-config.xml</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/test-data-access-config.xml</span><span class="delimiter">&quot;</span></span>})
-<span class="annotation">@ActiveProfiles</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">dev</span><span class="delimiter">&quot;</span></span>)
-<span class="annotation">@Transactional</span>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">UserRepositoryTests</span> { }</code></pre>
+@RunWith(SpringRunner.class)
+@ContextConfiguration({"/app-config.xml", "/test-data-access-config.xml"})
+@ActiveProfiles("dev")
+@Transactional
+public class UserRepositoryTests { }</code></pre>
 </div>
 </div>
 </div>
@@ -2359,12 +2268,12 @@ Spring的常用测试配置从而减少重复，如下所示：</p>
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Target</span>(<span class="predefined-type">ElementType</span>.TYPE)
-<span class="annotation">@Retention</span>(<span class="predefined-type">RetentionPolicy</span>.RUNTIME)
-<span class="annotation">@ContextConfiguration</span>({<span class="string"><span class="delimiter">&quot;</span><span class="content">/app-config.xml</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/test-data-access-config.xml</span><span class="delimiter">&quot;</span></span>})
-<span class="annotation">@ActiveProfiles</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">dev</span><span class="delimiter">&quot;</span></span>)
-<span class="annotation">@Transactional</span>
-<span class="directive">public</span> <span class="annotation">@interface</span> TransactionalDevTestConfig { }</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@ContextConfiguration({"/app-config.xml", "/test-data-access-config.xml"})
+@ActiveProfiles("dev")
+@Transactional
+public @interface TransactionalDevTestConfig { }</code></pre>
 </div>
 </div>
 </div>
@@ -2376,13 +2285,13 @@ Spring的常用测试配置从而减少重复，如下所示：</p>
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@RunWith</span>(SpringRunner.class)
-<span class="annotation">@TransactionalDevTestConfig</span>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">OrderRepositoryTests</span> { }
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@RunWith(SpringRunner.class)
+@TransactionalDevTestConfig
+public class OrderRepositoryTests { }
 
-<span class="annotation">@RunWith</span>(SpringRunner.class)
-<span class="annotation">@TransactionalDevTestConfig</span>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">UserRepositoryTests</span> { }</code></pre>
+@RunWith(SpringRunner.class)
+@TransactionalDevTestConfig
+public class UserRepositoryTests { }</code></pre>
 </div>
 </div>
 </div>
@@ -2394,17 +2303,17 @@ Spring的常用测试配置从而减少重复，如下所示：</p>
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ExtendWith</span>(SpringExtension.class)
-<span class="annotation">@ContextConfiguration</span>({<span class="string"><span class="delimiter">&quot;</span><span class="content">/app-config.xml</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/test-data-access-config.xml</span><span class="delimiter">&quot;</span></span>})
-<span class="annotation">@ActiveProfiles</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">dev</span><span class="delimiter">&quot;</span></span>)
-<span class="annotation">@Transactional</span>
-<span class="type">class</span> <span class="class">OrderRepositoryTests</span> { }
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@ExtendWith(SpringExtension.class)
+@ContextConfiguration({"/app-config.xml", "/test-data-access-config.xml"})
+@ActiveProfiles("dev")
+@Transactional
+class OrderRepositoryTests { }
 
-<span class="annotation">@ExtendWith</span>(SpringExtension.class)
-<span class="annotation">@ContextConfiguration</span>({<span class="string"><span class="delimiter">&quot;</span><span class="content">/app-config.xml</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/test-data-access-config.xml</span><span class="delimiter">&quot;</span></span>})
-<span class="annotation">@ActiveProfiles</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">dev</span><span class="delimiter">&quot;</span></span>)
-<span class="annotation">@Transactional</span>
-<span class="type">class</span> <span class="class">UserRepositoryTests</span> { }</code></pre>
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration({"/app-config.xml", "/test-data-access-config.xml"})
+@ActiveProfiles("dev")
+@Transactional
+class UserRepositoryTests { }</code></pre>
 </div>
 </div>
 </div>
@@ -2417,13 +2326,13 @@ Spring和JUnit Jupiter的常用测试配置从而减少重复，如下所示：<
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Target</span>(<span class="predefined-type">ElementType</span>.TYPE)
-<span class="annotation">@Retention</span>(<span class="predefined-type">RetentionPolicy</span>.RUNTIME)
-<span class="annotation">@ExtendWith</span>(SpringExtension.class)
-<span class="annotation">@ContextConfiguration</span>({<span class="string"><span class="delimiter">&quot;</span><span class="content">/app-config.xml</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/test-data-access-config.xml</span><span class="delimiter">&quot;</span></span>})
-<span class="annotation">@ActiveProfiles</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">dev</span><span class="delimiter">&quot;</span></span>)
-<span class="annotation">@Transactional</span>
-<span class="directive">public</span> <span class="annotation">@interface</span> TransactionalDevTestConfig { }</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration({"/app-config.xml", "/test-data-access-config.xml"})
+@ActiveProfiles("dev")
+@Transactional
+public @interface TransactionalDevTestConfig { }</code></pre>
 </div>
 </div>
 </div>
@@ -2435,11 +2344,11 @@ Spring和JUnit Jupiter的常用测试配置从而减少重复，如下所示：<
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@TransactionalDevTestConfig</span>
-<span class="type">class</span> <span class="class">OrderRepositoryTests</span> { }
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@TransactionalDevTestConfig
+class OrderRepositoryTests { }
 
-<span class="annotation">@TransactionalDevTestConfig</span>
-<span class="type">class</span> <span class="class">UserRepositoryTests</span> { }</code></pre>
+@TransactionalDevTestConfig
+class UserRepositoryTests { }</code></pre>
 </div>
 </div>
 </div>
@@ -2454,12 +2363,12 @@ Spring和JUnit Jupiter的常用测试配置从而减少重复，如下所示：<
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Target</span>(<span class="predefined-type">ElementType</span>.METHOD)
-<span class="annotation">@Retention</span>(<span class="predefined-type">RetentionPolicy</span>.RUNTIME)
-<span class="annotation">@Transactional</span>
-<span class="annotation">@Tag</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">integration-test</span><span class="delimiter">&quot;</span></span>) <span class="comment">// org.junit.jupiter.api.Tag</span>
-<span class="annotation">@Test</span> <span class="comment">// org.junit.jupiter.api.Test</span>
-<span class="directive">public</span> <span class="annotation">@interface</span> TransactionalIntegrationTest { }</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@Transactional
+@Tag("integration-test") // org.junit.jupiter.api.Tag
+@Test // org.junit.jupiter.api.Test
+public @interface TransactionalIntegrationTest { }</code></pre>
 </div>
 </div>
 </div>
@@ -2471,11 +2380,11 @@ Spring和JUnit Jupiter的常用测试配置从而减少重复，如下所示：<
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@TransactionalIntegrationTest</span>
-<span class="type">void</span> saveOrder() { }
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@TransactionalIntegrationTest
+void saveOrder() { }
 
-<span class="annotation">@TransactionalIntegrationTest</span>
-<span class="type">void</span> deleteOrder() { }</code></pre>
+@TransactionalIntegrationTest
+void deleteOrder() { }</code></pre>
 </div>
 </div>
 </div>
@@ -2695,8 +2604,8 @@ Spring和JUnit Jupiter的常用测试配置从而减少重复，如下所示：<
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ContextConfiguration</span>
-<span class="annotation">@TestExecutionListeners</span>({
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@ContextConfiguration
+@TestExecutionListeners({
     MyCustomTestExecutionListener.class,
     ServletTestExecutionListener.class,
     DirtiesContextBeforeModesTestExecutionListener.class,
@@ -2705,8 +2614,8 @@ Spring和JUnit Jupiter的常用测试配置从而减少重复，如下所示：<
     TransactionalTestExecutionListener.class,
     SqlScriptsTestExecutionListener.class
 })
-<span class="directive">public</span> <span class="type">class</span> <span class="class">MyTest</span> {
-    <span class="comment">// class body...</span>
+public class MyTest {
+    // class body...
 }</code></pre>
 </div>
 </div>
@@ -2735,13 +2644,13 @@ Spring和JUnit Jupiter的常用测试配置从而减少重复，如下所示：<
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ContextConfiguration</span>
-<span class="annotation">@TestExecutionListeners</span>(
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@ContextConfiguration
+@TestExecutionListeners(
     listeners = MyCustomTestExecutionListener.class,
     mergeMode = MERGE_WITH_DEFAULTS
 )
-<span class="directive">public</span> <span class="type">class</span> <span class="class">MyTest</span> {
-    <span class="comment">// class body...</span>
+public class MyTest {
+    // class body...
 }</code></pre>
 </div>
 </div>
@@ -2773,14 +2682,14 @@ Spring和JUnit Jupiter的常用测试配置从而减少重复，如下所示：<
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@RunWith</span>(SpringRunner.class)
-<span class="annotation">@ContextConfiguration</span>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">MyTest</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@RunWith(SpringRunner.class)
+@ContextConfiguration
+public class MyTest {
 
-    <span class="annotation">@Autowired</span> <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="directive">private</span> ApplicationContext applicationContext;
+    @Autowired <i class="conum" data-value="1"></i><b>(1)</b>
+    private ApplicationContext applicationContext;
 
-    <span class="comment">// class body...</span>
+    // class body...
 }</code></pre>
 </div>
 </div>
@@ -2801,15 +2710,15 @@ Spring和JUnit Jupiter的常用测试配置从而减少重复，如下所示：<
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@RunWith</span>(SpringRunner.class)
-<span class="annotation">@WebAppConfiguration</span> <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="annotation">@ContextConfiguration</span>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">MyWebAppTest</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@RunWith(SpringRunner.class)
+@WebAppConfiguration <i class="conum" data-value="1"></i><b>(1)</b>
+@ContextConfiguration
+public class MyWebAppTest {
 
-    <span class="annotation">@Autowired</span> <i class="conum" data-value="2"></i><b>(2)</b>
-    <span class="directive">private</span> WebApplicationContext wac;
+    @Autowired <i class="conum" data-value="2"></i><b>(2)</b>
+    private WebApplicationContext wac;
 
-    <span class="comment">// class body...</span>
+    // class body...
 }</code></pre>
 </div>
 </div>
@@ -2945,18 +2854,18 @@ TestContext框架没有检测实例化测试实例的方式。因此，对于构
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@RunWith</span>(SpringRunner.class)
-<span class="comment">// 指定要为此测试夹具加载的Spring配置</span>
-<span class="annotation">@ContextConfiguration</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">repository-config.xml</span><span class="delimiter">&quot;</span></span>)
-<span class="directive">public</span> <span class="type">class</span> <span class="class">HibernateTitleRepositoryTests</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@RunWith(SpringRunner.class)
+// 指定要为此测试夹具加载的Spring配置
+@ContextConfiguration("repository-config.xml")
+public class HibernateTitleRepositoryTests {
 
-    <span class="comment">// 此实例将按类型注入依赖项</span>
-    <span class="annotation">@Autowired</span>
-    <span class="directive">private</span> HibernateTitleRepository titleRepository;
+    // 此实例将按类型注入依赖项
+    @Autowired
+    private HibernateTitleRepository titleRepository;
 
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> findById() {
-        Title title = titleRepository.findById(<span class="keyword">new</span> <span class="predefined-type">Long</span>(<span class="integer">10</span>));
+    @Test
+    public void findById() {
+        Title title = titleRepository.findById(new Long(10));
         assertNotNull(title);
     }
 }</code></pre>
@@ -2971,22 +2880,22 @@ TestContext框架没有检测实例化测试实例的方式。因此，对于构
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@RunWith</span>(SpringRunner.class)
-<span class="comment">// 指定要为此测试夹具加载的Spring配置</span>
-<span class="annotation">@ContextConfiguration</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">repository-config.xml</span><span class="delimiter">&quot;</span></span>)
-<span class="directive">public</span> <span class="type">class</span> <span class="class">HibernateTitleRepositoryTests</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@RunWith(SpringRunner.class)
+// 指定要为此测试夹具加载的Spring配置
+@ContextConfiguration("repository-config.xml")
+public class HibernateTitleRepositoryTests {
 
-    <span class="comment">// 此实例将按类型注入依赖项</span>
-    <span class="directive">private</span> HibernateTitleRepository titleRepository;
+    // 此实例将按类型注入依赖项
+    private HibernateTitleRepository titleRepository;
 
-    <span class="annotation">@Autowired</span>
-    <span class="directive">public</span> <span class="type">void</span> setTitleRepository(HibernateTitleRepository titleRepository) {
-        <span class="local-variable">this</span>.titleRepository = titleRepository;
+    @Autowired
+    public void setTitleRepository(HibernateTitleRepository titleRepository) {
+        this.titleRepository = titleRepository;
     }
 
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> findById() {
-        Title title = titleRepository.findById(<span class="keyword">new</span> <span class="predefined-type">Long</span>(<span class="integer">10</span>));
+    @Test
+    public void findById() {
+        Title title = titleRepository.findById(new Long(10));
         assertNotNull(title);
     }
 }</code></pre>
@@ -3001,22 +2910,22 @@ TestContext框架没有检测实例化测试实例的方式。因此，对于构
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="preprocessor">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
-<span class="tag">&lt;beans</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/beans</span><span class="delimiter">&quot;</span></span>
-    <span class="attribute-name">xmlns:xsi</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.w3.org/2001/XMLSchema-instance</span><span class="delimiter">&quot;</span></span>
-    <span class="attribute-name">xsi:schemaLocation</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/beans</span>
-        <span class="content">http://www.springframework.org/schema/beans/spring-beans.xsd</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd"&gt;
 
-    <span class="comment">&lt;!-- 这个bean将被注入HibernateTitleRepositoryTests类 --&gt;</span>
-    <span class="tag">&lt;bean</span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">titleRepository</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.foo.repository.hibernate.HibernateTitleRepository</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-        <span class="tag">&lt;property</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">sessionFactory</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">ref</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">sessionFactory</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
-    <span class="tag">&lt;/bean&gt;</span>
+    &lt;!-- 这个bean将被注入HibernateTitleRepositoryTests类 --&gt;
+    &lt;bean id="titleRepository" class="com.foo.repository.hibernate.HibernateTitleRepository"&gt;
+        &lt;property name="sessionFactory" ref="sessionFactory"/&gt;
+    &lt;/bean&gt;
 
-    <span class="tag">&lt;bean</span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">sessionFactory</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">org.springframework.orm.hibernate5.LocalSessionFactoryBean</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-        <span class="comment">&lt;!-- 为简洁而省略了配置 --&gt;</span>
-    <span class="tag">&lt;/bean&gt;</span>
+    &lt;bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean"&gt;
+        &lt;!-- 为简洁而省略了配置 --&gt;
+    &lt;/bean&gt;
 
-<span class="tag">&lt;/beans&gt;</span></code></pre>
+&lt;/beans&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -3037,15 +2946,15 @@ TestContext框架没有检测实例化测试实例的方式。因此，对于构
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// ...</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">// ...
 
-    <span class="annotation">@Autowired</span>
-    <span class="annotation">@Override</span>
-    <span class="directive">public</span> <span class="type">void</span> setDataSource(<span class="annotation">@Qualifier</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">myDataSource</span><span class="delimiter">&quot;</span></span>) <span class="predefined-type">DataSource</span> dataSource) {
-        <span class="local-variable">super</span>.setDataSource(dataSource);
+    @Autowired
+    @Override
+    public void setDataSource(@Qualifier("myDataSource") DataSource dataSource) {
+        super.setDataSource(dataSource);
     }
 
-<span class="comment">// ...</span></code></pre>
+// ...</code></pre>
 </div>
 </div>
 </div>
@@ -3091,19 +3000,19 @@ bean名称可用作回退限定符值，因此你可以有效地在那里按名�
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;beans&gt;</span>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;beans&gt;
 
-    <span class="tag">&lt;bean</span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">userService</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.example.SimpleUserService</span><span class="delimiter">&quot;</span></span>
-            <span class="attribute-name">c:loginAction-ref</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">loginAction</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+    &lt;bean id="userService" class="com.example.SimpleUserService"
+            c:loginAction-ref="loginAction"/&gt;
 
-    <span class="tag">&lt;bean</span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">loginAction</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.example.LoginAction</span><span class="delimiter">&quot;</span></span>
-            <span class="attribute-name">c:username</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">#{request.getParameter('user')}</span><span class="delimiter">&quot;</span></span>
-            <span class="attribute-name">c:password</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">#{request.getParameter('pswd')}</span><span class="delimiter">&quot;</span></span>
-            <span class="attribute-name">scope</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">request</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-        <span class="tag">&lt;aop:scoped-proxy</span><span class="tag">/&gt;</span>
-    <span class="tag">&lt;/bean&gt;</span>
+    &lt;bean id="loginAction" class="com.example.LoginAction"
+            c:username="#{request.getParameter('user')}"
+            c:password="#{request.getParameter('pswd')}"
+            scope="request"&gt;
+        &lt;aop:scoped-proxy/&gt;
+    &lt;/bean&gt;
 
-<span class="tag">&lt;/beans&gt;</span></code></pre>
+&lt;/beans&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -3119,21 +3028,21 @@ bean名称可用作回退限定符值，因此你可以有效地在那里按名�
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@RunWith</span>(SpringRunner.class)
-<span class="annotation">@ContextConfiguration</span>
-<span class="annotation">@WebAppConfiguration</span>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">RequestScopedBeanTests</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@RunWith(SpringRunner.class)
+@ContextConfiguration
+@WebAppConfiguration
+public class RequestScopedBeanTests {
 
-    <span class="annotation">@Autowired</span> UserService userService;
-    <span class="annotation">@Autowired</span> MockHttpServletRequest request;
+    @Autowired UserService userService;
+    @Autowired MockHttpServletRequest request;
 
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> requestScope() {
-        request.setParameter(<span class="string"><span class="delimiter">&quot;</span><span class="content">user</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">enigma</span><span class="delimiter">&quot;</span></span>);
-        request.setParameter(<span class="string"><span class="delimiter">&quot;</span><span class="content">pswd</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">$pr!ng</span><span class="delimiter">&quot;</span></span>);
+    @Test
+    public void requestScope() {
+        request.setParameter("user", "enigma");
+        request.setParameter("pswd", "$pr!ng");
 
         LoginResults results = userService.loginUser();
-        <span class="comment">// 断言results</span>
+        // 断言results
     }
 }</code></pre>
 </div>
@@ -3150,18 +3059,18 @@ bean名称可用作回退限定符值，因此你可以有效地在那里按名�
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;beans&gt;</span>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;beans&gt;
 
-    <span class="tag">&lt;bean</span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">userService</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.example.SimpleUserService</span><span class="delimiter">&quot;</span></span>
-            <span class="attribute-name">c:userPreferences-ref</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">userPreferences</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+    &lt;bean id="userService" class="com.example.SimpleUserService"
+            c:userPreferences-ref="userPreferences" /&gt;
 
-    <span class="tag">&lt;bean</span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">userPreferences</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.example.UserPreferences</span><span class="delimiter">&quot;</span></span>
-            <span class="attribute-name">c:theme</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">#{session.getAttribute('theme')}</span><span class="delimiter">&quot;</span></span>
-            <span class="attribute-name">scope</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">session</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-        <span class="tag">&lt;aop:scoped-proxy</span><span class="tag">/&gt;</span>
-    <span class="tag">&lt;/bean&gt;</span>
+    &lt;bean id="userPreferences" class="com.example.UserPreferences"
+            c:theme="#{session.getAttribute('theme')}"
+            scope="session"&gt;
+        &lt;aop:scoped-proxy/&gt;
+    &lt;/bean&gt;
 
-<span class="tag">&lt;/beans&gt;</span></code></pre>
+&lt;/beans&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -3177,20 +3086,20 @@ bean名称可用作回退限定符值，因此你可以有效地在那里按名�
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@RunWith</span>(SpringRunner.class)
-<span class="annotation">@ContextConfiguration</span>
-<span class="annotation">@WebAppConfiguration</span>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">SessionScopedBeanTests</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@RunWith(SpringRunner.class)
+@ContextConfiguration
+@WebAppConfiguration
+public class SessionScopedBeanTests {
 
-    <span class="annotation">@Autowired</span> UserService userService;
-    <span class="annotation">@Autowired</span> MockHttpSession session;
+    @Autowired UserService userService;
+    @Autowired MockHttpSession session;
 
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> sessionScope() <span class="directive">throws</span> <span class="exception">Exception</span> {
-        session.setAttribute(<span class="string"><span class="delimiter">&quot;</span><span class="content">theme</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">blue</span><span class="delimiter">&quot;</span></span>);
+    @Test
+    public void sessionScope() throws Exception {
+        session.setAttribute("theme", "blue");
 
         Results results = userService.processUserPreferences();
-        <span class="comment">// 断言results</span>
+        // 断言results
     }
 }</code></pre>
 </div>
@@ -3225,43 +3134,43 @@ bean名称可用作回退限定符值，因此你可以有效地在那里按名�
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@RunWith</span>(SpringRunner.class)
-<span class="annotation">@ContextConfiguration</span>(classes = TestConfig.class)
-<span class="annotation">@Transactional</span>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">HibernateUserRepositoryTests</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = TestConfig.class)
+@Transactional
+public class HibernateUserRepositoryTests {
 
-    <span class="annotation">@Autowired</span>
+    @Autowired
     HibernateUserRepository repository;
 
-    <span class="annotation">@Autowired</span>
+    @Autowired
     SessionFactory sessionFactory;
 
     JdbcTemplate jdbcTemplate;
 
-    <span class="annotation">@Autowired</span>
-    <span class="directive">public</span> <span class="type">void</span> setDataSource(<span class="predefined-type">DataSource</span> dataSource) {
-        <span class="local-variable">this</span>.jdbcTemplate = <span class="keyword">new</span> JdbcTemplate(dataSource);
+    @Autowired
+    public void setDataSource(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> createUser() {
-        <span class="comment">// 跟踪测试数据库中的初始状态：</span>
-        <span class="directive">final</span> <span class="type">int</span> count = countRowsInTable(<span class="string"><span class="delimiter">&quot;</span><span class="content">user</span><span class="delimiter">&quot;</span></span>);
+    @Test
+    public void createUser() {
+        // 跟踪测试数据库中的初始状态：
+        final int count = countRowsInTable("user");
 
-        User user = <span class="keyword">new</span> User(...);
+        User user = new User(...);
         repository.save(user);
 
-        <span class="comment">// 需要手动flush以避免测试中的误报</span>
+        // 需要手动flush以避免测试中的误报
         sessionFactory.getCurrentSession().flush();
-        assertNumUsers(count + <span class="integer">1</span>);
+        assertNumUsers(count + 1);
     }
 
-    <span class="directive">protected</span> <span class="type">int</span> countRowsInTable(<span class="predefined-type">String</span> tableName) {
-        <span class="keyword">return</span> JdbcTestUtils.countRowsInTable(<span class="local-variable">this</span>.jdbcTemplate, tableName);
+    protected int countRowsInTable(String tableName) {
+        return JdbcTestUtils.countRowsInTable(this.jdbcTemplate, tableName);
     }
 
-    <span class="directive">protected</span> <span class="type">void</span> assertNumUsers(<span class="type">int</span> expected) {
-        assertEquals(<span class="string"><span class="delimiter">&quot;</span><span class="content">Number of rows in the [user] table.</span><span class="delimiter">&quot;</span></span>, expected, countRowsInTable(<span class="string"><span class="delimiter">&quot;</span><span class="content">user</span><span class="delimiter">&quot;</span></span>));
+    protected void assertNumUsers(int expected) {
+        assertEquals("Number of rows in the [user] table.", expected, countRowsInTable("user"));
     }
 }</code></pre>
 </div>
@@ -3290,29 +3199,29 @@ bean名称可用作回退限定符值，因此你可以有效地在那里按名�
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ContextConfiguration</span>(classes = TestConfig.class)
-<span class="directive">public</span> <span class="type">class</span> <span class="class">ProgrammaticTransactionManagementTests</span> <span class="directive">extends</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@ContextConfiguration(classes = TestConfig.class)
+public class ProgrammaticTransactionManagementTests extends
         AbstractTransactionalJUnit4SpringContextTests {
 
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> transactionalTest() {
-        <span class="comment">// 断言测试数据库中的初始状态：</span>
-        assertNumUsers(<span class="integer">2</span>);
+    @Test
+    public void transactionalTest() {
+        // 断言测试数据库中的初始状态：
+        assertNumUsers(2);
 
-        deleteFromTables(<span class="string"><span class="delimiter">&quot;</span><span class="content">user</span><span class="delimiter">&quot;</span></span>);
+        deleteFromTables("user");
 
-        <span class="comment">// 将提交对数据库的更改！</span>
+        // 将提交对数据库的更改！
         TestTransaction.flagForCommit();
         TestTransaction.end();
         assertFalse(TestTransaction.isActive());
-        assertNumUsers(<span class="integer">0</span>);
+        assertNumUsers(0);
 
         TestTransaction.start();
-        <span class="comment">// 对数据库执行其他操作，测试完成后将自动回滚...</span>
+        // 对数据库执行其他操作，测试完成后将自动回滚...
     }
 
-    <span class="directive">protected</span> <span class="type">void</span> assertNumUsers(<span class="type">int</span> expected) {
-        assertEquals(<span class="string"><span class="delimiter">&quot;</span><span class="content">Number of rows in the [user] table.</span><span class="delimiter">&quot;</span></span>, expected, countRowsInTable(<span class="string"><span class="delimiter">&quot;</span><span class="content">user</span><span class="delimiter">&quot;</span></span>));
+    protected void assertNumUsers(int expected) {
+        assertEquals("Number of rows in the [user] table.", expected, countRowsInTable("user"));
     }
 }</code></pre>
 </div>
@@ -3353,37 +3262,37 @@ bean名称可用作回退限定符值，因此你可以有效地在那里按名�
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@RunWith</span>(SpringRunner.class)
-<span class="annotation">@ContextConfiguration</span>
-<strong><span class="annotation">@Transactional</span>(transactionManager = <span class="string"><span class="delimiter">&quot;</span><span class="content">txMgr</span><span class="delimiter">&quot;</span></span>)</strong>
-<strong><span class="annotation">@Commit</span></strong>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">FictitiousTransactionalTest</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@RunWith(SpringRunner.class)
+@ContextConfiguration
+<strong>@Transactional(transactionManager = "txMgr")</strong>
+<strong>@Commit</strong>
+public class FictitiousTransactionalTest {
 
-    <strong><span class="annotation">@BeforeTransaction</span></strong>
-    <span class="type">void</span> verifyInitialDatabaseState() {
-        <span class="comment">// 在事务开始之前验证初始状态的逻辑</span>
+    <strong>@BeforeTransaction</strong>
+    void verifyInitialDatabaseState() {
+        // 在事务开始之前验证初始状态的逻辑
     }
 
-    <span class="annotation">@Before</span>
-    <span class="directive">public</span> <span class="type">void</span> setUpTestDataWithinTransaction() {
-        <span class="comment">// 在事务中设置测试数据</span>
+    @Before
+    public void setUpTestDataWithinTransaction() {
+        // 在事务中设置测试数据
     }
 
-    <span class="annotation">@Test</span>
-    <span class="comment">// 覆盖类级别的@Commit设置</span>
-    <strong><span class="annotation">@Rollback</span></strong>
-    <span class="directive">public</span> <span class="type">void</span> modifyDatabaseWithinTransaction() {
-        <span class="comment">// 使用测试数据并修改数据库状态的逻辑</span>
+    @Test
+    // 覆盖类级别的@Commit设置
+    <strong>@Rollback</strong>
+    public void modifyDatabaseWithinTransaction() {
+        // 使用测试数据并修改数据库状态的逻辑
     }
 
-    <span class="annotation">@After</span>
-    <span class="directive">public</span> <span class="type">void</span> tearDownWithinTransaction() {
-        <span class="comment">// 在事务中执行测试“拆除”逻辑</span>
+    @After
+    public void tearDownWithinTransaction() {
+        // 在事务中执行测试“拆除”逻辑
     }
 
-    <strong><span class="annotation">@AfterTransaction</span></strong>
-    <span class="type">void</span> verifyFinalDatabaseState() {
-        <span class="comment">// 事务回滚后验证最终状态的逻辑</span>
+    <strong>@AfterTransaction</strong>
+    void verifyFinalDatabaseState() {
+        // 事务回滚后验证最终状态的逻辑
     }
 
 }</code></pre>
@@ -3406,27 +3315,27 @@ bean名称可用作回退限定符值，因此你可以有效地在那里按名�
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// ...</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">// ...
 
-<span class="annotation">@Autowired</span>
+@Autowired
 SessionFactory sessionFactory;
 
-<span class="annotation">@Transactional</span>
-<span class="annotation">@Test</span> <span class="comment">// 没有期望异常</span>
-<span class="directive">public</span> <span class="type">void</span> falsePositive() {
-        updateEntityInHibernateSession();
-        <span class="comment">// 误报：一旦Hibernate会话最终被刷新（即在生产代码中），将抛出异常</span>
+@Transactional
+@Test // 没有期望异常
+public void falsePositive() {
+	updateEntityInHibernateSession();
+	// 误报：一旦Hibernate会话最终被刷新（即在生产代码中），将抛出异常
 }
 
-<span class="annotation">@Transactional</span>
-<span class="annotation">@Test</span>(expected = ...)
-<span class="directive">public</span> <span class="type">void</span> updateWithSessionFlush() {
-        updateEntityInHibernateSession();
-        <span class="comment">// 需要手动flush以避免测试中的误报</span>
-        sessionFactory.getCurrentSession().flush();
+@Transactional
+@Test(expected = ...)
+public void updateWithSessionFlush() {
+	updateEntityInHibernateSession();
+	// 需要手动flush以避免测试中的误报
+	sessionFactory.getCurrentSession().flush();
 }
 
-<span class="comment">// ...</span></code></pre>
+// ...</code></pre>
 </div>
 </div>
 </div>
@@ -3438,27 +3347,27 @@ SessionFactory sessionFactory;
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// ...</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">// ...
 
-<span class="annotation">@PersistenceContext</span>
+@PersistenceContext
 EntityManager entityManager;
 
-<span class="annotation">@Transactional</span>
-<span class="annotation">@Test</span> <span class="comment">// 没有期望异常</span>
-<span class="directive">public</span> <span class="type">void</span> falsePositive() {
-        updateEntityInJpaPersistenceContext();
-        <span class="comment">// 误报：一旦JPA EntityManager最终被刷新（即在生产代码中），将抛出异常</span>
+@Transactional
+@Test // 没有期望异常
+public void falsePositive() {
+	updateEntityInJpaPersistenceContext();
+	// 误报：一旦JPA EntityManager最终被刷新（即在生产代码中），将抛出异常
 }
 
-<span class="annotation">@Transactional</span>
-<span class="annotation">@Test</span>(expected = ...)
-<span class="directive">public</span> <span class="type">void</span> updateWithEntityManagerFlush() {
-        updateEntityInJpaPersistenceContext();
-        <span class="comment">// 需要手动flush以避免测试中的误报</span>
-        entityManager.flush();
+@Transactional
+@Test(expected = ...)
+public void updateWithEntityManagerFlush() {
+	updateEntityInJpaPersistenceContext();
+	// 需要手动flush以避免测试中的误报
+	entityManager.flush();
 }
 
-<span class="comment">// ...</span></code></pre>
+// ...</code></pre>
 </div>
 </div>
 </div>
@@ -3508,15 +3417,15 @@ EntityManager entityManager;
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Test</span>
-<span class="directive">public</span> <span class="type">void</span> databaseTest {
-    ResourceDatabasePopulator populator = <span class="keyword">new</span> ResourceDatabasePopulator();
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Test
+public void databaseTest {
+    ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
     populator.addScripts(
-            <span class="keyword">new</span> ClassPathResource(<span class="string"><span class="delimiter">&quot;</span><span class="content">test-schema.sql</span><span class="delimiter">&quot;</span></span>),
-            <span class="keyword">new</span> ClassPathResource(<span class="string"><span class="delimiter">&quot;</span><span class="content">test-data.sql</span><span class="delimiter">&quot;</span></span>));
-    populator.setSeparator(<span class="string"><span class="delimiter">&quot;</span><span class="content">@@</span><span class="delimiter">&quot;</span></span>);
-    populator.execute(<span class="local-variable">this</span>.dataSource);
-    <span class="comment">// 使用测试schema和数据执行代码</span>
+            new ClassPathResource("test-schema.sql"),
+            new ClassPathResource("test-data.sql"));
+    populator.setSeparator("@@");
+    populator.execute(this.dataSource);
+    // 使用测试schema和数据执行代码
 }</code></pre>
 </div>
 </div>
@@ -3543,19 +3452,19 @@ EntityManager entityManager;
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@SpringJUnitConfig</span>
-<span class="annotation">@Sql</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">/test-schema.sql</span><span class="delimiter">&quot;</span></span>)
-<span class="type">class</span> <span class="class">DatabaseTests</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@SpringJUnitConfig
+@Sql("/test-schema.sql")
+class DatabaseTests {
 
-    <span class="annotation">@Test</span>
-    <span class="type">void</span> emptySchemaTest {
-        <span class="comment">// 执行使用测试schema而没有任何测试数据的代码</span>
+    @Test
+    void emptySchemaTest {
+        // 执行使用测试schema而没有任何测试数据的代码
     }
 
-    <span class="annotation">@Test</span>
-    <span class="annotation">@Sql</span>({<span class="string"><span class="delimiter">&quot;</span><span class="content">/test-schema.sql</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/test-user-data.sql</span><span class="delimiter">&quot;</span></span>})
-    <span class="type">void</span> userTest {
-        <span class="comment">// 执行使用测试schema和测试数据的代码</span>
+    @Test
+    @Sql({"/test-schema.sql", "/test-user-data.sql"})
+    void userTest {
+        // 执行使用测试schema和测试数据的代码
     }
 }</code></pre>
 </div>
@@ -3591,11 +3500,11 @@ EntityManager entityManager;
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Test</span>
-<span class="annotation">@Sql</span>(scripts = <span class="string"><span class="delimiter">&quot;</span><span class="content">/test-schema.sql</span><span class="delimiter">&quot;</span></span>, config = <span class="annotation">@SqlConfig</span>(commentPrefix = <span class="string"><span class="delimiter">&quot;</span><span class="content">`</span><span class="delimiter">&quot;</span></span>))
-<span class="annotation">@Sql</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">/test-user-data.sql</span><span class="delimiter">&quot;</span></span>)
-<span class="directive">public</span> <span class="type">void</span> userTest {
-    <span class="comment">// 执行使用测试schema和测试数据的代码</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Test
+@Sql(scripts = "/test-schema.sql", config = @SqlConfig(commentPrefix = "`"))
+@Sql("/test-user-data.sql")
+public void userTest {
+    // 执行使用测试schema和测试数据的代码
 }</code></pre>
 </div>
 </div>
@@ -3611,13 +3520,13 @@ EntityManager entityManager;
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Test</span>
-<span class="annotation">@SqlGroup</span>({
-    <span class="annotation">@Sql</span>(scripts = <span class="string"><span class="delimiter">&quot;</span><span class="content">/test-schema.sql</span><span class="delimiter">&quot;</span></span>, config = <span class="annotation">@SqlConfig</span>(commentPrefix = <span class="string"><span class="delimiter">&quot;</span><span class="content">`</span><span class="delimiter">&quot;</span></span>)),
-    <span class="annotation">@Sql</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">/test-user-data.sql</span><span class="delimiter">&quot;</span></span>)
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Test
+@SqlGroup({
+    @Sql(scripts = "/test-schema.sql", config = @SqlConfig(commentPrefix = "`")),
+    @Sql("/test-user-data.sql")
 )}
-<span class="directive">public</span> <span class="type">void</span> userTest {
-    <span class="comment">// 执行使用测试schema和测试数据的代码</span>
+public void userTest {
+    // 执行使用测试schema和测试数据的代码
 }</code></pre>
 </div>
 </div>
@@ -3633,18 +3542,18 @@ EntityManager entityManager;
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Test</span>
-<span class="annotation">@Sql</span>(
-    scripts = <span class="string"><span class="delimiter">&quot;</span><span class="content">create-test-data.sql</span><span class="delimiter">&quot;</span></span>,
-    config = <span class="annotation">@SqlConfig</span>(transactionMode = ISOLATED)
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Test
+@Sql(
+    scripts = "create-test-data.sql",
+    config = @SqlConfig(transactionMode = ISOLATED)
 )
-<span class="annotation">@Sql</span>(
-    scripts = <span class="string"><span class="delimiter">&quot;</span><span class="content">delete-test-data.sql</span><span class="delimiter">&quot;</span></span>,
-    config = <span class="annotation">@SqlConfig</span>(transactionMode = ISOLATED),
+@Sql(
+    scripts = "delete-test-data.sql",
+    config = @SqlConfig(transactionMode = ISOLATED),
     executionPhase = AFTER_TEST_METHOD
 )
-<span class="directive">public</span> <span class="type">void</span> userTest {
-    <span class="comment">// 执行需要将测试数据提交到测试事务之外的数据库的代码</span>
+public void userTest {
+    // 执行需要将测试数据提交到测试事务之外的数据库的代码
 }</code></pre>
 </div>
 </div>
@@ -3675,32 +3584,32 @@ EntityManager entityManager;
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@SpringJUnitConfig</span>(TestDatabaseConfig.class)
-<span class="annotation">@Transactional</span>
-<span class="type">class</span> <span class="class">TransactionalSqlScriptsTests</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@SpringJUnitConfig(TestDatabaseConfig.class)
+@Transactional
+class TransactionalSqlScriptsTests {
 
-    <span class="directive">final</span> JdbcTemplate jdbcTemplate;
+    final JdbcTemplate jdbcTemplate;
 
-    <span class="annotation">@Autowired</span>
-    TransactionalSqlScriptsTests(<span class="predefined-type">DataSource</span> dataSource) {
-        <span class="local-variable">this</span>.jdbcTemplate = <span class="keyword">new</span> JdbcTemplate(dataSource);
+    @Autowired
+    TransactionalSqlScriptsTests(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    <span class="annotation">@Test</span>
-    <span class="annotation">@Sql</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">/test-data.sql</span><span class="delimiter">&quot;</span></span>)
-    <span class="type">void</span> usersTest() {
-        <span class="comment">// 验证测试数据库中的状态：</span>
-        assertNumUsers(<span class="integer">2</span>);
-        <span class="comment">// 执行使用测试数据的代码......</span>
+    @Test
+    @Sql("/test-data.sql")
+    void usersTest() {
+        // 验证测试数据库中的状态：
+        assertNumUsers(2);
+        // 执行使用测试数据的代码......
     }
 
-    <span class="type">int</span> countRowsInTable(<span class="predefined-type">String</span> tableName) {
-        <span class="keyword">return</span> JdbcTestUtils.countRowsInTable(<span class="local-variable">this</span>.jdbcTemplate, tableName);
+    int countRowsInTable(String tableName) {
+        return JdbcTestUtils.countRowsInTable(this.jdbcTemplate, tableName);
     }
 
-    <span class="type">void</span> assertNumUsers(<span class="type">int</span> expected) {
-        assertEquals(expected, countRowsInTable(<span class="string"><span class="delimiter">&quot;</span><span class="content">user</span><span class="delimiter">&quot;</span></span>),
-            <span class="string"><span class="delimiter">&quot;</span><span class="content">Number of rows in the [user] table.</span><span class="delimiter">&quot;</span></span>);
+    void assertNumUsers(int expected) {
+        assertEquals(expected, countRowsInTable("user"),
+            "Number of rows in the [user] table.");
     }
 }</code></pre>
 </div>
@@ -3796,13 +3705,13 @@ EntityManager entityManager;
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@RunWith</span>(SpringRunner.class)
-<span class="annotation">@TestExecutionListeners</span>({})
-<span class="directive">public</span> <span class="type">class</span> <span class="class">SimpleTest</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@RunWith(SpringRunner.class)
+@TestExecutionListeners({})
+public class SimpleTest {
 
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> testMethod() {
-        <span class="comment">// 执行测试逻辑...</span>
+    @Test
+    public void testMethod() {
+        // 执行测试逻辑...
     }
 }</code></pre>
 </div>
@@ -3841,19 +3750,19 @@ EntityManager entityManager;
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// （可选）通过 @RunWith(...) 指定非Spring Runner</span>
-<span class="annotation">@ContextConfiguration</span>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">IntegrationTest</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">// （可选）通过 @RunWith(...) 指定非Spring Runner
+@ContextConfiguration
+public class IntegrationTest {
 
-    <span class="annotation">@ClassRule</span>
-    <span class="directive">public</span> <span class="directive">static</span> <span class="directive">final</span> SpringClassRule springClassRule = <span class="keyword">new</span> SpringClassRule();
+    @ClassRule
+    public static final SpringClassRule springClassRule = new SpringClassRule();
 
-    <span class="annotation">@Rule</span>
-    <span class="directive">public</span> <span class="directive">final</span> SpringMethodRule springMethodRule = <span class="keyword">new</span> SpringMethodRule();
+    @Rule
+    public final SpringMethodRule springMethodRule = new SpringMethodRule();
 
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> testMethod() {
-        <span class="comment">// 执行测试逻辑...</span>
+    @Test
+    public void testMethod() {
+        // 执行测试逻辑...
     }
 }</code></pre>
 </div>
@@ -3961,26 +3870,26 @@ Spring Boot提供了一个选项来编写包含正在运行的服务器的完整
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">static</span> <span class="include">org.springframework.test.web.servlet.request.MockMvcRequestBuilders</span>.*;
-<span class="keyword">import</span> <span class="include">static</span> <span class="include">org.springframework.test.web.servlet.result.MockMvcResultMatchers</span>.*;
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-<span class="annotation">@SpringJUnitWebConfig</span>(locations = <span class="string"><span class="delimiter">&quot;</span><span class="content">test-servlet-context.xml</span><span class="delimiter">&quot;</span></span>)
-<span class="type">class</span> <span class="class">ExampleTests</span> {
+@SpringJUnitWebConfig(locations = "test-servlet-context.xml")
+class ExampleTests {
 
-    <span class="directive">private</span> MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-    <span class="annotation">@BeforeEach</span>
-    <span class="type">void</span> setup(WebApplicationContext wac) {
-        <span class="local-variable">this</span>.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+    @BeforeEach
+    void setup(WebApplicationContext wac) {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
     }
 
-    <span class="annotation">@Test</span>
-    <span class="type">void</span> getAccount() <span class="directive">throws</span> <span class="exception">Exception</span> {
-        <span class="local-variable">this</span>.mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/accounts/1</span><span class="delimiter">&quot;</span></span>)
-                .accept(MediaType.parseMediaType(<span class="string"><span class="delimiter">&quot;</span><span class="content">application/json;charset=UTF-8</span><span class="delimiter">&quot;</span></span>)))
+    @Test
+    void getAccount() throws Exception {
+        this.mockMvc.perform(get("/accounts/1")
+                .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(<span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>))
-            .andExpect(jsonPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">$.name</span><span class="delimiter">&quot;</span></span>).value(<span class="string"><span class="delimiter">&quot;</span><span class="content">Lee</span><span class="delimiter">&quot;</span></span>));
+            .andExpect(content().contentType("application/json"))
+            .andExpect(jsonPath("$.name").value("Lee"));
     }
 }</code></pre>
 </div>
@@ -4015,22 +3924,22 @@ Java → Editor → Content Assist → Favorites下的Eclipse首选项中将它�
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@RunWith</span>(SpringRunner.class)
-<span class="annotation">@WebAppConfiguration</span>
-<span class="annotation">@ContextConfiguration</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">my-servlet-context.xml</span><span class="delimiter">&quot;</span></span>)
-<span class="directive">public</span> <span class="type">class</span> <span class="class">MyWebTests</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@RunWith(SpringRunner.class)
+@WebAppConfiguration
+@ContextConfiguration("my-servlet-context.xml")
+public class MyWebTests {
 
-    <span class="annotation">@Autowired</span>
-    <span class="directive">private</span> WebApplicationContext wac;
+    @Autowired
+    private WebApplicationContext wac;
 
-    <span class="directive">private</span> MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-    <span class="annotation">@Before</span>
-    <span class="directive">public</span> <span class="type">void</span> setup() {
-        <span class="local-variable">this</span>.mockMvc = MockMvcBuilders.webAppContextSetup(<span class="local-variable">this</span>.wac).build();
+    @Before
+    public void setup() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
 
-    <span class="comment">// ...</span>
+    // ...
 
 }</code></pre>
 </div>
@@ -4045,16 +3954,16 @@ Java → Editor → Content Assist → Favorites下的Eclipse首选项中将它�
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">MyWebTests</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class MyWebTests {
 
-    <span class="directive">private</span> MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-    <span class="annotation">@Before</span>
-    <span class="directive">public</span> <span class="type">void</span> setup() {
-        <span class="local-variable">this</span>.mockMvc = MockMvcBuilders.standaloneSetup(<span class="keyword">new</span> AccountController()).build();
+    @Before
+    public void setup() {
+        this.mockMvc = MockMvcBuilders.standaloneSetup(new AccountController()).build();
     }
 
-    <span class="comment">// ...</span>
+    // ...
 
 }</code></pre>
 </div>
@@ -4073,9 +3982,9 @@ Java → Editor → Content Assist → Favorites下的Eclipse首选项中将它�
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;bean</span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">accountService</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">org.mockito.Mockito</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">factory-method</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">mock</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-    <span class="tag">&lt;constructor-arg</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">org.example.AccountService</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
-<span class="tag">&lt;/bean&gt;</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="accountService" class="org.mockito.Mockito" factory-method="mock"&gt;
+    &lt;constructor-arg value="org.example.AccountService"/&gt;
+&lt;/bean&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -4087,20 +3996,20 @@ Java → Editor → Content Assist → Favorites下的Eclipse首选项中将它�
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@RunWith</span>(SpringRunner.class)
-<span class="annotation">@WebAppConfiguration</span>
-<span class="annotation">@ContextConfiguration</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">test-servlet-context.xml</span><span class="delimiter">&quot;</span></span>)
-<span class="directive">public</span> <span class="type">class</span> <span class="class">AccountTests</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@RunWith(SpringRunner.class)
+@WebAppConfiguration
+@ContextConfiguration("test-servlet-context.xml")
+public class AccountTests {
 
-    <span class="annotation">@Autowired</span>
-    <span class="directive">private</span> WebApplicationContext wac;
+    @Autowired
+    private WebApplicationContext wac;
 
-    <span class="directive">private</span> MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-    <span class="annotation">@Autowired</span>
-    <span class="directive">private</span> AccountService accountService;
+    @Autowired
+    private AccountService accountService;
 
-    <span class="comment">// ...</span>
+    // ...
 
 }</code></pre>
 </div>
@@ -4128,12 +4037,12 @@ Spring MVC配置进行测试。</p>
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// 静态导入 MockMvcBuilders.standaloneSetup</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">// 静态导入 MockMvcBuilders.standaloneSetup
 
-MockMvc mockMvc = standaloneSetup(<span class="keyword">new</span> MusicController())
-        .defaultRequest(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>).accept(MediaType.APPLICATION_JSON))
+MockMvc mockMvc = standaloneSetup(new MusicController())
+        .defaultRequest(get("/").accept(MediaType.APPLICATION_JSON))
         .alwaysExpect(status().isOk())
-        .alwaysExpect(content().contentType(<span class="string"><span class="delimiter">&quot;</span><span class="content">application/json;charset=UTF-8</span><span class="delimiter">&quot;</span></span>))
+        .alwaysExpect(content().contentType("application/json;charset=UTF-8"))
         .build();</code></pre>
 </div>
 </div>
@@ -4147,13 +4056,13 @@ Spring框架有一个这样的内置实现，可以帮助跨请求保存和重�
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// 静态导入 SharedHttpSessionConfigurer.sharedHttpSession</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">// 静态导入 SharedHttpSessionConfigurer.sharedHttpSession
 
-MockMvc mockMvc = MockMvcBuilders.standaloneSetup(<span class="keyword">new</span> TestController())
+MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new TestController())
         .apply(sharedHttpSession())
         .build();
 
-<span class="comment">// 使用mockMvc执行请求...</span></code></pre>
+// 使用mockMvc执行请求...</code></pre>
 </div>
 </div>
 </div>
@@ -4172,7 +4081,7 @@ MockMvc mockMvc = MockMvcBuilders.standaloneSetup(<span class="keyword">new</spa
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">mockMvc.perform(post(<span class="string"><span class="delimiter">&quot;</span><span class="content">/hotels/{id}</span><span class="delimiter">&quot;</span></span>, <span class="integer">42</span>).accept(MediaType.APPLICATION_JSON));</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">mockMvc.perform(post("/hotels/{id}", 42).accept(MediaType.APPLICATION_JSON));</code></pre>
 </div>
 </div>
 </div>
@@ -4185,7 +4094,7 @@ MockMvc mockMvc = MockMvcBuilders.standaloneSetup(<span class="keyword">new</spa
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">mockMvc.perform(multipart(<span class="string"><span class="delimiter">&quot;</span><span class="content">/doc</span><span class="delimiter">&quot;</span></span>).file(<span class="string"><span class="delimiter">&quot;</span><span class="content">a1</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">ABC</span><span class="delimiter">&quot;</span></span>.getBytes(<span class="string"><span class="delimiter">&quot;</span><span class="content">UTF-8</span><span class="delimiter">&quot;</span></span>)));</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">mockMvc.perform(multipart("/doc").file("a1", "ABC".getBytes("UTF-8")));</code></pre>
 </div>
 </div>
 </div>
@@ -4197,7 +4106,7 @@ MockMvc mockMvc = MockMvcBuilders.standaloneSetup(<span class="keyword">new</spa
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/hotels?thing={thing}</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">somewhere</span><span class="delimiter">&quot;</span></span>));</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">mockMvc.perform(get("/hotels?thing={thing}", "somewhere"));</code></pre>
 </div>
 </div>
 </div>
@@ -4209,7 +4118,7 @@ MockMvc mockMvc = MockMvcBuilders.standaloneSetup(<span class="keyword">new</spa
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/hotels</span><span class="delimiter">&quot;</span></span>).param(<span class="string"><span class="delimiter">&quot;</span><span class="content">thing</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">somewhere</span><span class="delimiter">&quot;</span></span>));</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">mockMvc.perform(get("/hotels").param("thing", "somewhere"));</code></pre>
 </div>
 </div>
 </div>
@@ -4226,7 +4135,7 @@ MockMvc mockMvc = MockMvcBuilders.standaloneSetup(<span class="keyword">new</spa
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/app/main/hotels/{id}</span><span class="delimiter">&quot;</span></span>).contextPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">/app</span><span class="delimiter">&quot;</span></span>).servletPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">/main</span><span class="delimiter">&quot;</span></span>))</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">mockMvc.perform(get("/app/main/hotels/{id}").contextPath("/app").servletPath("/main"))</code></pre>
 </div>
 </div>
 </div>
@@ -4238,15 +4147,15 @@ MockMvc mockMvc = MockMvcBuilders.standaloneSetup(<span class="keyword">new</spa
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">MyWebTests</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class MyWebTests {
 
-    <span class="directive">private</span> MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-    <span class="annotation">@Before</span>
-    <span class="directive">public</span> <span class="type">void</span> setup() {
-        mockMvc = standaloneSetup(<span class="keyword">new</span> AccountController())
-            .defaultRequest(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>)
-            .contextPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">/app</span><span class="delimiter">&quot;</span></span>).servletPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">/main</span><span class="delimiter">&quot;</span></span>)
+    @Before
+    public void setup() {
+        mockMvc = standaloneSetup(new AccountController())
+            .defaultRequest(get("/")
+            .contextPath("/app").servletPath("/main")
             .accept(MediaType.APPLICATION_JSON)).build();
     }</code></pre>
 </div>
@@ -4267,7 +4176,7 @@ MockMvc mockMvc = MockMvcBuilders.standaloneSetup(<span class="keyword">new</spa
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/accounts/1</span><span class="delimiter">&quot;</span></span>)).andExpect(status().isOk());</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">mockMvc.perform(get("/accounts/1")).andExpect(status().isOk());</code></pre>
 </div>
 </div>
 </div>
@@ -4289,9 +4198,9 @@ MockMvc mockMvc = MockMvcBuilders.standaloneSetup(<span class="keyword">new</spa
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">mockMvc.perform(post(<span class="string"><span class="delimiter">&quot;</span><span class="content">/persons</span><span class="delimiter">&quot;</span></span>))
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">mockMvc.perform(post("/persons"))
     .andExpect(status().isOk())
-    .andExpect(model().attributeHasErrors(<span class="string"><span class="delimiter">&quot;</span><span class="content">person</span><span class="delimiter">&quot;</span></span>));</code></pre>
+    .andExpect(model().attributeHasErrors("person"));</code></pre>
 </div>
 </div>
 </div>
@@ -4304,10 +4213,10 @@ MockMvc mockMvc = MockMvcBuilders.standaloneSetup(<span class="keyword">new</spa
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">mockMvc.perform(post(<span class="string"><span class="delimiter">&quot;</span><span class="content">/persons</span><span class="delimiter">&quot;</span></span>))
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">mockMvc.perform(post("/persons"))
     .andDo(print())
     .andExpect(status().isOk())
-    .andExpect(model().attributeHasErrors(<span class="string"><span class="delimiter">&quot;</span><span class="content">person</span><span class="delimiter">&quot;</span></span>));</code></pre>
+    .andExpect(model().attributeHasErrors("person"));</code></pre>
 </div>
 </div>
 </div>
@@ -4327,10 +4236,10 @@ Spring Framework 4.2引入了一个 <code>log()</code> 方法和 <code>print()</
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">MvcResult mvcResult = mockMvc.perform(post(<span class="string"><span class="delimiter">&quot;</span><span class="content">/persons</span><span class="delimiter">&quot;</span></span>))
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">MvcResult mvcResult = mockMvc.perform(post("/persons"))
     .andExpect(status().isOk())
     .andReturn();
-<span class="comment">// ...</span></code></pre>
+// ...</code></pre>
 </div>
 </div>
 </div>
@@ -4342,9 +4251,9 @@ Spring Framework 4.2引入了一个 <code>log()</code> 方法和 <code>print()</
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">standaloneSetup(<span class="keyword">new</span> SimpleController())
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">standaloneSetup(new SimpleController())
     .alwaysExpect(status().isOk())
-    .alwaysExpect(content().contentType(<span class="string"><span class="delimiter">&quot;</span><span class="content">application/json;charset=UTF-8</span><span class="delimiter">&quot;</span></span>))
+    .alwaysExpect(content().contentType("application/json;charset=UTF-8"))
     .build()</code></pre>
 </div>
 </div>
@@ -4361,9 +4270,9 @@ Spring Framework 4.2引入了一个 <code>log()</code> 方法和 <code>print()</
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/people</span><span class="delimiter">&quot;</span></span>).accept(MediaType.APPLICATION_JSON))
-    .andExpect(jsonPath(<span class="string"><span class="delimiter">&quot;</span><span class="content">$.links[?(@.rel == 'self')].href</span><span class="delimiter">&quot;</span></span>)
-        .value(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8080/people</span><span class="delimiter">&quot;</span></span>));</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">mockMvc.perform(get("/people").accept(MediaType.APPLICATION_JSON))
+    .andExpect(jsonPath("$.links[?(@.rel == 'self')].href")
+        .value("http://localhost:8080/people"));</code></pre>
 </div>
 </div>
 </div>
@@ -4376,10 +4285,10 @@ Spring Framework 4.2引入了一个 <code>log()</code> 方法和 <code>print()</
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Map</span>&lt;<span class="predefined-type">String</span>, <span class="predefined-type">String</span>&gt; ns = <span class="predefined-type">Collections</span>.singletonMap(<span class="string"><span class="delimiter">&quot;</span><span class="content">ns</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.w3.org/2005/Atom</span><span class="delimiter">&quot;</span></span>);
-mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/handle</span><span class="delimiter">&quot;</span></span>).accept(MediaType.APPLICATION_XML))
-    .andExpect(xpath(<span class="string"><span class="delimiter">&quot;</span><span class="content">/person/ns:link[@rel='self']/@href</span><span class="delimiter">&quot;</span></span>, ns)
-        .string(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8080/people</span><span class="delimiter">&quot;</span></span>));</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Map&lt;String, String&gt; ns = Collections.singletonMap("ns", "http://www.w3.org/2005/Atom");
+mockMvc.perform(get("/handle").accept(MediaType.APPLICATION_XML))
+    .andExpect(xpath("/person/ns:link[@rel='self']/@href", ns)
+        .string("http://localhost:8080/people"));</code></pre>
 </div>
 </div>
 </div>
@@ -4394,8 +4303,8 @@ mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><s
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">mockMvc = standaloneSetup(<span class="keyword">new</span> PersonController())
-    .addFilters(<span class="keyword">new</span> CharacterEncodingFilter())
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">mockMvc = standaloneSetup(new PersonController())
+    .addFilters(new CharacterEncodingFilter())
     .build();</code></pre>
 </div>
 </div>
@@ -4493,13 +4402,13 @@ MockMvc使用不依赖于Servlet容器的模板技术（例如，Thymeleaf，Fre
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">MockHttpServletRequestBuilder createMessage = post(<span class="string"><span class="delimiter">&quot;</span><span class="content">/messages/</span><span class="delimiter">&quot;</span></span>)
-        .param(<span class="string"><span class="delimiter">&quot;</span><span class="content">summary</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Spring Rocks</span><span class="delimiter">&quot;</span></span>)
-        .param(<span class="string"><span class="delimiter">&quot;</span><span class="content">text</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">In case you didn't know, Spring Rocks!</span><span class="delimiter">&quot;</span></span>);
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">MockHttpServletRequestBuilder createMessage = post("/messages/")
+        .param("summary", "Spring Rocks")
+        .param("text", "In case you didn't know, Spring Rocks!");
 
 mockMvc.perform(createMessage)
         .andExpect(status().is3xxRedirection())
-        .andExpect(redirectedUrl(<span class="string"><span class="delimiter">&quot;</span><span class="content">/messages/123</span><span class="delimiter">&quot;</span></span>));</code></pre>
+        .andExpect(redirectedUrl("/messages/123"));</code></pre>
 </div>
 </div>
 </div>
@@ -4511,19 +4420,19 @@ mockMvc.perform(createMessage)
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;form</span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">messageForm</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">action</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">/messages/</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">method</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">post</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-    <span class="tag">&lt;div</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">pull-right</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span><span class="tag">&lt;a</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">/messages/</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>Messages<span class="tag">&lt;/a&gt;</span><span class="tag">&lt;/div&gt;</span>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;form id="messageForm" action="/messages/" method="post"&gt;
+    &lt;div class="pull-right"&gt;&lt;a href="/messages/"&gt;Messages&lt;/a&gt;&lt;/div&gt;
 
-    <span class="tag">&lt;label</span> <span class="attribute-name">for</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">summary</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>Summary<span class="tag">&lt;/label&gt;</span>
-    <span class="tag">&lt;input</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">text</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">required</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">summary</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">summary</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+    &lt;label for="summary"&gt;Summary&lt;/label&gt;
+    &lt;input type="text" class="required" id="summary" name="summary" value="" /&gt;
 
-    <span class="tag">&lt;label</span> <span class="attribute-name">for</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">text</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>Message<span class="tag">&lt;/label&gt;</span>
-    <span class="tag">&lt;textarea</span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">text</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">text</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span><span class="tag">&lt;/textarea&gt;</span>
+    &lt;label for="text"&gt;Message&lt;/label&gt;
+    &lt;textarea id="text" name="text"&gt;&lt;/textarea&gt;
 
-    <span class="tag">&lt;div</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">form-actions</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-        <span class="tag">&lt;input</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">submit</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Create</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
-    <span class="tag">&lt;/div&gt;</span>
-<span class="tag">&lt;/form&gt;</span></code></pre>
+    &lt;div class="form-actions"&gt;
+        &lt;input type="submit" value="Create" /&gt;
+    &lt;/div&gt;
+&lt;/form&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -4535,9 +4444,9 @@ mockMvc.perform(createMessage)
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/messages/form</span><span class="delimiter">&quot;</span></span>))
-        .andExpect(xpath(<span class="string"><span class="delimiter">&quot;</span><span class="content">//input[@name='summary']</span><span class="delimiter">&quot;</span></span>).exists())
-        .andExpect(xpath(<span class="string"><span class="delimiter">&quot;</span><span class="content">//textarea[@name='text']</span><span class="delimiter">&quot;</span></span>).exists());</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">mockMvc.perform(get("/messages/form"))
+        .andExpect(xpath("//input[@name='summary']").exists())
+        .andExpect(xpath("//textarea[@name='text']").exists());</code></pre>
 </div>
 </div>
 </div>
@@ -4550,19 +4459,19 @@ mockMvc.perform(createMessage)
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">String</span> summaryParamName = <span class="string"><span class="delimiter">&quot;</span><span class="content">summary</span><span class="delimiter">&quot;</span></span>;
-<span class="predefined-type">String</span> textParamName = <span class="string"><span class="delimiter">&quot;</span><span class="content">text</span><span class="delimiter">&quot;</span></span>;
-mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/messages/form</span><span class="delimiter">&quot;</span></span>))
-        .andExpect(xpath(<span class="string"><span class="delimiter">&quot;</span><span class="content">//input[@name='</span><span class="delimiter">&quot;</span></span> + summaryParamName + <span class="string"><span class="delimiter">&quot;</span><span class="content">']</span><span class="delimiter">&quot;</span></span>).exists())
-        .andExpect(xpath(<span class="string"><span class="delimiter">&quot;</span><span class="content">//textarea[@name='</span><span class="delimiter">&quot;</span></span> + textParamName + <span class="string"><span class="delimiter">&quot;</span><span class="content">']</span><span class="delimiter">&quot;</span></span>).exists());
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">String summaryParamName = "summary";
+String textParamName = "text";
+mockMvc.perform(get("/messages/form"))
+        .andExpect(xpath("//input[@name='" + summaryParamName + "']").exists())
+        .andExpect(xpath("//textarea[@name='" + textParamName + "']").exists());
 
-MockHttpServletRequestBuilder createMessage = post(<span class="string"><span class="delimiter">&quot;</span><span class="content">/messages/</span><span class="delimiter">&quot;</span></span>)
-        .param(summaryParamName, <span class="string"><span class="delimiter">&quot;</span><span class="content">Spring Rocks</span><span class="delimiter">&quot;</span></span>)
-        .param(textParamName, <span class="string"><span class="delimiter">&quot;</span><span class="content">In case you didn't know, Spring Rocks!</span><span class="delimiter">&quot;</span></span>);
+MockHttpServletRequestBuilder createMessage = post("/messages/")
+        .param(summaryParamName, "Spring Rocks")
+        .param(textParamName, "In case you didn't know, Spring Rocks!");
 
 mockMvc.perform(createMessage)
         .andExpect(status().is3xxRedirection())
-        .andExpect(redirectedUrl(<span class="string"><span class="delimiter">&quot;</span><span class="content">/messages/123</span><span class="delimiter">&quot;</span></span>));</code></pre>
+        .andExpect(redirectedUrl("/messages/123"));</code></pre>
 </div>
 </div>
 </div>
@@ -4676,13 +4585,13 @@ mockMvc.perform(createMessage)
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Autowired</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Autowired
 WebApplicationContext context;
 
 WebClient webClient;
 
-<span class="annotation">@Before</span>
-<span class="directive">public</span> <span class="type">void</span> setup() {
+@Before
+public void setup() {
     webClient = MockMvcWebClientBuilder
             .webAppContextSetup(context)
             .build();
@@ -4718,7 +4627,7 @@ WebClient webClient;
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">HtmlPage createMsgFormPage = webClient.getPage(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost/messages/form</span><span class="delimiter">&quot;</span></span>);</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">HtmlPage createMsgFormPage = webClient.getPage("http://localhost/messages/form");</code></pre>
 </div>
 </div>
 </div>
@@ -4742,12 +4651,12 @@ WebClient webClient;
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">HtmlForm form = createMsgFormPage.getHtmlElementById(<span class="string"><span class="delimiter">&quot;</span><span class="content">messageForm</span><span class="delimiter">&quot;</span></span>);
-HtmlTextInput summaryInput = createMsgFormPage.getHtmlElementById(<span class="string"><span class="delimiter">&quot;</span><span class="content">summary</span><span class="delimiter">&quot;</span></span>);
-summaryInput.setValueAttribute(<span class="string"><span class="delimiter">&quot;</span><span class="content">Spring Rocks</span><span class="delimiter">&quot;</span></span>);
-HtmlTextArea textInput = createMsgFormPage.getHtmlElementById(<span class="string"><span class="delimiter">&quot;</span><span class="content">text</span><span class="delimiter">&quot;</span></span>);
-textInput.setText(<span class="string"><span class="delimiter">&quot;</span><span class="content">In case you didn't know, Spring Rocks!</span><span class="delimiter">&quot;</span></span>);
-HtmlSubmitInput submit = form.getOneHtmlElementByAttribute(<span class="string"><span class="delimiter">&quot;</span><span class="content">input</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">type</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">submit</span><span class="delimiter">&quot;</span></span>);
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">HtmlForm form = createMsgFormPage.getHtmlElementById("messageForm");
+HtmlTextInput summaryInput = createMsgFormPage.getHtmlElementById("summary");
+summaryInput.setValueAttribute("Spring Rocks");
+HtmlTextArea textInput = createMsgFormPage.getHtmlElementById("text");
+textInput.setText("In case you didn't know, Spring Rocks!");
+HtmlSubmitInput submit = form.getOneHtmlElementByAttribute("input", "type", "submit");
 HtmlPage newMessagePage = submit.click();</code></pre>
 </div>
 </div>
@@ -4760,13 +4669,13 @@ HtmlPage newMessagePage = submit.click();</code></pre>
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">assertThat(newMessagePage.getUrl().toString()).endsWith(<span class="string"><span class="delimiter">&quot;</span><span class="content">/messages/123</span><span class="delimiter">&quot;</span></span>);
-<span class="predefined-type">String</span> id = newMessagePage.getHtmlElementById(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>).getTextContent();
-assertThat(id).isEqualTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">123</span><span class="delimiter">&quot;</span></span>);
-<span class="predefined-type">String</span> summary = newMessagePage.getHtmlElementById(<span class="string"><span class="delimiter">&quot;</span><span class="content">summary</span><span class="delimiter">&quot;</span></span>).getTextContent();
-assertThat(summary).isEqualTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">Spring Rocks</span><span class="delimiter">&quot;</span></span>);
-<span class="predefined-type">String</span> text = newMessagePage.getHtmlElementById(<span class="string"><span class="delimiter">&quot;</span><span class="content">text</span><span class="delimiter">&quot;</span></span>).getTextContent();
-assertThat(text).isEqualTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">In case you didn't know, Spring Rocks!</span><span class="delimiter">&quot;</span></span>);</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">assertThat(newMessagePage.getUrl().toString()).endsWith("/messages/123");
+String id = newMessagePage.getHtmlElementById("id").getTextContent();
+assertThat(id).isEqualTo("123");
+String summary = newMessagePage.getHtmlElementById("summary").getTextContent();
+assertThat(summary).isEqualTo("Spring Rocks");
+String text = newMessagePage.getHtmlElementById("text").getTextContent();
+assertThat(text).isEqualTo("In case you didn't know, Spring Rocks!");</code></pre>
 </div>
 </div>
 </div>
@@ -4793,13 +4702,13 @@ assertThat(text).isEqualTo(<span class="string"><span class="delimiter">&quot;</
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Autowired</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Autowired
 WebApplicationContext context;
 
 WebClient webClient;
 
-<span class="annotation">@Before</span>
-<span class="directive">public</span> <span class="type">void</span> setup() {
+@Before
+public void setup() {
     webClient = MockMvcWebClientBuilder
             .webAppContextSetup(context)
             .build();
@@ -4815,18 +4724,18 @@ WebClient webClient;
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">WebClient webClient;
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">WebClient webClient;
 
-<span class="annotation">@Before</span>
-<span class="directive">public</span> <span class="type">void</span> setup() {
+@Before
+public void setup() {
     webClient = MockMvcWebClientBuilder
-        <span class="comment">// 演示应用一个MockMvcConfigurer (Spring Security)</span>
+        // 演示应用一个MockMvcConfigurer (Spring Security)
         .webAppContextSetup(context, springSecurity())
-        <span class="comment">// 仅供参考 - 默认为&quot;&quot;</span>
-        .contextPath(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>)
-        <span class="comment">// 默认情况下，MockMvc仅用于localhost;</span>
-        <span class="comment">// 以下将MockMvc也用于example.com和example.org</span>
-        .useMockMvcForHosts(<span class="string"><span class="delimiter">&quot;</span><span class="content">example.com</span><span class="delimiter">&quot;</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">example.org</span><span class="delimiter">&quot;</span></span>)
+        // 仅供参考 - 默认为""
+        .contextPath("")
+        // 默认情况下，MockMvc仅用于localhost;
+        // 以下将MockMvc也用于example.com和example.org
+        .useMockMvcForHosts("example.com","example.org")
         .build();
 }</code></pre>
 </div>
@@ -4840,18 +4749,18 @@ WebClient webClient;
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">MockMvc mockMvc = MockMvcBuilders
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">MockMvc mockMvc = MockMvcBuilders
         .webAppContextSetup(context)
         .apply(springSecurity())
         .build();
 
 webClient = MockMvcWebClientBuilder
         .mockMvcSetup(mockMvc)
-        <span class="comment">// 仅供参考 - 默认为&quot;&quot;</span>
-        .contextPath(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>)
-        <span class="comment">// 默认情况下，MockMvc仅用于localhost;</span>
-        <span class="comment">// 以下将MockMvc也用于example.com和example.org</span>
-        .useMockMvcForHosts(<span class="string"><span class="delimiter">&quot;</span><span class="content">example.com</span><span class="delimiter">&quot;</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">example.org</span><span class="delimiter">&quot;</span></span>)
+        // 仅供参考 - 默认为""
+        .contextPath("")
+        // 默认情况下，MockMvc仅用于localhost;
+        // 以下将MockMvc也用于example.com和example.org
+        .useMockMvcForHosts("example.com","example.org")
         .build();</code></pre>
 </div>
 </div>
@@ -4897,12 +4806,12 @@ webClient = MockMvcWebClientBuilder
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">RestTemplate restTemplate = <span class="keyword">new</span> RestTemplate();
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">RestTemplate restTemplate = new RestTemplate();
 
 MockRestServiceServer mockServer = MockRestServiceServer.bindTo(restTemplate).build();
-mockServer.expect(requestTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">/greeting</span><span class="delimiter">&quot;</span></span>)).andRespond(withSuccess());
+mockServer.expect(requestTo("/greeting")).andRespond(withSuccess());
 
-<span class="comment">// 使用上面RestTemplate的测试代码 ...</span>
+// 使用上面RestTemplate的测试代码 ...
 
 mockServer.verify();</code></pre>
 </div>
@@ -4923,7 +4832,7 @@ mockServer.verify();</code></pre>
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">server = MockRestServiceServer.bindTo(restTemplate).ignoreExpectOrder(<span class="predefined-constant">true</span>).build();</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">server = MockRestServiceServer.bindTo(restTemplate).ignoreExpectOrder(true).build();</code></pre>
 </div>
 </div>
 </div>
@@ -4936,13 +4845,13 @@ mockServer.verify();</code></pre>
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">RestTemplate restTemplate = <span class="keyword">new</span> RestTemplate();
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">RestTemplate restTemplate = new RestTemplate();
 
 MockRestServiceServer mockServer = MockRestServiceServer.bindTo(restTemplate).build();
-mockServer.expect(times(<span class="integer">2</span>), requestTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">/something</span><span class="delimiter">&quot;</span></span>)).andRespond(withSuccess());
-mockServer.expect(times(<span class="integer">3</span>), requestTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">/somewhere</span><span class="delimiter">&quot;</span></span>)).andRespond(withSuccess());
+mockServer.expect(times(2), requestTo("/something")).andRespond(withSuccess());
+mockServer.expect(times(3), requestTo("/somewhere")).andRespond(withSuccess());
 
-<span class="comment">// ...</span>
+// ...
 
 mockServer.verify();</code></pre>
 </div>
@@ -4963,10 +4872,10 @@ mockServer.verify();</code></pre>
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(<span class="local-variable">this</span>.wac).build();
-<span class="local-variable">this</span>.restTemplate = <span class="keyword">new</span> RestTemplate(<span class="keyword">new</span> MockMvcClientHttpRequestFactory(mockMvc));
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+this.restTemplate = new RestTemplate(new MockMvcClientHttpRequestFactory(mockMvc));
 
-<span class="comment">// 使用上面RestTemplate的测试代码 ...</span></code></pre>
+// 使用上面RestTemplate的测试代码 ...</code></pre>
 </div>
 </div>
 </div>
@@ -5059,10 +4968,8 @@ Eclipse用户应该在Java → Editor → Content Assist → Favorites中添加 
 </div>
 </div>
 </div>
-<div id="footer">
-<div id="footer-text">
-Last updated 2019-01-02 08:28:38 CST
-</div>
-</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
+<script>hljs.initHighlighting()</script>
 </body>
 </html>

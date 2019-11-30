@@ -1,0 +1,4205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.3">
+<title>IoC容器</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<style>
+/* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
+/* Remove comment around @import statement below when using as a custom stylesheet */
+/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700";*/
+article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}
+audio,canvas,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+[hidden],template{display:none}
+script{display:none!important}
+html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
+body{margin:0}
+a{background:transparent}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+abbr[title]{border-bottom:1px dotted}
+b,strong{font-weight:bold}
+dfn{font-style:italic}
+hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}
+input[type="search"]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}
+input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+body{-webkit-font-smoothing:antialiased}
+img,object,svg{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+.center{margin-left:auto;margin-right:auto}
+.spread{width:100%}
+p.lead,.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{font-size:1.21875em;line-height:1.6}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0;direction:ltr}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:none}
+p{font-family:inherit;font-weight:400;font-size:1em;line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #ddddd8;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em;height:0}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{font-size:1em;line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol,ul.no-bullet,ol.no-bullet{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0;font-size:1em}
+ul.square li ul,ul.circle li ul,ul.disc li ul{list-style:inherit}
+ul.square{list-style-type:square}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ul.no-bullet{list-style:none}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+abbr,acronym{text-transform:uppercase;font-size:90%;color:rgba(0,0,0,.8);border-bottom:1px dotted #ddd;cursor:help}
+abbr{text-transform:none}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote cite{display:block;font-size:.9375em;color:rgba(0,0,0,.6)}
+blockquote cite:before{content:"\2014 \0020"}
+blockquote cite a,blockquote cite a:visited{color:rgba(0,0,0,.6)}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media only screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede}
+table thead,table tfoot{background:#f7f8f7;font-weight:bold}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt,table tr:nth-of-type(even){background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
+body{tab-size:4}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.clearfix:before,.clearfix:after,.float-group:before,.float-group:after{content:" ";display:table}
+.clearfix:after,.float-group:after{clear:both}
+*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+pre,pre>code{line-height:1.45;color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;text-rendering:optimizeSpeed}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menu{color:rgba(0,0,0,.8)}
+b.button:before,b.button:after{position:relative;top:-1px;font-weight:400}
+b.button:before{content:"[";padding:0 3px 0 2px}
+b.button:after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header:before,#header:after,#content:before,#content:after,#footnotes:before,#footnotes:after,#footer:before,#footer:after{content:" ";display:table}
+#header:after,#content:after,#footnotes:after,#footer:after{clear:both}
+#content{margin-top:1.25em}
+#content:before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #ddddd8}
+#header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #ddddd8;padding-bottom:8px}
+#header .details{border-bottom:1px solid #ddddd8;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:-ms-flexbox;display:-webkit-flex;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span:before{content:"\00a0\2013\00a0"}
+#header .details br+span.author:before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark:before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber:after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #ddddd8;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #efefed;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media only screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+#toc.toc2{margin-top:0!important;background-color:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #efefed;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #efefed;left:auto;right:0}}
+@media only screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:20em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:100%;background-color:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:rgba(255,255,255,.8);line-height:1.44}
+.sect1{padding-bottom:.625em}
+@media only screen and (min-width:768px){.sect1{padding-bottom:1.25em}}
+.sect1+.sect1{border-top:1px solid #efefed}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor:before,h2>a.anchor:before,h3>a.anchor:before,#toctitle>a.anchor:before,.sidebarblock>.content>.title>a.anchor:before,h4>a.anchor:before,h5>a.anchor:before,h6>a.anchor:before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock>caption.title{white-space:nowrap;overflow:visible;max-width:0}
+.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{color:rgba(0,0,0,.85)}
+table.tableblock #preamble>.sectionbody>.paragraph:first-of-type p{font-size:inherit}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #ddddd8;color:rgba(0,0,0,.6)}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border-style:solid;border-width:1px;border-color:#e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;-webkit-border-radius:4px;border-radius:4px}
+.exampleblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child{margin-bottom:0}
+.sidebarblock{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+.sidebarblock>:first-child{margin-top:0}
+.sidebarblock>:last-child{margin-bottom:0}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock pre:not(.highlight),.listingblock pre[class="highlight"],.listingblock pre[class^="highlight "],.listingblock pre.CodeRay,.listingblock pre.prettyprint{background:#f7f7f8}
+.sidebarblock .literalblock pre,.sidebarblock .listingblock pre:not(.highlight),.sidebarblock .listingblock pre[class="highlight"],.sidebarblock .listingblock pre[class^="highlight "],.sidebarblock .listingblock pre.CodeRay,.sidebarblock .listingblock pre.prettyprint{background:#f2f1f1}
+.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{-webkit-border-radius:4px;border-radius:4px;word-wrap:break-word;padding:1em;font-size:.8125em}
+.literalblock pre.nowrap,.literalblock pre[class].nowrap,.listingblock pre.nowrap,.listingblock pre[class].nowrap{overflow-x:auto;white-space:pre;word-wrap:normal}
+@media only screen and (min-width:768px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:.90625em}}
+@media only screen and (min-width:1280px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:1em}}
+.literalblock.output pre{color:#f7f7f8;background-color:rgba(0,0,0,.9)}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;-webkit-border-radius:4px;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.listingblock>.content{position:relative}
+.listingblock code[data-lang]:before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:#999}
+.listingblock:hover code[data-lang]:before{display:block}
+.listingblock.terminal pre .command:before{content:attr(data-prompt);padding-right:.5em;color:#999}
+.listingblock.terminal pre .command:not([data-prompt]):before{content:"$"}
+table.pyhltable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.pyhltable td{vertical-align:top;padding-top:0;padding-bottom:0;line-height:1.45}
+table.pyhltable td.code{padding-left:.75em;padding-right:0}
+pre.pygments .lineno,table.pyhltable td:not(.code){color:#999;padding-left:0;padding-right:.5em;border-right:1px solid #ddddd8}
+pre.pygments .lineno{display:inline-block;margin-right:.25em}
+table.pyhltable .linenodiv{background:none!important;padding-right:0!important}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock blockquote p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote:before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.5em;margin-right:.5ex;text-align:right}
+.quoteblock .quoteblock{margin-left:0;margin-right:0;padding:.5em 0;border-left:3px solid rgba(0,0,0,.6)}
+.quoteblock .quoteblock blockquote{padding:0 0 0 .75em}
+.quoteblock .quoteblock blockquote:before{display:none}
+.verseblock{margin:0 1em 1.25em 1em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract{margin:0 0 1.25em 0;display:block}
+.quoteblock.abstract blockquote,.quoteblock.abstract blockquote p{text-align:left;word-spacing:0}
+.quoteblock.abstract blockquote:before,.quoteblock.abstract blockquote p:first-of-type:before{display:none}
+table.tableblock{max-width:100%;border-collapse:separate}
+table.tableblock td>.paragraph:last-child p>p:last-child,table.tableblock th>p:last-child,table.tableblock td>p:last-child{margin-bottom:0}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all th.tableblock,table.grid-all td.tableblock{border-width:0 1px 1px 0}
+table.grid-all tfoot>tr>th.tableblock,table.grid-all tfoot>tr>td.tableblock{border-width:1px 1px 0 0}
+table.grid-cols th.tableblock,table.grid-cols td.tableblock{border-width:0 1px 0 0}
+table.grid-all *>tr>.tableblock:last-child,table.grid-cols *>tr>.tableblock:last-child{border-right-width:0}
+table.grid-rows th.tableblock,table.grid-rows td.tableblock{border-width:0 0 1px 0}
+table.grid-all tbody>tr:last-child>th.tableblock,table.grid-all tbody>tr:last-child>td.tableblock,table.grid-all thead:last-child>tr>th.tableblock,table.grid-rows tbody>tr:last-child>th.tableblock,table.grid-rows tbody>tr:last-child>td.tableblock,table.grid-rows thead:last-child>tr>th.tableblock{border-bottom-width:0}
+table.grid-rows tfoot>tr>th.tableblock,table.grid-rows tfoot>tr>td.tableblock{border-width:1px 0 0 0}
+table.frame-all{border-width:1px}
+table.frame-sides{border-width:0 1px}
+table.frame-topbot{border-width:1px 0}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{display:table-cell;line-height:1.6;background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+td>div.verse{white-space:pre}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.unstyled,ol.unnumbered,ul.checklist,ul.none{list-style-type:none}
+ul.unstyled,ol.unnumbered,ul.checklist{margin-left:.625em}
+ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1em;font-size:.85em}
+ul.checklist li>p:first-child>input[type="checkbox"]:first-child{width:1em;position:relative;top:1px}
+ul.inline{margin:0 auto .625em auto;margin-left:-1.375em;margin-right:0;padding:0;list-style:none;overflow:hidden}
+ul.inline>li{list-style:none;float:left;margin-left:1.375em;display:block}
+ul.inline>li>*{display:block}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist>table tr>td:first-of-type{padding:0 .75em;line-height:1}
+.colist>table tr>td:last-of-type{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:solid 4px #fff;-webkit-box-shadow:0 0 0 1px #ddd;box-shadow:0 0 0 1px #ddd}
+.imageblock.left,.imageblock[style*="float: left"]{margin:.25em .625em 1.25em 0}
+.imageblock.right,.imageblock[style*="float: right"]{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em 0;border-width:1px 0 0 0}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;text-indent:-1.05em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
+.gist .file-data>table td.line-data{width:99%}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background-color:#00fafa}
+.black{color:#000}
+.black-background{background-color:#000}
+.blue{color:#0000bf}
+.blue-background{background-color:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background-color:#fa00fa}
+.gray{color:#606060}
+.gray-background{background-color:#7d7d7d}
+.green{color:#006000}
+.green-background{background-color:#007d00}
+.lime{color:#00bf00}
+.lime-background{background-color:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background-color:#7d0000}
+.navy{color:#000060}
+.navy-background{background-color:#00007d}
+.olive{color:#606000}
+.olive-background{background-color:#7d7d00}
+.purple{color:#600060}
+.purple-background{background-color:#7d007d}
+.red{color:#bf0000}
+.red-background{background-color:#fa0000}
+.silver{color:#909090}
+.silver-background{background-color:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background-color:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background-color:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background-color:#fafa00}
+span.icon>.fa{cursor:default}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note:before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip:before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning:before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution:before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important:before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background-color:rgba(0,0,0,.8);-webkit-border-radius:100px;border-radius:100px;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]:after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,span.alt{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background-color:#fffef7;border-color:#e0e0dc;-webkit-box-shadow:0 1px 4px #e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@media print{@page{margin:1.25cm .75cm}
+*{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]:after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+thead{display:table-header-group}
+svg{max-width:100%}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #ddddd8!important;padding-bottom:0!important}
+.sect1{padding-bottom:0!important}
+.sect1+.sect1{border:0!important}
+#header>h1:first-child{margin-top:1.25rem}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em 0}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span:before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]:before{display:block}
+#footer{background:none!important;padding:0 .9375em}
+#footer-text{color:rgba(0,0,0,.6)!important;font-size:.9em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+<style>
+.hidden {
+	display: none;
+}
+
+.switch {
+	border-width: 1px 1px 0 1px;
+	border-style: solid;
+	border-color: #7a2518;
+	display: inline-block;
+}
+
+.switch--item {
+	padding: 10px;
+	background-color: #ffffff;
+	color: #7a2518;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.switch--item:not(:first-child) {
+	border-width: 0 0 0 1px;
+	border-style: solid;
+	border-color: #7a2518;
+}
+
+.switch--item.selected {
+	background-color: #7a2519;
+	color: #ffffff;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
+<script type="text/javascript">
+function addBlockSwitches() {
+	$('.primary').each(function() {
+		primary = $(this);
+		createSwitchItem(primary, createBlockSwitch(primary)).item.addClass("selected");
+		primary.children('.title').remove();
+	});
+	$('.secondary').each(function(idx, node) {
+		secondary = $(node);
+		primary = findPrimary(secondary);
+		switchItem = createSwitchItem(secondary, primary.children('.switch'));
+		switchItem.content.addClass('hidden');
+		findPrimary(secondary).append(switchItem.content);
+		secondary.remove();
+	});
+}
+
+function createBlockSwitch(primary) {
+	blockSwitch = $('<div class="switch"></div>');
+	primary.prepend(blockSwitch);
+	return blockSwitch;
+}
+
+function findPrimary(secondary) {
+	candidate = secondary.prev();
+	while (!candidate.is('.primary')) {
+		candidate = candidate.prev();
+	}
+	return candidate;
+}
+
+function createSwitchItem(block, blockSwitch) {
+	blockName = block.children('.title').text();
+	content = block.children('.content').first().append(block.next('.colist'));
+	item = $('<div class="switch--item">' + blockName + '</div>');
+	item.on('click', '', content, function(e) {
+		$(this).addClass('selected');
+		$(this).siblings().removeClass('selected');
+		e.data.siblings('.content').addClass('hidden');
+		e.data.removeClass('hidden');
+	});
+	blockSwitch.append(item);
+	return {'item': item, 'content': content};
+}
+
+$(addBlockSwitches);
+</script>
+
+</head>
+<body id="beans" class="book toc2 toc-left">
+<div id="header">
+<h1>IoC容器</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#beans-introduction">1. Spring IoC容器和Bean简介</a></li>
+<li><a href="#beans-basics">2. 容器概述</a>
+<ul class="sectlevel2">
+<li><a href="#beans-factory-metadata">2.1. 配置元数据</a></li>
+<li><a href="#beans-factory-instantiation">2.2. 实例化容器</a></li>
+<li><a href="#beans-factory-client">2.3. 使用容器</a></li>
+</ul>
+</li>
+<li><a href="#beans-definition">3. Bean总览</a>
+<ul class="sectlevel2">
+<li><a href="#beans-beanname">3.1. Bean命名</a></li>
+<li><a href="#beans-factory-class">3.2. Bean实例化</a></li>
+</ul>
+</li>
+<li><a href="#beans-dependencies">4. 依赖</a>
+<ul class="sectlevel2">
+<li><a href="#beans-factory-collaborators">4.1. 依赖注入</a></li>
+<li><a href="#beans-factory-properties-detailed">4.2. 依赖关系和配置详情</a></li>
+<li><a href="#beans-factory-dependson">4.3. 使用 <code>depends-on</code></a></li>
+<li><a href="#beans-factory-lazy-init">4.4. 延迟初始化Bean</a></li>
+<li><a href="#beans-factory-autowire">4.5. 自动装配协作者</a></li>
+<li><a href="#beans-factory-method-injection">4.6. 方法注入</a></li>
+</ul>
+</li>
+<li><a href="#beans-factory-scopes">5. Bean作用域</a>
+<ul class="sectlevel2">
+<li><a href="#beans-factory-scopes-singleton">5.1. 单例作用域</a></li>
+<li><a href="#beans-factory-scopes-prototype">5.2. 原型作用域</a></li>
+<li><a href="#beans-factory-scopes-sing-prot-interaction">5.3. 具有原型Bean依赖关系的单例Bean</a></li>
+<li><a href="#beans-factory-scopes-other">5.4. 请求，会话，应用程序和WebSocket作用域</a></li>
+<li><a href="#beans-factory-scopes-custom">5.5. 自定义作用域</a></li>
+</ul>
+</li>
+<li><a href="#beans-factory-nature">6. 自定义Bean的性质</a>
+<ul class="sectlevel2">
+<li><a href="#beans-factory-lifecycle">6.1. 生命周期回调</a></li>
+<li><a href="#beans-factory-aware">6.2. <code>ApplicationContextAware</code> 和 <code>BeanNameAware</code></a></li>
+<li><a href="#aware-list">6.3. 其它 <code>Aware</code> 接口</a></li>
+</ul>
+</li>
+<li><a href="#beans-child-bean-definitions">7. Bean定义继承</a></li>
+<li><a href="#beans-factory-extension">8. 容器扩展点</a>
+<ul class="sectlevel2">
+<li><a href="#beans-factory-extension-bpp">8.1. 使用 <code>BeanPostProcessor</code> 自定义Bean</a></li>
+</ul>
+</li>
+<li><a href="#beans-beanfactory">9. BeanFactory</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>本章介绍了Spring的Inversion of Control（IoC）容器。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="beans-introduction">1. Spring IoC容器和Bean简介</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>本章介绍了控制反转（IoC）原理的Spring框架实现。IoC也称为依赖注入（DI）。在此过程中，对象仅通过构造函数参数，
+工厂方法的参数或在构造或从工厂方法返回后在对象实例上设置的属性来定义其依赖项（即它所依赖的其他对象）。然后，
+容器在创建bean时注入那些依赖项。此过程从根本上讲是通过使用类的直接构造或诸如服务定位器模式之类的方法来控制其依赖项的实例化或位置，
+基本上是bean本身的逆过程（因此称为控制反转）。</p>
+</div>
+<div class="paragraph">
+<p><code>org.springframework.beans</code> 和 <code>org.springframework.context</code> 包是Spring Framework的IoC容器的基础。
+{docSpring}/beans/factory/BeanFactory.html[<code>BeanFactory</code>]接口提供了一种高级配置机制，能够管理任何类型的对象。
+{docSpring}/context/ApplicationContext.html[<code>ApplicationContext</code>]是 <code>BeanFactory</code> 的子接口。它增加了：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>与Spring的AOP功能轻松集成</p>
+</li>
+<li>
+<p>消息资源处理（用于国际化）</p>
+</li>
+<li>
+<p>事件发布</p>
+</li>
+<li>
+<p>应用层特定的上下文，例如Web应用程序中使用的 <code>WebApplicationContext</code>。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>简而言之，<code>BeanFactory</code> 提供了配置框架和基本功能，而 <code>ApplicationContext</code>
+添加了更多企业特定的功能。<code>ApplicationContext</code> 是 <code>BeanFactory</code> 的完整超集，在本章中使用它对Spring的IoC容器进行描述。有关使用
+<code>BeanFactory</code> 代替 <code>ApplicationContext</code> 的更多信息，请参见 <a href="#beans-beanfactory"><code>BeanFactory</code></a>。</p>
+</div>
+<div class="paragraph">
+<p>在Spring中，构成应用程序主要部分并由Spring IoC容器管理的对象称为bean。Bean是由Spring
+IoC容器实例化，组装和以其他方式管理的对象。否则，bean仅仅是应用程序中许多对象之一。
+Bean及其之间的依赖关系反映在容器所使用的配置元数据中。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="beans-basics">2. 容器概述</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>org.springframework.context.ApplicationContext</code> 接口表示Spring IoC容器，并负责实例化，配置和组装Bean。容器通过读取配置元数据来获取有关要实例化，配置和组装哪些对象的指令。
+配置元数据以XML，Java注解或Java代码表示。它使你能够表达组成应用程序的对象以及这些对象之间的丰富相互依赖关系。</p>
+</div>
+<div class="paragraph">
+<p>Spring提供了 <code>ApplicationContext</code> 接口的几种实现。在独立应用程序中，通常创建 {docSpring}/context/support/ClassPathXmlApplicationContext.html[<code>ClassPathXmlApplicationContext</code>]
+或 {docSpring}/context/support/FileSystemXmlApplicationContext.html[<code>FileSystemXmlApplicationContext</code>]的实例。尽管XML是定义配置元数据的传统格式，
+但是你可以通过提供少量XML配置来声明性地启用对其他元数据格式的支持，从而指示容器将Java注解或代码用作元数据格式。</p>
+</div>
+<div class="paragraph">
+<p>在大多数应用场景中，不需要显式用户代码即可实例化一个Spring IoC容器的一个或多个实例。例如，在Web应用程序场景中，应用程序的 <code>web
+.xml</code> 文件中简单的大约八行样板Web描述符XML通常就足够了（请参阅<a href="#context-create">Web应用程序的便捷 <code>ApplicationContext</code> 实例化</a>）。
+如果使用 {toolSTS}[Spring Tool Suite]（基于Eclipse的开发环境），则只需单击几次鼠标或敲击几下键盘即可轻松创建此样板配置。</p>
+</div>
+<div class="paragraph">
+<p>下图显示了Spring工作原理的高级视图。你的应用程序类与配置元数据结合在一起，以便在创建和初始化 <code>ApplicationContext</code> 之后，你将拥有一个完全配置且可执行的系统或应用程序。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/spring-core/container-magic.png" alt="Spring IoC容器">
+</div>
+</div>
+<div class="sect2">
+<h3 id="beans-factory-metadata">2.1. 配置元数据</h3>
+<div class="paragraph">
+<p>如上图所示，Spring IoC容器使用一种形式的配置元数据。这个配置元数据表示你作为应用程序开发人员如何告诉Spring容器在应用程序中实例化，配置和组装对象。</p>
+</div>
+<div class="paragraph">
+<p>传统上，配置元数据以简单直观的XML格式提供，本章大部分内容都用它来表述Spring IoC容器的关键概念和功能。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+基于XML的元数据不是配置元数据的唯一允许形式。Spring IoC容器本身与实际写入此配置元数据的格式完全解耦。
+如今，许多开发人员为他们的Spring应用程序选择<a href="#beans-java">基于Java的配置</a>。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>有关在Spring容器中使用其他形式的元数据的信息，请参见：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#beans-annotation-config">基于注解的配置</a>: Spring 2.5引入了对基于注解的配置元数据的支持。</p>
+</li>
+<li>
+<p><a href="#beans-java">基于Java的配置</a>: 从Spring 3.0开始，Spring JavaConfig项目提供的许多功能成为Spring Framework核心的一部分。
+因此，你可以使用Java而不是XML文件来定义应用程序类外部bean。要使用这些新功能，请参见
+{docSpring}/context/annotation/Configuration.html[<code>@Configuration</code>],
+{docSpring}/context/annotation/Bean.html[<code>@Bean</code>],
+{docSpring}/context/annotation/Import.html[<code>@Import</code>],
+和 {docSpring}/context/annotation/DependsOn.html[<code>@DependsOn</code>] 注解.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Spring配置由容器必须管理的至少一个（通常是一个以上）bean定义组成。基于XML的配置元数据将这些bean配置为顶级 <code>&lt;beans/&gt;</code> 元素内的
+<code>&lt;bean/&gt;</code> 元素。Java配置通常在 <code>@Configuration</code> 类中使用 <code>@Bean</code> 注解方法。</p>
+</div>
+<div class="paragraph">
+<p>这些bean定义对应于组成应用程序的实际对象。通常，你定义服务层对象，数据访问层对象（DAO），表示层对象（例如Struts Action实例），
+基础结构对象（例如Hibernate SessionFactories，JMS队列）等等。通常，不会在容器中配置细粒度的域对象，因为创建和加载域对象通常是DAO和业务逻辑的职责。
+但是，你可以使用Spring与AspectJ的集成来配置在IoC容器控制之外创建的对象。参考<a href="#aop-atconfigurable">使用AspectJ通过Spring依赖注入域对象</a>。</p>
+</div>
+<div class="paragraph">
+<p>以下示例显示了基于XML的配置元数据的基本结构：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd"&gt;
+
+    &lt;bean id="..." class="..."&gt; <i class="conum" data-value="1"></i><b>(1)</b> <i class="conum" data-value="2"></i><b>(2)</b>
+        &lt;!-- collaborators and configuration for this bean go here --&gt;
+    &lt;/bean&gt;
+
+    &lt;bean id="..." class="..."&gt;
+        &lt;!-- collaborators and configuration for this bean go here --&gt;
+    &lt;/bean&gt;
+
+     &lt;!-- more bean definitions go here --&gt;
+
+&lt;/beans&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>id</code> 属性是一个标识单个bean定义的字符串。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>class</code> 属性使用完全限定的类名定义bean的类型。</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><code>id</code> 属性的值表示协作对象。在此示例中未显示用于引用协作对象的XML。有关更多信息，请参见
+<a href="#beans-dependencies">依赖关系</a>。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="beans-factory-instantiation">2.2. 实例化容器</h3>
+<div class="paragraph">
+<p>提供给 <code>ApplicationContext</code> 构造函数的一个或多个位置路径是资源字符串，这些资源字符串使容器可以从各种外部资源
+（例如本地文件系统，Java <code>CLASSPATH</code> 等）加载配置元数据。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">ApplicationContext context = new ClassPathXmlApplicationContext("services.xml", "daos.xml");</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>了解了Spring的IoC容器之后，你可能想了解更多有关Spring的 <code>Resource</code> 抽象（如<a href="#resources">[resources]</a>所述），
+它提供了一种方便的机制，可以从URI语法定义的位置读取InputStream。尤其是，如
+<a href="#resources-app-ctx">应用程序上下文和资源路径</a>中所述，资源路径用于构造应用程序上下文。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>以下示例显示了服务层对象（ <code>services.xml</code> ）配置文件：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd"&gt;
+
+    &lt;!-- services --&gt;
+
+    &lt;bean id="petStore" class="org.springframework.samples.jpetstore.services.PetStoreServiceImpl"&gt;
+        &lt;property name="accountDao" ref="accountDao"/&gt;
+        &lt;property name="itemDao" ref="itemDao"/&gt;
+        &lt;!-- additional collaborators and configuration for this bean go here --&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- more bean definitions for services go here --&gt;
+
+&lt;/beans&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下示例显示了数据访问层对象 <code>daos.xml</code> 文件：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd"&gt;
+
+    &lt;bean id="accountDao"
+        class="org.springframework.samples.jpetstore.dao.jpa.JpaAccountDao"&gt;
+        &lt;!-- additional collaborators and configuration for this bean go here --&gt;
+    &lt;/bean&gt;
+
+    &lt;bean id="itemDao" class="org.springframework.samples.jpetstore.dao.jpa.JpaItemDao"&gt;
+        &lt;!-- additional collaborators and configuration for this bean go here --&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- more bean definitions for data access objects go here --&gt;
+
+&lt;/beans&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>在前面的示例中，服务层由 <code>PetStoreServiceImpl</code> 类和两个 <code>JpaAccountDao</code> 和 <code>JpaItemDao</code> 类型的数据访问
+对象组成（基于JPA对象关系映射标准）。<code>property name</code> 元素引用JavaBean属性的名称，而 <code>ref</code> 元素引用另一个
+bean定义的名称。<code>id</code> 和 <code>ref</code> 元素之间的这种联系表达了协作对象之间的依赖性。有关配置对象的依赖关系的详细信息，
+请参阅<a href="#beans-dependencies">依赖关系</a>。</p>
+</div>
+<div class="sect3">
+<h4 id="beans-factory-xml-import">2.2.1. 组合基于XML的配置元数据</h4>
+<div class="paragraph">
+<p>使bean定义跨越多个XML文件可能很有用。通常，每个单独的XML配置文件都代表体系结构中的不同的逻辑层或模块。</p>
+</div>
+<div class="paragraph">
+<p>你可以使用应用程序上下文构造函数从所有这些XML片段中加载bean定义。如<a href="#beans-factory-instantiation">上一节</a>所示，
+此构造函数具有多个 <code>Resource</code> 参数。或者，使用一个或多个 <code>&lt;import/&gt;</code> 元素从另一个文件中加载bean定义。
+以下示例显示了如何执行此操作：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;beans&gt;
+    &lt;import resource="services.xml"/&gt;
+    &lt;import resource="resources/messageSource.xml"/&gt;
+    &lt;import resource="/resources/themeSource.xml"/&gt;
+
+    &lt;bean id="bean1" class="..."/&gt;
+    &lt;bean id="bean2" class="..."/&gt;
+&lt;/beans&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>在前面的示例中，外部bean定义是从三个文件加载的：
+<code>services.xml</code>, <code>messageSource.xml</code>, 和 <code>themeSource.xml</code>。
+所有位置路径都相对于进行导入的定义文件，因此，<code>services.xml</code> 必须与进行导入的文件位于同一目录或类路径位置，
+而 <code>messageSource.xml</code> 和 <code>themeSource.xml</code> 必须位于导入文件位置下的 <code>resources</code> 子文件夹。
+如你所见，斜杠可被忽略。但是，鉴于这些路径是相对的，最好不要使用任何斜线。根据Spring Schema，导入的文件的内容
+（包括顶级 <code>&lt;beans/&gt;</code> 元素）必须是有效的XML bean定义。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>可以但不建议使用相对的“../”路径引用父目录中的文件。这样做会创建对当前应用程序外部文件的依赖。特别是，不建议对
+<code>classpath:</code> URL（例如，<code>classpath:../services.xml</code>）使用此引用，在URL中，运行时解析过程会选择“ <code>最近</code> ”
+的classpath根目录，然后查看其父目录。类路径配置的更改可能导致选择其他错误的目录。</p>
+</div>
+<div class="paragraph">
+<p>你始终可以使用完全限定的资源位置来代替相对路径：例如，<code>file:C:/config/services.xml</code> 或 <code>classpath:/config/services.xml</code>。
+但是请注意，你正在将应用程序的配置耦合到特定的绝对位置。通常最好为这样的绝对位置保留一个间接寻址，例如，可借助“${…}”占位符，
+这些占位符在运行时会根据JVM系统属性解析。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>命名空间本身提供了导入指令功能。Spring所提供的一系列XML名称空间（例如，<code>context</code> 和 <code>util</code> 名称空间）中提供
+了除普通bean定义的其他配置功能。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="beans-factory-client">2.3. 使用容器</h3>
+<div class="paragraph">
+<p><code>ApplicationContext</code> 是高级工厂的接口，该工厂能够维护不同bean及其依赖关系的注册表。可以通过使用方法
+<code>T getBean(String name, Class&lt;T&gt; requiredType)</code> 检索bean的实例。</p>
+</div>
+<div class="paragraph">
+<p>使用 <code>ApplicationContext</code> 可以读取bean定义并访问它们，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">// create and configure beans
+ApplicationContext context = new ClassPathXmlApplicationContext("services.xml", "daos.xml");
+
+// retrieve configured instance
+PetStoreService service = context.getBean("petStore", PetStoreService.class);
+
+// use configured instance
+List&lt;String&gt; userList = service.getUsernameList();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>最灵活的变体是 <code>GenericApplicationContext</code> 与读取器委托结合使用，例如，与XML文件的
+<code>XmlBeanDefinitionReader</code> 结合使用，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">GenericApplicationContext context = new GenericApplicationContext();
+new XmlBeanDefinitionReader(context).loadBeanDefinitions("services.xml", "daos.xml");
+context.refresh();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你可以在同一 <code>ApplicationContext</code> 上混合和匹配这样的阅读器委托，从不同的配置源读取Bean定义。</p>
+</div>
+<div class="paragraph">
+<p>然后，你可以使用 <code>getBean</code> 检索bean的实例。<code>ApplicationContext</code> 接口还有其他几种检索bean的方法，
+但是理想情况下，你的应用程序代码永远不要使用它们。实际上，你的应用程序代码应该根本不调用 <code>getBean()</code> 方法，
+因此完全不依赖于Spring API。例如，Spring与Web框架的集成为各种Web框架组件（例如控制器和JSF管理的Bean）
+提供了依赖项注入，使你可以通过元数据（例如自动装配注解）声明对特定Bean的依赖项。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="beans-definition">3. Bean总览</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring IoC容器管理一个或多个bean。这些bean是使用你提供给容器的配置元数据创建的（例如，以XML <code>&lt;bean/&gt;</code> 定义的形式）。</p>
+</div>
+<div class="paragraph">
+<p>在容器本身内，这些bean定义表示为 <code>BeanDefinition</code> 对象，其中包含（除其他信息外）以下元数据：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>包限定的类名：通常定义了Bean的实际实现类。</p>
+</li>
+<li>
+<p>Bean行为配置元素，用于声明Bean在容器中的行为（作用域，生命周期回调等）。</p>
+</li>
+<li>
+<p>对其他bean的引用。这些引用也称为协作者或依赖项。</p>
+</li>
+<li>
+<p>要在新创建的对象中设置的其他配置项，例如，池的大小限制或要在管理连接池的bean中使用的连接数。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>此元数据转换为构成每个bean定义的一组属性。下表描述了这些属性：</p>
+</div>
+<table id="beans-factory-bean-definition-tbl" class="tableblock frame-all grid-all spread">
+<caption class="title">Table 1. Bean定义</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">属性</th>
+<th class="tableblock halign-left valign-top">在&#8230;&#8203;中解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">类</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#beans-factory-class">Bean实例化</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">名称</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#beans-beanname">Bean命名</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">作用域</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#beans-factory-scopes">Bean作用域</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">构造函数参数</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#beans-factory-collaborators">依赖注入</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">属性集</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#beans-factory-collaborators">依赖注入</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">自动注入模式</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#beans-factory-autowire">自动装配协作者</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">延迟初始化模式</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#beans-factory-lazy-init">延迟初始化Bean</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">初始化方法</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#beans-factory-lifecycle-initializingbean">初始化回调</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">销毁方法</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#beans-factory-lifecycle-disposablebean">销毁回调</a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>除了包含有关如何创建特定Bean信息的Bean定义之外，<code>ApplicationContext</code> 实现还允许注册在容器外部（由用户）创建的现有对象。
+这是通过 <code>getBeanFactory()</code> 方法访问 <code>ApplicationContext</code> 的 <code>BeanFactory</code> 来完成的，该方法返回BeanFactory
+<code>DefaultListableBeanFactory</code> 实现。<code>DefaultListableBeanFactory</code> 通过 <code>registerSingleton(..)</code> 和
+<code>registerBeanDefinition(..)</code> 方法支持此注册。但是，典型的应用程序只能与通过常规bean定义元数据定义的bean一起使用。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Bean元数据和手动提供的单例实例需要尽早注册，以便容器在自动装配和其他自省步骤中正确地推理它们。
+虽然在某种程度上支持覆盖现有元数据和现有单例实例，但官方不支持在运行时（与对工厂的实时访问同时）对新bean的注册，
+其很可能导致并发访问异常，bean容器中的状态不一致或两者皆有。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="beans-beanname">3.1. Bean命名</h3>
+<div class="paragraph">
+<p>每个bean具有一个或多个标识符。这些标识符在承载Bean的容器内必须是唯一的。一个bean通常只有一个标识符。
+但是，如果需要多个，则可以将其它的视为别名。</p>
+</div>
+<div class="paragraph">
+<p>在基于XML的配置元数据中，可以使用 <code>id</code> 属性和/或 <code>name</code> 属性来指定bean标识符。<code>id</code> 属性可让你精确指定一个id。通常，
+这些名称是字母+数字（“myBean”，“someService”等），但它们也可以包含特殊字符。如果要为bean引入其他别名，
+还可以在 <code>name</code> 属性中指定它们，并用逗号（<code>,</code>），分号（<code>;</code>）或空格分隔。作为历史记录，在Spring 3.1之前的版本中，
+<code>id</code> 属性定义为 <code>xsd:ID</code> 类型，该类型限制了可能的字符。从3.1开始，它被定义为 <code>xsd:string</code> 类型。请注意，
+Bean ID唯一性仍由容器强制执行，尽管XML解析器不再如此。</p>
+</div>
+<div class="paragraph">
+<p>你不需要提供bean的 <code>id</code> 或 <code>name</code>。如果未明确提供 <code>id</code> 或 <code>name</code>，则容器将为该bean生成一个唯一的名称。但是，
+如果要通过名称引用该bean，则必须通过使用 <code>ref</code> 元素或<a href="#beans-servicelocator">服务定位器</a>样式查找，
+你必须提供一个名称。不提供名称的动机与使用<a href="#beans-inner-beans">内部bean</a>和<a href="#beans-factory-autowire">自动装配合作者</a>有关。</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Bean命名约定</div>
+<div class="paragraph">
+<p>约定是在命名bean时将标准Java约定用于实例字段名称。也就是说，bean名称以小写字母开头，使用小驼峰记法。例如：
+<code>accountManager</code>, <code>accountService</code>, <code>userDao</code>, <code>loginController</code> 等。</p>
+</div>
+<div class="paragraph">
+<p>一致地命名Bean使你的配置更易于阅读和理解。另外，如果你使用Spring AOP，则在将建议应用于名称相关的一组bean时，它会很有帮助。</p>
+</div>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+通过在类路径中进行组件扫描，Spring会按照前面描述的规则为未命名的组件生成Bean名称：采用简单的类名称并将其首字符转换为小写。
+但是，在特殊情况下，如果有多个字符并且第一个和第二个字符均为大写字母，则会保留原始大小写。
+这些规则与 <code>java.beans.Introspector.decapitalize</code>（Spring在此使用）定义的规则相同。
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="beans-beanname-alias">3.1.1. 在Bean定义之外别名Bean</h4>
+<div class="paragraph">
+<p>在bean定义本身中，可以使用由 <code>id</code> 属性指定的一个名称和 <code>name</code> 属性中任意数量的其他名称的组合来为bean提供多个名称。
+这些名称可以是同一个bean的等效别名，这在某些情况下很有用，例如通过使用特定于该组件本身的bean名称，让应用程序中的每个组件都引用一个公共依赖项。</p>
+</div>
+<div class="paragraph">
+<p>但是，在实际定义bean的地方指定所有别名并不总是可行的。有时需要为在别处定义的bean引入别名。这在大型系统中尤为常见，
+在大型系统中，配置在每个子系统之间分配，每个子系统都有自己的对象定义集。在基于XML的配置元数据中，可以使用 <code>&lt;alias/&gt;</code> 元素来完成此操作。
+以下示例显示了如何执行此操作：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;alias name="fromName" alias="toName"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>在这种情况下，在使用该别名定义之后，就可以将名为 <code>fromName</code> 的bean（在同一容器中）称为 <code>toName</code>。</p>
+</div>
+<div class="paragraph">
+<p>例如，子系统A的配置元数据可以通过 <code>subsystemA-dataSource</code> 的名称引用数据源。
+子系统B的配置元数据可以通过 <code>subsystemB-dataSource</code> 的名称引用数据源。
+组成使用这两个子系统的主应用程序时，主应用程序通过 <code>myApp-dataSource</code> 的名称引用数据源。
+要使这三个名称都引用相同的对象，可以将以下别名定义添加到配置元数据中：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;alias name="myApp-dataSource" alias="subsystemA-dataSource"/&gt;
+&lt;alias name="myApp-dataSource" alias="subsystemB-dataSource"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>现在，每个组件和主应用程序都可以通过唯一的名称引用数据源，并保证不与任何其他定义冲突（有效地创建名称空间），但它们引用的是同一bean。</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Java配置</div>
+<div class="paragraph">
+<p>如果使用Javaconfiguration，则 <code>@Bean</code> 注解可用于提供别名。有关详细信息，请参见<a href="#beans-java-bean-annotation">使用 <code>@Bean</code> 注解</a>。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="beans-factory-class">3.2. Bean实例化</h3>
+<div class="paragraph">
+<p>Bean定义本质上是创建一个或多个对象的方法。容器在被询问时会查看该命名bean定义，并使用该bean定义封装的配置元数据来创建（或获取）实际对象。</p>
+</div>
+<div class="paragraph">
+<p>如果使用基于XML的配置元数据，则在 <code>&lt;bean/&gt;</code> 元素的 <code>class</code> 属性中指定要实例化的对象的类型（或类）。
+这个 <code>class</code> 属性（在内部是 <code>BeanDefinition</code> 实例的 <code>Class</code>
+属性）通常是必需的。（其他情况，请参见<a href="#beans-factory-class-instance-factory-method">用实例工厂方法实例化</a>和<a href="#beans-child-bean-definitions">Bean定义继承</a>）
+可以通过以下两种方式之一使用 <code>Class</code> 属性：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>通常指定要构造的Bean类，容器本身会通过反射调用其构造函数直接创建Bean，这在某种程度上等同于使用 <code>new</code> 运算符的Java代码。</p>
+</li>
+<li>
+<p>要指定包含所创建对象的静态工厂方法的实际类，在不太常见的情况下，容器将在类上调用静态工厂方法以创建Bean。从静态工厂方法的调用返回的对象类型可以是同一类，也可以是完全不同的另一类。</p>
+</li>
+</ul>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<div class="title">内部类名称</div>
+<p>如果要为静态内部类配置Bean定义，则必须使用内部类的二进制名称。</p>
+</div>
+<div class="paragraph">
+<p>例如，如果你在 <code>com.example</code> 包中有一个名为 <code>SomeThing</code> 的类，并且此 <code>SomeThing</code> 类具有一个名为
+<code>OtherThing</code> 的静态内部类，则bean定义上的 <code>class</code> 属性的值将为 <code>com.example.SomeThing$OtherThing</code>。</p>
+</div>
+<div class="paragraph">
+<p>请注意，名称中使用 <code>$</code> 字符将内部类名与外部类名分开。</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-factory-class-ctor">3.2.1. 用构造函数实例化</h4>
+<div class="paragraph">
+<p>当通过构造方法创建一个bean时，所有普通类都可以被Spring使用并与之兼容。也就是说，
+正在开发的类不需要实现任何特定的接口或以特定的方式进行编码。只需指定bean类就足够了。
+但是，根据你为特定bean使用的IoC类型，你可能需要一个默认（空）构造函数。</p>
+</div>
+<div class="paragraph">
+<p>Spring IoC容器几乎可以管理你要管理的任何类。它不仅限于管理真正的JavaBean。大多数Spring用户更喜欢实际的JavaBean，
+它们仅具有默认（无参数）构造函数，以及根据容器中的属性建模的适当的setter和getter方法。你还可以在容器中具有更多奇特的非bean样式类。
+例如，如果你需要使用绝对不符合JavaBean规范的旧式连接池，则Spring也可以对其进行管理。</p>
+</div>
+<div class="paragraph">
+<p>使用基于XML的配置元数据，你可以如下指定bean类：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="exampleBean" class="examples.ExampleBean"/&gt;
+
+&lt;bean name="anotherExample" class="examples.ExampleBeanTwo"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>有关向构造函数提供参数（如果需要）并在构造对象之后设置对象实例属性的机制的详细信息，请参考
+<a href="#beans-factory-collaborators">注入依赖项</a>。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-factory-class-static-factory-method">3.2.2. 用静态工厂方法实例化</h4>
+<div class="paragraph">
+<p>定义使用静态工厂方法创建的bean时，请使用 <code>class</code> 属性指定包含静态工厂方法的类，并使用名为 <code>factory-method</code> 的属性指定工厂方法本身的名称。
+你应该能够调用此方法（带有可选参数，如后面所述），并返回一个活动对象，该对象随后将被视为已通过构造函数创建。
+这种bean定义的一种用法是在旧版代码中调用 <code>static</code> 工厂。</p>
+</div>
+<div class="paragraph">
+<p>以下bean定义指定通过调用工厂方法来创建bean。该定义不指定返回对象的类型（类），而仅指定包含工厂方法的类。
+在此示例中，<code>createInstance()</code> 方法必须是静态方法。以下示例显示如何指定工厂方法：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="clientService"
+    class="examples.ClientService"
+    factory-method="createInstance"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下示例显示了相应的类：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class ClientService {
+    private static ClientService clientService = new ClientService();
+    private ClientService() {}
+
+    public static ClientService createInstance() {
+        return clientService;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>有关为工厂方法提供（可选）参数并在从工厂返回对象后设置对象实例属性的机制的详细信息，请参考
+<a href="#beans-factory-properties-detailed">详细的依赖关系和配置</a>。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-factory-class-instance-factory-method">3.2.3. 用实例工厂方法实例化</h4>
+<div class="paragraph">
+<p>类似于<a href="#beans-factory-class-static-factory-method">用静态工厂方法实例化</a>，使用实例工厂方法进行实例化会从容器中调用现有bean的非静态方法来创建新bean。
+要使用这种机制，请将 <code>class</code> 属性保留为空，并在 <code>factory-bean</code> 属性中，在当前（或父或祖先）容器中指定包含要创建该对象的实例方法的bean的名称。
+使用 <code>factory-method</code> 属性设置工厂方法本身的名称。以下示例显示了如何配置此类Bean：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;!-- the factory bean, which contains a method called createInstance() --&gt;
+&lt;bean id="serviceLocator" class="examples.DefaultServiceLocator"&gt;
+    &lt;!-- inject any dependencies required by this locator bean --&gt;
+&lt;/bean&gt;
+
+&lt;!-- the bean to be created via the factory bean --&gt;
+&lt;bean id="clientService"
+    factory-bean="serviceLocator"
+    factory-method="createClientServiceInstance"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下示例显示了相应的类：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class DefaultServiceLocator {
+
+    private static ClientService clientService = new ClientServiceImpl();
+
+    public ClientService createClientServiceInstance() {
+        return clientService;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>一个工厂类也可以包含一个以上的工厂方法，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="serviceLocator" class="examples.DefaultServiceLocator"&gt;
+    &lt;!-- inject any dependencies required by this locator bean --&gt;
+&lt;/bean&gt;
+
+&lt;bean id="clientService"
+    factory-bean="serviceLocator"
+    factory-method="createClientServiceInstance"/&gt;
+
+&lt;bean id="accountService"
+    factory-bean="serviceLocator"
+    factory-method="createAccountServiceInstance"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下示例显示了相应的类：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class DefaultServiceLocator {
+
+    private static ClientService clientService = new ClientServiceImpl();
+
+    private static AccountService accountService = new AccountServiceImpl();
+
+    public ClientService createClientServiceInstance() {
+        return clientService;
+    }
+
+    public AccountService createAccountServiceInstance() {
+        return accountService;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>这种方法表明，工厂Bean本身可以通过依赖项注入（DI）进行管理和配置。详细信息，请参考
+<a href="#beans-factory-properties-detailed">详细的依赖关系和配置</a>。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+在Spring文档中，“factory bean”是指在Spring容器中配置并通过
+<a href="#beans-factory-class-instance-factory-method">实例</a> or
+<a href="#beans-factory-class-static-factory-method">静态</a>工厂方法创建的bean。
+相比之下，FactoryBean（注意大小写）是指特定于Spring的<a href="#beans-factory-extension-factorybean"><code>FactoryBean</code></a>。
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="beans-dependencies">4. 依赖</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>典型的企业应用程序不由单个对象（或Spring术语中的bean）组成。即使是最简单的应用程序，也有一些对象可以协同工作，
+以呈现最终用户视为一致的应用程序。下一部分将说明如何从定义许多独立的bean定义过渡到一个完全实现的应用程序，其中对象通过协作实现目标。</p>
+</div>
+<div class="sect2">
+<h3 id="beans-factory-collaborators">4.1. 依赖注入</h3>
+<div class="paragraph">
+<p>依赖注入（DI）是一个过程，通过该过程，对象仅通过构造函数参数，工厂方法的参数或在构造或创建对象实例后在对象实例
+上设置的属性来定义其依赖关系（即与它们一起工作的其他对象）。然后容器在创建bean时注入那些依赖项。
+此过程从根本上讲是通过使用类的直接构造或诸如服务定位器模式之类的方法来控制其依赖项的实例化或位置，
+基本上是bean本身的逆过程（因此称为控制反转）。</p>
+</div>
+<div class="paragraph">
+<p>使用DI原理，代码更加简洁，当为对象提供依赖项时，去耦会更有效。该对象不查找其依赖项，并且不知道依赖项的位置或类。
+结果，你的类变得更易于测试，尤其是当依赖项依赖于接口或抽象基类时，它们允许在单元测试中使用存根或模拟实现。</p>
+</div>
+<div class="paragraph">
+<p>DI存在两个主要变体：<a href="#beans-constructor-injection">基于构造函数的依赖注入</a>和<a href="#beans-setter-injection">基于Setter的依赖注入</a>。</p>
+</div>
+<div class="sect3">
+<h4 id="beans-constructor-injection">4.1.1. 基于构造函数的依赖注入</h4>
+<div class="paragraph">
+<p>基于构造函数的DI是容器通过调用具有多个参数的构造函数来完成的，每个参数表示一个依赖项。调用带有特定参数的
+静态工厂方法来构造Bean几乎是等效的，这里将构造函数和静态工厂方法的参数视为类似。
+以下示例显示了只能通过构造函数注入进行依赖项注入的类：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class SimpleMovieLister {
+
+    // the SimpleMovieLister has a dependency on a MovieFinder
+    private MovieFinder movieFinder;
+
+    // a constructor so that the Spring container can inject a MovieFinder
+    public SimpleMovieLister(MovieFinder movieFinder) {
+        this.movieFinder = movieFinder;
+    }
+
+    // business logic that actually uses the injected MovieFinder is omitted...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>注意，该类没有什么特别的。它是一个POJO，不依赖于特定于容器的接口，基类或注解。</p>
+</div>
+<div class="sect4">
+<h5 id="beans-factory-ctor-arguments-resolution">构造函数参数解析</h5>
+<div class="paragraph">
+<p>构造函数参数解析匹配通过使用参数的类型进行。如果Bean定义的构造函数参数中不存在潜在的歧义，则在实例化Bean时，
+在Bean定义中定义构造函数参数的顺序就是将这些参数提供给适当的构造函数的顺序。考虑以下类：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">package x.y;
+
+public class ThingOne {
+
+    public ThingOne(ThingTwo thingTwo, ThingThree thingThree) {
+        // ...
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>假设 <code>ThingTwo</code> 和 <code>ThingThree</code> 类没有通过继承关联，则不存在潜在的歧义。
+因此，以下配置可以正常工作，并且你无需在 <code>&lt;constructor-arg/&gt;</code> 元素中显式指定构造函数参数索引或类型。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;beans&gt;
+    &lt;bean id="beanOne" class="x.y.ThingOne"&gt;
+        &lt;constructor-arg ref="beanTwo"/&gt;
+        &lt;constructor-arg ref="beanThree"/&gt;
+    &lt;/bean&gt;
+
+    &lt;bean id="beanTwo" class="x.y.ThingTwo"/&gt;
+
+    &lt;bean id="beanThree" class="x.y.ThingThree"/&gt;
+&lt;/beans&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>当引用另一个bean时，类型是已知的，并且可以发生匹配（与前面的示例一样）。
+当使用简单类型（例如 <code>&lt;value&gt;true&lt;/value&gt;</code> ）时，Spring无法确定值的类型，因此在没有帮助的情况下无法按类型进行匹配。考虑以下类：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">package examples;
+
+public class ExampleBean {
+
+    // Number of years to calculate the Ultimate Answer
+    private int years;
+
+    // The Answer to Life, the Universe, and Everything
+    private String ultimateAnswer;
+
+    public ExampleBean(int years, String ultimateAnswer) {
+        this.years = years;
+        this.ultimateAnswer = ultimateAnswer;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="openblock">
+<div class="title"><a id="beans-factory-ctor-arguments-type"></a>构造函数参数类型匹配</div><div class="content">
+<div class="paragraph">
+<p>在上述情况下，如果你通过使用 <code>type</code> 属性显式指定构造函数参数的类型，则容器可以使用简单类型的类型匹配。如下例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="exampleBean" class="examples.ExampleBean"&gt;
+    &lt;constructor-arg type="int" value="7500000"/&gt;
+    &lt;constructor-arg type="java.lang.String" value="42"/&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="openblock">
+<div class="title"><a id="beans-factory-ctor-arguments-index"></a>构造函数参数索引</div><div class="content">
+<div class="paragraph">
+<p>你可以使用 <code>index</code> 属性来显式指定构造函数参数的索引，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="exampleBean" class="examples.ExampleBean"&gt;
+    &lt;constructor-arg index="0" value="7500000"/&gt;
+    &lt;constructor-arg index="1" value="42"/&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>除了解决多个简单值的歧义性之外，指定索引还可以解决歧义，比如构造函数具有两个相同类型的参数。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+索引从0开始。
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="openblock">
+<div class="title"><a id="beans-factory-ctor-arguments-name"></a>构造函数参数名称</div><div class="content">
+<div class="paragraph">
+<p>你还可以使用构造函数参数名称来消除歧义，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="exampleBean" class="examples.ExampleBean"&gt;
+    &lt;constructor-arg name="years" value="7500000"/&gt;
+    &lt;constructor-arg name="ultimateAnswer" value="42"/&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>请记住，要使用该功能，必须在启用调试标志的情况下编译代码，以便Spring可以从构造函数中查找参数名称。
+如果你不能或不想使用debug标志编译代码，则可以使用
+{javaDocJavaSE6}/java/beans/ConstructorProperties.html[<code>@ConstructorProperties</code>]JDK注解显式命名构造函数参数。
+然后，样本类必须如下所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">package examples;
+
+public class ExampleBean {
+
+    // Fields omitted
+
+    @ConstructorProperties({"years", "ultimateAnswer"})
+    public ExampleBean(int years, String ultimateAnswer) {
+        this.years = years;
+        this.ultimateAnswer = ultimateAnswer;
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-setter-injection">4.1.2. 基于Setter的依赖注入</h4>
+<div class="paragraph">
+<p>通过调用无参数构造函数或无参数 <code>static</code> 工厂方法来实例化你的bean之后，容器通过在bean上调用setter方法来完成基于setter的DI。</p>
+</div>
+<div class="paragraph">
+<p>下面的示例显示只能通过使用纯setter注入来依赖注入的类。此类是常规的Java。它是一个POJO，不依赖于特定于容器的接口，基类或注解。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class SimpleMovieLister {
+
+    // the SimpleMovieLister has a dependency on the MovieFinder
+    private MovieFinder movieFinder;
+
+    // a setter method so that the Spring container can inject a MovieFinder
+    public void setMovieFinder(MovieFinder movieFinder) {
+        this.movieFinder = movieFinder;
+    }
+
+    // business logic that actually uses the injected MovieFinder is omitted...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>ApplicationContext</code> 支持其管理的bean的基于构造函数和基于setter的DI。在通过构造函数方法注入了某些依赖项之后，
+它还支持基于setter的DI。你可以以 <code>BeanDefinition</code> 的形式配置依赖项，将其与 <code>PropertyEditor</code> 实例结合使用以
+将属性从一种格式转换为另一种格式。但是，大多数Spring用户并不直接（即以编程方式）使用这些类，而是使用XML bean定义，
+带注解的组件（即以 <code>@Component</code>，<code>@Controller</code> 等进行注释的类）或基于Java的 <code>@Configuration</code> 类中的 <code>@Bean</code> 方法。
+然后，这些源在内部转换为 <code>BeanDefinition</code> 实例，并用于加载整个Spring IoC容器实例。</p>
+</div>
+<div id="beans-constructor-vs-setter-injection" class="sidebarblock">
+<div class="content">
+<div class="title">基于构造函数还是基于setter的DI?</div>
+<div class="paragraph">
+<p>由于你可以混合使用基于构造函数的DI和基于setter方法的DI，因此将构造函数用于强制性依赖项并将setter方法或
+配置方法用于可选依赖性是一个很好的经验法则。请注意，可以在setter方法上使用<a href="#beans-required-annotation">@Required</a>注解，
+以使该属性成为必需的依赖项。但是，最好还是使用带有参数的程序验证的构造函数注入。</p>
+</div>
+<div class="paragraph">
+<p>Spring团队通常提倡构造函数注入，因为它可以让你将应用程序组件实现为不可变对象，并确保所需的依赖项不为 <code>null</code>。此外，
+构造函数注入的组件始终以完全初始化的状态返回到客户端（调用）代码。附带说明一下，大量的构造函数参数是一种不好的代码味道，
+这表明该类可能承担了太多的职责，应该对其进行重构以更好地解决关注点分离问题。</p>
+</div>
+<div class="paragraph">
+<p>Setter注入主要应仅用于可以在类中分配合理的默认值的可选依赖项。否则，必须在代码使用依赖项的任何地方执行非空检查。
+setter注入的一个好处是，setter方法使该类的对象在以后可以重新配置或重新注入。因此，通过
+{docSpringIntegration}#jmx[JMXMBean]进行管理是用于setter注入的一大用例。</p>
+</div>
+<div class="paragraph">
+<p>使用对特定类最合适的DI风格。有时，在处理你没有源代码的第三方类时，将为你自动做出选择。
+例如，如果第三方类未公开任何setter方法，则构造函数注入可能是DI的唯一可用形式。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-dependency-resolution">4.1.3. 依赖解析过程</h4>
+<div class="paragraph">
+<p>容器执行bean依赖项解析过程，如下所示：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>将使用描述所有Bean的配置元数据来创建和初始化 <code>ApplicationContext</code>。可以通过XML，Java代码或注解指定配置元数据。</p>
+</li>
+<li>
+<p>对于每个bean，其依赖关系都以属性，构造函数参数或静态工厂方法的参数的形式表示。实际创建Bean时，会将这些依赖项提供给Bean。</p>
+</li>
+<li>
+<p>每个属性或构造函数参数都是要设置的值的实际定义，或者是对容器中另一个bean的引用。</p>
+</li>
+<li>
+<p>每个属性或构造函数参数都将从其指定的格式转换为该属性或构造函数参数的实际类型。
+默认情况下，Spring可以将以字符串格式提供的值转换为所有内置类型，例如 <code>int</code>，<code>long</code>，<code>String</code>，<code>boolean</code> 等。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>在创建容器时，Spring容器会验证每个bean的配置。但是，在实际创建Bean之前，不会设置Bean属性本身。
+创建容器时，将创建具有单例作用域并设置为预先实例化（默认）的Bean。作用域在<a href="#beans-factory-scopes">Bean作用域</a>中定义。
+否则，仅在请求时才创建Bean。创建和分配Bean的依赖项及其依赖项的依赖项（依此类推）时，
+创建Bean可能会导致创建一个Bean图。请注意，这些依赖项之间的解析不匹配可能会在后期出现-即在首次创建受影响的bean时。</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">循环依赖</div>
+<div class="paragraph">
+<p>如果主要使用构造函数注入，则可能会创建无法解决的循环依赖场景。</p>
+</div>
+<div class="paragraph">
+<p>例如：A类通过构造函数注入需要B类的实例，而B类通过构造函数注入需要A类的实例。
+如果你为将类A和B相互注入而配置了bean，则Spring IoC容器会在运行时检测到此循环引用，并抛出
+<code>BeanCurrentlyInCreationException</code>.</p>
+</div>
+<div class="paragraph">
+<p>一种可能的解决方案是编辑某些类的源代码，这些类的源代码由setter而不是构造函数来配置。或者，避免构造函数注入，
+而仅使用setter注入。换句话说，尽管不建议这样做，但是你可以使用setter注入配置循环依赖项。</p>
+</div>
+<div class="paragraph">
+<p>与典型情况（没有循环依赖关系）不同，Bean A和Bean B之间的循环依赖关系迫使其中一个Bean在完全初始化之前就被注入
+到另一个Bean（经典的“鸡与蛋”场景）。</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>通常，你可以信任Spring会做正确的事。它在容器加载时检测配置问题，例如对不存在的Bean的引用和循环依赖项。
+在实际创建bean时，Spring设置属性并尽可能晚地解决依赖关系。这意味着如果创建该对象或其依赖项之一时出现问题，
+则正确加载了Spring的容器以后可以在你请求对象时生成异常-例如，由于缺少或无效Bean属性引发异常。
+这可能会延迟某些配置问题的可见性，这就是为什么默认情况下 <code>ApplicationContext</code> 实现会预先实例化单例bean的原因。
+在实际需要使用这些bean之前要花一些前期时间和内存，这样你会在创建 <code>ApplicationContext</code> 时立即发现配置问题。
+当然你可以覆盖此默认行为，以便单例bean延迟初始化，而不是预先实例化。</p>
+</div>
+<div class="paragraph">
+<p>如果不存在循环依赖关系，则在将一个或多个协作bean注入到依赖bean中时，每个协作bean都将在注入到依赖bean之前被完全配置。
+这意味着，如果bean A依赖于bean B，则Spring IoC容器会在对bean A调用setter方法之前完全配置beanB。也就是说，
+bean B已被实例化（如果不是预先实例化的singleton），设置其依赖项，
+并调用相关的生命周期方法（例如<a href="#beans-factory-lifecycle-initializingbean">已配置的 <code>init</code> 方法</a>或
+<a href="#beans-factory-lifecycle-initializingbean"><code>InitializingBean</code> 回调方法</a>）。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-some-examples">4.1.4. 依赖注入样例</h4>
+<div class="paragraph">
+<p>以下示例将基于XML的配置元数据用于基于setter的DI。Spring XML配置文件的一小部分指定了一些bean定义，如下所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="exampleBean" class="examples.ExampleBean"&gt;
+    &lt;!-- setter injection using the nested ref element --&gt;
+    &lt;property name="beanOne"&gt;
+        &lt;ref bean="anotherExampleBean"/&gt;
+    &lt;/property&gt;
+
+    &lt;!-- setter injection using the neater ref attribute --&gt;
+    &lt;property name="beanTwo" ref="yetAnotherBean"/&gt;
+    &lt;property name="integerProperty" value="1"/&gt;
+&lt;/bean&gt;
+
+&lt;bean id="anotherExampleBean" class="examples.AnotherBean"/&gt;
+&lt;bean id="yetAnotherBean" class="examples.YetAnotherBean"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下示例显示了相应的 <code>ExampleBean</code> 类：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class ExampleBean {
+
+    private AnotherBean beanOne;
+
+    private YetAnotherBean beanTwo;
+
+    private int i;
+
+    public void setBeanOne(AnotherBean beanOne) {
+        this.beanOne = beanOne;
+    }
+
+    public void setBeanTwo(YetAnotherBean beanTwo) {
+        this.beanTwo = beanTwo;
+    }
+
+    public void setIntegerProperty(int i) {
+        this.i = i;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>在前面的示例中，声明了setter以与XML文件中指定的属性匹配。以下示例使用基于构造函数的DI：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="exampleBean" class="examples.ExampleBean"&gt;
+    &lt;!-- constructor injection using the nested ref element --&gt;
+    &lt;constructor-arg&gt;
+        &lt;ref bean="anotherExampleBean"/&gt;
+    &lt;/constructor-arg&gt;
+
+    &lt;!-- constructor injection using the neater ref attribute --&gt;
+    &lt;constructor-arg ref="yetAnotherBean"/&gt;
+
+    &lt;constructor-arg type="int" value="1"/&gt;
+&lt;/bean&gt;
+
+&lt;bean id="anotherExampleBean" class="examples.AnotherBean"/&gt;
+&lt;bean id="yetAnotherBean" class="examples.YetAnotherBean"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下示例显示了相应的 <code>ExampleBean</code> 类：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class ExampleBean {
+
+    private AnotherBean beanOne;
+
+    private YetAnotherBean beanTwo;
+
+    private int i;
+
+    public ExampleBean(
+        AnotherBean anotherBean, YetAnotherBean yetAnotherBean, int i) {
+        this.beanOne = anotherBean;
+        this.beanTwo = yetAnotherBean;
+        this.i = i;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>bean定义中指定的构造函数参数用作 <code>ExampleBean</code> 构造函数的参数。</p>
+</div>
+<div class="paragraph">
+<p>现在考虑该示例的一个变体，在该变体中，不是使用构造函数，而是指示Spring调用静态工厂方法以返回对象的实例：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="exampleBean" class="examples.ExampleBean" factory-method="createInstance"&gt;
+    &lt;constructor-arg ref="anotherExampleBean"/&gt;
+    &lt;constructor-arg ref="yetAnotherBean"/&gt;
+    &lt;constructor-arg value="1"/&gt;
+&lt;/bean&gt;
+
+&lt;bean id="anotherExampleBean" class="examples.AnotherBean"/&gt;
+&lt;bean id="yetAnotherBean" class="examples.YetAnotherBean"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下示例显示了相应的 <code>ExampleBean</code> 类：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class ExampleBean {
+
+    // a private constructor
+    private ExampleBean(...) {
+        ...
+    }
+
+    // a static factory method; the arguments to this method can be
+    // considered the dependencies of the bean that is returned,
+    // regardless of how those arguments are actually used.
+    public static ExampleBean createInstance (
+        AnotherBean anotherBean, YetAnotherBean yetAnotherBean, int i) {
+
+        ExampleBean eb = new ExampleBean (...);
+        // some other operations...
+        return eb;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>静态工厂方法的参数由 <code>&lt;constructor-arg/&gt;</code> 元素提供，与实际使用构造函数时完全相同。
+工厂方法返回的类的类型不必与包含 <code>static</code> 工厂方法的类的类型相同（尽管在此示例中相同）。
+实例（非静态）工厂方法可以以基本上相同的方式使用（除了使用 <code>factory-bean</code> 属性代替 <code>class</code> 属性之外），因此不做赘述。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="beans-factory-properties-detailed">4.2. 依赖关系和配置详情</h3>
+<div class="paragraph">
+<p>如<a href="#beans-factory-collaborators">上一节</a>所述，你可以将bean属性和构造函数参数定义为对其他托管bean（协作者）
+的引用或内联定义的值。为此目的Spring的基于XML的配置元数据在其元素内支持 <code>&lt;property/&gt;</code> 和 <code>&lt;constructor-arg/&gt;</code> 子元素类型。</p>
+</div>
+<div class="sect3">
+<h4 id="beans-value-element">4.2.1. 直接值（原型，字符串等）</h4>
+<div class="paragraph">
+<p>The <code>value</code> attribute of the <code>&lt;property/&gt;</code> element specifies a property or constructor
+argument as a human-readable string representation. Spring&#8217;s
+<a href="#core-convert-ConversionService-API">conversion service</a> is used to convert these
+values from a <code>String</code> to the actual type of the property or argument.
+The following example shows various values being set:</p>
+</div>
+<div class="paragraph">
+<p><code>&lt;property/&gt;</code> 元素的 <code>value</code> 属性将属性或构造函数参数指定为人类可读的字符串表示形式。
+Spring的<a href="#core-convert-ConversionService-API">转换服务</a>用于将这些值从字符串转换为属性或参数的实际类型。
+以下示例显示了可设置的各种值：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="myDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"&gt;
+    &lt;!-- results in a setDriverClassName(String) call --&gt;
+    &lt;property name="driverClassName" value="com.mysql.jdbc.Driver"/&gt;
+    &lt;property name="url" value="jdbc:mysql://localhost:3306/mydb"/&gt;
+    &lt;property name="username" value="root"/&gt;
+    &lt;property name="password" value="masterkaoli"/&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>下面的示例使用<a href="#beans-p-namespace">p-namespace</a>进行更简洁的XML配置：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd"&gt;
+
+    &lt;bean id="myDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+        destroy-method="close"
+        p:driverClassName="com.mysql.jdbc.Driver"
+        p:url="jdbc:mysql://localhost:3306/mydb"
+        p:username="root"
+        p:password="masterkaoli"/&gt;
+
+&lt;/beans&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>前面的XML更简洁。但是，除非在创建bean定义时使用支持属性自动完成的IDE（例如{toolIDEA}[IntelliJ IDEA]或{toolSTS}[Spring Tool Suite]），
+否则在运行时（而不是编码时）才会发现错别字。强烈建议你使用此类IDE帮助。</p>
+</div>
+<div class="paragraph">
+<p>你还可以配置 <code>java.util.Properties</code> 实例，如下所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="mappings"
+    class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"&gt;
+
+    &lt;!-- typed as a java.util.Properties --&gt;
+    &lt;property name="properties"&gt;
+        &lt;value&gt;
+            jdbc.driver.className=com.mysql.jdbc.Driver
+            jdbc.url=jdbc:mysql://localhost:3306/mydb
+        &lt;/value&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Spring容器通过使用JavaBeans <code>PropertyEditor</code> 机制将 <code>&lt;value/&gt;</code> 元素内的文本转换为 <code>java.util.Properties</code> 实例。
+这是一个不错的捷径，并且是Spring团队更喜欢使用嵌套的 <code>&lt;value/&gt;</code> 元素而不是 <code>value</code> 属性样式的几个地方之一。</p>
+</div>
+<div class="sect4">
+<h5 id="beans-idref-element"><code>idref</code> 元素</h5>
+<div class="paragraph">
+<p><code>idref</code> 元素只是一种防错方法，可以将容器中另一个bean的id（字符串值-不是引用）传递给 <code>&lt;constructor-arg/&gt;</code> 或
+<code>&lt;property/&gt;</code> 元素。以下示例显示了如何使用它：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="theTargetBean" class="..."/&gt;
+
+&lt;bean id="theClientBean" class="..."&gt;
+    &lt;property name="targetName"&gt;
+        &lt;idref bean="theTargetBean"/&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>前面的bean定义片段（在运行时）与下面的片段完全等效：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="theTargetBean" class="..." /&gt;
+
+&lt;bean id="client" class="..."&gt;
+    &lt;property name="targetName" value="theTargetBean"/&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>第一种形式优于第二种形式，因为使用 <code>idref</code> 元素可使容器在部署时验证所引用的命名bean是否实际存在。
+在第二个变体中，不对传递给 <code>client</code> bean的 <code>targetName</code> 属性的值执行验证。拼写错误仅在实际实例化 <code>client</code> bean时发现
+（最有可能导致致命的结果）。如果 <code>client</code> Bean是原型Bean，则可能在部署容器很长时间后才发现此拼写错误和所产生的异常。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+在4.0 Bean XSD中不再支持 <code>idref</code> 元素上的 <code>local</code> 属性，因为它不再提供常规 <code>bean</code> 引用之上的值。
+升级到4.0模式时，将现有的 <code>idref local</code> 引用更改为 <code>idref bean</code>。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><code>&lt;idref/&gt;</code> 元素带来价值的一个常见地方（至少在Spring 2.0之前的版本中）是在 <code>ProxyFactoryBean</code> bean定义中的
+<a href="#aop-pfb-1">AOP拦截器</a>的配置中。指定拦截器名称时使用 <code>&lt;idref/&gt;</code> 元素可防止你拼写错误的拦截器ID。</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-ref-element">4.2.2. 对其他Bean（协作者）的引用</h4>
+<div class="paragraph">
+<p><code>ref</code> 元素是 <code>&lt;constructor-arg/&gt;</code> 或 <code>&lt;property/&gt;</code> 定义元素内的最后一个元素。在这里，你将bean的指定属性的值设置为对容器管理的另一个bean
+（协作者）的引用。引用的bean是要设置其属性的bean的依赖关系，并且在设置属性之前根据需要对其进行初始化。
+（如果协作者是单例bean，则它可能已经由容器初始化了。）所有引用最终都是对另一个对象的引用。作用域和验证取决于你是通过 <code>bean</code>，
+<code>local</code> 还是 <code>parent</code> 属性指定其他对象的ID或名称。</p>
+</div>
+<div class="paragraph">
+<p>通过 <code>&lt;ref/&gt;</code> 元素的 <code>bean</code> 属性指定目标bean是最通用的形式，并且允许创建对同一容器或父容器中任何bean的引用，而不管它是否在同一XML文件中。
+<code>bean</code> 属性的值可以与目标bean的 <code>id</code> 属性相同，也可以与目标bean的 <code>name</code> 属性中的值之一相同。下面的示例演示如何使用 <code>ref</code> 元素：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;ref bean="someBean"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>通过 <code>parent</code> 属性指定目标bean将创建对当前容器的父容器中bean的引用。<code>parent</code> 属性的值可以与目标Bean的
+<code>id</code> 属性或目标Bean的 <code>name</code> 属性中的值之一相同。目标Bean必须位于当前容器的父容器中。
+主要在具有容器层次结构并且子容器要使用与父bean名称相同的代理而将现有bean封装在父容器中时，才应使用此bean引用变体。
+以下清单显示了如何使用 <code>parent</code> 属性：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;!-- in the parent context --&gt;
+&lt;bean id="accountService" class="com.something.SimpleAccountService"&gt;
+    &lt;!-- insert dependencies as required as here --&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;!-- in the child (descendant) context --&gt;
+&lt;bean id="accountService" &lt;!-- bean name is the same as the parent bean --&gt;
+    class="org.springframework.aop.framework.ProxyFactoryBean"&gt;
+    &lt;property name="target"&gt;
+        &lt;ref parent="accountService"/&gt; &lt;!-- notice how we refer to the parent bean --&gt;
+    &lt;/property&gt;
+    &lt;!-- insert other configuration and dependencies as required here --&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>ref</code> 元素的 <code>local</code> 属性在4.0 Bean XSD中不再受支持，因为它不再提供常规 <code>bean</code> 引用之上的值。
+升级到4.0模式时，将现有的 <code>ref local</code> 引用更改为 <code>ref bean</code>。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-inner-beans">4.2.3. 内部Bean</h4>
+<div class="paragraph">
+<p><code>&lt;property/&gt;</code> 或 <code>&lt;constructor-arg/&gt;</code> 元素内的 <code>&lt;bean/&gt;</code> 元素定义了一个内部bean，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="outer" class="..."&gt;
+    &lt;!-- instead of using a reference to a target bean, simply define the target bean inline --&gt;
+    &lt;property name="target"&gt;
+        &lt;bean class="com.example.Person"&gt; &lt;!-- this is the inner bean --&gt;
+            &lt;property name="name" value="Fiona Apple"/&gt;
+            &lt;property name="age" value="25"/&gt;
+        &lt;/bean&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>内部bean定义不需要定义ID或名称。如果指定，则容器不使用该值作为标识符。容器在创建时也会忽略 <code>scope</code> 标志，
+因为内部Bean始终是匿名的，并且始终与外部Bean一起创建。不可能独立访问内部bean或将它们注入到协作bean中而不是封装在bean中。</p>
+</div>
+<div class="paragraph">
+<p>作为一个特例，可以从自定义作用域中接收销毁回调，例如对于单例bean中包含的request作用域的内部bean。
+内部bean实例的创建与其包含的bean绑定在一起，但是销毁回调使它可以参与request作用域的生命周期。
+这不是常见的情况。内部bean通常只共享其包含bean的作用域。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-collection-elements">4.2.4. 集合</h4>
+<div class="paragraph">
+<p><code>&lt;list/&gt;</code>, <code>&lt;set/&gt;</code>, <code>&lt;map/&gt;</code> 和 <code>&lt;props/&gt;</code> 元素分别设置 <code>List</code>, <code>Set</code>, <code>Map</code> 和 <code>Properties</code>
+Java <code>Collection</code> 类型的属性和参数, 以下示例显示了如何使用它们：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="moreComplexObject" class="example.ComplexObject"&gt;
+    &lt;!-- results in a setAdminEmails(java.util.Properties) call --&gt;
+    &lt;property name="adminEmails"&gt;
+        &lt;props&gt;
+            &lt;prop key="administrator"&gt;administrator@example.org&lt;/prop&gt;
+            &lt;prop key="support"&gt;support@example.org&lt;/prop&gt;
+            &lt;prop key="development"&gt;development@example.org&lt;/prop&gt;
+        &lt;/props&gt;
+    &lt;/property&gt;
+    &lt;!-- results in a setSomeList(java.util.List) call --&gt;
+    &lt;property name="someList"&gt;
+        &lt;list&gt;
+            &lt;value&gt;a list element followed by a reference&lt;/value&gt;
+            &lt;ref bean="myDataSource" /&gt;
+        &lt;/list&gt;
+    &lt;/property&gt;
+    &lt;!-- results in a setSomeMap(java.util.Map) call --&gt;
+    &lt;property name="someMap"&gt;
+        &lt;map&gt;
+            &lt;entry key="an entry" value="just some string"/&gt;
+            &lt;entry key ="a ref" value-ref="myDataSource"/&gt;
+        &lt;/map&gt;
+    &lt;/property&gt;
+    &lt;!-- results in a setSomeSet(java.util.Set) call --&gt;
+    &lt;property name="someSet"&gt;
+        &lt;set&gt;
+            &lt;value&gt;just some string&lt;/value&gt;
+            &lt;ref bean="myDataSource" /&gt;
+        &lt;/set&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>map键或值的值或set的值也可以是以下任意一种元素：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">bean | ref | idref | list | set | map | props | value | null</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="beans-collection-elements-merging">集合合并</h5>
+<div class="paragraph">
+<p>Spring容器还支持合并集合。应用程序开发人员可以定义父 <code>&lt;list/&gt;</code>，<code>&lt;map/&gt;</code>，<code>&lt;set/&gt;</code> 或 <code>&lt;props/&gt;</code> 元素，
+并具有子 <code>&lt;list/&gt;</code>，<code>&lt;map/&gt;</code>，<code>&lt;set/&gt;</code> 或 <code>&lt;props/&gt;</code> 元素。从父集合继承和覆盖值。
+也就是说，子集合的值是合并父集合和子集合的元素的结果，子集合的元素会覆盖父集合中指定的同名键值。</p>
+</div>
+<div class="paragraph">
+<p>本节讨论了父子bean机制。不熟悉父bean和子bean定义的读者可能希望先阅读<a href="#beans-child-bean-definitions">相关部分</a>，然后再继续。</p>
+</div>
+<div class="paragraph">
+<p>下面的示例演示了集合合并：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;beans&gt;
+    &lt;bean id="parent" abstract="true" class="example.ComplexObject"&gt;
+        &lt;property name="adminEmails"&gt;
+            &lt;props&gt;
+                &lt;prop key="administrator"&gt;administrator@example.com&lt;/prop&gt;
+                &lt;prop key="support"&gt;support@example.com&lt;/prop&gt;
+            &lt;/props&gt;
+        &lt;/property&gt;
+    &lt;/bean&gt;
+    &lt;bean id="child" parent="parent"&gt;
+        &lt;property name="adminEmails"&gt;
+            &lt;!-- the merge is specified on the child collection definition --&gt;
+            &lt;props merge="true"&gt;
+                &lt;prop key="sales"&gt;sales@example.com&lt;/prop&gt;
+                &lt;prop key="support"&gt;support@example.co.uk&lt;/prop&gt;
+            &lt;/props&gt;
+        &lt;/property&gt;
+    &lt;/bean&gt;
+&lt;beans&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>注意子bean定义的 <code>adminEmails</code> 属性的 <code>&lt;props/&gt;</code> 元素上使用 <code>merge=true</code> 属性。当 <code>child</code> bean由容器解析并实例化后，
+生成的实例具有 <code>adminEmails</code> <code>Properties</code> 集合，其中包含将 <code>child</code> 的 <code>adminEmails</code> 集合与父对象的
+<code>adminEmails</code> 集合合并的结果。以下清单显示了结果：</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>administrator=administrator@example.com
+sales=sales@example.com
+support=support@example.co.uk</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>子 <code>Properties</code> 集合的值集继承了父 <code>&lt;props/&gt;</code> 的所有属性元素，子属性的 <code>support</code> 值将覆盖父集合中的值。</p>
+</div>
+<div class="paragraph">
+<p>此合并行为类似地适用于 <code>&lt;list/&gt;</code>，<code>&lt;map/&gt;</code> 和 <code>&lt;set/&gt;</code> 集合类型。在 <code>&lt;list/&gt;</code> 元素的特定情况下，将维护与 <code>List</code> 集合类型关联的语义
+（即值的有序集合的概念）。父级的值优先于子级列表的所有值。对于 <code>Map</code> 和 <code>Set</code>，<code>Properties</code> 集合类型，不存在任何排序。
+因此，对于容器内部使用的关联 <code>Map</code> 和 <code>Set</code>，<code>Properties</code> 实现类型基础的集合类型，不会有任何排序语义。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="beans-collection-merge-limitations">集合合并的局限性</h5>
+<div class="paragraph">
+<p>你不能合并不同的集合类型（例如 <code>Map</code> 和 <code>List</code>）。如果你尝试这样做，则会引发适当的 <code>Exception</code>。
+必须在继承的子定义中指定 <code>merge</code> 属性。在父集合定义上指定 <code>merge</code> 属性是多余的，不会导致所需的合并。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="beans-collection-elements-strongly-typed">强类型集合</h5>
+<div class="paragraph">
+<p>随着Java 5中泛型类型的引入，你可以使用强类型集合。也就是说，可以声明一个 <code>Collection</code> 类型，使其只能包含（例如）<code>String</code> 元素。
+如果你使用Spring将强类型的 <code>Collection</code> 依赖注入到Bean中，则可以利用Spring的类型转换支持，
+以便在将强类型的 <code>Collection</code> 实例的元素转换为适当的类型，然后再添加到其中。以下Java类和bean定义显示了如何执行此操作：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class SomeClass {
+
+    private Map&lt;String, Float&gt; accounts;
+
+    public void setAccounts(Map&lt;String, Float&gt; accounts) {
+        this.accounts = accounts;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;beans&gt;
+    &lt;bean id="something" class="x.y.SomeClass"&gt;
+        &lt;property name="accounts"&gt;
+            &lt;map&gt;
+                &lt;entry key="one" value="9.99"/&gt;
+                &lt;entry key="two" value="2.75"/&gt;
+                &lt;entry key="six" value="3.99"/&gt;
+            &lt;/map&gt;
+        &lt;/property&gt;
+    &lt;/bean&gt;
+&lt;/beans&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>当准备注入 <code>something</code> bean的 <code>accounts</code> 属性时，可以通过反射获得有关强类型 <code>Map&lt;String, Float&gt;</code> 的元素类型的泛型信息。
+因此，Spring的类型转换基础结构将各种值元素识别为 <code>Float</code> 类型，并将字符串值（<code>9.99</code>、<code>2.75</code> 和 <code>3.99</code>）转换为实际的 <code>Float</code> 类型。</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-null-element">4.2.5. Null和空字符串值</h4>
+<div class="paragraph">
+<p>Spring将属性等的空参数视为空 <code>Strings</code>。以下基于XML的配置元数据片段将 <code>email</code> 属性设置为空的 <code>String</code> 值（“”）。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean class="ExampleBean"&gt;
+    &lt;property name="email" value=""/&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>前面的示例等效于以下Java代码：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">exampleBean.setEmail("");</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>&lt;null/&gt;</code> 元素用以处理 <code>null</code> 值。以下显示了一个示例：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean class="ExampleBean"&gt;
+    &lt;property name="email"&gt;
+        &lt;null/&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>前面的示例等效于以下Java代码：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">exampleBean.setEmail(null);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-p-namespace">4.2.6. 带p命名空间的XML快捷方式</h4>
+<div class="paragraph">
+<p>p-namespace允许你使用 <code>bean</code> 元素的属性（而不是嵌套的 <code>&lt;property/&gt;</code> 元素）来描述协作bean的属性值，或同时使用这两者。</p>
+</div>
+<div class="paragraph">
+<p>Spring支持基于XML Schema定义的可扩展配置格式<a href="core.html#xsd-schemas">带名称空间</a>。
+本章讨论的 <code>beans</code> 配置格式是在XML Schema文档中定义的。但是，p命名空间未在XSD文件中定义，仅存在于Spring Core中。</p>
+</div>
+<div class="paragraph">
+<p>以下示例显示了两个XML代码段（第一个使用标准XML格式，第二个使用p-命名空间），它们可以解析为相同的结果：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd"&gt;
+
+    &lt;bean name="classic" class="com.example.ExampleBean"&gt;
+        &lt;property name="email" value="someone@somewhere.com"/&gt;
+    &lt;/bean&gt;
+
+    &lt;bean name="p-namespace" class="com.example.ExampleBean"
+        p:email="someone@somewhere.com"/&gt;
+&lt;/beans&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>该示例显示了在p命名空间中，bean定义中的名为 <code>email</code> 的属性。这告诉Spring包含一个属性声明。
+如前所述，p名称空间没有schema定义，因此可以将attribute名称设置为p属性名称。</p>
+</div>
+<div class="paragraph">
+<p>下一个示例包括另外两个bean定义，它们都引用了另一个bean：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd"&gt;
+
+    &lt;bean name="john-classic" class="com.example.Person"&gt;
+        &lt;property name="name" value="John Doe"/&gt;
+        &lt;property name="spouse" ref="jane"/&gt;
+    &lt;/bean&gt;
+
+    &lt;bean name="john-modern"
+        class="com.example.Person"
+        p:name="John Doe"
+        p:spouse-ref="jane"/&gt;
+
+    &lt;bean name="jane" class="com.example.Person"&gt;
+        &lt;property name="name" value="Jane Doe"/&gt;
+    &lt;/bean&gt;
+&lt;/beans&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>此示例不仅包括使用p-namespace的属性值，而且还使用特殊格式来声明属性引用。第一个bean定义使用
+<code>&lt;property name="spouse" ref="jane"/&gt;</code> 创建从bean <code>john</code> 到bean <code>jane</code> 的引用，
+而第二个bean定义使用 <code>p:spouse-ref="jane"</code> 作为属性来执行完全一样的东西。在这种情况下，<code>spouse</code> 是属性名称，
+而 <code>-ref</code> 部分表示这不是一个直接值，而是对另一个bean的引用。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+p命名空间不如标准XML格式灵活。例如，声明属性引用的格式会与以 <code>Ref</code> 结尾的属性发生冲突，而标准XML格式则没有。
+我们建议你谨慎选择，并将其传达给团队成员，以避免同时使用这三种方法生成XML文档。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-c-namespace">4.2.7. 带c命名空间的XML快捷方式</h4>
+<div class="paragraph">
+<p>与<a href="#beans-p-namespace">带p命名空间的XML快捷方式</a>类似，在Spring 3.1中引入的c-namespace允许使用内联属性来配置构造函数参数，而不是嵌套的 <code>constructor-arg</code> 元素。</p>
+</div>
+<div class="paragraph">
+<p>下面的示例使用 <code>c:</code> 命名空间执行与<a href="#beans-constructor-injection">基于构造函数的依赖注入</a>相同的操作：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd"&gt;
+
+    &lt;bean id="beanTwo" class="x.y.ThingTwo"/&gt;
+    &lt;bean id="beanThree" class="x.y.ThingThree"/&gt;
+
+    &lt;!-- traditional declaration with optional argument names --&gt;
+    &lt;bean id="beanOne" class="x.y.ThingOne"&gt;
+        &lt;constructor-arg name="thingTwo" ref="beanTwo"/&gt;
+        &lt;constructor-arg name="thingThree" ref="beanThree"/&gt;
+        &lt;constructor-arg name="email" value="something@somewhere.com"/&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- c-namespace declaration with argument names --&gt;
+    &lt;bean id="beanOne" class="x.y.ThingOne" c:thingTwo-ref="beanTwo"
+        c:thingThree-ref="beanThree" c:email="something@somewhere.com"/&gt;
+
+&lt;/beans&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>c:</code> 名称空间使用与 <code>p:</code> 名称空间有相同的约定（<code>-ref</code> 后缀表示Bean引用）以按名称设置构造函数参数。
+同样，即使未在XSD模式中定义它（也存在于Spring Core中），也可以在XML文件中声明它。</p>
+</div>
+<div class="paragraph">
+<p>对于极少数情况下无法使用构造函数自变量名称的情况（通常，如果字节码是在没有调试信息的情况下编译的），
+可以使用参数索引后备方案，如下所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;!-- c-namespace index declaration --&gt;
+&lt;bean id="beanOne" class="x.y.ThingOne" c:_0-ref="beanTwo" c:_1-ref="beanThree"
+    c:_2="something@somewhere.com"/&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+由于XML语法的原因，索引符号要求前导字符 <code>_</code> 存在，因为XML属性名称不能以数字开头（即使某些IDE允许）。
+相应的索引符号也可用于 <code>&lt;constructor-arg&gt;</code> 元素，但并不常用，因为这里的声明顺序通常就足够了。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>实际上，构造函数解析<a href="#beans-factory-ctor-arguments-resolution">机制</a>在匹配参数方面非常有效，因此除非你确实需要，
+否则我们建议在整个配置过程中使用名称表示法。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-compound-property-names">4.2.8. 复合属性名称</h4>
+<div class="paragraph">
+<p>设置bean属性时，可以使用复合属性名称或嵌套属性名称，只要路径中除最终属性名称以外的所有组件都不为 <code>null</code> 即可。考虑以下bean定义：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="something" class="things.ThingOne"&gt;
+    &lt;property name="fred.bob.sammy" value="123" /&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>something</code> bean具有 <code>fred</code> 属性，该属性具有 <code>bob</code> 属性，该属性又具有 <code>sammy</code> 属性，并且最终的 <code>sammy</code> 属性被设置为值 <code>123</code>。
+为了使其正常工作，构造bean之后，<code>something</code> 的 <code>fred</code> 属性和 <code>fred</code> 属性的 <code>bob</code> 属性不能为 <code>null</code>。否则，将引发
+<code>NullPointerException</code>。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="beans-factory-dependson">4.3. 使用 <code>depends-on</code></h3>
+<div class="paragraph">
+<p>如果一个bean是另一个bean的依赖项，则通常意味着将一个bean设置为另一个bean的属性。
+通常，你可以使用基于XML的配置元数据中的 <a href="#beans-ref-element"><code>&lt;ref/&gt;</code> 元素</a>来完成此操作。
+但是，有时bean之间的依赖性不太直接。一个示例是何时需要触发类中的静态初始值设定项，例如用于数据库驱动程序注册。
+<code>depends-on</code> 属性可以显式地强制初始化一个或多个使用该元素的bean之前的bean。
+下面的示例使用 <code>depends-on</code> 属性来表示对单个bean的依赖关系：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="beanOne" class="ExampleBean" depends-on="manager"/&gt;
+&lt;bean id="manager" class="ManagerBean" /&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>要表达对多个bean的依赖关系，请提供一个bean名称列表作为 <code>depends-on</code> 属性的值（逗号，空格和分号是有效的分割符）：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="beanOne" class="ExampleBean" depends-on="manager,accountDao"&gt;
+    &lt;property name="manager" ref="manager" /&gt;
+&lt;/bean&gt;
+
+&lt;bean id="manager" class="ManagerBean" /&gt;
+&lt;bean id="accountDao" class="x.y.jdbc.JdbcAccountDao" /&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>depends-on</code> 属性既可以指定初始化时间依赖性，也可以仅在单例bean的情况下指定相应的销毁时间依赖性。
+与给定bean定义依赖关系的从属bean首先被销毁，然后再销毁给定bean本身。因此，<code>depends-on</code> 也可以控制shutdown顺序。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="beans-factory-lazy-init">4.4. 延迟初始化Bean</h3>
+<div class="paragraph">
+<p>默认情况下，作为初始化过程的一部分，<code>ApplicationContext</code> 实现会急于创建和配置所有单例bean。
+通常，这种预初始化是可取的，因为与数小时甚至数天后相比，这会立即发现配置或周围环境中的错误。
+如果不希望出现这种情况，则可以通过将bean定义标记为延迟初始化来防止对singleton bean的预实例化。
+延迟初始化的bean告诉IoC容器在首次请求时而不是在启动时创建一个bean实例。</p>
+</div>
+<div class="paragraph">
+<p>在XML中，此行为由 <code>&lt;bean/&gt;</code> 元素上的 <code>lazy-init</code> 属性控制，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="lazy" class="com.something.ExpensiveToCreateBean" lazy-init="true"/&gt;
+&lt;bean name="not.lazy" class="com.something.AnotherBean"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>当前面的配置被 <code>ApplicationContext</code> 消费时，在 <code>ApplicationContext</code> 启动时不会急切地预实例化 <code>lazy</code> bean，
+而会急切地预实例化 <code>not.lazy</code> Bean。</p>
+</div>
+<div class="paragraph">
+<p>但是，如果延迟初始化的bean是未延迟初始化的单例bean的依赖项，则 <code>ApplicationContext</code> 在启动时仍会创建延迟初始化的bean，
+因为它必须满足单例的依赖关系。延迟初始化的bean会被注入到其他未延迟初始化的单例bean中。</p>
+</div>
+<div class="paragraph">
+<p>你还可以通过使用 <code>&lt;beans/&gt;</code> 元素上的 <code>default-lazy-init</code> 属性在容器级别控制延迟初始化，以下示例显示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;beans default-lazy-init="true"&gt;
+    &lt;!-- no beans will be pre-instantiated... --&gt;
+&lt;/beans&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="beans-factory-autowire">4.5. 自动装配协作者</h3>
+<div class="paragraph">
+<p>Spring容器可以自动装配协作bean之间的关系。你可以通过检查 <code>ApplicationContext</code> 的内容，
+让Spring为你的bean自动解决协作者（其他bean）。自动装配具有以下优点：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>自动装配可以大大减少指定属性或构造函数参数的需要。
+（<a href="#beans-child-bean-definitions">在本章其他地方讨论</a>的其他机制（例如Bean模板）在这方面也很有价值。）</p>
+</li>
+<li>
+<p>随着对象的发展，自动装配可以更新配置。例如，如果你需要向类中添加依赖项，则无需修改配置即可自动装配该依赖项。
+因此，自动装配在开发过程中特别有用，当代码库变得更加稳定时，自动装配可以避免手动装配所需的选项。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>使用基于XML的配置元数据时（请参阅<a href="#beans-factory-collaborators">依赖注入</a>），可以使用 <code>&lt;bean/&gt;</code> 元素的
+<code>autowire</code> 属性为bean定义指定自动装配模式。自动装配功能具有四种模式。你可以为每个bean指定自动装配，
+因此可以选择哪些bean要自动装配。下表描述了四种自动装配模式：</p>
+</div>
+<table id="beans-factory-autowiring-modes-tbl" class="tableblock frame-all grid-all spread">
+<caption class="title">Table 2. 自动装配模式</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Mode</th>
+<th class="tableblock halign-left valign-top">Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>no</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">（默认）无自动装配。Bean引用必须由 <code>ref</code> 元素定义。对于较大的部署，建议不要更改默认设置，
+  因为明确指定协作者可以提供更好的控制和清晰度。在某种程度上，它记录了系统的结构。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>byName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">按属性名称自动装配。Spring寻找与需要自动装配的属性同名的bean。例如，如果一个bean定义被设置为按名称自动装配，
+  并且包含一个 <code>master</code> 属性（即它具有 <code>setMaster(..)</code> 方法），那么Spring将查找一个名为 <code>master</code> 的bean定义，并使用它来设置该属性。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>byType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">按属性类型自动装配。如果容器中恰好存在一个该属性类型的bean，则使该属性自动装配。如果存在多个，则将引发致命异常，
+  这表明你不得对该bean使用 <code>byType</code> 自动装配。如果没有匹配的bean，则什么都不会发生（未设置该属性）。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>constructor</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">与 <code>byType</code> 类似，但适用于构造函数参数。如果容器中不存在构造函数参数类型的一个bean，则将引发致命错误。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>在 <code>byType</code> 或 <code>constructor</code> 自动装配模式下，你可以对数组和类型集合进行装配。在这种情况下，将提供容器中与期望类型匹配的所有自动装配候选bean实例，以满足相关性。
+如果期望的键类型是 <code>String</code>，则可以自动装配强类型的 <code>Map</code> 实例。一个自动装配的 <code>Map</code> 实例的值包括所有与期望类型匹配的bean实例，而 <code>Map</code> 实例的键则为相应的bean名称。</p>
+</div>
+<div class="sect3">
+<h4 id="beans-autowired-exceptions">4.5.1. 自动装配的局限性和缺点</h4>
+<div class="paragraph">
+<p>当在项目中一致使用自动装配时，自动装配效果最好。如果通常不使用自动装配，则可能使开发人员仅使用自动装配来连接一个或两个bean定义而感到困惑。</p>
+</div>
+<div class="paragraph">
+<p>考虑自动装配的局限性和缺点：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>属性和构造器参数设置中的显式依赖关系始终会覆盖自动装配。你无法自动装配简单属性，
+例如元类型，<code>Strings</code> 和 <code>Classes</code>（以及这些简单属性的数组）。此限制是设计使然。</p>
+</li>
+<li>
+<p>自动装配不如显式装配精确。尽管如前所述，Spring还是谨慎地避免猜测，以免产生意想不到的结果。
+Spring管理的对象之间的关系不再明确记录。</p>
+</li>
+<li>
+<p>装配信息可能不适用于想从Spring容器生成文档的工具。</p>
+</li>
+<li>
+<p>容器内的多个bean定义可能与要自动装配的setter方法或构造函数参数指定的类型匹配。对于数组，集合或 <code>Map</code> 实例，这不一定是问题。
+但是，对于需要单个值的依赖项，不会任意解决此歧义。如果没有唯一的bean定义可用，则会引发异常。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>在最后一种情况下，你有几种选择：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>放弃自动装配，转而使用显式的装配。</p>
+</li>
+<li>
+<p>通过将bean的 <code>autowire-candidate</code> 属性设置为 <code>false</code>，避免自动装配bean定义，如<a href="#beans-factory-autowire-candidate">下一节</a>所述。</p>
+</li>
+<li>
+<p>通过将其 <code>&lt;bean/&gt;</code> 元素的 <code>primary</code> 属性设置为 <code>true</code>，将单个bean定义指定为主要候选对象。</p>
+</li>
+<li>
+<p>如<a href="#beans-annotation-config">基于注解的容器配置</a>中所述，通过基于注解的配置实现更细粒度的控制。</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-factory-autowire-candidate">4.5.2. 从自动装配中排除Bean</h4>
+<div class="paragraph">
+<p>在每个bean的基础上，你可以从自动装配中排除一个bean。使用Spring的XML格式，将 <code>&lt;bean/&gt;</code> 元素的 <code>autowire-candidate</code> 属性设置为 <code>false</code>。
+容器会使特定的bean定义对自动装配基础结构不可用（包括注解样式配置，例如<a href="#beans-autowired-annotation"><code>@Autowired</code></a>）。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>autowire-candidate</code> 属性设计为仅影响基于类型的自动装配。它不会影响按名称装配的显式引用，
+即使指定的Bean未标记为自动装配候选者，该名称也可得到解析。因此，如果名称匹配，按名称自动装配仍然会注入Bean。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>你还可以基于与Bean名称的模式匹配规则来限制自动装配候选bean。顶级 <code>&lt;beans/&gt;</code> 元素在其 <code>default-autowire-candidates</code> 属性内接受一个或多个模式。
+例如，要将自动装配候选状态限制为名称以 <code>Repository</code> 结尾的任何bean，请提供 <code>*Repository</code> 值。要提供多种模式，请在以逗号分隔的列表中定义它们。
+Bean定义的 <code>autowire-candidate</code> 属性的显式值 <code>true</code> 或 <code>false</code> 始终优先。对于此类bean，模式匹配规则不适用。</p>
+</div>
+<div class="paragraph">
+<p>这些技术对于你不希望通过自动装配将其注入到其他bean的bean非常有用。这并不意味着排除的bean本身不能使用自动装配进行配置。
+相反，bean本身不是自动装配其他bean的候选对象。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="beans-factory-method-injection">4.6. 方法注入</h3>
+<div class="paragraph">
+<p>在大多数应用场景中，容器中的大多数bean是<a href="#beans-factory-scopes-singleton">单例</a>的。
+当单例Bean需要与另一个单例Bean协作或非单例Bean需要与另一个非单例Bean协作时，
+通常可以通过将一个Bean定义为另一个Bean的属性来处理依赖性。当bean的生命周期不同时会出现问题。
+假设单例bean A需要使用非单例（原型）bean B，也许在对A的每个方法调用上都使用它。容器仅创建一次单例bean A，
+因此只有一次机会来设置属性。每次需要一个bean A时，容器都无法为bean A提供一个新的bean B实例。</p>
+</div>
+<div class="paragraph">
+<p>一个解决方案是放弃某些控制反转。你可以通过实现 <code>ApplicationContextAware</code> 接口<a href="#beans-factory-aware">织入容器来创建bean A</a>，并
+<a href="#beans-factory-client">对容器进行 <code>getBean("B")</code> 调用</a>来使每次bean A需要它时都请求一个（通常是新的）bean B实例。以下示例显示了此方法：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">// a class that uses a stateful Command-style class to perform some processing
+package fiona.apple;
+
+// Spring-API imports
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+
+public class CommandManager implements ApplicationContextAware {
+
+    private ApplicationContext applicationContext;
+
+    public Object process(Map commandState) {
+        // grab a new instance of the appropriate Command
+        Command command = createCommand();
+        // set the state on the (hopefully brand new) Command instance
+        command.setState(commandState);
+        return command.execute();
+    }
+
+    protected Command createCommand() {
+        // notice the Spring API dependency!
+        return this.applicationContext.getBean("command", Command.class);
+    }
+
+    public void setApplicationContext(
+            ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>前面的内容是不理想的，因为业务代码织入并耦合到Spring框架。方法注入是Spring IoC容器的一项高级功能，使你可以干净地处理此用例。</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>你可以在 <a href="https://spring.io/blog/2004/08/06/method-injection/">这篇博客</a>中阅读有关方法注入动机的更多信息。</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-factory-lookup-method-injection">4.6.1. 查找方法注入</h4>
+<div class="paragraph">
+<p>Lookup方法注入是容器覆盖容器管理的Bean上的方法并返回容器中另一个命名Bean的查找结果的能力。查找通常涉及原型bean，
+如<a href="#beans-factory-method-injection">上一节</a>中所述。Spring框架通过使用从CGLIB库生成字节码来动态生成覆盖该方法的子类来实现此方法注入。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>为了使此动态子类起作用，Spring bean容器将子类化的类不能为 <code>final</code>，而被重写的方法也不能为 <code>final</code>。</p>
+</li>
+<li>
+<p>对具有抽象方法的类进行单元测试需要你自己对该类进行子类化，并提供该抽象方法的存根实现。</p>
+</li>
+<li>
+<p>组件扫描也需要具体的方法，这需要具体的类来获取。</p>
+</li>
+<li>
+<p>另一个关键限制是，查找方法不适用于工厂方法，尤其不适用于配置类中的 <code>@Bean</code> 方法，因为在这种情况下，容器不负责创建实例，
+因此无法创建运行时动态生成的子类。</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>对于前面的代码片段中的 <code>CommandManager</code> 类，Spring容器动态地覆盖 <code>createCommand()</code> 方法的实现。
+如重新编写的示例所示，<code>CommandManager</code> 类现在没有任何Spring依赖项：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">package fiona.apple;
+
+// no more Spring imports!
+
+public abstract class CommandManager {
+
+    public Object process(Object commandState) {
+        // grab a new instance of the appropriate Command interface
+        Command command = createCommand();
+        // set the state on the (hopefully brand new) Command instance
+        command.setState(commandState);
+        return command.execute();
+    }
+
+    // okay... but where is the implementation of this method?
+    protected abstract Command createCommand();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>在包含要注入的方法的客户端类（在本例中为 <code>CommandManager</code>）中，要注入的方法需要以下形式的签名：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;public|protected&gt; [abstract] &lt;return-type&gt; theMethodName(no-arguments);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>如果该方法是 <code>abstract</code> 的，则动态生成的子类将实现该方法。否则，动态生成的子类将覆盖原始类中定义的具体方法。考虑以下示例：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;!-- a stateful bean deployed as a prototype (non-singleton) --&gt;
+&lt;bean id="myCommand" class="fiona.apple.AsyncCommand" scope="prototype"&gt;
+    &lt;!-- inject dependencies here as required --&gt;
+&lt;/bean&gt;
+
+&lt;!-- commandProcessor uses statefulCommandHelper --&gt;
+&lt;bean id="commandManager" class="fiona.apple.CommandManager"&gt;
+    &lt;lookup-method name="createCommand" bean="myCommand"/&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>每当需要新的 <code>myCommand</code> bean实例时，标识为 <code>commandManager</code> 的bean就会调用其自己的 <code>createCommand()</code> 方法。
+如果确实需要新的 <code>myCommand</code> bean，则必须小心将其设置为原型。如果是单例，则每次都返回 <code>myCommand</code> bean的相同实例。</p>
+</div>
+<div class="paragraph">
+<p>另外，在基于注解的组件模型中，你可以通过 <code>@Lookup</code> 注解声明一个查找方法，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public abstract class CommandManager {
+
+    public Object process(Object commandState) {
+        Command command = createCommand();
+        command.setState(commandState);
+        return command.execute();
+    }
+
+    @Lookup("myCommand")
+    protected abstract Command createCommand();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>或者更常用的是，你可以依赖于目标bean根据lookup方法声明的返回类型来解析：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public abstract class CommandManager {
+
+    public Object process(Object commandState) {
+        MyCommand command = createCommand();
+        command.setState(commandState);
+        return command.execute();
+    }
+
+    @Lookup
+    protected abstract MyCommand createCommand();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>请注意，通常应使用具体的存根实现声明此类带注解的查找方法，以使其与Spring的组件扫描规则兼容，
+在默认情况下抽象类将被忽略。此限制不适用于显式注册或显式导入的Bean类。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>访问作用域不同的目标bean的另一种方法是  <code>ObjectFactory</code>/<code>Provider</code> 注入点。
+请参阅<a href="#beans-factory-scopes-other-injection">作用域Bean作为依赖项</a>。</p>
+</div>
+<div class="paragraph">
+<p>你可能还会发现 <code>ServiceLocatorFactoryBean</code>（在 <code>org.springframework.beans.factory.config</code> 包中）很有用。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-factory-arbitrary-method-replacement">4.6.2. 任意方法替换</h4>
+<div class="paragraph">
+<p>与查找方法注入相比，方法注入的一种不太有用的形式是能够用另一种方法实现替换托管bean中的任意方法。
+你可以放心地跳过本节的其余部分，直到你真正需要此功能为止。</p>
+</div>
+<div class="paragraph">
+<p>借助基于XML的配置元数据，你可以使用 <code>replaced-method</code> 元素将现有的方法实现替换为已部署的Bean。考虑以下类，
+该类具有一个我们要覆盖的名为 <code>computeValue</code> 的方法：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class MyValueCalculator {
+
+    public String computeValue(String input) {
+        // some real code...
+    }
+
+    // some other methods...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>实现 <code>org.springframework.beans.factory.support.MethodReplacer</code> 接口的类提供了新的方法定义，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">/**
+ * meant to be used to override the existing computeValue(String)
+ * implementation in MyValueCalculator
+ */
+public class ReplacementComputeValue implements MethodReplacer {
+
+    public Object reimplement(Object o, Method m, Object[] args) throws Throwable {
+        // get the input value, work with it, and return a computed result
+        String input = (String) args[0];
+        ...
+        return ...;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>用于声明原始类并指定方法覆盖的Bean定义类似于以下示例：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="myValueCalculator" class="x.y.z.MyValueCalculator"&gt;
+    &lt;!-- arbitrary method replacement --&gt;
+    &lt;replaced-method name="computeValue" replacer="replacementComputeValue"&gt;
+        &lt;arg-type&gt;String&lt;/arg-type&gt;
+    &lt;/replaced-method&gt;
+&lt;/bean&gt;
+
+&lt;bean id="replacementComputeValue" class="a.b.c.ReplacementComputeValue"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你可以在 <code>&lt;replaced-method/&gt;</code> 元素内使用一个或多个 <code>&lt;arg-type/&gt;</code> 元素来指示被替换的方法的方法签名。
+仅当方法重载且类中存在多个变体时，才需要对参数签名。为了方便起见，参数的类型字符串可以是完全限定类型名称的子字符串。
+例如，以下所有声明均可匹配 <code>java.lang.String</code>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">java.lang.String
+String
+Str</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>因为参数的数量通常足以区分每个可能的选择，所以通过让你仅键入与参数类型匹配的最短字符串，此快捷方式可以节省很多输入。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="beans-factory-scopes">5. Bean作用域</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>创建bean定义时，将创建一个配方，用于创建该bean定义所定义的类的实际实例。
+Bean定义是配方的想法很重要，因为它意味着与类一样，你可以从一个配方中创建许多对象实例。</p>
+</div>
+<div class="paragraph">
+<p>你不仅可以控制要插入到从特定bean定义创建的对象中的各种依赖项和配置值，还可以控制从特定bean定义创建的对象作用域。
+这种方法功能强大且灵活，因为你可以选择通过配置创建的对象的作用域，而不必在Java类级别上考虑对象的作用域。
+可以将Bean定义为部署在多个作用域之一中。Spring框架支持六个作用域，其中有只在使用web-aware的
+<code>ApplicationContext</code> 时才可用的作用域。你还可以创建自定义作用域。</p>
+</div>
+<div class="paragraph">
+<p>下表描述了受支持的作用域：</p>
+</div>
+<table id="beans-factory-scopes-tbl" class="tableblock frame-all grid-all spread">
+<caption class="title">Table 3. Bean scopes</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">作用域</th>
+<th class="tableblock halign-left valign-top">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#beans-factory-scopes-singleton">singleton</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">（默认）将Spring IoC容器中的单个bean定义作用域限定为单个对象实例。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#beans-factory-scopes-prototype">prototype</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">将单个bean定义的作用域限定为任意数量的对象实例。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#beans-factory-scopes-request">request</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">将单个bean定义的作用域限定为单个HTTP请求的生命周期。
+  也就是说，每个HTTP请求都有一个依据单个bean定义所创建的bean实例。
+  仅在web-aware的Spring <code>ApplicationContext</code> 上下文中有效。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#beans-factory-scopes-session">session</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">将单个bean定义的作用域限定为HTTP <code>Session</code> 的生命周期。
+  仅在web-aware的Spring <code>ApplicationContext</code> 上下文中有效。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#beans-factory-scopes-application">application</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">将单个bean定义的作用域限定为 <code>ServletContext</code> 的生命周期。
+  仅在web-aware的Spring <code>ApplicationContext</code> 上下文中有效。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="web.html#websocket-stomp-websocket-scope">websocket</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">将单个bean定义的作用域限定为 <code>WebSocket</code> 的生命周期。
+  仅在web-aware的Spring <code>ApplicationContext</code> 上下文中有效。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+从Spring 3.0开始，线程作用域可用，但默认情况下未注册。有关更多信息，请参见
+{docSpring}/context/support/SimpleThreadScope.html[<code>SimpleThreadScope</code>]文档。
+有关如何注册此自定义作用域或任何其他自定义作用域的说明，请参阅<a href="#beans-factory-scopes-custom-using">使用自定义作用域</a>。
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="beans-factory-scopes-singleton">5.1. 单例作用域</h3>
+<div class="paragraph">
+<p>仅管理一个singleton bean的一个共享实例，并且所有对具有ID或与该bean定义相匹配的ID的bean的请求都将导致Spring容器返回该特定的bean实例。</p>
+</div>
+<div class="paragraph">
+<p>换句话说，当你定义一个bean定义并且其作用域为单例时，Spring IoC容器将为该bean定义所定义的对象创建一个实例。
+该单个实例存储在此类单例bean的高速缓存中，并且对该命名bean的所有后续请求和引用都返回该高速缓存的对象。下图显示了单例作用域的工作方式：</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/spring-core/singleton.png" alt="singleton">
+</div>
+</div>
+<div class="paragraph">
+<p>Spring的“单例bean”概念与《四人帮（Gang of Four，GANG）模式》一书中定义的单例模式有所不同。
+GoF单例对对象的作用域进行硬编码，这样每个ClassLoader只能创建一个特定类的一个实例。
+最好将Spring单例的作用域描述为每个容器和每个bean。这意味着，如果你在单个Spring
+容器中为特定类定义一个bean，则Spring容器将创建该bean定义所定义的类的一个且只有一个实例。
+单例作用域是Spring中的默认作用域。在XML中要将bean定义为单例，可以如以下示例所示定义bean：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="accountService" class="com.something.DefaultAccountService"/&gt;
+
+&lt;!-- the following is equivalent, though redundant (singleton scope is the default) --&gt;
+&lt;bean id="accountService" class="com.something.DefaultAccountService" scope="singleton"/&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="beans-factory-scopes-prototype">5.2. 原型作用域</h3>
+<div class="paragraph">
+<p>每次获取特定bean时，bean设置的非单一原型作用域都会导致创建一个新bean实例。也就是说，
+该Bean被注入到另一个Bean中，或者你可以通过容器上的 <code>getBean()</code> 方法调用来请求它。
+通常，应将原型作用域用于所有有状态Bean，将单例作用域用于无状态Bean。</p>
+</div>
+<div class="paragraph">
+<p>下图说明了Spring原型作用域：</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/spring-core/prototype.png" alt="prototype">
+</div>
+</div>
+<div class="paragraph">
+<p>(数据访问对象（DAO）通常不配置为原型，因为典型的DAO不保存任何对话状态。)</p>
+</div>
+<div class="paragraph">
+<p>以下示例将bean定义为原型作用域：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="accountService" class="com.something.DefaultAccountService" scope="prototype"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>与其他作用域相比，Spring不能管理原型Bean的完整生命周期。容器实例化，配置或组装原型对象，然后将其交给客户端，
+而无需对该原型实例的进一步记录。因此，尽管在不考虑作用域的情况下在所有对象上都调用了初始化生命周期回调方法，
+但在原型的情况下，不会调用已配置的销毁生命周期回调。客户端代码必须自己清除原型作用域内的对象并释放原型Bean拥有的昂贵资源。
+要使Spring容器释放由原型作用域的bean占用的资源，请尝试使用自定义<a href="#beans-factory-extension-bpp">bean后处理器</a>，
+该处理器包含对需要清理的bean的引用。</p>
+</div>
+<div class="paragraph">
+<p>在某些方面，Spring容器在原型作用域Bean方面的角色是Java <code>new</code> 运算符的替代。
+超过该时间点的所有生命周期管理必须由客户端处理。（有关Spring容器中bean生命周期的详细信息，请参阅<a href="#beans-factory-lifecycle">生命周期回调</a>。）</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="beans-factory-scopes-sing-prot-interaction">5.3. 具有原型Bean依赖关系的单例Bean</h3>
+<div class="paragraph">
+<p>当你使用对原型Bean有依赖性的单例作用域Bean时，请注意，依赖性在实例化时已解决。因此，
+如果你将依赖原型作用域的bean注入到单例作用域的bean中，则将实例化新的原型bean，
+然后将依赖项注入到该单例Bean中。原型实例是实例化时提供给单例作用域的bean的唯一实例。</p>
+</div>
+<div class="paragraph">
+<p>但是，假设你希望单例作用域的bean在运行时重复获取原型作用域的bean的新实例。
+你不能将原型作用域的bean依赖项注入到你的单例bean中，因为当Spring容器实例化单例bean并解析并注入其依赖项时，
+该注入仅发生一次。如果在运行时不止一次需要原型bean的新实例，请参见<a href="#beans-factory-method-injection">方法注入</a>。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="beans-factory-scopes-other">5.4. 请求，会话，应用程序和WebSocket作用域</h3>
+<div class="paragraph">
+<p><code>request</code>, <code>session</code>, <code>application</code>, 和 <code>websocket</code> 作用域仅可用于当
+你使用web-aware的Spring <code>ApplicationContext</code> 实现（例如 <code>XmlWebApplicationContext</code>）。
+如果你将这些作用域用于常规的Spring IoC容器，例如 <code>ClassPathXmlApplicationContext</code>，
+一个抱怨的 <code>IllegalStateException</code> 关于一个未知的bean作用域会被抛出。</p>
+</div>
+<div class="sect3">
+<h4 id="beans-factory-scopes-other-web-configuration">5.4.1. 初始化Web配置</h4>
+<div class="paragraph">
+<p>为了支持在 <code>request</code>, <code>session</code>, <code>application</code> 和 <code>websocket</code> 级别（Web范围的Bean）的Bean作用域，在定义Bean之前，
+需要一些较小的初始配置。（对于标准作用域：<code>singleton</code> 和 <code>prototype</code>，不需要此初始设置。）</p>
+</div>
+<div class="paragraph">
+<p>如何完成此初始设置取决于你的特定Servlet环境。</p>
+</div>
+<div class="paragraph">
+<p>如果你实际上在Spring Web MVC中访问由Spring <code>DispatcherServlet</code> 处理的请求中的作用域Bean，则不需要特殊的设置。
+<code>DispatcherServlet</code> 已经公开了所有相关状态。</p>
+</div>
+<div class="paragraph">
+<p>如果使用Servlet 2.5 Web容器，并且在Spring的 <code>DispatcherServlet</code> 之外处理请求（例如，使用JSF或Struts时），
+则需要注册 <code>org.springframework.web.context.request.RequestContextListener</code>，<code>ServletRequestListener</code>。
+对于Servlet 3.0+，这可以通过使用 <code>WebApplicationInitializer</code> 接口以编程方式完成。或者，或者对于较旧的容器，
+将以下声明添加到Web应用程序的 <code>web.xml</code> 文件中：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;web-app&gt;
+    ...
+    &lt;listener&gt;
+        &lt;listener-class&gt;
+            org.springframework.web.context.request.RequestContextListener
+        &lt;/listener-class&gt;
+    &lt;/listener&gt;
+    ...
+&lt;/web-app&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>另外，如果你的监听器设置存在问题，请考虑使用Spring的 <code>RequestContextFilter</code>。
+过滤器映射取决于周围的Web应用程序配置，因此你必须适当地对其进行更改。以下清单显示了Web应用程序的过滤器部分：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;web-app&gt;
+    ...
+    &lt;filter&gt;
+        &lt;filter-name&gt;requestContextFilter&lt;/filter-name&gt;
+        &lt;filter-class&gt;org.springframework.web.filter.RequestContextFilter&lt;/filter-class&gt;
+    &lt;/filter&gt;
+    &lt;filter-mapping&gt;
+        &lt;filter-name&gt;requestContextFilter&lt;/filter-name&gt;
+        &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+    &lt;/filter-mapping&gt;
+    ...
+&lt;/web-app&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>DispatcherServlet</code>，<code>RequestContextListener</code> 和 <code>RequestContextFilter</code> 都做完全相同的事情，
+即将HTTP请求对象绑定到为该请求提供服务的 <code>Thread</code>。这使得在请求和会话作用域内的bean可以在调用链的更下游使用。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-factory-scopes-request">5.4.2. 请求作用域</h4>
+<div class="paragraph">
+<p>考虑以下XML配置定义的bean：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="loginAction" class="com.something.LoginAction" scope="request"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Spring容器通过为每个HTTP请求使用 <code>loginAction</code> bean定义来创建 <code>LoginAction</code> bean的新实例。
+也就是说，<code>loginAction</code> bean的作用域为HTTP请求级别。你可以根据需要更改创建实例的内部状态，
+因为从同一 <code>loginAction</code> bean定义创建的其他实例不会看到这些状态更改。它们特定于单个请求。
+当请求完成处理时，将放弃作用于该请求的Bean。</p>
+</div>
+<div class="paragraph">
+<p>当使用注解驱动的组件或Java配置时，可以使用 <code>@RequestScope</code> 注解给组件分配 <code>request</code> 作用域。以下示例显示了如何执行此操作：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java"><strong>@RequestScope</strong>
+@Component
+public class LoginAction {
+    // ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-factory-scopes-session">5.4.3. 会话作用域</h4>
+<div class="paragraph">
+<p>考虑以下XML配置定义的bean：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="userPreferences" class="com.something.UserPreferences" scope="session"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Spring容器通过在单个HTTP <code>Session</code> 的生命周期内使用 <code>userPreferences</code> bean定义来创建 <code>UserPreferences</code> bean的新实例。
+换句话说，<code>userPreferences</code> bean有效地作用于HTTP <code>Session</code> 级别。与请求作用域的Bean一样，
+你可以根据需要任意更改所创建实例的内部状态，因为其他也在使用从同一 <code>userPreferences</code> Bean定义而创建的HTTP
+<code>Session</code> 实例也看不到这些状态变化，因为它们特定于单个HTTP <code>Session</code>。
+当HTTP <code>Session</code> 最终被丢弃时，作用于该特定HTTP <code>Session</code> 的bean也将被丢弃。</p>
+</div>
+<div class="paragraph">
+<p>当使用注解驱动的组件或Java配置时，可以使用 <code>@SessionScope</code> 注解给组件分配 <code>session</code> 作用域。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java"><strong>@SessionScope</strong>
+@Component
+public class UserPreferences {
+    // ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-factory-scopes-application">5.4.4. 应用程序作用域</h4>
+<div class="paragraph">
+<p>考虑以下XML配置定义的bean：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="appPreferences" class="com.something.AppPreferences" scope="application"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Spring容器通过对整个Web应用程序使用一次 <code>appPreferences</code> bean定义来创建一个新的 <code>AppPreferences</code> bean实例。
+也就是说，<code>appPreferences</code> bean的作用域为 <code>ServletContext</code> 级别，并存储为常规的 <code>ServletContext</code> 属性。
+这有点类似于Spring单例bean，但是在两个重要方面有所不同：它是每个 <code>ServletContext</code> 的单例，而不是每个Spring
+<code>ApplicationContext</code> 的单例（在任何给定的Web应用程序中可能都有多个），并且它实际上是公开的，
+因此作为 <code>ServletContext</code> 属性可见。</p>
+</div>
+<div class="paragraph">
+<p>当使用注解驱动的组件或Java配置时，可以使用 <code>@ApplicationScope</code> 注解给组件分配 <code>application</code> 作用域。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java"><strong>@ApplicationScope</strong>
+@Component
+public class AppPreferences {
+    // ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-factory-scopes-other-injection">5.4.5. 作用域Bean作为依赖项</h4>
+<div class="paragraph">
+<p>Spring IoC容器不仅管理对象（bean）的实例化，而且还管理协作者（或依赖项）的连接。
+如果要将（例如）HTTP请求作用域的Bean注入（例如）另一个作用域更长的Bean，则可以选择注入AOP代理来代替作用域的Bean。
+也就是说，你需要注入一个代理对象，该对象公开与作用域对象相同的公共接口，但也可以从相关作用域（例如HTTP请求）
+中检索实际目标对象，并将方法调用委托给实际对象。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>你还可以在单例作用域bean中使用 <code>&lt;aop:scoped-proxy/&gt;</code>，然后通过可序列化的中间代理引用，从而能够在反序列化时重新获得目标单例bean。</p>
+</div>
+<div class="paragraph">
+<p>当针对原型作用域bean声明 <code>&lt;aop:scoped-proxy/&gt;</code> 时，共享代理上的每个方法调用都会导致创建新的目标实例，然后将该调用转发到该目标实例。</p>
+</div>
+<div class="paragraph">
+<p>同样，作用域代理不是以生命周期安全的方式从较短的作用域访问bean的唯一方法。你也可以将注入点（即构造函数或setter参数或自动装配的字段）
+声明为 <code>ObjectFactory&lt;MyTargetBean&gt;</code>，从而允许 <code>getObject()</code> 调用在需要时按需检索当前实例。而不要保持实例或将其单独存储。</p>
+</div>
+<div class="paragraph">
+<p>作为扩展变体，你可以声明 <code>ObjectProvider&lt;MyTargetBean&gt;</code>，它提供几个附加的访问变体，包括 <code>getIfAvailable</code> 和 <code>getIfUnique</code>。</p>
+</div>
+<div class="paragraph">
+<p>JSR-330的这种变体称为 <code>Provider</code>，并与 <code>Provider&lt;MyTargetBean&gt;</code> 声明和每次检索尝试的相应 <code>get()</code> 调用一起使用。
+有关JSR-330总体的更多详细信息，请参见<a href="#beans-standard-annotations">此处</a>。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>以下示例中的配置只有一行，但是了解其背后的“原因”和“方式”很重要：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd"&gt;
+
+    &lt;!-- an HTTP Session-scoped bean exposed as a proxy --&gt;
+    &lt;bean id="userPreferences" class="com.something.UserPreferences" scope="session"&gt;
+        &lt;!-- instructs the container to proxy the surrounding bean --&gt;
+        &lt;aop:scoped-proxy/&gt; <i class="conum" data-value="1"></i><b>(1)</b>
+    &lt;/bean&gt;
+
+    &lt;!-- a singleton-scoped bean injected with a proxy to the above bean --&gt;
+    &lt;bean id="userService" class="com.something.SimpleUserService"&gt;
+        &lt;!-- a reference to the proxied userPreferences bean --&gt;
+        &lt;property name="userPreferences" ref="userPreferences"/&gt;
+    &lt;/bean&gt;
+&lt;/beans&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>定义代理的行。</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>要创建这样的代理，请将子 <code>&lt;aop:scoped-proxy/&gt;</code> 元素插入到作用域bean定义中（请参阅<a href="#beans-factory-scopes-other-injection-proxies">选择要创建的代理类型</a>和
+<a href="#xsd-schemas">基于XML Schema的配置</a>）。
+为什么在请求，会话和自定义作用域级别范围内定义的bean定义需要 <code>&lt;aop:scoped-proxy/&gt;</code> 元素？
+考虑以下单例bean定义，并将其与你需要为上述作用域定义的内容进行对比（请注意，以下 <code>userPreferences</code> bean定义不完整）：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="userPreferences" class="com.something.UserPreferences" scope="session"/&gt;
+
+&lt;bean id="userManager" class="com.something.UserManager"&gt;
+    &lt;property name="userPreferences" ref="userPreferences"/&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>在前面的示例中，单例bean（<code>userManager</code>）注入了对HTTP <code>Session</code> 作用域bean（<code>userPreferences</code>）的引用。
+这里的重点是 <code>userManager</code> bean是单例的：每个容器只实例化一次，并且它的依赖项（在这种情况下，只有一个 <code>userPreferences</code> bean）也只注入一次。
+这意味着 <code>userManager</code> bean仅在完全相同的 <code>userPreferences</code> 对象（即最初的注入对象）上操作。</p>
+</div>
+<div class="paragraph">
+<p>将寿命较短的作用域bean注入寿命较长的作用域bean时，这不是你想要的行为（例如，将HTTP <code>Session</code> 作用域的协作bean作为依赖项注入到singleton bean中）。
+相反，你只需要一个 <code>userManager</code> 对象，并且在HTTP <code>Session</code> 的生命周期内，你需要一个特定于HTTP <code>Session</code> 的 <code>userPreferences</code> 对象。
+因此，容器创建一个对象，该对象公开与 <code>UserPreferences</code> 类完全相同的公共接口（理想情况下是一个 <code>UserPreferences</code> 实例的对象），
+该对象可以从作用域机制（HTTP请求，<code>Session</code> 等）中获取实际的 <code>UserPreferences</code> 对象。容器将此代理对象注入到 <code>userManager</code>
+bean中，而后者不知道此 <code>UserPreferences</code> 引用是代理。在此示例中，当 <code>UserManager</code> 实例在注入依赖项的 <code>UserPreferences</code> 对象上调用方法时，
+实际上是在代理上调用方法。然后，代理从HTTP <code>Session</code>（在本例中）获取真实的 <code>UserPreferences</code> 对象，并将方法调用委托给检索到的真实的
+<code>UserPreferences</code> 对象。</p>
+</div>
+<div class="paragraph">
+<p>因此，在将 <code>request-</code> 和 <code>session-scoped</code> 的bean注入到协作对象中时，你需要以下（正确和完整）配置，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="userPreferences" class="com.something.UserPreferences" scope="session"&gt;
+    &lt;aop:scoped-proxy/&gt;
+&lt;/bean&gt;
+
+&lt;bean id="userManager" class="com.something.UserManager"&gt;
+    &lt;property name="userPreferences" ref="userPreferences"/&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="beans-factory-scopes-other-injection-proxies">选择要创建的代理类型</h5>
+<div class="paragraph">
+<p>默认情况下，当Spring容器为使用 <code>&lt;aop:scoped-proxy/&gt;</code> 元素标记的bean创建代理时，将创建基于CGLIB的类代理。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>CGLIB代理仅拦截公共方法调用！不要在这样的代理上调用非公共方法。它们没有被委派给实际的作用域目标对象。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>另外，你可以通过将 <code>&lt;aop:scoped-proxy/&gt;</code> 元素的 <code>proxy-target-class</code> 属性值指定 <code>false</code>，
+来配置Spring容器为此类作用域的bean创建基于标准JDK接口的代理。
+使用基于JDK接口的代理意味着你不需要应用程序类路径中的其他库即可产生此类代理。
+但是，这也意味着作用域Bean的类必须实现至少一个接口，并且作用域Bean注入到其中的所有协作者必须通过其接口之一引用该Bean。
+以下示例显示了基于接口的代理：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;!-- DefaultUserPreferences implements the UserPreferences interface --&gt;
+&lt;bean id="userPreferences" class="com.stuff.DefaultUserPreferences" scope="session"&gt;
+    &lt;aop:scoped-proxy proxy-target-class="false"/&gt;
+&lt;/bean&gt;
+
+&lt;bean id="userManager" class="com.stuff.UserManager"&gt;
+    &lt;property name="userPreferences" ref="userPreferences"/&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>有关选择基于类或基于接口的代理的更多详细信息，请参阅<a href="#aop-proxying">代理机制</a>。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="beans-factory-scopes-custom">5.5. 自定义作用域</h3>
+<div class="paragraph">
+<p>bean的作用域机制是可扩展的。你可以定义自己的作用域，甚至重新定义现有作用域，尽管后者被认为是不好的做法，
+并且你不能覆盖内置的 <code>singleton</code> 和 <code>prototype</code> 作用域。</p>
+</div>
+<div class="sect3">
+<h4 id="beans-factory-scopes-custom-creating">5.5.1. 创建自定义作用域</h4>
+<div class="paragraph">
+<p>要将自定义作用域集成到Spring容器中，需要实现 <code>org.springframework.beans.factory.config.Scope</code> 接口，本节对此进行了介绍。
+有关如何实现自己的作用域，请参阅Spring框架本身提供的 <code>Scope</code> 实现和
+{docSpring}/beans/factory/config/Scope.html[Scope] javadoc，其中详细说明了需要实现的方法。</p>
+</div>
+<div class="paragraph">
+<p><code>Scope</code> 接口有四种方法可以从作用域中获取对象，将它们从作用域中删除，然后销毁它们。</p>
+</div>
+<div class="paragraph">
+<p>例如，会话作用域实现返回会话作用域的Bean（如果不存在，则该方法将其绑定到会话上以供将来参考之后，返回该Bean的新实例）。
+以下方法从作用域返回对象：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Object get(String name, ObjectFactory objectFactory)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>会话作用域的实现例如，从基础会话中删除了会话作用域的bean，应该返回该对象，但是如果找不到具有指定名称的对象，则可以返回 <code>null</code>。
+以下方法从作用域中删除该对象：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Object remove(String name)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下方法注册在销毁作用域或销毁作用域中的指定对象时应执行的回调：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">void registerDestructionCallback(String name, Runnable destructionCallback)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>有关销毁回调的更多信息，请参见 {docSpring}/beans/factory/config/Scope.html#registerDestructionCallback[javadoc]或Spring作用域实现。</p>
+</div>
+<div class="paragraph">
+<p>以下方法获取作用域的对话标识符：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">String getConversationId()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>每个作用域的标识符都不相同。对于会话作用域的实现，此标识符可以是session id。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-factory-scopes-custom-using">5.5.2. 使用自定义作用域</h4>
+<div class="paragraph">
+<p>在编写和测试一个或多个自定义 <code>Scope</code> 实现之后，需要使Spring容器知道你的新作用域。以下方法是在Spring容器中注册新 <code>Scope</code> 的主要方法：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">void registerScope(String scopeName, Scope scope);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>此方法在 <code>ConfigurableBeanFactory</code> 接口上声明，该接口可通过Spring自带的大多数具体 <code>ApplicationContext</code> 实现上的
+<code>BeanFactory</code> 属性获得。</p>
+</div>
+<div class="paragraph">
+<p><code>registerScope(..)</code> 方法的第一个参数是与作用域关联的唯一名称。Spring容器本身中的此类名称示例包括 <code>singleton</code> 和 <code>prototype</code>。
+<code>registerScope(..)</code> 方法的第二个参数是你希望注册和使用的自定义作用域实现的实际实例。</p>
+</div>
+<div class="paragraph">
+<p>假设你编写了自定义的 <code>Scope</code> 实现，然后按照下一个示例所示进行注册。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+下一个示例使用 <code>SimpleThreadScope</code>，它包含在Spring中，但默认情况下未注册。对于你自己的自定义作用域实现，说明将是相同的。
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Scope threadScope = new SimpleThreadScope();
+beanFactory.registerScope("thread", threadScope);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>然后，你可以按照你的自定义 <code>Scope</code> 的作用域规则创建bean定义，如下所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="..." class="..." scope="thread"&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>使用自定义 <code>Scope</code> 实现，你不仅限于以编程方式注册作用域。你还可以使用 <code>CustomScopeConfigurer</code> 类以声明方式进行注册，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd"&gt;
+
+    &lt;bean class="org.springframework.beans.factory.config.CustomScopeConfigurer"&gt;
+        &lt;property name="scopes"&gt;
+            &lt;map&gt;
+                &lt;entry key="thread"&gt;
+                    &lt;bean class="org.springframework.context.support.SimpleThreadScope"/&gt;
+                &lt;/entry&gt;
+            &lt;/map&gt;
+        &lt;/property&gt;
+    &lt;/bean&gt;
+
+    &lt;bean id="thing2" class="x.y.Thing2" scope="thread"&gt;
+        &lt;property name="name" value="Rick"/&gt;
+        &lt;aop:scoped-proxy/&gt;
+    &lt;/bean&gt;
+
+    &lt;bean id="thing1" class="x.y.Thing1"&gt;
+        &lt;property name="thing2" ref="thing2"/&gt;
+    &lt;/bean&gt;
+
+&lt;/beans&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+当将 <code>&lt;aop:scoped-proxy/&gt;</code> 放置在 <code>FactoryBean</code> 实现中时，作用域是工厂bean本身，而不是从 <code>getObject()</code> 返回的对象。
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="beans-factory-nature">6. 自定义Bean的性质</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring框架提供了许多接口，你可以使用这些接口来自定义Bean的性质。本节将它们分组如下：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#beans-factory-lifecycle">生命周期回调</a></p>
+</li>
+<li>
+<p><a href="#beans-factory-aware"><code>ApplicationContextAware</code> 和 <code>BeanNameAware</code></a></p>
+</li>
+<li>
+<p><a href="#aware-list">其它 <code>Aware</code> 接口</a></p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="beans-factory-lifecycle">6.1. 生命周期回调</h3>
+<div class="paragraph">
+<p>为了与容器对bean生命周期的管理进行交互，你可以实现Spring <code>InitializingBean</code> 和 <code>DisposableBean</code> 接口。
+容器为前者调用 <code>afterPropertiesSet()</code> 并为后者调用 <code>destroy()</code>，以使在初始化和销毁Bean时执行某些操作。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>JSR-250 <code>@PostConstruct</code> 和 <code>@PreDestroy</code> 注解通常被认为是在现代Spring应用程序中接收生命周期回调的最佳实践。
+使用这些注解意味着你的bean没有耦合到特定于Spring的接口。有关详细信息，请参见
+<a href="#beans-postconstruct-and-predestroy-annotations">使用 <code>@PostConstruct</code> 和 <code>@PreDestroy</code></a>。</p>
+</div>
+<div class="paragraph">
+<p>如果不想使用JSR-250注解，但仍然想删除耦合，请考虑使用 <code>init-method</code> 和 <code>destroy-method</code> 定义Bean元数据。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>在内部，Spring框架使用 <code>BeanPostProcessor</code> 实现来处理它可以找到的任何回调接口并调用适当的方法。
+如果你需要自定义功能或其他生命周期行为，Spring默认不提供，则你可以自己实现 <code>BeanPostProcessor</code>。有关更多信息，请参见
+<a href="#beans-factory-extension">容器扩展点</a>。</p>
+</div>
+<div class="paragraph">
+<p>除了初始化和销毁回调，Spring管理的对象还可以实现 <code>Lifecycle</code> 接口，以便这些对象可以在容器自身的生命周期的驱动下参与启动和关闭过程。</p>
+</div>
+<div class="paragraph">
+<p>本节介绍了生命周期回调接口。</p>
+</div>
+<div class="sect3">
+<h4 id="beans-factory-lifecycle-initializingbean">6.1.1. 初始化回调</h4>
+<div class="paragraph">
+<p>使用 <code>org.springframework.beans.factory.InitializingBean</code> 接口，容器在bean上设置了所有必需的属性后，
+就可以执行初始化工作。<code>InitializingBean</code> 接口指定一个方法：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">void afterPropertiesSet() throws Exception;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>我们建议你不要使用 <code>InitializingBean</code> 接口，因为它不必要地将代码耦合到Spring。
+另外，我们建议使用 <a href="#beans-postconstruct-and-predestroy-annotations"><code>@PostConstruct</code></a> 注解或指定POJO初始化方法。
+对于基于XML的配置元数据，可以使用 <code>init-method</code> 属性指定具有void且无参数签名的方法名称。
+通过Java配置，可以使用 <code>@Bean</code> 的 <code>initMethod</code> 属性。
+请参阅<a href="#beans-java-lifecycle-callbacks">[beans-java-lifecycle-callbacks]</a>。考虑以下示例：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="exampleInitBean" class="examples.ExampleBean" init-method="init"/&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class ExampleBean {
+
+    public void init() {
+        // do some initialization work
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>前面的示例与下面的示例（包含两个清单）几乎具有完全相同的效果：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="exampleInitBean" class="examples.AnotherExampleBean"/&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class AnotherExampleBean implements InitializingBean {
+
+    public void afterPropertiesSet() {
+        // do some initialization work
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>但是，前面两个示例中的第一个示例并未将代码耦合到Spring。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-factory-lifecycle-disposablebean">6.1.2. 销毁回调</h4>
+<div class="paragraph">
+<p>通过实现 <code>org.springframework.beans.factory.DisposableBean</code> 接口，当包含bean的容器被销毁时，
+它可以获取回调。<code>DisposableBean</code> 接口指定一个方法：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">void destroy() throws Exception;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>我们建议你不要使用 <code>DisposableBean</code> 接口，因为它不必要地将代码耦合到Spring。
+另外，我们建议使用 <a href="#beans-postconstruct-and-predestroy-annotations"><code>@PreDestroy</code></a> 注解或指定bean定义支持的通用方法。
+对于基于XML的配置元数据，可以在 <code>&lt;bean/&gt;</code> 上使用 <code>destroy-method</code> 属性。
+通过Java配置，可以使用 <code>@Bean</code> 的 <code>destroyMethod</code> 属性。
+请参阅<a href="#beans-java-lifecycle-callbacks">[beans-java-lifecycle-callbacks]</a>。考虑以下示例：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="exampleInitBean" class="examples.ExampleBean" destroy-method="cleanup"/&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class ExampleBean {
+
+    public void cleanup() {
+        // do some destruction work (like releasing pooled connections)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>前面的定义与下面的定义几乎具有完全相同的效果：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="exampleInitBean" class="examples.AnotherExampleBean"/&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class AnotherExampleBean implements DisposableBean {
+
+    public void destroy() {
+        // do some destruction work (like releasing pooled connections)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>但是，前面两个定义中的第一个没有将代码耦合到Spring。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+你可以为 <code>&lt;bean&gt;</code> 元素的 <code>destroy-method</code> 属性指定一个特殊的（<code>inferred</code>）值，
+该值指示Spring在特定bean类上自动检测公共的 <code>close</code> 或 <code>shutdown</code> 方法。
+（因此，任何实现 <code>java.lang.AutoCloseable</code> 或 <code>java.io.Closeable</code> 的类都将匹配。）你还可以在 <code>&lt;beans&gt;</code> 的
+<code>default-destroy-method</code> 属性上设置这个特殊的（<code>inferred</code>）值。即可将此行为应用到整个bean集（请参阅
+<a href="#beans-factory-lifecycle-default-init-destroy-methods">默认初始化和销毁方法</a>）。请注意，这是Java配置的默认行为。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-factory-lifecycle-default-init-destroy-methods">6.1.3. 默认初始化和销毁方法</h4>
+<div class="paragraph">
+<p>当编写不使用Spring特定的 <code>InitializingBean</code> 和 <code>DisposableBean</code> 回调接口的初始化和销毁方法回调时，
+通常会编写诸如 <code>init()</code>，<code>initialize()</code>，<code>dispose()</code> 等名称的方法。理想情况下，此类生命周期回调方法的名称应在整个项目中标准化，
+以便所有开发人员都使用相同的方法名称并确保一致性。</p>
+</div>
+<div class="paragraph">
+<p>你可以将Spring容器配置为“look”每个bean上初始化/销毁回调方法的名称。这意味着，作为应用程序开发人员，
+你可以编写应用程序类并使用称为 <code>init()</code> 的初始化回调，而不必为每个bean定义配置 <code>init-method="init"</code> 属性。
+Spring IoC容器在创建bean时（并根据<a href="#beans-factory-lifecycle">前面描述</a>的标准生命周期回调协定）调用该方法。
+此功能还对初始化和销毁方法回调强制执行一致的命名约定。</p>
+</div>
+<div class="paragraph">
+<p>假设你的初始化回调方法命名为 <code>init()</code>，而destroy回调方法命名为 <code>destroy()</code>。然后你的类定义类似于以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class DefaultBlogService implements BlogService {
+
+    private BlogDao blogDao;
+
+    public void setBlogDao(BlogDao blogDao) {
+        this.blogDao = blogDao;
+    }
+
+    // this is (unsurprisingly) the initialization callback method
+    public void init() {
+        if (this.blogDao == null) {
+            throw new IllegalStateException("The [blogDao] property must be set.");
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>然后，你可以在类似于以下内容的Bean中使用该类：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;beans default-init-method="init"&gt;
+
+    &lt;bean id="blogService" class="com.something.DefaultBlogService"&gt;
+        &lt;property name="blogDao" ref="blogDao" /&gt;
+    &lt;/bean&gt;
+
+&lt;/beans&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>顶级 <code>&lt;beans/&gt;</code> 元素属性上存在 <code>default-init-method</code> 属性，导致Spring IoC容器将Bean类上称为 <code>init</code> 的方法识别为初始化方法回调。
+在创建和组装bean时，如果bean类具有这种方法，则会在适当的时间调用它。</p>
+</div>
+<div class="paragraph">
+<p>你可以通过使用顶级 <code>&lt;beans/&gt;</code> 元素上的 <code>default-destroy-method</code> 属性类似地（在XML中）配置 <code>destroy</code> 方法回调。</p>
+</div>
+<div class="paragraph">
+<p>如果现有的Bean类已经具有按约定以不同的方式命名的回调方法，则可以通过使用 <code>&lt;bean/&gt;</code> 的 <code>init-method</code> 和
+<code>destroy-method</code> 属性指定（在XML中）方法名称来覆盖默认值本身。</p>
+</div>
+<div class="paragraph">
+<p>Spring容器保证在为bean提供所有依赖项后立即调用配置的初始化回调。因此，在原始bean引用上调用了初始化回调，
+这意味着AOP拦截器等尚未应用于bean。首先完全创建目标bean，然后应用带有其拦截器链的AOP代理。例如
+如果目标Bean和代理分别定义，则你的代码甚至可以绕过代理与原始目标Bean进行交互。因此，
+将拦截器应用于 <code>init</code> 方法是不一致的，因为这样做会将目标Bean的生命周期耦合到其代理或拦截器，
+并且当你的代码直接与原始目标Bean进行交互时会留下奇怪的语义。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-factory-lifecycle-combined-effects">6.1.4. 组合生命周期机制</h4>
+<div class="paragraph">
+<p>从Spring 2.5开始，你可以使用三个选项来控制Bean生命周期行为：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#beans-factory-lifecycle-initializingbean"><code>InitializingBean</code></a> 和
+<a href="#beans-factory-lifecycle-disposablebean"><code>DisposableBean</code></a> 回调接口</p>
+</li>
+<li>
+<p>自定义 <code>init()</code> 和 <code>destroy()</code> 方法</p>
+</li>
+<li>
+<p><a href="#beans-postconstruct-and-predestroy-annotations"><code>@PostConstruct</code> 和 <code>@PreDestroy</code>
+注解</a>.你可以结合使用这些机制来控制给定的bean。</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+如果为一个bean配置了多个生命周期机制，并且为每个机制配置了不同的方法名称，
+则将按照此后列出的顺序执行每个已配置的方法。但是，如果为多个生命周期机制中的多个生命周期配置了相同的方法名称
+（例如，为初始化方法使用 <code>init()</code>），则该方法将执行一次，如<a href="#beans-factory-lifecycle-default-init-destroy-methods">上一节</a>所述。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>为同一个bean配置的具有不同初始化方法的多种生命周期机制如下：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>用 <code>@PostConstruct</code> 注解的方法</p>
+</li>
+<li>
+<p>由 <code>InitializingBean</code> 回调接口定义的 <code>afterPropertiesSet()</code></p>
+</li>
+<li>
+<p>自定义配置的 <code>init()</code> 方法</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>销毁方法的调用顺序相同：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>用 <code>@PreDestroy</code> 注解的方法</p>
+</li>
+<li>
+<p>由 <code>DisposableBean</code> 回调接口定义的 <code>destroy()</code></p>
+</li>
+<li>
+<p>自定义配置的 <code>destroy()</code> 方法</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-factory-lifecycle-processor">6.1.5. 启动和关机回调</h4>
+<div class="paragraph">
+<p><code>Lifecycle</code> 接口为具有自己的生命周期要求（例如启动和停止某些后台进程）的任何对象定义了基本方法：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public interface Lifecycle {
+
+    void start();
+
+    void stop();
+
+    boolean isRunning();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>任何Spring管理的对象都可以实现 <code>Lifecycle</code> 接口。然后，当 <code>ApplicationContext</code> 本身接收到启动和停止信号时
+（例如，对于运行时的停止/重新启动场景），它将那些调用级联到在该上下文中定义的所有 <code>Lifecycle</code> 实现。
+它通过委派给 <code>LifecycleProcessor</code> 来实现此目的，如以下清单所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public interface LifecycleProcessor extends Lifecycle {
+
+    void onRefresh();
+
+    void onClose();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>请注意，<code>LifecycleProcessor</code> 本身是 <code>Lifecycle</code> 接口的扩展。它还添加了其他两种方法来对正在刷新和关闭的上下文做出反应。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>请注意，常规的 <code>org.springframework.context.Lifecycle</code> 接口是用于显式启动和停止通知的普通协议，并不意味着在上下文刷新时自动启动。
+为了对特定bean的自动启动（包括启动阶段）进行细粒度的控制，请考虑改为实现 <code>org.springframework.context.SmartLifecycle</code>。</p>
+</div>
+<div class="paragraph">
+<p>另外请注意，不能保证会在销毁之前发出停止通知。在常规关闭时，在传播常规销毁回调之前，所有 <code>Lifecycle</code> bean首先都会收到停止通知。
+但是，在上下文生命周期内进行热刷新或刷新尝试失败时，仅调用 <code>destroy</code> 方法。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>启动和关闭调用的顺序可能很重要。如果任何两个对象之间存在“depends-on”关系，则依赖方在其依赖之后开始，而在依赖之前停止。
+但是，有时直接依赖项是未知的。你可能只知道某种类型的对象应该先于另一种类型的对象开始。在这些情况下，
+<code>SmartLifecycle</code> 接口定义了另一个选项，即在其超级接口 <code>Phased</code> 上定义的 <code>getPhase()</code> 方法。以下清单显示了 <code>Phased</code> 接口的定义：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public interface Phased {
+
+    int getPhase();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下清单显示了 <code>SmartLifecycle</code> 接口的定义：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public interface SmartLifecycle extends Lifecycle, Phased {
+
+    boolean isAutoStartup();
+
+    void stop(Runnable callback);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>启动时，阶段最低的对象首先启动。停止时，遵循相反的顺序。因此，实现 <code>SmartLifecycle</code> 并且其 <code>getPhase()</code> 方法返回
+ <code>Integer.MIN_VALUE</code> 的对象将是第一个启动且最后一个停止的对象。<code>Integer.MAX_VALUE</code> 的阶段值将指示该对象应该最后启动并首先停止
+ （可能是因为它依赖于正在运行的其他进程）。在考虑阶段值时，重要的是要知道未实现 <code>SmartLifecycle</code> 的任何“正常”
+ <code>Lifecycle</code> 对象的默认阶段为0。因此，任何负阶段值都表明对象应在这些标准组件之前开始（然后停止）在他们之后）。对于任何正阶段值，反之亦然。</p>
+</div>
+<div class="paragraph">
+<p><code>SmartLifecycle</code> 定义的 <code>stop</code> 方法接受回调。任何实现都必须在该实现的关闭过程完成后调用该回调的 <code>run()</code> 方法。
+这将在必要时启用异步关闭，因为 <code>LifecycleProcessor</code> 接口的默认实现 <code>DefaultLifecycleProcessor</code>
+会等待其超时值，以等待每个阶段内的对象组调用该回调。默认的每阶段超时是30秒。你可以通过在上下文中定义一个名为
+<code>lifecycleProcessor</code> 的bean来覆盖默认的生命周期处理器实例。如果只想修改超时，则定义以下内容即可：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="lifecycleProcessor" class="org.springframework.context.support.DefaultLifecycleProcessor"&gt;
+    &lt;!-- timeout value in milliseconds --&gt;
+    &lt;property name="timeoutPerShutdownPhase" value="10000"/&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>如前所述，<code>LifecycleProcessor</code> 接口还定义了用于刷新和关闭上下文的回调方法。后者驱动关闭过程，就好像已经显式调用了
+<code>stop()</code> 一样，但是它在上下文关闭时发生。另一方面，“refresh”回调启用 <code>SmartLifecycle</code>
+bean的另一个功能。刷新上下文时（在所有对象都被实例化和初始化之后），该回调将被调用。
+届时，默认的生命周期处理器将检查每个 <code>SmartLifecycle</code> 对象的 <code>isAutoStartup()</code> 方法返回的布尔值。
+如果为 <code>true</code>，则在该点启动该对象，而不是等待上下文或它自己的 <code>start()</code> 方法的显式调用
+（与上下文刷新不同，对于标准上下文实现，上下文启动不会自动发生）。阶段值和任何“depends-on”关系决定了启动顺序，如前所述。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="beans-factory-shutdown">6.1.6. 在非Web应用程序中正常关闭Spring IoC容器</h4>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>本节仅适用于非Web应用程序。Spring的基于Web的 <code>ApplicationContext</code> 实现已经具有适当的代码，可以在相关的Web应用程序关闭时正常关闭Spring IoC容器。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>如果你在非Web应用程序环境中（例如，在富客户端桌面环境中）使用Spring的IoC容器，请向JVM注册一个关闭钩子。
+这样做可以确保正常关机，并在你的单例bean上调用相关的destroy方法，以便释放所有资源。但你必须正确配置和实现这些destroy回调。</p>
+</div>
+<div class="paragraph">
+<p>要注册关闭挂钩，请调用在 <code>ConfigurableApplicationContext</code> 接口上声明的 <code>registerShutdownHook()</code> 方法，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public final class Boot {
+
+    public static void main(final String[] args) throws Exception {
+        ConfigurableApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
+
+        // add a shutdown hook for the above context...
+        ctx.registerShutdownHook();
+
+        // app runs here...
+
+        // main method exits, hook is called prior to the app shutting down...
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="beans-factory-aware">6.2. <code>ApplicationContextAware</code> 和 <code>BeanNameAware</code></h3>
+<div class="paragraph">
+<p>当 <code>ApplicationContext</code> 创建实现 <code>org.springframework.context.ApplicationContextAware</code> 接口的对象实例时，
+将为该实例提供对该 <code>ApplicationContext</code> 的引用。以下清单显示了 <code>ApplicationContextAware</code> 接口的定义：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public interface ApplicationContextAware {
+
+    void setApplicationContext(ApplicationContext applicationContext) throws BeansException;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>因此，bean可以通过 <code>ApplicationContext</code> 接口或通过将引用转换为该接口的已知子类（例如 <code>ConfigurableApplicationContext</code>
+，它公开了其他功能）来以编程方式操纵创建它们的 <code>ApplicationContext</code>。一种用途是通过编程方式检索其他bean。
+有时，此功能很有用。但是，通常应避免使用它，因为它将代码耦合到Spring，并且不遵循控制反转样式，在该样式中，将协作者作为属性提供给bean。
+<code>ApplicationContext</code> 的其他方法提供对文件资源的访问，发布应用程序事件以及访问 <code>MessageSource</code>。
+这些附加功能在 <code>ApplicationContext</code> 的<a href="#context-introduction">其他功能</a>中进行了描述。</p>
+</div>
+<div class="paragraph">
+<p>自动装配是获得对 <code>ApplicationContext</code> 的引用的另一种选择。传统的 <code>constructor</code> 和 <code>byType</code> 自动装配模式
+（如“<a href="#beans-factory-autowire">自动装配协作者</a>”中所述）可以分别为构造函数参数或setter方法参数提供 <code>ApplicationContext</code> 类型的依赖项。
+要获得更大的灵活性，包括能够自动装配字段和使用多个参数方法，请使用基于注解的自动装配功能。如果这样做，则将 <code>ApplicationContext</code>
+自动连接到需要使用 <code>ApplicationContext</code> 类型的字段，构造函数参数或方法参数中（如果字段，构造函数或方法带有 <code>@Autowired</code>
+注解）。有关更多信息，请参见<a href="#beans-autowired-annotation">使用 <code>@Autowired</code></a>。</p>
+</div>
+<div class="paragraph">
+<p>当 <code>ApplicationContext</code> 创建实现 <code>org.springframework.beans.factory.BeanNameAware</code> 接口的类时，
+该类将获得对在其关联对象定义中定义的名称的引用。以下清单显示了 <code>BeanNameAware</code> 接口的定义：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public interface BeanNameAware {
+
+    void setBeanName(String name) throws BeansException;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>在填充正常的bean属性之后，但在初始化回调（例如 <code>InitializingBean</code> 的 <code>afterPropertiesSet</code> 或自定义 <code>init-method</code>）之前，调用该回调。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="aware-list">6.3. 其它 <code>Aware</code> 接口</h3>
+<div class="paragraph">
+<p>除了 <code>ApplicationContextAware</code> 和 <code>BeanNameAware</code>（<a href="#beans-factory-aware">前面</a>已经讨论过）之外，Spring还提供了多种 <code>Aware</code> 回调接口，
+这些接口使Bean向容器指示它们需要某种基础结构依赖性。通常，名称表示依赖项类型。下表总结了最重要的 <code>Aware</code> 接口：</p>
+</div>
+<table id="beans-factory-nature-aware-list" class="tableblock frame-all grid-all spread">
+<caption class="title">Table 4. Aware interfaces</caption>
+<colgroup>
+<col style="width: 33%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">名称</th>
+<th class="tableblock halign-left valign-top">注入依赖</th>
+<th class="tableblock halign-left valign-top">在&#8230;&#8203;中解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ApplicationContextAware</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">声明 <code>ApplicationContext</code>。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#beans-factory-aware"><code>ApplicationContextAware</code> 和 <code>BeanNameAware</code></a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ApplicationEventPublisherAware</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">封闭的 <code>ApplicationContext</code> 的事件发布者。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#context-introduction">[context-introduction]</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BeanClassLoaderAware</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">类加载器，用于加载Bean类。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#beans-factory-class">Bean实例化</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BeanFactoryAware</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">声明 <code>BeanFactory</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#beans-factory-aware"><code>ApplicationContextAware</code> 和 <code>BeanNameAware</code></a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BeanNameAware</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">声明bean的名称。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#beans-factory-aware"><code>ApplicationContextAware</code> 和 <code>BeanNameAware</code></a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BootstrapContextAware</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">容器在其中运行的资源适配器 <code>BootstrapContext</code>。通常仅在以下位置可用JCA感知的 <code>ApplicationContext</code> 实例。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{docSpringIntegration}#cci[JCA CCI]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LoadTimeWeaverAware</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">定义的编织器，用于在加载时处理类定义。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#aop-aj-ltw">[aop-aj-ltw]</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MessageSourceAware</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">解决消息的已配置策略（支持参数化和国际化）。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#context-introduction">[context-introduction]</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>NotificationPublisherAware</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spring JMX通知发布者。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="integration.html#jmx-notifications">Notifications</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ResourceLoaderAware</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">配置的加载程序，用于对资源的低级别访问。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#resources">[resources]</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ServletConfigAware</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">当前 <code>ServletConfig</code>，容器在其之中运行。仅在web-aware的Spring <code>ApplicationContext</code> 中有效。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="web.html#mvc">Spring MVC</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ServletContextAware</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">当前 <code>ServletContext</code>，容器在其之中运行 。仅在web-aware的Spring <code>ApplicationContext</code> 中有效。</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="web.html#mvc">Spring MVC</a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>再次注意，使用这些接口会将你的代码与Spring API绑定在一起，并且不遵循“控制反转”样式。
+因此，我们建议将它们用于需要以编程方式访问容器的基础结构Bean。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="beans-child-bean-definitions">7. Bean定义继承</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Bean定义可以包含许多配置信息，包括构造函数参数，属性值和特定于容器的信息，例如初始化方法，静态工厂方法名称等。
+子bean定义从父定义继承配置数据。子定义可以覆盖某些值或根据需要添加其他值。
+使用父bean和子bean定义可以节省很多输入。实际上，这是一种模板形式。</p>
+</div>
+<div class="paragraph">
+<p>如果你以编程方式使用 <code>ApplicationContext</code> 接口，则子bean定义由 <code>ChildBeanDefinition</code> 类表示。
+大多数用户不在此级别上与他们合作。相反，它们在诸如 <code>ClassPathXmlApplicationContext</code> 之类的类中声明性地配置bean定义。
+当使用基于XML的配置元数据时，可以通过使用 <code>parent</code> 属性（将父bean指定为该属性的值）来指示子bean定义。以下示例显示了如何执行此操作：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="inheritedTestBean" abstract="true"
+        class="org.springframework.beans.TestBean"&gt;
+    &lt;property name="name" value="parent"/&gt;
+    &lt;property name="age" value="1"/&gt;
+&lt;/bean&gt;
+
+&lt;bean id="inheritsWithDifferentClass"
+        class="org.springframework.beans.DerivedTestBean"
+        parent="inheritedTestBean" init-method="initialize"&gt;  <i class="conum" data-value="1"></i><b>(1)</b>
+    &lt;property name="name" value="override"/&gt;
+    &lt;!-- the age property value of 1 will be inherited from parent --&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>注意 <code>parent</code> 属性。</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>如果未指定子bean定义，则使用父定义中的bean类，但也可以覆盖它。在后一种情况下，子bean类必须与父类兼容（也就是说，它必须接受父类的属性值）。</p>
+</div>
+<div class="paragraph">
+<p>子bean定义从父对象继承作用域，构造函数参数值，属性值和方法替代，并可以选择添加新值。你指定的任何作用域，初始化方法，
+destroy方法或 <code>static</code> 工厂方法设置都会覆盖相应的父设置。</p>
+</div>
+<div class="paragraph">
+<p>其余设置始终从子定义中获取：依赖项，自动装配模式，依赖项检查，单例和惰性初始化。</p>
+</div>
+<div class="paragraph">
+<p>前面的示例使用 <code>abstract</code> 属性将父bean定义显式标记为抽象类。如果父定义未指定类，则需要将父bean定义显式标记为 <code>abstract</code>，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="inheritedTestBeanWithoutClass" abstract="true"&gt;
+    &lt;property name="name" value="parent"/&gt;
+    &lt;property name="age" value="1"/&gt;
+&lt;/bean&gt;
+
+&lt;bean id="inheritsWithClass" class="org.springframework.beans.DerivedTestBean"
+        parent="inheritedTestBeanWithoutClass" init-method="initialize"&gt;
+    &lt;property name="name" value="override"/&gt;
+    &lt;!-- age will inherit the value of 1 from the parent bean definition--&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>父bean不能单独实例化，因为它不完整，并且还被明确标记为 <code>abstract</code>。当定义是 <code>abstract</code> 的时，它只能用作纯模板bean定义，用作子定义的父定义。
+通过将其称为另一个bean的ref属性或使用父bean ID进行显式 <code>getBean()</code> 调用来尝试单独使用这样的抽象父bean会返回错误。
+同样，容器的内部 <code>preInstantiateSingletons()</code> 方法将忽略定义为 <code>abstract</code> 的bean定义。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+默认情况下，<code>ApplicationContext</code> 会预先实例化所有单例。因此，重要的是（至少对于单例bean），
+如果有一个（父）bean定义仅打算用作模板，并且此定义指定了一个类，则必须确保将 <em>abstract</em> 属性设置为 <em>true</em>，
+否则应用程序上下文实际上将（试图）预先实例化抽象Bean。
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="beans-factory-extension">8. 容器扩展点</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>通常，应用程序开发人员不需要为 <code>ApplicationContext</code> 实现类提供子类。相反，可以通过插入特殊集成接口的实现来扩展Spring IoC容器。
+接下来的几节描述了这些集成接口。</p>
+</div>
+<div class="sect2">
+<h3 id="beans-factory-extension-bpp">8.1. 使用 <code>BeanPostProcessor</code> 自定义Bean</h3>
+<div class="paragraph">
+<p><code>BeanPostProcessor</code> 接口定义了回调方法，您可以实施这些回调方法以提供自己的（或覆盖容器的默认值）实例化逻辑，
+依赖关系解析逻辑等。如果您想在Spring容器完成实例化，配置和初始化bean之后实现一些自定义逻辑，
+则可以插入一个或多个自定义 <code>BeanPostProcessor</code> 实现。</p>
+</div>
+<div class="paragraph">
+<p>您可以配置多个 <code>BeanPostProcessor</code> 实例，并且可以通过设置 <code>order</code> 属性来控制这些
+<code>BeanPostProcessor</code> 实例的执行顺序。仅当 <code>BeanPostProcessor</code> 实现
+<code>Ordered</code> 接口时，才可以设置此属性。如果您编写自己的 <code>BeanPostProcessor</code>，则也应该考虑实现
+<code>Ordered</code> 接口。有关更多详细信息，请参见 {api-spring-framework}/beans/factory/config/BeanPostProcessor.html[<code>BeanPostProcessor</code>]
+和 {api-spring-framework}/core/Ordered.html[<code>Ordered</code>] 接口的javadoc。
+另请参见有关<a href="#beans-factory-programmatically-registering-beanpostprocessors">以编程方式注册 <code>BeanPostProcessor</code> 实例</a>的说明。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><code>BeanPostProcessor</code> 实例在bean（或对象）实例上运行。即Spring IoC容器实例化一个bean实例，然后 <code>BeanPostProcessor</code> 实例执行它们的工作。</p>
+</div>
+<div class="paragraph">
+<p><code>BeanPostProcessor</code> 实例是按容器划分作用域的。仅在使用容器层次结构时，这才有意义。如果在一个容器中定义 <code>BeanPostProcessor</code>，
+那么它只对该容器中的bean进行后处理。换句话说，在一个容器中定义的bean不会由在另一个容器中定义的 <code>BeanPostProcessor</code> 进行后处理，
+即使这两个容器是同一层次结构的一部分。</p>
+</div>
+<div class="paragraph">
+<p>要更改实际的bean定义（即定义bean的蓝图），您需要使用 <code>BeanFactoryPostProcessor</code>，如<a href="#beans-factory-extension-factory
+-postprocessors">[beans-factory-extension-factory
+-postprocessors]</a>中所述。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><code>org.springframework.beans.factory.config.BeanPostProcessor</code> 接口恰好由两个回调方法组成。
+当此类被注册为容器的后处理器时，对于容器创建的每个bean实例，后处理器都会在容器初始化方法
+（例如 <code>InitializingBean.afterPropertiesSet()</code> 或任何声明的 <code>init</code> 方法），并在任何bean初始化回调之后被调用。
+后处理器可以对bean实例执行任何操作，包括完全忽略回调。Bean后处理器通常检查回调接口，或者可以用代理包装Bean。
+一些Spring AOP基础结构类被实现为bean后处理器，以提供代理包装逻辑。</p>
+</div>
+<div class="paragraph">
+<p><code>ApplicationContext</code> 自动检测实现 <code>BeanPostProcessor</code> 接口的配置元数据中定义的所有bean。
+<code>ApplicationContext</code> 将这些bean注册为后处理器，以便以后在bean创建时可以调用它们。Bean后处理器可以与其他Bean以相同的方式部署在容器中。</p>
+</div>
+<div class="paragraph">
+<p>注意，在配置类上使用 <code>@Bean</code> 工厂方法声明 <code>BeanPostProcessor</code> 时，工厂方法的返回类型应该是实现类本身，或者至少是
+<code>org.springframework.beans.factory.config.BeanPostProcessor</code> 接口。以指示该bean的后处理器性质。否则，
+<code>ApplicationContext</code> 无法在完全创建之前按类型自动检测它。由于 <code>BeanPostProcessor</code> 需要及早实例化才能应用于上下文中其他bean的初始化，
+因此这种早期类型检测至关重要。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="beans-beanfactory">9. BeanFactory</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
+<script>hljs.initHighlighting()</script>
+</body>
+</html>

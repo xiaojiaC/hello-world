@@ -417,97 +417,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .show-for-print{display:inherit!important}}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
-<style>
-/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
-/*pre.CodeRay {background-color:#f7f7f8;}*/
-.CodeRay .line-numbers{border-right:1px solid #d8d8d8;padding:0 0.5em 0 .25em}
-.CodeRay span.line-numbers{display:inline-block;margin-right:.5em;color:rgba(0,0,0,.3)}
-.CodeRay .line-numbers strong{color:rgba(0,0,0,.4)}
-table.CodeRay{border-collapse:separate;border-spacing:0;margin-bottom:0;border:0;background:none}
-table.CodeRay td{vertical-align: top;line-height:1.45}
-table.CodeRay td.line-numbers{text-align:right}
-table.CodeRay td.line-numbers>pre{padding:0;color:rgba(0,0,0,.3)}
-table.CodeRay td.code{padding:0 0 0 .5em}
-table.CodeRay td.code>pre{padding:0}
-.CodeRay .debug{color:#fff !important;background:#000080 !important}
-.CodeRay .annotation{color:#007}
-.CodeRay .attribute-name{color:#000080}
-.CodeRay .attribute-value{color:#700}
-.CodeRay .binary{color:#509}
-.CodeRay .comment{color:#998;font-style:italic}
-.CodeRay .char{color:#04d}
-.CodeRay .char .content{color:#04d}
-.CodeRay .char .delimiter{color:#039}
-.CodeRay .class{color:#458;font-weight:bold}
-.CodeRay .complex{color:#a08}
-.CodeRay .constant,.CodeRay .predefined-constant{color:#008080}
-.CodeRay .color{color:#099}
-.CodeRay .class-variable{color:#369}
-.CodeRay .decorator{color:#b0b}
-.CodeRay .definition{color:#099}
-.CodeRay .delimiter{color:#000}
-.CodeRay .doc{color:#970}
-.CodeRay .doctype{color:#34b}
-.CodeRay .doc-string{color:#d42}
-.CodeRay .escape{color:#666}
-.CodeRay .entity{color:#800}
-.CodeRay .error{color:#808}
-.CodeRay .exception{color:inherit}
-.CodeRay .filename{color:#099}
-.CodeRay .function{color:#900;font-weight:bold}
-.CodeRay .global-variable{color:#008080}
-.CodeRay .hex{color:#058}
-.CodeRay .integer,.CodeRay .float{color:#099}
-.CodeRay .include{color:#555}
-.CodeRay .inline{color:#000}
-.CodeRay .inline .inline{background:#ccc}
-.CodeRay .inline .inline .inline{background:#bbb}
-.CodeRay .inline .inline-delimiter{color:#d14}
-.CodeRay .inline-delimiter{color:#d14}
-.CodeRay .important{color:#555;font-weight:bold}
-.CodeRay .interpreted{color:#b2b}
-.CodeRay .instance-variable{color:#008080}
-.CodeRay .label{color:#970}
-.CodeRay .local-variable{color:#963}
-.CodeRay .octal{color:#40e}
-.CodeRay .predefined{color:#369}
-.CodeRay .preprocessor{color:#579}
-.CodeRay .pseudo-class{color:#555}
-.CodeRay .directive{font-weight:bold}
-.CodeRay .type{font-weight:bold}
-.CodeRay .predefined-type{color:inherit}
-.CodeRay .reserved,.CodeRay .keyword {color:#000;font-weight:bold}
-.CodeRay .key{color:#808}
-.CodeRay .key .delimiter{color:#606}
-.CodeRay .key .char{color:#80f}
-.CodeRay .value{color:#088}
-.CodeRay .regexp .delimiter{color:#808}
-.CodeRay .regexp .content{color:#808}
-.CodeRay .regexp .modifier{color:#808}
-.CodeRay .regexp .char{color:#d14}
-.CodeRay .regexp .function{color:#404;font-weight:bold}
-.CodeRay .string{color:#d20}
-.CodeRay .string .string .string{background:#ffd0d0}
-.CodeRay .string .content{color:#d14}
-.CodeRay .string .char{color:#d14}
-.CodeRay .string .delimiter{color:#d14}
-.CodeRay .shell{color:#d14}
-.CodeRay .shell .delimiter{color:#d14}
-.CodeRay .symbol{color:#990073}
-.CodeRay .symbol .content{color:#a60}
-.CodeRay .symbol .delimiter{color:#630}
-.CodeRay .tag{color:#008080}
-.CodeRay .tag-special{color:#d70}
-.CodeRay .variable{color:#036}
-.CodeRay .insert{background:#afa}
-.CodeRay .delete{background:#faa}
-.CodeRay .change{color:#aaf;background:#007}
-.CodeRay .head{color:#f8f;background:#505}
-.CodeRay .insert .insert{color:#080}
-.CodeRay .delete .delete{color:#800}
-.CodeRay .change .change{color:#66f}
-.CodeRay .head .head{color:#f4f}
-</style>
 <style>
 .hidden {
 	display: none;
@@ -681,22 +590,22 @@ $(addBlockSwitches);
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">interface</span> <span class="class">CrudRepository</span>&lt;T, ID <span class="directive">extends</span> <span class="predefined-type">Serializable</span>&gt;
-  <span class="directive">extends</span> Repository&lt;T, ID&gt; {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public interface CrudRepository&lt;T, ID extends Serializable&gt;
+  extends Repository&lt;T, ID&gt; {
 
-  &lt;S <span class="directive">extends</span> T&gt; S save(S entity);      <i class="conum" data-value="1"></i><b>(1)</b>
+  &lt;S extends T&gt; S save(S entity);      <i class="conum" data-value="1"></i><b>(1)</b>
 
   Optional&lt;T&gt; findById(ID primaryKey); <i class="conum" data-value="2"></i><b>(2)</b>
 
-  <span class="predefined-type">Iterable</span>&lt;T&gt; findAll();               <i class="conum" data-value="3"></i><b>(3)</b>
+  Iterable&lt;T&gt; findAll();               <i class="conum" data-value="3"></i><b>(3)</b>
 
-  <span class="type">long</span> count();                        <i class="conum" data-value="4"></i><b>(4)</b>
+  long count();                        <i class="conum" data-value="4"></i><b>(4)</b>
 
-  <span class="type">void</span> delete(T entity);               <i class="conum" data-value="5"></i><b>(5)</b>
+  void delete(T entity);               <i class="conum" data-value="5"></i><b>(5)</b>
 
-  <span class="type">boolean</span> existsById(ID primaryKey);   <i class="conum" data-value="6"></i><b>(6)</b>
+  boolean existsById(ID primaryKey);   <i class="conum" data-value="6"></i><b>(6)</b>
 
-  <span class="comment">// … 省略了更多功能</span>
+  // … 省略了更多功能
 }</code></pre>
 </div>
 </div>
@@ -752,12 +661,12 @@ $(addBlockSwitches);
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">interface</span> <span class="class">PagingAndSortingRepository</span>&lt;T, ID <span class="directive">extends</span> <span class="predefined-type">Serializable</span>&gt;
-  <span class="directive">extends</span> CrudRepository&lt;T, ID&gt; {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public interface PagingAndSortingRepository&lt;T, ID extends Serializable&gt;
+  extends CrudRepository&lt;T, ID&gt; {
 
-  <span class="predefined-type">Iterable</span>&lt;T&gt; findAll(Sort sort);
+  Iterable&lt;T&gt; findAll(Sort sort);
 
-  Page&lt;T&gt; findAll(<span class="predefined-type">Pageable</span> pageable);
+  Page&lt;T&gt; findAll(Pageable pageable);
 }</code></pre>
 </div>
 </div>
@@ -768,8 +677,8 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">PagingAndSortingRepository&lt;User, <span class="predefined-type">Long</span>&gt; repository = <span class="comment">// … 获得对bean的访问权限</span>
-Page&lt;User&gt; users = repository.findAll(<span class="keyword">new</span> PageRequest(<span class="integer">1</span>, <span class="integer">20</span>)); <span class="comment">// 注意第一页从0开始</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">PagingAndSortingRepository&lt;User, Long&gt; repository = // … 获得对bean的访问权限
+Page&lt;User&gt; users = repository.findAll(new PageRequest(1, 20)); // 注意第一页从0开始</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -783,9 +692,9 @@ Page&lt;User&gt; users = repository.findAll(<span class="keyword">new</span> Pag
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> CrudRepository&lt;User, <span class="predefined-type">Long</span>&gt; {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">interface UserRepository extends CrudRepository&lt;User, Long&gt; {
 
-  <span class="type">long</span> countByLastname(<span class="predefined-type">String</span> lastname);
+  long countByLastname(String lastname);
 }</code></pre>
 </div>
 </div>
@@ -799,11 +708,11 @@ Page&lt;User&gt; users = repository.findAll(<span class="keyword">new</span> Pag
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> CrudRepository&lt;User, <span class="predefined-type">Long</span>&gt; {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">interface UserRepository extends CrudRepository&lt;User, Long&gt; {
 
-  <span class="type">long</span> deleteByLastname(<span class="predefined-type">String</span> lastname);
+  long deleteByLastname(String lastname);
 
-  <span class="predefined-type">List</span>&lt;User&gt; removeByLastname(<span class="predefined-type">String</span> lastname);
+  List&lt;User&gt; removeByLastname(String lastname);
 }</code></pre>
 </div>
 </div>
@@ -823,7 +732,7 @@ Page&lt;User&gt; users = repository.findAll(<span class="keyword">new</span> Pag
 <p>声明继承 <code>Repository</code> 或其子接口之一的接口，并键入它应处理的域类和ID类型，如以下示例所示：</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">PersonRepository</span> <span class="directive">extends</span> Repository&lt;Person, <span class="predefined-type">Long</span>&gt; { <span class="error">…</span> }</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">interface PersonRepository extends Repository&lt;Person, Long&gt; { … }</code></pre>
 </div>
 </div>
 </li>
@@ -831,8 +740,8 @@ Page&lt;User&gt; users = repository.findAll(<span class="keyword">new</span> Pag
 <p>在接口中声明查询方法。</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">PersonRepository</span> <span class="directive">extends</span> Repository&lt;Person, <span class="predefined-type">Long</span>&gt; {
-  <span class="predefined-type">List</span>&lt;Person&gt; findByLastname(<span class="predefined-type">String</span> lastname);
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">interface PersonRepository extends Repository&lt;Person, Long&gt; {
+  List&lt;Person&gt; findByLastname(String lastname);
 }</code></pre>
 </div>
 </div>
@@ -846,10 +755,10 @@ Page&lt;User&gt; users = repository.findAll(<span class="keyword">new</span> Pag
 <p>要使用Java配置，请创建类似于以下内容的类：</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">org.springframework.data.jpa.repository.config.EnableJpaRepositories</span>;
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-<span class="annotation">@EnableJpaRepositories</span>
-<span class="type">class</span> <span class="class">Config</span> {}</code></pre>
+@EnableJpaRepositories
+class Config {}</code></pre>
 </div>
 </div>
 </li>
@@ -857,18 +766,18 @@ Page&lt;User&gt; users = repository.findAll(<span class="keyword">new</span> Pag
 <p>要使用XML配置，请定义类似于以下内容的bean：</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="preprocessor">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
-<span class="tag">&lt;beans</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/beans</span><span class="delimiter">&quot;</span></span>
-   <span class="attribute-name">xmlns:xsi</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.w3.org/2001/XMLSchema-instance</span><span class="delimiter">&quot;</span></span>
-   <span class="attribute-name">xmlns:jpa</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/data/jpa</span><span class="delimiter">&quot;</span></span>
-   <span class="attribute-name">xsi:schemaLocation</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/beans</span>
-     <span class="content">http://www.springframework.org/schema/beans/spring-beans.xsd</span>
-     <span class="content">http://www.springframework.org/schema/data/jpa</span>
-     <span class="content">http://www.springframework.org/schema/data/jpa/spring-jpa.xsd</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+   xsi:schemaLocation="http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/data/jpa
+     http://www.springframework.org/schema/data/jpa/spring-jpa.xsd"&gt;
 
-   <span class="tag">&lt;jpa:repositories</span> <span class="attribute-name">base-package</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.repositories</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
+   &lt;jpa:repositories base-package="com.acme.repositories"/&gt;
 
-<span class="tag">&lt;/beans&gt;</span></code></pre>
+&lt;/beans&gt;</code></pre>
 </div>
 </div>
 </li>
@@ -888,16 +797,16 @@ Page&lt;User&gt; users = repository.findAll(<span class="keyword">new</span> Pag
 <p>注入存储库实例并使用它，如以下示例所示：</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">SomeClient</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">class SomeClient {
 
-  <span class="directive">private</span> <span class="directive">final</span> PersonRepository repository;
+  private final PersonRepository repository;
 
   SomeClient(PersonRepository repository) {
-    <span class="local-variable">this</span>.repository = repository;
+    this.repository = repository;
   }
 
-  <span class="type">void</span> doSomething() {
-    <span class="predefined-type">List</span>&lt;Person&gt; persons = repository.findByLastname(<span class="string"><span class="delimiter">&quot;</span><span class="content">Matthews</span><span class="delimiter">&quot;</span></span>);
+  void doSomething() {
+    List&lt;Person&gt; persons = repository.findByLastname("Matthews");
   }
 }</code></pre>
 </div>
@@ -958,15 +867,15 @@ Page&lt;User&gt; users = repository.findAll(<span class="keyword">new</span> Pag
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@NoRepositoryBean</span>
-<span class="type">interface</span> <span class="class">MyBaseRepository</span>&lt;T, ID <span class="directive">extends</span> <span class="predefined-type">Serializable</span>&gt; <span class="directive">extends</span> Repository&lt;T, ID&gt; {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@NoRepositoryBean
+interface MyBaseRepository&lt;T, ID extends Serializable&gt; extends Repository&lt;T, ID&gt; {
 
   Optional&lt;T&gt; findById(ID id);
 
-  &lt;S <span class="directive">extends</span> T&gt; S save(S entity);
+  &lt;S extends T&gt; S save(S entity);
 }
 
-<span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> MyBaseRepository&lt;User, <span class="predefined-type">Long</span>&gt; {
+interface UserRepository extends MyBaseRepository&lt;User, Long&gt; {
   User findByEmailAddress(EmailAddress emailAddress);
 }</code></pre>
 </div>
@@ -1050,8 +959,8 @@ JSR 305元注释允许 <a href="https://www.jetbrains.com/help/idea/nullable-and
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@org</span>.springframework.lang.NonNullApi
-<span class="keyword">package</span> <span class="namespace">com.acme</span>;</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@org.springframework.lang.NonNullApi
+package com.acme;</code></pre>
 </div>
 </div>
 </div>
@@ -1070,16 +979,16 @@ JSR 305元注释允许 <a href="https://www.jetbrains.com/help/idea/nullable-and
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">package</span> <span class="namespace">com.acme</span>;                                                       <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">package com.acme;                                                       <i class="conum" data-value="1"></i><b>(1)</b>
 
-<span class="keyword">import</span> <span class="include">org.springframework.lang.Nullable</span>;
+import org.springframework.lang.Nullable;
 
-<span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> Repository&lt;User, <span class="predefined-type">Long</span>&gt; {
+interface UserRepository extends Repository&lt;User, Long&gt; {
 
   User getByEmailAddress(EmailAddress emailAddress);                    <i class="conum" data-value="2"></i><b>(2)</b>
 
-  <span class="annotation">@Nullable</span>
-  User findByEmailAddress(<span class="annotation">@Nullable</span> EmailAddress emailAdress);          <i class="conum" data-value="3"></i><b>(3)</b>
+  @Nullable
+  User findByEmailAddress(@Nullable EmailAddress emailAdress);          <i class="conum" data-value="3"></i><b>(3)</b>
 
   Optional&lt;User&gt; findOptionalByEmailAddress(EmailAddress emailAddress); <i class="conum" data-value="4"></i><b>(4)</b>
 }</code></pre>
@@ -1121,7 +1030,7 @@ Spring Data存储库使用语言机制来定义这些约束以应用相同的运
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="kotlin">interface UserRepository : Repository&lt;User, String&gt; {
+<pre class="highlightjs highlight"><code class="language-kotlin" data-lang="kotlin">interface UserRepository : Repository&lt;User, String&gt; {
 
   fun findByUsername(username: String): User     <i class="conum" data-value="1"></i><b>(1)</b>
 
@@ -1173,15 +1082,15 @@ Spring Data存储库使用语言机制来定义这些约束以应用相同的运
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">MyRepository</span> <span class="directive">extends</span> JpaRepository&lt;User, <span class="predefined-type">Long</span>&gt; { }
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">interface MyRepository extends JpaRepository&lt;User, Long&gt; { }
 
-<span class="annotation">@NoRepositoryBean</span>
-<span class="type">interface</span> <span class="class">MyBaseRepository</span>&lt;T, ID <span class="directive">extends</span> <span class="predefined-type">Serializable</span>&gt; <span class="directive">extends</span> JpaRepository&lt;T, ID&gt; {
-  <span class="error">…</span>
+@NoRepositoryBean
+interface MyBaseRepository&lt;T, ID extends Serializable&gt; extends JpaRepository&lt;T, ID&gt; {
+  …
 }
 
-<span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> MyBaseRepository&lt;User, <span class="predefined-type">Long</span>&gt; {
-  <span class="error">…</span>
+interface UserRepository extends MyBaseRepository&lt;User, Long&gt; {
+  …
 }</code></pre>
 </div>
 </div>
@@ -1198,17 +1107,17 @@ Spring Data存储库使用语言机制来定义这些约束以应用相同的运
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">AmbiguousRepository</span> <span class="directive">extends</span> Repository&lt;User, <span class="predefined-type">Long</span>&gt; {
- <span class="error">…</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">interface AmbiguousRepository extends Repository&lt;User, Long&gt; {
+ …
 }
 
-<span class="annotation">@NoRepositoryBean</span>
-<span class="type">interface</span> <span class="class">MyBaseRepository</span>&lt;T, ID <span class="directive">extends</span> <span class="predefined-type">Serializable</span>&gt; <span class="directive">extends</span> CrudRepository&lt;T, ID&gt; {
-  <span class="error">…</span>
+@NoRepositoryBean
+interface MyBaseRepository&lt;T, ID extends Serializable&gt; extends CrudRepository&lt;T, ID&gt; {
+  …
 }
 
-<span class="type">interface</span> <span class="class">AmbiguousUserRepository</span> <span class="directive">extends</span> MyBaseRepository&lt;User, <span class="predefined-type">Long</span>&gt; {
-  <span class="error">…</span>
+interface AmbiguousUserRepository extends MyBaseRepository&lt;User, Long&gt; {
+  …
 }</code></pre>
 </div>
 </div>
@@ -1226,22 +1135,22 @@ Spring Data存储库使用语言机制来定义这些约束以应用相同的运
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">PersonRepository</span> <span class="directive">extends</span> Repository&lt;Person, <span class="predefined-type">Long</span>&gt; {
- <span class="error">…</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">interface PersonRepository extends Repository&lt;Person, Long&gt; {
+ …
 }
 
-<span class="annotation">@Entity</span>
-<span class="type">class</span> <span class="class">Person</span> {
-  <span class="error">…</span>
+@Entity
+class Person {
+  …
 }
 
-<span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> Repository&lt;User, <span class="predefined-type">Long</span>&gt; {
- <span class="error">…</span>
+interface UserRepository extends Repository&lt;User, Long&gt; {
+ …
 }
 
-<span class="annotation">@Document</span>
-<span class="type">class</span> <span class="class">User</span> {
-  <span class="error">…</span>
+@Document
+class User {
+  …
 }</code></pre>
 </div>
 </div>
@@ -1259,18 +1168,18 @@ Spring Data存储库使用语言机制来定义这些约束以应用相同的运
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">JpaPersonRepository</span> <span class="directive">extends</span> Repository&lt;Person, <span class="predefined-type">Long</span>&gt; {
- <span class="error">…</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">interface JpaPersonRepository extends Repository&lt;Person, Long&gt; {
+ …
 }
 
-<span class="type">interface</span> <span class="class">MongoDBPersonRepository</span> <span class="directive">extends</span> Repository&lt;Person, <span class="predefined-type">Long</span>&gt; {
- <span class="error">…</span>
+interface MongoDBPersonRepository extends Repository&lt;Person, Long&gt; {
+ …
 }
 
-<span class="annotation">@Entity</span>
-<span class="annotation">@Document</span>
-<span class="type">class</span> <span class="class">Person</span> {
-  <span class="error">…</span>
+@Entity
+@Document
+class Person {
+  …
 }</code></pre>
 </div>
 </div>
@@ -1297,9 +1206,9 @@ Spring Data存储库使用语言机制来定义这些约束以应用相同的运
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@EnableJpaRepositories</span>(basePackages = <span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.repositories.jpa</span><span class="delimiter">&quot;</span></span>)
-<span class="annotation">@EnableMongoRepositories</span>(basePackages = <span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.repositories.mongo</span><span class="delimiter">&quot;</span></span>)
-<span class="type">interface</span> <span class="class">Configuration</span> { }</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@EnableJpaRepositories(basePackages = "com.acme.repositories.jpa")
+@EnableMongoRepositories(basePackages = "com.acme.repositories.mongo")
+interface Configuration { }</code></pre>
 </div>
 </div>
 </div>
@@ -1364,22 +1273,22 @@ introduction子句可以包含更多表达式，例如 <code>Distinct</code> 在
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">PersonRepository</span> <span class="directive">extends</span> Repository&lt;User, <span class="predefined-type">Long</span>&gt; {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">interface PersonRepository extends Repository&lt;User, Long&gt; {
 
-  <span class="predefined-type">List</span>&lt;Person&gt; findByEmailAddressAndLastname(EmailAddress emailAddress, <span class="predefined-type">String</span> lastname);
+  List&lt;Person&gt; findByEmailAddressAndLastname(EmailAddress emailAddress, String lastname);
 
-  <span class="comment">// 为查询启用distinct标志</span>
-  <span class="predefined-type">List</span>&lt;Person&gt; findDistinctPeopleByLastnameOrFirstname(<span class="predefined-type">String</span> lastname, <span class="predefined-type">String</span> firstname);
-  <span class="predefined-type">List</span>&lt;Person&gt; findPeopleDistinctByLastnameOrFirstname(<span class="predefined-type">String</span> lastname, <span class="predefined-type">String</span> firstname);
+  // 为查询启用distinct标志
+  List&lt;Person&gt; findDistinctPeopleByLastnameOrFirstname(String lastname, String firstname);
+  List&lt;Person&gt; findPeopleDistinctByLastnameOrFirstname(String lastname, String firstname);
 
-  <span class="comment">// 启用忽略单个属性的大小写</span>
-  <span class="predefined-type">List</span>&lt;Person&gt; findByLastnameIgnoreCase(<span class="predefined-type">String</span> lastname);
-  <span class="comment">// 启用忽略所有合适属性的大小写</span>
-  <span class="predefined-type">List</span>&lt;Person&gt; findByLastnameAndFirstnameAllIgnoreCase(<span class="predefined-type">String</span> lastname, <span class="predefined-type">String</span> firstname);
+  // 启用忽略单个属性的大小写
+  List&lt;Person&gt; findByLastnameIgnoreCase(String lastname);
+  // 启用忽略所有合适属性的大小写
+  List&lt;Person&gt; findByLastnameAndFirstnameAllIgnoreCase(String lastname, String firstname);
 
-  <span class="comment">// 为查询启用静态ORDER BY</span>
-  <span class="predefined-type">List</span>&lt;Person&gt; findByLastnameOrderByFirstnameAsc(<span class="predefined-type">String</span> lastname);
-  <span class="predefined-type">List</span>&lt;Person&gt; findByLastnameOrderByFirstnameDesc(<span class="predefined-type">String</span> lastname);
+  // 为查询启用静态ORDER BY
+  List&lt;Person&gt; findByLastnameOrderByFirstnameAsc(String lastname);
+  List&lt;Person&gt; findByLastnameOrderByFirstnameDesc(String lastname);
 }</code></pre>
 </div>
 </div>
@@ -1415,7 +1324,7 @@ introduction子句可以包含更多表达式，例如 <code>Distinct</code> 在
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">List</span>&lt;Person&gt; findByAddressZipCode(ZipCode zipCode);</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">List&lt;Person&gt; findByAddressZipCode(ZipCode zipCode);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1434,7 +1343,7 @@ introduction子句可以包含更多表达式，例如 <code>Distinct</code> 在
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">List</span>&lt;Person&gt; findByAddress_ZipCode(ZipCode zipCode);</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">List&lt;Person&gt; findByAddress_ZipCode(ZipCode zipCode);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1452,13 +1361,13 @@ introduction子句可以包含更多表达式，例如 <code>Distinct</code> 在
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">Page&lt;User&gt; findByLastname(<span class="predefined-type">String</span> lastname, <span class="predefined-type">Pageable</span> pageable);
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Page&lt;User&gt; findByLastname(String lastname, Pageable pageable);
 
-Slice&lt;User&gt; findByLastname(<span class="predefined-type">String</span> lastname, <span class="predefined-type">Pageable</span> pageable);
+Slice&lt;User&gt; findByLastname(String lastname, Pageable pageable);
 
-<span class="predefined-type">List</span>&lt;User&gt; findByLastname(<span class="predefined-type">String</span> lastname, Sort sort);
+List&lt;User&gt; findByLastname(String lastname, Sort sort);
 
-<span class="predefined-type">List</span>&lt;User&gt; findByLastname(<span class="predefined-type">String</span> lastname, <span class="predefined-type">Pageable</span> pageable);</code></pre>
+List&lt;User&gt; findByLastname(String lastname, Pageable pageable);</code></pre>
 </div>
 </div>
 </div>
@@ -1498,17 +1407,17 @@ Slice&lt;User&gt; findByLastname(<span class="predefined-type">String</span> las
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">User findFirstByOrderByLastnameAsc();
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">User findFirstByOrderByLastnameAsc();
 
 User findTopByOrderByAgeDesc();
 
-Page&lt;User&gt; queryFirst10ByLastname(<span class="predefined-type">String</span> lastname, <span class="predefined-type">Pageable</span> pageable);
+Page&lt;User&gt; queryFirst10ByLastname(String lastname, Pageable pageable);
 
-Slice&lt;User&gt; findTop3ByLastname(<span class="predefined-type">String</span> lastname, <span class="predefined-type">Pageable</span> pageable);
+Slice&lt;User&gt; findTop3ByLastname(String lastname, Pageable pageable);
 
-<span class="predefined-type">List</span>&lt;User&gt; findFirst10ByLastname(<span class="predefined-type">String</span> lastname, Sort sort);
+List&lt;User&gt; findFirst10ByLastname(String lastname, Sort sort);
 
-<span class="predefined-type">List</span>&lt;User&gt; findTop10ByLastname(<span class="predefined-type">String</span> lastname, <span class="predefined-type">Pageable</span> pageable);</code></pre>
+List&lt;User&gt; findTop10ByLastname(String lastname, Pageable pageable);</code></pre>
 </div>
 </div>
 </div>
@@ -1543,13 +1452,13 @@ Slice&lt;User&gt; findTop3ByLastname(<span class="predefined-type">String</span>
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Query</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">select u from User u</span><span class="delimiter">&quot;</span></span>)
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Query("select u from User u")
 Stream&lt;User&gt; findAllByCustomQueryAndStream();
 
 Stream&lt;User&gt; readAllByFirstnameNotNull();
 
-<span class="annotation">@Query</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">select u from User u</span><span class="delimiter">&quot;</span></span>)
-Stream&lt;User&gt; streamAllPaged(<span class="predefined-type">Pageable</span> pageable);</code></pre>
+@Query("select u from User u")
+Stream&lt;User&gt; streamAllPaged(Pageable pageable);</code></pre>
 </div>
 </div>
 </div>
@@ -1572,8 +1481,8 @@ Stream&lt;User&gt; streamAllPaged(<span class="predefined-type">Pageable</span> 
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">try</span> (Stream&lt;User&gt; stream = repository.findAllByCustomQueryAndStream()) {
-  stream.forEach(<span class="error">…</span>);
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">try (Stream&lt;User&gt; stream = repository.findAllByCustomQueryAndStream()) {
+  stream.forEach(…);
 }</code></pre>
 </div>
 </div>
@@ -1604,14 +1513,14 @@ Stream&lt;User&gt; streamAllPaged(<span class="predefined-type">Pageable</span> 
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Async</span>
-<span class="predefined-type">Future</span>&lt;User&gt; findByFirstname(<span class="predefined-type">String</span> firstname);               <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Async
+Future&lt;User&gt; findByFirstname(String firstname);               <i class="conum" data-value="1"></i><b>(1)</b>
 
-<span class="annotation">@Async</span>
-CompletableFuture&lt;User&gt; findOneByFirstname(<span class="predefined-type">String</span> firstname); <i class="conum" data-value="2"></i><b>(2)</b>
+@Async
+CompletableFuture&lt;User&gt; findOneByFirstname(String firstname); <i class="conum" data-value="2"></i><b>(2)</b>
 
-<span class="annotation">@Async</span>
-ListenableFuture&lt;User&gt; findOneByLastname(<span class="predefined-type">String</span> lastname);    <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+@Async
+ListenableFuture&lt;User&gt; findOneByLastname(String lastname);    <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1652,18 +1561,18 @@ ListenableFuture&lt;User&gt; findOneByLastname(<span class="predefined-type">Str
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="preprocessor">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
-<span class="tag">&lt;beans:beans</span> <span class="attribute-name">xmlns:beans</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/beans</span><span class="delimiter">&quot;</span></span>
-  <span class="attribute-name">xmlns:xsi</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.w3.org/2001/XMLSchema-instance</span><span class="delimiter">&quot;</span></span>
-  <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/data/jpa</span><span class="delimiter">&quot;</span></span>
-  <span class="attribute-name">xsi:schemaLocation</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/beans</span>
-    <span class="content">http://www.springframework.org/schema/beans/spring-beans.xsd</span>
-    <span class="content">http://www.springframework.org/schema/data/jpa</span>
-    <span class="content">http://www.springframework.org/schema/data/jpa/spring-jpa.xsd</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.springframework.org/schema/data/jpa"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/data/jpa
+    http://www.springframework.org/schema/data/jpa/spring-jpa.xsd"&gt;
 
-  <span class="tag">&lt;repositories</span> <span class="attribute-name">base-package</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.repositories</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+  &lt;repositories base-package="com.acme.repositories" /&gt;
 
-<span class="tag">&lt;/beans:beans&gt;</span></code></pre>
+&lt;/beans:beans&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -1690,9 +1599,9 @@ ListenableFuture&lt;User&gt; findOneByLastname(<span class="predefined-type">Str
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;repositories</span> <span class="attribute-name">base-package</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.repositories</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-  <span class="tag">&lt;context:exclude-filter</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">regex</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">expression</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">.*SomeRepository</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
-<span class="tag">&lt;/repositories&gt;</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;repositories base-package="com.acme.repositories"&gt;
+  &lt;context:exclude-filter type="regex" expression=".*SomeRepository" /&gt;
+&lt;/repositories&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -1716,13 +1625,13 @@ ListenableFuture&lt;User&gt; findOneByLastname(<span class="predefined-type">Str
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
-<span class="annotation">@EnableJpaRepositories</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.repositories</span><span class="delimiter">&quot;</span></span>)
-<span class="type">class</span> <span class="class">ApplicationConfiguration</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Configuration
+@EnableJpaRepositories("com.acme.repositories")
+class ApplicationConfiguration {
 
-  <span class="annotation">@Bean</span>
+  @Bean
   EntityManagerFactory entityManagerFactory() {
-    <span class="comment">// …</span>
+    // …
   }
 }</code></pre>
 </div>
@@ -1755,7 +1664,7 @@ ListenableFuture&lt;User&gt; findOneByLastname(<span class="predefined-type">Str
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">RepositoryFactorySupport factory = <span class="error">…</span> <span class="comment">// 在这里实例化工厂</span>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">RepositoryFactorySupport factory = … // 在这里实例化工厂
 UserRepository repository = factory.getRepository(UserRepository.class);</code></pre>
 </div>
 </div>
@@ -1784,8 +1693,8 @@ Spring Data存储库允许你提供自定义存储库代码，并将其与通用
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">CustomizedUserRepository</span> {
-  <span class="type">void</span> someCustomMethod(User user);
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">interface CustomizedUserRepository {
+  void someCustomMethod(User user);
 }</code></pre>
 </div>
 </div>
@@ -1799,10 +1708,10 @@ Spring Data存储库允许你提供自定义存储库代码，并将其与通用
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">CustomizedUserRepositoryImpl</span> <span class="directive">implements</span> CustomizedUserRepository {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">class CustomizedUserRepositoryImpl implements CustomizedUserRepository {
 
-  <span class="directive">public</span> <span class="type">void</span> someCustomMethod(User user) {
-    <span class="comment">// 你的自定义实现</span>
+  public void someCustomMethod(User user) {
+    // 你的自定义实现
   }
 }</code></pre>
 </div>
@@ -1833,9 +1742,9 @@ Spring Data存储库允许你提供自定义存储库代码，并将其与通用
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> CrudRepository&lt;User, <span class="predefined-type">Long</span>&gt;, CustomizedUserRepository {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">interface UserRepository extends CrudRepository&lt;User, Long&gt;, CustomizedUserRepository {
 
-  <span class="comment">// 在这里声明查询方法</span>
+  // 在这里声明查询方法
 }</code></pre>
 </div>
 </div>
@@ -1856,32 +1765,32 @@ Spring Data存储库允许你提供自定义存储库代码，并将其与通用
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">HumanRepository</span> {
-  <span class="type">void</span> someHumanMethod(User user);
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">interface HumanRepository {
+  void someHumanMethod(User user);
 }
 
-<span class="type">class</span> <span class="class">HumanRepositoryImpl</span> <span class="directive">implements</span> HumanRepository {
+class HumanRepositoryImpl implements HumanRepository {
 
-  <span class="directive">public</span> <span class="type">void</span> someHumanMethod(User user) {
-    <span class="comment">// 你的自定义实现</span>
+  public void someHumanMethod(User user) {
+    // 你的自定义实现
   }
 }
 
-<span class="type">interface</span> <span class="class">ContactRepository</span> {
+interface ContactRepository {
 
-  <span class="type">void</span> someContactMethod(User user);
+  void someContactMethod(User user);
 
   User anotherContactMethod(User user);
 }
 
-<span class="type">class</span> <span class="class">ContactRepositoryImpl</span> <span class="directive">implements</span> ContactRepository {
+class ContactRepositoryImpl implements ContactRepository {
 
-  <span class="directive">public</span> <span class="type">void</span> someContactMethod(User user) {
-    <span class="comment">// 你的自定义实现</span>
+  public void someContactMethod(User user) {
+    // 你的自定义实现
   }
 
-  <span class="directive">public</span> User anotherContactMethod(User user) {
-    <span class="comment">// 你的自定义实现</span>
+  public User anotherContactMethod(User user) {
+    // 你的自定义实现
   }
 }</code></pre>
 </div>
@@ -1896,9 +1805,9 @@ Spring Data存储库允许你提供自定义存储库代码，并将其与通用
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> CrudRepository&lt;User, <span class="predefined-type">Long</span>&gt;, HumanRepository, ContactRepository {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">interface UserRepository extends CrudRepository&lt;User, Long&gt;, HumanRepository, ContactRepository {
 
-  <span class="comment">// 在这里声明查询方法</span>
+  // 在这里声明查询方法
 }</code></pre>
 </div>
 </div>
@@ -1917,14 +1826,14 @@ Spring Data存储库允许你提供自定义存储库代码，并将其与通用
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">CustomizedSave</span>&lt;T&gt; {
-  &lt;S <span class="directive">extends</span> T&gt; S save(S entity);
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">interface CustomizedSave&lt;T&gt; {
+  &lt;S extends T&gt; S save(S entity);
 }
 
-<span class="type">class</span> <span class="class">CustomizedSaveImpl</span>&lt;T&gt; <span class="directive">implements</span> CustomizedSave&lt;T&gt; {
+class CustomizedSaveImpl&lt;T&gt; implements CustomizedSave&lt;T&gt; {
 
-  <span class="directive">public</span> &lt;S <span class="directive">extends</span> T&gt; S save(S entity) {
-    <span class="comment">// 你的自定义实现</span>
+  public &lt;S extends T&gt; S save(S entity) {
+    // 你的自定义实现
   }
 }</code></pre>
 </div>
@@ -1939,10 +1848,10 @@ Spring Data存储库允许你提供自定义存储库代码，并将其与通用
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> CrudRepository&lt;User, <span class="predefined-type">Long</span>&gt;, CustomizedSave&lt;User&gt; {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">interface UserRepository extends CrudRepository&lt;User, Long&gt;, CustomizedSave&lt;User&gt; {
 }
 
-<span class="type">interface</span> <span class="class">PersonRepository</span> <span class="directive">extends</span> CrudRepository&lt;Person, <span class="predefined-type">Long</span>&gt;, CustomizedSave&lt;Person&gt; {
+interface PersonRepository extends CrudRepository&lt;Person, Long&gt;, CustomizedSave&lt;Person&gt; {
 }</code></pre>
 </div>
 </div>
@@ -1960,9 +1869,9 @@ Spring Data存储库允许你提供自定义存储库代码，并将其与通用
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;repositories</span> <span class="attribute-name">base-package</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.repository</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;repositories base-package="com.acme.repository" /&gt;
 
-<span class="tag">&lt;repositories</span> <span class="attribute-name">base-package</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.repository</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">repository-impl-postfix</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">MyPostfix</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span></code></pre>
+&lt;repositories base-package="com.acme.repository" repository-impl-postfix="MyPostfix" /&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -1985,22 +1894,22 @@ Spring Data存储库允许你提供自定义存储库代码，并将其与通用
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">package</span> <span class="namespace">com.acme.impl.one</span>;
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">package com.acme.impl.one;
 
-<span class="type">class</span> <span class="class">CustomizedUserRepositoryImpl</span> <span class="directive">implements</span> CustomizedUserRepository {
+class CustomizedUserRepositoryImpl implements CustomizedUserRepository {
 
-  <span class="comment">// 你的自定义实现</span>
+  // 你的自定义实现
 }</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">package</span> <span class="namespace">com.acme.impl.two</span>;
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">package com.acme.impl.two;
 
-<span class="annotation">@Component</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">specialCustomImpl</span><span class="delimiter">&quot;</span></span>)
-<span class="type">class</span> <span class="class">CustomizedUserRepositoryImpl</span> <span class="directive">implements</span> CustomizedUserRepository {
+@Component("specialCustomImpl")
+class CustomizedUserRepositoryImpl implements CustomizedUserRepository {
 
-  <span class="comment">// 你的自定义实现</span>
+  // 你的自定义实现
 }</code></pre>
 </div>
 </div>
@@ -2024,11 +1933,11 @@ Spring Data存储库允许你提供自定义存储库代码，并将其与通用
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;repositories</span> <span class="attribute-name">base-package</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.repository</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;repositories base-package="com.acme.repository" /&gt;
 
-<span class="tag">&lt;beans:bean</span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">userRepositoryImpl</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">…</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-  <span class="comment">&lt;!-- 进一步配置 --&gt;</span>
-<span class="tag">&lt;/beans:bean&gt;</span></code></pre>
+&lt;beans:bean id="userRepositoryImpl" class="…"&gt;
+  &lt;!-- 进一步配置 --&gt;
+&lt;/beans:bean&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -2047,22 +1956,22 @@ Spring Data存储库允许你提供自定义存储库代码，并将其与通用
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">MyRepositoryImpl</span>&lt;T, ID <span class="directive">extends</span> <span class="predefined-type">Serializable</span>&gt;
-  <span class="directive">extends</span> SimpleJpaRepository&lt;T, ID&gt; {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">class MyRepositoryImpl&lt;T, ID extends Serializable&gt;
+  extends SimpleJpaRepository&lt;T, ID&gt; {
 
-  <span class="directive">private</span> <span class="directive">final</span> EntityManager entityManager;
+  private final EntityManager entityManager;
 
   MyRepositoryImpl(JpaEntityInformation entityInformation,
                           EntityManager entityManager) {
-    <span class="local-variable">super</span>(entityInformation, entityManager);
+    super(entityInformation, entityManager);
 
-    <span class="comment">// 持有EntityManager可以使用新引入的方法</span>
-    <span class="local-variable">this</span>.entityManager = entityManager;
+    // 持有EntityManager可以使用新引入的方法
+    this.entityManager = entityManager;
   }
 
-  <span class="annotation">@Transactional</span>
-  <span class="directive">public</span> &lt;S <span class="directive">extends</span> T&gt; S save(S entity) {
-    <span class="comment">// 在这里实施自定义</span>
+  @Transactional
+  public &lt;S extends T&gt; S save(S entity) {
+    // 在这里实施自定义
   }
 }</code></pre>
 </div>
@@ -2091,9 +2000,9 @@ Spring Data存储库允许你提供自定义存储库代码，并将其与通用
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
-<span class="annotation">@EnableJpaRepositories</span>(repositoryBaseClass = MyRepositoryImpl.class)
-<span class="type">class</span> <span class="class">ApplicationConfiguration</span> { <span class="error">…</span> }</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Configuration
+@EnableJpaRepositories(repositoryBaseClass = MyRepositoryImpl.class)
+class ApplicationConfiguration { … }</code></pre>
 </div>
 </div>
 </div>
@@ -2106,7 +2015,7 @@ Spring Data存储库允许你提供自定义存储库代码，并将其与通用
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;repositories</span> <span class="attribute-name">base-package</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.repository</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">base-class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">….MyRepositoryImpl</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;repositories base-package="com.acme.repository" base-class="….MyRepositoryImpl" /&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -2126,16 +2035,16 @@ Spring Data提供了一个名为 <code>@DomainEvents</code> 的注解，你可�
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">AnAggregateRoot</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">class AnAggregateRoot {
 
-    <span class="annotation">@DomainEvents</span>                <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="predefined-type">Collection</span>&lt;<span class="predefined-type">Object</span>&gt; domainEvents() {
-        <span class="comment">// … 返回要在此处发布的事件</span>
+    @DomainEvents                <i class="conum" data-value="1"></i><b>(1)</b>
+    Collection&lt;Object&gt; domainEvents() {
+        // … 返回要在此处发布的事件
     }
 
-    <span class="annotation">@AfterDomainEventPublication</span> <i class="conum" data-value="2"></i><b>(2)</b>
-    <span class="type">void</span> callbackMethod() {
-       <span class="comment">// … 可能会清理域事件列表</span>
+    @AfterDomainEventPublication <i class="conum" data-value="2"></i><b>(2)</b>
+    void callbackMethod() {
+       // … 可能会清理域事件列表
     }
 }</code></pre>
 </div>
@@ -2179,17 +2088,17 @@ Spring Data提供了一个名为 <code>@DomainEvents</code> 的注解，你可�
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">interface</span> <span class="class">QuerydslPredicateExecutor</span>&lt;T&gt; {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public interface QuerydslPredicateExecutor&lt;T&gt; {
 
-  Optional&lt;T&gt; findById(<span class="predefined-type">Predicate</span> predicate);  <i class="conum" data-value="1"></i><b>(1)</b>
+  Optional&lt;T&gt; findById(Predicate predicate);  <i class="conum" data-value="1"></i><b>(1)</b>
 
-  <span class="predefined-type">Iterable</span>&lt;T&gt; findAll(<span class="predefined-type">Predicate</span> predicate);   <i class="conum" data-value="2"></i><b>(2)</b>
+  Iterable&lt;T&gt; findAll(Predicate predicate);   <i class="conum" data-value="2"></i><b>(2)</b>
 
-  <span class="type">long</span> count(<span class="predefined-type">Predicate</span> predicate);            <i class="conum" data-value="3"></i><b>(3)</b>
+  long count(Predicate predicate);            <i class="conum" data-value="3"></i><b>(3)</b>
 
-  <span class="type">boolean</span> exists(<span class="predefined-type">Predicate</span> predicate);        <i class="conum" data-value="4"></i><b>(4)</b>
+  boolean exists(Predicate predicate);        <i class="conum" data-value="4"></i><b>(4)</b>
 
-  <span class="comment">// … 省略了更多功能</span>
+  // … 省略了更多功能
 }</code></pre>
 </div>
 </div>
@@ -2223,7 +2132,7 @@ Spring Data提供了一个名为 <code>@DomainEvents</code> 的注解，你可�
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> CrudRepository&lt;User, <span class="predefined-type">Long</span>&gt;, QuerydslPredicateExecutor&lt;User&gt; {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">interface UserRepository extends CrudRepository&lt;User, Long&gt;, QuerydslPredicateExecutor&lt;User&gt; {
 }</code></pre>
 </div>
 </div>
@@ -2234,8 +2143,8 @@ Spring Data提供了一个名为 <code>@DomainEvents</code> 的注解，你可�
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Predicate</span> predicate = user.firstname.equalsIgnoreCase(<span class="string"><span class="delimiter">&quot;</span><span class="content">dave</span><span class="delimiter">&quot;</span></span>)
-        .and(user.lastname.startsWithIgnoreCase(<span class="string"><span class="delimiter">&quot;</span><span class="content">mathews</span><span class="delimiter">&quot;</span></span>));
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Predicate predicate = user.firstname.equalsIgnoreCase("dave")
+	.and(user.lastname.startsWithIgnoreCase("mathews"));
 
 userRepository.findAll(predicate);</code></pre>
 </div>
@@ -2266,10 +2175,10 @@ userRepository.findAll(predicate);</code></pre>
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
-<span class="annotation">@EnableWebMvc</span>
-<span class="annotation">@EnableSpringDataWebSupport</span>
-<span class="type">class</span> <span class="class">WebConfiguration</span> {}</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Configuration
+@EnableWebMvc
+@EnableSpringDataWebSupport
+class WebConfiguration {}</code></pre>
 </div>
 </div>
 </div>
@@ -2287,10 +2196,10 @@ userRepository.findAll(predicate);</code></pre>
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;bean</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">org.springframework.data.web.config.SpringDataWebConfiguration</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean class="org.springframework.data.web.config.SpringDataWebConfiguration" /&gt;
 
-<span class="comment">&lt;!-- 如果你使用Spring HATEOAS，请注册这个而不是前者 --&gt;</span>
-<span class="tag">&lt;bean</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">org.springframework.data.web.config.HateoasAwareSpringDataWebConfiguration</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span></code></pre>
+&lt;!-- 如果你使用Spring HATEOAS，请注册这个而不是前者 --&gt;
+&lt;bean class="org.springframework.data.web.config.HateoasAwareSpringDataWebConfiguration" /&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -2320,15 +2229,15 @@ userRepository.findAll(predicate);</code></pre>
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Controller</span>
-<span class="annotation">@RequestMapping</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">/users</span><span class="delimiter">&quot;</span></span>)
-<span class="type">class</span> <span class="class">UserController</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Controller
+@RequestMapping("/users")
+class UserController {
 
-  <span class="annotation">@RequestMapping</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">/{id}</span><span class="delimiter">&quot;</span></span>)
-  <span class="predefined-type">String</span> showUserForm(<span class="annotation">@PathVariable</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>) User user, Model model) {
+  @RequestMapping("/{id}")
+  String showUserForm(@PathVariable("id") User user, Model model) {
 
-    model.addAttribute(<span class="string"><span class="delimiter">&quot;</span><span class="content">user</span><span class="delimiter">&quot;</span></span>, user);
-    <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">userForm</span><span class="delimiter">&quot;</span></span>;
+    model.addAttribute("user", user);
+    return "userForm";
   }
 }</code></pre>
 </div>
@@ -2363,21 +2272,21 @@ userRepository.findAll(predicate);</code></pre>
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Controller</span>
-<span class="annotation">@RequestMapping</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">/users</span><span class="delimiter">&quot;</span></span>)
-<span class="type">class</span> <span class="class">UserController</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Controller
+@RequestMapping("/users")
+class UserController {
 
-  <span class="directive">private</span> <span class="directive">final</span> UserRepository repository;
+  private final UserRepository repository;
 
   UserController(UserRepository repository) {
-    <span class="local-variable">this</span>.repository = repository;
+    this.repository = repository;
   }
 
-  <span class="annotation">@RequestMapping</span>
-  <span class="predefined-type">String</span> showUsers(Model model, <span class="predefined-type">Pageable</span> pageable) {
+  @RequestMapping
+  String showUsers(Model model, Pageable pageable) {
 
-    model.addAttribute(<span class="string"><span class="delimiter">&quot;</span><span class="content">users</span><span class="delimiter">&quot;</span></span>, repository.findAll(pageable));
-    <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">users</span><span class="delimiter">&quot;</span></span>;
+    model.addAttribute("users", repository.findAll(pageable));
+    return "users";
   }
 }</code></pre>
 </div>
@@ -2415,8 +2324,8 @@ userRepository.findAll(predicate);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Bean</span> SortHandlerMethodArgumentResolverCustomizer sortCustomizer() {
-    <span class="keyword">return</span> s -&gt; s.setPropertyDelimiter(<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;--&gt;</span><span class="delimiter">&quot;</span></span>);
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Bean SortHandlerMethodArgumentResolverCustomizer sortCustomizer() {
+    return s -&gt; s.setPropertyDelimiter("&lt;--&gt;");
 }</code></pre>
 </div>
 </div>
@@ -2430,9 +2339,9 @@ userRepository.findAll(predicate);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">String</span> showUsers(Model model,
-      <span class="annotation">@Qualifier</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">thing1</span><span class="delimiter">&quot;</span></span>) <span class="predefined-type">Pageable</span> first,
-      <span class="annotation">@Qualifier</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">thing2</span><span class="delimiter">&quot;</span></span>) <span class="predefined-type">Pageable</span> second) { <span class="error">…</span> }</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">String showUsers(Model model,
+      @Qualifier("thing1") Pageable first,
+      @Qualifier("thing2") Pageable second) { … }</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2455,17 +2364,17 @@ userRepository.findAll(predicate);</code></pre>
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Controller</span>
-<span class="type">class</span> <span class="class">PersonController</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Controller
+class PersonController {
 
-  <span class="annotation">@Autowired</span> PersonRepository repository;
+  @Autowired PersonRepository repository;
 
-  <span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/persons</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.GET)
-  HttpEntity&lt;PagedResources&lt;Person&gt;&gt; persons(<span class="predefined-type">Pageable</span> pageable,
+  @RequestMapping(value = "/persons", method = RequestMethod.GET)
+  HttpEntity&lt;PagedResources&lt;Person&gt;&gt; persons(Pageable pageable,
     PagedResourcesAssembler assembler) {
 
     Page&lt;Person&gt; persons = repository.findAll(pageable);
-    <span class="keyword">return</span> <span class="keyword">new</span> ResponseEntity&lt;&gt;(assembler.toResources(persons), HttpStatus.OK);
+    return new ResponseEntity&lt;&gt;(assembler.toResources(persons), HttpStatus.OK);
   }
 }</code></pre>
 </div>
@@ -2495,23 +2404,23 @@ userRepository.findAll(predicate);</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="json">{
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">links</span><span class="delimiter">&quot;</span></span> : [
+<pre class="highlightjs highlight"><code class="language-json" data-lang="json">{
+  "links" : [
     {
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">rel</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">next</span><span class="delimiter">&quot;</span></span>,
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">href</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8080/persons?page=1&amp;size=20
+      "rel" : "next",
+      "href" : "http://localhost:8080/persons?page=1&amp;size=20
     }
   ],
-  </span><span class="delimiter">&quot;</span></span><span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">t</span><span class="error">e</span><span class="error">n</span><span class="error">t</span><span class="string"><span class="delimiter">&quot;</span><span class="content"> : [
+  "content" : [
      … // 此处呈现20个Person实例
   ],
-  </span><span class="delimiter">&quot;</span></span><span class="error">p</span><span class="error">a</span><span class="error">g</span><span class="error">e</span><span class="error">M</span><span class="error">e</span><span class="error">t</span><span class="error">a</span><span class="error">d</span><span class="error">a</span><span class="error">t</span><span class="error">a</span><span class="string"><span class="delimiter">&quot;</span><span class="content"> : {
-    </span><span class="delimiter">&quot;</span></span><span class="error">s</span><span class="error">i</span><span class="error">z</span><span class="error">e</span><span class="string"><span class="delimiter">&quot;</span><span class="content"> : 20,
-    </span><span class="delimiter">&quot;</span></span><span class="error">t</span><span class="error">o</span><span class="error">t</span><span class="error">a</span><span class="error">l</span><span class="error">E</span><span class="error">l</span><span class="error">e</span><span class="error">m</span><span class="error">e</span><span class="error">n</span><span class="error">t</span><span class="error">s</span><span class="string"><span class="delimiter">&quot;</span><span class="content"> : 30,
-    </span><span class="delimiter">&quot;</span></span><span class="error">t</span><span class="error">o</span><span class="error">t</span><span class="error">a</span><span class="error">l</span><span class="error">P</span><span class="error">a</span><span class="error">g</span><span class="error">e</span><span class="error">s</span><span class="string"><span class="delimiter">&quot;</span><span class="content"> : 2,
-    </span><span class="delimiter">&quot;</span></span><span class="error">n</span><span class="error">u</span><span class="error">m</span><span class="error">b</span><span class="error">e</span><span class="error">r</span><span class="string"><span class="delimiter">&quot;</span><span class="content"> : 0
+  "pageMetadata" : {
+    "size" : 20,
+    "totalElements" : 30,
+    "totalPages" : 2,
+    "number" : 0
   }
-}</span></span></code></pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2532,16 +2441,16 @@ userRepository.findAll(predicate);</code></pre>
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ProjectedPayload</span>
-<span class="directive">public</span> <span class="type">interface</span> <span class="class">UserPayload</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@ProjectedPayload
+public interface UserPayload {
 
-  <span class="annotation">@XBRead</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">//firstname</span><span class="delimiter">&quot;</span></span>)
-  <span class="annotation">@JsonPath</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$..firstname</span><span class="delimiter">&quot;</span></span>)
-  <span class="predefined-type">String</span> getFirstname();
+  @XBRead("//firstname")
+  @JsonPath("$..firstname")
+  String getFirstname();
 
-  <span class="annotation">@XBRead</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">/lastname</span><span class="delimiter">&quot;</span></span>)
-  <span class="annotation">@JsonPath</span>({ <span class="string"><span class="delimiter">&quot;</span><span class="content">$.lastname</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">$.user.lastname</span><span class="delimiter">&quot;</span></span> })
-  <span class="predefined-type">String</span> getLastname();
+  @XBRead("/lastname")
+  @JsonPath({ "$.lastname", "$.user.lastname" })
+  String getLastname();
 }</code></pre>
 </div>
 </div>
@@ -2575,7 +2484,7 @@ JSON变体首先尝试顶级 <code>lastname</code>，但如果前者没有返回
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="text">?firstname=Dave&amp;lastname=Matthews</code></pre>
+<pre class="highlightjs highlight"><code class="language-text" data-lang="text">?firstname=Dave&amp;lastname=Matthews</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2583,7 +2492,7 @@ JSON变体首先尝试顶级 <code>lastname</code>，但如果前者没有返回
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="text">QUser.user.firstname.eq(&quot;Dave&quot;).and(QUser.user.lastname.eq(&quot;Matthews&quot;))</code></pre>
+<pre class="highlightjs highlight"><code class="language-text" data-lang="text">QUser.user.firstname.eq("Dave").and(QUser.user.lastname.eq("Matthews"))</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -2620,18 +2529,18 @@ JSON变体首先尝试顶级 <code>lastname</code>，但如果前者没有返回
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Controller</span>
-<span class="type">class</span> <span class="class">UserController</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Controller
+class UserController {
 
-  <span class="annotation">@Autowired</span> UserRepository repository;
+  @Autowired UserRepository repository;
 
-  <span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.GET)
-  <span class="predefined-type">String</span> index(Model model, <span class="annotation">@QuerydslPredicate</span>(root = User.class) <span class="predefined-type">Predicate</span> predicate,    <i class="conum" data-value="1"></i><b>(1)</b>
-          <span class="predefined-type">Pageable</span> pageable, <span class="annotation">@RequestParam</span> MultiValueMap&lt;<span class="predefined-type">String</span>, <span class="predefined-type">String</span>&gt; parameters) {
+  @RequestMapping(value = "/", method = RequestMethod.GET)
+  String index(Model model, @QuerydslPredicate(root = User.class) Predicate predicate,    <i class="conum" data-value="1"></i><b>(1)</b>
+          Pageable pageable, @RequestParam MultiValueMap&lt;String, String&gt; parameters) {
 
-    model.addAttribute(<span class="string"><span class="delimiter">&quot;</span><span class="content">users</span><span class="delimiter">&quot;</span></span>, repository.findAll(predicate, pageable));
+    model.addAttribute("users", repository.findAll(predicate, pageable));
 
-    <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">index</span><span class="delimiter">&quot;</span></span>;
+    return "index";
   }
 }</code></pre>
 </div>
@@ -2670,16 +2579,16 @@ JSON变体首先尝试顶级 <code>lastname</code>，但如果前者没有返回
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">interface</span> <span class="class">UserRepository</span> <span class="directive">extends</span> CrudRepository&lt;User, <span class="predefined-type">String</span>&gt;,
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">interface UserRepository extends CrudRepository&lt;User, String&gt;,
                                  QuerydslPredicateExecutor&lt;User&gt;,                <i class="conum" data-value="1"></i><b>(1)</b>
                                  QuerydslBinderCustomizer&lt;QUser&gt; {               <i class="conum" data-value="2"></i><b>(2)</b>
 
-  <span class="annotation">@Override</span>
-  <span class="keyword">default</span> <span class="type">void</span> customize(QuerydslBindings bindings, QUser user) {
+  @Override
+  default void customize(QuerydslBindings bindings, QUser user) {
 
     bindings.bind(user.username).first((path, value) -&gt; path.contains(value))    <i class="conum" data-value="3"></i><b>(3)</b>
-    bindings.bind(<span class="predefined-type">String</span>.class)
-      .first((StringPath path, <span class="predefined-type">String</span> value) -&gt; path.containsIgnoreCase(value)); <i class="conum" data-value="4"></i><b>(4)</b>
+    bindings.bind(String.class)
+      .first((StringPath path, String value) -&gt; path.containsIgnoreCase(value)); <i class="conum" data-value="4"></i><b>(4)</b>
     bindings.excluding(user.password);                                           <i class="conum" data-value="5"></i><b>(5)</b>
   }
 }</code></pre>
@@ -2729,16 +2638,16 @@ JSON变体首先尝试顶级 <code>lastname</code>，但如果前者没有返回
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="json">[
+<pre class="highlightjs highlight"><code class="language-json" data-lang="json">[
     {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">_class</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.Person</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">firstname</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">Dave</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">lastname</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">Matthews</span><span class="delimiter">&quot;</span></span>
+        "_class" : "com.acme.Person",
+        "firstname" : "Dave",
+        "lastname" : "Matthews"
     },
     {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">_class</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme.Person</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">firstname</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">Carter</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">lastname</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">Beauford</span><span class="delimiter">&quot;</span></span>
+        "_class" : "com.acme.Person",
+        "firstname" : "Carter",
+        "lastname" : "Beauford"
     }
 ]</code></pre>
 </div>
@@ -2754,18 +2663,18 @@ JSON变体首先尝试顶级 <code>lastname</code>，但如果前者没有返回
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="preprocessor">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
-<span class="tag">&lt;beans</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/beans</span><span class="delimiter">&quot;</span></span>
-  <span class="attribute-name">xmlns:xsi</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.w3.org/2001/XMLSchema-instance</span><span class="delimiter">&quot;</span></span>
-  <span class="attribute-name">xmlns:repository</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/data/repository</span><span class="delimiter">&quot;</span></span>
-  <span class="attribute-name">xsi:schemaLocation</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/beans</span>
-    <span class="content">http://www.springframework.org/schema/beans/spring-beans.xsd</span>
-    <span class="content">http://www.springframework.org/schema/data/repository</span>
-    <span class="content">http://www.springframework.org/schema/data/repository/spring-repository.xsd</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:repository="http://www.springframework.org/schema/data/repository"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/data/repository
+    http://www.springframework.org/schema/data/repository/spring-repository.xsd"&gt;
 
-  <span class="tag">&lt;repository:jackson2-populator</span> <span class="attribute-name">locations</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:data.json</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+  &lt;repository:jackson2-populator locations="classpath:data.json" /&gt;
 
-<span class="tag">&lt;/beans&gt;</span></code></pre>
+&lt;/beans&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -2786,24 +2695,24 @@ JSON变体首先尝试顶级 <code>lastname</code>，但如果前者没有返回
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="preprocessor">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
-<span class="tag">&lt;beans</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/beans</span><span class="delimiter">&quot;</span></span>
-  <span class="attribute-name">xmlns:xsi</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.w3.org/2001/XMLSchema-instance</span><span class="delimiter">&quot;</span></span>
-  <span class="attribute-name">xmlns:repository</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/data/repository</span><span class="delimiter">&quot;</span></span>
-  <span class="attribute-name">xmlns:oxm</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/oxm</span><span class="delimiter">&quot;</span></span>
-  <span class="attribute-name">xsi:schemaLocation</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.springframework.org/schema/beans</span>
-    <span class="content">http://www.springframework.org/schema/beans/spring-beans.xsd</span>
-    <span class="content">http://www.springframework.org/schema/data/repository</span>
-    <span class="content">http://www.springframework.org/schema/data/repository/spring-repository.xsd</span>
-    <span class="content">http://www.springframework.org/schema/oxm</span>
-    <span class="content">http://www.springframework.org/schema/oxm/spring-oxm.xsd</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:repository="http://www.springframework.org/schema/data/repository"
+  xmlns:oxm="http://www.springframework.org/schema/oxm"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/data/repository
+    http://www.springframework.org/schema/data/repository/spring-repository.xsd
+    http://www.springframework.org/schema/oxm
+    http://www.springframework.org/schema/oxm/spring-oxm.xsd"&gt;
 
-  <span class="tag">&lt;repository:unmarshaller-populator</span> <span class="attribute-name">locations</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">classpath:data.json</span><span class="delimiter">&quot;</span></span>
-    <span class="attribute-name">unmarshaller-ref</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">unmarshaller</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+  &lt;repository:unmarshaller-populator locations="classpath:data.json"
+    unmarshaller-ref="unmarshaller" /&gt;
 
-  <span class="tag">&lt;oxm:jaxb2-marshaller</span> <span class="attribute-name">contextPath</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.acme</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+  &lt;oxm:jaxb2-marshaller contextPath="com.acme" /&gt;
 
-<span class="tag">&lt;/beans&gt;</span></code></pre>
+&lt;/beans&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -2812,10 +2721,8 @@ JSON变体首先尝试顶级 <code>lastname</code>，但如果前者没有返回
 </div>
 </div>
 </div>
-<div id="footer">
-<div id="footer-text">
-Last updated 2019-03-09 08:33:14 CST
-</div>
-</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
+<script>hljs.initHighlighting()</script>
 </body>
 </html>

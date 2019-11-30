@@ -417,97 +417,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .show-for-print{display:inherit!important}}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
-<style>
-/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
-/*pre.CodeRay {background-color:#f7f7f8;}*/
-.CodeRay .line-numbers{border-right:1px solid #d8d8d8;padding:0 0.5em 0 .25em}
-.CodeRay span.line-numbers{display:inline-block;margin-right:.5em;color:rgba(0,0,0,.3)}
-.CodeRay .line-numbers strong{color:rgba(0,0,0,.4)}
-table.CodeRay{border-collapse:separate;border-spacing:0;margin-bottom:0;border:0;background:none}
-table.CodeRay td{vertical-align: top;line-height:1.45}
-table.CodeRay td.line-numbers{text-align:right}
-table.CodeRay td.line-numbers>pre{padding:0;color:rgba(0,0,0,.3)}
-table.CodeRay td.code{padding:0 0 0 .5em}
-table.CodeRay td.code>pre{padding:0}
-.CodeRay .debug{color:#fff !important;background:#000080 !important}
-.CodeRay .annotation{color:#007}
-.CodeRay .attribute-name{color:#000080}
-.CodeRay .attribute-value{color:#700}
-.CodeRay .binary{color:#509}
-.CodeRay .comment{color:#998;font-style:italic}
-.CodeRay .char{color:#04d}
-.CodeRay .char .content{color:#04d}
-.CodeRay .char .delimiter{color:#039}
-.CodeRay .class{color:#458;font-weight:bold}
-.CodeRay .complex{color:#a08}
-.CodeRay .constant,.CodeRay .predefined-constant{color:#008080}
-.CodeRay .color{color:#099}
-.CodeRay .class-variable{color:#369}
-.CodeRay .decorator{color:#b0b}
-.CodeRay .definition{color:#099}
-.CodeRay .delimiter{color:#000}
-.CodeRay .doc{color:#970}
-.CodeRay .doctype{color:#34b}
-.CodeRay .doc-string{color:#d42}
-.CodeRay .escape{color:#666}
-.CodeRay .entity{color:#800}
-.CodeRay .error{color:#808}
-.CodeRay .exception{color:inherit}
-.CodeRay .filename{color:#099}
-.CodeRay .function{color:#900;font-weight:bold}
-.CodeRay .global-variable{color:#008080}
-.CodeRay .hex{color:#058}
-.CodeRay .integer,.CodeRay .float{color:#099}
-.CodeRay .include{color:#555}
-.CodeRay .inline{color:#000}
-.CodeRay .inline .inline{background:#ccc}
-.CodeRay .inline .inline .inline{background:#bbb}
-.CodeRay .inline .inline-delimiter{color:#d14}
-.CodeRay .inline-delimiter{color:#d14}
-.CodeRay .important{color:#555;font-weight:bold}
-.CodeRay .interpreted{color:#b2b}
-.CodeRay .instance-variable{color:#008080}
-.CodeRay .label{color:#970}
-.CodeRay .local-variable{color:#963}
-.CodeRay .octal{color:#40e}
-.CodeRay .predefined{color:#369}
-.CodeRay .preprocessor{color:#579}
-.CodeRay .pseudo-class{color:#555}
-.CodeRay .directive{font-weight:bold}
-.CodeRay .type{font-weight:bold}
-.CodeRay .predefined-type{color:inherit}
-.CodeRay .reserved,.CodeRay .keyword {color:#000;font-weight:bold}
-.CodeRay .key{color:#808}
-.CodeRay .key .delimiter{color:#606}
-.CodeRay .key .char{color:#80f}
-.CodeRay .value{color:#088}
-.CodeRay .regexp .delimiter{color:#808}
-.CodeRay .regexp .content{color:#808}
-.CodeRay .regexp .modifier{color:#808}
-.CodeRay .regexp .char{color:#d14}
-.CodeRay .regexp .function{color:#404;font-weight:bold}
-.CodeRay .string{color:#d20}
-.CodeRay .string .string .string{background:#ffd0d0}
-.CodeRay .string .content{color:#d14}
-.CodeRay .string .char{color:#d14}
-.CodeRay .string .delimiter{color:#d14}
-.CodeRay .shell{color:#d14}
-.CodeRay .shell .delimiter{color:#d14}
-.CodeRay .symbol{color:#990073}
-.CodeRay .symbol .content{color:#a60}
-.CodeRay .symbol .delimiter{color:#630}
-.CodeRay .tag{color:#008080}
-.CodeRay .tag-special{color:#d70}
-.CodeRay .variable{color:#036}
-.CodeRay .insert{background:#afa}
-.CodeRay .delete{background:#faa}
-.CodeRay .change{color:#aaf;background:#007}
-.CodeRay .head{color:#f8f;background:#505}
-.CodeRay .insert .insert{color:#080}
-.CodeRay .delete .delete{color:#800}
-.CodeRay .change .change{color:#66f}
-.CodeRay .head .head{color:#f4f}
-</style>
 <style>
 .hidden {
 	display: none;
@@ -656,8 +565,8 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">Person</span> {
-  Person(<span class="predefined-type">String</span> firstname, <span class="predefined-type">String</span> lastname) { <span class="error">…</span> }
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">class Person {
+  Person(String firstname, String lastname) { … }
 }</code></pre>
 </div>
 </div>
@@ -666,10 +575,10 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">PersonObjectInstantiator</span> <span class="directive">implements</span> ObjectInstantiator {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">class PersonObjectInstantiator implements ObjectInstantiator {
 
-  <span class="predefined-type">Object</span> newInstance(<span class="predefined-type">Object</span>... args) {
-    <span class="keyword">return</span> <span class="keyword">new</span> Person((<span class="predefined-type">String</span>) args[<span class="integer">0</span>], (<span class="predefined-type">String</span>) args[<span class="integer">1</span>]);
+  Object newInstance(Object... args) {
+    return new Person((String) args[0], (String) args[1]);
   }
 }</code></pre>
 </div>
@@ -714,26 +623,26 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">Person</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">class Person {
 
-  <span class="directive">private</span> <span class="directive">final</span> <span class="predefined-type">Long</span> id;
-  <span class="directive">private</span> <span class="predefined-type">String</span> firstname;
-  <span class="directive">private</span> <span class="annotation">@AccessType</span>(<span class="predefined-type">Type</span>.PROPERTY) <span class="predefined-type">String</span> lastname;
+  private final Long id;
+  private String firstname;
+  private @AccessType(Type.PROPERTY) String lastname;
 
   Person() {
-    <span class="local-variable">this</span>.id = <span class="predefined-constant">null</span>;
+    this.id = null;
   }
 
-  Person(<span class="predefined-type">Long</span> id, <span class="predefined-type">String</span> firstname, <span class="predefined-type">String</span> lastname) {
-    <span class="comment">// Field assignments</span>
+  Person(Long id, String firstname, String lastname) {
+    // Field assignments
   }
 
-  Person withId(<span class="predefined-type">Long</span> id) {
-    <span class="keyword">return</span> <span class="keyword">new</span> Person(id, <span class="local-variable">this</span>.firstname, <span class="local-variable">this</span>.lastame);
+  Person withId(Long id) {
+    return new Person(id, this.firstname, this.lastame);
   }
 
-  <span class="type">void</span> setLastname(<span class="predefined-type">String</span> lastname) {
-    <span class="local-variable">this</span>.lastname = lastname;
+  void setLastname(String lastname) {
+    this.lastname = lastname;
   }
 }</code></pre>
 </div>
@@ -743,21 +652,21 @@ $(addBlockSwitches);
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">PersonPropertyAccessor</span> <span class="directive">implements</span> PersistentPropertyAccessor {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">class PersonPropertyAccessor implements PersistentPropertyAccessor {
 
-  <span class="directive">private</span> <span class="directive">static</span> <span class="directive">final</span> MethodHandle firstname;              <i class="conum" data-value="2"></i><b>(2)</b>
+  private static final MethodHandle firstname;              <i class="conum" data-value="2"></i><b>(2)</b>
 
-  <span class="directive">private</span> Person person;                                    <i class="conum" data-value="1"></i><b>(1)</b>
+  private Person person;                                    <i class="conum" data-value="1"></i><b>(1)</b>
 
-  <span class="directive">public</span> <span class="type">void</span> setProperty(PersistentProperty property, <span class="predefined-type">Object</span> value) {
-    <span class="predefined-type">String</span> name = property.getName();
+  public void setProperty(PersistentProperty property, Object value) {
+    String name = property.getName();
 
-    <span class="keyword">if</span> (<span class="string"><span class="delimiter">&quot;</span><span class="content">firstname</span><span class="delimiter">&quot;</span></span>.equals(name)) {
-      firstname.invoke(person, (<span class="predefined-type">String</span>) value);             <i class="conum" data-value="2"></i><b>(2)</b>
-    } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>.equals(name)) {
-      <span class="local-variable">this</span>.person = person.withId((<span class="predefined-type">Long</span>) value);            <i class="conum" data-value="3"></i><b>(3)</b>
-    } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string"><span class="delimiter">&quot;</span><span class="content">lastname</span><span class="delimiter">&quot;</span></span>.equals(name)) {
-      <span class="local-variable">this</span>.person.setLastname((<span class="predefined-type">String</span>) value);              <i class="conum" data-value="4"></i><b>(4)</b>
+    if ("firstname".equals(name)) {
+      firstname.invoke(person, (String) value);             <i class="conum" data-value="2"></i><b>(2)</b>
+    } else if ("id".equals(name)) {
+      this.person = person.withId((Long) value);            <i class="conum" data-value="3"></i><b>(3)</b>
+    } else if ("lastname".equals(name)) {
+      this.person.setLastname((String) value);              <i class="conum" data-value="4"></i><b>(4)</b>
     }
   }
 }</code></pre>
@@ -817,35 +726,35 @@ $(addBlockSwitches);
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="type">class</span> <span class="class">Person</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">class Person {
 
-  <span class="directive">private</span> <span class="directive">final</span> <span class="annotation">@Id</span> <span class="predefined-type">Long</span> id;                                                <i class="conum" data-value="1"></i><b>(1)</b>
-  <span class="directive">private</span> <span class="directive">final</span> <span class="predefined-type">String</span> firstname, lastname;                                 <i class="conum" data-value="2"></i><b>(2)</b>
-  <span class="directive">private</span> <span class="directive">final</span> LocalDate birthday;
-  <span class="directive">private</span> <span class="directive">final</span> <span class="type">int</span> age; <i class="conum" data-value="3"></i><b>(3)</b>
+  private final @Id Long id;                                                <i class="conum" data-value="1"></i><b>(1)</b>
+  private final String firstname, lastname;                                 <i class="conum" data-value="2"></i><b>(2)</b>
+  private final LocalDate birthday;
+  private final int age; <i class="conum" data-value="3"></i><b>(3)</b>
 
-  <span class="directive">private</span> <span class="predefined-type">String</span> comment;                                                   <i class="conum" data-value="4"></i><b>(4)</b>
-  <span class="directive">private</span> <span class="annotation">@AccessType</span>(<span class="predefined-type">Type</span>.PROPERTY) <span class="predefined-type">String</span> remarks;                        <i class="conum" data-value="5"></i><b>(5)</b>
+  private String comment;                                                   <i class="conum" data-value="4"></i><b>(4)</b>
+  private @AccessType(Type.PROPERTY) String remarks;                        <i class="conum" data-value="5"></i><b>(5)</b>
 
-  <span class="directive">static</span> Person of(<span class="predefined-type">String</span> firstname, <span class="predefined-type">String</span> lastname, LocalDate birthday) { <i class="conum" data-value="6"></i><b>(6)</b>
-    <span class="keyword">return</span> <span class="keyword">new</span> Person(<span class="predefined-constant">null</span>, firstname, lastname, birthday,
+  static Person of(String firstname, String lastname, LocalDate birthday) { <i class="conum" data-value="6"></i><b>(6)</b>
+    return new Person(null, firstname, lastname, birthday,
       Period.between(birthday, LocalDate.now()).getYears());
   }
 
-  Person(<span class="predefined-type">Long</span> id, <span class="predefined-type">String</span> firstname, <span class="predefined-type">String</span> lastname, LocalDate birthday, <span class="type">int</span> age) { <i class="conum" data-value="6"></i><b>(6)</b>
-    <span class="local-variable">this</span>.id = id;
-    <span class="local-variable">this</span>.firstname = firstname;
-    <span class="local-variable">this</span>.lastname = lastname;
-    <span class="local-variable">this</span>.birthday = birthday;
-    <span class="local-variable">this</span>.age = age;
+  Person(Long id, String firstname, String lastname, LocalDate birthday, int age) { <i class="conum" data-value="6"></i><b>(6)</b>
+    this.id = id;
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.birthday = birthday;
+    this.age = age;
   }
 
-  Person withId(<span class="predefined-type">Long</span> id) {                                                  <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="keyword">return</span> <span class="keyword">new</span> Person(id, <span class="local-variable">this</span>.firstname, <span class="local-variable">this</span>.lastname, <span class="local-variable">this</span>.birthday);
+  Person withId(Long id) {                                                  <i class="conum" data-value="1"></i><b>(1)</b>
+    return new Person(id, this.firstname, this.lastname, this.birthday);
   }
 
-  <span class="type">void</span> setRemarks(<span class="predefined-type">String</span> remarks) {                                         <i class="conum" data-value="5"></i><b>(5)</b>
-    <span class="local-variable">this</span>.remarks = remarks;
+  void setRemarks(String remarks) {                                         <i class="conum" data-value="5"></i><b>(5)</b>
+    this.remarks = remarks;
   }
 }</code></pre>
 </div>
@@ -910,10 +819,8 @@ $(addBlockSwitches);
 </div>
 </div>
 </div>
-<div id="footer">
-<div id="footer-text">
-Last updated 2019-03-09 08:33:14 CST
-</div>
-</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
+<script>hljs.initHighlighting()</script>
 </body>
 </html>

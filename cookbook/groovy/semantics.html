@@ -417,97 +417,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .show-for-print{display:inherit!important}}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
-<style>
-/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
-/*pre.CodeRay {background-color:#f7f7f8;}*/
-.CodeRay .line-numbers{border-right:1px solid #d8d8d8;padding:0 0.5em 0 .25em}
-.CodeRay span.line-numbers{display:inline-block;margin-right:.5em;color:rgba(0,0,0,.3)}
-.CodeRay .line-numbers strong{color:rgba(0,0,0,.4)}
-table.CodeRay{border-collapse:separate;border-spacing:0;margin-bottom:0;border:0;background:none}
-table.CodeRay td{vertical-align: top;line-height:1.45}
-table.CodeRay td.line-numbers{text-align:right}
-table.CodeRay td.line-numbers>pre{padding:0;color:rgba(0,0,0,.3)}
-table.CodeRay td.code{padding:0 0 0 .5em}
-table.CodeRay td.code>pre{padding:0}
-.CodeRay .debug{color:#fff !important;background:#000080 !important}
-.CodeRay .annotation{color:#007}
-.CodeRay .attribute-name{color:#000080}
-.CodeRay .attribute-value{color:#700}
-.CodeRay .binary{color:#509}
-.CodeRay .comment{color:#998;font-style:italic}
-.CodeRay .char{color:#04d}
-.CodeRay .char .content{color:#04d}
-.CodeRay .char .delimiter{color:#039}
-.CodeRay .class{color:#458;font-weight:bold}
-.CodeRay .complex{color:#a08}
-.CodeRay .constant,.CodeRay .predefined-constant{color:#008080}
-.CodeRay .color{color:#099}
-.CodeRay .class-variable{color:#369}
-.CodeRay .decorator{color:#b0b}
-.CodeRay .definition{color:#099}
-.CodeRay .delimiter{color:#000}
-.CodeRay .doc{color:#970}
-.CodeRay .doctype{color:#34b}
-.CodeRay .doc-string{color:#d42}
-.CodeRay .escape{color:#666}
-.CodeRay .entity{color:#800}
-.CodeRay .error{color:#808}
-.CodeRay .exception{color:inherit}
-.CodeRay .filename{color:#099}
-.CodeRay .function{color:#900;font-weight:bold}
-.CodeRay .global-variable{color:#008080}
-.CodeRay .hex{color:#058}
-.CodeRay .integer,.CodeRay .float{color:#099}
-.CodeRay .include{color:#555}
-.CodeRay .inline{color:#000}
-.CodeRay .inline .inline{background:#ccc}
-.CodeRay .inline .inline .inline{background:#bbb}
-.CodeRay .inline .inline-delimiter{color:#d14}
-.CodeRay .inline-delimiter{color:#d14}
-.CodeRay .important{color:#555;font-weight:bold}
-.CodeRay .interpreted{color:#b2b}
-.CodeRay .instance-variable{color:#008080}
-.CodeRay .label{color:#970}
-.CodeRay .local-variable{color:#963}
-.CodeRay .octal{color:#40e}
-.CodeRay .predefined{color:#369}
-.CodeRay .preprocessor{color:#579}
-.CodeRay .pseudo-class{color:#555}
-.CodeRay .directive{font-weight:bold}
-.CodeRay .type{font-weight:bold}
-.CodeRay .predefined-type{color:inherit}
-.CodeRay .reserved,.CodeRay .keyword {color:#000;font-weight:bold}
-.CodeRay .key{color:#808}
-.CodeRay .key .delimiter{color:#606}
-.CodeRay .key .char{color:#80f}
-.CodeRay .value{color:#088}
-.CodeRay .regexp .delimiter{color:#808}
-.CodeRay .regexp .content{color:#808}
-.CodeRay .regexp .modifier{color:#808}
-.CodeRay .regexp .char{color:#d14}
-.CodeRay .regexp .function{color:#404;font-weight:bold}
-.CodeRay .string{color:#d20}
-.CodeRay .string .string .string{background:#ffd0d0}
-.CodeRay .string .content{color:#d14}
-.CodeRay .string .char{color:#d14}
-.CodeRay .string .delimiter{color:#d14}
-.CodeRay .shell{color:#d14}
-.CodeRay .shell .delimiter{color:#d14}
-.CodeRay .symbol{color:#990073}
-.CodeRay .symbol .content{color:#a60}
-.CodeRay .symbol .delimiter{color:#630}
-.CodeRay .tag{color:#008080}
-.CodeRay .tag-special{color:#d70}
-.CodeRay .variable{color:#036}
-.CodeRay .insert{background:#afa}
-.CodeRay .delete{background:#faa}
-.CodeRay .change{color:#aaf;background:#007}
-.CodeRay .head{color:#f8f;background:#505}
-.CodeRay .insert .insert{color:#080}
-.CodeRay .delete .delete{color:#800}
-.CodeRay .change .change{color:#66f}
-.CodeRay .head .head{color:#f4f}
-</style>
 <style>
 .hidden {
 	display: none;
@@ -669,8 +578,8 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">String</span> x
-<span class="keyword">def</span> o</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">String x
+def o</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -690,19 +599,19 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">x = <span class="integer">1</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">x = 1
 println x
 
-x = <span class="keyword">new</span> java.util.Date()
+x = new java.util.Date()
 println x
 
-x = -<span class="float">3.1499392</span>
+x = -3.1499392
 println x
 
-x = <span class="predefined-constant">false</span>
+x = false
 println x
 
-x = <span class="string"><span class="delimiter">&quot;</span><span class="content">Hi</span><span class="delimiter">&quot;</span></span>
+x = "Hi"
 println x</code></pre>
 </div>
 </div>
@@ -713,8 +622,8 @@ println x</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> (a, b, c) = [<span class="integer">10</span>, <span class="integer">20</span>, <span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span>]
-<span class="keyword">assert</span> a == <span class="integer">10</span> &amp;&amp; b == <span class="integer">20</span> &amp;&amp; c == <span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def (a, b, c) = [10, 20, 'foo']
+assert a == 10 &amp;&amp; b == 20 &amp;&amp; c == 'foo'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -722,8 +631,8 @@ println x</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> (<span class="type">int</span> i, <span class="predefined-type">String</span> j) = [<span class="integer">10</span>, <span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span>]
-<span class="keyword">assert</span> i == <span class="integer">10</span> &amp;&amp; j == <span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def (int i, String j) = [10, 'foo']
+assert i == 10 &amp;&amp; j == 'foo'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -731,10 +640,10 @@ println x</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> nums = [<span class="integer">1</span>, <span class="integer">3</span>, <span class="integer">5</span>]
-<span class="keyword">def</span> a, b, c
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def nums = [1, 3, 5]
+def a, b, c
 (a, b, c) = nums
-<span class="keyword">assert</span> a == <span class="integer">1</span> &amp;&amp; b == <span class="integer">3</span> &amp;&amp; c == <span class="integer">5</span></code></pre>
+assert a == 1 &amp;&amp; b == 3 &amp;&amp; c == 5</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -742,8 +651,8 @@ println x</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> (_, month, year) = <span class="string"><span class="delimiter">&quot;</span><span class="content">18th June 2009</span><span class="delimiter">&quot;</span></span>.split()
-<span class="keyword">assert</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">In </span><span class="inline"><span class="inline-delimiter">$</span>month</span><span class="content"> of </span><span class="inline"><span class="inline-delimiter">$</span>year</span><span class="delimiter">&quot;</span></span> == <span class="string"><span class="delimiter">'</span><span class="content">In June of 2009</span><span class="delimiter">'</span></span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def (_, month, year) = "18th June 2009".split()
+assert "In $month of $year" == 'In June of 2009'</code></pre>
 </div>
 </div>
 </div>
@@ -754,8 +663,8 @@ println x</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> (a, b, c) = [<span class="integer">1</span>, <span class="integer">2</span>]
-<span class="keyword">assert</span> a == <span class="integer">1</span> &amp;&amp; b == <span class="integer">2</span> &amp;&amp; c == <span class="predefined-constant">null</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def (a, b, c) = [1, 2]
+assert a == 1 &amp;&amp; b == 2 &amp;&amp; c == null</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -763,8 +672,8 @@ println x</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> (a, b) = [<span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>]
-<span class="keyword">assert</span> a == <span class="integer">1</span> &amp;&amp; b == <span class="integer">2</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def (a, b) = [1, 2, 3]
+assert a == 1 &amp;&amp; b == 2</code></pre>
 </div>
 </div>
 </div>
@@ -781,15 +690,15 @@ println x</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@Immutable</span>
-<span class="type">class</span> <span class="class">Coordinates</span> {
-    <span class="type">double</span> latitude
-    <span class="type">double</span> longitude
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Immutable
+class Coordinates {
+    double latitude
+    double longitude
 
-    <span class="type">double</span> getAt(<span class="type">int</span> idx) {
-        <span class="keyword">if</span> (idx == <span class="integer">0</span>) latitude
-        <span class="keyword">else</span> <span class="keyword">if</span> (idx == <span class="integer">1</span>) longitude
-        <span class="keyword">else</span> <span class="keyword">throw</span> <span class="keyword">new</span> <span class="exception">Exception</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">Wrong coordinate index, use 0 or 1</span><span class="delimiter">&quot;</span></span>)
+    double getAt(int idx) {
+        if (idx == 0) latitude
+        else if (idx == 1) longitude
+        else throw new Exception("Wrong coordinate index, use 0 or 1")
     }
 }</code></pre>
 </div>
@@ -799,12 +708,12 @@ println x</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> coordinates = <span class="keyword">new</span> Coordinates(<span class="key">latitude</span>: <span class="float">43.23</span>, <span class="key">longitude</span>: <span class="float">3.67</span>) <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def coordinates = new Coordinates(latitude: 43.23, longitude: 3.67) <i class="conum" data-value="1"></i><b>(1)</b>
 
-<span class="keyword">def</span> (la, lo) = coordinates                                          <i class="conum" data-value="2"></i><b>(2)</b>
+def (la, lo) = coordinates                                          <i class="conum" data-value="2"></i><b>(2)</b>
 
-<span class="keyword">assert</span> la == <span class="float">43.23</span>                                                  <i class="conum" data-value="3"></i><b>(3)</b>
-<span class="keyword">assert</span> lo == <span class="float">3.67</span></code></pre>
+assert la == 43.23                                                  <i class="conum" data-value="3"></i><b>(3)</b>
+assert lo == 3.67</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -836,22 +745,22 @@ println x</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> x = <span class="predefined-constant">false</span>
-<span class="keyword">def</span> y = <span class="predefined-constant">false</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def x = false
+def y = false
 
-<span class="keyword">if</span> ( !x ) {
-    x = <span class="predefined-constant">true</span>
+if ( !x ) {
+    x = true
 }
 
-<span class="keyword">assert</span> x == <span class="predefined-constant">true</span>
+assert x == true
 
-<span class="keyword">if</span> ( x ) {
-    x = <span class="predefined-constant">false</span>
-} <span class="keyword">else</span> {
-    y = <span class="predefined-constant">true</span>
+if ( x ) {
+    x = false
+} else {
+    y = true
 }
 
-<span class="keyword">assert</span> x == y</code></pre>
+assert x == y</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -859,11 +768,11 @@ println x</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">if</span> ( ... ) {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">if ( ... ) {
     ...
-} <span class="keyword">else</span> <span class="keyword">if</span> (...) {
+} else if (...) {
     ...
-} <span class="keyword">else</span> {
+} else {
     ...
 }</code></pre>
 </div>
@@ -879,46 +788,46 @@ println x</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> x = <span class="float">1.23</span>
-<span class="keyword">def</span> result = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def x = 1.23
+def result = ""
 
-<span class="keyword">switch</span> ( x ) {
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>:
-        result = <span class="string"><span class="delimiter">&quot;</span><span class="content">found foo</span><span class="delimiter">&quot;</span></span>
-        <span class="comment">// lets fall through</span>
+switch ( x ) {
+    case "foo":
+        result = "found foo"
+        // lets fall through
 
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span>:
-        result += <span class="string"><span class="delimiter">&quot;</span><span class="content">bar</span><span class="delimiter">&quot;</span></span>
+    case "bar":
+        result += "bar"
 
-    <span class="keyword">case</span> [<span class="integer">4</span>, <span class="integer">5</span>, <span class="integer">6</span>, <span class="string"><span class="delimiter">'</span><span class="content">inList</span><span class="delimiter">'</span></span>]:
-        result = <span class="string"><span class="delimiter">&quot;</span><span class="content">list</span><span class="delimiter">&quot;</span></span>
-        <span class="keyword">break</span>
+    case [4, 5, 6, 'inList']:
+        result = "list"
+        break
 
-    <span class="keyword">case</span> <span class="integer">12</span>..<span class="integer">30</span>:
-        result = <span class="string"><span class="delimiter">&quot;</span><span class="content">range</span><span class="delimiter">&quot;</span></span>
-        <span class="keyword">break</span>
+    case 12..30:
+        result = "range"
+        break
 
-    <span class="keyword">case</span> <span class="predefined-type">Integer</span>:
-        result = <span class="string"><span class="delimiter">&quot;</span><span class="content">integer</span><span class="delimiter">&quot;</span></span>
-        <span class="keyword">break</span>
+    case Integer:
+        result = "integer"
+        break
 
-    <span class="keyword">case</span> <span class="predefined-type">Number</span>:
-        result = <span class="string"><span class="delimiter">&quot;</span><span class="content">number</span><span class="delimiter">&quot;</span></span>
-        <span class="keyword">break</span>
+    case Number:
+        result = "number"
+        break
 
-    <span class="keyword">case</span> ~<span class="regexp"><span class="delimiter">/</span><span class="content">fo*</span><span class="delimiter">/</span></span>: <span class="comment">// toString() representation of x matches the pattern?</span>
-        result = <span class="string"><span class="delimiter">&quot;</span><span class="content">foo regex</span><span class="delimiter">&quot;</span></span>
-        <span class="keyword">break</span>
+    case ~/fo*/: // toString() representation of x matches the pattern?
+        result = "foo regex"
+        break
 
-    <span class="keyword">case</span> { <span class="local-variable">it</span> &lt; <span class="integer">0</span> }: <span class="comment">// or { x &lt; 0 }</span>
-        result = <span class="string"><span class="delimiter">&quot;</span><span class="content">negative</span><span class="delimiter">&quot;</span></span>
-        <span class="keyword">break</span>
+    case { it &lt; 0 }: // or { x &lt; 0 }
+        result = "negative"
+        break
 
-    <span class="keyword">default</span>:
-        result = <span class="string"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>
+    default:
+        result = "default"
 }
 
-<span class="keyword">assert</span> result == <span class="string"><span class="delimiter">&quot;</span><span class="content">number</span><span class="delimiter">&quot;</span></span></code></pre>
+assert result == "number"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -957,11 +866,11 @@ println x</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">String</span> message = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
-<span class="keyword">for</span> (<span class="type">int</span> i = <span class="integer">0</span>; i &lt; <span class="integer">5</span>; i++) {
-    message += <span class="string"><span class="delimiter">'</span><span class="content">Hi </span><span class="delimiter">'</span></span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">String message = ''
+for (int i = 0; i &lt; 5; i++) {
+    message += 'Hi '
 }
-<span class="keyword">assert</span> message == <span class="string"><span class="delimiter">'</span><span class="content">Hi Hi Hi Hi Hi </span><span class="delimiter">'</span></span></code></pre>
+assert message == 'Hi Hi Hi Hi Hi '</code></pre>
 </div>
 </div>
 </div>
@@ -972,50 +881,50 @@ println x</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// iterate over a range</span>
-<span class="keyword">def</span> x = <span class="integer">0</span>
-<span class="keyword">for</span> ( i <span class="keyword">in</span> <span class="integer">0</span>..<span class="integer">9</span> ) {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">// iterate over a range
+def x = 0
+for ( i in 0..9 ) {
     x += i
 }
-<span class="keyword">assert</span> x == <span class="integer">45</span>
+assert x == 45
 
-<span class="comment">// iterate over a list</span>
-x = <span class="integer">0</span>
-<span class="keyword">for</span> ( i <span class="keyword">in</span> [<span class="integer">0</span>, <span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>, <span class="integer">4</span>] ) {
+// iterate over a list
+x = 0
+for ( i in [0, 1, 2, 3, 4] ) {
     x += i
 }
-<span class="keyword">assert</span> x == <span class="integer">10</span>
+assert x == 10
 
-<span class="comment">// iterate over an array</span>
-<span class="keyword">def</span> array = (<span class="integer">0</span>..<span class="integer">4</span>).toArray()
-x = <span class="integer">0</span>
-<span class="keyword">for</span> ( i <span class="keyword">in</span> array ) {
+// iterate over an array
+def array = (0..4).toArray()
+x = 0
+for ( i in array ) {
     x += i
 }
-<span class="keyword">assert</span> x == <span class="integer">10</span>
+assert x == 10
 
-<span class="comment">// iterate over a map</span>
-<span class="keyword">def</span> map = [<span class="string"><span class="delimiter">'</span><span class="content">abc</span><span class="delimiter">'</span></span>:<span class="integer">1</span>, <span class="string"><span class="delimiter">'</span><span class="content">def</span><span class="delimiter">'</span></span>:<span class="integer">2</span>, <span class="string"><span class="delimiter">'</span><span class="content">xyz</span><span class="delimiter">'</span></span>:<span class="integer">3</span>]
-x = <span class="integer">0</span>
-<span class="keyword">for</span> ( e <span class="keyword">in</span> map ) {
+// iterate over a map
+def map = ['abc':1, 'def':2, 'xyz':3]
+x = 0
+for ( e in map ) {
     x += e.value
 }
-<span class="keyword">assert</span> x == <span class="integer">6</span>
+assert x == 6
 
-<span class="comment">// iterate over values in a map</span>
-x = <span class="integer">0</span>
-<span class="keyword">for</span> ( v <span class="keyword">in</span> map.values() ) {
+// iterate over values in a map
+x = 0
+for ( v in map.values() ) {
     x += v
 }
-<span class="keyword">assert</span> x == <span class="integer">6</span>
+assert x == 6
 
-<span class="comment">// iterate over the characters in a string</span>
-<span class="keyword">def</span> text = <span class="string"><span class="delimiter">&quot;</span><span class="content">abc</span><span class="delimiter">&quot;</span></span>
-<span class="keyword">def</span> list = <span class="type">[]</span>
-<span class="keyword">for</span> (c <span class="keyword">in</span> text) {
+// iterate over the characters in a string
+def text = "abc"
+def list = []
+for (c in text) {
     list.add(c)
 }
-<span class="keyword">assert</span> list == [<span class="string"><span class="delimiter">&quot;</span><span class="content">a</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">b</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">c</span><span class="delimiter">&quot;</span></span>]</code></pre>
+assert list == ["a", "b", "c"]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1029,14 +938,14 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> x = <span class="integer">0</span>
-<span class="keyword">def</span> y = <span class="integer">5</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def x = 0
+def y = 5
 
-<span class="keyword">while</span> ( y-- &gt; <span class="integer">0</span> ) {
+while ( y-- &gt; 0 ) {
     x++
 }
 
-<span class="keyword">assert</span> x == <span class="integer">5</span></code></pre>
+assert x == 5</code></pre>
 </div>
 </div>
 </div>
@@ -1057,11 +966,11 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">try</span> {
-    <span class="string"><span class="delimiter">'</span><span class="content">moo</span><span class="delimiter">'</span></span>.toLong()   <span class="comment">// 这将产生一个异常</span>
-    <span class="keyword">assert</span> <span class="predefined-constant">false</span>     <span class="comment">// 永远不会到达这的断言语句</span>
-} <span class="keyword">catch</span> ( e ) {
-    <span class="keyword">assert</span> e <span class="keyword">in</span> <span class="exception">NumberFormatException</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">try {
+    'moo'.toLong()   // 这将产生一个异常
+    assert false     // 永远不会到达这的断言语句
+} catch ( e ) {
+    assert e in NumberFormatException
 }</code></pre>
 </div>
 </div>
@@ -1070,18 +979,18 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> z
-<span class="keyword">try</span> {
-    <span class="keyword">def</span> i = <span class="integer">7</span>, j = <span class="integer">0</span>
-    <span class="keyword">try</span> {
-        <span class="keyword">def</span> k = i / j
-        <span class="keyword">assert</span> <span class="predefined-constant">false</span>        <span class="comment">// 由于前一行中的异常而从未到达过</span>
-    } <span class="keyword">finally</span> {
-        z = <span class="string"><span class="delimiter">'</span><span class="content">reached here</span><span class="delimiter">'</span></span>  <span class="comment">// 即使抛出Exception也总是执行</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def z
+try {
+    def i = 7, j = 0
+    try {
+        def k = i / j
+        assert false        // 由于前一行中的异常而从未到达过
+    } finally {
+        z = 'reached here'  // 即使抛出Exception也总是执行
     }
-} <span class="keyword">catch</span> ( e ) {
-    <span class="keyword">assert</span> e <span class="keyword">in</span> <span class="exception">ArithmeticException</span>
-    <span class="keyword">assert</span> z == <span class="string"><span class="delimiter">'</span><span class="content">reached here</span><span class="delimiter">'</span></span>
+} catch ( e ) {
+    assert e in ArithmeticException
+    assert z == 'reached here'
 }</code></pre>
 </div>
 </div>
@@ -1093,10 +1002,10 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">try</span> {
-    <span class="comment">/* ... */</span>
-} <span class="keyword">catch</span> ( <span class="exception">IOException</span> | <span class="exception">NullPointerException</span> e ) {
-    <span class="comment">/* 一个块来处理2种异常 */</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">try {
+    /* ... */
+} catch ( IOException | NullPointerException e ) {
+    /* 一个块来处理2种异常 */
 }</code></pre>
 </div>
 </div>
@@ -1112,7 +1021,7 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> [left expression] == [right expression] : (optional message)</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">assert [left expression] == [right expression] : (optional message)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1120,7 +1029,7 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> <span class="integer">1</span>+<span class="integer">1</span> == <span class="integer">3</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">assert 1+1 == 3</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1128,11 +1037,11 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="key">Caught</span>: Assertion <span class="key">failed</span>:
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Caught: Assertion failed:
 
-<span class="keyword">assert</span> <span class="integer">1</span>+<span class="integer">1</span> == <span class="integer">3</span>
+assert 1+1 == 3
         |  |
-        <span class="integer">2</span>  <span class="predefined-constant">false</span></code></pre>
+        2  false</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1140,11 +1049,11 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> x = <span class="integer">2</span>
-<span class="keyword">def</span> y = <span class="integer">7</span>
-<span class="keyword">def</span> z = <span class="integer">5</span>
-<span class="keyword">def</span> calc = { a,b -&gt; a*b+<span class="integer">1</span> }
-<span class="keyword">assert</span> calc(x,y) == [x,z].sum()</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def x = 2
+def y = 7
+def z = 5
+def calc = { a,b -&gt; a*b+1 }
+assert calc(x,y) == [x,z].sum()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1152,10 +1061,10 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> calc(x,y) == [x,z].sum()
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">assert calc(x,y) == [x,z].sum()
        |    | |  |   | |  |
-       <span class="integer">15</span>   <span class="integer">2</span> <span class="integer">7</span>  |   <span class="integer">2</span> <span class="integer">5</span>  <span class="integer">7</span>
-                 <span class="predefined-constant">false</span></code></pre>
+       15   2 7  |   2 5  7
+                 false</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1163,11 +1072,11 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> x = <span class="integer">2</span>
-<span class="keyword">def</span> y = <span class="integer">7</span>
-<span class="keyword">def</span> z = <span class="integer">5</span>
-<span class="keyword">def</span> calc = { a,b -&gt; a*b+<span class="integer">1</span> }
-<span class="keyword">assert</span> calc(x,y) == z*z : <span class="string"><span class="delimiter">'</span><span class="content">Incorrect computation result</span><span class="delimiter">'</span></span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def x = 2
+def y = 7
+def z = 5
+def calc = { a,b -&gt; a*b+1 }
+assert calc(x,y) == z*z : 'Incorrect computation result'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1175,7 +1084,7 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">Incorrect computation result. Expression: (calc.call(x, y) == (z * z)). Values: z = <span class="integer">5</span>, z = <span class="integer">5</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Incorrect computation result. Expression: (calc.call(x, y) == (z * z)). Values: z = 5, z = 5</code></pre>
 </div>
 </div>
 </div>
@@ -1186,13 +1095,13 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="key">given</span>:
-    <span class="keyword">def</span> x = <span class="integer">1</span>
-    <span class="keyword">def</span> y = <span class="integer">2</span>
-<span class="key">when</span>:
-    <span class="keyword">def</span> z = x+y
-<span class="key">then</span>:
-    <span class="keyword">assert</span> z == <span class="integer">3</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">given:
+    def x = 1
+    def y = 2
+when:
+    def z = x+y
+then:
+    assert z == 3</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1200,14 +1109,14 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">for</span> (<span class="type">int</span> i=<span class="integer">0</span>;i&lt;<span class="integer">10</span>;i++) {
-    <span class="keyword">for</span> (<span class="type">int</span> j=<span class="integer">0</span>;j&lt;i;j++) {
-        println <span class="string"><span class="delimiter">&quot;</span><span class="content">j=</span><span class="inline"><span class="inline-delimiter">$</span>j</span><span class="delimiter">&quot;</span></span>
-        <span class="keyword">if</span> (j == <span class="integer">5</span>) {
-            <span class="keyword">break</span> exit
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">for (int i=0;i&lt;10;i++) {
+    for (int j=0;j&lt;i;j++) {
+        println "j=$j"
+        if (j == 5) {
+            break exit
         }
     }
-    <span class="key">exit</span>: println <span class="string"><span class="delimiter">&quot;</span><span class="content">i=</span><span class="inline"><span class="inline-delimiter">$</span>i</span><span class="delimiter">&quot;</span></span>
+    exit: println "i=$i"
 }</code></pre>
 </div>
 </div>
@@ -1267,7 +1176,7 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">void</span> aMethodFoo() { println <span class="string"><span class="delimiter">&quot;</span><span class="content">This is aMethodFoo.</span><span class="delimiter">&quot;</span></span> } <i class="conum" data-value="0"></i><b>(0)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">void aMethodFoo() { println "This is aMethodFoo." } <i class="conum" data-value="0"></i><b>(0)</b></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1275,7 +1184,7 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> [<span class="string"><span class="delimiter">'</span><span class="content">aMethodFoo</span><span class="delimiter">'</span></span>] == <span class="local-variable">this</span>.class.methods.name.grep(~<span class="regexp"><span class="delimiter">/</span><span class="content">.*Foo</span><span class="delimiter">/</span></span>)</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">assert ['aMethodFoo'] == this.class.methods.name.grep(~/.*Foo/)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1286,9 +1195,9 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">void</span> aMethodBar() { println <span class="string"><span class="delimiter">&quot;</span><span class="content">This is aMethodBar.</span><span class="delimiter">&quot;</span></span> }             <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="type">void</span> anotherFooMethod() { println <span class="string"><span class="delimiter">&quot;</span><span class="content">This is anotherFooMethod.</span><span class="delimiter">&quot;</span></span> } <i class="conum" data-value="2"></i><b>(2)</b>
-<span class="type">void</span> aSecondMethodBar() { println <span class="string"><span class="delimiter">&quot;</span><span class="content">This is aSecondMethodBar.</span><span class="delimiter">&quot;</span></span> } <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">void aMethodBar() { println "This is aMethodBar." }             <i class="conum" data-value="1"></i><b>(1)</b>
+void anotherFooMethod() { println "This is anotherFooMethod." } <i class="conum" data-value="2"></i><b>(2)</b>
+void aSecondMethodBar() { println "This is aSecondMethodBar." } <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1296,7 +1205,7 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> [<span class="string"><span class="delimiter">'</span><span class="content">aMethodBar</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">aSecondMethodBar</span><span class="delimiter">'</span></span>] <span class="keyword">as</span> <span class="predefined-type">Set</span> == <span class="local-variable">this</span>.class.methods.name.grep(~<span class="regexp"><span class="delimiter">/</span><span class="content">.*Bar</span><span class="delimiter">/</span></span>) <span class="keyword">as</span> <span class="predefined-type">Set</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">assert ['aMethodBar', 'aSecondMethodBar'] as Set == this.class.methods.name.grep(~/.*Bar/) as Set</code></pre>
 </div>
 </div>
 </div>
@@ -1333,11 +1242,11 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">List</span>&lt;<span class="predefined-type">String</span>&gt; methodNames = <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;<span class="predefined-type">String</span>&gt;();
-<span class="keyword">for</span> (<span class="predefined-type">Method</span> method : <span class="local-variable">this</span>.getClass().getMethods()) {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">List&lt;String&gt; methodNames = new ArrayList&lt;String&gt;();
+for (Method method : this.getClass().getMethods()) {
    methodNames.add(method.getName());
 }
-<span class="keyword">return</span> methodNames;</code></pre>
+return methodNames;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1345,7 +1254,7 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> <span class="string"><span class="delimiter">'</span><span class="content">aSecondMethodBar</span><span class="delimiter">'</span></span> == <span class="local-variable">this</span>.class.methods.name.grep(~<span class="regexp"><span class="delimiter">/</span><span class="content">.*Bar</span><span class="delimiter">/</span></span>).sort()[<span class="integer">1</span>]</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">assert 'aSecondMethodBar' == this.class.methods.name.grep(~/.*Bar/).sort()[1]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1359,7 +1268,7 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> xmlText = <span class="string"><span class="delimiter">&quot;&quot;&quot;</span><span class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def xmlText = """
               | &lt;root&gt;
               |   &lt;level&gt;
               |      &lt;sublevel id='1'&gt;
@@ -1380,12 +1289,12 @@ x = <span class="integer">0</span>
               |      &lt;/sublevel&gt;
               |   &lt;/level&gt;
               | &lt;/root&gt;
-              </span><span class="delimiter">&quot;&quot;&quot;</span></span>
-<span class="keyword">def</span> root = <span class="keyword">new</span> XmlSlurper().parseText(xmlText.stripMargin())
-<span class="keyword">assert</span> root.level.size() == <span class="integer">1</span> <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="keyword">assert</span> root.level.sublevel.size() == <span class="integer">2</span> <i class="conum" data-value="2"></i><b>(2)</b>
-<span class="keyword">assert</span> root.level.sublevel.findAll { <span class="local-variable">it</span>.@id == <span class="integer">1</span> }.size() == <span class="integer">1</span> <i class="conum" data-value="3"></i><b>(3)</b>
-<span class="keyword">assert</span> root.level.sublevel[<span class="integer">1</span>].keyVal[<span class="integer">0</span>].key.text() == <span class="string"><span class="delimiter">'</span><span class="content">anotherKey</span><span class="delimiter">'</span></span> <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+              """
+def root = new XmlSlurper().parseText(xmlText.stripMargin())
+assert root.level.size() == 1 <i class="conum" data-value="1"></i><b>(1)</b>
+assert root.level.sublevel.size() == 2 <i class="conum" data-value="2"></i><b>(2)</b>
+assert root.level.sublevel.findAll { it.@id == 1 }.size() == 1 <i class="conum" data-value="3"></i><b>(3)</b>
+assert root.level.sublevel[1].keyVal[0].key.text() == 'anotherKey' <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1433,8 +1342,8 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">interface</span> <span class="predefined-type">Predicate</span>&lt;T&gt; {
-    <span class="type">boolean</span> accept(T obj)
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">interface Predicate&lt;T&gt; {
+    boolean accept(T obj)
 }</code></pre>
 </div>
 </div>
@@ -1443,10 +1352,10 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="directive">abstract</span> <span class="type">class</span> <span class="class">Greeter</span> {
-    <span class="directive">abstract</span> <span class="predefined-type">String</span> getName()
-    <span class="type">void</span> greet() {
-        println <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello, </span><span class="inline"><span class="inline-delimiter">$</span>name</span><span class="delimiter">&quot;</span></span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">abstract class Greeter {
+    abstract String getName()
+    void greet() {
+        println "Hello, $name"
     }
 }</code></pre>
 </div>
@@ -1456,10 +1365,10 @@ x = <span class="integer">0</span>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">Predicate</span> filter = { <span class="local-variable">it</span>.contains <span class="string"><span class="delimiter">'</span><span class="content">G</span><span class="delimiter">'</span></span> } <span class="keyword">as</span> <span class="predefined-type">Predicate</span>
-<span class="keyword">assert</span> filter.accept(<span class="string"><span class="delimiter">'</span><span class="content">Groovy</span><span class="delimiter">'</span></span>) == <span class="predefined-constant">true</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Predicate filter = { it.contains 'G' } as Predicate
+assert filter.accept('Groovy') == true
 
-Greeter greeter = { <span class="string"><span class="delimiter">'</span><span class="content">Groovy</span><span class="delimiter">'</span></span> } <span class="keyword">as</span> Greeter
+Greeter greeter = { 'Groovy' } as Greeter
 greeter.greet()</code></pre>
 </div>
 </div>
@@ -1468,10 +1377,10 @@ greeter.greet()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">Predicate</span> filter = { <span class="local-variable">it</span>.contains <span class="string"><span class="delimiter">'</span><span class="content">G</span><span class="delimiter">'</span></span> }
-<span class="keyword">assert</span> filter.accept(<span class="string"><span class="delimiter">'</span><span class="content">Groovy</span><span class="delimiter">'</span></span>) == <span class="predefined-constant">true</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Predicate filter = { it.contains 'G' }
+assert filter.accept('Groovy') == true
 
-Greeter greeter = { <span class="string"><span class="delimiter">'</span><span class="content">Groovy</span><span class="delimiter">'</span></span> }
+Greeter greeter = { 'Groovy' }
 greeter.greet()</code></pre>
 </div>
 </div>
@@ -1480,10 +1389,10 @@ greeter.greet()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">boolean</span> doFilter(<span class="predefined-type">String</span> s) { s.contains(<span class="string"><span class="delimiter">'</span><span class="content">G</span><span class="delimiter">'</span></span>) }
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">boolean doFilter(String s) { s.contains('G') }
 
-<span class="predefined-type">Predicate</span> filter = <span class="local-variable">this</span>.&amp;doFilter
-<span class="keyword">assert</span> filter.accept(<span class="string"><span class="delimiter">'</span><span class="content">Groovy</span><span class="delimiter">'</span></span>) == <span class="predefined-constant">true</span>
+Predicate filter = this.&amp;doFilter
+assert filter.accept('Groovy') == true
 
 Greeter greeter = GroovySystem.&amp;getVersion
 greeter.greet()</code></pre>
@@ -1497,8 +1406,8 @@ greeter.greet()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="directive">public</span> &lt;T&gt; <span class="predefined-type">List</span>&lt;T&gt; filter(<span class="predefined-type">List</span>&lt;T&gt; source, <span class="predefined-type">Predicate</span>&lt;T&gt; predicate) {
-    source.findAll { predicate.accept(<span class="local-variable">it</span>) }
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">public &lt;T&gt; List&lt;T&gt; filter(List&lt;T&gt; source, Predicate&lt;T&gt; predicate) {
+    source.findAll { predicate.accept(it) }
 }</code></pre>
 </div>
 </div>
@@ -1507,7 +1416,7 @@ greeter.greet()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> filter([<span class="string"><span class="delimiter">'</span><span class="content">Java</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">Groovy</span><span class="delimiter">'</span></span>], { <span class="local-variable">it</span>.contains <span class="string"><span class="delimiter">'</span><span class="content">G</span><span class="delimiter">'</span></span>} <span class="keyword">as</span> <span class="predefined-type">Predicate</span>) == [<span class="string"><span class="delimiter">'</span><span class="content">Groovy</span><span class="delimiter">'</span></span>]</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">assert filter(['Java','Groovy'], { it.contains 'G'} as Predicate) == ['Groovy']</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1515,7 +1424,7 @@ greeter.greet()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="error">但</span><span class="error">是</span><span class="error">从</span>Groovy <span class="float">2.2</span><span class="float">.0</span><span class="error">开</span><span class="error">始</span><span class="error">，</span><span class="error">你</span><span class="error">也</span><span class="error">可</span><span class="error">以</span><span class="error">省</span><span class="error">略</span><span class="error">显</span><span class="error">式</span><span class="error">强</span><span class="error">制</span><span class="error">并</span><span class="error">调</span><span class="error">用</span><span class="error">方</span><span class="error">法</span><span class="error">，</span><span class="error">就</span><span class="error">好</span><span class="error">像</span><span class="error">它</span><span class="error">使</span><span class="error">用</span><span class="error">了</span><span class="error">一</span><span class="error">个</span><span class="error">闭</span><span class="error">包</span><span class="error">：</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">但是从Groovy 2.2.0开始，你也可以省略显式强制并调用方法，就好像它使用了一个闭包：</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1529,9 +1438,9 @@ greeter.greet()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">interface</span> FooBar {
-    <span class="type">int</span> foo()
-    <span class="type">void</span> bar()
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">interface FooBar {
+    int foo()
+    void bar()
 }</code></pre>
 </div>
 </div>
@@ -1540,7 +1449,7 @@ greeter.greet()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> impl = { println <span class="string"><span class="delimiter">'</span><span class="content">ok</span><span class="delimiter">'</span></span>; <span class="integer">123</span> } <span class="keyword">as</span> FooBar</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def impl = { println 'ok'; 123 } as FooBar</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1548,7 +1457,7 @@ greeter.greet()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> impl.foo() == <span class="integer">123</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">assert impl.foo() == 123
 impl.bar()</code></pre>
 </div>
 </div>
@@ -1557,14 +1466,14 @@ impl.bar()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">FooBar</span> {
-    <span class="type">int</span> foo() { <span class="integer">1</span> }
-    <span class="type">void</span> bar() { println <span class="string"><span class="delimiter">'</span><span class="content">bar</span><span class="delimiter">'</span></span> }
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class FooBar {
+    int foo() { 1 }
+    void bar() { println 'bar' }
 }
 
-<span class="keyword">def</span> impl = { println <span class="string"><span class="delimiter">'</span><span class="content">ok</span><span class="delimiter">'</span></span>; <span class="integer">123</span> } <span class="keyword">as</span> FooBar
+def impl = { println 'ok'; 123 } as FooBar
 
-<span class="keyword">assert</span> impl.foo() == <span class="integer">123</span>
+assert impl.foo() == 123
 impl.bar()</code></pre>
 </div>
 </div>
@@ -1577,13 +1486,13 @@ impl.bar()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> map
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def map
 map = [
-  <span class="key">i</span>: <span class="integer">10</span>,
-  <span class="key">hasNext</span>: { map.i &gt; <span class="integer">0</span> },
-  <span class="key">next</span>: { map.i-- },
+  i: 10,
+  hasNext: { map.i &gt; 0 },
+  next: { map.i-- },
 ]
-<span class="keyword">def</span> iter = map <span class="keyword">as</span> <span class="predefined-type">Iterator</span></code></pre>
+def iter = map as Iterator</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1591,16 +1500,16 @@ map = [
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">interface</span> X {
-    <span class="type">void</span> f()
-    <span class="type">void</span> g(<span class="type">int</span> n)
-    <span class="type">void</span> h(<span class="predefined-type">String</span> s, <span class="type">int</span> n)
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">interface X {
+    void f()
+    void g(int n)
+    void h(String s, int n)
 }
 
-x = [ <span class="key">f</span>: {println <span class="string"><span class="delimiter">&quot;</span><span class="content">f called</span><span class="delimiter">&quot;</span></span>} ] <span class="keyword">as</span> X
-x.f() <span class="comment">// 方法存在</span>
-x.g() <span class="comment">// 出现 MissingMethodException</span>
-x.g(<span class="integer">5</span>) <span class="comment">// 出现 UnsupportedOperationException</span></code></pre>
+x = [ f: {println "f called"} ] as X
+x.f() // 方法存在
+x.g() // 出现 MissingMethodException
+x.g(5) // 出现 UnsupportedOperationException</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1624,7 +1533,7 @@ x.g(<span class="integer">5</span>) <span class="comment">// 出现 UnsupportedO
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">enum</span> State {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">enum State {
     up,
     down
 }</code></pre>
@@ -1635,8 +1544,8 @@ x.g(<span class="integer">5</span>) <span class="comment">// 出现 UnsupportedO
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">State st = <span class="string"><span class="delimiter">'</span><span class="content">up</span><span class="delimiter">'</span></span>
-<span class="keyword">assert</span> st == State.up</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">State st = 'up'
+assert st == State.up</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1644,9 +1553,9 @@ x.g(<span class="integer">5</span>) <span class="comment">// 出现 UnsupportedO
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> val = <span class="string"><span class="delimiter">&quot;</span><span class="content">up</span><span class="delimiter">&quot;</span></span>
-State st = <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">${</span>val<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
-<span class="keyword">assert</span> st == State.up</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def val = "up"
+State st = "${val}"
+assert st == State.up</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1654,7 +1563,7 @@ State st = <span class="string"><span class="delimiter">&quot;</span><span class
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">State st = <span class="string"><span class="delimiter">'</span><span class="content">not an enum value</span><span class="delimiter">'</span></span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">State st = 'not an enum value'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1662,12 +1571,12 @@ State st = <span class="string"><span class="delimiter">&quot;</span><span class
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">State switchState(State st) {
-    <span class="keyword">switch</span> (st) {
-        <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">up</span><span class="delimiter">'</span></span>:
-            <span class="keyword">return</span> State.down <span class="comment">// 显式常量</span>
-        <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">down</span><span class="delimiter">'</span></span>:
-            <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">up</span><span class="delimiter">'</span></span> <span class="comment">// 对返回类型的隐式强转</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">State switchState(State st) {
+    switch (st) {
+        case 'up':
+            return State.down // 显式常量
+        case 'down':
+            return 'up' // 对返回类型的隐式强转
     }
 }</code></pre>
 </div>
@@ -1677,8 +1586,8 @@ State st = <span class="string"><span class="delimiter">&quot;</span><span class
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> switchState(<span class="string"><span class="delimiter">'</span><span class="content">up</span><span class="delimiter">'</span></span> <span class="keyword">as</span> State) == State.down
-<span class="keyword">assert</span> switchState(State.down) == State.up</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">assert switchState('up' as State) == State.down
+assert switchState(State.down) == State.up</code></pre>
 </div>
 </div>
 </div>
@@ -1689,13 +1598,13 @@ State st = <span class="string"><span class="delimiter">&quot;</span><span class
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Polar</span> {
-    <span class="type">double</span> r
-    <span class="type">double</span> phi
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Polar {
+    double r
+    double phi
 }
-<span class="type">class</span> <span class="class">Cartesian</span> {
-   <span class="type">double</span> x
-   <span class="type">double</span> y
+class Cartesian {
+   double x
+   double y
 }</code></pre>
 </div>
 </div>
@@ -1704,9 +1613,9 @@ State st = <span class="string"><span class="delimiter">&quot;</span><span class
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> <span class="function">asType</span>(<span class="predefined-type">Class</span> target) {
-    <span class="keyword">if</span> (Cartesian==target) {
-        <span class="keyword">return</span> <span class="keyword">new</span> Cartesian(<span class="key">x</span>: r*cos(phi), <span class="key">y</span>: r*sin(phi))
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def asType(Class target) {
+    if (Cartesian==target) {
+        return new Cartesian(x: r*cos(phi), y: r*sin(phi))
     }
 }</code></pre>
 </div>
@@ -1716,10 +1625,10 @@ State st = <span class="string"><span class="delimiter">&quot;</span><span class
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> sigma = <span class="float">1E-16</span>
-<span class="keyword">def</span> polar = <span class="keyword">new</span> Polar(<span class="key">r</span>:<span class="float">1.0</span>,<span class="key">phi</span>:PI/<span class="integer">2</span>)
-<span class="keyword">def</span> cartesian = polar <span class="keyword">as</span> Cartesian
-<span class="keyword">assert</span> abs(cartesian.x-sigma) &lt; sigma</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def sigma = 1E-16
+def polar = new Polar(r:1.0,phi:PI/2)
+def cartesian = polar as Cartesian
+assert abs(cartesian.x-sigma) &lt; sigma</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1727,12 +1636,12 @@ State st = <span class="string"><span class="delimiter">&quot;</span><span class
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Polar</span> {
-    <span class="type">double</span> r
-    <span class="type">double</span> phi
-    <span class="keyword">def</span> <span class="function">asType</span>(<span class="predefined-type">Class</span> target) {
-        <span class="keyword">if</span> (Cartesian==target) {
-            <span class="keyword">return</span> <span class="keyword">new</span> Cartesian(<span class="key">x</span>: r*cos(phi), <span class="key">y</span>: r*sin(phi))
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Polar {
+    double r
+    double phi
+    def asType(Class target) {
+        if (Cartesian==target) {
+            return new Cartesian(x: r*cos(phi), y: r*sin(phi))
         }
     }
 }</code></pre>
@@ -1743,9 +1652,9 @@ State st = <span class="string"><span class="delimiter">&quot;</span><span class
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">Polar.metaClass.asType = { <span class="predefined-type">Class</span> target -&gt;
-    <span class="keyword">if</span> (Cartesian==target) {
-        <span class="keyword">return</span> <span class="keyword">new</span> Cartesian(<span class="key">x</span>: r*cos(phi), <span class="key">y</span>: r*sin(phi))
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Polar.metaClass.asType = { Class target -&gt;
+    if (Cartesian==target) {
+        return new Cartesian(x: r*cos(phi), y: r*sin(phi))
     }
 }</code></pre>
 </div>
@@ -1758,10 +1667,10 @@ State st = <span class="string"><span class="delimiter">&quot;</span><span class
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">interface</span> Greeter {
-    <span class="type">void</span> greet()
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">interface Greeter {
+    void greet()
 }
-<span class="keyword">def</span> greeter = { println <span class="string"><span class="delimiter">'</span><span class="content">Hello, Groovy!</span><span class="delimiter">'</span></span> } <span class="keyword">as</span> Greeter <span class="comment">// Greeter是其类的静态引用</span>
+def greeter = { println 'Hello, Groovy!' } as Greeter // Greeter是其类的静态引用
 greeter.greet()</code></pre>
 </div>
 </div>
@@ -1770,7 +1679,7 @@ greeter.greet()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">Class</span> clazz = <span class="predefined-type">Class</span>.forName(<span class="string"><span class="delimiter">'</span><span class="content">Greeter</span><span class="delimiter">'</span></span>)</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Class clazz = Class.forName('Greeter')</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1778,11 +1687,11 @@ greeter.greet()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">greeter = { println <span class="string"><span class="delimiter">'</span><span class="content">Hello, Groovy!</span><span class="delimiter">'</span></span> } <span class="keyword">as</span> clazz
-<span class="comment">// throws:</span>
-<span class="comment">// unable to resolve class clazz</span>
-<span class="comment">// @ line 9, column 40.</span>
-<span class="comment">//   greeter = { println 'Hello, Groovy!' } as clazz</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">greeter = { println 'Hello, Groovy!' } as clazz
+// throws:
+// unable to resolve class clazz
+// @ line 9, column 40.
+//   greeter = { println 'Hello, Groovy!' } as clazz</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1790,7 +1699,7 @@ greeter.greet()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">greeter = { println <span class="string"><span class="delimiter">'</span><span class="content">Hello, Groovy!</span><span class="delimiter">'</span></span> }.asType(clazz)
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">greeter = { println 'Hello, Groovy!' }.asType(clazz)
 greeter.greet()</code></pre>
 </div>
 </div>
@@ -1807,8 +1716,8 @@ greeter.greet()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">println <span class="string"><span class="delimiter">'</span><span class="content">Hello World</span><span class="delimiter">'</span></span>
-<span class="keyword">def</span> maximum = <span class="predefined-type">Math</span>.max <span class="integer">5</span>, <span class="integer">10</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">println 'Hello World'
+def maximum = Math.max 5, 10</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1816,8 +1725,8 @@ greeter.greet()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">println()
-println(<span class="predefined-type">Math</span>.max(<span class="integer">5</span>, <span class="integer">10</span>))</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">println()
+println(Math.max(5, 10))</code></pre>
 </div>
 </div>
 </div>
@@ -1828,7 +1737,7 @@ println(<span class="predefined-type">Math</span>.max(<span class="integer">5</s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> <span class="predefined-constant">true</span>;</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">assert true;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1836,7 +1745,7 @@ println(<span class="predefined-type">Math</span>.max(<span class="integer">5</s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> <span class="predefined-constant">true</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">assert true</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1844,7 +1753,7 @@ println(<span class="predefined-type">Math</span>.max(<span class="integer">5</s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">boolean</span> a = <span class="predefined-constant">true</span>; <span class="keyword">assert</span> a</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">boolean a = true; assert a</code></pre>
 </div>
 </div>
 </div>
@@ -1855,10 +1764,10 @@ println(<span class="predefined-type">Math</span>.max(<span class="integer">5</s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">int</span> add(<span class="type">int</span> a, <span class="type">int</span> b) {
-    <span class="keyword">return</span> a+b
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">int add(int a, int b) {
+    return a+b
 }
-<span class="keyword">assert</span> add(<span class="integer">1</span>, <span class="integer">2</span>) == <span class="integer">3</span></code></pre>
+assert add(1, 2) == 3</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1866,10 +1775,10 @@ println(<span class="predefined-type">Math</span>.max(<span class="integer">5</s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">int</span> add(<span class="type">int</span> a, <span class="type">int</span> b) {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">int add(int a, int b) {
     a+b
 }
-<span class="keyword">assert</span> add(<span class="integer">1</span>, <span class="integer">2</span>) == <span class="integer">3</span></code></pre>
+assert add(1, 2) == 3</code></pre>
 </div>
 </div>
 </div>
@@ -1880,8 +1789,8 @@ println(<span class="predefined-type">Math</span>.max(<span class="integer">5</s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="directive">public</span> <span class="type">class</span> <span class="class">Server</span> {
-    <span class="directive">public</span> <span class="predefined-type">String</span> toString() { <span class="string"><span class="delimiter">&quot;</span><span class="content">a server</span><span class="delimiter">&quot;</span></span> }
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">public class Server {
+    public String toString() { "a server" }
 }</code></pre>
 </div>
 </div>
@@ -1890,8 +1799,8 @@ println(<span class="predefined-type">Math</span>.max(<span class="integer">5</s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Server</span> {
-    <span class="predefined-type">String</span> toString() { <span class="string"><span class="delimiter">&quot;</span><span class="content">a server</span><span class="delimiter">&quot;</span></span> }
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Server {
+    String toString() { "a server" }
 }</code></pre>
 </div>
 </div>
@@ -1911,8 +1820,8 @@ println(<span class="predefined-type">Math</span>.max(<span class="integer">5</s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> <span class="predefined-constant">true</span>
-<span class="keyword">assert</span> !<span class="predefined-constant">false</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">assert true
+assert !false</code></pre>
 </div>
 </div>
 </div>
@@ -1923,8 +1832,8 @@ println(<span class="predefined-type">Math</span>.max(<span class="integer">5</s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> [<span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>]
-<span class="keyword">assert</span> !<span class="type">[]</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">assert [1, 2, 3]
+assert ![]</code></pre>
 </div>
 </div>
 </div>
@@ -1935,8 +1844,8 @@ println(<span class="predefined-type">Math</span>.max(<span class="integer">5</s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> (<span class="string"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span> =~ <span class="regexp"><span class="delimiter">/</span><span class="content">a</span><span class="delimiter">/</span></span>)
-<span class="keyword">assert</span> !(<span class="string"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span> =~ <span class="regexp"><span class="delimiter">/</span><span class="content">b</span><span class="delimiter">/</span></span>)</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">assert ('a' =~ /a/)
+assert !('a' =~ /b/)</code></pre>
 </div>
 </div>
 </div>
@@ -1947,13 +1856,13 @@ println(<span class="predefined-type">Math</span>.max(<span class="integer">5</s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> [<span class="integer">0</span>].iterator()
-<span class="keyword">assert</span> !<span class="type">[]</span>.iterator()
-<span class="predefined-type">Vector</span> v = [<span class="integer">0</span>] <span class="keyword">as</span> <span class="predefined-type">Vector</span>
-<span class="predefined-type">Enumeration</span> enumeration = v.elements()
-<span class="keyword">assert</span> enumeration
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">assert [0].iterator()
+assert ![].iterator()
+Vector v = [0] as Vector
+Enumeration enumeration = v.elements()
+assert enumeration
 enumeration.nextElement()
-<span class="keyword">assert</span> !enumeration</code></pre>
+assert !enumeration</code></pre>
 </div>
 </div>
 </div>
@@ -1964,8 +1873,8 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> [<span class="string"><span class="delimiter">'</span><span class="content">one</span><span class="delimiter">'</span></span> : <span class="integer">1</span>]
-<span class="keyword">assert</span> ![:]</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">assert ['one' : 1]
+assert ![:]</code></pre>
 </div>
 </div>
 </div>
@@ -1976,12 +1885,12 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> <span class="string"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>
-<span class="keyword">assert</span> !<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
-<span class="keyword">def</span> nonEmpty = <span class="string"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>
-<span class="keyword">assert</span> <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">$</span>nonEmpty</span><span class="delimiter">&quot;</span></span>
-<span class="keyword">def</span> empty = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
-<span class="keyword">assert</span> !<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">$</span>empty</span><span class="delimiter">&quot;</span></span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">assert 'a'
+assert !''
+def nonEmpty = 'a'
+assert "$nonEmpty"
+def empty = ''
+assert !"$empty"</code></pre>
 </div>
 </div>
 </div>
@@ -1992,9 +1901,9 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> <span class="integer">1</span>
-<span class="keyword">assert</span> <span class="float">3.5</span>
-<span class="keyword">assert</span> !<span class="integer">0</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">assert 1
+assert 3.5
+assert !0</code></pre>
 </div>
 </div>
 </div>
@@ -2005,8 +1914,8 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> <span class="keyword">new</span> <span class="predefined-type">Object</span>()
-<span class="keyword">assert</span> !<span class="predefined-constant">null</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">assert new Object()
+assert !null</code></pre>
 </div>
 </div>
 </div>
@@ -2017,11 +1926,11 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Color</span> {
-    <span class="predefined-type">String</span> name
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Color {
+    String name
 
-    <span class="type">boolean</span> asBoolean(){
-        name == <span class="string"><span class="delimiter">'</span><span class="content">green</span><span class="delimiter">'</span></span> ? <span class="predefined-constant">true</span> : <span class="predefined-constant">false</span>
+    boolean asBoolean(){
+        name == 'green' ? true : false
     }
 }</code></pre>
 </div>
@@ -2031,8 +1940,8 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> <span class="keyword">new</span> <span class="predefined-type">Color</span>(<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">green</span><span class="delimiter">'</span></span>)
-<span class="keyword">assert</span> !<span class="keyword">new</span> <span class="predefined-type">Color</span>(<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>)</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">assert new Color(name: 'green')
+assert !new Color(name: 'red')</code></pre>
 </div>
 </div>
 </div>
@@ -2048,8 +1957,8 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">String</span> aString = <span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span>                      <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="keyword">assert</span> aString.toUpperCase()                <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">String aString = 'foo'                      <i class="conum" data-value="1"></i><b>(1)</b>
+assert aString.toUpperCase()                <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -2069,8 +1978,8 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> aString = <span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span>                         <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="keyword">assert</span> aString.toUpperCase()                <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def aString = 'foo'                         <i class="conum" data-value="1"></i><b>(1)</b>
+assert aString.toUpperCase()                <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -2093,10 +2002,10 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">String</span> concat(<span class="predefined-type">String</span> a, <span class="predefined-type">String</span> b) {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">String concat(String a, String b) {
     a+b
 }
-<span class="keyword">assert</span> concat(<span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">bar</span><span class="delimiter">'</span></span>) == <span class="string"><span class="delimiter">'</span><span class="content">foobar</span><span class="delimiter">'</span></span></code></pre>
+assert concat('foo','bar') == 'foobar'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2104,11 +2013,11 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> <span class="function">concat</span>(<span class="keyword">def</span> a, <span class="keyword">def</span> b) {                              <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def concat(def a, def b) {                              <i class="conum" data-value="1"></i><b>(1)</b>
     a+b
 }
-<span class="keyword">assert</span> concat(<span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">bar</span><span class="delimiter">'</span></span>) == <span class="string"><span class="delimiter">'</span><span class="content">foobar</span><span class="delimiter">'</span></span>                  <i class="conum" data-value="2"></i><b>(2)</b>
-<span class="keyword">assert</span> concat(<span class="integer">1</span>,<span class="integer">2</span>) == <span class="integer">3</span>                                 <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+assert concat('foo','bar') == 'foobar'                  <i class="conum" data-value="2"></i><b>(2)</b>
+assert concat(1,2) == 3                                 <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -2135,11 +2044,11 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="directive">private</span> concat(a,b) {                                   <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">private concat(a,b) {                                   <i class="conum" data-value="1"></i><b>(1)</b>
     a+b
 }
-<span class="keyword">assert</span> concat(<span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">bar</span><span class="delimiter">'</span></span>) == <span class="string"><span class="delimiter">'</span><span class="content">foobar</span><span class="delimiter">'</span></span>                  <i class="conum" data-value="2"></i><b>(2)</b>
-<span class="keyword">assert</span> concat(<span class="integer">1</span>,<span class="integer">2</span>) == <span class="integer">3</span>                                 <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+assert concat('foo','bar') == 'foobar'                  <i class="conum" data-value="2"></i><b>(2)</b>
+assert concat(1,2) == 3                                 <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -2169,12 +2078,12 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Person</span> {                                                   <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="predefined-type">String</span> firstName
-    <span class="predefined-type">String</span> lastName
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Person {                                                   <i class="conum" data-value="1"></i><b>(1)</b>
+    String firstName
+    String lastName
 }
-<span class="keyword">def</span> p = <span class="keyword">new</span> Person(<span class="key">firstName</span>: <span class="string"><span class="delimiter">'</span><span class="content">Raymond</span><span class="delimiter">'</span></span>, <span class="key">lastName</span>: <span class="string"><span class="delimiter">'</span><span class="content">Devos</span><span class="delimiter">'</span></span>)      <i class="conum" data-value="2"></i><b>(2)</b>
-<span class="keyword">assert</span> p.formattedName == <span class="string"><span class="delimiter">'</span><span class="content">Raymond Devos</span><span class="delimiter">'</span></span>                        <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+def p = new Person(firstName: 'Raymond', lastName: 'Devos')      <i class="conum" data-value="2"></i><b>(2)</b>
+assert p.formattedName == 'Raymond Devos'                        <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -2198,7 +2107,7 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">Person.metaClass.getFormattedName = { <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">$</span>delegate</span><span class="content">.firstName </span><span class="inline"><span class="inline-delimiter">$</span>delegate</span><span class="content">.lastName</span><span class="delimiter">&quot;</span></span> }</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Person.metaClass.getFormattedName = { "$delegate.firstName $delegate.lastName" }</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2235,9 +2144,9 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@groovy</span>.transform.TypeChecked
-<span class="type">class</span> <span class="class">Calculator</span> {
-    <span class="type">int</span> sum(<span class="type">int</span> x, <span class="type">int</span> y) { x+y }
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@groovy.transform.TypeChecked
+class Calculator {
+    int sum(int x, int y) { x+y }
 }</code></pre>
 </div>
 </div>
@@ -2246,9 +2155,9 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">lass Calculator {
-    <span class="annotation">@groovy</span>.transform.TypeChecked
-    <span class="type">int</span> sum(<span class="type">int</span> x, <span class="type">int</span> y) { x+y }
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">lass Calculator {
+    @groovy.transform.TypeChecked
+    int sum(int x, int y) { x+y }
 }</code></pre>
 </div>
 </div>
@@ -2263,24 +2172,24 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">groovy.transform.TypeChecked</span>
-<span class="keyword">import</span> <span class="include">groovy.transform.TypeCheckingMode</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import groovy.transform.TypeChecked
+import groovy.transform.TypeCheckingMode
 
-<span class="annotation">@TypeChecked</span>                                        <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="type">class</span> <span class="class">GreetingService</span> {
-    <span class="predefined-type">String</span> greeting() {                             <i class="conum" data-value="2"></i><b>(2)</b>
+@TypeChecked                                        <i class="conum" data-value="1"></i><b>(1)</b>
+class GreetingService {
+    String greeting() {                             <i class="conum" data-value="2"></i><b>(2)</b>
         doGreet()
     }
 
-    <span class="annotation">@TypeChecked</span>(TypeCheckingMode.SKIP)             <i class="conum" data-value="3"></i><b>(3)</b>
-    <span class="directive">private</span> <span class="predefined-type">String</span> doGreet() {
-        <span class="keyword">def</span> b = <span class="keyword">new</span> SentenceBuilder()
+    @TypeChecked(TypeCheckingMode.SKIP)             <i class="conum" data-value="3"></i><b>(3)</b>
+    private String doGreet() {
+        def b = new SentenceBuilder()
         b.Hello.my.name.is.John                     <i class="conum" data-value="4"></i><b>(4)</b>
         b
     }
 }
-<span class="keyword">def</span> s = <span class="keyword">new</span> GreetingService()
-<span class="keyword">assert</span> s.greeting() == <span class="string"><span class="delimiter">'</span><span class="content">Hello my name is John</span><span class="delimiter">'</span></span></code></pre>
+def s = new GreetingService()
+assert s.greeting() == 'Hello my name is John'</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -2325,7 +2234,7 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">Date</span> now = <span class="keyword">new</span> <span class="predefined-type">Date</span>()</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Date now = new Date()</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -2337,10 +2246,10 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">String</span> s = <span class="keyword">new</span> <span class="predefined-type">Date</span>() <span class="comment">// 隐式调用toString</span>
-<span class="predefined-type">Boolean</span> boxed = <span class="string"><span class="delimiter">'</span><span class="content">some string</span><span class="delimiter">'</span></span>       <span class="comment">// Groovy真值</span>
-<span class="type">boolean</span> prim = <span class="string"><span class="delimiter">'</span><span class="content">some string</span><span class="delimiter">'</span></span>        <span class="comment">// Groovy真值</span>
-<span class="predefined-type">Class</span> clazz = <span class="string"><span class="delimiter">'</span><span class="content">java.lang.String</span><span class="delimiter">'</span></span>    <span class="comment">// class强转</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">String s = new Date() // 隐式调用toString
+Boolean boxed = 'some string'       // Groovy真值
+boolean prim = 'some string'        // Groovy真值
+Class clazz = 'java.lang.String'    // class强转</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -2352,8 +2261,8 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">String</span> s = <span class="predefined-constant">null</span>         <span class="comment">// passes</span>
-<span class="type">int</span> i = <span class="predefined-constant">null</span>            <span class="comment">// fails</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">String s = null         // passes
+int i = null            // fails</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -2365,8 +2274,8 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">int</span><span class="type">[]</span> i = <span class="keyword">new</span> <span class="type">int</span>[<span class="integer">4</span>]        <span class="comment">// passes</span>
-<span class="type">int</span><span class="type">[]</span> i = <span class="keyword">new</span> <span class="predefined-type">String</span>[<span class="integer">4</span>]     <span class="comment">// fails</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">int[] i = new int[4]        // passes
+int[] i = new String[4]     // fails</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -2378,8 +2287,8 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">int</span><span class="type">[]</span> i = [<span class="integer">1</span>,<span class="integer">2</span>,<span class="integer">3</span>]               <span class="comment">// passes</span>
-<span class="type">int</span><span class="type">[]</span> i = [<span class="integer">1</span>,<span class="integer">2</span>, <span class="keyword">new</span> <span class="predefined-type">Date</span>()]     <span class="comment">// fails</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">int[] i = [1,2,3]               // passes
+int[] i = [1,2, new Date()]     // fails</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -2391,8 +2300,8 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">AbstractList</span> list = <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>()     <span class="comment">// passes</span>
-<span class="predefined-type">LinkedList</span> list = <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>()       <span class="comment">// fails</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">AbstractList list = new ArrayList()     // passes
+LinkedList list = new ArrayList()       // fails</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -2404,8 +2313,8 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">List</span> list = <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>()             <span class="comment">// passes</span>
-<span class="predefined-type">RandomAccess</span> list = <span class="keyword">new</span> <span class="predefined-type">LinkedList</span>()    <span class="comment">// fails</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">List list = new ArrayList()             // passes
+RandomAccess list = new LinkedList()    // fails</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -2417,10 +2326,10 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">int</span> i = <span class="integer">0</span>
-<span class="predefined-type">Integer</span> bi = <span class="integer">1</span>
-<span class="type">int</span> x = <span class="keyword">new</span> <span class="predefined-type">Integer</span>(<span class="integer">123</span>)
-<span class="type">double</span> d = <span class="keyword">new</span> <span class="predefined-type">Float</span>(<span class="float">5f</span>)</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">int i = 0
+Integer bi = 1
+int x = new Integer(123)
+double d = new Float(5f)</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -2432,18 +2341,18 @@ enumeration.nextElement()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">Runnable</span> r = { println <span class="string"><span class="delimiter">'</span><span class="content">Hello</span><span class="delimiter">'</span></span> }
-<span class="type">interface</span> SAMType {
-    <span class="type">int</span> doSomething()
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Runnable r = { println 'Hello' }
+interface SAMType {
+    int doSomething()
 }
-SAMType sam = { <span class="integer">123</span> }
-<span class="keyword">assert</span> sam.doSomething() == <span class="integer">123</span>
-<span class="directive">abstract</span> <span class="type">class</span> <span class="class">AbstractSAM</span> {
-    <span class="type">int</span> calc() { <span class="integer">2</span>* value() }
-    <span class="directive">abstract</span> <span class="type">int</span> value()
+SAMType sam = { 123 }
+assert sam.doSomething() == 123
+abstract class AbstractSAM {
+    int calc() { 2* value() }
+    abstract int value()
 }
-AbstractSAM c = { <span class="integer">123</span> }
-<span class="keyword">assert</span> c.calc() == <span class="integer">246</span></code></pre>
+AbstractSAM c = { 123 }
+assert c.calc() == 246</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -2477,12 +2386,12 @@ AbstractSAM c = { <span class="integer">123</span> }
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">Double</span> d1 = <span class="float">4d</span>
-<span class="predefined-type">Double</span> d2 = <span class="float">4f</span>
-<span class="predefined-type">Double</span> d3 = <span class="integer">4l</span>
-<span class="predefined-type">Double</span> d4 = <span class="integer">4</span>i
-<span class="predefined-type">Double</span> d5 = (<span class="type">short</span>) <span class="integer">4</span>
-<span class="predefined-type">Double</span> d6 = (<span class="type">byte</span>) <span class="integer">4</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Double d1 = 4d
+Double d2 = 4f
+Double d3 = 4l
+Double d4 = 4i
+Double d5 = (short) 4
+Double d6 = (byte) 4</code></pre>
 </div>
 </div></div></td>
 </tr>
@@ -2495,11 +2404,11 @@ AbstractSAM c = { <span class="integer">123</span> }
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">Float</span> f1 = <span class="float">4f</span>
-<span class="predefined-type">Float</span> f2 = <span class="integer">4l</span>
-<span class="predefined-type">Float</span> f3 = <span class="integer">4</span>i
-<span class="predefined-type">Float</span> f4 = (<span class="type">short</span>) <span class="integer">4</span>
-<span class="predefined-type">Float</span> f5 = (<span class="type">byte</span>) <span class="integer">4</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Float f1 = 4f
+Float f2 = 4l
+Float f3 = 4i
+Float f4 = (short) 4
+Float f5 = (byte) 4</code></pre>
 </div>
 </div></div></td>
 </tr>
@@ -2512,10 +2421,10 @@ AbstractSAM c = { <span class="integer">123</span> }
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">Long</span> l1 = <span class="integer">4l</span>
-<span class="predefined-type">Long</span> l2 = <span class="integer">4</span>i
-<span class="predefined-type">Long</span> l3 = (<span class="type">short</span>) <span class="integer">4</span>
-<span class="predefined-type">Long</span> l4 = (<span class="type">byte</span>) <span class="integer">4</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Long l1 = 4l
+Long l2 = 4i
+Long l3 = (short) 4
+Long l4 = (byte) 4</code></pre>
 </div>
 </div></div></td>
 </tr>
@@ -2528,9 +2437,9 @@ AbstractSAM c = { <span class="integer">123</span> }
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">Integer</span> i1 = <span class="integer">4</span>i
-<span class="predefined-type">Integer</span> i2 = (<span class="type">short</span>) <span class="integer">4</span>
-<span class="predefined-type">Integer</span> i3 = (<span class="type">byte</span>) <span class="integer">4</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Integer i1 = 4i
+Integer i2 = (short) 4
+Integer i3 = (byte) 4</code></pre>
 </div>
 </div></div></td>
 </tr>
@@ -2543,8 +2452,8 @@ AbstractSAM c = { <span class="integer">123</span> }
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">Short</span> s1 = (<span class="type">short</span>) <span class="integer">4</span>
-<span class="predefined-type">Short</span> s2 = (<span class="type">byte</span>) <span class="integer">4</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Short s1 = (short) 4
+Short s2 = (byte) 4</code></pre>
 </div>
 </div></div></td>
 </tr>
@@ -2557,7 +2466,7 @@ AbstractSAM c = { <span class="integer">123</span> }
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">Byte</span> b1 = (<span class="type">byte</span>) <span class="integer">4</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Byte b1 = (byte) 4</code></pre>
 </div>
 </div></div></td>
 </tr>
@@ -2584,12 +2493,12 @@ AbstractSAM c = { <span class="integer">123</span> }
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@groovy</span>.transform.TupleConstructor
-<span class="type">class</span> <span class="class">Person</span> {
-    <span class="predefined-type">String</span> firstName
-    <span class="predefined-type">String</span> lastName
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@groovy.transform.TupleConstructor
+class Person {
+    String firstName
+    String lastName
 }
-Person classic = <span class="keyword">new</span> Person(<span class="string"><span class="delimiter">'</span><span class="content">Ada</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">Lovelace</span><span class="delimiter">'</span></span>)</code></pre>
+Person classic = new Person('Ada','Lovelace')</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2597,7 +2506,7 @@ Person classic = <span class="keyword">new</span> Person(<span class="string"><s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">Person list = [<span class="string"><span class="delimiter">'</span><span class="content">Ada</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">Lovelace</span><span class="delimiter">'</span></span>]</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Person list = ['Ada','Lovelace']</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2605,7 +2514,7 @@ Person classic = <span class="keyword">new</span> Person(<span class="string"><s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">Person map = [<span class="key">firstName</span>:<span class="string"><span class="delimiter">'</span><span class="content">Ada</span><span class="delimiter">'</span></span>, <span class="key">lastName</span>:<span class="string"><span class="delimiter">'</span><span class="content">Lovelace</span><span class="delimiter">'</span></span>]</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Person map = [firstName:'Ada', lastName:'Lovelace']</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2613,12 +2522,12 @@ Person classic = <span class="keyword">new</span> Person(<span class="string"><s
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@groovy</span>.transform.TupleConstructor
-<span class="type">class</span> <span class="class">Person</span> {
-    <span class="predefined-type">String</span> firstName
-    <span class="predefined-type">String</span> lastName
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@groovy.transform.TupleConstructor
+class Person {
+    String firstName
+    String lastName
 }
-Person map = [<span class="key">firstName</span>:<span class="string"><span class="delimiter">'</span><span class="content">Ada</span><span class="delimiter">'</span></span>, <span class="key">lastName</span>:<span class="string"><span class="delimiter">'</span><span class="content">Lovelace</span><span class="delimiter">'</span></span>, <span class="key">age</span>: <span class="integer">24</span>]    <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+Person map = [firstName:'Ada', lastName:'Lovelace', age: 24]    <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -2647,10 +2556,10 @@ Person map = [<span class="key">firstName</span>:<span class="string"><span clas
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">int</span> sum(<span class="type">int</span> x, <span class="type">int</span> y) {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">int sum(int x, int y) {
     x+y
 }
-<span class="keyword">assert</span> sum(<span class="integer">3</span>,<span class="integer">4</span>) == <span class="integer">7</span></code></pre>
+assert sum(3,4) == 7</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -2662,10 +2571,10 @@ Person map = [<span class="key">firstName</span>:<span class="string"><span clas
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">String</span> format(<span class="predefined-type">String</span> str) {
-    <span class="string"><span class="delimiter">&quot;</span><span class="content">Result: </span><span class="inline"><span class="inline-delimiter">$</span>str</span><span class="delimiter">&quot;</span></span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">String format(String str) {
+    "Result: $str"
 }
-<span class="keyword">assert</span> format(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">${</span><span class="integer">3</span>+<span class="integer">4</span><span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>) == <span class="string"><span class="delimiter">&quot;</span><span class="content">Result: 7</span><span class="delimiter">&quot;</span></span></code></pre>
+assert format("${3+4}") == "Result: 7"</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -2677,11 +2586,11 @@ Person map = [<span class="key">firstName</span>:<span class="string"><span clas
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">String</span> format(<span class="type">int</span> value) {
-    <span class="string"><span class="delimiter">&quot;</span><span class="content">Result: </span><span class="inline"><span class="inline-delimiter">$</span>value</span><span class="delimiter">&quot;</span></span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">String format(int value) {
+    "Result: $value"
 }
-<span class="keyword">assert</span> format(<span class="integer">7</span>) == <span class="string"><span class="delimiter">&quot;</span><span class="content">Result: 7</span><span class="delimiter">&quot;</span></span>
-format(<span class="predefined-constant">null</span>)           <span class="comment">// fails</span></code></pre>
+assert format(7) == "Result: 7"
+format(null)           // fails</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -2693,11 +2602,11 @@ format(<span class="predefined-constant">null</span>)           <span class="com
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">String</span> format(<span class="predefined-type">String</span><span class="type">[]</span> values) {
-    <span class="string"><span class="delimiter">&quot;</span><span class="content">Result: </span><span class="inline"><span class="inline-delimiter">${</span>values.join(<span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>)<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">String format(String[] values) {
+    "Result: ${values.join(' ')}"
 }
-<span class="keyword">assert</span> format([<span class="string"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">b</span><span class="delimiter">'</span></span>] <span class="keyword">as</span> <span class="predefined-type">String</span><span class="type">[]</span>) == <span class="string"><span class="delimiter">&quot;</span><span class="content">Result: a b</span><span class="delimiter">&quot;</span></span>
-format([<span class="integer">1</span>,<span class="integer">2</span>] <span class="keyword">as</span> <span class="type">int</span><span class="type">[]</span>)              <span class="comment">// fails</span></code></pre>
+assert format(['a','b'] as String[]) == "Result: a b"
+format([1,2] as int[])              // fails</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -2709,14 +2618,14 @@ format([<span class="integer">1</span>,<span class="integer">2</span>] <span cla
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">String</span> format(<span class="predefined-type">AbstractList</span> list) {
-    list.join(<span class="string"><span class="delimiter">'</span><span class="content">,</span><span class="delimiter">'</span></span>)
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">String format(AbstractList list) {
+    list.join(',')
 }
-format(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>())              <span class="comment">// passes</span>
-<span class="predefined-type">String</span> format(<span class="predefined-type">LinkedList</span> list) {
-    list.join(<span class="string"><span class="delimiter">'</span><span class="content">,</span><span class="delimiter">'</span></span>)
+format(new ArrayList())              // passes
+String format(LinkedList list) {
+    list.join(',')
 }
-format(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>())              <span class="comment">// fails</span></code></pre>
+format(new ArrayList())              // fails</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -2728,14 +2637,14 @@ format(<span class="keyword">new</span> <span class="predefined-type">ArrayList<
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">String</span> format(<span class="predefined-type">List</span> list) {
-    list.join(<span class="string"><span class="delimiter">'</span><span class="content">,</span><span class="delimiter">'</span></span>)
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">String format(List list) {
+    list.join(',')
 }
-format(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>())                  <span class="comment">// passes</span>
-<span class="predefined-type">String</span> format(<span class="predefined-type">RandomAccess</span> list) {
-    <span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span>
+format(new ArrayList())                  // passes
+String format(RandomAccess list) {
+    'foo'
 }
-format(<span class="keyword">new</span> <span class="predefined-type">LinkedList</span>())                 <span class="comment">// fails</span></code></pre>
+format(new LinkedList())                 // fails</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -2747,13 +2656,13 @@ format(<span class="keyword">new</span> <span class="predefined-type">LinkedList
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">int</span> sum(<span class="type">int</span> x, <span class="predefined-type">Integer</span> y) {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">int sum(int x, Integer y) {
     x+y
 }
-<span class="keyword">assert</span> sum(<span class="integer">3</span>, <span class="keyword">new</span> <span class="predefined-type">Integer</span>(<span class="integer">4</span>)) == <span class="integer">7</span>
-<span class="keyword">assert</span> sum(<span class="keyword">new</span> <span class="predefined-type">Integer</span>(<span class="integer">3</span>), <span class="integer">4</span>) == <span class="integer">7</span>
-<span class="keyword">assert</span> sum(<span class="keyword">new</span> <span class="predefined-type">Integer</span>(<span class="integer">3</span>), <span class="keyword">new</span> <span class="predefined-type">Integer</span>(<span class="integer">4</span>)) == <span class="integer">7</span>
-<span class="keyword">assert</span> sum(<span class="keyword">new</span> <span class="predefined-type">Integer</span>(<span class="integer">3</span>), <span class="integer">4</span>) == <span class="integer">7</span></code></pre>
+assert sum(3, new Integer(4)) == 7
+assert sum(new Integer(3), 4) == 7
+assert sum(new Integer(3), new Integer(4)) == 7
+assert sum(new Integer(3), 4) == 7</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -2765,17 +2674,17 @@ format(<span class="keyword">new</span> <span class="predefined-type">LinkedList
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">interface</span> SAMType {
-    <span class="type">int</span> doSomething()
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">interface SAMType {
+    int doSomething()
 }
-<span class="type">int</span> twice(SAMType sam) { <span class="integer">2</span>*sam.doSomething() }
-<span class="keyword">assert</span> twice { <span class="integer">123</span> } == <span class="integer">246</span>
-<span class="directive">abstract</span> <span class="type">class</span> <span class="class">AbstractSAM</span> {
-    <span class="type">int</span> calc() { <span class="integer">2</span>* value() }
-    <span class="directive">abstract</span> <span class="type">int</span> value()
+int twice(SAMType sam) { 2*sam.doSomething() }
+assert twice { 123 } == 246
+abstract class AbstractSAM {
+    int calc() { 2* value() }
+    abstract int value()
 }
-<span class="type">int</span> eightTimes(AbstractSAM sam) { <span class="integer">4</span>*sam.calc() }
-<span class="keyword">assert</span> eightTimes { <span class="integer">123</span> } == <span class="integer">984</span></code></pre>
+int eightTimes(AbstractSAM sam) { 4*sam.calc() }
+assert eightTimes { 123 } == 984</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -2790,9 +2699,9 @@ format(<span class="keyword">new</span> <span class="predefined-type">LinkedList
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">MyService</span> {
-    <span class="type">void</span> doSomething() {
-        printLine <span class="string"><span class="delimiter">'</span><span class="content">Do something</span><span class="delimiter">'</span></span>            <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class MyService {
+    void doSomething() {
+        printLine 'Do something'            <i class="conum" data-value="1"></i><b>(1)</b>
     }
 }</code></pre>
 </div>
@@ -2810,10 +2719,10 @@ format(<span class="keyword">new</span> <span class="predefined-type">LinkedList
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@groovy</span>.transform.TypeChecked
-<span class="type">class</span> <span class="class">MyService</span> {
-    <span class="type">void</span> doSomething() {
-        printLine <span class="string"><span class="delimiter">'</span><span class="content">Do something</span><span class="delimiter">'</span></span>            <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@groovy.transform.TypeChecked
+class MyService {
+    void doSomething() {
+        printLine 'Do something'            <i class="conum" data-value="1"></i><b>(1)</b>
     }
 }</code></pre>
 </div>
@@ -2831,7 +2740,7 @@ format(<span class="keyword">new</span> <span class="predefined-type">LinkedList
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">Cannot find matching method MyService<span class="error">#</span>printLine(java.lang.String)</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Cannot find matching method MyService#printLine(java.lang.String)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2839,21 +2748,21 @@ format(<span class="keyword">new</span> <span class="predefined-type">LinkedList
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Duck</span> {
-    <span class="type">void</span> quack() {              <i class="conum" data-value="1"></i><b>(1)</b>
-        println <span class="string"><span class="delimiter">'</span><span class="content">Quack!</span><span class="delimiter">'</span></span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Duck {
+    void quack() {              <i class="conum" data-value="1"></i><b>(1)</b>
+        println 'Quack!'
     }
 }
-<span class="type">class</span> <span class="class">QuackingBird</span> {
-    <span class="type">void</span> quack() {              <i class="conum" data-value="2"></i><b>(2)</b>
-        println <span class="string"><span class="delimiter">'</span><span class="content">Quack!</span><span class="delimiter">'</span></span>
+class QuackingBird {
+    void quack() {              <i class="conum" data-value="2"></i><b>(2)</b>
+        println 'Quack!'
     }
 }
-<span class="annotation">@groovy</span>.transform.TypeChecked
-<span class="type">void</span> accept(quacker) {
+@groovy.transform.TypeChecked
+void accept(quacker) {
     quacker.quack()             <i class="conum" data-value="3"></i><b>(3)</b>
 }
-accept(<span class="keyword">new</span> Duck())              <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+accept(new Duck())              <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -2892,9 +2801,9 @@ accept(<span class="keyword">new</span> Duck())              <i class="conum" da
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> message = <span class="string"><span class="delimiter">'</span><span class="content">Welcome to Groovy!</span><span class="delimiter">'</span></span>              <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def message = 'Welcome to Groovy!'              <i class="conum" data-value="1"></i><b>(1)</b>
 println message.toUpperCase()                   <i class="conum" data-value="2"></i><b>(2)</b>
-println message.upper() <span class="comment">// compile time error   </span> <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+println message.upper() // compile time error   <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -2924,22 +2833,22 @@ println message.upper() <span class="comment">// compile time error   </span> <i
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">SomeClass</span> {
-    <span class="keyword">def</span> someUntypedField                                                                <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="predefined-type">String</span> someTypedField                                                               <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class SomeClass {
+    def someUntypedField                                                                <i class="conum" data-value="1"></i><b>(1)</b>
+    String someTypedField                                                               <i class="conum" data-value="2"></i><b>(2)</b>
 
-    <span class="type">void</span> someMethod() {
-        someUntypedField = <span class="string"><span class="delimiter">'</span><span class="content">123</span><span class="delimiter">'</span></span>                                                        <i class="conum" data-value="3"></i><b>(3)</b>
-        someUntypedField = someUntypedField.toUpperCase()  <span class="comment">// compile-time error        </span><i class="conum" data-value="4"></i><b>(4)</b>
+    void someMethod() {
+        someUntypedField = '123'                                                        <i class="conum" data-value="3"></i><b>(3)</b>
+        someUntypedField = someUntypedField.toUpperCase()  // compile-time error        <i class="conum" data-value="4"></i><b>(4)</b>
     }
 
-    <span class="type">void</span> someSafeMethod() {
-        someTypedField = <span class="string"><span class="delimiter">'</span><span class="content">123</span><span class="delimiter">'</span></span>                                                          <i class="conum" data-value="5"></i><b>(5)</b>
+    void someSafeMethod() {
+        someTypedField = '123'                                                          <i class="conum" data-value="5"></i><b>(5)</b>
         someTypedField = someTypedField.toUpperCase()                                   <i class="conum" data-value="6"></i><b>(6)</b>
     }
 
-    <span class="type">void</span> someMethodUsingLocalVariable() {
-        <span class="keyword">def</span> localVariable = <span class="string"><span class="delimiter">'</span><span class="content">123</span><span class="delimiter">'</span></span>                                                       <i class="conum" data-value="7"></i><b>(7)</b>
+    void someMethodUsingLocalVariable() {
+        def localVariable = '123'                                                       <i class="conum" data-value="7"></i><b>(7)</b>
         someUntypedField = localVariable.toUpperCase()                                  <i class="conum" data-value="8"></i><b>(8)</b>
     }
 }</code></pre>
@@ -3084,16 +2993,16 @@ println message.upper() <span class="comment">// compile time error   </span> <i
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Top</span> {}
-<span class="type">class</span> <span class="class">Bottom1</span> <span class="directive">extends</span> Top {}
-<span class="type">class</span> <span class="class">Bottom2</span> <span class="directive">extends</span> Top {}
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Top {}
+class Bottom1 extends Top {}
+class Bottom2 extends Top {}
 
-<span class="keyword">assert</span> leastUpperBound(<span class="predefined-type">String</span>, <span class="predefined-type">String</span>) == <span class="predefined-type">String</span>                    <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="keyword">assert</span> leastUpperBound(<span class="predefined-type">ArrayList</span>, <span class="predefined-type">LinkedList</span>) == <span class="predefined-type">AbstractList</span>       <i class="conum" data-value="2"></i><b>(2)</b>
-<span class="keyword">assert</span> leastUpperBound(<span class="predefined-type">ArrayList</span>, <span class="predefined-type">List</span>) == <span class="predefined-type">List</span>                     <i class="conum" data-value="3"></i><b>(3)</b>
-<span class="keyword">assert</span> leastUpperBound(<span class="predefined-type">List</span>, <span class="predefined-type">List</span>) == <span class="predefined-type">List</span>                          <i class="conum" data-value="4"></i><b>(4)</b>
-<span class="keyword">assert</span> leastUpperBound(Bottom1, Bottom2) == Top                     <i class="conum" data-value="5"></i><b>(5)</b>
-<span class="keyword">assert</span> leastUpperBound(<span class="predefined-type">List</span>, <span class="predefined-type">Serializable</span>) == <span class="predefined-type">Object</span>                <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
+assert leastUpperBound(String, String) == String                    <i class="conum" data-value="1"></i><b>(1)</b>
+assert leastUpperBound(ArrayList, LinkedList) == AbstractList       <i class="conum" data-value="2"></i><b>(2)</b>
+assert leastUpperBound(ArrayList, List) == List                     <i class="conum" data-value="3"></i><b>(3)</b>
+assert leastUpperBound(List, List) == List                          <i class="conum" data-value="4"></i><b>(4)</b>
+assert leastUpperBound(Bottom1, Bottom2) == Top                     <i class="conum" data-value="5"></i><b>(5)</b>
+assert leastUpperBound(List, Serializable) == Object                <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -3129,10 +3038,10 @@ println message.upper() <span class="comment">// compile time error   </span> <i
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">interface</span> Foo {}
-<span class="type">class</span> <span class="class">Top</span> {}
-<span class="type">class</span> <span class="class">Bottom</span> <span class="directive">extends</span> Top <span class="directive">implements</span> <span class="predefined-type">Serializable</span>, Foo {}
-<span class="type">class</span> <span class="class">SerializableFooImpl</span> <span class="directive">implements</span> <span class="predefined-type">Serializable</span>, Foo {}</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">interface Foo {}
+class Top {}
+class Bottom extends Top implements Serializable, Foo {}
+class SerializableFooImpl implements Serializable, Foo {}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3143,23 +3052,23 @@ println message.upper() <span class="comment">// compile time error   </span> <i
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">interface</span> Greeter { <span class="type">void</span> greet() }                  <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="type">interface</span> Salute { <span class="type">void</span> salute() }                  <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">interface Greeter { void greet() }                  <i class="conum" data-value="1"></i><b>(1)</b>
+interface Salute { void salute() }                  <i class="conum" data-value="2"></i><b>(2)</b>
 
-<span class="type">class</span> <span class="class">A</span> <span class="directive">implements</span> Greeter, Salute {                <i class="conum" data-value="3"></i><b>(3)</b>
-    <span class="type">void</span> greet() { println <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello, I'm A!</span><span class="delimiter">&quot;</span></span> }
-    <span class="type">void</span> salute() { println <span class="string"><span class="delimiter">&quot;</span><span class="content">Bye from A!</span><span class="delimiter">&quot;</span></span> }
+class A implements Greeter, Salute {                <i class="conum" data-value="3"></i><b>(3)</b>
+    void greet() { println "Hello, I'm A!" }
+    void salute() { println "Bye from A!" }
 }
-<span class="type">class</span> <span class="class">B</span> <span class="directive">implements</span> Greeter, Salute {                <i class="conum" data-value="4"></i><b>(4)</b>
-    <span class="type">void</span> greet() { println <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello, I'm B!</span><span class="delimiter">&quot;</span></span> }
-    <span class="type">void</span> salute() { println <span class="string"><span class="delimiter">&quot;</span><span class="content">Bye from B!</span><span class="delimiter">&quot;</span></span> }
-    <span class="type">void</span> exit() { println <span class="string"><span class="delimiter">'</span><span class="content">No way!</span><span class="delimiter">'</span></span> }               <i class="conum" data-value="5"></i><b>(5)</b>
+class B implements Greeter, Salute {                <i class="conum" data-value="4"></i><b>(4)</b>
+    void greet() { println "Hello, I'm B!" }
+    void salute() { println "Bye from B!" }
+    void exit() { println 'No way!' }               <i class="conum" data-value="5"></i><b>(5)</b>
 }
-<span class="keyword">def</span> list = [<span class="keyword">new</span> A(), <span class="keyword">new</span> B()]                       <i class="conum" data-value="6"></i><b>(6)</b>
+def list = [new A(), new B()]                       <i class="conum" data-value="6"></i><b>(6)</b>
 list.each {
-    <span class="local-variable">it</span>.greet()                                      <i class="conum" data-value="7"></i><b>(7)</b>
-    <span class="local-variable">it</span>.salute()                                     <i class="conum" data-value="8"></i><b>(8)</b>
-    <span class="local-variable">it</span>.exit()                                       <i class="conum" data-value="9"></i><b>(9)</b>
+    it.greet()                                      <i class="conum" data-value="7"></i><b>(7)</b>
+    it.salute()                                     <i class="conum" data-value="8"></i><b>(8)</b>
+    it.exit()                                       <i class="conum" data-value="9"></i><b>(9)</b>
 }</code></pre>
 </div>
 </div>
@@ -3208,7 +3117,7 @@ list.each {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">[Static type checking] - Cannot find matching method Greeter or Salute<span class="error">#</span>exit()</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">[Static type checking] - Cannot find matching method Greeter or Salute#exit()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3222,17 +3131,17 @@ list.each {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Greeter</span> {
-    <span class="predefined-type">String</span> greeting() { <span class="string"><span class="delimiter">'</span><span class="content">Hello</span><span class="delimiter">'</span></span> }
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Greeter {
+    String greeting() { 'Hello' }
 }
 
-<span class="type">void</span> doSomething(<span class="keyword">def</span> o) {
-    <span class="keyword">if</span> (o <span class="keyword">instanceof</span> Greeter) {     <i class="conum" data-value="1"></i><b>(1)</b>
+void doSomething(def o) {
+    if (o instanceof Greeter) {     <i class="conum" data-value="1"></i><b>(1)</b>
         println o.greeting()        <i class="conum" data-value="2"></i><b>(2)</b>
     }
 }
 
-doSomething(<span class="keyword">new</span> Greeter())</code></pre>
+doSomething(new Greeter())</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -3252,8 +3161,8 @@ doSomething(<span class="keyword">new</span> Greeter())</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">if</span> (o <span class="keyword">instanceof</span> Greeter) {
-    <span class="predefined-type">System</span>.out.println(((Greeter)o).greeting());
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">if (o instanceof Greeter) {
+    System.out.println(((Greeter)o).greeting());
 }</code></pre>
 </div>
 </div>
@@ -3268,12 +3177,12 @@ doSomething(<span class="keyword">new</span> Greeter())</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@groovy</span>.transform.TypeChecked
-<span class="type">void</span> flowTyping() {
-    <span class="keyword">def</span> o = <span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span>                       <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@groovy.transform.TypeChecked
+void flowTyping() {
+    def o = 'foo'                       <i class="conum" data-value="1"></i><b>(1)</b>
     o = o.toUpperCase()                 <i class="conum" data-value="2"></i><b>(2)</b>
-    o = <span class="float">9d</span>                              <i class="conum" data-value="3"></i><b>(3)</b>
-    o = <span class="predefined-type">Math</span>.sqrt(o)                    <i class="conum" data-value="4"></i><b>(4)</b>
+    o = 9d                              <i class="conum" data-value="3"></i><b>(3)</b>
+    o = Math.sqrt(o)                    <i class="conum" data-value="4"></i><b>(4)</b>
 }</code></pre>
 </div>
 </div>
@@ -3302,7 +3211,7 @@ doSomething(<span class="keyword">new</span> Greeter())</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">o = <span class="float">9d</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">o = 9d
 o = o.toUpperCase()</code></pre>
 </div>
 </div>
@@ -3314,11 +3223,11 @@ o = o.toUpperCase()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@groovy</span>.transform.TypeChecked
-<span class="type">void</span> flowTypingWithExplicitType() {
-    <span class="predefined-type">List</span> list = [<span class="string"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">b</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">c</span><span class="delimiter">'</span></span>]           <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@groovy.transform.TypeChecked
+void flowTypingWithExplicitType() {
+    List list = ['a','b','c']           <i class="conum" data-value="1"></i><b>(1)</b>
     list = list*.toUpperCase()          <i class="conum" data-value="2"></i><b>(2)</b>
-    list = <span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span>                        <i class="conum" data-value="3"></i><b>(3)</b>
+    list = 'foo'                        <i class="conum" data-value="3"></i><b>(3)</b>
 }</code></pre>
 </div>
 </div>
@@ -3343,10 +3252,10 @@ o = o.toUpperCase()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@groovy</span>.transform.TypeChecked
-<span class="type">void</span> flowTypingWithExplicitType() {
-    <span class="predefined-type">List</span> list = [<span class="string"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">b</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">c</span><span class="delimiter">'</span></span>]           <i class="conum" data-value="1"></i><b>(1)</b>
-    list.add(<span class="integer">1</span>)                         <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@groovy.transform.TypeChecked
+void flowTypingWithExplicitType() {
+    List list = ['a','b','c']           <i class="conum" data-value="1"></i><b>(1)</b>
+    list.add(1)                         <i class="conum" data-value="2"></i><b>(2)</b>
 }</code></pre>
 </div>
 </div>
@@ -3367,11 +3276,11 @@ o = o.toUpperCase()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@groovy</span>.transform.TypeChecked
-<span class="type">void</span> flowTypingWithExplicitType() {
-    <span class="predefined-type">List</span>&lt;? <span class="directive">extends</span> <span class="predefined-type">Serializable</span>&gt; list = <span class="type">[]</span>              <i class="conum" data-value="1"></i><b>(1)</b>
-    list.addAll([<span class="string"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">b</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">c</span><span class="delimiter">'</span></span>])                          <i class="conum" data-value="2"></i><b>(2)</b>
-    list.add(<span class="integer">1</span>)                                         <i class="conum" data-value="3"></i><b>(3)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@groovy.transform.TypeChecked
+void flowTypingWithExplicitType() {
+    List&lt;? extends Serializable&gt; list = []              <i class="conum" data-value="1"></i><b>(1)</b>
+    list.addAll(['a','b','c'])                          <i class="conum" data-value="2"></i><b>(2)</b>
+    list.add(1)                                         <i class="conum" data-value="3"></i><b>(3)</b>
 }</code></pre>
 </div>
 </div>
@@ -3396,16 +3305,16 @@ o = o.toUpperCase()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="directive">public</span> <span class="predefined-type">Integer</span> compute(<span class="predefined-type">String</span> str) {
-    <span class="keyword">return</span> str.length();
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">public Integer compute(String str) {
+    return str.length();
 }
-<span class="directive">public</span> <span class="predefined-type">String</span> compute(<span class="predefined-type">Object</span> o) {
-    <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Nope</span><span class="delimiter">&quot;</span></span>;
+public String compute(Object o) {
+    return "Nope";
 }
-<span class="comment">// ...</span>
-<span class="predefined-type">Object</span> string = <span class="string"><span class="delimiter">&quot;</span><span class="content">Some string</span><span class="delimiter">&quot;</span></span>;          <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="predefined-type">Object</span> result = compute(string);        <i class="conum" data-value="2"></i><b>(2)</b>
-<span class="predefined-type">System</span>.out.println(result);             <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+// ...
+Object string = "Some string";          <i class="conum" data-value="1"></i><b>(1)</b>
+Object result = compute(string);        <i class="conum" data-value="2"></i><b>(2)</b>
+System.out.println(result);             <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -3432,10 +3341,10 @@ o = o.toUpperCase()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">int</span> compute(<span class="predefined-type">String</span> string) { string.length() }
-<span class="predefined-type">String</span> compute(<span class="predefined-type">Object</span> o) { <span class="string"><span class="delimiter">&quot;</span><span class="content">Nope</span><span class="delimiter">&quot;</span></span> }
-<span class="predefined-type">Object</span> o = <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>
-<span class="keyword">def</span> result = compute(o)
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">int compute(String string) { string.length() }
+String compute(Object o) { "Nope" }
+Object o = 'string'
+def result = compute(o)
 println result</code></pre>
 </div>
 </div>
@@ -3456,20 +3365,20 @@ println result</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Top</span> {
-   <span class="type">void</span> methodFromTop() {}
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Top {
+   void methodFromTop() {}
 }
-<span class="type">class</span> <span class="class">Bottom</span> <span class="directive">extends</span> Top {
-   <span class="type">void</span> methodFromBottom() {}
+class Bottom extends Top {
+   void methodFromBottom() {}
 }
-<span class="keyword">def</span> o
-<span class="keyword">if</span> (someCondition) {
-    o = <span class="keyword">new</span> Top()                               <i class="conum" data-value="1"></i><b>(1)</b>
-} <span class="keyword">else</span> {
-    o = <span class="keyword">new</span> Bottom()                            <i class="conum" data-value="2"></i><b>(2)</b>
+def o
+if (someCondition) {
+    o = new Top()                               <i class="conum" data-value="1"></i><b>(1)</b>
+} else {
+    o = new Bottom()                            <i class="conum" data-value="2"></i><b>(2)</b>
 }
 o.methodFromTop()                               <i class="conum" data-value="3"></i><b>(3)</b>
-o.methodFromBottom()  <span class="comment">// compilation error      </span> <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+o.methodFromBottom()  // compilation error      <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -3500,8 +3409,8 @@ o.methodFromBottom()  <span class="comment">// compilation error      </span> <i
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> text = <span class="string"><span class="delimiter">'</span><span class="content">Hello, world!</span><span class="delimiter">'</span></span>                          <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="keyword">def</span> closure = {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def text = 'Hello, world!'                          <i class="conum" data-value="1"></i><b>(1)</b>
+def closure = {
     println text                                    <i class="conum" data-value="2"></i><b>(2)</b>
 }</code></pre>
 </div>
@@ -3523,9 +3432,9 @@ o.methodFromBottom()  <span class="comment">// compilation error      </span> <i
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">String</span> result
-doSomething { <span class="predefined-type">String</span> <span class="local-variable">it</span> -&gt;
-    result = <span class="string"><span class="delimiter">&quot;</span><span class="content">Result: </span><span class="inline"><span class="inline-delimiter">$</span><span class="local-variable">it</span></span><span class="delimiter">&quot;</span></span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">String result
+doSomething { String it -&gt;
+    result = "Result: $it"
 }
 result = result?.toUpperCase()</code></pre>
 </div>
@@ -3535,18 +3444,18 @@ result = result?.toUpperCase()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Top</span> {
-   <span class="type">void</span> methodFromTop() {}
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Top {
+   void methodFromTop() {}
 }
-<span class="type">class</span> <span class="class">Bottom</span> <span class="directive">extends</span> Top {
-   <span class="type">void</span> methodFromBottom() {}
+class Bottom extends Top {
+   void methodFromBottom() {}
 }
-<span class="keyword">def</span> o = <span class="keyword">new</span> Top()                               <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="predefined-type">Thread</span>.start {
-    o = <span class="keyword">new</span> Bottom()                            <i class="conum" data-value="2"></i><b>(2)</b>
+def o = new Top()                               <i class="conum" data-value="1"></i><b>(1)</b>
+Thread.start {
+    o = new Bottom()                            <i class="conum" data-value="2"></i><b>(2)</b>
 }
 o.methodFromTop()                               <i class="conum" data-value="3"></i><b>(3)</b>
-o.methodFromBottom()  <span class="comment">// compilation error      </span> <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+o.methodFromBottom()  // compilation error      <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -3586,10 +3495,10 @@ o.methodFromBottom()  <span class="comment">// compilation error      </span> <i
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@groovy</span>.transform.TypeChecked
-<span class="type">int</span> testClosureReturnTypeInference(<span class="predefined-type">String</span> arg) {
-    <span class="keyword">def</span> cl = { <span class="string"><span class="delimiter">&quot;</span><span class="content">Arg: </span><span class="inline"><span class="inline-delimiter">$</span>arg</span><span class="delimiter">&quot;</span></span> }                                <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="keyword">def</span> val = cl()                                          <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@groovy.transform.TypeChecked
+int testClosureReturnTypeInference(String arg) {
+    def cl = { "Arg: $arg" }                                <i class="conum" data-value="1"></i><b>(1)</b>
+    def val = cl()                                          <i class="conum" data-value="2"></i><b>(2)</b>
 
     val.length()                                            <i class="conum" data-value="3"></i><b>(3)</b>
 }</code></pre>
@@ -3622,16 +3531,16 @@ o.methodFromBottom()  <span class="comment">// compilation error      </span> <i
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@TypeChecked</span>
-<span class="type">class</span> <span class="class">A</span> {
-    <span class="keyword">def</span> <span class="function">compute</span>() { <span class="string"><span class="delimiter">'</span><span class="content">some string</span><span class="delimiter">'</span></span> }             <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="keyword">def</span> <span class="function">computeFully</span>() {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@TypeChecked
+class A {
+    def compute() { 'some string' }             <i class="conum" data-value="1"></i><b>(1)</b>
+    def computeFully() {
         compute().toUpperCase()                 <i class="conum" data-value="2"></i><b>(2)</b>
     }
 }
-<span class="annotation">@TypeChecked</span>
-<span class="type">class</span> <span class="class">B</span> <span class="directive">extends</span> A {
-    <span class="keyword">def</span> <span class="function">compute</span>() { <span class="integer">123</span> }                       <i class="conum" data-value="3"></i><b>(3)</b>
+@TypeChecked
+class B extends A {
+    def compute() { 123 }                       <i class="conum" data-value="3"></i><b>(3)</b>
 }</code></pre>
 </div>
 </div>
@@ -3678,23 +3587,23 @@ o.methodFromBottom()  <span class="comment">// compilation error      </span> <i
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Person</span> {
-    <span class="predefined-type">String</span> name
-    <span class="type">int</span> age
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    String name
+    int age
 }
 
-<span class="type">void</span> inviteIf(Person p, Closure&lt;<span class="predefined-type">Boolean</span>&gt; predicate) {           <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="keyword">if</span> (predicate.call(p)) {
-        <span class="comment">// send invite</span>
-        <span class="comment">// ...</span>
+void inviteIf(Person p, Closure&lt;Boolean&gt; predicate) {           <i class="conum" data-value="1"></i><b>(1)</b>
+    if (predicate.call(p)) {
+        // send invite
+        // ...
     }
 }
 
-<span class="annotation">@groovy</span>.transform.TypeChecked
-<span class="type">void</span> failCompilation() {
-    Person p = <span class="keyword">new</span> Person(<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">Gerard</span><span class="delimiter">'</span></span>, <span class="key">age</span>: <span class="integer">55</span>)
+@groovy.transform.TypeChecked
+void failCompilation() {
+    Person p = new Person(name: 'Gerard', age: 55)
     inviteIf(p) {                                               <i class="conum" data-value="2"></i><b>(2)</b>
-        <span class="local-variable">it</span>.age &gt;= <span class="integer">18</span> <span class="comment">// No such property: age                   </span><i class="conum" data-value="3"></i><b>(3)</b>
+        it.age &gt;= 18 // No such property: age                   <i class="conum" data-value="3"></i><b>(3)</b>
     }
 }</code></pre>
 </div>
@@ -3726,8 +3635,8 @@ o.methodFromBottom()  <span class="comment">// compilation error      </span> <i
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">inviteIf(p) { Person <span class="local-variable">it</span> -&gt;                         <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="local-variable">it</span>.age &gt;= <span class="integer">18</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">inviteIf(p) { Person it -&gt;                         <i class="conum" data-value="1"></i><b>(1)</b>
+    it.age &gt;= 18
 }</code></pre>
 </div>
 </div>
@@ -3750,21 +3659,21 @@ o.methodFromBottom()  <span class="comment">// compilation error      </span> <i
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">interface</span> <span class="predefined-type">Predicate</span>&lt;On&gt; { <span class="type">boolean</span> apply(On e) }                 <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">interface Predicate&lt;On&gt; { boolean apply(On e) }                 <i class="conum" data-value="1"></i><b>(1)</b>
 
-<span class="type">void</span> inviteIf(Person p, <span class="predefined-type">Predicate</span>&lt;Person&gt; predicate) {          <i class="conum" data-value="2"></i><b>(2)</b>
-    <span class="keyword">if</span> (predicate.apply(p)) {
-        <span class="comment">// send invite</span>
-        <span class="comment">// ...</span>
+void inviteIf(Person p, Predicate&lt;Person&gt; predicate) {          <i class="conum" data-value="2"></i><b>(2)</b>
+    if (predicate.apply(p)) {
+        // send invite
+        // ...
     }
 }
 
-<span class="annotation">@groovy</span>.transform.TypeChecked
-<span class="type">void</span> passesCompilation() {
-    Person p = <span class="keyword">new</span> Person(<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">Gerard</span><span class="delimiter">'</span></span>, <span class="key">age</span>: <span class="integer">55</span>)
+@groovy.transform.TypeChecked
+void passesCompilation() {
+    Person p = new Person(name: 'Gerard', age: 55)
 
     inviteIf(p) {                                               <i class="conum" data-value="3"></i><b>(3)</b>
-        <span class="local-variable">it</span>.age &gt;= <span class="integer">18</span>                                            <i class="conum" data-value="4"></i><b>(4)</b>
+        it.age &gt;= 18                                            <i class="conum" data-value="4"></i><b>(4)</b>
     }
 }</code></pre>
 </div>
@@ -3806,16 +3715,16 @@ o.methodFromBottom()  <span class="comment">// compilation error      </span> <i
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">groovy.transform.stc.ClosureParams</span>
-<span class="keyword">import</span> <span class="include">groovy.transform.stc.FirstParam</span>
-<span class="type">void</span> inviteIf(Person p, <span class="annotation">@ClosureParams</span>(FirstParam) Closure&lt;<span class="predefined-type">Boolean</span>&gt; predicate) {        <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="keyword">if</span> (predicate.call(p)) {
-        <span class="comment">// send invite</span>
-        <span class="comment">// ...</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import groovy.transform.stc.ClosureParams
+import groovy.transform.stc.FirstParam
+void inviteIf(Person p, @ClosureParams(FirstParam) Closure&lt;Boolean&gt; predicate) {        <i class="conum" data-value="1"></i><b>(1)</b>
+    if (predicate.call(p)) {
+        // send invite
+        // ...
     }
 }
 inviteIf(p) {                                                                           <i class="conum" data-value="2"></i><b>(2)</b>
-    <span class="local-variable">it</span>.age &gt;= <span class="integer">18</span>
+    it.age &gt;= 18
 }</code></pre>
 </div>
 </div>
@@ -3866,33 +3775,33 @@ inviteIf(p) {                                                                   
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">groovy.transform.stc.FirstParam</span>
-<span class="type">void</span> doSomething(<span class="predefined-type">String</span> str, <span class="annotation">@ClosureParams</span>(FirstParam) Closure c) {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import groovy.transform.stc.FirstParam
+void doSomething(String str, @ClosureParams(FirstParam) Closure c) {
     c(str)
 }
-doSomething(<span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span>) { println <span class="local-variable">it</span>.toUpperCase() }</code></pre>
+doSomething('foo') { println it.toUpperCase() }</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">groovy.transform.stc.SecondParam</span>
-<span class="type">void</span> withHash(<span class="predefined-type">String</span> str, <span class="type">int</span> seed, <span class="annotation">@ClosureParams</span>(SecondParam) Closure c) {
-    c(<span class="integer">31</span>*str.hashCode()+seed)
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import groovy.transform.stc.SecondParam
+void withHash(String str, int seed, @ClosureParams(SecondParam) Closure c) {
+    c(31*str.hashCode()+seed)
 }
-withHash(<span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span>, (<span class="type">int</span>)<span class="predefined-type">System</span>.currentTimeMillis()) {
-    <span class="type">int</span> mod = <span class="local-variable">it</span>%<span class="integer">2</span>
+withHash('foo', (int)System.currentTimeMillis()) {
+    int mod = it%2
 }</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">groovy.transform.stc.ThirdParam</span>
-<span class="predefined-type">String</span> format(<span class="predefined-type">String</span> prefix, <span class="predefined-type">String</span> postfix, <span class="predefined-type">String</span> o, <span class="annotation">@ClosureParams</span>(ThirdParam) Closure c) {
-    <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">$</span>prefix</span><span class="inline"><span class="inline-delimiter">${</span>c(o)<span class="inline-delimiter">}</span></span><span class="inline"><span class="inline-delimiter">$</span>postfix</span><span class="delimiter">&quot;</span></span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import groovy.transform.stc.ThirdParam
+String format(String prefix, String postfix, String o, @ClosureParams(ThirdParam) Closure c) {
+    "$prefix${c(o)}$postfix"
 }
-<span class="keyword">assert</span> format(<span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">bar</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">baz</span><span class="delimiter">'</span></span>) {
-    <span class="local-variable">it</span>.toUpperCase()
-} == <span class="string"><span class="delimiter">'</span><span class="content">fooBAZbar</span><span class="delimiter">'</span></span></code></pre>
+assert format('foo', 'bar', 'baz') {
+    it.toUpperCase()
+} == 'fooBAZbar'</code></pre>
 </div>
 </div></div></td>
 </tr>
@@ -3910,14 +3819,14 @@ withHash(<span class="string"><span class="delimiter">'</span><span class="conte
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">groovy.transform.stc.FirstParam</span>
-<span class="directive">public</span> &lt;T&gt; <span class="type">void</span> doSomething(<span class="predefined-type">List</span>&lt;T&gt; strings, <span class="annotation">@ClosureParams</span>(FirstParam.FirstGenericType) Closure c) {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import groovy.transform.stc.FirstParam
+public &lt;T&gt; void doSomething(List&lt;T&gt; strings, @ClosureParams(FirstParam.FirstGenericType) Closure c) {
     strings.each {
-        c(<span class="local-variable">it</span>)
+        c(it)
     }
 }
-doSomething([<span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">bar</span><span class="delimiter">'</span></span>]) { println <span class="local-variable">it</span>.toUpperCase() }
-doSomething([<span class="integer">1</span>,<span class="integer">2</span>,<span class="integer">3</span>]) { println(<span class="integer">2</span>*<span class="local-variable">it</span>) }</code></pre>
+doSomething(['foo','bar']) { println it.toUpperCase() }
+doSomething([1,2,3]) { println(2*it) }</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3936,12 +3845,12 @@ doSomething([<span class="integer">1</span>,<span class="integer">2</span>,<span
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">groovy.transform.stc.SimpleType</span>
-<span class="directive">public</span> <span class="type">void</span> doSomething(<span class="annotation">@ClosureParams</span>(value=<span class="predefined-type">SimpleType</span>,options=[<span class="string"><span class="delimiter">'</span><span class="content">java.lang.String</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">int</span><span class="delimiter">'</span></span>]) Closure c) {
-    c(<span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span>,<span class="integer">3</span>)
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import groovy.transform.stc.SimpleType
+public void doSomething(@ClosureParams(value=SimpleType,options=['java.lang.String','int']) Closure c) {
+    c('foo',3)
 }
 doSomething { str, len -&gt;
-    <span class="keyword">assert</span> str.length() == len
+    assert str.length() == len
 }</code></pre>
 </div>
 </div>
@@ -3961,15 +3870,15 @@ doSomething { str, len -&gt;
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">groovy.transform.stc.MapEntryOrKeyValue</span>
-<span class="directive">public</span> &lt;K,V&gt; <span class="type">void</span> doSomething(<span class="predefined-type">Map</span>&lt;K,V&gt; map, <span class="annotation">@ClosureParams</span>(MapEntryOrKeyValue) Closure c) {
-    <span class="comment">// ...</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import groovy.transform.stc.MapEntryOrKeyValue
+public &lt;K,V&gt; void doSomething(Map&lt;K,V&gt; map, @ClosureParams(MapEntryOrKeyValue) Closure c) {
+    // ...
 }
-doSomething([<span class="key">a</span>: <span class="string"><span class="delimiter">'</span><span class="content">A</span><span class="delimiter">'</span></span>]) { k,v -&gt;
-    <span class="keyword">assert</span> k.toUpperCase() == v.toUpperCase()
+doSomething([a: 'A']) { k,v -&gt;
+    assert k.toUpperCase() == v.toUpperCase()
 }
-doSomething([<span class="key">abc</span>: <span class="integer">3</span>]) { e -&gt;
-    <span class="keyword">assert</span> e.key.length() == e.value
+doSomething([abc: 3]) { e -&gt;
+    assert e.key.length() == e.value
 }</code></pre>
 </div>
 </div>
@@ -3989,13 +3898,13 @@ doSomething([<span class="key">abc</span>: <span class="integer">3</span>]) { e 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">groovy.transform.stc.FromAbstractTypeMethods</span>
-<span class="directive">abstract</span> <span class="type">class</span> <span class="class">Foo</span> {
-    <span class="directive">abstract</span> <span class="type">void</span> firstSignature(<span class="type">int</span> x, <span class="type">int</span> y)
-    <span class="directive">abstract</span> <span class="type">void</span> secondSignature(<span class="predefined-type">String</span> str)
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import groovy.transform.stc.FromAbstractTypeMethods
+abstract class Foo {
+    abstract void firstSignature(int x, int y)
+    abstract void secondSignature(String str)
 }
-<span class="type">void</span> doSomething(<span class="annotation">@ClosureParams</span>(value=FromAbstractTypeMethods, options=[<span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>]) Closure cl) {
-    <span class="comment">// ...</span>
+void doSomething(@ClosureParams(value=FromAbstractTypeMethods, options=["Foo"]) Closure cl) {
+    // ...
 }
 doSomething { a, b -&gt; a+b }
 doSomething { s -&gt; s.toUpperCase() }</code></pre>
@@ -4020,9 +3929,9 @@ doSomething { s -&gt; s.toUpperCase() }</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">groovy.transform.stc.FromString</span>
-<span class="type">void</span> doSomething(<span class="annotation">@ClosureParams</span>(value=FromString, options=[<span class="string"><span class="delimiter">&quot;</span><span class="content">String</span><span class="delimiter">&quot;</span></span>]) Closure cl) {
-    <span class="comment">// ...</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import groovy.transform.stc.FromString
+void doSomething(@ClosureParams(value=FromString, options=["String"]) Closure cl) {
+    // ...
 }
 doSomething { s -&gt; s.toUpperCase() }</code></pre>
 </div>
@@ -4032,9 +3941,9 @@ doSomething { s -&gt; s.toUpperCase() }</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">groovy.transform.stc.FromString</span>
-<span class="type">void</span> doSomething(<span class="annotation">@ClosureParams</span>(value=FromString, options=[<span class="string"><span class="delimiter">&quot;</span><span class="content">String</span><span class="delimiter">&quot;</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">String,Integer</span><span class="delimiter">&quot;</span></span>]) Closure cl) {
-    <span class="comment">// ...</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import groovy.transform.stc.FromString
+void doSomething(@ClosureParams(value=FromString, options=["String","String,Integer"]) Closure cl) {
+    // ...
 }
 doSomething { s -&gt; s.toUpperCase() }
 doSomething { s,i -&gt; s.toUpperCase()*i }</code></pre>
@@ -4045,12 +3954,12 @@ doSomething { s,i -&gt; s.toUpperCase()*i }</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">groovy.transform.stc.FromString</span>
-<span class="directive">public</span> &lt;T&gt; <span class="type">void</span> doSomething(T e, <span class="annotation">@ClosureParams</span>(value=FromString, options=[<span class="string"><span class="delimiter">&quot;</span><span class="content">T</span><span class="delimiter">&quot;</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">T,T</span><span class="delimiter">&quot;</span></span>]) Closure cl) {
-    <span class="comment">// ...</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import groovy.transform.stc.FromString
+public &lt;T&gt; void doSomething(T e, @ClosureParams(value=FromString, options=["T","T,T"]) Closure cl) {
+    // ...
 }
-doSomething(<span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span>) { s -&gt; s.toUpperCase() }
-doSomething(<span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span>) { s1,s2 -&gt; <span class="keyword">assert</span> s1.toUpperCase() == s2.toUpperCase() }</code></pre>
+doSomething('foo') { s -&gt; s.toUpperCase() }
+doSomething('foo') { s1,s2 -&gt; assert s1.toUpperCase() == s2.toUpperCase() }</code></pre>
 </div>
 </div></div></td>
 </tr>
@@ -4086,20 +3995,20 @@ doSomething(<span class="string"><span class="delimiter">'</span><span class="co
 </div>
 <div id="semantics.typechecked-defeated" class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Computer</span> {
-    <span class="type">int</span> compute(<span class="predefined-type">String</span> str) {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Computer {
+    int compute(String str) {
         str.length()
     }
-    <span class="predefined-type">String</span> compute(<span class="type">int</span> x) {
-        <span class="predefined-type">String</span>.valueOf(x)
+    String compute(int x) {
+        String.valueOf(x)
     }
 }
 
-<span class="annotation">@groovy</span>.transform.TypeChecked
-<span class="type">void</span> test() {
-    <span class="keyword">def</span> computer = <span class="keyword">new</span> Computer()
+@groovy.transform.TypeChecked
+void test() {
+    def computer = new Computer()
     computer.with {
-        <span class="keyword">assert</span> compute(compute(<span class="string"><span class="delimiter">'</span><span class="content">foobar</span><span class="delimiter">'</span></span>)) ==<span class="string"><span class="delimiter">'</span><span class="content">6</span><span class="delimiter">'</span></span>
+        assert compute(compute('foobar')) =='6'
     }
 }</code></pre>
 </div>
@@ -4112,7 +4021,7 @@ doSomething(<span class="string"><span class="delimiter">'</span><span class="co
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">Computer.metaClass.compute = { <span class="predefined-type">String</span> str -&gt; <span class="keyword">new</span> <span class="predefined-type">Date</span>() }</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Computer.metaClass.compute = { String str -&gt; new Date() }</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4132,23 +4041,23 @@ doSomething(<span class="string"><span class="delimiter">'</span><span class="co
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Computer</span> {
-    <span class="type">int</span> compute(<span class="predefined-type">String</span> str) {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Computer {
+    int compute(String str) {
         str.length()
     }
-    <span class="predefined-type">String</span> compute(<span class="type">int</span> x) {
-        <span class="predefined-type">String</span>.valueOf(x)
+    String compute(int x) {
+        String.valueOf(x)
     }
 }
 
-<span class="annotation">@groovy</span>.transform.CompileStatic
-<span class="type">void</span> test() {
-    <span class="keyword">def</span> computer = <span class="keyword">new</span> Computer()
+@groovy.transform.CompileStatic
+void test() {
+    def computer = new Computer()
     computer.with {
-        <span class="keyword">assert</span> compute(compute(<span class="string"><span class="delimiter">'</span><span class="content">foobar</span><span class="delimiter">'</span></span>)) ==<span class="string"><span class="delimiter">'</span><span class="content">6</span><span class="delimiter">'</span></span>
+        assert compute(compute('foobar')) =='6'
     }
 }
-Computer.metaClass.compute = { <span class="predefined-type">String</span> str -&gt; <span class="keyword">new</span> <span class="predefined-type">Date</span>() }
+Computer.metaClass.compute = { String str -&gt; new Date() }
 test()</code></pre>
 </div>
 </div>
@@ -4205,10 +4114,8 @@ test()</code></pre>
 </div>
 </div>
 </div>
-<div id="footer">
-<div id="footer-text">
-Last updated 2019-03-09 08:33:14 CST
-</div>
-</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
+<script>hljs.initHighlighting()</script>
 </body>
 </html>

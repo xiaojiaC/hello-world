@@ -417,97 +417,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .show-for-print{display:inherit!important}}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
-<style>
-/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
-/*pre.CodeRay {background-color:#f7f7f8;}*/
-.CodeRay .line-numbers{border-right:1px solid #d8d8d8;padding:0 0.5em 0 .25em}
-.CodeRay span.line-numbers{display:inline-block;margin-right:.5em;color:rgba(0,0,0,.3)}
-.CodeRay .line-numbers strong{color:rgba(0,0,0,.4)}
-table.CodeRay{border-collapse:separate;border-spacing:0;margin-bottom:0;border:0;background:none}
-table.CodeRay td{vertical-align: top;line-height:1.45}
-table.CodeRay td.line-numbers{text-align:right}
-table.CodeRay td.line-numbers>pre{padding:0;color:rgba(0,0,0,.3)}
-table.CodeRay td.code{padding:0 0 0 .5em}
-table.CodeRay td.code>pre{padding:0}
-.CodeRay .debug{color:#fff !important;background:#000080 !important}
-.CodeRay .annotation{color:#007}
-.CodeRay .attribute-name{color:#000080}
-.CodeRay .attribute-value{color:#700}
-.CodeRay .binary{color:#509}
-.CodeRay .comment{color:#998;font-style:italic}
-.CodeRay .char{color:#04d}
-.CodeRay .char .content{color:#04d}
-.CodeRay .char .delimiter{color:#039}
-.CodeRay .class{color:#458;font-weight:bold}
-.CodeRay .complex{color:#a08}
-.CodeRay .constant,.CodeRay .predefined-constant{color:#008080}
-.CodeRay .color{color:#099}
-.CodeRay .class-variable{color:#369}
-.CodeRay .decorator{color:#b0b}
-.CodeRay .definition{color:#099}
-.CodeRay .delimiter{color:#000}
-.CodeRay .doc{color:#970}
-.CodeRay .doctype{color:#34b}
-.CodeRay .doc-string{color:#d42}
-.CodeRay .escape{color:#666}
-.CodeRay .entity{color:#800}
-.CodeRay .error{color:#808}
-.CodeRay .exception{color:inherit}
-.CodeRay .filename{color:#099}
-.CodeRay .function{color:#900;font-weight:bold}
-.CodeRay .global-variable{color:#008080}
-.CodeRay .hex{color:#058}
-.CodeRay .integer,.CodeRay .float{color:#099}
-.CodeRay .include{color:#555}
-.CodeRay .inline{color:#000}
-.CodeRay .inline .inline{background:#ccc}
-.CodeRay .inline .inline .inline{background:#bbb}
-.CodeRay .inline .inline-delimiter{color:#d14}
-.CodeRay .inline-delimiter{color:#d14}
-.CodeRay .important{color:#555;font-weight:bold}
-.CodeRay .interpreted{color:#b2b}
-.CodeRay .instance-variable{color:#008080}
-.CodeRay .label{color:#970}
-.CodeRay .local-variable{color:#963}
-.CodeRay .octal{color:#40e}
-.CodeRay .predefined{color:#369}
-.CodeRay .preprocessor{color:#579}
-.CodeRay .pseudo-class{color:#555}
-.CodeRay .directive{font-weight:bold}
-.CodeRay .type{font-weight:bold}
-.CodeRay .predefined-type{color:inherit}
-.CodeRay .reserved,.CodeRay .keyword {color:#000;font-weight:bold}
-.CodeRay .key{color:#808}
-.CodeRay .key .delimiter{color:#606}
-.CodeRay .key .char{color:#80f}
-.CodeRay .value{color:#088}
-.CodeRay .regexp .delimiter{color:#808}
-.CodeRay .regexp .content{color:#808}
-.CodeRay .regexp .modifier{color:#808}
-.CodeRay .regexp .char{color:#d14}
-.CodeRay .regexp .function{color:#404;font-weight:bold}
-.CodeRay .string{color:#d20}
-.CodeRay .string .string .string{background:#ffd0d0}
-.CodeRay .string .content{color:#d14}
-.CodeRay .string .char{color:#d14}
-.CodeRay .string .delimiter{color:#d14}
-.CodeRay .shell{color:#d14}
-.CodeRay .shell .delimiter{color:#d14}
-.CodeRay .symbol{color:#990073}
-.CodeRay .symbol .content{color:#a60}
-.CodeRay .symbol .delimiter{color:#630}
-.CodeRay .tag{color:#008080}
-.CodeRay .tag-special{color:#d70}
-.CodeRay .variable{color:#036}
-.CodeRay .insert{background:#afa}
-.CodeRay .delete{background:#faa}
-.CodeRay .change{color:#aaf;background:#007}
-.CodeRay .head{color:#f8f;background:#505}
-.CodeRay .insert .insert{color:#080}
-.CodeRay .delete .delete{color:#800}
-.CodeRay .change .change{color:#66f}
-.CodeRay .head .head{color:#f4f}
-</style>
 <style>
 .hidden {
 	display: none;
@@ -637,8 +546,8 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// 定义名为com.yoursite的包</span>
-<span class="keyword">package</span> com.yoursite</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">// 定义名为com.yoursite的包
+package com.yoursite</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -657,13 +566,13 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// 导入类MarkupBuilder</span>
-<span class="keyword">import</span> <span class="include">groovy.xml.MarkupBuilder</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">// 导入类MarkupBuilder
+import groovy.xml.MarkupBuilder
 
-<span class="comment">// 使用导入的类创建对象</span>
-<span class="keyword">def</span> xml = <span class="keyword">new</span> MarkupBuilder()
+// 使用导入的类创建对象
+def xml = new MarkupBuilder()
 
-<span class="keyword">assert</span> xml != <span class="predefined-constant">null</span></code></pre>
+assert xml != null</code></pre>
 </div>
 </div>
 <div class="sect2">
@@ -673,7 +582,7 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">new</span> <span class="predefined-type">Date</span>()</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">new Date()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -684,14 +593,14 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">java.lang.*</span>
-<span class="keyword">import</span> <span class="include">java.util.*</span>
-<span class="keyword">import</span> <span class="include">java.io.*</span>
-<span class="keyword">import</span> <span class="include">java.net.*</span>
-<span class="keyword">import</span> <span class="include">groovy.lang.*</span>
-<span class="keyword">import</span> <span class="include">groovy.util.*</span>
-<span class="keyword">import</span> <span class="include">java.math.BigInteger</span>
-<span class="keyword">import</span> <span class="include">java.math.BigDecimal</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import java.lang.*
+import java.util.*
+import java.io.*
+import java.net.*
+import groovy.lang.*
+import groovy.util.*
+import java.math.BigInteger
+import java.math.BigDecimal</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -705,13 +614,13 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// 导入类MarkupBuilder</span>
-<span class="keyword">import</span> <span class="include">groovy.xml.MarkupBuilder</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">// 导入类MarkupBuilder
+import groovy.xml.MarkupBuilder
 
-<span class="comment">// 使用导入的类创建对象</span>
-<span class="keyword">def</span> xml = <span class="keyword">new</span> MarkupBuilder()
+// 使用导入的类创建对象
+def xml = new MarkupBuilder()
 
-<span class="keyword">assert</span> xml != <span class="predefined-constant">null</span></code></pre>
+assert xml != null</code></pre>
 </div>
 </div>
 </div>
@@ -722,14 +631,14 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">groovy.xml.MarkupBuilder</span>
-<span class="keyword">import</span> <span class="include">groovy.xml.StreamingMarkupBuilder</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import groovy.xml.MarkupBuilder
+import groovy.xml.StreamingMarkupBuilder
 
-<span class="keyword">def</span> markupBuilder = <span class="keyword">new</span> MarkupBuilder()
+def markupBuilder = new MarkupBuilder()
 
-<span class="keyword">assert</span> markupBuilder != <span class="predefined-constant">null</span>
+assert markupBuilder != null
 
-<span class="keyword">assert</span> <span class="keyword">new</span> StreamingMarkupBuilder() != <span class="predefined-constant">null</span></code></pre>
+assert new StreamingMarkupBuilder() != null</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -737,13 +646,13 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">groovy.xml.*</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import groovy.xml.*
 
-<span class="keyword">def</span> markupBuilder = <span class="keyword">new</span> MarkupBuilder()
+def markupBuilder = new MarkupBuilder()
 
-<span class="keyword">assert</span> markupBuilder != <span class="predefined-constant">null</span>
+assert markupBuilder != null
 
-<span class="keyword">assert</span> <span class="keyword">new</span> StreamingMarkupBuilder() != <span class="predefined-constant">null</span></code></pre>
+assert new StreamingMarkupBuilder() != null</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -757,9 +666,9 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">static</span> <span class="include">Boolean.FALSE</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import static Boolean.FALSE
 
-<span class="keyword">assert</span> !FALSE <span class="comment">// 直接使用，没有Boolean前缀！</span></code></pre>
+assert !FALSE // 直接使用，没有Boolean前缀！</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -767,17 +676,17 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">static</span> <span class="include">java.lang.String.format</span> <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import static java.lang.String.format <i class="conum" data-value="1"></i><b>(1)</b>
 
-<span class="type">class</span> <span class="class">SomeClass</span> {
+class SomeClass {
 
-    <span class="predefined-type">String</span> format(<span class="predefined-type">Integer</span> i) { <i class="conum" data-value="2"></i><b>(2)</b>
+    String format(Integer i) { <i class="conum" data-value="2"></i><b>(2)</b>
         i.toString()
     }
 
-    <span class="directive">static</span> <span class="type">void</span> main(<span class="predefined-type">String</span><span class="type">[]</span> args) {
-        <span class="keyword">assert</span> format(<span class="string"><span class="delimiter">'</span><span class="content">String</span><span class="delimiter">'</span></span>) == <span class="string"><span class="delimiter">'</span><span class="content">String</span><span class="delimiter">'</span></span> <i class="conum" data-value="3"></i><b>(3)</b>
-        <span class="keyword">assert</span> <span class="keyword">new</span> SomeClass().format(<span class="predefined-type">Integer</span>.valueOf(<span class="integer">1</span>)) == <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>
+    static void main(String[] args) {
+        assert format('String') == 'String' <i class="conum" data-value="3"></i><b>(3)</b>
+        assert new SomeClass().format(Integer.valueOf(1)) == '1'
     }
 }</code></pre>
 </div>
@@ -809,9 +718,9 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">static</span> <span class="include">Calendar.getInstance</span> <span class="keyword">as</span> <span class="class">now</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import static Calendar.getInstance as now
 
-<span class="keyword">assert</span> now().class == <span class="predefined-type">Calendar</span>.getInstance().class</code></pre>
+assert now().class == Calendar.getInstance().class</code></pre>
 </div>
 </div>
 </div>
@@ -825,10 +734,10 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">static</span> <span class="include">java.lang.Math.*</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import static java.lang.Math.*
 
-<span class="keyword">assert</span> sin(<span class="integer">0</span>) == <span class="float">0.0</span>
-<span class="keyword">assert</span> cos(<span class="integer">0</span>) == <span class="float">1.0</span></code></pre>
+assert sin(0) == 0.0
+assert cos(0) == 1.0</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -845,14 +754,14 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">java.util.Date</span>
-<span class="keyword">import</span> <span class="include">java.sql.Date</span> <span class="keyword">as</span> <span class="class">SQLDate</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import java.util.Date
+import java.sql.Date as SQLDate
 
-<span class="predefined-type">Date</span> utilDate = <span class="keyword">new</span> <span class="predefined-type">Date</span>(<span class="integer">1000L</span>)
-SQLDate sqlDate = <span class="keyword">new</span> SQLDate(<span class="integer">1000L</span>)
+Date utilDate = new Date(1000L)
+SQLDate sqlDate = new SQLDate(1000L)
 
-<span class="keyword">assert</span> utilDate <span class="keyword">instanceof</span> java.util.Date
-<span class="keyword">assert</span> sqlDate <span class="keyword">instanceof</span> java.sql.Date</code></pre>
+assert utilDate instanceof java.util.Date
+assert sqlDate instanceof java.sql.Date</code></pre>
 </div>
 </div>
 </div>
@@ -869,9 +778,9 @@ SQLDate sqlDate = <span class="keyword">new</span> SQLDate(<span class="integer"
 <div class="listingblock">
 <div class="title">Main.groovy</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Main</span> {                                    <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="directive">static</span> <span class="type">void</span> main(<span class="predefined-type">String</span>... args) {          <i class="conum" data-value="2"></i><b>(2)</b>
-        println <span class="string"><span class="delimiter">'</span><span class="content">Groovy world!</span><span class="delimiter">'</span></span>                 <i class="conum" data-value="3"></i><b>(3)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Main {                                    <i class="conum" data-value="1"></i><b>(1)</b>
+    static void main(String... args) {          <i class="conum" data-value="2"></i><b>(2)</b>
+        println 'Groovy world!'                 <i class="conum" data-value="3"></i><b>(3)</b>
     }
 }</code></pre>
 </div>
@@ -898,7 +807,7 @@ SQLDate sqlDate = <span class="keyword">new</span> SQLDate(<span class="integer"
 <div class="listingblock">
 <div class="title">Main.groovy</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">println <span class="string"><span class="delimiter">'</span><span class="content">Groovy world!</span><span class="delimiter">'</span></span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">println 'Groovy world!'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -913,12 +822,12 @@ SQLDate sqlDate = <span class="keyword">new</span> SQLDate(<span class="integer"
 <div class="listingblock">
 <div class="title">Main.groovy</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">org.codehaus.groovy.runtime.InvokerHelper</span>
-<span class="type">class</span> <span class="class">Main</span> <span class="directive">extends</span> Script {                     <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="keyword">def</span> <span class="function">run</span>() {                                 <i class="conum" data-value="2"></i><b>(2)</b>
-        println <span class="string"><span class="delimiter">'</span><span class="content">Groovy world!</span><span class="delimiter">'</span></span>                 <i class="conum" data-value="3"></i><b>(3)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import org.codehaus.groovy.runtime.InvokerHelper
+class Main extends Script {                     <i class="conum" data-value="1"></i><b>(1)</b>
+    def run() {                                 <i class="conum" data-value="2"></i><b>(2)</b>
+        println 'Groovy world!'                 <i class="conum" data-value="3"></i><b>(3)</b>
     }
-    <span class="directive">static</span> <span class="type">void</span> main(<span class="predefined-type">String</span><span class="type">[]</span> args) {           <i class="conum" data-value="4"></i><b>(4)</b>
+    static void main(String[] args) {           <i class="conum" data-value="4"></i><b>(4)</b>
         InvokerHelper.runScript(Main, args)     <i class="conum" data-value="5"></i><b>(5)</b>
     }
 }</code></pre>
@@ -959,10 +868,10 @@ SQLDate sqlDate = <span class="keyword">new</span> SQLDate(<span class="integer"
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">int</span> fib(<span class="type">int</span> n) {
-    n &lt; <span class="integer">2</span> ? <span class="integer">1</span> : fib(n-<span class="integer">1</span>) + fib(n-<span class="integer">2</span>)
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">int fib(int n) {
+    n &lt; 2 ? 1 : fib(n-1) + fib(n-2)
 }
-<span class="keyword">assert</span> fib(<span class="integer">10</span>)==<span class="integer">89</span></code></pre>
+assert fib(10)==89</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -970,11 +879,11 @@ SQLDate sqlDate = <span class="keyword">new</span> SQLDate(<span class="integer"
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">println <span class="string"><span class="delimiter">'</span><span class="content">Hello</span><span class="delimiter">'</span></span>                                 <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">println 'Hello'                                 <i class="conum" data-value="1"></i><b>(1)</b>
 
-<span class="type">int</span> power(<span class="type">int</span> n) { <span class="integer">2</span>**n }                       <i class="conum" data-value="2"></i><b>(2)</b>
+int power(int n) { 2**n }                       <i class="conum" data-value="2"></i><b>(2)</b>
 
-println <span class="string"><span class="delimiter">&quot;</span><span class="content">2^6==</span><span class="inline"><span class="inline-delimiter">${</span>power(<span class="integer">6</span>)<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>                      <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+println "2^6==${power(6)}"                      <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -998,14 +907,14 @@ println <span class="string"><span class="delimiter">&quot;</span><span class="c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">org.codehaus.groovy.runtime.InvokerHelper</span>
-<span class="type">class</span> <span class="class">Main</span> <span class="directive">extends</span> Script {
-    <span class="type">int</span> power(<span class="type">int</span> n) { <span class="integer">2</span>** n}                   <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="keyword">def</span> <span class="function">run</span>() {
-        println <span class="string"><span class="delimiter">'</span><span class="content">Hello</span><span class="delimiter">'</span></span>                         <i class="conum" data-value="2"></i><b>(2)</b>
-        println <span class="string"><span class="delimiter">&quot;</span><span class="content">2^6==</span><span class="inline"><span class="inline-delimiter">${</span>power(<span class="integer">6</span>)<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>              <i class="conum" data-value="3"></i><b>(3)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import org.codehaus.groovy.runtime.InvokerHelper
+class Main extends Script {
+    int power(int n) { 2** n}                   <i class="conum" data-value="1"></i><b>(1)</b>
+    def run() {
+        println 'Hello'                         <i class="conum" data-value="2"></i><b>(2)</b>
+        println "2^6==${power(6)}"              <i class="conum" data-value="3"></i><b>(3)</b>
     }
-    <span class="directive">static</span> <span class="type">void</span> main(<span class="predefined-type">String</span><span class="type">[]</span> args) {
+    static void main(String[] args) {
         InvokerHelper.runScript(Main, args)
     }
 }</code></pre>
@@ -1038,9 +947,9 @@ println <span class="string"><span class="delimiter">&quot;</span><span class="c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">int</span> x = <span class="integer">1</span>
-<span class="type">int</span> y = <span class="integer">2</span>
-<span class="keyword">assert</span> x+y == <span class="integer">3</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">int x = 1
+int y = 2
+assert x+y == 3</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1048,9 +957,9 @@ println <span class="string"><span class="delimiter">&quot;</span><span class="c
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">x = <span class="integer">1</span>
-y = <span class="integer">2</span>
-<span class="keyword">assert</span> x+y == <span class="integer">3</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">x = 1
+y = 2
+assert x+y == 3</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1082,10 +991,8 @@ y = <span class="integer">2</span>
 </div>
 </div>
 </div>
-<div id="footer">
-<div id="footer-text">
-Last updated 2019-03-09 08:33:14 CST
-</div>
-</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
+<script>hljs.initHighlighting()</script>
 </body>
 </html>

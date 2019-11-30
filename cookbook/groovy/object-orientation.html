@@ -417,97 +417,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .show-for-print{display:inherit!important}}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
-<style>
-/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
-/*pre.CodeRay {background-color:#f7f7f8;}*/
-.CodeRay .line-numbers{border-right:1px solid #d8d8d8;padding:0 0.5em 0 .25em}
-.CodeRay span.line-numbers{display:inline-block;margin-right:.5em;color:rgba(0,0,0,.3)}
-.CodeRay .line-numbers strong{color:rgba(0,0,0,.4)}
-table.CodeRay{border-collapse:separate;border-spacing:0;margin-bottom:0;border:0;background:none}
-table.CodeRay td{vertical-align: top;line-height:1.45}
-table.CodeRay td.line-numbers{text-align:right}
-table.CodeRay td.line-numbers>pre{padding:0;color:rgba(0,0,0,.3)}
-table.CodeRay td.code{padding:0 0 0 .5em}
-table.CodeRay td.code>pre{padding:0}
-.CodeRay .debug{color:#fff !important;background:#000080 !important}
-.CodeRay .annotation{color:#007}
-.CodeRay .attribute-name{color:#000080}
-.CodeRay .attribute-value{color:#700}
-.CodeRay .binary{color:#509}
-.CodeRay .comment{color:#998;font-style:italic}
-.CodeRay .char{color:#04d}
-.CodeRay .char .content{color:#04d}
-.CodeRay .char .delimiter{color:#039}
-.CodeRay .class{color:#458;font-weight:bold}
-.CodeRay .complex{color:#a08}
-.CodeRay .constant,.CodeRay .predefined-constant{color:#008080}
-.CodeRay .color{color:#099}
-.CodeRay .class-variable{color:#369}
-.CodeRay .decorator{color:#b0b}
-.CodeRay .definition{color:#099}
-.CodeRay .delimiter{color:#000}
-.CodeRay .doc{color:#970}
-.CodeRay .doctype{color:#34b}
-.CodeRay .doc-string{color:#d42}
-.CodeRay .escape{color:#666}
-.CodeRay .entity{color:#800}
-.CodeRay .error{color:#808}
-.CodeRay .exception{color:inherit}
-.CodeRay .filename{color:#099}
-.CodeRay .function{color:#900;font-weight:bold}
-.CodeRay .global-variable{color:#008080}
-.CodeRay .hex{color:#058}
-.CodeRay .integer,.CodeRay .float{color:#099}
-.CodeRay .include{color:#555}
-.CodeRay .inline{color:#000}
-.CodeRay .inline .inline{background:#ccc}
-.CodeRay .inline .inline .inline{background:#bbb}
-.CodeRay .inline .inline-delimiter{color:#d14}
-.CodeRay .inline-delimiter{color:#d14}
-.CodeRay .important{color:#555;font-weight:bold}
-.CodeRay .interpreted{color:#b2b}
-.CodeRay .instance-variable{color:#008080}
-.CodeRay .label{color:#970}
-.CodeRay .local-variable{color:#963}
-.CodeRay .octal{color:#40e}
-.CodeRay .predefined{color:#369}
-.CodeRay .preprocessor{color:#579}
-.CodeRay .pseudo-class{color:#555}
-.CodeRay .directive{font-weight:bold}
-.CodeRay .type{font-weight:bold}
-.CodeRay .predefined-type{color:inherit}
-.CodeRay .reserved,.CodeRay .keyword {color:#000;font-weight:bold}
-.CodeRay .key{color:#808}
-.CodeRay .key .delimiter{color:#606}
-.CodeRay .key .char{color:#80f}
-.CodeRay .value{color:#088}
-.CodeRay .regexp .delimiter{color:#808}
-.CodeRay .regexp .content{color:#808}
-.CodeRay .regexp .modifier{color:#808}
-.CodeRay .regexp .char{color:#d14}
-.CodeRay .regexp .function{color:#404;font-weight:bold}
-.CodeRay .string{color:#d20}
-.CodeRay .string .string .string{background:#ffd0d0}
-.CodeRay .string .content{color:#d14}
-.CodeRay .string .char{color:#d14}
-.CodeRay .string .delimiter{color:#d14}
-.CodeRay .shell{color:#d14}
-.CodeRay .shell .delimiter{color:#d14}
-.CodeRay .symbol{color:#990073}
-.CodeRay .symbol .content{color:#a60}
-.CodeRay .symbol .delimiter{color:#630}
-.CodeRay .tag{color:#008080}
-.CodeRay .tag-special{color:#d70}
-.CodeRay .variable{color:#036}
-.CodeRay .insert{background:#afa}
-.CodeRay .delete{background:#faa}
-.CodeRay .change{color:#aaf;background:#007}
-.CodeRay .head{color:#f8f;background:#505}
-.CodeRay .insert .insert{color:#080}
-.CodeRay .delete .delete{color:#800}
-.CodeRay .change .change{color:#66f}
-.CodeRay .head .head{color:#f4f}
-</style>
 <style>
 .hidden {
 	display: none;
@@ -714,12 +623,12 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Foo</span> {
-  <span class="directive">static</span> <span class="type">int</span> i
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Foo {
+  static int i
 }
 
-<span class="keyword">assert</span> Foo.class.getDeclaredField(<span class="string"><span class="delimiter">'</span><span class="content">i</span><span class="delimiter">'</span></span>).type == <span class="type">int</span>.class
-<span class="keyword">assert</span> Foo.i.class != <span class="type">int</span>.class &amp;&amp; Foo.i.class == <span class="predefined-type">Integer</span>.class</code></pre>
+assert Foo.class.getDeclaredField('i').type == int.class
+assert Foo.i.class != int.class &amp;&amp; Foo.i.class == Integer.class</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -755,13 +664,13 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Person</span> {                       <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Person {                       <i class="conum" data-value="1"></i><b>(1)</b>
 
-    <span class="predefined-type">String</span> name                      <i class="conum" data-value="2"></i><b>(2)</b>
-    <span class="predefined-type">Integer</span> age
+    String name                      <i class="conum" data-value="2"></i><b>(2)</b>
+    Integer age
 
-    <span class="keyword">def</span> <span class="function">increaseAge</span>(<span class="predefined-type">Integer</span> years) { <i class="conum" data-value="3"></i><b>(3)</b>
-        <span class="local-variable">this</span>.age += years
+    def increaseAge(Integer years) { <i class="conum" data-value="3"></i><b>(3)</b>
+        this.age += years
     }
 }</code></pre>
 </div>
@@ -789,7 +698,7 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> p = <span class="keyword">new</span> Person()</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def p = new Person()</code></pre>
 </div>
 </div>
 </div>
@@ -800,16 +709,16 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Outer</span> {
-    <span class="directive">private</span> <span class="predefined-type">String</span> privateStr
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Outer {
+    private String privateStr
 
-    <span class="keyword">def</span> <span class="function">callInnerMethod</span>() {
-        <span class="keyword">new</span> Inner().methodA()        <i class="conum" data-value="1"></i><b>(1)</b>
+    def callInnerMethod() {
+        new Inner().methodA()        <i class="conum" data-value="1"></i><b>(1)</b>
     }
 
-    <span class="type">class</span> <span class="class">Inner</span> {                    <i class="conum" data-value="2"></i><b>(2)</b>
-        <span class="keyword">def</span> <span class="function">methodA</span>() {
-            println <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">${</span>privateStr<span class="inline-delimiter">}</span></span><span class="content">.</span><span class="delimiter">&quot;</span></span> <i class="conum" data-value="3"></i><b>(3)</b>
+    class Inner {                    <i class="conum" data-value="2"></i><b>(2)</b>
+        def methodA() {
+            println "${privateStr}." <i class="conum" data-value="3"></i><b>(3)</b>
         }
     }
 }</code></pre>
@@ -852,16 +761,16 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Outer2</span> {
-    <span class="directive">private</span> <span class="predefined-type">String</span> privateStr = <span class="string"><span class="delimiter">'</span><span class="content">some string</span><span class="delimiter">'</span></span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Outer2 {
+    private String privateStr = 'some string'
 
-    <span class="keyword">def</span> <span class="function">startThread</span>() {
-       <span class="keyword">new</span> <span class="predefined-type">Thread</span>(<span class="keyword">new</span> Inner2()).start()
+    def startThread() {
+       new Thread(new Inner2()).start()
     }
 
-    <span class="type">class</span> <span class="class">Inner2</span> <span class="directive">implements</span> <span class="predefined-type">Runnable</span> {
-        <span class="type">void</span> run() {
-            println <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">${</span>privateStr<span class="inline-delimiter">}</span></span><span class="content">.</span><span class="delimiter">&quot;</span></span>
+    class Inner2 implements Runnable {
+        void run() {
+            println "${privateStr}."
         }
     }
 }</code></pre>
@@ -877,13 +786,13 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Outer3</span> {
-    <span class="directive">private</span> <span class="predefined-type">String</span> privateStr = <span class="string"><span class="delimiter">'</span><span class="content">some string</span><span class="delimiter">'</span></span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Outer3 {
+    private String privateStr = 'some string'
 
-    <span class="keyword">def</span> <span class="function">startThread</span>() {
-        <span class="keyword">new</span> <span class="predefined-type">Thread</span>(<span class="keyword">new</span> <span class="predefined-type">Runnable</span>() {      <i class="conum" data-value="1"></i><b>(1)</b>
-            <span class="type">void</span> run() {
-                println <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">${</span>privateStr<span class="inline-delimiter">}</span></span><span class="content">.</span><span class="delimiter">&quot;</span></span>
+    def startThread() {
+        new Thread(new Runnable() {      <i class="conum" data-value="1"></i><b>(1)</b>
+            void run() {
+                println "${privateStr}."
             }
         }).start()                       <i class="conum" data-value="2"></i><b>(2)</b>
     }
@@ -914,13 +823,13 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="directive">abstract</span> <span class="type">class</span> <span class="class">Abstract</span> {         <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="predefined-type">String</span> name
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">abstract class Abstract {         <i class="conum" data-value="1"></i><b>(1)</b>
+    String name
 
-    <span class="directive">abstract</span> <span class="keyword">def</span> <span class="function">abstractMethod</span>() <i class="conum" data-value="2"></i><b>(2)</b>
+    abstract def abstractMethod() <i class="conum" data-value="2"></i><b>(2)</b>
 
-    <span class="keyword">def</span> <span class="function">concreteMethod</span>() {
-        println <span class="string"><span class="delimiter">'</span><span class="content">concrete</span><span class="delimiter">'</span></span>
+    def concreteMethod() {
+        println 'concrete'
     }
 }</code></pre>
 </div>
@@ -949,8 +858,8 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">interface</span> Greeter {                      <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="type">void</span> greet(<span class="predefined-type">String</span> name)              <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">interface Greeter {                      <i class="conum" data-value="1"></i><b>(1)</b>
+    void greet(String name)              <i class="conum" data-value="2"></i><b>(2)</b>
 }</code></pre>
 </div>
 </div>
@@ -971,8 +880,8 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">interface</span> Greeter {
-    <span class="directive">protected</span> <span class="type">void</span> greet(<span class="predefined-type">String</span> name)           <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">interface Greeter {
+    protected void greet(String name)           <i class="conum" data-value="1"></i><b>(1)</b>
 }</code></pre>
 </div>
 </div>
@@ -989,14 +898,14 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">SystemGreeter</span> <span class="directive">implements</span> Greeter {               <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="type">void</span> greet(<span class="predefined-type">String</span> name) {                          <i class="conum" data-value="2"></i><b>(2)</b>
-        println <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello </span><span class="inline"><span class="inline-delimiter">$</span>name</span><span class="delimiter">&quot;</span></span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class SystemGreeter implements Greeter {               <i class="conum" data-value="1"></i><b>(1)</b>
+    void greet(String name) {                          <i class="conum" data-value="2"></i><b>(2)</b>
+        println "Hello $name"
     }
 }
 
-<span class="keyword">def</span> greeter = <span class="keyword">new</span> SystemGreeter()
-<span class="keyword">assert</span> greeter <span class="keyword">instanceof</span> Greeter                       <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+def greeter = new SystemGreeter()
+assert greeter instanceof Greeter                       <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1020,8 +929,8 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">interface</span> ExtendedGreeter <span class="directive">extends</span> Greeter {              <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="type">void</span> sayBye(<span class="predefined-type">String</span> name)
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">interface ExtendedGreeter extends Greeter {              <i class="conum" data-value="1"></i><b>(1)</b>
+    void sayBye(String name)
 }</code></pre>
 </div>
 </div>
@@ -1038,12 +947,12 @@ $(addBlockSwitches);
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">DefaultGreeter</span> {
-    <span class="type">void</span> greet(<span class="predefined-type">String</span> name) { println <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello</span><span class="delimiter">&quot;</span></span> }
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class DefaultGreeter {
+    void greet(String name) { println "Hello" }
 }
 
-greeter = <span class="keyword">new</span> DefaultGreeter()
-<span class="keyword">assert</span> !(greeter <span class="keyword">instanceof</span> Greeter)</code></pre>
+greeter = new DefaultGreeter()
+assert !(greeter instanceof Greeter)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1051,9 +960,9 @@ greeter = <span class="keyword">new</span> DefaultGreeter()
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">greeter = <span class="keyword">new</span> DefaultGreeter()                              <i class="conum" data-value="1"></i><b>(1)</b>
-coerced = greeter <span class="keyword">as</span> Greeter                                <i class="conum" data-value="2"></i><b>(2)</b>
-<span class="keyword">assert</span> coerced <span class="keyword">instanceof</span> Greeter                           <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">greeter = new DefaultGreeter()                              <i class="conum" data-value="1"></i><b>(1)</b>
+coerced = greeter as Greeter                                <i class="conum" data-value="2"></i><b>(2)</b>
+assert coerced instanceof Greeter                           <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1110,19 +1019,19 @@ coerced = greeter <span class="keyword">as</span> Greeter                       
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">PersonConstructor</span> {
-    <span class="predefined-type">String</span> name
-    <span class="predefined-type">Integer</span> age
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class PersonConstructor {
+    String name
+    Integer age
 
     PersonConstructor(name, age) {               <i class="conum" data-value="1"></i><b>(1)</b>
-        <span class="local-variable">this</span>.name = name
-        <span class="local-variable">this</span>.age = age
+        this.name = name
+        this.age = age
     }
 }
 
-<span class="keyword">def</span> person1 = <span class="keyword">new</span> PersonConstructor(<span class="string"><span class="delimiter">'</span><span class="content">Marie</span><span class="delimiter">'</span></span>, <span class="integer">1</span>)  <i class="conum" data-value="2"></i><b>(2)</b>
-<span class="keyword">def</span> person2 = [<span class="string"><span class="delimiter">'</span><span class="content">Marie</span><span class="delimiter">'</span></span>, <span class="integer">2</span>] <span class="keyword">as</span> PersonConstructor  <i class="conum" data-value="3"></i><b>(3)</b>
-PersonConstructor person3 = [<span class="string"><span class="delimiter">'</span><span class="content">Marie</span><span class="delimiter">'</span></span>, <span class="integer">3</span>]         <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+def person1 = new PersonConstructor('Marie', 1)  <i class="conum" data-value="2"></i><b>(2)</b>
+def person2 = ['Marie', 2] as PersonConstructor  <i class="conum" data-value="3"></i><b>(3)</b>
+PersonConstructor person3 = ['Marie', 3]         <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1153,15 +1062,15 @@ PersonConstructor person3 = [<span class="string"><span class="delimiter">'</spa
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">PersonWOConstructor</span> {                                  <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="predefined-type">String</span> name
-    <span class="predefined-type">Integer</span> age
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class PersonWOConstructor {                                  <i class="conum" data-value="1"></i><b>(1)</b>
+    String name
+    Integer age
 }
 
-<span class="keyword">def</span> person4 = <span class="keyword">new</span> PersonWOConstructor()                      <i class="conum" data-value="2"></i><b>(2)</b>
-<span class="keyword">def</span> person5 = <span class="keyword">new</span> PersonWOConstructor(<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">Marie</span><span class="delimiter">'</span></span>)         <i class="conum" data-value="3"></i><b>(3)</b>
-<span class="keyword">def</span> person6 = <span class="keyword">new</span> PersonWOConstructor(<span class="key">age</span>: <span class="integer">1</span>)                <i class="conum" data-value="4"></i><b>(4)</b>
-<span class="keyword">def</span> person7 = <span class="keyword">new</span> PersonWOConstructor(<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">Marie</span><span class="delimiter">'</span></span>, <span class="key">age</span>: <span class="integer">2</span>) <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+def person4 = new PersonWOConstructor()                      <i class="conum" data-value="2"></i><b>(2)</b>
+def person5 = new PersonWOConstructor(name: 'Marie')         <i class="conum" data-value="3"></i><b>(3)</b>
+def person6 = new PersonWOConstructor(age: 1)                <i class="conum" data-value="4"></i><b>(4)</b>
+def person7 = new PersonWOConstructor(name: 'Marie', age: 2) <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1238,10 +1147,10 @@ PersonConstructor person3 = [<span class="string"><span class="delimiter">'</spa
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> <span class="function">someMethod</span>() { <span class="string"><span class="delimiter">'</span><span class="content">method called</span><span class="delimiter">'</span></span> }                           <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="predefined-type">String</span> anotherMethod() { <span class="string"><span class="delimiter">'</span><span class="content">another method called</span><span class="delimiter">'</span></span> }             <i class="conum" data-value="2"></i><b>(2)</b>
-<span class="keyword">def</span> <span class="function">thirdMethod</span>(param1) { <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">$</span>param1</span><span class="content"> passed</span><span class="delimiter">&quot;</span></span> }                   <i class="conum" data-value="3"></i><b>(3)</b>
-<span class="directive">static</span> <span class="predefined-type">String</span> fourthMethod(<span class="predefined-type">String</span> param1) { <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">$</span>param1</span><span class="content"> passed</span><span class="delimiter">&quot;</span></span> } <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def someMethod() { 'method called' }                           <i class="conum" data-value="1"></i><b>(1)</b>
+String anotherMethod() { 'another method called' }             <i class="conum" data-value="2"></i><b>(2)</b>
+def thirdMethod(param1) { "$param1 passed" }                   <i class="conum" data-value="3"></i><b>(3)</b>
+static String fourthMethod(String param1) { "$param1 passed" } <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1272,8 +1181,8 @@ PersonConstructor person3 = [<span class="string"><span class="delimiter">'</spa
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> <span class="function">foo</span>(<span class="predefined-type">Map</span> args) { <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">${</span>args.name<span class="inline-delimiter">}</span></span><span class="content">: </span><span class="inline"><span class="inline-delimiter">${</span>args.age<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span> }
-foo(<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">Marie</span><span class="delimiter">'</span></span>, <span class="key">age</span>: <span class="integer">1</span>)</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def foo(Map args) { "${args.name}: ${args.age}" }
+foo(name: 'Marie', age: 1)</code></pre>
 </div>
 </div>
 <div class="sect4">
@@ -1283,9 +1192,9 @@ foo(<span class="key">name</span>: <span class="string"><span class="delimiter">
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> <span class="function">foo</span>(<span class="predefined-type">Map</span> args, <span class="predefined-type">Integer</span> number) { <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">${</span>args.name<span class="inline-delimiter">}</span></span><span class="content">: </span><span class="inline"><span class="inline-delimiter">${</span>args.age<span class="inline-delimiter">}</span></span><span class="content">, and the number is </span><span class="inline"><span class="inline-delimiter">${</span>number<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span> }
-foo(<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">Marie</span><span class="delimiter">'</span></span>, <span class="key">age</span>: <span class="integer">1</span>, <span class="integer">23</span>)  <i class="conum" data-value="1"></i><b>(1)</b>
-foo(<span class="integer">23</span>, <span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">Marie</span><span class="delimiter">'</span></span>, <span class="key">age</span>: <span class="integer">1</span>)  <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def foo(Map args, Integer number) { "${args.name}: ${args.age}, and the number is ${number}" }
+foo(name: 'Marie', age: 1, 23)  <i class="conum" data-value="1"></i><b>(1)</b>
+foo(23, name: 'Marie', age: 1)  <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1305,8 +1214,8 @@ foo(<span class="integer">23</span>, <span class="key">name</span>: <span class=
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> <span class="function">foo</span>(<span class="predefined-type">Integer</span> number, <span class="predefined-type">Map</span> args) { <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">${</span>args.name<span class="inline-delimiter">}</span></span><span class="content">: </span><span class="inline"><span class="inline-delimiter">${</span>args.age<span class="inline-delimiter">}</span></span><span class="content">, and the number is </span><span class="inline"><span class="inline-delimiter">${</span>number<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span> }
-foo(<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">Marie</span><span class="delimiter">'</span></span>, <span class="key">age</span>: <span class="integer">1</span>, <span class="integer">23</span>)  <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def foo(Integer number, Map args) { "${args.name}: ${args.age}, and the number is ${number}" }
+foo(name: 'Marie', age: 1, 23)  <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1322,8 +1231,8 @@ foo(<span class="key">name</span>: <span class="string"><span class="delimiter">
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> <span class="function">foo</span>(<span class="predefined-type">Integer</span> number, <span class="predefined-type">Map</span> args) { <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">${</span>args.name<span class="inline-delimiter">}</span></span><span class="content">: </span><span class="inline"><span class="inline-delimiter">${</span>args.age<span class="inline-delimiter">}</span></span><span class="content">, and the number is </span><span class="inline"><span class="inline-delimiter">${</span>number<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span> }
-foo(<span class="integer">23</span>, [<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">Marie</span><span class="delimiter">'</span></span>, <span class="key">age</span>: <span class="integer">1</span>])  <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def foo(Integer number, Map args) { "${args.name}: ${args.age}, and the number is ${number}" }
+foo(23, [name: 'Marie', age: 1])  <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1346,8 +1255,8 @@ foo(<span class="integer">23</span>, [<span class="key">name</span>: <span class
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> <span class="function">foo</span>(<span class="predefined-type">String</span> par1, <span class="predefined-type">Integer</span> par2 = <span class="integer">1</span>) { [<span class="key">name</span>: par1, <span class="key">age</span>: par2] }
-<span class="keyword">assert</span> foo(<span class="string"><span class="delimiter">'</span><span class="content">Marie</span><span class="delimiter">'</span></span>).age == <span class="integer">1</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def foo(String par1, Integer par2 = 1) { [name: par1, age: par2] }
+assert foo('Marie').age == 1</code></pre>
 </div>
 </div>
 </div>
@@ -1358,10 +1267,10 @@ foo(<span class="integer">23</span>, [<span class="key">name</span>: <span class
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> <span class="function">foo</span>(<span class="predefined-type">Object</span>... args) { args.length }
-<span class="keyword">assert</span> foo() == <span class="integer">0</span>
-<span class="keyword">assert</span> foo(<span class="integer">1</span>) == <span class="integer">1</span>
-<span class="keyword">assert</span> foo(<span class="integer">1</span>, <span class="integer">2</span>) == <span class="integer">2</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def foo(Object... args) { args.length }
+assert foo() == 0
+assert foo(1) == 1
+assert foo(1, 2) == 2</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1369,10 +1278,10 @@ foo(<span class="integer">23</span>, [<span class="key">name</span>: <span class
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> <span class="function">foo</span>(<span class="predefined-type">Object</span><span class="type">[]</span> args) { args.length }
-<span class="keyword">assert</span> foo() == <span class="integer">0</span>
-<span class="keyword">assert</span> foo(<span class="integer">1</span>) == <span class="integer">1</span>
-<span class="keyword">assert</span> foo(<span class="integer">1</span>, <span class="integer">2</span>) == <span class="integer">2</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def foo(Object[] args) { args.length }
+assert foo() == 0
+assert foo(1) == 1
+assert foo(1, 2) == 2</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1380,8 +1289,8 @@ foo(<span class="integer">23</span>, [<span class="key">name</span>: <span class
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> <span class="function">foo</span>(<span class="predefined-type">Object</span>... args) { args }
-<span class="keyword">assert</span> foo(<span class="predefined-constant">null</span>) == <span class="predefined-constant">null</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def foo(Object... args) { args }
+assert foo(null) == null</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1389,9 +1298,9 @@ foo(<span class="integer">23</span>, [<span class="key">name</span>: <span class
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> <span class="function">foo</span>(<span class="predefined-type">Object</span>... args) { args }
-<span class="predefined-type">Integer</span><span class="type">[]</span> ints = [<span class="integer">1</span>, <span class="integer">2</span>]
-<span class="keyword">assert</span> foo(ints) == [<span class="integer">1</span>, <span class="integer">2</span>]</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def foo(Object... args) { args }
+Integer[] ints = [1, 2]
+assert foo(ints) == [1, 2]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1399,11 +1308,11 @@ foo(<span class="integer">23</span>, [<span class="key">name</span>: <span class
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> <span class="function">foo</span>(<span class="predefined-type">Object</span>... args) { <span class="integer">1</span> }
-<span class="keyword">def</span> <span class="function">foo</span>(<span class="predefined-type">Object</span> x) { <span class="integer">2</span> }
-<span class="keyword">assert</span> foo() == <span class="integer">1</span>
-<span class="keyword">assert</span> foo(<span class="integer">1</span>) == <span class="integer">2</span>
-<span class="keyword">assert</span> foo(<span class="integer">1</span>, <span class="integer">2</span>) == <span class="integer">1</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def foo(Object... args) { 1 }
+def foo(Object x) { 2 }
+assert foo() == 1
+assert foo(1) == 2
+assert foo(1, 2) == 1</code></pre>
 </div>
 </div>
 </div>
@@ -1420,11 +1329,11 @@ foo(<span class="integer">23</span>, [<span class="key">name</span>: <span class
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> <span class="function">badRead</span>() {
-    <span class="keyword">new</span> <span class="predefined-type">File</span>(<span class="string"><span class="delimiter">'</span><span class="content">doesNotExist.txt</span><span class="delimiter">'</span></span>).text
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def badRead() {
+    new File('doesNotExist.txt').text
 }
 
-shouldFail(<span class="exception">FileNotFoundException</span>) {
+shouldFail(FileNotFoundException) {
     badRead()
 }</code></pre>
 </div>
@@ -1437,11 +1346,11 @@ shouldFail(<span class="exception">FileNotFoundException</span>) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> <span class="function">badRead</span>() <span class="directive">throws</span> <span class="exception">FileNotFoundException</span> {
-    <span class="keyword">new</span> <span class="predefined-type">File</span>(<span class="string"><span class="delimiter">'</span><span class="content">doesNotExist.txt</span><span class="delimiter">'</span></span>).text
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def badRead() throws FileNotFoundException {
+    new File('doesNotExist.txt').text
 }
 
-shouldFail(<span class="exception">FileNotFoundException</span>) {
+shouldFail(FileNotFoundException) {
     badRead()
 }</code></pre>
 </div>
@@ -1473,10 +1382,10 @@ shouldFail(<span class="exception">FileNotFoundException</span>) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Data</span> {
-    <span class="directive">private</span> <span class="type">int</span> id                                  <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="directive">protected</span> <span class="predefined-type">String</span> description                    <i class="conum" data-value="2"></i><b>(2)</b>
-    <span class="directive">public</span> <span class="directive">static</span> <span class="directive">final</span> <span class="type">boolean</span> DEBUG = <span class="predefined-constant">false</span>       <i class="conum" data-value="3"></i><b>(3)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Data {
+    private int id                                  <i class="conum" data-value="1"></i><b>(1)</b>
+    protected String description                    <i class="conum" data-value="2"></i><b>(2)</b>
+    public static final boolean DEBUG = false       <i class="conum" data-value="3"></i><b>(3)</b>
 }</code></pre>
 </div>
 </div>
@@ -1501,9 +1410,9 @@ shouldFail(<span class="exception">FileNotFoundException</span>) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Data</span> {
-    <span class="directive">private</span> <span class="predefined-type">String</span> id = IDGenerator.next() <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="comment">// ...</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Data {
+    private String id = IDGenerator.next() <i class="conum" data-value="1"></i><b>(1)</b>
+    // ...
 }</code></pre>
 </div>
 </div>
@@ -1520,11 +1429,11 @@ shouldFail(<span class="exception">FileNotFoundException</span>) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">BadPractice</span> {
-    <span class="directive">private</span> mapping                         <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class BadPractice {
+    private mapping                         <i class="conum" data-value="1"></i><b>(1)</b>
 }
-<span class="type">class</span> <span class="class">GoodPractice</span> {
-    <span class="directive">private</span> <span class="predefined-type">Map</span>&lt;<span class="predefined-type">String</span>,<span class="predefined-type">String</span>&gt; mapping      <i class="conum" data-value="2"></i><b>(2)</b>
+class GoodPractice {
+    private Map&lt;String,String&gt; mapping      <i class="conum" data-value="2"></i><b>(2)</b>
 }</code></pre>
 </div>
 </div>
@@ -1570,9 +1479,9 @@ shouldFail(<span class="exception">FileNotFoundException</span>) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Person</span> {
-    <span class="predefined-type">String</span> name                             <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="type">int</span> age                                 <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    String name                             <i class="conum" data-value="1"></i><b>(1)</b>
+    int age                                 <i class="conum" data-value="2"></i><b>(2)</b>
 }</code></pre>
 </div>
 </div>
@@ -1593,12 +1502,12 @@ shouldFail(<span class="exception">FileNotFoundException</span>) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Person</span> {
-    <span class="directive">final</span> <span class="predefined-type">String</span> name                   <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="directive">final</span> <span class="type">int</span> age                       <i class="conum" data-value="2"></i><b>(2)</b>
-    Person(<span class="predefined-type">String</span> name, <span class="type">int</span> age) {
-        <span class="local-variable">this</span>.name = name                <i class="conum" data-value="3"></i><b>(3)</b>
-        <span class="local-variable">this</span>.age = age                  <i class="conum" data-value="4"></i><b>(4)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    final String name                   <i class="conum" data-value="1"></i><b>(1)</b>
+    final int age                       <i class="conum" data-value="2"></i><b>(2)</b>
+    Person(String name, int age) {
+        this.name = name                <i class="conum" data-value="3"></i><b>(3)</b>
+        this.age = age                  <i class="conum" data-value="4"></i><b>(4)</b>
     }
 }</code></pre>
 </div>
@@ -1628,20 +1537,20 @@ shouldFail(<span class="exception">FileNotFoundException</span>) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Person</span> {
-    <span class="predefined-type">String</span> name
-    <span class="type">void</span> name(<span class="predefined-type">String</span> name) {
-        <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">&quot;</span><span class="content">Wonder</span><span class="inline"><span class="inline-delimiter">$</span>name</span><span class="delimiter">&quot;</span></span>       <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    String name
+    void name(String name) {
+        this.name = "Wonder$name"       <i class="conum" data-value="1"></i><b>(1)</b>
     }
-    <span class="predefined-type">String</span> wonder() {
-        <span class="local-variable">this</span>.name                       <i class="conum" data-value="2"></i><b>(2)</b>
+    String wonder() {
+        this.name                       <i class="conum" data-value="2"></i><b>(2)</b>
     }
 }
-<span class="keyword">def</span> p = <span class="keyword">new</span> Person()
-p.name = <span class="string"><span class="delimiter">'</span><span class="content">Marge</span><span class="delimiter">'</span></span>                        <i class="conum" data-value="3"></i><b>(3)</b>
-<span class="keyword">assert</span> p.name == <span class="string"><span class="delimiter">'</span><span class="content">Marge</span><span class="delimiter">'</span></span>                <i class="conum" data-value="4"></i><b>(4)</b>
-p.name(<span class="string"><span class="delimiter">'</span><span class="content">Marge</span><span class="delimiter">'</span></span>)                         <i class="conum" data-value="5"></i><b>(5)</b>
-<span class="keyword">assert</span> p.wonder() == <span class="string"><span class="delimiter">'</span><span class="content">WonderMarge</span><span class="delimiter">'</span></span>      <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
+def p = new Person()
+p.name = 'Marge'                        <i class="conum" data-value="3"></i><b>(3)</b>
+assert p.name == 'Marge'                <i class="conum" data-value="4"></i><b>(4)</b>
+p.name('Marge')                         <i class="conum" data-value="5"></i><b>(5)</b>
+assert p.wonder() == 'WonderMarge'      <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1680,12 +1589,12 @@ p.name(<span class="string"><span class="delimiter">'</span><span class="content
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Person</span> {
-    <span class="predefined-type">String</span> name
-    <span class="type">int</span> age
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    String name
+    int age
 }
-<span class="keyword">def</span> p = <span class="keyword">new</span> Person()
-<span class="keyword">assert</span> p.properties.keySet().containsAll([<span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">age</span><span class="delimiter">'</span></span>])</code></pre>
+def p = new Person()
+assert p.properties.keySet().containsAll(['name','age'])</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1693,21 +1602,21 @@ p.name(<span class="string"><span class="delimiter">'</span><span class="content
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">PseudoProperties</span> {
-    <span class="comment">// a pseudo property &quot;name&quot;</span>
-    <span class="type">void</span> setName(<span class="predefined-type">String</span> name) {}
-    <span class="predefined-type">String</span> getName() {}
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class PseudoProperties {
+    // a pseudo property "name"
+    void setName(String name) {}
+    String getName() {}
 
-    <span class="comment">// a pseudo read-only property &quot;age&quot;</span>
-    <span class="type">int</span> getAge() { <span class="integer">42</span> }
+    // a pseudo read-only property "age"
+    int getAge() { 42 }
 
-    <span class="comment">// a pseudo write-only property &quot;groovy&quot;</span>
-    <span class="type">void</span> setGroovy(<span class="type">boolean</span> groovy) {  }
+    // a pseudo write-only property "groovy"
+    void setGroovy(boolean groovy) {  }
 }
-<span class="keyword">def</span> p = <span class="keyword">new</span> PseudoProperties()
-p.name = <span class="string"><span class="delimiter">'</span><span class="content">Foo</span><span class="delimiter">'</span></span>                      <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="keyword">assert</span> p.age == <span class="integer">42</span>                  <i class="conum" data-value="2"></i><b>(2)</b>
-p.groovy = <span class="predefined-constant">true</span>                     <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+def p = new PseudoProperties()
+p.name = 'Foo'                      <i class="conum" data-value="1"></i><b>(1)</b>
+assert p.age == 42                  <i class="conum" data-value="2"></i><b>(2)</b>
+p.groovy = true                     <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1740,7 +1649,7 @@ p.groovy = <span class="predefined-constant">true</span>                     <i 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@interface</span> SomeAnnotation {}</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@interface SomeAnnotation {}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1773,24 +1682,24 @@ p.groovy = <span class="predefined-constant">true</span>                     <i 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@interface</span> SomeAnnotation {
-    <span class="predefined-type">String</span> value()                          <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@interface SomeAnnotation {
+    String value()                          <i class="conum" data-value="1"></i><b>(1)</b>
 }
-<span class="annotation">@interface</span> SomeAnnotation {
-    <span class="predefined-type">String</span> value() <span class="keyword">default</span> <span class="string"><span class="delimiter">'</span><span class="content">something</span><span class="delimiter">'</span></span>      <i class="conum" data-value="2"></i><b>(2)</b>
+@interface SomeAnnotation {
+    String value() default 'something'      <i class="conum" data-value="2"></i><b>(2)</b>
 }
-<span class="annotation">@interface</span> SomeAnnotation {
-    <span class="type">int</span> step()                              <i class="conum" data-value="3"></i><b>(3)</b>
+@interface SomeAnnotation {
+    int step()                              <i class="conum" data-value="3"></i><b>(3)</b>
 }
-<span class="annotation">@interface</span> SomeAnnotation {
-    <span class="predefined-type">Class</span> appliesTo()                       <i class="conum" data-value="4"></i><b>(4)</b>
+@interface SomeAnnotation {
+    Class appliesTo()                       <i class="conum" data-value="4"></i><b>(4)</b>
 }
-<span class="annotation">@interface</span> SomeAnnotation {}
-<span class="annotation">@interface</span> SomeAnnotations {
-    SomeAnnotation<span class="type">[]</span> value()                <i class="conum" data-value="5"></i><b>(5)</b>
+@interface SomeAnnotation {}
+@interface SomeAnnotations {
+    SomeAnnotation[] value()                <i class="conum" data-value="5"></i><b>(5)</b>
 }
-<span class="type">enum</span> DayOfWeek { mon, tue, wed, thu, fri, sat, sun }
-<span class="annotation">@interface</span> Scheduled {
+enum DayOfWeek { mon, tue, wed, thu, fri, sat, sun }
+@interface Scheduled {
     DayOfWeek dayOfWeek()                   <i class="conum" data-value="6"></i><b>(6)</b>
 }</code></pre>
 </div>
@@ -1834,15 +1743,15 @@ p.groovy = <span class="predefined-constant">true</span>                     <i 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@SomeAnnotation</span>                 <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="type">void</span> someMethod() {
-    <span class="comment">// ...</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@SomeAnnotation                 <i class="conum" data-value="1"></i><b>(1)</b>
+void someMethod() {
+    // ...
 }
 
-<span class="annotation">@SomeAnnotation</span>                 <i class="conum" data-value="2"></i><b>(2)</b>
-<span class="type">class</span> <span class="class">SomeClass</span> {}
+@SomeAnnotation                 <i class="conum" data-value="2"></i><b>(2)</b>
+class SomeClass {}
 
-<span class="annotation">@SomeAnnotation</span> <span class="predefined-type">String</span> var      <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+@SomeAnnotation String var      <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1866,11 +1775,11 @@ p.groovy = <span class="predefined-constant">true</span>                     <i 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">java.lang.annotation.ElementType</span>
-<span class="keyword">import</span> <span class="include">java.lang.annotation.Target</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import java.lang.annotation.ElementType
+import java.lang.annotation.Target
 
-<span class="annotation">@Target</span>([<span class="predefined-type">ElementType</span>.METHOD, <span class="predefined-type">ElementType</span>.TYPE])     <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="annotation">@interface</span> SomeAnnotation {}                        <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+@Target([ElementType.METHOD, ElementType.TYPE])     <i class="conum" data-value="1"></i><b>(1)</b>
+@interface SomeAnnotation {}                        <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1899,13 +1808,13 @@ p.groovy = <span class="predefined-constant">true</span>                     <i 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@interface</span> Page {
-    <span class="type">int</span> statusCode()
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@interface Page {
+    int statusCode()
 }
 
-<span class="annotation">@Page</span>(statusCode=<span class="integer">404</span>)
-<span class="type">void</span> notFound() {
-    <span class="comment">// ...</span>
+@Page(statusCode=404)
+void notFound() {
+    // ...
 }</code></pre>
 </div>
 </div>
@@ -1914,24 +1823,24 @@ p.groovy = <span class="predefined-constant">true</span>                     <i 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@interface</span> Page {
-    <span class="predefined-type">String</span> value()
-    <span class="type">int</span> statusCode() <span class="keyword">default</span> <span class="integer">200</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@interface Page {
+    String value()
+    int statusCode() default 200
 }
 
-<span class="annotation">@Page</span>(value=<span class="string"><span class="delimiter">'</span><span class="content">/home</span><span class="delimiter">'</span></span>)                    <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="type">void</span> home() {
-    <span class="comment">// ...</span>
+@Page(value='/home')                    <i class="conum" data-value="1"></i><b>(1)</b>
+void home() {
+    // ...
 }
 
-<span class="annotation">@Page</span>(<span class="string"><span class="delimiter">'</span><span class="content">/users</span><span class="delimiter">'</span></span>)                         <i class="conum" data-value="2"></i><b>(2)</b>
-<span class="type">void</span> userList() {
-    <span class="comment">// ...</span>
+@Page('/users')                         <i class="conum" data-value="2"></i><b>(2)</b>
+void userList() {
+    // ...
 }
 
-<span class="annotation">@Page</span>(value=<span class="string"><span class="delimiter">'</span><span class="content">error</span><span class="delimiter">'</span></span>,statusCode=<span class="integer">404</span>)     <i class="conum" data-value="3"></i><b>(3)</b>
-<span class="type">void</span> notFound() {
-    <span class="comment">// ...</span>
+@Page(value='error',statusCode=404)     <i class="conum" data-value="3"></i><b>(3)</b>
+void notFound() {
+    // ...
 }</code></pre>
 </div>
 </div>
@@ -1959,11 +1868,11 @@ p.groovy = <span class="predefined-constant">true</span>                     <i 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">java.lang.annotation.Retention</span>
-<span class="keyword">import</span> <span class="include">java.lang.annotation.RetentionPolicy</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import java.lang.annotation.Retention
+import java.lang.annotation.RetentionPolicy
 
-<span class="annotation">@Retention</span>(<span class="predefined-type">RetentionPolicy</span>.SOURCE)                   <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="annotation">@interface</span> SomeAnnotation {}                         <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+@Retention(RetentionPolicy.SOURCE)                   <i class="conum" data-value="1"></i><b>(1)</b>
+@interface SomeAnnotation {}                         <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1989,18 +1898,18 @@ p.groovy = <span class="predefined-constant">true</span>                     <i 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Tasks</span> {
-    <span class="predefined-type">Set</span> result = <span class="type">[]</span>
-    <span class="type">void</span> alwaysExecuted() {
-        result &lt;&lt; <span class="integer">1</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Tasks {
+    Set result = []
+    void alwaysExecuted() {
+        result &lt;&lt; 1
     }
-    <span class="annotation">@OnlyIf</span>({ jdk&gt;=<span class="integer">6</span> })
-    <span class="type">void</span> supportedOnlyInJDK6() {
-        result &lt;&lt; <span class="string"><span class="delimiter">'</span><span class="content">JDK 6</span><span class="delimiter">'</span></span>
+    @OnlyIf({ jdk&gt;=6 })
+    void supportedOnlyInJDK6() {
+        result &lt;&lt; 'JDK 6'
     }
-    <span class="annotation">@OnlyIf</span>({ jdk&gt;=<span class="integer">7</span> &amp;&amp; windows })
-    <span class="type">void</span> requiresJDK7AndWindows() {
-        result &lt;&lt; <span class="string"><span class="delimiter">'</span><span class="content">JDK 7 Windows</span><span class="delimiter">'</span></span>
+    @OnlyIf({ jdk&gt;=7 &amp;&amp; windows })
+    void requiresJDK7AndWindows() {
+        result &lt;&lt; 'JDK 7 Windows'
     }
 }</code></pre>
 </div>
@@ -2010,9 +1919,9 @@ p.groovy = <span class="predefined-constant">true</span>                     <i 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@Retention</span>(<span class="predefined-type">RetentionPolicy</span>.RUNTIME)
-<span class="annotation">@interface</span> OnlyIf {
-    <span class="predefined-type">Class</span> value()                    <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Retention(RetentionPolicy.RUNTIME)
+@interface OnlyIf {
+    Class value()                    <i class="conum" data-value="1"></i><b>(1)</b>
 }</code></pre>
 </div>
 </div>
@@ -2021,20 +1930,20 @@ p.groovy = <span class="predefined-constant">true</span>                     <i 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Runner</span> {
-    <span class="directive">static</span> &lt;T&gt; T run(<span class="predefined-type">Class</span>&lt;T&gt; taskClass) {
-        <span class="keyword">def</span> tasks = taskClass.newInstance()                                         <i class="conum" data-value="1"></i><b>(1)</b>
-        <span class="keyword">def</span> params = [<span class="key">jdk</span>:<span class="integer">6</span>, <span class="key">windows</span>: <span class="predefined-constant">false</span>]                                        <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Runner {
+    static &lt;T&gt; T run(Class&lt;T&gt; taskClass) {
+        def tasks = taskClass.newInstance()                                         <i class="conum" data-value="1"></i><b>(1)</b>
+        def params = [jdk:6, windows: false]                                        <i class="conum" data-value="2"></i><b>(2)</b>
         tasks.class.declaredMethods.each { m -&gt;                                     <i class="conum" data-value="3"></i><b>(3)</b>
-            <span class="keyword">if</span> (<span class="predefined-type">Modifier</span>.isPublic(m.modifiers) &amp;&amp; m.parameterTypes.length == <span class="integer">0</span>) {   <i class="conum" data-value="4"></i><b>(4)</b>
-                <span class="keyword">def</span> onlyIf = m.getAnnotation(OnlyIf)                                <i class="conum" data-value="5"></i><b>(5)</b>
-                <span class="keyword">if</span> (onlyIf) {
+            if (Modifier.isPublic(m.modifiers) &amp;&amp; m.parameterTypes.length == 0) {   <i class="conum" data-value="4"></i><b>(4)</b>
+                def onlyIf = m.getAnnotation(OnlyIf)                                <i class="conum" data-value="5"></i><b>(5)</b>
+                if (onlyIf) {
                     Closure cl = onlyIf.value().newInstance(tasks,tasks)            <i class="conum" data-value="6"></i><b>(6)</b>
                     cl.delegate = params                                            <i class="conum" data-value="7"></i><b>(7)</b>
-                    <span class="keyword">if</span> (cl()) {                                                     <i class="conum" data-value="8"></i><b>(8)</b>
+                    if (cl()) {                                                     <i class="conum" data-value="8"></i><b>(8)</b>
                         m.invoke(tasks)                                             <i class="conum" data-value="9"></i><b>(9)</b>
                     }
-                } <span class="keyword">else</span> {
+                } else {
                     m.invoke(tasks)                                                 <i class="conum" data-value="10"></i><b>(10)</b>
                 }
             }
@@ -2097,8 +2006,8 @@ p.groovy = <span class="predefined-constant">true</span>                     <i 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> tasks = Runner.run(Tasks)
-<span class="keyword">assert</span> tasks.result == [<span class="integer">1</span>, <span class="string"><span class="delimiter">'</span><span class="content">JDK 6</span><span class="delimiter">'</span></span>] <span class="keyword">as</span> <span class="predefined-type">Set</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def tasks = Runner.run(Tasks)
+assert tasks.result == [1, 'JDK 6'] as Set</code></pre>
 </div>
 </div>
 </div>
@@ -2114,9 +2023,9 @@ p.groovy = <span class="predefined-constant">true</span>                     <i 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@Service</span>
-<span class="annotation">@Transactional</span>
-<span class="type">class</span> <span class="class">MyTransactionalService</span> {}</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Service
+@Transactional
+class MyTransactionalService {}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2124,8 +2033,8 @@ p.groovy = <span class="predefined-constant">true</span>                     <i 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@TransactionalService</span>                           <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="type">class</span> <span class="class">MyTransactionalService</span> {}</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@TransactionalService                           <i class="conum" data-value="1"></i><b>(1)</b>
+class MyTransactionalService {}</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -2141,10 +2050,10 @@ p.groovy = <span class="predefined-constant">true</span>                     <i 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@Service</span>                                        <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="annotation">@Transactional</span>                                  <i class="conum" data-value="2"></i><b>(2)</b>
-<span class="annotation">@AnnotationCollector</span>                            <i class="conum" data-value="3"></i><b>(3)</b>
-<span class="annotation">@interface</span> TransactionalService {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Service                                        <i class="conum" data-value="1"></i><b>(1)</b>
+@Transactional                                  <i class="conum" data-value="2"></i><b>(2)</b>
+@AnnotationCollector                            <i class="conum" data-value="3"></i><b>(3)</b>
+@interface TransactionalService {
 }</code></pre>
 </div>
 </div>
@@ -2187,9 +2096,9 @@ p.groovy = <span class="predefined-constant">true</span>                     <i 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> annotations = MyTransactionalService.annotations*.annotationType()
-<span class="keyword">assert</span> (Service <span class="keyword">in</span> annotations)
-<span class="keyword">assert</span> (Transactional <span class="keyword">in</span> annotations)</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def annotations = MyTransactionalService.annotations*.annotationType()
+assert (Service in annotations)
+assert (Transactional in annotations)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2206,8 +2115,8 @@ p.groovy = <span class="predefined-constant">true</span>                     <i 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@Timeout</span>(after=<span class="integer">3600</span>)
-<span class="annotation">@Dangerous</span>(type=<span class="string"><span class="delimiter">'</span><span class="content">explosive</span><span class="delimiter">'</span></span>)</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Timeout(after=3600)
+@Dangerous(type='explosive')</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2215,10 +2124,10 @@ p.groovy = <span class="predefined-constant">true</span>                     <i 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@Timeout</span>(after=<span class="integer">3600</span>)
-<span class="annotation">@Dangerous</span>(type=<span class="string"><span class="delimiter">'</span><span class="content">explosive</span><span class="delimiter">'</span></span>)
-<span class="annotation">@AnnotationCollector</span>
-<span class="directive">public</span> <span class="annotation">@interface</span> Explosive {}</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Timeout(after=3600)
+@Dangerous(type='explosive')
+@AnnotationCollector
+public @interface Explosive {}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2226,8 +2135,8 @@ p.groovy = <span class="predefined-constant">true</span>                     <i 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@Explosive</span>(after=<span class="integer">0</span>)                 <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="type">class</span> <span class="class">Bomb</span> {}</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Explosive(after=0)                 <i class="conum" data-value="1"></i><b>(1)</b>
+class Bomb {}</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -2243,31 +2152,31 @@ p.groovy = <span class="predefined-constant">true</span>                     <i 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@Retention</span>(<span class="predefined-type">RetentionPolicy</span>.RUNTIME)
-<span class="directive">public</span> <span class="annotation">@interface</span> Foo {
-   <span class="predefined-type">String</span> value()                                   <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Retention(RetentionPolicy.RUNTIME)
+public @interface Foo {
+   String value()                                   <i class="conum" data-value="1"></i><b>(1)</b>
 }
-<span class="annotation">@Retention</span>(<span class="predefined-type">RetentionPolicy</span>.RUNTIME)
-<span class="directive">public</span> <span class="annotation">@interface</span> Bar {
-    <span class="predefined-type">String</span> value()                                  <i class="conum" data-value="2"></i><b>(2)</b>
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Bar {
+    String value()                                  <i class="conum" data-value="2"></i><b>(2)</b>
 }
 
-<span class="annotation">@Foo</span>
-<span class="annotation">@Bar</span>
-<span class="annotation">@AnnotationCollector</span>
-<span class="directive">public</span> <span class="annotation">@interface</span> FooBar {}                         <i class="conum" data-value="3"></i><b>(3)</b>
+@Foo
+@Bar
+@AnnotationCollector
+public @interface FooBar {}                         <i class="conum" data-value="3"></i><b>(3)</b>
 
-<span class="annotation">@Foo</span>(<span class="string"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>)
-<span class="annotation">@Bar</span>(<span class="string"><span class="delimiter">'</span><span class="content">b</span><span class="delimiter">'</span></span>)
-<span class="type">class</span> <span class="class">Bob</span> {}                                        <i class="conum" data-value="4"></i><b>(4)</b>
+@Foo('a')
+@Bar('b')
+class Bob {}                                        <i class="conum" data-value="4"></i><b>(4)</b>
 
-<span class="keyword">assert</span> Bob.getAnnotation(Foo).value() == <span class="string"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>        <i class="conum" data-value="5"></i><b>(5)</b>
-println Bob.getAnnotation(Bar).value() == <span class="string"><span class="delimiter">'</span><span class="content">b</span><span class="delimiter">'</span></span>       <i class="conum" data-value="6"></i><b>(6)</b>
+assert Bob.getAnnotation(Foo).value() == 'a'        <i class="conum" data-value="5"></i><b>(5)</b>
+println Bob.getAnnotation(Bar).value() == 'b'       <i class="conum" data-value="6"></i><b>(6)</b>
 
-<span class="annotation">@FooBar</span>(<span class="string"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>)
-<span class="type">class</span> <span class="class">Joe</span> {}                                        <i class="conum" data-value="7"></i><b>(7)</b>
-<span class="keyword">assert</span> Joe.getAnnotation(Foo).value() == <span class="string"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>        <i class="conum" data-value="8"></i><b>(8)</b>
-println Joe.getAnnotation(Bar).value() == <span class="string"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>       <i class="conum" data-value="9"></i><b>(9)</b></code></pre>
+@FooBar('a')
+class Joe {}                                        <i class="conum" data-value="7"></i><b>(7)</b>
+assert Joe.getAnnotation(Foo).value() == 'a'        <i class="conum" data-value="8"></i><b>(8)</b>
+println Joe.getAnnotation(Bar).value() == 'a'       <i class="conum" data-value="9"></i><b>(9)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -2399,9 +2308,9 @@ println Joe.getAnnotation(Bar).value() == <span class="string"><span class="deli
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@CompileStatic</span>(TypeCheckingMode.SKIP)
-<span class="annotation">@AnnotationCollector</span>
-<span class="directive">public</span> <span class="annotation">@interface</span> CompileDynamic {}</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@CompileStatic(TypeCheckingMode.SKIP)
+@AnnotationCollector
+public @interface CompileDynamic {}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2409,8 +2318,8 @@ println Joe.getAnnotation(Bar).value() == <span class="string"><span class="deli
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@AnnotationCollector</span>(processor = <span class="string"><span class="delimiter">&quot;</span><span class="content">org.codehaus.groovy.transform.CompileDynamicProcessor</span><span class="delimiter">&quot;</span></span>)
-<span class="directive">public</span> <span class="annotation">@interface</span> CompileDynamic {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@AnnotationCollector(processor = "org.codehaus.groovy.transform.CompileDynamicProcessor")
+public @interface CompileDynamic {
 }</code></pre>
 </div>
 </div>
@@ -2423,20 +2332,20 @@ println Joe.getAnnotation(Bar).value() == <span class="string"><span class="deli
 <div class="listingblock">
 <div class="title">CompileDynamicProcessor.groovy</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@CompileStatic</span>                                                                  <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="type">class</span> <span class="class">CompileDynamicProcessor</span> <span class="directive">extends</span> AnnotationCollectorTransform {            <i class="conum" data-value="2"></i><b>(2)</b>
-    <span class="directive">private</span> <span class="directive">static</span> <span class="directive">final</span> ClassNode CS_NODE = ClassHelper.make(CompileStatic)    <i class="conum" data-value="3"></i><b>(3)</b>
-    <span class="directive">private</span> <span class="directive">static</span> <span class="directive">final</span> ClassNode TC_NODE = ClassHelper.make(TypeCheckingMode) <i class="conum" data-value="4"></i><b>(4)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@CompileStatic                                                                  <i class="conum" data-value="1"></i><b>(1)</b>
+class CompileDynamicProcessor extends AnnotationCollectorTransform {            <i class="conum" data-value="2"></i><b>(2)</b>
+    private static final ClassNode CS_NODE = ClassHelper.make(CompileStatic)    <i class="conum" data-value="3"></i><b>(3)</b>
+    private static final ClassNode TC_NODE = ClassHelper.make(TypeCheckingMode) <i class="conum" data-value="4"></i><b>(4)</b>
 
-    <span class="predefined-type">List</span>&lt;AnnotationNode&gt; visit(AnnotationNode collector,                        <i class="conum" data-value="5"></i><b>(5)</b>
+    List&lt;AnnotationNode&gt; visit(AnnotationNode collector,                        <i class="conum" data-value="5"></i><b>(5)</b>
                                AnnotationNode aliasAnnotationUsage,             <i class="conum" data-value="6"></i><b>(6)</b>
                                AnnotatedNode aliasAnnotated,                    <i class="conum" data-value="7"></i><b>(7)</b>
                                SourceUnit source) {                             <i class="conum" data-value="8"></i><b>(8)</b>
-        <span class="keyword">def</span> node = <span class="keyword">new</span> AnnotationNode(CS_NODE)                                  <i class="conum" data-value="9"></i><b>(9)</b>
-        <span class="keyword">def</span> enumRef = <span class="keyword">new</span> PropertyExpression(
-            <span class="keyword">new</span> ClassExpression(TC_NODE), <span class="string"><span class="delimiter">&quot;</span><span class="content">SKIP</span><span class="delimiter">&quot;</span></span>)                               <i class="conum" data-value="10"></i><b>(10)</b>
-        node.addMember(<span class="string"><span class="delimiter">&quot;</span><span class="content">value</span><span class="delimiter">&quot;</span></span>, enumRef)                                        <i class="conum" data-value="11"></i><b>(11)</b>
-        <span class="predefined-type">Collections</span>.singletonList(node)                                         <i class="conum" data-value="12"></i><b>(12)</b>
+        def node = new AnnotationNode(CS_NODE)                                  <i class="conum" data-value="9"></i><b>(9)</b>
+        def enumRef = new PropertyExpression(
+            new ClassExpression(TC_NODE), "SKIP")                               <i class="conum" data-value="10"></i><b>(10)</b>
+        node.addMember("value", enumRef)                                        <i class="conum" data-value="11"></i><b>(11)</b>
+        Collections.singletonList(node)                                         <i class="conum" data-value="12"></i><b>(12)</b>
     }
 }</code></pre>
 </div>
@@ -2540,8 +2449,8 @@ println Joe.getAnnotation(Bar).value() == <span class="string"><span class="deli
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait FlyingAbility {                          <i class="conum" data-value="1"></i><b>(1)</b>
-        <span class="predefined-type">String</span> fly() { <span class="string"><span class="delimiter">&quot;</span><span class="content">I'm flying!</span><span class="delimiter">&quot;</span></span> }         <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait FlyingAbility {                          <i class="conum" data-value="1"></i><b>(1)</b>
+        String fly() { "I'm flying!" }         <i class="conum" data-value="2"></i><b>(2)</b>
 }</code></pre>
 </div>
 </div>
@@ -2562,9 +2471,9 @@ println Joe.getAnnotation(Bar).value() == <span class="string"><span class="deli
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Bird</span> <span class="directive">implements</span> FlyingAbility {}          <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="keyword">def</span> b = <span class="keyword">new</span> Bird()                              <i class="conum" data-value="2"></i><b>(2)</b>
-<span class="keyword">assert</span> b.fly() == <span class="string"><span class="delimiter">&quot;</span><span class="content">I'm flying!</span><span class="delimiter">&quot;</span></span>                 <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Bird implements FlyingAbility {}          <i class="conum" data-value="1"></i><b>(1)</b>
+def b = new Bird()                              <i class="conum" data-value="2"></i><b>(2)</b>
+assert b.fly() == "I'm flying!"                 <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -2595,8 +2504,8 @@ println Joe.getAnnotation(Bar).value() == <span class="string"><span class="deli
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait FlyingAbility {                          <i class="conum" data-value="1"></i><b>(1)</b>
-        <span class="predefined-type">String</span> fly() { <span class="string"><span class="delimiter">&quot;</span><span class="content">I'm flying!</span><span class="delimiter">&quot;</span></span> }         <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait FlyingAbility {                          <i class="conum" data-value="1"></i><b>(1)</b>
+        String fly() { "I'm flying!" }         <i class="conum" data-value="2"></i><b>(2)</b>
 }</code></pre>
 </div>
 </div>
@@ -2620,9 +2529,9 @@ println Joe.getAnnotation(Bar).value() == <span class="string"><span class="deli
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait Greetable {
-    <span class="directive">abstract</span> <span class="predefined-type">String</span> name()                              <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="predefined-type">String</span> greeting() { <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello, </span><span class="inline"><span class="inline-delimiter">${</span>name()<span class="inline-delimiter">}</span></span><span class="content">!</span><span class="delimiter">&quot;</span></span> }           <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait Greetable {
+    abstract String name()                              <i class="conum" data-value="1"></i><b>(1)</b>
+    String greeting() { "Hello, ${name()}!" }           <i class="conum" data-value="2"></i><b>(2)</b>
 }</code></pre>
 </div>
 </div>
@@ -2643,12 +2552,12 @@ println Joe.getAnnotation(Bar).value() == <span class="string"><span class="deli
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Person</span> <span class="directive">implements</span> Greetable {                     <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="predefined-type">String</span> name() { <span class="string"><span class="delimiter">'</span><span class="content">Bob</span><span class="delimiter">'</span></span> }                             <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Person implements Greetable {                     <i class="conum" data-value="1"></i><b>(1)</b>
+    String name() { 'Bob' }                             <i class="conum" data-value="2"></i><b>(2)</b>
 }
 
-<span class="keyword">def</span> p = <span class="keyword">new</span> Person()
-<span class="keyword">assert</span> p.greeting() == <span class="string"><span class="delimiter">'</span><span class="content">Hello, Bob!</span><span class="delimiter">'</span></span>                    <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+def p = new Person()
+assert p.greeting() == 'Hello, Bob!'                    <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -2675,23 +2584,23 @@ println Joe.getAnnotation(Bar).value() == <span class="string"><span class="deli
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait Greeter {
-    <span class="directive">private</span> <span class="predefined-type">String</span> greetingMessage() {                      <i class="conum" data-value="1"></i><b>(1)</b>
-        <span class="string"><span class="delimiter">'</span><span class="content">Hello from a private method!</span><span class="delimiter">'</span></span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait Greeter {
+    private String greetingMessage() {                      <i class="conum" data-value="1"></i><b>(1)</b>
+        'Hello from a private method!'
     }
-    <span class="predefined-type">String</span> greet() {
-        <span class="keyword">def</span> m = greetingMessage()                           <i class="conum" data-value="2"></i><b>(2)</b>
+    String greet() {
+        def m = greetingMessage()                           <i class="conum" data-value="2"></i><b>(2)</b>
         println m
         m
     }
 }
-<span class="type">class</span> <span class="class">GreetingMachine</span> <span class="directive">implements</span> Greeter {}                 <i class="conum" data-value="3"></i><b>(3)</b>
-<span class="keyword">def</span> g = <span class="keyword">new</span> GreetingMachine()
-<span class="keyword">assert</span> g.greet() == <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello from a private method!</span><span class="delimiter">&quot;</span></span>          <i class="conum" data-value="4"></i><b>(4)</b>
-<span class="keyword">try</span> {
-    <span class="keyword">assert</span> g.greetingMessage()                              <i class="conum" data-value="5"></i><b>(5)</b>
-} <span class="keyword">catch</span> (MissingMethodException e) {
-    println <span class="string"><span class="delimiter">&quot;</span><span class="content">greetingMessage is private in trait</span><span class="delimiter">&quot;</span></span>
+class GreetingMachine implements Greeter {}                 <i class="conum" data-value="3"></i><b>(3)</b>
+def g = new GreetingMachine()
+assert g.greet() == "Hello from a private method!"          <i class="conum" data-value="4"></i><b>(4)</b>
+try {
+    assert g.greetingMessage()                              <i class="conum" data-value="5"></i><b>(5)</b>
+} catch (MissingMethodException e) {
+    println "greetingMessage is private in trait"
 }</code></pre>
 </div>
 </div>
@@ -2734,11 +2643,11 @@ println Joe.getAnnotation(Bar).value() == <span class="string"><span class="deli
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait <span class="predefined-type">Introspector</span> {
-    <span class="keyword">def</span> <span class="function">whoAmI</span>() { <span class="local-variable">this</span> }
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait Introspector {
+    def whoAmI() { this }
 }
-<span class="type">class</span> <span class="class">Foo</span> <span class="directive">implements</span> <span class="predefined-type">Introspector</span> {}
-<span class="keyword">def</span> foo = <span class="keyword">new</span> Foo()</code></pre>
+class Foo implements Introspector {}
+def foo = new Foo()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2746,7 +2655,7 @@ println Joe.getAnnotation(Bar).value() == <span class="string"><span class="deli
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">foo.whoAmI()</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">foo.whoAmI()</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2754,7 +2663,7 @@ println Joe.getAnnotation(Bar).value() == <span class="string"><span class="deli
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> foo.whoAmI().is(foo)</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">assert foo.whoAmI().is(foo)</code></pre>
 </div>
 </div>
 </div>
@@ -2765,20 +2674,20 @@ println Joe.getAnnotation(Bar).value() == <span class="string"><span class="deli
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">interface</span> Named {                                       <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="predefined-type">String</span> name()
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">interface Named {                                       <i class="conum" data-value="1"></i><b>(1)</b>
+    String name()
 }
-trait Greetable <span class="directive">implements</span> Named {                      <i class="conum" data-value="2"></i><b>(2)</b>
-    <span class="predefined-type">String</span> greeting() { <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello, </span><span class="inline"><span class="inline-delimiter">${</span>name()<span class="inline-delimiter">}</span></span><span class="content">!</span><span class="delimiter">&quot;</span></span> }
+trait Greetable implements Named {                      <i class="conum" data-value="2"></i><b>(2)</b>
+    String greeting() { "Hello, ${name()}!" }
 }
-<span class="type">class</span> <span class="class">Person</span> <span class="directive">implements</span> Greetable {                     <i class="conum" data-value="3"></i><b>(3)</b>
-    <span class="predefined-type">String</span> name() { <span class="string"><span class="delimiter">'</span><span class="content">Bob</span><span class="delimiter">'</span></span> }                             <i class="conum" data-value="4"></i><b>(4)</b>
+class Person implements Greetable {                     <i class="conum" data-value="3"></i><b>(3)</b>
+    String name() { 'Bob' }                             <i class="conum" data-value="4"></i><b>(4)</b>
 }
 
-<span class="keyword">def</span> p = <span class="keyword">new</span> Person()
-<span class="keyword">assert</span> p.greeting() == <span class="string"><span class="delimiter">'</span><span class="content">Hello, Bob!</span><span class="delimiter">'</span></span>                    <i class="conum" data-value="5"></i><b>(5)</b>
-<span class="keyword">assert</span> p <span class="keyword">instanceof</span> Named                               <i class="conum" data-value="6"></i><b>(6)</b>
-<span class="keyword">assert</span> p <span class="keyword">instanceof</span> Greetable                           <i class="conum" data-value="7"></i><b>(7)</b></code></pre>
+def p = new Person()
+assert p.greeting() == 'Hello, Bob!'                    <i class="conum" data-value="5"></i><b>(5)</b>
+assert p instanceof Named                               <i class="conum" data-value="6"></i><b>(6)</b>
+assert p instanceof Greetable                           <i class="conum" data-value="7"></i><b>(7)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -2821,13 +2730,13 @@ trait Greetable <span class="directive">implements</span> Named {               
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait Named {
-    <span class="predefined-type">String</span> name                             <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait Named {
+    String name                             <i class="conum" data-value="1"></i><b>(1)</b>
 }
-<span class="type">class</span> <span class="class">Person</span> <span class="directive">implements</span> Named {}            <i class="conum" data-value="2"></i><b>(2)</b>
-<span class="keyword">def</span> p = <span class="keyword">new</span> Person(<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">Bob</span><span class="delimiter">'</span></span>)             <i class="conum" data-value="3"></i><b>(3)</b>
-<span class="keyword">assert</span> p.name == <span class="string"><span class="delimiter">'</span><span class="content">Bob</span><span class="delimiter">'</span></span>                      <i class="conum" data-value="4"></i><b>(4)</b>
-<span class="keyword">assert</span> p.getName() == <span class="string"><span class="delimiter">'</span><span class="content">Bob</span><span class="delimiter">'</span></span>                 <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+class Person implements Named {}            <i class="conum" data-value="2"></i><b>(2)</b>
+def p = new Person(name: 'Bob')             <i class="conum" data-value="3"></i><b>(3)</b>
+assert p.name == 'Bob'                      <i class="conum" data-value="4"></i><b>(4)</b>
+assert p.getName() == 'Bob'                 <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -2864,14 +2773,14 @@ trait Greetable <span class="directive">implements</span> Named {               
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait Counter {
-    <span class="directive">private</span> <span class="type">int</span> count = <span class="integer">0</span>                   <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="type">int</span> count() { count += <span class="integer">1</span>; count }       <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait Counter {
+    private int count = 0                   <i class="conum" data-value="1"></i><b>(1)</b>
+    int count() { count += 1; count }       <i class="conum" data-value="2"></i><b>(2)</b>
 }
-<span class="type">class</span> <span class="class">Foo</span> <span class="directive">implements</span> Counter {}             <i class="conum" data-value="3"></i><b>(3)</b>
-<span class="keyword">def</span> f = <span class="keyword">new</span> Foo()
-<span class="keyword">assert</span> f.count() == <span class="integer">1</span>                       <i class="conum" data-value="4"></i><b>(4)</b>
-<span class="keyword">assert</span> f.count() == <span class="integer">2</span></code></pre>
+class Foo implements Counter {}             <i class="conum" data-value="3"></i><b>(3)</b>
+def f = new Foo()
+assert f.count() == 1                       <i class="conum" data-value="4"></i><b>(4)</b>
+assert f.count() == 2</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -2905,12 +2814,12 @@ trait Greetable <span class="directive">implements</span> Named {               
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait Named {
-    <span class="directive">public</span> <span class="predefined-type">String</span> name                      <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait Named {
+    public String name                      <i class="conum" data-value="1"></i><b>(1)</b>
 }
-<span class="type">class</span> <span class="class">Person</span> <span class="directive">implements</span> Named {}            <i class="conum" data-value="2"></i><b>(2)</b>
-<span class="keyword">def</span> p = <span class="keyword">new</span> Person()                        <i class="conum" data-value="3"></i><b>(3)</b>
-p.Named__name = <span class="string"><span class="delimiter">'</span><span class="content">Bob</span><span class="delimiter">'</span></span>                       <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+class Person implements Named {}            <i class="conum" data-value="2"></i><b>(2)</b>
+def p = new Person()                        <i class="conum" data-value="3"></i><b>(3)</b>
+p.Named__name = 'Bob'                       <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -2938,7 +2847,7 @@ p.Named__name = <span class="string"><span class="delimiter">'</span><span class
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">String</span> my_package_Foo__bar</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">String my_package_Foo__bar</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2953,11 +2862,11 @@ p.Named__name = <span class="string"><span class="delimiter">'</span><span class
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait FlyingAbility {                          <i class="conum" data-value="1"></i><b>(1)</b>
-        <span class="predefined-type">String</span> fly() { <span class="string"><span class="delimiter">&quot;</span><span class="content">I'm flying!</span><span class="delimiter">&quot;</span></span> }         <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait FlyingAbility {                          <i class="conum" data-value="1"></i><b>(1)</b>
+        String fly() { "I'm flying!" }         <i class="conum" data-value="2"></i><b>(2)</b>
 }
 trait SpeakingAbility {
-    <span class="predefined-type">String</span> speak() { <span class="string"><span class="delimiter">&quot;</span><span class="content">I'm speaking!</span><span class="delimiter">&quot;</span></span> }
+    String speak() { "I'm speaking!" }
 }</code></pre>
 </div>
 </div>
@@ -2966,11 +2875,11 @@ trait SpeakingAbility {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Duck</span> <span class="directive">implements</span> FlyingAbility, SpeakingAbility {} <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Duck implements FlyingAbility, SpeakingAbility {} <i class="conum" data-value="1"></i><b>(1)</b>
 
-<span class="keyword">def</span> d = <span class="keyword">new</span> Duck()                                      <i class="conum" data-value="2"></i><b>(2)</b>
-<span class="keyword">assert</span> d.fly() == <span class="string"><span class="delimiter">&quot;</span><span class="content">I'm flying!</span><span class="delimiter">&quot;</span></span>                         <i class="conum" data-value="3"></i><b>(3)</b>
-<span class="keyword">assert</span> d.speak() == <span class="string"><span class="delimiter">&quot;</span><span class="content">I'm speaking!</span><span class="delimiter">&quot;</span></span>                     <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+def d = new Duck()                                      <i class="conum" data-value="2"></i><b>(2)</b>
+assert d.fly() == "I'm flying!"                         <i class="conum" data-value="3"></i><b>(3)</b>
+assert d.speak() == "I'm speaking!"                     <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -3004,15 +2913,15 @@ trait SpeakingAbility {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Duck</span> <span class="directive">implements</span> FlyingAbility, SpeakingAbility {
-    <span class="predefined-type">String</span> quack() { <span class="string"><span class="delimiter">&quot;</span><span class="content">Quack!</span><span class="delimiter">&quot;</span></span> }                         <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="predefined-type">String</span> speak() { quack() }                          <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Duck implements FlyingAbility, SpeakingAbility {
+    String quack() { "Quack!" }                         <i class="conum" data-value="1"></i><b>(1)</b>
+    String speak() { quack() }                          <i class="conum" data-value="2"></i><b>(2)</b>
 }
 
-<span class="keyword">def</span> d = <span class="keyword">new</span> Duck()
-<span class="keyword">assert</span> d.fly() == <span class="string"><span class="delimiter">&quot;</span><span class="content">I'm flying!</span><span class="delimiter">&quot;</span></span>                         <i class="conum" data-value="3"></i><b>(3)</b>
-<span class="keyword">assert</span> d.quack() == <span class="string"><span class="delimiter">&quot;</span><span class="content">Quack!</span><span class="delimiter">&quot;</span></span>                            <i class="conum" data-value="4"></i><b>(4)</b>
-<span class="keyword">assert</span> d.speak() == <span class="string"><span class="delimiter">&quot;</span><span class="content">Quack!</span><span class="delimiter">&quot;</span></span>                            <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+def d = new Duck()
+assert d.fly() == "I'm flying!"                         <i class="conum" data-value="3"></i><b>(3)</b>
+assert d.quack() == "Quack!"                            <i class="conum" data-value="4"></i><b>(4)</b>
+assert d.speak() == "Quack!"                            <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -3049,15 +2958,15 @@ trait SpeakingAbility {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait Named {
-    <span class="predefined-type">String</span> name                                     <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait Named {
+    String name                                     <i class="conum" data-value="1"></i><b>(1)</b>
 }
-trait Polite <span class="directive">extends</span> Named {                        <i class="conum" data-value="2"></i><b>(2)</b>
-    <span class="predefined-type">String</span> introduce() { <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello, I am </span><span class="inline"><span class="inline-delimiter">$</span>name</span><span class="delimiter">&quot;</span></span> }      <i class="conum" data-value="3"></i><b>(3)</b>
+trait Polite extends Named {                        <i class="conum" data-value="2"></i><b>(2)</b>
+    String introduce() { "Hello, I am $name" }      <i class="conum" data-value="3"></i><b>(3)</b>
 }
-<span class="type">class</span> <span class="class">Person</span> <span class="directive">implements</span> Polite {}
-<span class="keyword">def</span> p = <span class="keyword">new</span> Person(<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">Alice</span><span class="delimiter">'</span></span>)                   <i class="conum" data-value="4"></i><b>(4)</b>
-<span class="keyword">assert</span> p.introduce() == <span class="string"><span class="delimiter">'</span><span class="content">Hello, I am Alice</span><span class="delimiter">'</span></span>         <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+class Person implements Polite {}
+def p = new Person(name: 'Alice')                   <i class="conum" data-value="4"></i><b>(4)</b>
+assert p.introduce() == 'Hello, I am Alice'         <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -3092,13 +3001,13 @@ trait Polite <span class="directive">extends</span> Named {                     
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait WithId {                                      <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="predefined-type">Long</span> id
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait WithId {                                      <i class="conum" data-value="1"></i><b>(1)</b>
+    Long id
 }
 trait WithName {                                    <i class="conum" data-value="2"></i><b>(2)</b>
-    <span class="predefined-type">String</span> name
+    String name
 }
-trait Identified <span class="directive">implements</span> WithId, WithName {}     <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+trait Identified implements WithId, WithName {}     <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -3128,16 +3037,16 @@ trait Identified <span class="directive">implements</span> WithId, WithName {}  
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait SpeakingDuck {
-    <span class="predefined-type">String</span> speak() { quack() }                      <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait SpeakingDuck {
+    String speak() { quack() }                      <i class="conum" data-value="1"></i><b>(1)</b>
 }
-<span class="type">class</span> <span class="class">Duck</span> <span class="directive">implements</span> SpeakingDuck {
-    <span class="predefined-type">String</span> methodMissing(<span class="predefined-type">String</span> name, args) {
-        <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">${</span>name.capitalize()<span class="inline-delimiter">}</span></span><span class="content">!</span><span class="delimiter">&quot;</span></span>                     <i class="conum" data-value="2"></i><b>(2)</b>
+class Duck implements SpeakingDuck {
+    String methodMissing(String name, args) {
+        "${name.capitalize()}!"                     <i class="conum" data-value="2"></i><b>(2)</b>
     }
 }
-<span class="keyword">def</span> d = <span class="keyword">new</span> Duck()
-<span class="keyword">assert</span> d.speak() == <span class="string"><span class="delimiter">'</span><span class="content">Quack!</span><span class="delimiter">'</span></span>                        <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+def d = new Duck()
+assert d.speak() == 'Quack!'                        <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -3164,30 +3073,30 @@ trait Identified <span class="directive">implements</span> WithId, WithName {}  
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait DynamicObject {                               <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="directive">private</span> <span class="predefined-type">Map</span> props = [:]
-    <span class="keyword">def</span> <span class="function">methodMissing</span>(<span class="predefined-type">String</span> name, args) {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait DynamicObject {                               <i class="conum" data-value="1"></i><b>(1)</b>
+    private Map props = [:]
+    def methodMissing(String name, args) {
         name.toUpperCase()
     }
-    <span class="keyword">def</span> <span class="function">propertyMissing</span>(<span class="predefined-type">String</span> prop) {
+    def propertyMissing(String prop) {
         props[prop]
     }
-    <span class="type">void</span> setProperty(<span class="predefined-type">String</span> prop, <span class="predefined-type">Object</span> value) {
+    void setProperty(String prop, Object value) {
         props[prop] = value
     }
 }
 
-<span class="type">class</span> <span class="class">Dynamic</span> <span class="directive">implements</span> DynamicObject {
-    <span class="predefined-type">String</span> existingProperty = <span class="string"><span class="delimiter">'</span><span class="content">ok</span><span class="delimiter">'</span></span>                  <i class="conum" data-value="2"></i><b>(2)</b>
-    <span class="predefined-type">String</span> existingMethod() { <span class="string"><span class="delimiter">'</span><span class="content">ok</span><span class="delimiter">'</span></span> }                <i class="conum" data-value="3"></i><b>(3)</b>
+class Dynamic implements DynamicObject {
+    String existingProperty = 'ok'                  <i class="conum" data-value="2"></i><b>(2)</b>
+    String existingMethod() { 'ok' }                <i class="conum" data-value="3"></i><b>(3)</b>
 }
-<span class="keyword">def</span> d = <span class="keyword">new</span> Dynamic()
-<span class="keyword">assert</span> d.existingProperty == <span class="string"><span class="delimiter">'</span><span class="content">ok</span><span class="delimiter">'</span></span>                   <i class="conum" data-value="4"></i><b>(4)</b>
-<span class="keyword">assert</span> d.foo == <span class="predefined-constant">null</span>                                <i class="conum" data-value="5"></i><b>(5)</b>
-d.foo = <span class="string"><span class="delimiter">'</span><span class="content">bar</span><span class="delimiter">'</span></span>                                       <i class="conum" data-value="6"></i><b>(6)</b>
-<span class="keyword">assert</span> d.foo == <span class="string"><span class="delimiter">'</span><span class="content">bar</span><span class="delimiter">'</span></span>                               <i class="conum" data-value="7"></i><b>(7)</b>
-<span class="keyword">assert</span> d.existingMethod() == <span class="string"><span class="delimiter">'</span><span class="content">ok</span><span class="delimiter">'</span></span>                   <i class="conum" data-value="8"></i><b>(8)</b>
-<span class="keyword">assert</span> d.someMethod() == <span class="string"><span class="delimiter">'</span><span class="content">SOMEMETHOD</span><span class="delimiter">'</span></span>               <i class="conum" data-value="9"></i><b>(9)</b></code></pre>
+def d = new Dynamic()
+assert d.existingProperty == 'ok'                   <i class="conum" data-value="4"></i><b>(4)</b>
+assert d.foo == null                                <i class="conum" data-value="5"></i><b>(5)</b>
+d.foo = 'bar'                                       <i class="conum" data-value="6"></i><b>(6)</b>
+assert d.foo == 'bar'                               <i class="conum" data-value="7"></i><b>(7)</b>
+assert d.existingMethod() == 'ok'                   <i class="conum" data-value="8"></i><b>(8)</b>
+assert d.someMethod() == 'SOMEMETHOD'               <i class="conum" data-value="9"></i><b>(9)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -3241,13 +3150,13 @@ d.foo = <span class="string"><span class="delimiter">'</span><span class="conten
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait A {
-    <span class="predefined-type">String</span> exec() { <span class="string"><span class="delimiter">'</span><span class="content">A</span><span class="delimiter">'</span></span> }               <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait A {
+    String exec() { 'A' }               <i class="conum" data-value="1"></i><b>(1)</b>
 }
 trait B {
-    <span class="predefined-type">String</span> exec() { <span class="string"><span class="delimiter">'</span><span class="content">B</span><span class="delimiter">'</span></span> }               <i class="conum" data-value="2"></i><b>(2)</b>
+    String exec() { 'B' }               <i class="conum" data-value="2"></i><b>(2)</b>
 }
-<span class="type">class</span> <span class="class">C</span> <span class="directive">implements</span> A,B {}               <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+class C implements A,B {}               <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -3271,8 +3180,8 @@ trait B {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> c = <span class="keyword">new</span> C()
-<span class="keyword">assert</span> c.exec() == <span class="string"><span class="delimiter">'</span><span class="content">B</span><span class="delimiter">'</span></span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def c = new C()
+assert c.exec() == 'B'</code></pre>
 </div>
 </div>
 </div>
@@ -3283,11 +3192,11 @@ trait B {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">C</span> <span class="directive">implements</span> A,B {
-    <span class="predefined-type">String</span> exec() { A.super.exec() }    <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class C implements A,B {
+    String exec() { A.super.exec() }    <i class="conum" data-value="1"></i><b>(1)</b>
 }
-<span class="keyword">def</span> c = <span class="keyword">new</span> C()
-<span class="keyword">assert</span> c.exec() == <span class="string"><span class="delimiter">'</span><span class="content">A</span><span class="delimiter">'</span></span>                  <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+def c = new C()
+assert c.exec() == 'A'                  <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -3313,11 +3222,11 @@ trait B {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait Extra {
-    <span class="predefined-type">String</span> extra() { <span class="string"><span class="delimiter">&quot;</span><span class="content">I'm an extra method</span><span class="delimiter">&quot;</span></span> }            <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait Extra {
+    String extra() { "I'm an extra method" }            <i class="conum" data-value="1"></i><b>(1)</b>
 }
-<span class="type">class</span> <span class="class">Something</span> {                                       <i class="conum" data-value="2"></i><b>(2)</b>
-    <span class="predefined-type">String</span> doSomething() { <span class="string"><span class="delimiter">'</span><span class="content">Something</span><span class="delimiter">'</span></span> }                <i class="conum" data-value="3"></i><b>(3)</b>
+class Something {                                       <i class="conum" data-value="2"></i><b>(2)</b>
+    String doSomething() { 'Something' }                <i class="conum" data-value="3"></i><b>(3)</b>
 }</code></pre>
 </div>
 </div>
@@ -3342,7 +3251,7 @@ trait B {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> s = <span class="keyword">new</span> Something()
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def s = new Something()
 s.extra()</code></pre>
 </div>
 </div>
@@ -3351,7 +3260,7 @@ s.extra()</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">def</span> s = <span class="keyword">new</span> Something() <span class="keyword">as</span> Extra                        <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">def s = new Something() as Extra                        <i class="conum" data-value="1"></i><b>(1)</b>
 s.extra()                                               <i class="conum" data-value="2"></i><b>(2)</b>
 s.doSomething()                                         <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
@@ -3383,15 +3292,15 @@ s.doSomething()                                         <i class="conum" data-va
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait A { <span class="type">void</span> methodFromA() {} }
-trait B { <span class="type">void</span> methodFromB() {} }
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait A { void methodFromA() {} }
+trait B { void methodFromB() {} }
 
-<span class="type">class</span> <span class="class">C</span> {}
+class C {}
 
-<span class="keyword">def</span> c = <span class="keyword">new</span> C()
+def c = new C()
 c.methodFromA()                     <i class="conum" data-value="1"></i><b>(1)</b>
 c.methodFromB()                     <i class="conum" data-value="2"></i><b>(2)</b>
-<span class="keyword">def</span> d = c.withTraits A, B           <i class="conum" data-value="3"></i><b>(3)</b>
+def d = c.withTraits A, B           <i class="conum" data-value="3"></i><b>(3)</b>
 d.methodFromA()                     <i class="conum" data-value="4"></i><b>(4)</b>
 d.methodFromB()                     <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
 </div>
@@ -3432,8 +3341,8 @@ d.methodFromB()                     <i class="conum" data-value="5"></i><b>(5)</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">interface</span> MessageHandler {
-    <span class="type">void</span> on(<span class="predefined-type">String</span> message, <span class="predefined-type">Map</span> payload)
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">interface MessageHandler {
+    void on(String message, Map payload)
 }</code></pre>
 </div>
 </div>
@@ -3442,9 +3351,9 @@ d.methodFromB()                     <i class="conum" data-value="5"></i><b>(5)</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait DefaultHandler <span class="directive">implements</span> MessageHandler {
-    <span class="type">void</span> on(<span class="predefined-type">String</span> message, <span class="predefined-type">Map</span> payload) {
-        println <span class="string"><span class="delimiter">&quot;</span><span class="content">Received </span><span class="inline"><span class="inline-delimiter">$</span>message</span><span class="content"> with payload </span><span class="inline"><span class="inline-delimiter">$</span>payload</span><span class="delimiter">&quot;</span></span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait DefaultHandler implements MessageHandler {
+    void on(String message, Map payload) {
+        println "Received $message with payload $payload"
     }
 }</code></pre>
 </div>
@@ -3454,7 +3363,7 @@ d.methodFromB()                     <i class="conum" data-value="5"></i><b>(5)</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">SimpleHandler</span> <span class="directive">implements</span> DefaultHandler {}</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class SimpleHandler implements DefaultHandler {}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3462,9 +3371,9 @@ d.methodFromB()                     <i class="conum" data-value="5"></i><b>(5)</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">SimpleHandlerWithLogging</span> <span class="directive">implements</span> DefaultHandler {
-    <span class="type">void</span> on(<span class="predefined-type">String</span> message, <span class="predefined-type">Map</span> payload) {                                  <i class="conum" data-value="1"></i><b>(1)</b>
-        println <span class="string"><span class="delimiter">&quot;</span><span class="content">Seeing </span><span class="inline"><span class="inline-delimiter">$</span>message</span><span class="content"> with payload </span><span class="inline"><span class="inline-delimiter">$</span>payload</span><span class="delimiter">&quot;</span></span>                     <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class SimpleHandlerWithLogging implements DefaultHandler {
+    void on(String message, Map payload) {                                  <i class="conum" data-value="1"></i><b>(1)</b>
+        println "Seeing $message with payload $payload"                     <i class="conum" data-value="2"></i><b>(2)</b>
         DefaultHandler.super.on(message, payload)                           <i class="conum" data-value="3"></i><b>(3)</b>
     }
 }</code></pre>
@@ -3504,10 +3413,10 @@ d.methodFromB()                     <i class="conum" data-value="5"></i><b>(5)</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait LoggingHandler <span class="directive">implements</span> MessageHandler {                       <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="type">void</span> on(<span class="predefined-type">String</span> message, <span class="predefined-type">Map</span> payload) {
-        println <span class="string"><span class="delimiter">&quot;</span><span class="content">Seeing </span><span class="inline"><span class="inline-delimiter">$</span>message</span><span class="content"> with payload </span><span class="inline"><span class="inline-delimiter">$</span>payload</span><span class="delimiter">&quot;</span></span>                <i class="conum" data-value="2"></i><b>(2)</b>
-        <span class="local-variable">super</span>.on(message, payload)                                     <i class="conum" data-value="3"></i><b>(3)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait LoggingHandler implements MessageHandler {                       <i class="conum" data-value="1"></i><b>(1)</b>
+    void on(String message, Map payload) {
+        println "Seeing $message with payload $payload"                <i class="conum" data-value="2"></i><b>(2)</b>
+        super.on(message, payload)                                     <i class="conum" data-value="3"></i><b>(3)</b>
     }
 }</code></pre>
 </div>
@@ -3533,9 +3442,9 @@ d.methodFromB()                     <i class="conum" data-value="5"></i><b>(5)</
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">HandlerWithLogger</span> <span class="directive">implements</span> DefaultHandler, LoggingHandler {}
-<span class="keyword">def</span> loggingHandler = <span class="keyword">new</span> HandlerWithLogger()
-loggingHandler.on(<span class="string"><span class="delimiter">'</span><span class="content">test logging</span><span class="delimiter">'</span></span>, [:])</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class HandlerWithLogger implements DefaultHandler, LoggingHandler {}
+def loggingHandler = new HandlerWithLogger()
+loggingHandler.on('test logging', [:])</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3543,7 +3452,7 @@ loggingHandler.on(<span class="string"><span class="delimiter">'</span><span cla
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">Seeing test logging with payload [:]
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Seeing test logging with payload [:]
 Received test logging with payload [:]</code></pre>
 </div>
 </div>
@@ -3555,12 +3464,12 @@ Received test logging with payload [:]</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait SayHandler <span class="directive">implements</span> MessageHandler {
-    <span class="type">void</span> on(<span class="predefined-type">String</span> message, <span class="predefined-type">Map</span> payload) {
-        <span class="keyword">if</span> (message.startsWith(<span class="string"><span class="delimiter">&quot;</span><span class="content">say</span><span class="delimiter">&quot;</span></span>)) {                      <i class="conum" data-value="1"></i><b>(1)</b>
-            println <span class="string"><span class="delimiter">&quot;</span><span class="content">I say </span><span class="inline"><span class="inline-delimiter">${</span>message - <span class="string"><span class="delimiter">'</span><span class="content">say</span><span class="delimiter">'</span></span><span class="inline-delimiter">}</span></span><span class="content">!</span><span class="delimiter">&quot;</span></span>
-        } <span class="keyword">else</span> {
-            <span class="local-variable">super</span>.on(message, payload)                        <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait SayHandler implements MessageHandler {
+    void on(String message, Map payload) {
+        if (message.startsWith("say")) {                      <i class="conum" data-value="1"></i><b>(1)</b>
+            println "I say ${message - 'say'}!"
+        } else {
+            super.on(message, payload)                        <i class="conum" data-value="2"></i><b>(2)</b>
         }
     }
 }</code></pre>
@@ -3583,10 +3492,10 @@ Received test logging with payload [:]</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Handler</span> <span class="directive">implements</span> DefaultHandler, SayHandler, LoggingHandler {}
-<span class="keyword">def</span> h = <span class="keyword">new</span> <span class="predefined-type">Handler</span>()
-h.on(<span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span>, [:])
-h.on(<span class="string"><span class="delimiter">'</span><span class="content">sayHello</span><span class="delimiter">'</span></span>, [:])</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Handler implements DefaultHandler, SayHandler, LoggingHandler {}
+def h = new Handler()
+h.on('foo', [:])
+h.on('sayHello', [:])</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3613,7 +3522,7 @@ h.on(<span class="string"><span class="delimiter">'</span><span class="content">
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">Seeing foo with payload [:]
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Seeing foo with payload [:]
 Received foo with payload [:]
 Seeing sayHello with payload [:]
 I say Hello!</code></pre>
@@ -3624,10 +3533,10 @@ I say Hello!</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">AlternateHandler</span> <span class="directive">implements</span> DefaultHandler, LoggingHandler, SayHandler {}
-h = <span class="keyword">new</span> AlternateHandler()
-h.on(<span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span>, [:])
-h.on(<span class="string"><span class="delimiter">'</span><span class="content">sayHello</span><span class="delimiter">'</span></span>, [:])</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class AlternateHandler implements DefaultHandler, LoggingHandler, SayHandler {}
+h = new AlternateHandler()
+h.on('foo', [:])
+h.on('sayHello', [:])</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3635,7 +3544,7 @@ h.on(<span class="string"><span class="delimiter">'</span><span class="content">
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">Seeing foo with payload [:]
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Seeing foo with payload [:]
 Received foo with payload [:]
 I say Hello!</code></pre>
 </div>
@@ -3663,16 +3572,16 @@ I say Hello!</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait Filtering {                                       <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="predefined-type">StringBuilder</span> append(<span class="predefined-type">String</span> str) {                  <i class="conum" data-value="2"></i><b>(2)</b>
-        <span class="keyword">def</span> subst = str.replace(<span class="string"><span class="delimiter">'</span><span class="content">o</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>)                 <i class="conum" data-value="3"></i><b>(3)</b>
-        <span class="local-variable">super</span>.append(subst)                             <i class="conum" data-value="4"></i><b>(4)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait Filtering {                                       <i class="conum" data-value="1"></i><b>(1)</b>
+    StringBuilder append(String str) {                  <i class="conum" data-value="2"></i><b>(2)</b>
+        def subst = str.replace('o','')                 <i class="conum" data-value="3"></i><b>(3)</b>
+        super.append(subst)                             <i class="conum" data-value="4"></i><b>(4)</b>
     }
-    <span class="predefined-type">String</span> toString() { <span class="local-variable">super</span>.toString() }              <i class="conum" data-value="5"></i><b>(5)</b>
+    String toString() { super.toString() }              <i class="conum" data-value="5"></i><b>(5)</b>
 }
-<span class="keyword">def</span> sb = <span class="keyword">new</span> <span class="predefined-type">StringBuilder</span>().withTraits Filtering       <i class="conum" data-value="6"></i><b>(6)</b>
-sb.append(<span class="string"><span class="delimiter">'</span><span class="content">Groovy</span><span class="delimiter">'</span></span>)
-<span class="keyword">assert</span> sb.toString() == <span class="string"><span class="delimiter">'</span><span class="content">Grvy</span><span class="delimiter">'</span></span>                          <i class="conum" data-value="7"></i><b>(7)</b></code></pre>
+def sb = new StringBuilder().withTraits Filtering       <i class="conum" data-value="6"></i><b>(6)</b>
+sb.append('Groovy')
+assert sb.toString() == 'Grvy'                          <i class="conum" data-value="7"></i><b>(7)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -3721,9 +3630,9 @@ sb.append(<span class="string"><span class="delimiter">'</span><span class="cont
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait Greeter {
-    <span class="predefined-type">String</span> greet() { <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello </span><span class="inline"><span class="inline-delimiter">$</span>name</span><span class="delimiter">&quot;</span></span> }        <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="directive">abstract</span> <span class="predefined-type">String</span> getName()               <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait Greeter {
+    String greet() { "Hello $name" }        <i class="conum" data-value="1"></i><b>(1)</b>
+    abstract String getName()               <i class="conum" data-value="2"></i><b>(2)</b>
 }</code></pre>
 </div>
 </div>
@@ -3744,7 +3653,7 @@ sb.append(<span class="string"><span class="delimiter">'</span><span class="cont
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">Greeter greeter = { <span class="string"><span class="delimiter">'</span><span class="content">Alice</span><span class="delimiter">'</span></span> }               <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Greeter greeter = { 'Alice' }               <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -3760,8 +3669,8 @@ sb.append(<span class="string"><span class="delimiter">'</span><span class="cont
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">void</span> greet(Greeter g) { println g.greet() } <i class="conum" data-value="1"></i><b>(1)</b>
-greet { <span class="string"><span class="delimiter">'</span><span class="content">Alice</span><span class="delimiter">'</span></span> }                           <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">void greet(Greeter g) { println g.greet() } <i class="conum" data-value="1"></i><b>(1)</b>
+greet { 'Alice' }                           <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -3790,23 +3699,23 @@ greet { <span class="string"><span class="delimiter">'</span><span class="conten
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">groovy.transform.CompileStatic</span>
-<span class="keyword">import</span> <span class="include">org.codehaus.groovy.control.CompilerConfiguration</span>
-<span class="keyword">import</span> <span class="include">org.codehaus.groovy.control.customizers.ASTTransformationCustomizer</span>
-<span class="keyword">import</span> <span class="include">org.codehaus.groovy.control.customizers.ImportCustomizer</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">import groovy.transform.CompileStatic
+import org.codehaus.groovy.control.CompilerConfiguration
+import org.codehaus.groovy.control.customizers.ASTTransformationCustomizer
+import org.codehaus.groovy.control.customizers.ImportCustomizer
 
-<span class="type">class</span> <span class="class">SomeTest</span> <span class="directive">extends</span> GroovyTestCase {
-    <span class="keyword">def</span> config
-    <span class="keyword">def</span> shell
+class SomeTest extends GroovyTestCase {
+    def config
+    def shell
 
-    <span class="type">void</span> setup() {
-        config = <span class="keyword">new</span> CompilerConfiguration()
-        shell = <span class="keyword">new</span> GroovyShell(config)
+    void setup() {
+        config = new CompilerConfiguration()
+        shell = new GroovyShell(config)
     }
-    <span class="type">void</span> testSomething() {
-        <span class="keyword">assert</span> shell.evaluate(<span class="string"><span class="delimiter">'</span><span class="content">1+1</span><span class="delimiter">'</span></span>) == <span class="integer">2</span>
+    void testSomething() {
+        assert shell.evaluate('1+1') == 2
     }
-    <span class="type">void</span> otherTest() { <span class="comment">/* ... */</span> }
+    void otherTest() { /* ... */ }
 }</code></pre>
 </div>
 </div>
@@ -3815,11 +3724,11 @@ greet { <span class="string"><span class="delimiter">'</span><span class="conten
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">AnotherTest</span> <span class="directive">extends</span> SomeTest {
-    <span class="type">void</span> setup() {
-        config = <span class="keyword">new</span> CompilerConfiguration()
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class AnotherTest extends SomeTest {
+    void setup() {
+        config = new CompilerConfiguration()
         config.addCompilationCustomizers( ... )
-        shell = <span class="keyword">new</span> GroovyShell(config)
+        shell = new GroovyShell(config)
     }
 }</code></pre>
 </div>
@@ -3829,11 +3738,11 @@ greet { <span class="string"><span class="delimiter">'</span><span class="conten
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">YetAnotherTest</span> <span class="directive">extends</span> SomeTest {
-    <span class="type">void</span> setup() {
-        config = <span class="keyword">new</span> CompilerConfiguration()
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class YetAnotherTest extends SomeTest {
+    void setup() {
+        config = new CompilerConfiguration()
         config.addCompilationCustomizers( ... )
-        shell = <span class="keyword">new</span> GroovyShell(config)
+        shell = new GroovyShell(config)
     }
 }</code></pre>
 </div>
@@ -3843,11 +3752,11 @@ greet { <span class="string"><span class="delimiter">'</span><span class="conten
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait MyTestSupport {
-    <span class="type">void</span> setup() {
-        config = <span class="keyword">new</span> CompilerConfiguration()
-        config.addCompilationCustomizers( <span class="keyword">new</span> ASTTransformationCustomizer(CompileStatic) )
-        shell = <span class="keyword">new</span> GroovyShell(config)
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait MyTestSupport {
+    void setup() {
+        config = new CompilerConfiguration()
+        config.addCompilationCustomizers( new ASTTransformationCustomizer(CompileStatic) )
+        shell = new GroovyShell(config)
     }
 }</code></pre>
 </div>
@@ -3857,8 +3766,8 @@ greet { <span class="string"><span class="delimiter">'</span><span class="conten
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">AnotherTest</span> <span class="directive">extends</span> SomeTest <span class="directive">implements</span> MyTestSupport {}
-<span class="type">class</span> <span class="class">YetAnotherTest</span> <span class="directive">extends</span> SomeTest2 <span class="directive">implements</span> MyTestSupport {}
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class AnotherTest extends SomeTest implements MyTestSupport {}
+class YetAnotherTest extends SomeTest2 implements MyTestSupport {}
 ...</code></pre>
 </div>
 </div>
@@ -3873,17 +3782,17 @@ greet { <span class="string"><span class="delimiter">'</span><span class="conten
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Person</span> {
-    <span class="predefined-type">String</span> name                                         <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Person {
+    String name                                         <i class="conum" data-value="1"></i><b>(1)</b>
 }
 trait Bob {
-    <span class="predefined-type">String</span> getName() { <span class="string"><span class="delimiter">'</span><span class="content">Bob</span><span class="delimiter">'</span></span> }                          <i class="conum" data-value="2"></i><b>(2)</b>
+    String getName() { 'Bob' }                          <i class="conum" data-value="2"></i><b>(2)</b>
 }
 
-<span class="keyword">def</span> p = <span class="keyword">new</span> Person(<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">Alice</span><span class="delimiter">'</span></span>)
-<span class="keyword">assert</span> p.name == <span class="string"><span class="delimiter">'</span><span class="content">Alice</span><span class="delimiter">'</span></span>                                <i class="conum" data-value="3"></i><b>(3)</b>
-<span class="keyword">def</span> p2 = p <span class="keyword">as</span> Bob                                       <i class="conum" data-value="4"></i><b>(4)</b>
-<span class="keyword">assert</span> p2.name == <span class="string"><span class="delimiter">'</span><span class="content">Bob</span><span class="delimiter">'</span></span>                                 <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+def p = new Person(name: 'Alice')
+assert p.name == 'Alice'                                <i class="conum" data-value="3"></i><b>(3)</b>
+def p2 = p as Bob                                       <i class="conum" data-value="4"></i><b>(4)</b>
+assert p2.name == 'Bob'                                 <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -3944,14 +3853,14 @@ trait Bob {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">A</span> { <span class="predefined-type">String</span> methodFromA() { <span class="string"><span class="delimiter">'</span><span class="content">A</span><span class="delimiter">'</span></span> } }        <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="type">class</span> <span class="class">B</span> { <span class="predefined-type">String</span> methodFromB() { <span class="string"><span class="delimiter">'</span><span class="content">B</span><span class="delimiter">'</span></span> } }        <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class A { String methodFromA() { 'A' } }        <i class="conum" data-value="1"></i><b>(1)</b>
+class B { String methodFromB() { 'B' } }        <i class="conum" data-value="2"></i><b>(2)</b>
 A.metaClass.mixin B                             <i class="conum" data-value="3"></i><b>(3)</b>
-<span class="keyword">def</span> o = <span class="keyword">new</span> A()
-<span class="keyword">assert</span> o.methodFromA() == <span class="string"><span class="delimiter">'</span><span class="content">A</span><span class="delimiter">'</span></span>                   <i class="conum" data-value="4"></i><b>(4)</b>
-<span class="keyword">assert</span> o.methodFromB() == <span class="string"><span class="delimiter">'</span><span class="content">B</span><span class="delimiter">'</span></span>                   <i class="conum" data-value="5"></i><b>(5)</b>
-<span class="keyword">assert</span> o <span class="keyword">instanceof</span> A                           <i class="conum" data-value="6"></i><b>(6)</b>
-<span class="keyword">assert</span> !(o <span class="keyword">instanceof</span> B)                        <i class="conum" data-value="7"></i><b>(7)</b></code></pre>
+def o = new A()
+assert o.methodFromA() == 'A'                   <i class="conum" data-value="4"></i><b>(4)</b>
+assert o.methodFromB() == 'B'                   <i class="conum" data-value="5"></i><b>(5)</b>
+assert o instanceof A                           <i class="conum" data-value="6"></i><b>(6)</b>
+assert !(o instanceof B)                        <i class="conum" data-value="7"></i><b>(7)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -4019,15 +3928,15 @@ A.metaClass.mixin B                             <i class="conum" data-value="3">
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait TestHelper {
-    <span class="directive">public</span> <span class="directive">static</span> <span class="type">boolean</span> CALLED = <span class="predefined-constant">false</span>        <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="directive">static</span> <span class="type">void</span> init() {                        <i class="conum" data-value="2"></i><b>(2)</b>
-        CALLED = <span class="predefined-constant">true</span>                           <i class="conum" data-value="3"></i><b>(3)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait TestHelper {
+    public static boolean CALLED = false        <i class="conum" data-value="1"></i><b>(1)</b>
+    static void init() {                        <i class="conum" data-value="2"></i><b>(2)</b>
+        CALLED = true                           <i class="conum" data-value="3"></i><b>(3)</b>
     }
 }
-<span class="type">class</span> <span class="class">Foo</span> <span class="directive">implements</span> TestHelper {}
+class Foo implements TestHelper {}
 Foo.init()                                      <i class="conum" data-value="4"></i><b>(4)</b>
-<span class="keyword">assert</span> Foo.TestHelper__CALLED                   <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+assert Foo.TestHelper__CALLED                   <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -4059,7 +3968,7 @@ Foo.init()                                      <i class="conum" data-value="4">
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">Foo.CALLED = <span class="predefined-constant">true</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">Foo.CALLED = true</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4067,11 +3976,11 @@ Foo.init()                                      <i class="conum" data-value="4">
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Bar</span> <span class="directive">implements</span> TestHelper {}              <i class="conum" data-value="1"></i><b>(1)</b>
-<span class="type">class</span> <span class="class">Baz</span> <span class="directive">implements</span> TestHelper {}              <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Bar implements TestHelper {}              <i class="conum" data-value="1"></i><b>(1)</b>
+class Baz implements TestHelper {}              <i class="conum" data-value="2"></i><b>(2)</b>
 Bar.init()                                      <i class="conum" data-value="3"></i><b>(3)</b>
-<span class="keyword">assert</span> Bar.TestHelper__CALLED                   <i class="conum" data-value="4"></i><b>(4)</b>
-<span class="keyword">assert</span> !Baz.TestHelper__CALLED                  <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+assert Bar.TestHelper__CALLED                   <i class="conum" data-value="4"></i><b>(4)</b>
+assert !Baz.TestHelper__CALLED                  <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -4106,10 +4015,10 @@ Bar.init()                                      <i class="conum" data-value="3">
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait IntCouple {
-    <span class="type">int</span> x = <span class="integer">1</span>
-    <span class="type">int</span> y = <span class="integer">2</span>
-    <span class="type">int</span> sum() { x+y }
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait IntCouple {
+    int x = 1
+    int y = 2
+    int sum() { x+y }
 }</code></pre>
 </div>
 </div>
@@ -4118,11 +4027,11 @@ Bar.init()                                      <i class="conum" data-value="3">
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">BaseElem</span> <span class="directive">implements</span> IntCouple {
-    <span class="type">int</span> f() { sum() }
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class BaseElem implements IntCouple {
+    int f() { sum() }
 }
-<span class="keyword">def</span> base = <span class="keyword">new</span> BaseElem()
-<span class="keyword">assert</span> base.f() == <span class="integer">3</span></code></pre>
+def base = new BaseElem()
+assert base.f() == 3</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4130,12 +4039,12 @@ Bar.init()                                      <i class="conum" data-value="3">
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">Elem</span> <span class="directive">implements</span> IntCouple {
-    <span class="type">int</span> x = <span class="integer">3</span>                                       <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="type">int</span> y = <span class="integer">4</span>                                       <i class="conum" data-value="2"></i><b>(2)</b>
-    <span class="type">int</span> f() { sum() }                               <i class="conum" data-value="3"></i><b>(3)</b>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class Elem implements IntCouple {
+    int x = 3                                       <i class="conum" data-value="1"></i><b>(1)</b>
+    int y = 4                                       <i class="conum" data-value="2"></i><b>(2)</b>
+    int f() { sum() }                               <i class="conum" data-value="3"></i><b>(3)</b>
 }
-<span class="keyword">def</span> elem = <span class="keyword">new</span> Elem()</code></pre>
+def elem = new Elem()</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -4159,7 +4068,7 @@ Bar.init()                                      <i class="conum" data-value="3">
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> elem.f() == <span class="integer">3</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">assert elem.f() == 3</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4167,19 +4076,19 @@ Bar.init()                                      <i class="conum" data-value="3">
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">rait IntCouple {
-    <span class="type">int</span> x = <span class="integer">1</span>
-    <span class="type">int</span> y = <span class="integer">2</span>
-    <span class="type">int</span> sum() { getX()+getY() }
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">rait IntCouple {
+    int x = 1
+    int y = 2
+    int sum() { getX()+getY() }
 }
 
-<span class="type">class</span> <span class="class">Elem</span> <span class="directive">implements</span> IntCouple {
-    <span class="type">int</span> x = <span class="integer">3</span>
-    <span class="type">int</span> y = <span class="integer">4</span>
-    <span class="type">int</span> f() { sum() }
+class Elem implements IntCouple {
+    int x = 3
+    int y = 4
+    int f() { sum() }
 }
-<span class="keyword">def</span> elem = <span class="keyword">new</span> Elem()
-<span class="keyword">assert</span> elem.f() == <span class="integer">7</span></code></pre>
+def elem = new Elem()
+assert elem.f() == 7</code></pre>
 </div>
 </div>
 </div>
@@ -4192,25 +4101,25 @@ Bar.init()                                      <i class="conum" data-value="3">
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">CommunicationService</span> {
-    <span class="directive">static</span> <span class="type">void</span> sendMessage(<span class="predefined-type">String</span> from, <span class="predefined-type">String</span> to, <span class="predefined-type">String</span> message) {       <i class="conum" data-value="1"></i><b>(1)</b>
-        println <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">$</span>from</span><span class="content"> sent [</span><span class="inline"><span class="inline-delimiter">$</span>message</span><span class="content">] to </span><span class="inline"><span class="inline-delimiter">$</span>to</span><span class="delimiter">&quot;</span></span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class CommunicationService {
+    static void sendMessage(String from, String to, String message) {       <i class="conum" data-value="1"></i><b>(1)</b>
+        println "$from sent [$message] to $to"
     }
 }
 
-<span class="type">class</span> <span class="class">Device</span> { <span class="predefined-type">String</span> id }                                                  <i class="conum" data-value="2"></i><b>(2)</b>
+class Device { String id }                                                  <i class="conum" data-value="2"></i><b>(2)</b>
 
 trait Communicating {
-    <span class="type">void</span> sendMessage(Device to, <span class="predefined-type">String</span> message) {
+    void sendMessage(Device to, String message) {
         CommunicationService.sendMessage(id, to.id, message)                <i class="conum" data-value="3"></i><b>(3)</b>
     }
 }
 
-<span class="type">class</span> <span class="class">MyDevice</span> <span class="directive">extends</span> Device <span class="directive">implements</span> Communicating {}                   <i class="conum" data-value="4"></i><b>(4)</b>
+class MyDevice extends Device implements Communicating {}                   <i class="conum" data-value="4"></i><b>(4)</b>
 
-<span class="keyword">def</span> bob = <span class="keyword">new</span> MyDevice(<span class="key">id</span>:<span class="string"><span class="delimiter">'</span><span class="content">Bob</span><span class="delimiter">'</span></span>)
-<span class="keyword">def</span> alice = <span class="keyword">new</span> MyDevice(<span class="key">id</span>:<span class="string"><span class="delimiter">'</span><span class="content">Alice</span><span class="delimiter">'</span></span>)
-bob.sendMessage(alice,<span class="string"><span class="delimiter">'</span><span class="content">secret</span><span class="delimiter">'</span></span>)                                             <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+def bob = new MyDevice(id:'Bob')
+def alice = new MyDevice(id:'Alice')
+bob.sendMessage(alice,'secret')                                             <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -4248,8 +4157,8 @@ bob.sendMessage(alice,<span class="string"><span class="delimiter">'</span><span
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">SecurityService</span> {
-    <span class="directive">static</span> <span class="type">void</span> check(Device d) { <span class="keyword">if</span> (d.id==<span class="predefined-constant">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="exception">SecurityException</span>() }
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class SecurityService {
+    static void check(Device d) { if (d.id==null) throw new SecurityException() }
 }</code></pre>
 </div>
 </div>
@@ -4277,11 +4186,11 @@ bob.sendMessage(alice,<span class="string"><span class="delimiter">'</span><span
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@SelfType</span>(Device)
-<span class="annotation">@CompileStatic</span>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@SelfType(Device)
+@CompileStatic
 trait Communicating {
-    <span class="type">void</span> sendMessage(Device to, <span class="predefined-type">String</span> message) {
-        SecurityService.check(<span class="local-variable">this</span>)
+    void sendMessage(Device to, String message) {
+        SecurityService.check(this)
         CommunicationService.sendMessage(id, to.id, message)
     }
 }</code></pre>
@@ -4292,7 +4201,7 @@ trait Communicating {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">MyDevice</span> <span class="directive">implements</span> Communicating {} <span class="comment">// 忘记继承 Device</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class MyDevice implements Communicating {} // 忘记继承 Device</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4300,7 +4209,7 @@ trait Communicating {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="string"><span class="delimiter">'</span><span class="content">MyDevice</span><span class="delimiter">'</span></span> <span class="class">implements</span> trait <span class="string"><span class="delimiter">'</span><span class="content">Communicating</span><span class="delimiter">'</span></span> but does not extend self type <span class="type">class</span> <span class="string"><span class="delimiter">'</span><span class="content">Device</span><span class="delimiter">'</span></span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">class 'MyDevice' implements trait 'Communicating' but does not extend self type class 'Device'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4323,17 +4232,17 @@ trait Communicating {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">trait Counting {
-    <span class="type">int</span> x
-    <span class="type">void</span> inc() {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">trait Counting {
+    int x
+    void inc() {
         x++                             <i class="conum" data-value="1"></i><b>(1)</b>
     }
-    <span class="type">void</span> dec() {
+    void dec() {
         --x                             <i class="conum" data-value="2"></i><b>(2)</b>
     }
 }
-<span class="type">class</span> <span class="class">Counter</span> <span class="directive">implements</span> Counting {}
-<span class="keyword">def</span> c = <span class="keyword">new</span> Counter()
+class Counter implements Counting {}
+def c = new Counter()
 c.inc()</code></pre>
 </div>
 </div>
@@ -4369,10 +4278,8 @@ c.inc()</code></pre>
 </div>
 </div>
 </div>
-<div id="footer">
-<div id="footer-text">
-Last updated 2019-03-09 08:33:14 CST
-</div>
-</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
+<script>hljs.initHighlighting()</script>
 </body>
 </html>
