@@ -1,0 +1,33 @@
+[[webmvc-client]]
+= REST客户端
+
+本节描述了客户端对REST端点的访问选项。
+
+
+[[webmvc-resttemplate]]
+== `RestTemplate`
+
+`RestTemplate` 是执行HTTP请求的同步客户端。它是原始的Spring REST客户端，并且在基础HTTP客户端库上公开了简单的模板方法API。
+
+NOTE: 从5.0开始，无阻塞，响应式 `WebClient` 提供了 `RestTemplate` 的现代替代方案，并有效支持同步和异步以及流方案。
+`RestTemplate` 将在将来的版本中弃用，并且以后将不会添加主要的新功能。
+
+有关详细信息，请参见 {docSpringIntegration}#rest-client-access[REST端点]。
+
+
+[[webmvc-webclient]]
+== `WebClient`
+
+`WebClient` 是执行HTTP请求的非阻塞，响应式客户端。它是在5.0中引入的，它提供了 `RestTemplate` 的现代替代方案，
+并有效支持同步和异步以及流方案。
+
+与 `RestTemplate` 相比，`WebClient` 支持以下内容：
+
+* 非阻塞I/O.
+* 响应式流背压。
+* 高并发，硬件资源更少。
+* 利用Java 8 lambda的函数式，链式的API风格。
+* 同步和异步交互。
+* 上行流到服务器或从服务器下行流。
+
+有关更多详细信息，请参见 {docSpringWebFlux}#webflux-client[WebClient]。

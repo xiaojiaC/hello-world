@@ -1,0 +1,37 @@
+[[spring-mvc]]
+= 基于Servlet的Web
+:version: 5.2.2.RELEASE
+Version {version}
+:toc: left
+:toclevels: 4
+:tabsize: 4
+:docinfo: shared
+:docinfo1:
+:idprefix:
+:idseparator: -
+:linkcss: true
+:stylesdir: css
+:stylesheet: spring.css
+:highlightjsdir: js/highlight
+:highlightjs-theme: atom-one-dark-reasonable
+:docSpring: https://docs.spring.io/spring/docs/{version}/spring-framework-reference
+:javadocSpring: https://docs.spring.io/spring-framework/docs/{version}/javadoc-api/org/springframework
+:docSpringWeb: {docSpring}/web.html
+:docSpringWebFlux: {docSpring}/web-reactive.html
+:docSpringIntegration: {docSpring}/integration.html
+:docSpringCore: https://docs.spring.io/spring/docs/5.2.1.RELEASE/spring-framework-reference/core.html
+:docSpringSecurity: https://docs.spring.io/spring-security/site/docs/current/reference
+
+文档的此部分涵盖对基于Servlet API构建并部署到Servlet容器的Servlet堆栈Web应用程序的支持。各个章节包括
+<<mvc,Spring MVC>>, <<mvc-view,视图技术>>, <<mvc-cors,CORS 支持>>
+和 {docSpringWeb}#websocket[WebSocket支持]。对于响应式Web应用程序，请参阅
+{docSpringWeb}#spring-web-reactive[基于响应式技术栈的Web]。
+
+include::cookbook/spring-mvc/webmvc.adoc[leveloffset=+1]
+include::cookbook/spring-mvc/webmvc-client.adoc[leveloffset=+1]
+include::cookbook/spring-mvc/webmvc-test.adoc[leveloffset=+1]
+
+++++
+<script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
+<script type="text/javascript" src="js/toc.js"></script>
+++++

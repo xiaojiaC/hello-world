@@ -1,0 +1,21 @@
+[[testing]]
+= 测试
+[.small]#{docSpringWebFlux}#webflux-test[与Spring WebFlux相同]#
+
+本节总结了Spring MVC应用程序在 `spring-test` 中可用的选项。
+
+* Servlet API Mocks：Servlet API契约的模拟实现，用于单元测试控制器，过滤器和其他Web组件。有关更多详细信息，请参见
+<<spring-test.adoc#mock-objects-servlet,Servlet API>>模拟对象。
+
+* TestContext Framework：支持在JUnit和TestNG测试中加载Spring配置，包括在测试方法之间高效地缓存已加载的配置，
+并支持通过 `MockServletContext` 加载 `WebApplicationContext`。有关更多详细信息，请参见
+<<spring-test.adoc#testcontext-framework,TestContext Framework>>。
+
+* Spring MVC Test：一个框架，也称为 `MockMvc`，用于通过 `DispatcherServlet`（即支持注解）测试带注解的控制器，该框架具有Spring MVC基础设施，
+但没有HTTP服务器。有关更多详细信息，请参见 <<spring-test.adoc#spring-mvc-test-framework,Spring MVC Test>>。
+
+* Client-side REST: `spring-test` 提供了一个 `MockRestServiceServer`，您可以将其用作模拟服务器，以测试内部使用 `RestTemplate` 的客户端代码。
+有关更多详细信息，请参见<<spring-test.adoc#spring-mvc-test-client,客户端REST测试>>。
+
+* `WebTestClient`: 构建用于测试WebFlux应用程序，但也可以用于通过HTTP连接到任何服务器的端到端集成测试。
+它是一个无阻塞的响应式客户端，非常适合测试异步和流传输场景。
