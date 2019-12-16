@@ -1,0 +1,199 @@
+[[web-uricomponents]]
+= UriComponents
+[.small]#Spring MVC and Spring WebFlux#
+
+`UriComponentsBuilder` 有助于从具有变量的URI模板中构建URI，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    UriComponents uriComponents = UriComponentsBuilder
+            .fromUriString("http://example.com/hotels/{hotel}")  // <1>
+            .queryParam("q", "{q}")  // <2>
+            .encode() // <3>
+            .build(); // <4>
+
+    URI uri = uriComponents.expand("Westin", "123").toUri();  // <5>
+----
+<1> 带有URI模板的静态工厂方法。
+<2> 添加或替换URI组件。
+<3> 请求对URI模板和URI变量进行编码。
+<4> 构建一个 `UriComponents`。
+<5> 设置变量并获取 `URI`。
+
+
+可以将前面的示例合并为一个链，并通过 `buildAndExpand` 进行缩短，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    URI uri = UriComponentsBuilder
+            .fromUriString("http://example.com/hotels/{hotel}")
+            .queryParam("q", "{q}")
+            .encode()
+            .buildAndExpand("Westin", "123")
+            .toUri();
+----
+
+你可以通过直接传入URI（这意味着编码）来进一步缩短它，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    URI uri = UriComponentsBuilder
+            .fromUriString("http://example.com/hotels/{hotel}")
+            .queryParam("q", "{q}")
+            .build("Westin", "123");
+----
+
+你可以使用完整的URI模板进一步缩短它，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    URI uri = UriComponentsBuilder
+            .fromUriString("http://example.com/hotels/{hotel}?q={q}")
+            .build("Westin", "123");
+----
+
+
+[[web-uribuilder]]
+= UriBuilder
+[.small]#Spring MVC and Spring WebFlux#
+
+<<web-uricomponents,`UriComponentsBuilder`>> 实现了 `UriBuilder`。
+你可以依次使用 `UriBuilderFactory` 创建 `UriBuilder`。`UriBuilderFactory` 和 `UriBuilder`
+一起提供了一种可插入的机制，可以基于共享配置（例如基本URL，编码首选项和其他详细信息）从URI模板构建URI。
+
+你可以使用 `UriBuilderFactory` 配置 `RestTemplate` 和 `WebClient` 为自定义URI做准备。
+`DefaultUriBuilderFactory` 是 `UriBuilderFactory` 的默认实现，该实现在内部使用 `UriComponentsBuilder`
+并公开共享的配置选项。
+
+以下示例显示如何配置 `RestTemplate`：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    // import org.springframework.web.util.DefaultUriBuilderFactory.EncodingMode;
+
+    String baseUrl = "http://example.org";
+    DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(baseUrl);
+    factory.setEncodingMode(EncodingMode.TEMPLATE_AND_VARIABLES);
+
+    RestTemplate restTemplate = new RestTemplate();
+    restTemplate.setUriTemplateHandler(factory);
+----
+
+下面的示例配置一个 `WebClient`：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    // import org.springframework.web.util.DefaultUriBuilderFactory.EncodingMode;
+
+    String baseUrl = "http://example.org";
+    DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(baseUrl);
+    factory.setEncodingMode(EncodingMode.TEMPLATE_AND_VARIABLES);
+
+    WebClient client = WebClient.builder().uriBuilderFactory(factory).build();
+----
+
+此外，你也可以直接使用 `DefaultUriBuilderFactory`。
+它类似于使用 `UriComponentsBuilder`，但不是静态工厂方法，它是一个包含配置和首选项的实际实例，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    String baseUrl = "http://example.com";
+    DefaultUriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory(baseUrl);
+
+    URI uri = uriBuilderFactory.uriString("/hotels/{hotel}")
+            .queryParam("q", "{q}")
+            .build("Westin", "123");
+----
+
+
+[[web-uri-encoding]]
+= URI编码
+[.small]#Spring MVC and Spring WebFlux#
+
+`UriComponentsBuilder` 在两个级别公开了编码选项：
+
+* {javadocSpring}/web/util/UriComponentsBuilder.html#encode--[UriComponentsBuilder#encode()]:
+首先对URI模板进行预编码，然后在扩展时严格对URI变量进行编码。
+* {javadocSpring}/web/util/UriComponents.html#encode--[UriComponents#encode()]:
+扩展URI变量 __后__ 编码URI组件。
+
+这两个选项都用转义的八位字节替换非ASCII和非法字符。但是，第一个选项还会替换出现在URI变量中的具有保留含义的字符。
+
+TIP: 考虑“;”，这在路径上是合法的，但具有保留的含义。第一个选项将URI变量中“;”替换为“%3B”，但URI模板中的没有。
+相比之下，第二个选项永远不会替换“;”，因为它是路径中的合法字符。
+
+在大多数情况下，第一个选项可能会产生预期的结果，因为它将URI变量视为要完全编码的不透明数据，
+而选项2仅在URI变量有意要包含保留字符的情况下才有用。
+
+以下示例使用第一个选项：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+URI uri = UriComponentsBuilder.fromPath("/hotel list/{city}")
+            .queryParam("q", "{q}")
+            .encode()
+            .buildAndExpand("New York", "foo+bar")
+            .toUri();
+
+    // Result is "/hotel%20list/New%20York?q=foo%2Bbar"
+----
+
+你可以通过直接传入URI（这意味着编码）来缩短前面的示例，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+URI uri = UriComponentsBuilder.fromPath("/hotel list/{city}")
+            .queryParam("q", "{q}")
+            .build("New York", "foo+bar")
+----
+
+你可以使用完整的URI模板进一步缩短它，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+URI uri = UriComponentsBuilder.fromPath("/hotel list/{city}?q={q}")
+            .build("New York", "foo+bar")
+----
+
+`WebClient` 和 `RestTemplate` 通过 `UriBuilderFactory` 策略在内部扩展和编码URI模板。
+两者都可以使用自定义策略进行配置。如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    String baseUrl = "http://example.com";
+    DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(baseUrl)
+    factory.setEncodingMode(EncodingMode.TEMPLATE_AND_VALUES);
+
+    // Customize the RestTemplate..
+    RestTemplate restTemplate = new RestTemplate();
+    restTemplate.setUriTemplateHandler(factory);
+
+    // Customize the WebClient..
+    WebClient client = WebClient.builder().uriBuilderFactory(factory).build();
+----
+
+`DefaultUriBuilderFactory` 实现在内部使用 `UriComponentsBuilder` 来扩展和编码URI模板。
+作为工厂，它提供了一个位置，可以根据以下一种编码模式来配置编码方法：
+
+* `TEMPLATE_AND_VALUES`: 使用 `UriComponentsBuilder#encode()`
+（对应于先前列表中的第一个选项）对URI模板进行预编码，并在扩展时严格编码URI变量。
+* `VALUES_ONLY`: 不对URI模板进行编码，而是在将其扩展到模板之前通过
+`UriUtils#encodeUriUriVariables` 对URI变量进行严格编码。
+* `URI_COMPONENTS`: 在扩展URI变量之后，使用对应于先前列表中第二个选项的
+`UriComponents#encode()` 来编码URI组件值。
+* `NONE`: 不应用编码。
+
+由于历史原因和向后兼容性，将 `RestTemplate` 设置为 `EncodingMode.URI_COMPONENTS`。`WebClient` 依赖于
+`DefaultUriBuilderFactory` 中的默认值，该默认值已从5.0.x中的 `EncodingMode.URI_COMPONENTS`
+更改为5.1中的 `EncodingMode.TEMPLATE_AND_VALUES`。
