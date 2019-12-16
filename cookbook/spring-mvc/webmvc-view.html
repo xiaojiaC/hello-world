@@ -5,7 +5,8 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<title>Spring Documentation</title>
+<meta name="author" content="[.small]#{docSpringWebFlux}#webflux-view[WebFlux]#">
+<title>视图技术</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -498,50 +499,284 @@ $(addBlockSwitches);
 </script>
 
 </head>
-<body class="book toc2 toc-left">
+<body id="mvc-view" class="book toc2 toc-left">
 <div id="header">
-<h1>Spring Documentation</h1>
+<h1>视图技术</h1>
+<div class="details">
+<span id="author" class="author">[.small]#{docSpringWebFlux}#webflux-view[WebFlux]#</span><br>
+</div>
 <div id="toc" class="toc2">
-<div id="toctitle"></div>
-
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#mvc-view-thymeleaf">1. Thymeleaf</a></li>
+<li><a href="#mvc-view-freemarker">2. FreeMarker</a>
+<ul class="sectlevel2">
+<li><a href="#mvc-view-freemarker-contextconfig">2.1. 视图配置</a></li>
+<li><a href="#mvc-views-freemarker">2.2. FreeMarker配置</a></li>
+<li><a href="#mvc-view-freemarker-forms">2.3. 表单处理</a></li>
+</ul>
+</li>
+<li><a href="#mvc-view-document">3. PDF和Excel</a>
+<ul class="sectlevel2">
+<li><a href="#mvc-view-document-intro">3.1. 文档视图简介</a></li>
+<li><a href="#mvc-view-document-pdf">3.2. PDF视图</a></li>
+<li><a href="#mvc-view-document-excel">3.3. Excel视图</a></li>
+</ul>
+</li>
+<li><a href="#mvc-view-jackson">4. Jackson</a>
+<ul class="sectlevel2">
+<li><a href="#mvc-view-json-mapping">4.1. 基于Jackson的JSON MVC视图</a></li>
+<li><a href="#mvc-view-xml-mapping">4.2. 基于Jackson的XML视图</a></li>
+</ul>
+</li>
+</ul>
 </div>
 </div>
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Hmm, the gate of Spring :-)</p>
+<p>Spring MVC中视图技术的使用是可插入的，无论你决定使用Thymeleaf，Groovy标记模板，JSPs还是其他技术，主要取决于配置更改。
+本章介绍与Spring MVC集成的视图技术。我们假设你已经熟悉<a href="#mvc-viewresolver">[mvc-viewresolver]</a>。</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="spring-core.html#beans">Spring Core</a></p>
-</li>
-<li>
-<p><a href="spring-session.html#overview">Spring Session</a></p>
-</li>
-<li>
-<p><a href="spring-mvc.html#mvc">Spring MVC</a></p>
-</li>
-<li>
-<p><a href="spring-test.html#testing-introduction">Spring Testing</a></p>
-</li>
-<li>
-<p><a href="spring-boot-test.html#boot-features-testing">Spring Boot Testing</a></p>
-</li>
-<li>
-<p><a href="spring-data-jpa.html#project">Spring Data JPA</a></p>
-</li>
-<li>
-<p><a href="spring-data-solr.html#preface">Spring Data Solr</a></p>
-</li>
-<li>
-<p><a href="spring-rest-docs.html#introduction">Spring Rest Docs</a></p>
-</li>
-<li>
-<p><a href="springfox.html#introduction">Springfox</a></p>
-</li>
-</ul>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mvc-view-thymeleaf">1. Thymeleaf</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><span class="small">{docSpringWebFlux}#webflux-view-thymeleaf[WebFlux]</span></p>
+</div>
+<div class="paragraph">
+<p>Thymeleaf是一种现代的服务器端Java模板引擎，它强调可以通过双击在浏览器中预览的自然HTML模板，
+这对于独立处理UI模板(例如：由设计人员完成)而不需要运行服务器是非常有用的。如果要替换为JSP，
+Thymeleaf提供了最广泛的功能集之一，以使这种过渡更加容易。Thymeleaf是积极开发和维护的。
+有关更完整的介绍，请参见 <a href="http://www.thymeleaf.org/">Thymeleaf</a>项目主页。</p>
+</div>
+<div class="paragraph">
+<p>Thymeleaf与Spring MVC的集成由Thymeleaf项目管理。该配置涉及一些Bean声明，例如：
+<code>ServletContextTemplateResolver</code>，<code>SpringTemplateEngine</code> 和 <code>ThymeleafViewResolver</code>。
+有关更多详细信息，请参见 <a href="http://www.thymeleaf.org/documentation.html">Thymeleaf+Spring</a>。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mvc-view-freemarker">2. FreeMarker</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><span class="small">{docSpringWebFlux}#webflux-view-freemarker[WebFlux]</span></p>
+</div>
+<div class="paragraph">
+<p><a href="http://www.freemarker.org">Apache FreeMarker</a> 是一个模板引擎，用于生成从HTML到电子邮件等的任何类型的文本输出。
+Spring框架具有内置的集成，可以将Spring MVC与FreeMarker模板一起使用。</p>
+</div>
+<div class="sect2">
+<h3 id="mvc-view-freemarker-contextconfig">2.1. 视图配置</h3>
+<div class="paragraph">
+<p><span class="small">{docSpringWebFlux}#webflux-view-freemarker-contextconfig[WebFlux]</span></p>
+</div>
+<div class="paragraph">
+<p>以下示例显示如何配置使用FreeMarker视图技术：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Configuration
+@EnableWebMvc
+public class WebConfig implements WebMvcConfigurer {
+
+    @Override
+    public void configureViewResolvers(ViewResolverRegistry registry) {
+        registry.freemarker();
+    }
+
+    // Configure FreeMarker...
+
+    @Bean
+    public FreeMarkerConfigurer freeMarkerConfigurer() {
+        FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
+        configurer.setTemplateLoaderPath("/WEB-INF/freemarker");
+        return configurer;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下示例显示了如何在XML中进行配置：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;mvc:annotation-driven/&gt;
+
+&lt;mvc:view-resolvers&gt;
+    &lt;mvc:freemarker/&gt;
+&lt;/mvc:view-resolvers&gt;
+
+&lt;!-- Configure FreeMarker... --&gt;
+&lt;mvc:freemarker-configurer&gt;
+    &lt;mvc:template-loader-path location="/WEB-INF/freemarker"/&gt;
+&lt;/mvc:freemarker-configurer&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>另外，你也可以声明 <code>FreeMarkerConfigurer</code> bean，以完全控制所有属性，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer"&gt;
+    &lt;property name="templateLoaderPath" value="/WEB-INF/freemarker/"/&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你的模板需要存储在上例 <code>FreeMarkerConfigurer</code> 所示的指定的目录中。给定上述配置，如果你的控制器返回 <code>welcome</code> 视图名称，
+则解析器将查找 <code>/WEB-INF/freemarker/welcome.ftl</code> 模板。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="mvc-views-freemarker">2.2. FreeMarker配置</h3>
+<div class="paragraph">
+<p><span class="small">{docSpringWebFlux}#webflux-views-freemarker[WebFlux]</span></p>
+</div>
+<div class="paragraph">
+<p>你可以通过在 <code>FreeMarkerConfigurer</code> bean上设置适当的bean属性，将FreeMarker的&#8217;Settings' 和 'SharedVariables'
+直接传递给FreeMarker配置对象（由Spring管理）。<code>freemarkerSettings</code> 属性需要一个 <code>java.util.Properties</code> 对象，
+而 <code>freemarkerVariables</code> 属性需要一个 <code>java.util.Map</code>。以下示例显示了如何使用 <code>FreeMarkerConfigurer</code>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer"&gt;
+    &lt;property name="templateLoaderPath" value="/WEB-INF/freemarker/"/&gt;
+    &lt;property name="freemarkerVariables"&gt;
+        &lt;map&gt;
+            &lt;entry key="xml_escape" value-ref="fmXmlEscape"/&gt;
+        &lt;/map&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;
+
+&lt;bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>有关应用于 <code>Configuration</code> 对象的设置和变量的详细信息，请参阅FreeMarker文档。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="mvc-view-freemarker-forms">2.3. 表单处理</h3>
+<div class="paragraph">
+<p>Spring提供了一个供JSP使用的标签库，其中包含一个 <code>&lt;spring:bind/&gt;</code> 元素。
+该元素主要允许表单显示来自表单支持对象的值，并显示来自Web或业务层中 <code>Validator</code> 的验证失败的结果。
+Spring还支持FreeMarker中的相同功能，并为生成表单输入元素本身提供了额外的方便宏。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mvc-view-document">3. PDF和Excel</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring提供了返回HTML以外的输出的方法，包括PDF和Excel电子表格。本节介绍如何使用这些功能。</p>
+</div>
+<div class="sect2">
+<h3 id="mvc-view-document-intro">3.1. 文档视图简介</h3>
+<div class="paragraph">
+<p>HTML页面并非始终是用户查看模型输出的最佳方法，而Spring使从模型数据动态生成PDF文档或Excel电子表格变得简单。
+该文档是视图，并从服务器以正确的内容类型进行流传输，以（希望）使客户端PC能够运行其电子表格或PDF查看器应用程序作为响应。</p>
+</div>
+<div class="paragraph">
+<p>为了使用Excel视图，你需要将Apache POI库添加到你的类路径中。为了生成PDF，你需要添加（最好是）OpenPDF库。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+如果可能，你应该使用基础文档生成库的最新版本。特别是，我们强烈建议你使用OpenPDF（例如：OpenPDF 1.2.12）
+而不是过时的原始iText 2.1.7，因为OpenPDF会得到积极维护并修复了不可信任PDF内容的重要漏洞。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="mvc-view-document-pdf">3.2. PDF视图</h3>
+<div class="paragraph">
+<p>单词列表的简单PDF视图可以继承 <code>org.springframework.web.servlet.view.document.AbstractPdfView</code>
+并实现 <code>buildPdfDocument()</code> 方法，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class PdfWordList extends AbstractPdfView {
+
+    protected void buildPdfDocument(Map&lt;String, Object&gt; model, Document doc, PdfWriter writer,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        List&lt;String&gt; words = (List&lt;String&gt;) model.get("wordList");
+        for (String word : words) {
+            doc.add(new Paragraph(word));
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>控制器可以从外部视图定义（按名称引用）返回此视图，也可以从处理程序方法返回为 <code>View</code> 实例。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="mvc-view-document-excel">3.3. Excel视图</h3>
+<div class="paragraph">
+<p>从Spring Framework 4.2开始，提供 <code>org.springframework.web.servlet.view.document.AbstractXlsView</code>
+作为Excel视图的基类。它基于Apache POI，具有取代过时的 <code>AbstractExcelView</code> 类的专用子类
+（<code>AbstractXlsxView</code> 和 <code>AbstractXlsxStreamingView</code>）。</p>
+</div>
+<div class="paragraph">
+<p>编程模型类似于 <code>AbstractPdfView</code>，其中 <code>buildExcelDocument()</code> 作为中央模板方法，
+控制器能够从外部定义（按名称）或从处理程序方法作为 <code>View</code> 实例返回这种视图。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mvc-view-jackson">4. Jackson</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><span class="small">{docSpringWebFlux}#webflux-view-httpmessagewriter[WebFlux]</span></p>
+</div>
+<div class="paragraph">
+<p>Spring提供了对Jackson JSON库的支持。</p>
+</div>
+<div class="sect2">
+<h3 id="mvc-view-json-mapping">4.1. 基于Jackson的JSON MVC视图</h3>
+<div class="paragraph">
+<p><span class="small">{docSpringWebFlux}#webflux-view-httpmessagewriter[WebFlux]</span></p>
+</div>
+<div class="paragraph">
+<p><code>MappingJackson2JsonView</code> 使用Jackson类库的 <code>ObjectMapper</code> 将响应内容呈现为JSON。
+默认情况下，模型映射的全部内容（特定于框架的类除外）均编码为JSON。对于需要过滤映射内容的情况，
+可以使用 <code>modelKeys</code> 属性指定要编码的一组特定的模型属性。你也可以使用 <code>extractValueFromSingleKeyModel</code> 属性，
+以将单键模型中的值直接提取并序列化，而不是作为模型属性的映射。</p>
+</div>
+<div class="paragraph">
+<p>你可以根据需要使用Jackson提供的注解来自定义JSON映射。当需要进一步控制时，
+可以在需要为特定类型提供自定义JSON序列化器和反序列化器的情况下，通过 <code>ObjectMapper</code> 属性注入自定义 <code>ObjectMapper</code>。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="mvc-view-xml-mapping">4.2. 基于Jackson的XML视图</h3>
+<div class="paragraph">
+<p><span class="small">{docSpringWebFlux}#webflux-view-httpmessagewriter[WebFlux]</span></p>
+</div>
+<div class="paragraph">
+<p><code>MappingJackson2XmlView</code> 使用 <a href="https://github.com/FasterXML/jackson-dataformat-xml">Jackson XML扩展程序</a>
+的 <code>XmlMapper</code> 将响应内容呈现为XML。如果模型包含多个条目，则应使用 <code>modelKey</code> bean属性显式设置要序列化的对象。
+如果模型包含单个条目，则会自动序列化。</p>
+</div>
+<div class="paragraph">
+<p>你可以根据需要使用JAXB或Jackson提供的注解自定义XML映射。当需要进一步控制时，
+可以在需要为特定类型提供自定义XML序列化器和反序列化器的情况下，通过 <code>ObjectMapper</code> 属性注入自定义 <code>XmlMapper</code>。</p>
+</div>
 </div>
 </div>
 </div>

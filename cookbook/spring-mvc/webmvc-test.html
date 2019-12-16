@@ -5,7 +5,8 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<title>Spring Documentation</title>
+<meta name="author" content="[.small]#{docSpringWebFlux}#webflux-test[与Spring WebFlux相同]#">
+<title>测试</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -498,11 +499,14 @@ $(addBlockSwitches);
 </script>
 
 </head>
-<body class="book toc2 toc-left">
+<body id="testing" class="book toc2 toc-left">
 <div id="header">
-<h1>Spring Documentation</h1>
+<h1>测试</h1>
+<div class="details">
+<span id="author" class="author">[.small]#{docSpringWebFlux}#webflux-test[与Spring WebFlux相同]#</span><br>
+</div>
 <div id="toc" class="toc2">
-<div id="toctitle"></div>
+<div id="toctitle">Table of Contents</div>
 
 </div>
 </div>
@@ -510,36 +514,30 @@ $(addBlockSwitches);
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Hmm, the gate of Spring :-)</p>
+<p>本节总结了Spring MVC应用程序在 <code>spring-test</code> 中可用的选项。</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="spring-core.html#beans">Spring Core</a></p>
+<p>Servlet API Mocks：Servlet API契约的模拟实现，用于单元测试控制器，过滤器和其他Web组件。有关更多详细信息，请参见
+<a href="spring-test.html#mock-objects-servlet">Servlet API</a>模拟对象。</p>
 </li>
 <li>
-<p><a href="spring-session.html#overview">Spring Session</a></p>
+<p>TestContext Framework：支持在JUnit和TestNG测试中加载Spring配置，包括在测试方法之间高效地缓存已加载的配置，
+并支持通过 <code>MockServletContext</code> 加载 <code>WebApplicationContext</code>。有关更多详细信息，请参见
+<a href="spring-test.html#testcontext-framework">TestContext Framework</a>。</p>
 </li>
 <li>
-<p><a href="spring-mvc.html#mvc">Spring MVC</a></p>
+<p>Spring MVC Test：一个框架，也称为 <code>MockMvc</code>，用于通过 <code>DispatcherServlet</code>（即支持注解）测试带注解的控制器，该框架具有Spring MVC基础设施，
+但没有HTTP服务器。有关更多详细信息，请参见 <a href="spring-test.html#spring-mvc-test-framework">Spring MVC Test</a>。</p>
 </li>
 <li>
-<p><a href="spring-test.html#testing-introduction">Spring Testing</a></p>
+<p>Client-side REST: <code>spring-test</code> 提供了一个 <code>MockRestServiceServer</code>，您可以将其用作模拟服务器，以测试内部使用 <code>RestTemplate</code> 的客户端代码。
+有关更多详细信息，请参见<a href="spring-test.html#spring-mvc-test-client">客户端REST测试</a>。</p>
 </li>
 <li>
-<p><a href="spring-boot-test.html#boot-features-testing">Spring Boot Testing</a></p>
-</li>
-<li>
-<p><a href="spring-data-jpa.html#project">Spring Data JPA</a></p>
-</li>
-<li>
-<p><a href="spring-data-solr.html#preface">Spring Data Solr</a></p>
-</li>
-<li>
-<p><a href="spring-rest-docs.html#introduction">Spring Rest Docs</a></p>
-</li>
-<li>
-<p><a href="springfox.html#introduction">Springfox</a></p>
+<p><code>WebTestClient</code>: 构建用于测试WebFlux应用程序，但也可以用于通过HTTP连接到任何服务器的端到端集成测试。
+它是一个无阻塞的响应式客户端，非常适合测试异步和流传输场景。</p>
 </li>
 </ul>
 </div>

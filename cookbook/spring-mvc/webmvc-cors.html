@@ -5,7 +5,8 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<title>Spring Documentation</title>
+<meta name="author" content="[.small]#{docSpringWebFlux}#webflux-cors[WebFlux]#">
+<title>CORS</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -498,50 +499,354 @@ $(addBlockSwitches);
 </script>
 
 </head>
-<body class="book toc2 toc-left">
+<body id="mvc-cors" class="book toc2 toc-left">
 <div id="header">
-<h1>Spring Documentation</h1>
+<h1>CORS</h1>
+<div class="details">
+<span id="author" class="author">[.small]#{docSpringWebFlux}#webflux-cors[WebFlux]#</span><br>
+</div>
 <div id="toc" class="toc2">
-<div id="toctitle"></div>
-
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#mvc-cors-intro">1. 介绍</a></li>
+<li><a href="#mvc-cors-processing">2. 处理过程</a></li>
+<li><a href="#mvc-cors-controller">3. <code>@CrossOrigin</code></a></li>
+<li><a href="#mvc-cors-global">4. 全局配置</a>
+<ul class="sectlevel2">
+<li><a href="#mvc-cors-global-java">4.1. Java配置</a></li>
+<li><a href="#mvc-cors-global-xml">4.2. XML配置</a></li>
+</ul>
+</li>
+<li><a href="#mvc-cors-filter">5. CORS过滤器</a></li>
+</ul>
 </div>
 </div>
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Hmm, the gate of Spring :-)</p>
+<p>Spring MVC使你可以处理CORS（跨域资源共享）。本节介绍如何执行此操作。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mvc-cors-intro">1. 介绍</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><span class="small">{docSpringWebFlux}#webflux-cors-intro[WebFlux]</span></p>
+</div>
+<div class="paragraph">
+<p>出于安全原因，浏览器禁止AJAX调用当前来源以外的资源。
+例如，你可以将你的银行帐户放在一个浏览器标签中，将 <code>evil.com</code> 放在另一个浏览器标签中。
+来自 <code>evil.com</code> 的脚本不能使用你的凭据向你的银行API发送AJAX请求&#8201;&#8212;&#8201;例如：从你的帐户中提取资金！</p>
+</div>
+<div class="paragraph">
+<p>跨域资源共享（CORS）是 <a href="http://caniuse.com/#feat=cors">大多数浏览器</a>实施的
+<a href="http://www.w3.org/TR/cors/">W3C规范</a>，可让你指定授权哪种类型的跨域请求，
+而不是使用基于IFRAME或JSONP的安全性较低且功能较弱的变通办法。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mvc-cors-processing">2. 处理过程</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><span class="small">{docSpringWebFlux}#webflux-cors-processing[WebFlux]</span></p>
+</div>
+<div class="paragraph">
+<p>CORS规范分为预检，简单和实际请求。要了解CORS的工作原理，你可以阅读
+<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">本文</a>以及其他内容，或者参阅规范以获取更多详细信息。</p>
+</div>
+<div class="paragraph">
+<p>Spring MVC <code>HandlerMapping</code> 实现为CORS提供内置支持。成功将请求映射到处理程序后，
+<code>HandlerMapping</code> 实现将检查给定请求和处理程序的CORS配置，并采取进一步的措施。
+预检请求直接处理，而简单和实际的CORS请求被拦截、验证，并设置了必需的CORS响应头。</p>
+</div>
+<div class="paragraph">
+<p>为了启用跨域请求（即存在 <code>Origin</code> 请求头，并且与请求的主机不同），你需要具有一些显式声明的CORS配置。
+如果找不到匹配的CORS配置，则预检请求将被拒绝。没有将CORS响应头添加到简单和实际CORS请求的响应中，
+因此，浏览器拒绝了它们。</p>
+</div>
+<div class="paragraph">
+<p>可以使用基于URL模式的 <code>CorsConfiguration</code> 映射分别
+{javadocSpring}/web/servlet/handler/AbstractHandlerMapping.html#setCorsConfigurations-java.util.Map-[配置]
+每个 <code>HandlerMapping</code>。在大多数情况下，应用程序使用MVC
+Java配置或XML名称空间声明此类映射，这导致将单个全局映射传递给所有 <code>HandlerMapping</code> 实例。</p>
+</div>
+<div class="paragraph">
+<p>You can combine global CORS configuration at the <code>HandlerMapping</code> level with more
+fine-grained, handler-level CORS configuration. For example, annotated controllers can use
+class- or method-level <code>@CrossOrigin</code> annotations (other handlers can implement
+<code>CorsConfigurationSource</code>).</p>
+</div>
+<div class="paragraph">
+<p>你可以将 <code>HandlerMapping</code> 级别的全局CORS配置与更细粒度的处理程序级别的CORS配置结合使用。
+例如，带注解的控制器可以使用类或方法级别的 <code>@CrossOrigin</code> 注解（其他处理程序可以实现 <code>CorsConfigurationSource</code>）。</p>
+</div>
+<div class="paragraph">
+<p>全局和本地配置组合的规则通常是相加的&#8201;&#8212;&#8201;例如：所有全局和所有本地源。
+对于那些只能接受单个值的属性（例如 <code>allowCredentials</code> 和 <code>maxAge</code>），本地值将覆盖全局值。
+有关更多详细信息，请参见 {javadocSpring}/web/cors/CorsConfiguration.html#combine-org.springframework.web.cors.CorsConfiguration-[<code>CorsConfiguration#combine(CorsConfiguration)</code>]。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>要从源中了解更多信息或进行高级自定义，请查看后面的代码：</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="spring-core.html#beans">Spring Core</a></p>
+<p><code>CorsConfiguration</code></p>
 </li>
 <li>
-<p><a href="spring-session.html#overview">Spring Session</a></p>
+<p><code>CorsProcessor</code>, <code>DefaultCorsProcessor</code></p>
 </li>
 <li>
-<p><a href="spring-mvc.html#mvc">Spring MVC</a></p>
-</li>
-<li>
-<p><a href="spring-test.html#testing-introduction">Spring Testing</a></p>
-</li>
-<li>
-<p><a href="spring-boot-test.html#boot-features-testing">Spring Boot Testing</a></p>
-</li>
-<li>
-<p><a href="spring-data-jpa.html#project">Spring Data JPA</a></p>
-</li>
-<li>
-<p><a href="spring-data-solr.html#preface">Spring Data Solr</a></p>
-</li>
-<li>
-<p><a href="spring-rest-docs.html#introduction">Spring Rest Docs</a></p>
-</li>
-<li>
-<p><a href="springfox.html#introduction">Springfox</a></p>
+<p><code>AbstractHandlerMapping</code></p>
 </li>
 </ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mvc-cors-controller">3. <code>@CrossOrigin</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><span class="small">{docSpringWebFlux}#webflux-cors-controller[WebFlux]</span></p>
+</div>
+<div class="paragraph">
+<p>{javadocSpring}/web/bind/annotation/CrossOrigin.html[<code>@CrossOrigin</code>]
+注解启用被注解的控制器方法上的跨域请求，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@RestController
+@RequestMapping("/account")
+public class AccountController {
+
+    @CrossOrigin
+    @GetMapping("/{id}")
+    public Account retrieve(@PathVariable Long id) {
+        // ...
+    }
+
+    @DeleteMapping("/{id}")
+    public void remove(@PathVariable Long id) {
+        // ...
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>默认情况下，<code>@CrossOrigin</code> 允许：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>所有源。</p>
+</li>
+<li>
+<p>所有请求头。</p>
+</li>
+<li>
+<p>控制器方法映射到的所有HTTP方法。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>默认情况下，<code>allowedCredentials</code> 未启用，因为它建立了一个信任级别，可以公开敏感的用户特定信息
+（例如：cookie和CSRF令牌），并且仅在适当的地方使用。</p>
+</div>
+<div class="paragraph">
+<p><code>maxAge</code> 设置为30分钟。</p>
+</div>
+<div class="paragraph">
+<p><code>@CrossOrigin</code> 在类级别上也受支持，并且被所有方法继承，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@CrossOrigin(origins = "http://domain2.com", maxAge = 3600)
+@RestController
+@RequestMapping("/account")
+public class AccountController {
+
+    @GetMapping("/{id}")
+    public Account retrieve(@PathVariable Long id) {
+        // ...
+    }
+
+    @DeleteMapping("/{id}")
+    public void remove(@PathVariable Long id) {
+        // ...
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你可以在类级别和方法级别上使用 <code>@CrossOrigin</code>，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@CrossOrigin(maxAge = 3600)
+@RestController
+@RequestMapping("/account")
+public class AccountController {
+
+    @CrossOrigin("http://domain2.com")
+    @GetMapping("/{id}")
+    public Account retrieve(@PathVariable Long id) {
+        // ...
+    }
+
+    @DeleteMapping("/{id}")
+    public void remove(@PathVariable Long id) {
+        // ...
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mvc-cors-global">4. 全局配置</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><span class="small">{docSpringWebFlux}#webflux-cors-global[WebFlux]</span></p>
+</div>
+<div class="paragraph">
+<p>除了细粒度的控制器方法级别配置外，你可能还想定义一些全局CORS配置。
+你可以在任何 <code>HandlerMapping</code> 上分别设置基于URL的 <code>CorsConfiguration</code> 映射。
+但是，大多数应用程序都使用MVC Java配置或MVC XML名称空间来执行此操作。</p>
+</div>
+<div class="paragraph">
+<p>默认情况下，全局配置启用以下功能：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>所有源。</p>
+</li>
+<li>
+<p>所有请求头。</p>
+</li>
+<li>
+<p><code>GET</code>, <code>HEAD</code> 和 <code>POST</code> 方法.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>默认情况下，<code>allowedCredentials</code> 未启用，因为它建立了一个信任级别，可以公开敏感的用户特定信息
+（例如：cookie和CSRF令牌），并且仅在适当的地方使用。</p>
+</div>
+<div class="paragraph">
+<p><code>maxAge</code> 设置为30分钟。</p>
+</div>
+<div class="sect2">
+<h3 id="mvc-cors-global-java">4.1. Java配置</h3>
+<div class="paragraph">
+<p><span class="small">{docSpringWebFlux}#webflux-cors-global[WebFlux]</span></p>
+</div>
+<div class="paragraph">
+<p>要在MVC Java配置中启用CORS，可以使用 <code>CorsRegistry</code> 回调，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Configuration
+@EnableWebMvc
+public class WebConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+
+        registry.addMapping("/api/**")
+            .allowedOrigins("http://domain2.com")
+            .allowedMethods("PUT", "DELETE")
+            .allowedHeaders("header1", "header2", "header3")
+            .exposedHeaders("header1", "header2")
+            .allowCredentials(true).maxAge(3600);
+
+        // Add more mappings...
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="mvc-cors-global-xml">4.2. XML配置</h3>
+<div class="paragraph">
+<p>要在XML名称空间中启用CORS，可以使用 <code>&lt;mvc:cors&gt;</code> 元素，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;mvc:cors&gt;
+
+    &lt;mvc:mapping path="/api/**"
+        allowed-origins="http://domain1.com, http://domain2.com"
+        allowed-methods="GET, PUT"
+        allowed-headers="header1, header2, header3"
+        exposed-headers="header1, header2" allow-credentials="true"
+        max-age="123" /&gt;
+
+    &lt;mvc:mapping path="/resources/**"
+        allowed-origins="http://domain1.com" /&gt;
+
+&lt;/mvc:cors&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mvc-cors-filter">5. CORS过滤器</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><span class="small">{docSpringWebFlux}#webflux-cors-webfilter[WebFlux]</span></p>
+</div>
+<div class="paragraph">
+<p>你可以通过内置的 {javadocSpring}/web/filter/CorsFilter.html[<code>CorsFilter</code>]应用CORS支持。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+如果你尝试将 <code>CorsFilter</code> 与Spring Security一起使用，请记住Spring Security内置了对CORS的
+<a href="https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#cors">支持</a>。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>要配置过滤器，请将 <code>CorsConfigurationSource</code> 传递给它的构造函数，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">CorsConfiguration config = new CorsConfiguration();
+
+// Possibly...
+// config.applyPermitDefaultValues()
+
+config.setAllowCredentials(true);
+config.addAllowedOrigin("http://domain1.com");
+config.addAllowedHeader("*");
+config.addAllowedMethod("*");
+
+UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+source.registerCorsConfiguration("/**", config);
+
+CorsFilter filter = new CorsFilter(source);</code></pre>
+</div>
 </div>
 </div>
 </div>

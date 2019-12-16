@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<title>Spring Documentation</title>
+<title>REST客户端</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -498,50 +498,83 @@ $(addBlockSwitches);
 </script>
 
 </head>
-<body class="book toc2 toc-left">
+<body id="webmvc-client" class="book toc2 toc-left">
 <div id="header">
-<h1>Spring Documentation</h1>
+<h1>REST客户端</h1>
 <div id="toc" class="toc2">
-<div id="toctitle"></div>
-
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#webmvc-resttemplate">1. <code>RestTemplate</code></a></li>
+<li><a href="#webmvc-webclient">2. <code>WebClient</code></a></li>
+</ul>
 </div>
 </div>
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Hmm, the gate of Spring :-)</p>
+<p>本节描述了客户端对REST端点的访问选项。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="webmvc-resttemplate">1. <code>RestTemplate</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>RestTemplate</code> 是执行HTTP请求的同步客户端。它是原始的Spring REST客户端，并且在基础HTTP客户端库上公开了简单的模板方法API。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+从5.0开始，无阻塞，响应式 <code>WebClient</code> 提供了 <code>RestTemplate</code> 的现代替代方案，并有效支持同步和异步以及流方案。
+<code>RestTemplate</code> 将在将来的版本中弃用，并且以后将不会添加主要的新功能。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>有关详细信息，请参见 {docSpringIntegration}#rest-client-access[REST端点]。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="webmvc-webclient">2. <code>WebClient</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>WebClient</code> 是执行HTTP请求的非阻塞，响应式客户端。它是在5.0中引入的，它提供了 <code>RestTemplate</code> 的现代替代方案，
+并有效支持同步和异步以及流方案。</p>
+</div>
+<div class="paragraph">
+<p>与 <code>RestTemplate</code> 相比，<code>WebClient</code> 支持以下内容：</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="spring-core.html#beans">Spring Core</a></p>
+<p>非阻塞I/O.</p>
 </li>
 <li>
-<p><a href="spring-session.html#overview">Spring Session</a></p>
+<p>响应式流背压。</p>
 </li>
 <li>
-<p><a href="spring-mvc.html#mvc">Spring MVC</a></p>
+<p>高并发，硬件资源更少。</p>
 </li>
 <li>
-<p><a href="spring-test.html#testing-introduction">Spring Testing</a></p>
+<p>利用Java 8 lambda的函数式，链式的API风格。</p>
 </li>
 <li>
-<p><a href="spring-boot-test.html#boot-features-testing">Spring Boot Testing</a></p>
+<p>同步和异步交互。</p>
 </li>
 <li>
-<p><a href="spring-data-jpa.html#project">Spring Data JPA</a></p>
-</li>
-<li>
-<p><a href="spring-data-solr.html#preface">Spring Data Solr</a></p>
-</li>
-<li>
-<p><a href="spring-rest-docs.html#introduction">Spring Rest Docs</a></p>
-</li>
-<li>
-<p><a href="springfox.html#introduction">Springfox</a></p>
+<p>上行流到服务器或从服务器下行流。</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>有关更多详细信息，请参见 {docSpringWebFlux}#webflux-client[WebClient]。</p>
 </div>
 </div>
 </div>
