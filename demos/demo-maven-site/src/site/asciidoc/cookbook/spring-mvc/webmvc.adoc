@@ -1,0 +1,4505 @@
+[[mvc]]
+= Spring Web MVC
+
+Spring Web MVC是基于Servlet API构建的原始Web框架，从一开始就已包含在Spring框架中。
+正式名称“Spring Web MVC”来自其源模块的名称
+（ https://github.com/spring-projects/spring-framework/tree/master/spring-webmvc[`spring-webmvc`]），
+但它通常被称为“ Spring MVC”。与Spring Web MVC并行，Spring Framework 5.0引入了一个响应式栈Web框架，
+其名称“Spring WebFlux”也基于其源模块
+（ https://github.com/spring-projects/spring-framework/tree/master/spring-webflux[`spring-webflux`]）。
+本节介绍Spring Web MVC。 {docSpringWebFlux}#spring-web-reactive[下一节]将介绍Spring WebFlux。
+有关基线信息以及与Servlet容器和Java EE版本范围的兼容性，请参见Spring Framework
+https://github.com/spring-projects/spring-framework/wiki/Spring-Framework-Versions[Wiki]。
+
+[[mvc-servlet]]
+== DispatcherServlet
+[.small]#{docSpringWebFlux}#webflux-dispatcher-handler[WebFlux]#
+
+与其他许多Web框架一样，Spring MVC围绕前端控制器模式进行设计，在该模式下，中央 `Servlet`
+`DispatcherServlet` 提供了用于请求处理的共享算法，而实际工作是由可配置的委托组件执行的。
+该模型非常灵活，并支持多种工作流程。
+
+与任何 `Servlet` 一样，都需要根据Servlet规范使用Java配置或在 `web.xml` 中声明和映射 `DispatcherServlet`。
+反过来，`DispatcherServlet` 使用Spring配置发现请求映射，视图解析，异常处理
+<<mvc-servlet-special-bean-types,等>>所需的委托组件。
+
+以下Java配置示例注册并初始化 `DispatcherServlet`，该容器由Servlet容器自动检测到（请参阅<<mvc-container-config>>）：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    public class MyWebApplicationInitializer implements WebApplicationInitializer {
+
+        @Override
+        public void onStartup(ServletContext servletCxt) {
+
+            // Load Spring web application configuration
+            AnnotationConfigWebApplicationContext ac = new AnnotationConfigWebApplicationContext();
+            ac.register(AppConfig.class);
+            ac.refresh();
+
+            // Create and register the DispatcherServlet
+            DispatcherServlet servlet = new DispatcherServlet(ac);
+            ServletRegistration.Dynamic registration = servletCxt.addServlet("app", servlet);
+            registration.setLoadOnStartup(1);
+            registration.addMapping("/app/*");
+        }
+    }
+----
+
+NOTE: 除了直接使用ServletContext API外，你还可以继承
+`AbstractAnnotationConfigDispatcherServletInitializer` 并覆盖特定方法（请参见
+<<mvc-servlet-context-hierarchy>>下的示例）。
+
+以下 `web.xml` 配置示例注册并初始化 `DispatcherServlet`：
+
+[source,xml,indent=0]
+[subs="verbatim,quotes"]
+----
+<web-app>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/app-context.xml</param-value>
+    </context-param>
+
+    <servlet>
+        <servlet-name>app</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value></param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>app</servlet-name>
+        <url-pattern>/app/*</url-pattern>
+    </servlet-mapping>
+
+</web-app>
+----
+
+NOTE: Spring Boot遵循不同的初始化顺序。Spring Boot并没有陷入Servlet容器的生命周期，
+而是使用Spring配置来引导自身和嵌入式Servlet容器。在Spring配置中检测到 `Filter` 和 `Servlet` 声明，
+并在Servlet容器中注册。有关更多详细信息，请参见
+https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-embedded-container[Spring Boot 文档].。
+
+[[mvc-servlet-context-hierarchy]]
+=== 上下文层次结构
+
+`DispatcherServlet` 期望一个 `WebApplicationContext`（纯 `ApplicationContext` 的扩展）作为其自身的配置。
+`WebApplicationContext` 具有指向 `ServletContext` 和与其关联的 `Servlet` 的链接。
+它还绑定到 `ServletContext`，以便当需要访问它们时，应用程序可以在 `RequestContextUtils` 上使用静态方法来查找
+`WebApplicationContext`。
+
+对于许多应用程序而言，拥有一个简单的 `WebApplicationContext` 就足够了。但也可能具有上下文层次结构，
+其中一个根 `WebApplicationContext` 在多个 `DispatcherServlet`（或其他 `Servlet`）实例之间共享，
+每个实例都有其自己的子 `WebApplicationContext` 配置。
+有关上下文层次结构功能的更多信息，请参见
+<<spring-core.adoc#context-introduction,`ApplicationContext` 的其他功能>>。
+
+根 `WebApplicationContext` 通常包含基础结构beans，例如需要在多个 `Servlet` 实例之间共享的数据存储库和业务服务。
+这些Bean可以有效地继承，并且可以在特定Servlet的子 `WebApplicationContext` 中重写（即重新声明），
+该子 `WebApplicationContext` 通常包含给定 `Servlet` 本地的Bean。下图显示了这种关系：
+
+image::spring-mvc/mvc-context-hierarchy.png[]
+
+下面的示例配置了一个 `WebApplicationContext` 层次结构：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    public class MyWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+
+        @Override
+        protected Class<?>[] getRootConfigClasses() {
+            return new Class<?>[] { RootConfig.class };
+        }
+
+        @Override
+        protected Class<?>[] getServletConfigClasses() {
+            return new Class<?>[] { App1Config.class };
+        }
+
+        @Override
+        protected String[] getServletMappings() {
+            return new String[] { "/app1/*" };
+        }
+    }
+----
+
+TIP: 如果不需要应用程序上下文层次结构，则应用程序可以通过 `getRootConfigClasses()` 返回所有配置，
+并从 `getServletConfigClasses()` 返回null。
+
+以下示例显示了 `web.xml` 等效配置：
+
+[source,xml,indent=0]
+[subs="verbatim,quotes"]
+----
+<web-app>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/root-context.xml</param-value>
+    </context-param>
+
+    <servlet>
+        <servlet-name>app1</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/app1-context.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>app1</servlet-name>
+        <url-pattern>/app1/*</url-pattern>
+    </servlet-mapping>
+
+</web-app>
+----
+
+TIP: 如果不需要应用程序上下文层次结构，则应用程序可以仅配置“`root`”上下文，并将
+`contextConfigLocation` Servlet参数保留为空。
+
+[[mvc-servlet-special-bean-types]]
+=== 特殊Bean类型
+[.small]#{docSpringWebFlux}#webflux-special-bean-types[WebFlux]#
+
+`DispatcherServlet` 委托给特殊的Bean处理请求并呈现适当的响应。所谓“`特殊Bean`”，是指实现框架契约的Spring
+管理的 `Object` 实例。这些通常带有内置契约，但是你可以自定义它们的属性并继承或替换它们。
+
+下表列出了 `DispatcherServlet` 可检测到的特殊bean：
+
+[[mvc-webappctx-special-beans-tbl]]
+[cols="1,2", options="header"]
+|===
+| Bean类型 | 说明
+
+| `HandlerMapping`
+| 将请求与<<mvc-handlermapping-interceptor,拦截器>>列表一起映射到处理程序，以进行预处理和后期处理。
+  映射基于某些条件，其细节因 `HandlerMapping` 实现而异。
+
+  `HandlerMapping` 的两个主要实现是 `RequestMappingHandlerMapping`（支持带 `@RequestMapping`
+  注解的方法）和 `SimpleUrlHandlerMapping`（维护对处理程序的URI路径模式的显式注册）。
+
+| `HandlerAdapter`
+| 帮助 `DispatcherServlet` 调用映射到请求的处理程序，而不管实际如何调用该处理程序。
+  例如，调用带注解的控制器需要解析注解。`HandlerAdapter` 的主要目的是使 `DispatcherServlet` 免受此类细节的影响。
+
+| <<mvc-exceptionhandlers,`HandlerExceptionResolver`>>
+| 解决异常的策略，可能将它们映射到处理程序，HTML错误视图或其他目标。请参阅<<mvc-exceptionhandlers>>。
+
+| <<mvc-viewresolver,`ViewResolver`>>
+| 将从处理程序返回的基于 `String` 的逻辑视图名称解析为要呈现给响应的实际 `View`。
+  请参阅<<mvc-viewresolver>>和<<mvc-view>>。
+
+| <<mvc-localeresolver,`LocaleResolver`>>, <<mvc-timezone,LocaleContextResolver>>
+| 解析客户正在使用的 `Locale` 语言环境以及可能的时区，以便能够提供国际化的视图。请参阅<<mvc-localeresolver>>。
+
+| <<mvc-themeresolver,`ThemeResolver`>>
+| 解析Web应用程序可以使用的主题 -- 例如，用以提供个性化的布局。请参阅<<mvc-themeresolver>>。
+
+| <<mvc-multipart,`MultipartResolver`>>
+| 借助一些multipart解析库来解析multi-part请求的抽象（例如，浏览器表单文件上传）。请参见<<mvc-multipart>>。
+
+| <<mvc-flash-attributes,`FlashMapManager`>>
+| 存储和检索“`input`”和“`output`” `FlashMap`，可用于将属性从一个请求传递到另一个请求，通常用于跨重定向。
+  请参见<<mvc-flash-attributes>>。
+|===
+
+
+[[mvc-servlet-config]]
+=== Web MVC配置
+[.small]#{docSpringWebFlux}#webflux-framework-config[WebFlux]#
+
+应用程序可以声明处理请求所需的<<mvc-servlet-special-bean-types>>中列出的基础结构Bean。
+`DispatcherServlet` 检查每个特殊bean的 `WebApplicationContext`。如果没有匹配的bean类型，它将使用
+https://github.com/spring-projects/spring-framework/blob/master/spring-webmvc/src/main/resources/org/springframework/web/servlet/DispatcherServlet.properties[`DispatcherServlet.properties`]中列出的默认类型。
+
+在大多数情况下，<<mvc-config>>是最佳起点。它使用Java或XML声明所需的bean，并提供了更高级别的配置回调API来对其进行自定义。
+
+NOTE: Spring Boot依靠MVC Java配置来配置Spring MVC，并提供了许多额外的方便选项。
+
+
+[[mvc-container-config]]
+=== Servlet配置
+
+在Servlet 3.0+环境中，你可以选择以编程方式配置Servlet容器，作为替代方案或与 `web.xml` 文件结合使用。
+下面的示例注册一个 `DispatcherServlet`：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    import org.springframework.web.WebApplicationInitializer;
+
+    public class MyWebApplicationInitializer implements WebApplicationInitializer {
+
+        @Override
+        public void onStartup(ServletContext container) {
+            XmlWebApplicationContext appContext = new XmlWebApplicationContext();
+            appContext.setConfigLocation("/WEB-INF/spring/dispatcher-config.xml");
+
+            ServletRegistration.Dynamic registration = container.addServlet("dispatcher", new DispatcherServlet(appContext));
+            registration.setLoadOnStartup(1);
+            registration.addMapping("/");
+        }
+    }
+----
+
+`WebApplicationInitializer` 是Spring MVC提供的接口，可确保检测到你的实现并将其自动用于初始化任何Servlet 3容器。
+`WebApplicationInitializer` 的抽象基类实现名为 `AbstractDispatcherServletInitializer`，
+它通过重写指定Servlet映射和 `DispatcherServlet` 配置位置的方式，使注册 `DispatcherServlet` 更加容易。
+
+对于使用基于Java配置的Spring应用程序，建议这样做，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    public class MyWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+
+        @Override
+        protected Class<?>[] getRootConfigClasses() {
+            return null;
+        }
+
+        @Override
+        protected Class<?>[] getServletConfigClasses() {
+            return new Class<?>[] { MyWebConfig.class };
+        }
+
+        @Override
+        protected String[] getServletMappings() {
+            return new String[] { "/" };
+        }
+    }
+----
+
+如果使用基于XML的Spring配置，则应直接继承 `AbstractDispatcherServletInitializer`，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    public class MyWebAppInitializer extends AbstractDispatcherServletInitializer {
+
+        @Override
+        protected WebApplicationContext createRootApplicationContext() {
+            return null;
+        }
+
+        @Override
+        protected WebApplicationContext createServletApplicationContext() {
+            XmlWebApplicationContext cxt = new XmlWebApplicationContext();
+            cxt.setConfigLocation("/WEB-INF/spring/dispatcher-config.xml");
+            return cxt;
+        }
+
+        @Override
+        protected String[] getServletMappings() {
+            return new String[] { "/" };
+        }
+    }
+----
+
+`AbstractDispatcherServletInitializer` 还提供了一种便捷的方法来添加 `Filter` 实例，
+并将其自动映射到 `DispatcherServlet`，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    public class MyWebAppInitializer extends AbstractDispatcherServletInitializer {
+
+        // ...
+
+        @Override
+        protected Filter[] getServletFilters() {
+            return new Filter[] {
+                new HiddenHttpMethodFilter(), new CharacterEncodingFilter() };
+        }
+    }
+----
+
+每个过滤器都会根据其具体类型添加一个默认名称，并自动映射到 `DispatcherServlet`。
+
+`AbstractDispatcherServletInitializer` 提供了一个protected的 `isAsyncSupported` 方法，
+以在 `DispatcherServlet` 及其映射的所有过滤器上启用异步支持。默认情况下，此标志设置为 `true`。
+
+最后，如果你需要进一步自定义 `DispatcherServlet` 本身，则可以覆盖 `createDispatcherServlet` 方法。
+
+[[mvc-servlet-sequence]]
+=== 处理过程
+[.small]#{docSpringWebFlux}#webflux-dispatcher-handler-sequence[WebFlux]#
+
+`DispatcherServlet` 处理请求的方式如下：
+
+* 搜索 `WebApplicationContext` 并将其绑定在请求中，作为控制器和流程中其他元素可以使用的属性。
+  默认情况下，它绑定在 `DispatcherServlet.WEB_APPLICATION_CONTEXT_ATTRIBUTE` 键下。
+* 语言环境解析器被绑定到请求，以使流程中的元素解析在处理请求（渲染视图，准备数据等）时要使用的语言环境。
+  如果不需要语言环境解析，则不需要语言环境解析器。
+* 主题解析器被绑定到请求，以使诸如视图之类的元素确定要使用的主题。如果不使用主题，则可以将其忽略。
+* 如果指定multipart文件解析器，则将检查请求中是否有multiparts。如果找到multiparts，
+  则将该请求包装在 `MultipartHttpServletRequest` 中，以供流程中的其他元素进一步处理。
+  有关multipart处理的更多信息，请参见<<mvc-multipart>>。
+* 搜索适当的处理程序。如果找到处理程序，则执行与处理程序（预处理器，后处理器和控制器）关联的执行链，
+  以准备模型或渲染。或者，对于带注解的控制器，可以呈现响应（在 `HandlerAdapter` 中），而不是返回视图。
+* 如果返回模型，则渲染视图。如果没有返回任何模型（可能是由于预处理器或后处理器拦截了该请求，可能出于安全原因），
+  则不会呈现任何视图，因为该请求可能已经被满足。
+
+`WebApplicationContext` 中声明的 `HandlerExceptionResolver` Bean用于解决在请求处理期间引发的异常。
+这些异常解析器允许定制逻辑以解决异常。有关更多详细信息，请参见<<mvc-exceptionhandlers>>。
+
+Spring `DispatcherServlet` 还支持Servlet API所指定的 `last-modification-date` 的返回。
+确定特定请求的最后修改日期的过程很简单：`DispatcherServlet` 查找适当的处理程序映射，
+并测试找到的处理程序是否实现了 `LastModified` 接口。如果实现了，
+则将 `LastModified` 接口的 `long getLastModified(request)` 方法的值返回给客户端。
+
+你可以通过将Servlet初始化参数（`init-param` 元素）添加到 `web.xml` 文件的Servlet声明中，来定制各个
+`DispatcherServlet` 实例。下表列出了受支持的参数：
+
+[[mvc-disp-servlet-init-params-tbl]]
+.DispatcherServlet初始化参数
+|===
+| 参数 | 说明
+
+| `contextClass`
+| 实现 `ConfigurableWebApplicationContext` 的类，将由此Servlet实例化并在本地配置。
+  默认情况下，使用 `XmlWebApplicationContext`。
+
+| `contextConfigLocation`
+| 传递给上下文实例的字符串（由 `contextClass` 指定），以指示可以在哪里找到上下文。
+  该字符串可能包含多个字符串（使用逗号作为分隔符）以支持多个上下文。对于具有两次定义的bean的多个上下文位置，以最新位置为准。
+
+| `namespace`
+| `WebApplicationContext` 的命名空间。默认为 `[servlet-name]-servlet`。
+
+| `throwExceptionIfNoHandlerFound`
+| 在找不到请求的处理程序时是否引发 `NoHandlerFoundException`。然后可以使用 `HandlerExceptionResolver`
+  捕获该异常（例如，通过使用 `@ExceptionHandler` 处理控制器方法异常），然后将其作为其他任何异常进行处理。
+
+  默认情况下，它设置为 `false`，在这种情况下，`DispatcherServlet` 将响应状态设置为404（NOT_FOUND），而不会引发异常。
+
+  请注意，如果还配置了<<mvc-default-servlet-handler,默认servlet处理器>>，则始终将未解决的请求转发到默认servlet，
+  并且永远不会引发404。
+|===
+
+
+[[mvc-handlermapping-interceptor]]
+=== 拦截
+
+所有 `HandlerMapping` 实现都支持处理程序拦截器，当你要将特定功能应用于某些请求时（例如，检查主体），该拦截器很有用。
+拦截器必须实现 `org.springframework.web.servlet` 包中 `HandlerInterceptor` 类的三种方法，
+这三种方法提供足够的灵活性来执行各种预处理和后处理：
+
+* `preHandle(..)`: 在执行实际的处理程序之前
+* `postHandle(..)`: 处理程序执行后
+* `afterCompletion(..)`: 完整的请求完成后
+
+`preHandle(..)` 方法返回一个布尔值。你可以使用此方法来中断或继续执行链的处理。
+当此方法返回 `true` 时，处理程序执行链将继续执行。当它返回 `false` 时，`DispatcherServlet` 假定拦截器本身已经处理了请求
+（例如，渲染了一个适当的视图），并且不会继续执行其他拦截器和执行链中的实际处理程序。
+
+有关如何配置拦截器的示例，请参见MVC配置部分中的<<mvc-config-interceptors>>。你还可以通过在各个
+`HandlerMapping` 实现上使用setter直接注册它们。
+
+请注意，对于 `@ResponseBody` 和 `ResponseEntity` 方法，`postHandle` 的用处不大，
+因为响应是在 `HandlerAdapter` 内写入并提交的，在 `postHandle` 之前。这意味着对响应进行任何更改为时已晚，
+例如添加额外的响应头。对于这种情况，你可以实现 `ResponseBodyAdvice` 并将其声明为<<mvc-ann-controller-advice>>
+Bean或直接在 `RequestMappingHandlerAdapter` 上对其进行配置。
+
+
+[[mvc-exceptionhandlers]]
+=== 异常
+[.small]#{docSpringWebFlux}#webflux-dispatcher-exceptions[WebFlux]#
+
+如果在请求映射期间发生异常，或从请求处理程序（例如 `@Controller`）抛出异常，则 `DispatcherServlet` 将委托给
+`HandlerExceptionResolver` Bean链来解决该异常并提供替代处理，这通常是一个错误响应。
+
+下表列出了可用的 `HandlerExceptionResolver` 实现：
+
+[cols="1,2", options="header"]
+.HandlerExceptionResolver实现
+|===
+| `HandlerExceptionResolver` | 描述
+
+| `SimpleMappingExceptionResolver`
+| 异常类名称和错误视图名称之间的映射。对于在浏览器应用程序中呈现错误页面很有用。
+
+| {javadocSpring}/web/servlet/mvc/support/DefaultHandlerExceptionResolver.html[`DefaultHandlerExceptionResolver`]
+| 解决了Spring MVC引发的异常，并将它们映射到HTTP状态码。另请参见备用的 `ResponseEntityExceptionHandler`
+  和<<mvc-ann-rest-exceptions>>。
+
+| `ResponseStatusExceptionResolver`
+| 使用 `@ResponseStatus` 注解解决异常，并根据注解中的值将其映射到HTTP状态码。
+
+| `ExceptionHandlerExceptionResolver`
+| 通过调用 `@Controller` 或 `@ControllerAdvice` 类中的 `@ExceptionHandler` 方法来解决异常。
+  请参见<<mvc-ann-exceptionhandler,@ExceptionHandler方法>>。
+|===
+
+
+[[mvc-excetionhandlers-handling]]
+==== 解析器链
+
+你可以通过在Spring配置中声明多个 `HandlerExceptionResolver` bean并根据需要设置其
+`order` 属性来形成异常解析器链。`order` 属性值越高，异常解析器的位置就越靠后。
+
+`HandlerExceptionResolver` 的约定指定它可以返回：
+
+* 指向错误视图的 `ModelAndView`。
+* 如果在解析程序中处理了异常，则为空的 `ModelAndView`。
+* 如果该异常仍未解决，则为 `null`，以供后续解析器尝试；如果异常在最后仍然存在，则允许它向上冒泡到Servlet容器。
+
+<<mvc-config>>自动为默认的Spring MVC异常，`@ResponseStatus` 注解的异常以及对
+`@ExceptionHandler` 方法的支持声明内置解析器。你可以自定义该列表或替换它。
+
+
+[[mvc-ann-customer-servlet-container-error-page]]
+==== 容器错误页面
+
+如果任何 `HandlerExceptionResolver` 都无法解决异常，因此该异常可以传播，
+或者如果响应状态设置为错误状态（即4xx，5xx），则Servlet容器可以在HTML中呈现默认错误页面。
+要自定义容器的默认错误页面，可以在 `web.xml` 中声明错误页面映射。以下示例显示了如何执行此操作：
+
+[source,xml,indent=0]
+[subs="verbatim,quotes"]
+----
+    <error-page>
+        <location>/error</location>
+    </error-page>
+----
+
+对于前面的示例，当异常冒出或响应具有错误状态时，Servlet容器在容器内向配置的URL进行ERROR调度（例如，`/error`）。
+然后由 `DispatcherServlet` 处理它，可能将其映射到 `@Controller`，可以实现该错误以使用模型返回错误视图名称或呈现JSON响应，
+如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @RestController
+    public class ErrorController {
+
+        @RequestMapping(path = "/error")
+        public Map<String, Object> handle(HttpServletRequest request) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("status", request.getAttribute("javax.servlet.error.status_code"));
+            map.put("reason", request.getAttribute("javax.servlet.error.message"));
+            return map;
+        }
+    }
+----
+
+TIP: Servlet API没有提供在Java中创建错误页面映射的方法。但是，你可以同时使用 `WebApplicationInitializer`
+和最小化的 `web.xml`。
+
+[[mvc-viewresolver]]
+=== 视图解析
+[.small]#{docSpringWebFlux}#webflux-viewresolution[WebFlux]#
+
+Spring MVC定义了 `ViewResolver` 和 `View` 接口，这些接口使你可以在浏览器中渲染模型，而无需将你与特定的视图技术耦合在一起。
+`ViewResolver` 提供了视图名称和实际视图之间的映射。在移交给特定的视图技术之前，`View` 解决了数据准备问题。
+
+下表提供了有关 `ViewResolver` 层次结构的更多详细信息：
+
+[[mvc-view-resolvers-tbl]]
+.ViewResolver实现
+|===
+| ViewResolver| 描述
+
+| `AbstractCachingViewResolver`
+| `AbstractCachingViewResolver` 的子类缓存它们解析的视图实例。缓存可以提高某些视图技术的性能。
+  你可以通过将 `cache` 属性设置为 `false` 来关闭缓存。此外，如果必须在运行时刷新某个视图
+  （例如，当修改FreeMarker模板时），则可以使用 `removeFromCache(String viewName，Locale loc)` 方法。
+
+| `XmlViewResolver`
+| `ViewResolver` 的实现，它接受用XML编写的配置文件，该配置文件的DTD与Spring的XML bean工厂相同。
+  默认配置文件是 `/WEB-INF/views.xml`。
+
+| `ResourceBundleViewResolver`
+| `ViewResolver` 的实现，该 `ViewResolver` 在 `ResourceBundle` 中使用bean的定义，由bundle的基本名称指定。
+  对于应该解析的每个视图，它将属性 `[viewname].(class)` 的值用作视图类，并将属性 `[viewname].url` 的值用作视图URL。
+  你可以在<<mvc-view>>一章中找到示例。
+
+| `UrlBasedViewResolver`
+| `ViewResolver` 接口的简单实现会影响逻辑视图名称到URL的直接解析，而无需显式映射定义。
+  如果你的逻辑名称以直接的方式与视图资源的名称匹配，而无需任意映射，则这是适当的。
+
+| `InternalResourceViewResolver`
+| `UrlBasedViewResolver` 的方便子类，它支持 `InternalResourceView`（实际上是Servlet和JSPs）以及诸如
+  `JstlView` 和 `TilesView` 之类的子类。你可以使用 `setViewClass(..)` 为该解析器生成的所有视图指定视图类。
+  有关详细信息，请参见 {javadocSpring}/web/reactive/result/view/UrlBasedViewResolver.html[`UrlBasedViewResolver`] Javadoc。
+
+| `FreeMarkerViewResolver`
+| `UrlBasedViewResolver` 的便利子类，支持 `FreeMarkerView` 及其自定义子类。
+
+| `ContentNegotiatingViewResolver`
+| `ViewResolver` 接口的实现，该接口根据请求文件名或 `Accept` 请求头解析视图。请参阅<<mvc-multiple-representations>>。
+|===
+
+
+[[mvc-viewresolver-handling]]
+==== 处理
+[.small]#{docSpringWebFlux}#webflux-viewresolution-handling[WebFlux]#
+
+你可以通过声明多个解析器bean，并在必要时通过设置 `order` 属性以指定顺序来链接视图解析器。
+请记住，`order` 属性越高，视图解析器在链中的位置就越靠后。
+
+`ViewResolver` 的契约指定它可以返回null，以指示找不到该视图。但是，对于JSPs和 `InternalResourceViewResolver`，
+确定JSP是否存在的唯一方法是通过 `RequestDispatcher` 进行调度。
+因此，你必须始终将 `InternalResourceViewResolver` 配置为在视图解析器的总体顺序中最后一个。
+
+配置视图解析器就像将 `ViewResolver` bean添加到Spring配置中一样简单。<<mvc-config>>为
+<<mvc-config-view-resolvers>>和添加无逻辑的
+<<mvc-config-view-controller,View Controllers>>提供了专用的配置API，这对于无需控制器逻辑的HTML模板呈现非常有用。
+
+
+[[mvc-redirecting-redirect-prefix]]
+==== 重定向
+[.small]#{docSpringWebFlux}#webflux-redirecting-redirect-prefix[WebFlux]#
+
+视图名称中的特殊 `redirect:` 前缀使你可以执行重定向。`UrlBasedViewResolver`（及其子类）将其识别为需要重定向的指令。
+视图名称的其余部分是重定向URL。
+
+最终效果与控制器返回 `RedirectView` 的效果相同，但是现在控制器本身可以根据逻辑视图名称进行操作。
+逻辑视图名称（例如 `redirect:/myapp/some/resource`）相对于当前Servlet上下文进行重定向，
+而名称诸如 `redirect:http://myhost.com/some/arbitrary/path` 则重定向到绝对URL。
+
+请注意，如果使用 `@ResponseStatus` 注解控制器方法，则注解值优先于 `RedirectView` 设置的响应状态。
+
+
+[[mvc-redirecting-forward-prefix]]
+==== 转发
+
+你还可以使用特殊的 `forward:` 前缀表示最终由 `UrlBasedViewResolver` 和子类解析的视图名称。
+这将创建一个 `InternalResourceView`，它执行 `RequestDispatcher.forward()`。
+因此，此前缀在 `InternalResourceViewResolver` 和 `InternalResourceView`（对于JSPs）中没有用，
+但是如果你使用另一种视图技术但仍希望强制转发由Servlet/JSP引擎处理的资源，则该前缀很有用。
+请注意，你也可以链接多个视图解析器。
+
+[[mvc-multiple-representations]]
+==== 内容协商
+[.small]#{docSpringWebFlux}#webflux-multiple-representations[WebFlux]#
+
+{javadocSpring}/web/servlet/view/ContentNegotiatingViewResolver.html[`ContentNegotiatingViewResolver`]
+不会解析视图本身，而是委派给其他视图解析器，并选择类似于客户端请求的表示形式的视图。
+可以从 `Accept` 请求头或查询参数（例如，`"/path?format=pdf"`）中确定表示形式。
+
+`ContentNegotiatingViewResolver` 通过比较请求媒体类型和与每个 `ViewResolvers` 关联的 `View` 所支持的媒体类型
+(也称为 `Content-Type`)来选择一个适当的 `View` 来处理请求。具有兼容 `Content-Type` 的列表中的第一个 `View` 将表示形式返回给客户端。
+如果 `ViewResolver` 链无法提供兼容的视图，则查阅通过 `DefaultViews` 属性指定的视图列表。
+后一个选项适用于单一 `Views`，无论逻辑视图名称如何，该视图都可以呈现当前资源的适当表示形式。
+`Accept` 请求头可以包含通配符（例如 `text/{asterisk}`），在这种情况下，其 `Content-Type` 为 `text/xml` 的 `View` 是兼容的。
+
+有关配置详细信息，请参见<<mvc-config>>下的<<mvc-config-view-resolvers>>。
+
+
+[[mvc-localeresolver]]
+=== 语言环境
+
+正如Spring Web MVC框架所做的那样，Spring体系结构的大多数部分都支持国际化。
+使用 `DispatcherServlet`，你可以使用客户端的语言环境自动解析消息。这是通过 `LocaleResolver` 对象完成的。
+
+当请求到来时，`DispatcherServlet` 会寻找一个语言环境解析器，如果找到了它，它会尝试使用它来设置语言环境。
+通过使用 `RequestContext.getLocale()` 方法，你始终可以获取由语言环境解析器解析到的语言环境。
+
+除了自动的语言环境解析之外，你还可以在处理程序映射上附加一个拦截器（有关处理程序映射拦截器的更多信息，请参见
+<<mvc-handlermapping-interceptor>>），以在特定情况下（例如，基于请求中的参数）更改语言环境。
+
+语言环境解析器和拦截器在 `org.springframework.web.servlet.i18n` 包中定义，并以常规方式在应用程序上下文中进行配置。
+Spring包含以下可选择的语言环境解析器。
+
+* <<mvc-timezone>>
+* <<mvc-localeresolver-acceptheader>>
+* <<mvc-localeresolver-cookie>>
+* <<mvc-localeresolver-session>>
+* <<mvc-localeresolver-interceptor>>
+
+
+[[mvc-timezone]]
+==== 时区
+
+除了获取客户的语言环境外，了解其时区通常也很有用。`LocaleContextResolver` 接口提供了 `LocaleResolver`
+的扩展，该扩展使解析程序可以提供更丰富的 `LocaleContext`，其中可能包含时区信息。
+
+如果可用，可以使用 `RequestContext.getTimeZone()` 方法获取用户的 `TimeZone`。通过Spring的 `ConversionService`
+注册的任何Date/Time `Converter` 和 `Formatter` 对象都会自动使用时区信息。
+
+
+[[mvc-localeresolver-acceptheader]]
+==== 请求头解析器
+
+该语言环境解析器检查客户端（例如，Web浏览器）发送的请求中的 `accept-language` 标头。
+通常，此请求头字段包含客户端操作系统的语言环境。请注意，此解析器不支持时区信息。
+
+
+[[mvc-localeresolver-cookie]]
+==== Cookie解析器
+
+此语言环境解析器检查客户端上可能存在的 `Cookie`，以查看是否指定了 `Locale` 或 `TimeZone`。
+如果指定，它将使用指定的详细信息。通过使用此语言环境解析器的属性，可以指定Cookie的名称以及最长期限。
+以下示例定义了 `CookieLocaleResolver`：
+
+[source,xml,indent=0]
+[subs="verbatim,quotes"]
+----
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+
+        <property name="cookieName" value="clientlanguage"/>
+
+        <!-- in seconds. If set to -1, the cookie is not persisted (deleted when browser shuts down) -->
+        <property name="cookieMaxAge" value="100000"/>
+
+    </bean>
+----
+
+下表描述了 `CookieLocaleResolver` 属性：
+
+[[mvc-cookie-locale-resolver-props-tbl]]
+.CookieLocaleResolver属性
+[cols="1,1,4"]
+|===
+| 属性 | 默认值 | 描述
+
+| `cookieName`
+| classname + LOCALE
+| Cookie的名称
+
+| `cookieMaxAge`
+| Servlet container default
+| Cookie在客户端上保留的最长时间。如果指定 `-1`，则cookie将不会保留。它仅在客户端关闭浏览器之前可用。
+
+| `cookiePath`
+| /
+| 将Cookie的可见性限制为网站的特定部分。指定 `cookiePath` 时，该cookie仅对该路径及其子路径可见。
+|===
+
+
+[[mvc-localeresolver-session]]
+==== Session解析器
+
+通过 `SessionLocaleResolver`，你可以从可能与用户请求关联的会话中检索 `Locale` 和 `TimeZone`。
+与 `CookieLocaleResolver` 相比，此策略将本地选择的语言环境设置存储在Servlet容器的 `HttpSession` 中。
+结果，这些设置对于每个会话都是临时的，因此在每个会话终止时会丢失。
+
+请注意，与外部会话管理机制（例如Spring Session项目）没有直接关系。此
+`SessionLocaleResolver` 针对当前 `HttpServletRequest` 评估并修改相应的 `HttpSession` 属性。
+
+
+[[mvc-localeresolver-interceptor]]
+==== 语言环境拦截器
+
+你可以通过将 `LocaleChangeInterceptor` 添加到 `HandlerMapping` 定义之一来启用语言环境更改。
+它检测请求中的参数并相应地更改语言环境，在调度程序的应用程序上下文中在 `LocaleResolver` 上调用 `setLocale` 方法。
+下一个示例显示对包含名为 `siteLanguage` 的参数的所有 `{asterisk}.view` 资源的调用现在会更改语言环境。
+因此，例如，对URL的请求 `http://www.sf.net/home.view?siteLanguage=nl` 会将站点语言更改为荷兰语。
+以下示例显示如何拦截语言环境：
+
+[source,xml,indent=0]
+[subs="verbatim"]
+----
+    <bean id="localeChangeInterceptor"
+            class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+        <property name="paramName" value="siteLanguage"/>
+    </bean>
+
+    <bean id="localeResolver"
+            class="org.springframework.web.servlet.i18n.CookieLocaleResolver"/>
+
+    <bean id="urlMapping"
+            class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="interceptors">
+            <list>
+                <ref bean="localeChangeInterceptor"/>
+            </list>
+        </property>
+        <property name="mappings">
+            <value>/**/*.view=someController</value>
+        </property>
+    </bean>
+----
+
+[[mvc-themeresolver]]
+=== 主题
+
+你可以应用Spring Web MVC框架主题来设置应用程序的整体外观，从而增强用户体验。
+主题是静态资源的集合，通常影响样式表和图像，这些样式表和图像会影响应用程序的视觉样式。
+
+[[mvc-themeresolver-defining]]
+==== 定义主题
+
+要在Web应用程序中使用主题，你必须设置 `org.springframework.ui.context.ThemeSource` 接口的实现。
+`WebApplicationContext` 接口扩展了 `ThemeSource`，但将其职责委托给专用的实现。默认情况下，委托给
+`org.springframework.ui.context.support.ResourceBundleThemeSource` 实现，该实现从类路径的根加载属性文件。
+要使用自定义 `ThemeSource` 实现或配置 `ResourceBundleThemeSource` 的基本名称前缀，
+可以在应用程序上下文中使用保留名称 `themeSource` 来注册Bean。Web应用程序上下文会自动检测到具有该名称的bean并使用它。
+
+当你使用 `ResourceBundleThemeSource` 时，将在一个简单的属性文件中定义一个主题。属性文件列出了组成主题的资源，如以下示例所示：
+
+[literal]
+[subs="verbatim,quotes"]
+----
+styleSheet=/themes/cool/style.css
+background=/themes/cool/img/coolBg.jpg
+----
+
+属性的键是从视图代码引用主题元素的名称。对于JSP，通常使用 `spring:theme` 定制标记来执行此操作，
+该标记与 `spring:message` 标记非常相似。以下JSP片段使用上一个示例中定义的主题来自定义外观：
+
+[source,xml,indent=0]
+[subs="verbatim,quotes"]
+----
+    <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+    <html>
+        <head>
+            <link rel="stylesheet" href="<spring:theme code='styleSheet'/>" type="text/css"/>
+        </head>
+        <body style="background=<spring:theme code='background'/>">
+            ...
+        </body>
+    </html>
+----
+
+默认情况下，`ResourceBundleThemeSource` 使用一个空的基本名称前缀。结果，属性文件从类路径的根目录中加载。
+因此，你可以将 `cool.properties` 主题定义放在类路径的根目录中（例如，在 `/WEB-INF/classes` 中）。
+`ResourceBundleThemeSource` 使用标准的Java资源包加载机制，允许主题的完全国际化。
+例如，我们可以有一个 `/WEB-INF/classes/cool_nl.properties`，它引用带有荷兰文字的特殊背景图像。
+
+
+[[mvc-themeresolver-resolving]]
+==== 解析主题
+
+定义主题后，如<<mvc-themeresolver-defining,上一节>>所述，你可以决定要使用哪个主题。
+`DispatcherServlet` 查找一个名为 `themeResolver` 的bean，
+以找出要使用的 `ThemeResolver` 实现。主题解析器的工作方式与 `LocaleResolver` 几乎相同。
+它可以检测用于特定请求的主题，还可以更改请求的主题。下表描述了Spring提供的主题解析器：
+
+[[mvc-theme-resolver-impls-tbl]]
+.ThemeResolver实现
+[cols="1,4"]
+|===
+| 类 | 描述
+
+| `FixedThemeResolver`
+| 选择一个固定的主题，该主题通过使用 `defaultThemeName` 属性设置。
+
+| `SessionThemeResolver`
+| 该主题在用户的HTTP会话中维护。每个会话只需设置一次，但在会话之间不会保留。
+
+| `CookieThemeResolver`
+| 所选主题存储在客户端的cookie中。
+|===
+
+Spring还提供了 `ThemeChangeInterceptor`，可以使用简单的请求参数对每个请求进行主题更改。
+
+
+[[mvc-multipart]]
+=== Multipart解析器
+[.small]#{docSpringWebFlux}#webflux-multipart[WebFlux]#
+
+`org.springframework.web.multipart` 包中的 `MultipartResolver` 是一种用于解析包括文件上传在内的multipart请求的策略。
+有一种基于 http://jakarta.apache.org/commons/fileupload[Commons FileUpload]的实现，另一种基于Servlet 3.0 multipart请求解析。
+
+要启用multipart处理，你需要在 `DispatcherServlet` Spring配置中声明一个名为 `multipartResolver` 的 `MultipartResolver` Bean。
+`DispatcherServlet` 会检测到它并将其应用于传入的请求。收到内容类型为 `multipart/form-data` 的POST时，
+解析程序将解析内容并将当前 `HttpServletRequest` 包装为 `MultipartHttpServletRequest`，
+以提供对已解析部分的访问权限，并将其作为请求参数公开。
+
+
+[[mvc-multipart-resolver-commons]]
+==== Apache Commons `FileUpload`
+
+要使用Apache Commons `FileUpload`，可以配置名称为 `multipartResolver` 的 `CommonsMultipartResolver` 类型的Bean。
+你还需要添加 `commons-fileupload` 作为类路径的依赖。
+
+[[mvc-multipart-resolver-standard]]
+==== Servlet 3.0
+
+需要通过Servlet容器配置启用Servlet 3.0 multipart解析。为此：
+
+* 在Java中，在Servlet注册上设置 `MultipartConfigElement`。
+* 在 `web.xml` 中，将 `"<multipart-config>"` 部分添加到Servlet声明中。
+
+以下示例显示了如何在Servlet注册上设置 `MultipartConfigElement`：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+
+        // ...
+
+        @Override
+        protected void customizeRegistration(ServletRegistration.Dynamic registration) {
+
+            // Optionally also set maxFileSize, maxRequestSize, fileSizeThreshold
+            registration.setMultipartConfig(new MultipartConfigElement("/tmp"));
+        }
+
+    }
+----
+
+Servlet 3.0配置完后，你可以添加名称为 `multipartResolver` 的 `StandardServletMultipartResolver` 类型的Bean。
+
+
+[[mvc-logging]]
+=== 日志
+[.small]#{docSpringWebFlux}#webflux-logging[WebFlux]#
+
+Spring MVC中的DEBUG级别的日志被设计为紧凑，最少且人性化的。它侧重于反复有用的高价值信息，而不是只在调试特定问题时有用的信息。
+
+TRACE级别的日志记录通常遵循与DEBUG相同的原则，但可用于调试任何问题。此外，某些日志消息在TRACE和DEBUG上可能显示不同级别的详细信息。
+
+[[mvc-logging-sensitive-data]]
+==== 敏感数据
+[.small]#{docSpringWebFlux}#webflux-logging-sensitive-data[WebFlux]#
+
+DEBUG和TRACE日志记录可能会记录敏感信息。这就是默认情况下隐藏请求参数和请求头日志，并且必须通过
+`DispatcherServlet` 上的 `enableLoggingRequestDetails` 属性显式启用它们来记录完整日志的原因。
+
+以下示例显示了如何通过使用Java配置来执行此操作：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+public class MyInitializer
+        extends AbstractAnnotationConfigDispatcherServletInitializer {
+
+    @Override
+    protected Class<?>[] getRootConfigClasses() {
+        return ... ;
+    }
+
+    @Override
+    protected Class<?>[] getServletConfigClasses() {
+        return ... ;
+    }
+
+    @Override
+    protected String[] getServletMappings() {
+        return ... ;
+    }
+
+    @Override
+    protected void customizeRegistration(Dynamic registration) {
+        registration.setInitParameter("enableLoggingRequestDetails", "true");
+    }
+
+}
+----
+
+[[filters]]
+== 过滤器
+[.small]#{docSpringWebFlux}#webflux-filters[webFlux]#
+
+`spring-web` 模块提供了一些有用的过滤器：
+
+* <<filters-http-put>>
+* <<filters-forwarded-headers>>
+* <<filters-shallow-etag>>
+* <<filters-cors>>
+
+
+[[filters-http-put]]
+=== 表单数据
+
+浏览器只能通过HTTP GET或HTTP POST提交表单数据，但非浏览器客户端也可以使用HTTP PUT，PATCH和DELETE。
+Servlet API需要 `ServletRequest.getParameter{asterisk}()` 方法来仅支持HTTP POST的表单字段访问。
+
+`spring-web` 模块提供 `FormContentFilter` 来拦截内容类型为 `application/x-www-form-urlencoded` 的HTTP
+PUT，PATCH和DELETE请求，从请求的正文中读取表单数据，并包装 `ServletRequest` 以使表单数据可通过
+`ServletRequest.getParameter{asterisk}()` 方法族获得。
+
+
+[[filters-forwarded-headers]]
+=== Forwarded请求头
+[.small]#{docSpringWebFlux}#webflux-forwarded-headers[webFlux]#
+
+当请求通过代理（例如负载平衡器）进行处理时，host，port和scheme可能会更改，
+这使得从客户端角度创建指向正确的host，port和scheme的链接成为挑战。
+
+https://tools.ietf.org/html/rfc7239[RFC 7239]定义了代理可以用来提供有关原始请求信息的 `Forwarded` HTTP头。
+还有其他非标准请求头，包括 `X-Forwarded-Host`, `X-Forwarded-Port`,
+`X-Forwarded-Proto`, `X-Forwarded-Ssl` 和 `X-Forwarded-Prefix`。
+
+`ForwardedHeaderFilter` 是一个Servlet过滤器，用于修改请求，以便 a)基于 `Forwarded` 头更改host，port和scheme，
+b) 删除那些请求头以消除进一步的影响。该过滤器依赖于包装请求，因此它必须排在其他过滤器之前
+（例如 `RequestContextFilter`），其他过滤器应该处理修改后的请求，而不是原始请求。
+
+对于转发的请求头，存在安全方面的考虑，因为应用程序无法知道请求头是由代理添加的，还是由恶意客户端添加的。
+这就是为什么应配置信任边界处的代理以删除来自外部的不受信任的 `Forwarded` 头的原因。
+你还可以使用 `removeOnly=true` 配置 `ForwardedHeaderFilter`，在这种情况下，它将删除但不使用头。
+
+为了支持<<mvc-ann-async>>和错误调度，此过滤器应与 `DispatcherType.ASYNC` 以及 `DispatcherType.ERROR` 映射。
+如果使用Spring Framework的 `AbstractAnnotationConfigDispatcherServletInitializer`（请参阅<<mvc-container-config>>），
+则会为所有调度类型自动注册所有过滤器。但是，如果通过 `web.xml` 或在Spring Boot中通过
+`FilterRegistrationBean` 注册过滤器，请确保除了 `DispatcherType.REQUEST` 之外，还包括
+`DispatcherType.ASYNC` 和 `DispatcherType.ERROR`。
+
+[[filters-shallow-etag]]
+=== Shallow ETag
+
+`ShallowEtagHeaderFilter` 过滤器通过缓存写入响应的内容并从中计算MD5哈希值来创建“`shallow`” ETag。
+客户端下一次发送时，它会执行相同的操作，但是还会将计算出的值与 `If-None-Match` 请求头进行比较，如果两者相等，则返回304（NOT_MODIFIED）。
+
+此策略可节省网络带宽，但不会节省CPU，因为必须为每个请求计算完整响应。
+如前所述，控制器级别的其他策略可以避免计算。请参阅<<mvc-caching>>。
+
+该过滤器具有 `writeWeakETag` 参数，该参数将过滤器配置为写入弱ETag，类似于以下内容：
+`W/"02a2d595e6ed9a0b24f027f2b63b134d6"`（在
+https://tools.ietf.org/html/rfc7232#section-2.3[RFC 7232第2.3节]中定义）。
+
+为了支持<<mvc-ann-async>>，此过滤器必须与 `DispatcherType.ASYNC` 映射，以便过滤器可以延迟并成功生成ETag到最后一个异步调度的末尾。
+如果使用Spring Framework的 `AbstractAnnotationConfigDispatcherServletInitializer`（请参阅<<mvc-container-config>>），
+则会为所有调度类型自动注册所有过滤器。但是，如果通过 `web.xml` 或在Spring Boot中通过
+`FilterRegistrationBean` 注册过滤器，请确保包括 `DispatcherType.ASYNC`。
+
+[[filters-cors]]
+=== CORS
+[.small]#{docSpringWebFlux}#webflux-filters-cors[webFlux]#
+
+Spring MVC通过控制器上的注解为CORS配置提供了细粒度的支持。但是，当与Spring
+Security一起使用时，我们建议你依赖内置的 `CorsFilter`，它必须排在Spring Security的过滤器链之前。
+
+有关更多详细信息，请参见有关<<mvc-cors>>和<<mvc-cors-filter>>部分。
+
+[[mvc-controller]]
+== 带注解的控制器
+[.small]#{docSpringWebFlux}#webflux-controller[WebFlux]#
+
+Spring MVC提供了一个基于注解的编程模型，其中 `@Controller` 和 `@RestController` 组件使用注解来表达请求映射，
+请求输入，异常处理等。带注解的控制器具有灵活的方法签名，无需继承基类或实现特定的接口。以下示例显示了由注解定义的控制器：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Controller
+    public class HelloController {
+
+        @GetMapping("/hello")
+        public String handle(Model model) {
+            model.addAttribute("message", "Hello World!");
+            return "index";
+        }
+    }
+----
+
+在前面的示例中，该方法接受 `Model` 并以 `String` 的形式返回视图名称，但是还存在许多其他选项，本章稍后将对其进行说明。
+
+TIP: https://spring.io/guides[spring.io]上的指南和教程使用本节中描述的基于注解的编程模型。
+
+[[mvc-ann-controller]]
+=== 声明
+[.small]#{docSpringWebFlux}#webflux-ann-controller[WebFlux]#
+
+你可以使用Servlet的 `WebApplicationContext` 中的标准Spring bean定义来定义控制器Beans。
+`@Controller` 原型允许自动检测，与Spring对在类路径中检测 `@Component` 类并为其自动注册Bean定义的常规支持保持一致。
+它还充当带注解的类的原型，表明其作为Web组件的角色。
+
+要启用对此类 `@Controller` bean的自动检测，可以将组件扫描添加到Java配置中，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Configuration
+    @ComponentScan("org.example.web")
+    public class WebConfig {
+
+        // ...
+    }
+----
+
+下面的示例显示与前面的示例等效的XML配置：
+
+[source,xml,indent=0]
+[subs="verbatim,quotes"]
+----
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:p="http://www.springframework.org/schema/p"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd">
+
+        <context:component-scan base-package="org.example.web"/>
+
+        <!-- ... -->
+
+    </beans>
+----
+
+`@RestController` 是一个组合注解，其本身使用 `@Controller` 和 `@ResponseBody` 进行了元注解，以指示一个控制器，
+其每个方法都继承了类型级别的 `@ResponseBody` 注解，因此直接将其写入响应体，而不是视图解析并使用HTML模板进行渲染。
+
+
+[[mvc-ann-requestmapping-proxying]]
+==== AOP代理
+
+在某些情况下，你可能需要在运行时用AOP代理装饰控制器。一个示例是，如果你选择直接在控制器上声明 `@Transactional` 注解。
+在这种情况下，特别是对于控制器，我们建议使用基于类的代理。这通常是控制器的默认选择。
+但是，如果控制器必须实现不是Spring Context回调的接口（例如 `InitializingBean`，`*Aware` 等），
+则可能需要显式配置基于类的代理。例如，使用 `<tx:annotation-driven/>` 可以更改为 `<tx:annotation-driven proxy-target-class="true"/>`，
+使用 `@EnableTransactionManagement` 可以更改为 `@EnableTransactionManagement(proxyTargetClass = true)`。
+
+[[mvc-ann-requestmapping]]
+=== 请求映射
+[.small]#{docSpringWebFlux}#webflux-ann-requestmapping[WebFlux]#
+
+你可以使用 `@RequestMapping` 注解将请求映射到控制器方法。它具有各种属性，可以通过URL，HTTP
+方法，请求参数，请求头和媒体类型进行匹配。你可以在类级别使用它来表示共享的映射，也可以在方法级别使用它来缩小到特定的端点映射。
+
+`@RequestMapping` 还有HTTP方法特定的快捷方式：
+
+* `@GetMapping`
+* `@PostMapping`
+* `@PutMapping`
+* `@DeleteMapping`
+* `@PatchMapping`
+
+快捷方式是提供的 <<mvc-ann-requestmapping-composed>>，因为可以说，大多数控制器方法应该映射到特定的HTTP方法，
+而不是使用 `@RequestMapping`，后者默认情况下与所有HTTP方法匹配。
+同时，在类级别仍需要 `@RequestMapping` 来表示共享映射。
+
+以下示例具有类型和方法级别的映射：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @RestController
+    @RequestMapping("/persons")
+    class PersonController {
+
+        @GetMapping("/{id}")
+        public Person getPerson(@PathVariable Long id) {
+            // ...
+        }
+
+        @PostMapping
+        @ResponseStatus(HttpStatus.CREATED)
+        public void add(@RequestBody Person person) {
+            // ...
+        }
+    }
+----
+
+
+[[mvc-ann-requestmapping-uri-templates]]
+==== URI模式
+[.small]#{docSpringWebFlux}#webflux-ann-requestmapping-uri-templates[WebFlux]#
+
+你可以使用以下全局模式和通配符来映射请求：
+
+* `?` 匹配一个字符
+* `*` 匹配路径段中的零个或多个字符
+* `**` 匹配零个或多个路径段
+
+你还可以声明URI变量并使用 `@PathVariable` 访问其值，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @GetMapping("/owners/{ownerId}/pets/{petId}")
+    public Pet findPet(@PathVariable Long ownerId, @PathVariable Long petId) {
+        // ...
+    }
+----
+
+你可以在类和方法级别声明URI变量，如以下示例所示：
+
+[source,java,intent=0]
+[subs="verbatim,quotes"]
+----
+@Controller
+@RequestMapping("/owners/{ownerId}")
+public class OwnerController {
+
+    @GetMapping("/pets/{petId}")
+    public Pet findPet(@PathVariable Long ownerId, @PathVariable Long petId) {
+        // ...
+    }
+}
+----
+
+URI变量会自动转换为适当的类型，或者引发 `TypeMismatchException`。默认情况下支持简单类型（`int`，`long`，`Date`
+等），你可以注册对任何其他数据类型的支持。请参阅<<mvc-ann-typeconversion>>和<<mvc-ann-initbinder>>。
+
+你可以显式地命名URI变量（例如，`@PathVariable("customId")`），但是如果名称相同并且你的代码是使用调试信息或
+Java 8上的 `-parameters` 编译器标志进行编译的，则可以省略该详细信息。
+
+语法 `{varName:regex}` 声明带有正则表达式的URI变量，语法为 `{varName:regex}`。例如，给定URL
+`"/spring-web-3.0.5.jar"`，以下方法提取名称，版本和文件扩展名：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @GetMapping("/{name:[a-z-]+}-{version:\\d\\.\\d\\.\\d}{ext:\\.[a-z]+}")
+    public void handle(@PathVariable String version, @PathVariable String ext) {
+        // ...
+    }
+----
+
+URI路径模式也可以嵌入 `${...}` 占位符，这些占位符在启动时通过针对本地，系统，环境和其他属性源使用
+`PropertyPlaceHolderConfigurer` 进行解析。例如，你可以使用它来基于一些外部配置参数化基本URL。
+
+NOTE: Spring MVC使用 `spring-core` 中的 `PathMatcher` 契约和 `AntPathMatcher` 实现来进行URI路径匹配。
+
+[[mvc-ann-requestmapping-pattern-comparison]]
+==== 模式比较
+[.small]#{docSpringWebFlux}#webflux-ann-requestmapping-pattern-comparison[WebFlux]#
+
+当多个模式与URL匹配时，必须将它们进行比较以找到最佳匹配。这可以通过使用
+`AntPathMatcher.getPatternComparator(String path)` 来完成，该工具查找更具体的模式。
+
+如果一个模式的URI变量的数量较少（计数为1），单通配符（计数为1）和双通配符（计数为2），则该模式的含义不太明确。
+2). 给定相等的分数，则选择更长的模式。给定相同的分数和长度，将选择具有比通配符更多URI变量的模式。
+
+默认映射模式（`/{asterisk}{asterisk}`）从评分中排除，并且始终排在最后。
+另外，前缀模式（例如：`/public/{asterisk}{asterisk}`）也被认为比其他没有双通配符的模式更不明确。
+
+有关完整的详细信息，请参阅 {javadocSpring}/util/AntPathMatcher.html[`AntPathMatcher`]
+中的 {javadocSpring}/util/AntPathMatcher.AntPatternComparator.html[`AntPatternComparator`]，
+并且请记住，你可以自定义 {javadocSpring}/util/PathMatcher.html[`PathMatcher`]实现。
+请参阅配置部分中的<<mvc-config-path-matching>>。
+
+
+[[mvc-ann-requestmapping-suffix-pattern-match]]
+==== 后缀匹配
+
+默认情况下，Spring MVC执行 `.{asterisk}` 后缀模式匹配，以便映射到 `/person` 的控制器也隐式映射到 `/person.{asterisk}`。
+然后，文件扩展名用于解释请求的内容类型以用于响应（即，代替 `Accept` 请求头），例如 `/person.pdf`、`/person.xml` 等。
+
+当浏览器用来发送难以一致解释的 `Accept` 请求头时，以这种方式使用文件扩展名是必要的。
+目前，这已不再是必须的，使用 `Accept` 请求头是首选项。
+
+随着时间的流逝，文件扩展名的使用已经以各种方式证明是有问题的。
+当使用URI变量，路径参数和URI编码进行覆盖时，可能会引起歧义。
+关于基于URL的授权和安全性的推理（请参阅下一部分以了解更多详细信息）也变得更加困难。
+
+若要完全禁用文件扩展名，必须设置以下两项：
+
+* `useSuffixPatternMatching(false)`, 请参阅 <<mvc-config-path-matching,PathMatchConfigurer>>
+* `favorPathExtension(false)`, 请参阅 <<mvc-config-content-negotiation,ContentNegotiationConfigurer>>
+
+基于URL的内容协商仍然有用（例如，在浏览器中键入URL时）。为此，我们建议使用基于查询参数的策略，
+以避免文件扩展名附带的大多数问题。或者，如果必须使用文件扩展名，请考虑通过
+<<mvc-config-content-negotiation,ContentNegotiationConfigurer>>的 `mediaTypes` 属性将它们限制为已显式注册的扩展名列表。
+
+
+[[mvc-ann-requestmapping-rfd]]
+==== 后缀匹配和RFD
+
+反射型文件下载（RFD）攻击与XSS相似，它依赖于响应中反映的请求输入（例如，查询参数和URI变量）。
+但是，RFD攻击不是将JavaScript插入HTML，而是依靠浏览器切换来执行下载，并在以后双击时将响应视为可执行脚本。
+
+在Spring MVC中，`@ResponseBody` 和 `ResponseEntity` 方法存在风险，因为它们可以呈现不同的内容类型，
+客户端可以通过URL路径扩展来请求这些内容类型。禁用后缀模式匹配并使用路径扩展进行内容协商可以降低风险，但不足以防止RFD攻击。
+
+为了防止RFD攻击，Spring MVC在呈现响应主体之前，添加了 `Content-Disposition:inline;filename=f.txt`
+响应头来建议是固定且安全的下载文件。仅当URL路径包含既未列入白名单也未明确注册用于内容协商的文件扩展名时，
+才执行此操作。但是，当直接在浏览器中键入URL时，它可能会产生副作用。
+
+默认情况下，许多常见的路径扩展名都被列入白名单。具有自定义 `HttpMessageConverter` 实现的应用程序可以显式注册文件扩展名以进行内容协商，
+以避免为这些扩展名添加 `Content-Disposition` 响应头。请参阅<<mvc-config-content-negotiation>>。
+
+有关RFD的其他建议，请参见 http://pivotal.io/security/cve-2015-5211[CVE-2015-5211]。
+
+
+[[mvc-ann-requestmapping-consumes]]
+==== 可消费的媒体类型
+[.small]#{docSpringWebFlux}#webflux-ann-requestmapping-consumes[WebFlux]#
+
+你可以根据请求的 `Content-Type` 缩小请求映射，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @PostMapping(path = "/pets", consumes = "application/json") <1>
+    public void addPet(@RequestBody Pet pet) {
+        // ...
+    }
+----
+<1> 使用 `consumes` 属性可按内容类型缩小映射范围。
+
+`consumes` 属性还支持否定表达式 -- 例如，`!text/plain` 表示除 `text/plain` 之外的任何内容类型。
+
+你可以在类级别上声明一个共享的 `consumes` 属性。但是，与大多数其他请求映射属性不同，同时使用类级别和方法级别时，
+方法级别 `consumes` 属性覆盖而不是扩展类级别声明。
+
+TIP: `MediaType` 为常用的媒体类型提供常量，例如 `APPLICATION_JSON_VALUE` 和 `APPLICATION_XML_VALUE`。
+
+
+[[mvc-ann-requestmapping-produces]]
+==== 可生产的媒体类型
+[.small]#{docSpringWebFlux}#webflux-ann-requestmapping-produces[WebFlux]#
+
+你可以根据 `Accept` 请求头和控制器方法生成的内容类型列表来缩小请求映射，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @GetMapping(path = "/pets/{petId}", produces = "application/json;charset=UTF-8") <1>
+    @ResponseBody
+    public Pet getPet(@PathVariable String petId) {
+        // ...
+    }
+----
+<1> 使用 `produces` 属性可以按内容类型缩小映射。
+
+媒体类型可以指定字符集。支持否定的表达式 -- 例如，`!text/plain` 表示除 `text/plain` 之外的任何内容类型。
+
+你可以在类级别声明共享的 `produces` 属性。但是，与大多数其他请求映射属性不同，同时使用类级别和方法级别时，
+方法级别 `produces` 属性覆盖而不是扩展类级别声明。
+
+TIP: `MediaType` 为常用的媒体类型提供常量，例如 `APPLICATION_JSON_VALUE` 和 `APPLICATION_XML_VALUE`。
+
+
+[[mvc-ann-requestmapping-params-and-headers]]
+==== 请求参数，请求头
+[.small]#{docSpringWebFlux}#webflux-ann-requestmapping-params-and-headers[WebFlux]#
+
+你可以根据请求参数条件来缩小请求映射。你可以测试是否存在请求参数（`myParam`），或不存在请求参数
+（`!myParam`）或请求参数有特定值（`myParam=myValue`）。以下示例显示如何测试特定值：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @GetMapping(path = "/pets/{petId}", params = "myParam=myValue") <1>
+    public void findPet(@PathVariable String petId) {
+        // ...
+    }
+----
+<1> 测试 `myParam` 是否等于 `myValue`。
+
+
+你还可以将其与请求头条件一起使用，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @GetMapping(path = "/pets", headers = "myHeader=myValue") <1>
+    public void findPet(@PathVariable String petId) {
+        // ...
+    }
+----
+<1> 测试 `myHeader` 是否等于 `myValue`。
+
+
+TIP: 你可以将 `Content-Type` 和 `Accept` 与请求头条件进行匹配，但是最好还是使用
+<<mvc-ann-requestmapping-consumes,consumes>>和<<mvc-ann-requestmapping-produces,produces>>。
+
+[[mvc-ann-requestmapping-head-options]]
+==== HTTP HEAD, OPTIONS
+[.small]#{docSpringWebFlux}#webflux-ann-requestmapping-head-options[WebFlux]#
+
+`@GetMapping` (和 `@RequestMapping(method=HttpMethod.GET)`) 透明地支持HTTP HEAD以进行请求映射。
+控制器方法不需要更改。应用于 `javax.servlet.http.HttpServlet` 的响应包装器确保将 `Content-Length` 头设置为写入的字节数（实际上未写入响应）。
+
+`@GetMapping` (和 `@RequestMapping(method=HttpMethod.GET)`) 被隐式映射到并支持HTTP HEAD。
+像处理HTTP GET一样处理HTTP HEAD请求，不同之处在于，不写入响应正文，而是计算字节数并设置 `Content-Length` 头。
+
+默认情况下，通过将 `Allow` 响应头设置为所有具有匹配URL模式的 `@RequestMapping` 方法中列出的HTTP方法列表
+来处理HTTP OPTIONS。
+
+对于没有HTTP方法声明的 `@RequestMapping`，将 `Allow` 响应头设置为 `GET,HEAD,POST,PUT,PATCH,DELETE,OPTIONS`。
+建议控制器方法应始终声明支持的HTTP方法（例如，通过使用HTTP方法特定的变体：`@GetMapping`，`@PostMapping` 等）。
+
+你可以将 `@RequestMapping` 方法显式映射到HTTP HEAD和HTTP OPTIONS，但这通常不是必需的。
+
+
+[[mvc-ann-requestmapping-composed]]
+==== 自定义注解
+[.small]#{docSpringWebFlux}#mvc-ann-requestmapping-head-options[WebFlux]#
+
+Spring MVC支持将<<spring-core.adoc#beans-meta-annotations,组合注解>>用于请求映射。
+这些注解本身使用 `@RequestMapping` 进行元注解，并且旨在以更狭窄，
+更具体的用途重新声明 `@RequestMapping` 属性的子集（或全部）。
+
+`@GetMapping`, `@PostMapping`, `@PutMapping`, `@DeleteMapping` 和 `@PatchMapping` 是组合注解的示例。
+之所以提供它们，是因为可以说，大多数控制器方法都应该映射到特定的HTTP方法，
+而不是使用 `@RequestMapping`，后者默认情况下与所有HTTP方法都匹配。如果需要组合注解的示例，请查看如何声明它们。
+
+Spring MVC还支持带有自定义请求匹配逻辑的自定义请求映射属性。这是一个更高级的选项，
+它需要子类化 `RequestMappingHandlerMapping` 并覆盖 `getCustomMethodCondition`
+方法，你可以在其中检查自定义属性并返回自己的 `RequestCondition`。
+
+
+[[mvc-ann-requestmapping-registration]]
+==== 显式注册
+[.small]#{docSpringWebFlux}#webflux-ann-requestmapping-registration[WebFlux]#
+
+你可以通过编程方式注册处理器方法，你可以将其用于动态注册或高级案例，
+例如同一处理程序在不同URL下的不同实例。下面的示例注册一个处理器方法：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+@Configuration
+public class MyConfig {
+
+    @Autowired
+    public void setHandlerMapping(RequestMappingHandlerMapping mapping, UserHandler handler) <1>
+            throws NoSuchMethodException {
+
+        RequestMappingInfo info = RequestMappingInfo
+                .paths("/user/{id}").methods(RequestMethod.GET).build(); <2>
+
+        Method method = UserHandler.class.getMethod("getUser", Long.class); <3>
+
+        mapping.registerMapping(info, handler, method); <4>
+    }
+
+}
+----
+
+<1> 注入目标处理程序和控制器的处理程序映射。
+<2> 准备请求映射元数据。
+<3> 获取处理器方法。
+<4> 添加注册。
+
+[[mvc-ann-methods]]
+=== 处理器方法
+[.small]#{docSpringWebFlux}#webflux-ann-methods[WebFlux]#
+
+`@RequestMapping` 处理器方法具有灵活的签名，可以从一系列受支持的控制器方法参数和返回值中进行选择。
+
+[[mvc-ann-arguments]]
+==== 方法参数
+[.small]#{docSpringWebFlux}#webflux-ann-arguments[WebFlux]#
+
+下表描述了受支持的控制器方法参数。任何参数均不支持响应式类型。
+
+支持JDK 8的 `java.util.Optional` 作为方法参数，并与具有 `required` 属性（例如，`@RequestParam`,
+`@RequestHeader` 等）的注解结合在一起，等效于 `required=false`。
+
+[cols="1,2", options="header"]
+|===
+| 控制器方法参数 | 描述
+
+| `WebRequest`, `NativeWebRequest`
+| 通用访问请求参数以及请求和会话属性，而无需直接使用Servlet API。
+
+| `javax.servlet.ServletRequest`, `javax.servlet.ServletResponse`
+| 选择任何特定的请求或响应类型 -- 例如 `ServletRequest`, `HttpServletRequest` 或Spring的
+  `MultipartRequest`, `MultipartHttpServletRequest`。
+
+| `javax.servlet.http.HttpSession`
+| 强制会话的存在。结果，这样的参数永远不会为 `null`。请注意，会话访问不是线程安全的。如果允许多个请求并发访问会话，
+  请考虑将 `RequestMappingHandlerAdapter` 实例的 `synchronizeOnSession` 标志设置为 `true`。
+
+| `javax.servlet.http.PushBuilder`
+| Servlet 4.0推送构建器API，用于程序化的HTTP/2资源推送。请注意，根据Servlet规范，如果客户端不支持HTTP/2功能，
+  则注入的PushBuilder实例可以为null。
+
+| `java.security.Principal`
+| 当前经过身份验证的用户 -- 可能是特定的 `Principal` 实现类（如果已知）。
+
+| `HttpMethod`
+| 请求的HTTP方法。
+
+| `java.util.Locale`
+| 当前的请求语言设置，由可用的最特定的 `LocaleResolver`（实际上是配置的 `LocaleResolver` 或 `LocaleContextResolver`）确定。
+
+| `java.util.TimeZone` + `java.time.ZoneId`
+| 与当前请求关联的时区，由 `LocaleContextResolver` 确定。
+
+| `java.io.InputStream`, `java.io.Reader`
+| 用于访问Servlet API公开的原始请求正文。
+
+| `java.io.OutputStream`, `java.io.Writer`
+| 用于访问Servlet API公开的原始响应正文。
+
+| `@PathVariable`
+| 用于访问URI模板变量。请参阅<<mvc-ann-requestmapping-uri-templates>>。
+
+| `@MatrixVariable`
+| 用于访问URI路径段中的名称/值对。请参阅<<mvc-ann-matrix-variables>>。
+
+| `@RequestParam`
+| 用于访问Servlet请求参数，包括multipart文件。参数值将转换为声明的方法参数类型。
+  请参阅<<mvc-ann-requestparam>>以及<<mvc-multipart-forms>>。
+
+  请注意，对于简单参数值，`@RequestParam` 的使用是可选的。请参阅此表末尾的“其他任何参数”。
+| `@RequestHeader`
+| 用于访问请求头。请求头值将转换为声明的方法参数类型。请参阅<<mvc-ann-requestheader>>。
+
+| `@CookieValue`
+| 用于访问cookie。Cookies值将转换为声明的方法参数类型。请参阅<<mvc-ann-cookievalue>>。
+
+| `@RequestBody`
+| 用于访问HTTP请求体。请求体内容通过使用 `HttpMessageConverter` 实现转换为声明的方法参数类型。请参阅<<mvc-ann-requestbody>>。
+
+| `HttpEntity<B>`
+| 用于访问请求头和请求体。请求体使用 `HttpMessageConverter` 进行转换。请参见<<mvc-ann-httpentity>>。
+
+| `@RequestPart`
+| 要访问 `multipart/form-data`  请求中的部分，使用 `HttpMessageConverter` 转换部分的主体。请参阅<<mvc-multipart-forms>>。
+
+| `java.util.Map`, `org.springframework.ui.Model`, `org.springframework.ui.ModelMap`
+| 用于访问HTML控制器中使用的模型，并作为视图渲染的一部分公开给模板。
+
+| `RedirectAttributes`
+| 指定在重定向的情况下使用的属性（即追加到查询字符串中），并指定要临时存储的flash属性，直到重定向后的请求为止。
+  请参阅<<mvc-redirecting-passing-data>>和<<mvc-flash-attributes>>。
+
+| `@ModelAttribute`
+| 用于访问模型中的现有属性（如果不存在，则进行实例化），并应用数据绑定和验证。请参阅<<mvc-ann-modelattrib-method-args>>
+  以及<<mvc-ann-modelattrib-methods>>和<<mvc-ann-initbinder>>。
+
+  请注意，`@ModelAttribute` 的使用是可选的（例如，设置其属性）。请参阅此表末尾的“其他任何参数”。
+
+| `Errors`, `BindingResult`
+| 用于访问来自命令对象的验证和数据绑定（即，`@ModelAttribute` 参数）的错误或来自 `@RequestBody` 或 `@RequestPart` 参数的验证错误。
+  你必须在经过验证的方法参数后立即声明一个 `Errors` 或 `BindingResult` 参数。
+
+| `SessionStatus` + class-level `@SessionAttributes`
+| 为了标记表单处理完成，将触发清除通过类级别 `@SessionAttributes` 注解声明的会话属性。有关更多详细信息，请参见<<mvc-ann-sessionattributes>>。
+
+| `UriComponentsBuilder`
+| 用于准备相对于当前请求的host，port，scheme，上下文路径以及servlet mapping的文字部分的URL。请参阅<<mvc-uri-building>>。
+
+| `@SessionAttribute`
+| 为了访问任何会话属性，与由于类级别 `@SessionAttributes` 声明而存储在会话中的模型属性相反。
+  有关更多详细信息，请参见<<mvc-ann-sessionattribute>>。
+
+| `@RequestAttribute`
+| 用于访问请求属性。有关更多详细信息，请参见<<mvc-ann-requestattrib>>。
+
+| 其他任何参数
+| 如果方法参数与该表中前述的任何值都不匹配，并且为简单类型（由
+  {javadocSpring}/beans/BeanUtils.html#isSimpleProperty-java.lang.Class-[BeanUtils#isSimpleProperty]确定，
+  则将其解析为 `@RequestParam`。否则，将其解析为 `@ModelAttribute`。
+|===
+
+
+[[mvc-ann-return-types]]
+==== 返回值
+[.small]#{docSpringWebFlux}#webflux-ann-return-types[WebFlux]#
+
+下表描述了受支持的控制器方法返回值。所有返回值都支持响应式类型。
+
+[cols="1,2", options="header"]
+|===
+| 控制器方法返回值 | 描述
+
+| `@ResponseBody`
+| 返回值通过 `HttpMessageConverter` 实现转换并写入响应。请参阅<<mvc-ann-responsebody>>。
+
+| `HttpEntity<B>`, `ResponseEntity<B>`
+| 指定完整响应（包括HTTP响应头和响应体）的返回值将通过 `HttpMessageConverter` 实现进行转换，并写入响应中。
+  请参阅<<mvc-ann-responseentity>>。
+
+| `HttpHeaders`
+| 用于返回带有响应头且没有响应体的响应。
+
+| `String`
+| 使用 `ViewResolver` 实现解析的视图名称，并与隐式模型一起使用 -- 通过命令对象和 `@ModelAttribute` 方法确定。
+  处理器方法还可以通过声明 `Model` 参数来以编程方式丰富模型（请参阅<<mvc-ann-requestmapping-registration>>）。
+
+| `View`
+| 一个 `View` 实例，用于与隐式模型一起呈现 -- 通过命令对象和 `@ModelAttribute` 方法确定。
+  处理器方法还可以通过声明 `Model` 参数来以编程方式丰富模型（请参阅<<mvc-ann-requestmapping-registration>>）。
+
+| `java.util.Map`, `org.springframework.ui.Model`
+| 要添加到隐式模型的属性，其中视图名称通过 `RequestToViewNameTranslator` 隐式确定。
+
+| `@ModelAttribute`
+| 要添加到模型的属性，视图名称通过 `RequestToViewNameTranslator` 隐式确定。
+
+  请注意，`@ModelAttribute` 是可选的。请参阅此表末尾的“其他任何返回值”。
+
+| `ModelAndView` object
+| 要使用的视图和模型属性，以及响应状态（可选）。
+
+| `void`
+| 如果返回值类型为 `void`（或返回值为 `null`）的方法还具有 `ServletResponse`，`OutputStream` 参数或
+  `@ResponseStatus` 注解，则认为该方法已完全处理了响应。如果控制器进行了肯定的 `ETag` 或 `lastModified`
+  时间戳检查，也是如此（请参阅<<mvc-caching-etag-lastmodified>>以获取详细信息）。
+
+  如果以上条件都不成立，则对于REST控制器，`void` 返回类型也可以指示“`无响应体`”，对于HTML控制器，则选择默认视图名称。
+
+| `DeferredResult<V>`
+| 从任何线程异步生成任何上述返回值 -- 例如，由于某个事件或回调的结果。请参阅<<mvc-ann-async>>和<<mvc-ann-async-deferredresult>>。
+
+| `Callable<V>`
+| 在Spring MVC管理的线程中异步产生任何上述返回值。请参阅<<mvc-ann-async>>和<<mvc-ann-async-callable>>。
+
+| `ListenableFuture<V>`,
+  `java.util.concurrent.CompletionStage<V>`,
+  `java.util.concurrent.CompletableFuture<V>`
+| `DeferredResult` 的替代方法，以提供便利(例如，当一个底层服务返回其中一个时)。
+
+| `ResponseBodyEmitter`, `SseEmitter`
+| 使用 `HttpMessageConverter` 实现异步发出要写入响应的对象流。也支持作为 `ResponseEntity` 的主体。
+  请参阅<<mvc-ann-async>>和<<mvc-ann-async-http-streaming>>。
+
+| `StreamingResponseBody`
+| 异步写入响应 `OutputStream`。也支持作为 `ResponseEntity` 的主体。
+  请参阅<<mvc-ann-async>>和<<mvc-ann-async-http-streaming>>。
+
+| Reactive types -- Reactor, RxJava, or others through `ReactiveAdapterRegistry`
+| `DeferredResult` 的替代方法，其中包含收集到 `List` 的多值流（例如 `Flux`，`Observable`）。
+
+  对于流场景（例如，`text/event-stream`, `application/json+stream`），使用 `SseEmitter` 和
+  `ResponseBodyEmitter` 代替，其中在Spring MVC管理的线程上执行 `ServletOutputStream` 阻塞I/O，
+  并在每个写入完成时施加反压。
+
+  请参阅<<mvc-ann-async>>和<<mvc-ann-async-reactive-types>>。
+
+| 其他任何返回值
+| 如果返回值不是由 {javadocSpring}/beans/BeanUtils.html#isSimpleProperty-java.lang.Class-[BeanUtils#isSimpleProperty]
+  确定的简单类型，则它与该表中前述的任何返回值都不匹配且为 `String` 或 `void`
+  的任何返回值均被视为视图名称（通过 `RequestToViewNameTranslator` 选择默认视图名称）。简单类型的值仍然无法解析。
+
+|===
+
+
+[[mvc-ann-typeconversion]]
+==== 类型转换
+[.small]#{docSpringWebFlux}#webflux-ann-typeconversion[WebFlux]#
+
+如果参数声明为 `String` 以外的形式，则某些表示基于 `String` 的请求输入的带注解的控制器方法参数
+（例如：`@RequestParam`，`@RequestHeader`，`@PathVariable`，`@MatrixVariable` 和 `@CookieValue`）可能需要类型转换。
+
+在这种情况下，将根据配置的转换器自动应用类型转换。默认情况下，支持简单类型（`int`，`long`，`Date` 和其他）。
+你可以通过 `WebDataBinder`（请参见<<mvc-ann-initbinder>>）或通过在 `FormattingConversionService`
+中注册 `Formatter` 来自定义类型转换。请参阅 {docSpringCore}#format[Spring字段格式化]。
+
+
+[[mvc-ann-matrix-variables]]
+==== 矩阵变量
+[.small]#{docSpringWebFlux}#webflux-ann-matrix-variables[WebFlux]#
+
+http://tools.ietf.org/html/rfc3986#section-3.3[RFC 3986] 讨论了路径段中的名称/值对。
+在Spring MVC中，基于Tim Berners-Lee的 http://www.w3.org/DesignIssues/MatrixURIs.html["`旧帖子`"]，
+我们将其称为“`矩阵变量`”，但它们也可以称为URI路径参数。
+
+矩阵变量可以出现在任何路径段中，每个变量用分号分隔，多个值用逗号分隔（例如：`/cars;color=red,green;year=2012`）。
+也可以通过重复的变量名称指定多个值（例如：`color=red;color=green;color=blue`）。
+
+如果期望URL包含矩阵变量，则控制器方法的请求映射必须使用URI变量来屏蔽该变量内容，并确保可以成功地匹配请求，
+而不依赖于矩阵变量的顺序和存在性。以下示例使用矩阵变量：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    // GET /pets/42;q=11;r=22
+
+    @GetMapping("/pets/{petId}")
+    public void findPet(@PathVariable String petId, @MatrixVariable int q) {
+
+        // petId == 42
+        // q == 11
+    }
+----
+
+鉴于所有路径段都可能包含矩阵变量，因此有时你可能需要消除矩阵变量应位于哪个路径变量的歧义。以下示例说明了如何做到这一点：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    // GET /owners/42;q=11/pets/21;q=22
+
+    @GetMapping("/owners/{ownerId}/pets/{petId}")
+    public void findPet(
+            @MatrixVariable(name="q", pathVar="ownerId") int q1,
+            @MatrixVariable(name="q", pathVar="petId") int q2) {
+
+        // q1 == 11
+        // q2 == 22
+    }
+----
+
+可以将矩阵变量定义为可选变量，并指定默认值，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    // GET /pets/42
+
+    @GetMapping("/pets/{petId}")
+    public void findPet(@MatrixVariable(required=false, defaultValue="1") int q) {
+
+        // q == 1
+    }
+----
+
+要获取所有矩阵变量，可以使用 `MultiValueMap`，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    // GET /owners/42;q=11;r=12/pets/21;q=22;s=23
+
+    @GetMapping("/owners/{ownerId}/pets/{petId}")
+    public void findPet(
+            @MatrixVariable MultiValueMap<String, String> matrixVars,
+            @MatrixVariable(pathVar="petId") MultiValueMap<String, String> petMatrixVars) {
+
+        // matrixVars: ["q" : [11,22], "r" : 12, "s" : 23]
+        // petMatrixVars: ["q" : 22, "s" : 23]
+    }
+----
+
+请注意，如果要启用矩阵变量的使用。在MVC Java配置中，你需要通过<<mvc-config-path-matching>>设置带有
+`removeSemicolonContent=false` 的 `UrlPathHelper`。在MVC XML名称空间中，可以设置
+`<mvc:annotation-driven enable-matrix-variables="true"/>`。
+
+
+[[mvc-ann-requestparam]]
+==== `@RequestParam`
+[.small]#{docSpringWebFlux}#webflux-ann-requestparam[WebFlux]#
+
+你可以使用 `@RequestParam` 注解将Servlet请求参数（即查询参数或表单数据）绑定到控制器中的方法参数。
+
+以下示例显示了如何执行此操作：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Controller
+    @RequestMapping("/pets")
+    public class EditPetForm {
+
+        // ...
+
+        @GetMapping
+        public String setupForm(**@RequestParam("petId") int petId**, Model model) { <1>
+            Pet pet = this.clinic.loadPet(petId);
+            model.addAttribute("pet", pet);
+            return "petForm";
+        }
+
+        // ...
+
+    }
+----
+<1> 使用 `@RequestParam` 绑定 `petId`。
+
+默认情况下，使用此注解的方法参数是必需的，但是你可以通过将 `@RequestParam` 注解的 `required` 标志设置为
+`false` 或使用 `java.util.Optional` 包装器声明该参数，来指定方法参数是可选的。
+
+如果目标方法参数类型不是 `String`，则将自动应用类型转换。请参阅<<mvc-ann-typeconversion>>。
+
+将参数类型声明为数组或列表，可以为同一参数名称解析多个参数值。
+
+如果将 `@RequestParam` 注解声明为 `Map<String,String>` 或 `MultiValueMap<String,String>`，
+但未在注解中指定参数名称，则将使用每个给定请求参数名称和参数值填充映射。
+
+请注意，`@RequestParam` 的使用是可选的（例如，设置其属性）。默认情况下，
+任何简单值类型的参数（由 {javadocSpring}/beans/BeanUtils.html#isSimpleProperty-java.lang.Class-[BeanUtils#isSimpleProperty]
+确定）并且没有被任何其他参数解析器解析，就如同使用 `@RequestParam` 进行了标注一样。
+
+
+[[mvc-ann-requestheader]]
+==== `@RequestHeader`
+[.small]#{docSpringWebFlux}#webflux-ann-requestheader[WebFlux]#
+
+你可以使用 `@RequestHeader` 注解将请求头绑定到控制器中的方法参数。
+
+考虑带有以下请求头的请求：
+
+[literal]
+[subs="verbatim,quotes"]
+----
+Host                    localhost:8080
+Accept                  text/html,application/xhtml+xml,application/xml;q=0.9
+Accept-Language         fr,en-gb;q=0.7,en;q=0.3
+Accept-Encoding         gzip,deflate
+Accept-Charset          ISO-8859-1,utf-8;q=0.7,*;q=0.7
+Keep-Alive              300
+----
+
+以下示例获取 `Accept-Encoding` 和 `Keep-Alive` 请求头的值：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @GetMapping("/demo")
+    public void handle(
+            @RequestHeader("Accept-Encoding") String encoding, <1>
+            @RequestHeader("Keep-Alive") long keepAlive) { <2>
+        //...
+    }
+----
+<1> 获取 `Accept-Encoding` 请求头的值。
+<2> 获取 `Keep-Alive` 请求头的值。
+
+如果目标方法的参数类型不是 `String`，则将自动应用类型转换。请参阅<<mvc-ann-typeconversion>>。
+
+在 `Map<String, String>`，`MultiValueMap<String, String>` 或 `HttpHeaders` 参数上使用
+`@RequestHeader` 注解时，将使用所有请求头值填充该映射。
+
+TIP: 内置支持可用于将逗号分隔的字符串转换为数组或字符串集合或类型转换系统已知的其他类型。例如：用
+`@RequestHeader("Accept")` 标注的方法参数可以是 `String` 类型，也可以是 `String[]` 或 `List<String>`。
+
+
+[[mvc-ann-cookievalue]]
+==== `@CookieValue`
+[.small]#{docSpringWebFlux}#webflux-ann-cookievalue[WebFlux]#
+
+你可以使用 `@CookieValue` 注解将HTTP cookie的值绑定到控制器中的方法参数。
+
+考虑带有以下cookie的请求：
+
+[literal]
+[subs="verbatim,quotes"]
+----
+JSESSIONID=415A4AC178C59DACE0B2C9CA727CDD84
+----
+
+以下示例显示如何获取cookie值：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @GetMapping("/demo")
+    public void handle(@CookieValue("JSESSIONID") String cookie) { <1>
+        //...
+    }
+----
+<1> 获取 `JSESSIONID` cookie的值。
+
+如果目标方法的参数类型不是 `String`，则将自动应用类型转换。请参阅<<mvc-ann-typeconversion>>。
+
+
+[[mvc-ann-modelattrib-method-args]]
+==== `@ModelAttribute`
+[.small]#{docSpringWebFlux}#webflux-ann-modelattrib-method-args[WebFlux]#
+
+你可以在方法参数上使用 `@ModelAttribute` 注解，以从模型访问属性，或者将其实例化（如果不存在）。
+模型属性还覆盖了名称与字段名称匹配的HTTP Servlet请求参数中的值。这称为数据绑定，它使你不必参与解析和转换单个查询参数和表单字段的工作。
+以下示例显示了如何执行此操作：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @PostMapping("/owners/{ownerId}/pets/{petId}/edit")
+    public String processSubmit(@ModelAttribute Pet pet) { } <1>
+----
+<1> 绑定一个 `Pet` 实例。
+
+上面的 `Pet` 实例解析如下：
+
+* 如果已经使用<<mvc-ann-modelattrib-methods>>，则从模型中添加。
+* 通过使用<<mvc-ann-sessionattributes>>在HTTP会话中进行。
+* 通过 `Converter` 传递的URI路径变量（请参见下一个示例）。
+* 从默认构造函数的调用开始。
+* 从调用具有与Servlet请求参数匹配的参数的“`主构造函数`”开始。参数名称是通过JavaBeans `@ConstructorProperties`
+或字节码中运行时保留的参数名称确定的。
+
+尽管通常使用<<mvc-ann-modelattrib-methods>>用属性填充模型，但另一种替代方法是依赖于 `Converter<String, T>`
+与URI路径变量约定结合使用。在以下示例中，模型属性名称 `account` 与URI路径变量 `account` 匹配，
+并且通过将 `String` account传递给已注册的 `Converter<String, Account>` 来加载 `Account`：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @PutMapping("/accounts/{account}")
+    public String save(@ModelAttribute("account") Account account) {
+        // ...
+    }
+----
+
+获取模型属性实例后，将应用数据绑定。`WebDataBinder` 类将Servlet请求参数名称（查询参数和表单字段）与目标 `Object`
+上的字段名称进行匹配。必要时在应用类型转换后填充匹配字段。有关数据绑定（和验证）的更多信息，请参阅 {docSpringCore}#validation[验证]。
+有关自定义数据绑定的更多信息，请参阅<<mvc-ann-initbinder>>。
+
+数据绑定可能导致错误。默认情况下，引发 `BindException`。但是，如果要检查控制器方法中的此类错误，可以在
+`@ModelAttribute` 旁边立即添加 `BindingResult` 参数，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @PostMapping("/owners/{ownerId}/pets/{petId}/edit")
+    public String processSubmit(@ModelAttribute("pet") Pet pet, BindingResult result) { <1>
+        if (result.hasErrors()) {
+            return "petForm";
+        }
+        // ...
+    }
+----
+<1> 在 `@ModelAttribute` 旁边添加 `BindingResult`。
+
+在某些情况下，你可能希望访问没有数据绑定的模型属性。对于这种情况，可以将 `Model` 注入控制器中并直接访问它，
+或者设置 `@ModelAttribute(binding=false)`，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @ModelAttribute
+    public AccountForm setUpForm() {
+        return new AccountForm();
+    }
+
+    @ModelAttribute
+    public Account findAccount(@PathVariable String accountId) {
+        return accountRepository.findOne(accountId);
+    }
+
+    @PostMapping("update")
+    public String update(@Valid AccountUpdateForm form, BindingResult result,
+            @ModelAttribute(binding=false) Account account) { <1>
+        // ...
+    }
+----
+<1> 设置 `@ModelAttribute(binding=false)`.
+
+你可以通过添加 `javax.validation.Valid` 注解或Spring的 `@Validated` 注解（
+{docSpringCore}#validation-beanvalidation[Bean验证]和
+{docSpringCore}#validation[Spring验证]）
+自动在数据绑定后应用验证。以下示例显示了如何执行此操作：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @PostMapping("/owners/{ownerId}/pets/{petId}/edit")
+    public String processSubmit(@Valid @ModelAttribute("pet") Pet pet, BindingResult result) { <1>
+        if (result.hasErrors()) {
+            return "petForm";
+        }
+        // ...
+    }
+----
+<1> 验证 `Pet` 实例。
+
+请注意，使用 `@ModelAttribute` 是可选的（例如，设置其属性）。默认情况下，任何不是简单值类型（由
+{javadocSpring}/beans/BeanUtils.html#isSimpleProperty-java.lang.Class-[BeanUtils#isSimpleProperty]
+确定）且未被其他任何参数解析器解析的参数都将被视为使用 `@ModelAttribute` 注解。
+
+
+[[mvc-ann-sessionattributes]]
+==== `@SessionAttributes`
+[.small]#{docSpringWebFlux}#webflux-ann-sessionattributes[WebFlux]#
+
+`@SessionAttributes` 用于在请求之间的HTTP Servlet会话中存储模型属性。它是类型级别的注解，
+用于声明特定控制器使用的会话属性。这通常列出应透明地存储在会话中以供后续访问请求的模型属性的名称或模型属性的类型。
+
+以下示例使用 `@SessionAttributes` 注解：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Controller
+    @SessionAttributes("pet") <1>
+    public class EditPetForm {
+        // ...
+    }
+----
+<1> 使用 `@SessionAttributes` 注解。
+
+在第一个请求上，将名称为 `pet` 的模型属性添加到模型时，该属性会自动提升到HTTP Servlet会话并保存在该会话中。
+它会一直保留在那里，直到另一个控制器方法使用 `SessionStatus` 方法参数来清除存储，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Controller
+    @SessionAttributes("pet") <1>
+    public class EditPetForm {
+
+        // ...
+
+        @PostMapping("/pets/{id}")
+        public String handle(Pet pet, BindingResult errors, SessionStatus status) {
+            if (errors.hasErrors) {
+                // ...
+            }
+                status.setComplete(); <2>
+                // ...
+            }
+        }
+    }
+----
+<1> 在Servlet会话中存储 `Pet` 值。
+<2> 从Servlet会话中清除 `Pet` 值。
+
+
+
+[[mvc-ann-sessionattribute]]
+==== `@SessionAttribute`
+[.small]#{docSpringWebFlux}#webflux-ann-sessionattribute[WebFlux]#
+
+如果你需要访问全局存在（即在控制器外部 -- 例如，通过过滤器管理）并且可能存在或可能不存在的预先存在的会话属性，
+则可以在方法参数上使用 `@SessionAttribute` 注解，例如以下示例显示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @RequestMapping("/")
+    public String handle(@SessionAttribute User user) { <1>
+        // ...
+    }
+----
+<1> 使用 `@SessionAttribute` 注解。
+
+
+对于需要添加或删除会话属性的用例，请考虑将 `org.springframework.web.context.request.WebRequest` 或
+`javax.servlet.http.HttpSession` 注入到控制器方法中。
+
+要在控制器工作流中将模型属性临时存储在会话中，请考虑使用 `@SessionAttributes`，如<<mvc-ann-sessionattributes>>中所述。
+
+[[mvc-ann-requestattrib]]
+==== `@RequestAttribute`
+[.small]#{docSpringWebFlux}#webflux-ann-requestattrib[WebFlux]#
+
+与 `@SessionAttribute` 相似，你可以使用 `@RequestAttribute` 注解来访问先前创建的预先存在的请求属性（例如，
+通过Servlet `Filter` 或 `HandlerInterceptor`）：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @GetMapping("/")
+    public String handle(@RequestAttribute Client client) { <1>
+        // ...
+    }
+----
+<1> 使用 `@RequestAttribute` 注解。
+
+[[mvc-redirecting-passing-data]]
+==== 重定向属性
+
+默认情况下，所有模型属性均被视为在重定向URL中作为URI模板变量公开。在其余属性中，
+那些属于原始类型或原始类型的集合或数组的属性会自动附加为查询参数。
+
+如果专门为重定向准备了模型实例，则将原始类型属性作为查询参数附加可能是理想的结果。
+但是，在带注解的控制器中，模型可以包含为渲染目的添加的其他属性（例如，下拉字段值）。
+为避免此类属性出现在URL中的可能性，`@RequestMapping` 方法可以声明 `RedirectAttributes` 类型的参数，
+并使用它指定可用于 `RedirectView` 的确切属性。如果该方法确实重定向，则使用 `RedirectAttributes` 的内容。
+否则，将使用模型的内容。
+
+`RequestMappingHandlerAdapter` 提供了一个名为 `ignoreDefaultModelOnRedirect` 的标志，
+你可以使用该标志指示如果控制器方法重定向，则绝不要使用默认 `Model` 的内容。
+相反，控制器方法应声明一个 `RedirectAttributes` 类型的属性，或者，如果没有这样做，
+则不应将任何属性传递给 `RedirectView`。MVC名称空间和MVC Java配置都将此标志设置为 `false`，
+以保持向后兼容性。但是，对于新应用程序，我们建议将其设置为 `true`。
+
+请注意，展开重定向URL时，本请求中的URI模板变量会自动变为可用，你无需通过 `Model` 或 `RedirectAttributes`
+显式添加它们。以下示例显示了如何定义重定向：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @PostMapping("/files/{path}")
+    public String upload(...) {
+        // ...
+        return "redirect:files/{path}";
+    }
+----
+
+将数据传递到重定向目标的另一种方法是使用Flash属性。与其他重定向属性不同，Flash属性保存在HTTP会话中（因此不会出现在URL中）。
+有关更多信息，请参见<<mvc-flash-attributes>>。
+
+
+[[mvc-flash-attributes]]
+==== Flash属性
+
+Flash属性为一个请求提供了一种存储要在另一个请求中使用的属性的方式。重定向时最常需要此操作，
+例如：Post-Redirect-Get模式。Flash属性在重定向之前（通常在会话中）被临时保存，以便在重定向之后可供请求使用，并立即被删除。
+
+Spring MVC有两个主要的抽象来支持Flash属性。`FlashMap` 用于保存Flash属性，而 `FlashMapManager`
+用于存储，检索和管理 `FlashMap` 实例。
+
+Flash属性支持始终处于“`on`”状态，无需显式启用。但是，如果不使用它，则永远不会导致HTTP会话创建。
+在每个请求上，都有一个“`input`” `FlashMap`，其属性是从上一个请求（如果有）传递过来的，而“`output`”
+`FlashMap` 的属性是为后续请求保存的。可以通过 `RequestContextUtils` 中的静态方法从Spring MVC
+中的任何位置访问这两个 `FlashMap` 实例。
+
+带注解的控制器通常不需要直接使用 `FlashMap`。相反，`@RequestMapping` 方法可以接受 `RedirectAttributes` 类型的参数，
+并使用它为重定向方案添加Flash属性。通过 `RedirectAttributes` 添加的Flash属性会自动传播到“`output`” FlashMap。
+同样，重定向后，来自“`input`” `FlashMap` 的属性会自动添加到服务于目标URL的控制器的 `Model` 中。
+
+.将请求与Flash属性匹配
+****
+Flash属性的概念存在于许多其他Web框架中，并已证明有时会遇到并发问题。这是因为根据定义，Flash属性将存储到下一个请求。
+但是，“下一个”请求可能不是预期的接收者，而是另一个异步请求（例如，轮询或资源请求），在这种情况下，过早删除Flash属性。
+
+为了减少此类问题的可能性，`RedirectView` 会自动使用目标重定向URL的路径和查询参数“`stamps`” `FlashMap` 实例。
+反过来，默认 `FlashMapManager` 在查找“`input`” `FlashMap` 时会将信息与传入请求匹配。
+
+这不能完全消除并发问题的可能性，但可以通过重定向URL中已经可用的信息大大减少并发问题。因此，我们建议你主要将Flash属性用于重定向场景。
+****
+
+
+[[mvc-multipart-forms]]
+==== Multipart
+[.small]#{docSpringWebFlux}#webflux-multipart-forms[WebFlux]#
+
+启用 `MultipartResolver` 后，带有 `multipart/form-data` 的POST请求的内容将被解析并作为常规请求参数进行访问。
+以下示例访问一个常规表单字段和一个上传文件：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+@Controller
+public class FileUploadController {
+
+    @PostMapping("/form")
+    public String handleFormUpload(@RequestParam("name") String name,
+            @RequestParam("file") MultipartFile file) {
+
+        if (!file.isEmpty()) {
+            byte[] bytes = file.getBytes();
+            // store the bytes somewhere
+            return "redirect:uploadSuccess";
+        }
+        return "redirect:uploadFailure";
+    }
+}
+----
+
+将参数类型声明为 `List<MultipartFile>` 允许解析相同参数名称的多个文件。
+
+如果将 `@RequestParam` 注解声明为 `Map<String, MultipartFile>` 或 `MultiValueMap<String, MultipartFile>`，
+但未在注解中指定参数名称，则将使用每个给定参数名称的multipart文件填充映射。
+
+NOTE: 通过Servlet 3.0 multipart解析，你还可以声明 `javax.servlet.http.Part` 而不是Spring的
+`MultipartFile` 作为方法参数或集合值类型。
+
+你还可以将多部分内容用作数据绑定为<<mvc-ann-modelattrib-method-args,命令对象>>的一部分。例如，
+前面示例中的表单字段和文件可以是表单对象上的字段，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+class MyForm {
+
+    private String name;
+
+    private MultipartFile file;
+
+    // ...
+}
+
+@Controller
+public class FileUploadController {
+
+    @PostMapping("/form")
+    public String handleFormUpload(MyForm form, BindingResult errors) {
+        if (!form.getFile().isEmpty()) {
+            byte[] bytes = form.getFile().getBytes();
+            // store the bytes somewhere
+            return "redirect:uploadSuccess";
+        }
+        return "redirect:uploadFailure";
+    }
+}
+----
+
+在RESTful服务场景中，也可以从非浏览器客户端提交multipart请求。以下示例显示了带有JSON的文件：
+
+[literal]
+[subs="verbatim,quotes"]
+----
+POST /someUrl
+Content-Type: multipart/mixed
+
+--edt7Tfrdusa7r3lNQc79vXuhIIMlatb7PQg7Vp
+Content-Disposition: form-data; name="meta-data"
+Content-Type: application/json; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+{
+    "name": "value"
+}
+--edt7Tfrdusa7r3lNQc79vXuhIIMlatb7PQg7Vp
+Content-Disposition: form-data; name="file-data"; filename="file.properties"
+Content-Type: text/xml
+Content-Transfer-Encoding: 8bit
+... File Data ...
+----
+
+你可以使用 `@RequestParam` 作为字符串访问“元数据”部分，但你可能希望将其从JSON反序列化（类似于 `@RequestBody`）。
+在使用 {docSpringIntegration}#rest-message-conversion[HttpMessageConverter]进行转换后，
+使用 `@RequestPart` 注解来访问multipart：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+@PostMapping("/")
+public String handle(**@RequestPart("meta-data") MetaData metadata,
+        @RequestPart("file-data") MultipartFile file**) {
+    // ...
+}
+----
+
+你可以将 `@RequestPart` 与 `javax.validation.Valid` 结合使用，也可以使用Spring的 `@Validated` 注解，
+这两种注解都会导致应用标准Bean验证。默认情况下，验证错误会导致 `MethodArgumentNotValidException`，
+并将其转换为400（BAD_REQUEST）响应。另外，你可以通过 `Errors` 或 `BindingResult` 参数在控制器内本地处理验证错误，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+@PostMapping("/")
+public String handle(**@Valid** @RequestPart("meta-data") MetaData metadata,
+        **BindingResult result**) {
+    // ...
+}
+----
+
+
+[[mvc-ann-requestbody]]
+==== `@RequestBody`
+[.small]#{docSpringWebFlux}#webflux-ann-requestbody[WebFlux]#
+
+你可以使用 `@RequestBody` 注解使请求体通过 {docSpringIntegration}#rest-message-conversion[HttpMessageConverter]
+读取并反序列化为 `Object`。以下示例使用 `@RequestBody` 参数：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @PostMapping("/accounts")
+    public void handle(@RequestBody Account account) {
+        // ...
+    }
+----
+
+你可以使用<<mvc-config>>的<<mvc-config-message-converters>>选项来配置或自定义消息转换。
+
+你可以将 `@RequestBody` 与 `javax.validation.Valid` 或Spring的 `@Validated` 注解结合使用，
+这两种注解都会导致应用标准Bean验证。默认情况下，验证错误会导致 `MethodArgumentNotValidException`，
+并将其转换为400（BAD_REQUEST）响应。另外，你可以通过 `Errors` 或 `BindingResult` 参数在控制器内本地处理验证错误，
+如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @PostMapping("/accounts")
+    public void handle(@Valid @RequestBody Account account, BindingResult result) {
+        // ...
+    }
+----
+
+
+[[mvc-ann-httpentity]]
+==== HttpEntity
+[.small]#{docSpringWebFlux}#webflux-ann-httpentity[WebFlux]#
+
+`HttpEntity` 或多或少与使用<<mvc-ann-requestbody>>相同，但它基于公开请求头和请求体的容器对象。
+以下清单显示了一个示例：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @PostMapping("/accounts")
+    public void handle(HttpEntity<Account> entity) {
+        // ...
+    }
+----
+
+
+[[mvc-ann-responsebody]]
+==== `@ResponseBody`
+[.small]#{docSpringWebFlux}#webflux-ann-responsebody[WebFlux]#
+
+你可以在方法上使用 `@ResponseBody` 注解，以通过 {docSpringIntegration}#rest-message-conversion[HttpMessageConverter]
+将返回序列化为响应体。以下清单显示了一个示例：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @GetMapping("/accounts/{id}")
+    @ResponseBody
+    public Account handle() {
+        // ...
+    }
+----
+
+在类级别也支持 `@ResponseBody`，在这种情况下，所有控制器方法都将继承它。这就是
+`@RestController` 的效果，它只不过是带有 `@Controller` 和 `@ResponseBody` 注解的元注解。
+
+你可以将 `@ResponseBody` 与响应式类型一起使用。有关更多详细信息，请参见<<mvc-ann-async>>和<<mvc-ann-async-reactive-types>>。
+
+你可以使用<<mvc-config>>的<<mvc-config-message-converters>>选项来配置或自定义消息转换。
+
+你可以将 `@ResponseBody` 方法与JSON序列化视图结合使用。有关详细信息，请参见<<mvc-ann-jackson>>。
+
+
+[[mvc-ann-responseentity]]
+==== ResponseEntity
+[.small]#{docSpringWebFlux}#webflux-ann-responseentity[WebFlux]#
+
+`ResponseEntity` 类似于<<mvc-ann-responsebody>>，但具有状态信息和响应头。例如：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @GetMapping("/something")
+    public ResponseEntity<String> handle() {
+        String body = ... ;
+        String etag = ... ;
+        return ResponseEntity.ok().eTag(etag).build(body);
+    }
+----
+
+Spring MVC支持使用单值<<mvc-ann-async-reactive-types,响应式类型>>异步生成 `ResponseEntity`，
+和/或为主体使用单值和多值响应式类型。
+
+[[mvc-ann-jackson]]
+==== Jackson JSON
+
+Spring提供了对Jackson JSON库的支持。
+
+[[mvc-ann-jsonview]]
+===== JSON视图
+[.small]#{docSpringWebFlux}#webflux-ann-jsonview[WebFlux]#
+
+Spring MVC为 http://wiki.fasterxml.com/JacksonJsonViews[Jackson的序列化视图]提供了内置支持，该视图仅可呈现
+`Object` 中所有字段的一部分。要将其与 `@ResponseBody` 或 `ResponseEntity` 控制器方法一起使用，可以使用
+Jackson的 `@JsonView` 注解来激活序列化视图类，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @RestController
+    public class UserController {
+
+        @GetMapping("/user")
+        @JsonView(User.WithoutPasswordView.class)
+        public User getUser() {
+            return new User("eric", "7!jd#h23");
+        }
+    }
+
+    public class User {
+
+        public interface WithoutPasswordView {};
+        public interface WithPasswordView extends WithoutPasswordView {};
+
+        private String username;
+        private String password;
+
+        public User() {
+        }
+
+        public User(String username, String password) {
+            this.username = username;
+            this.password = password;
+        }
+
+        @JsonView(WithoutPasswordView.class)
+        public String getUsername() {
+            return this.username;
+        }
+
+        @JsonView(WithPasswordView.class)
+        public String getPassword() {
+            return this.password;
+        }
+    }
+----
+
+NOTE: `@JsonView` 允许使用一组视图类，但是每个控制器方法只能指定一个。如果需要激活多个视图，则可以使用复合接口。
+
+对于依赖视图解析技术的控制器，可以将序列化视图类添加到模型中，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Controller
+    public class UserController extends AbstractController {
+
+        @GetMapping("/user")
+        public String getUser(Model model) {
+            model.addAttribute("user", new User("eric", "7!jd#h23"));
+            model.addAttribute(JsonView.class.getName(), User.WithoutPasswordView.class);
+            return "userView";
+        }
+    }
+----
+
+[[mvc-ann-modelattrib-methods]]
+=== 模型
+[.small]#{docSpringWebFlux}#webflux-ann-modelattrib-methods[WebFlux]#
+
+你可以使用 `@ModelAttribute` 注解：
+
+* 在 `@RequestMapping` 方法中的<<mvc-ann-modelattrib-method-args,方法参数>>上，
+可从模型创建或访问 `Object`，并将其通过 `WebDataBinder` 绑定到请求。
+* 作为 `@Controller` 或 `@ControllerAdvice` 类中的方法级注解，可在任何 `@RequestMapping` 方法调用之前帮助初始化模型。
+* 在 `@RequestMapping` 方法上标记它的返回值是一个模型属性。
+
+本节讨论 `@ModelAttribute` 方法 -- 前面列表中的第二项。控制器可以具有任意数量的 `@ModelAttribute` 方法。
+所有此类方法均在同一控制器中的 `@RequestMapping` 方法之前调用。也可以通过 `@ControllerAdvice` 在控制器之间共享
+`@ModelAttribute` 方法。有关更多详细信息，请参阅<<mvc-ann-controller-advice>>部分。
+
+`@ModelAttribute` 方法具有灵活的方法签名。它们支持与 `@RequestMapping` 方法相同的许多参数，除了
+`@ModelAttribute` 本身或与请求正文相关的任何东西。
+
+下面的示例显示一个 `@ModelAttribute` 方法：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @ModelAttribute
+    public void populateModel(@RequestParam String number, Model model) {
+        model.addAttribute(accountRepository.findAccount(number));
+        // add more ...
+    }
+----
+
+以下示例仅添加一个属性：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @ModelAttribute
+    public Account addAccount(@RequestParam String number) {
+        return accountRepository.findAccount(number);
+    }
+----
+
+NOTE: 如果未明确指定名称，则根据 `Object` 类型选择默认名称，如 {javadocSpring}/core/Conventions.html[`Conventions`]的javadoc中所述。
+你始终可以使用重载的 `addAttribute` 方法或通过 `@ModelAttribute` 上的 `name` 属性（用于返回值）来分配显式名称。
+
+你也可以将 `@ModelAttribute` 用作 `@RequestMapping` 方法上的方法级注释，
+在这种情况下，`@RequestMapping` 方法的返回值将解释为模型属性。通常不需要这样做，因为它是HTML控制器的默认行为，
+除非返回值是一个 `String`，不这样做它将被解释为视图名称。`@ModelAttribute` 还可以自定义模型属性名称，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @GetMapping("/accounts/{id}")
+    @ModelAttribute("myAccount")
+    public Account handle() {
+        // ...
+        return account;
+    }
+----
+
+
+
+[[mvc-ann-initbinder]]
+=== `DataBinder`
+[.small]#{docSpringWebFlux}#webflux-ann-initbinder[WebFlux]#
+
+`@Controller` 或 `@ControllerAdvice` 类可以具有用于初始化 `WebDataBinder` 实例的 `@InitBinder` 方法，而这些方法又可以：
+
+* 将请求参数（即表单或查询数据）绑定到模型对象。
+* 将基于字符串的请求值（例如请求参数，路径变量，请求头，Cookie等）转换为控制器方法参数的目标类型。
+* 呈现HTML表单时，将模型对象的值格式化为 `String` 值。
+
+`@InitBinder` 方法可以注册特定于控制器的 `java.bean.PropertyEditor` 或
+Spring `Converter` 和 `Formatter` 组件。另外，你可以使用<<mvc-config-conversion,MVC配置>>在全局共享的
+`FormattingConversionService` 中注册 `Converter` 和 `Formatter` 类型。
+
+`@InitBinder` 方法支持与 `@RequestMapping` 方法相同的许多参数，除了 `@ModelAttribute`（命令对象）参数。
+通常，它们使用 `WebDataBinder` 参数（用于注册）和 `void` 返回值声明。以下清单显示了一个示例：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Controller
+    public class FormController {
+
+        @InitBinder <1>
+        public void initBinder(WebDataBinder binder) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            dateFormat.setLenient(false);
+            binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+        }
+
+        // ...
+    }
+----
+<1> 定义一个 `@InitBinder` 方法。
+
+另外，当通过共享的 `FormattingConversionService` 使用基于
+`Formatter` 的设置时，可以重新使用相同的方法并注册特定于控制器的 `Formatter` 实现，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Controller
+    public class FormController {
+
+        @InitBinder <1>
+        protected void initBinder(WebDataBinder binder) {
+            binder.addCustomFormatter(new DateFormatter("yyyy-MM-dd"));
+        }
+
+        // ...
+    }
+----
+<1> 在自定义格式化程序上定义 `@InitBinder` 方法。
+
+
+[[mvc-ann-exceptionhandler]]
+=== 异常
+[.small]#{docSpringWebFlux}#webflux-ann-controller-exceptions[WebFlux]#
+
+`@Controller` 和<<mvc-ann-controller-advice,@ControllerAdvice>>类可以具有 `@ExceptionHandler`
+方法来处理控制器方法中的异常，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Controller
+    public class SimpleController {
+
+        // ...
+
+        @ExceptionHandler
+        public ResponseEntity<String> handle(IOException ex) {
+            // ...
+        }
+    }
+----
+
+该异常可能与正在传播的顶级异常（即直接抛出 `IOException`）匹配，也可能与顶级包装器异常（例如，包装在 `IllegalStateException` 内部的
+`IOException`）内的直接cause匹配。
+
+对于匹配的异常类型，如前面的示例所示，最好将目标异常声明为方法参数。当多个异常方法匹配时，root异常匹配通常比cause异常匹配更可取。
+更具体地说，`ExceptionDepthComparator` 用于根据抛出的异常类型的深度对异常进行排序。
+
+另外，注解声明可以缩小异常类型以使其匹配，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @ExceptionHandler({FileSystemException.class, RemoteException.class})
+    public ResponseEntity<String> handle(IOException ex) {
+        // ...
+    }
+----
+
+你甚至可以使用带有非常通用的参数签名的特定异常类型列表，如下面的示例所示:
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @ExceptionHandler({FileSystemException.class, RemoteException.class})
+    public ResponseEntity<String> handle(Exception ex) {
+        // ...
+    }
+----
+
+[NOTE]
+====
+root和cause异常匹配之间的区别可能令人惊讶。
+
+在前面显示的 `IOException` 变体中，通常使用实际的 `FileSystemException` 或 `RemoteException`
+实例作为参数来调用该方法，因为这两个实例均继承自 `IOException`。但是，如果在包装器异常(本身就是 `IOException`)
+中传播任何此类匹配异常，则传入的异常实例就是该包装器异常。
+
+在 `handle(Exception)` 变体中，行为甚至更简单。在包装场景中，总是使用包装器异常来调用此方法，
+在这种情况下，实际匹配的异常可以通过 `ex.getCause()` 找到。仅当将它们作为顶级异常抛出时，
+传入的异常才是实际的 `FileSystemException` 或 `RemoteException` 实例。
+====
+
+我们通常建议你在参数签名中尽可能具体，以减少root和cause异常类型之间不匹配的可能性。
+考虑将多重匹配方法分解为单独的 `@ExceptionHandler` 方法，每个方法均通过其签名匹配单个特定的异常类型。
+
+在多 `@ControllerAdvice` 中，我们建议在以相应顺序优先的 `@ControllerAdvice` 上声明你的主要root异常映射。
+虽然root异常匹配是首选的原因，但这是在给定控制器或 `@ControllerAdvice` 类的方法中定义的。
+这意味着优先级较高的 `@ControllerAdvice` Bean上的原因匹配优于优先级较低的 `@ControllerAdvice` Bean上的任何匹配（例如：root）。
+
+最后但并非最不重要的一点是，`@ExceptionHandler` 方法实现可以选择通过以原始形式重新抛出异常来退出处理给定异常实例。
+这在你只对根级别的匹配或无法静态确定的特定上下文中的匹配感兴趣的场景中非常有用。
+重新抛出的异常会在其余的解析链中传播，就像给定的 `@ExceptionHandler` 方法最初不会匹配它一样。
+
+Spring MVC中对 `@ExceptionHandler` 方法的支持建立在 `DispatcherServlet` 级别
+<<mvc-exceptionhandlers,HandlerExceptionResolver>>机制上。
+
+[[mvc-ann-exceptionhandler-args]]
+==== 方法参数
+
+`@ExceptionHandler` 方法支持以下参数：
+
+[cols="1,2", options="header"]
+|===
+| 方法参数 | 描述
+
+| Exception type
+| 用于访问引发的异常。
+
+| `HandlerMethod`
+| 用于访问引发异常的控制器方法。
+
+| `WebRequest`, `NativeWebRequest`
+| 对请求参数以及请求和会话属性的常规访问，而无需直接使用Servlet API。
+
+| `javax.servlet.ServletRequest`, `javax.servlet.ServletResponse`
+| 选择任何特定的请求或响应类型（例如：`ServletRequest` 或 `HttpServletRequest` 或Spring的 `MultipartRequest`
+  或 `MultipartHttpServletRequest`）。
+
+| `javax.servlet.http.HttpSession`
+| 强制会话的存在。结果，这样的参数永远不会为 `null`。请注意，会话访问不是线程安全的。如果允许多个请求同时访问会话，
+  请考虑将 `RequestMappingHandlerAdapter` 实例的 `synchronizeOnSession` 标志设置为 `true`。
+
+| `java.security.Principal`
+| 当前经过身份验证的用户 -- 可能是特定的 `Principal` 实现类（如果已知）。
+
+| `HttpMethod`
+| 请求的HTTP方法。
+
+| `java.util.Locale`
+| 当前的请求语言设置，由可用的最特定的 `LocaleResolver`（实际上是配置的 `LocaleResolver` 或 `LocaleContextResolver`）确定。
+
+| `java.util.TimeZone`, `java.time.ZoneId`
+| 与当前请求关联的时区，由 `LocaleContextResolver` 确定。
+
+| `java.io.OutputStream`, `java.io.Writer`
+| 用于访问Servlet API公开的原始响应正文。
+
+| `java.util.Map`, `org.springframework.ui.Model`, `org.springframework.ui.ModelMap`
+| 用于访问模型以进行错误响应。永远是空的。
+
+| `RedirectAttributes`
+| 指定在重定向的情况下使用的属性（即追加到查询字符串中），并指定要临时存储的flash属性，直到重定向后的请求为止。
+  请参阅<<mvc-redirecting-passing-data>>和<<mvc-flash-attributes>>。
+
+| `@SessionAttribute`
+| 为了访问任何会话属性，与由于类级别 `@SessionAttributes` 声明而存储在会话中的模型属性相反。
+  有关更多详细信息，请参见<<mvc-ann-sessionattribute>>。
+
+| `@RequestAttribute`
+| 用于访问请求属性。有关更多详细信息，请参见<<mvc-ann-requestattrib>>。
+
+|===
+
+
+[[mvc-ann-exceptionhandler-return-values]]
+==== 返回值
+
+`@ExceptionHandler` 方法支持以下返回值：
+
+[cols="1,2", options="header"]
+|===
+| 返回值 | 描述
+
+| `@ResponseBody`
+| 返回值通过 `HttpMessageConverter` 实现转换并写入响应。请参阅<<mvc-ann-responsebody>>。
+
+| `HttpEntity<B>`, `ResponseEntity<B>`
+| 指定完整响应（包括HTTP响应头和响应体）的返回值将通过 `HttpMessageConverter` 实现进行转换，并写入响应中。
+  请参阅<<mvc-ann-responseentity>>。
+
+| `String`
+| 使用 `ViewResolver` 实现解析的视图名称，并与隐式模型一起使用 -- 通过命令对象和 `@ModelAttribute` 方法确定。
+  处理器方法还可以通过声明 `Model` 参数来以编程方式丰富模型（如前所述）。
+
+| `View`
+| 一个 `View` 实例，用于与隐式模型一起呈现 -- 通过命令对象和 `@ModelAttribute` 方法确定。
+  处理器方法还可以通过声明 `Model` 参数来以编程方式丰富模型（如前所述）。
+
+| `java.util.Map`, `org.springframework.ui.Model`
+| 要添加到隐式模型的属性，其中视图名称通过 `RequestToViewNameTranslator` 隐式确定。
+
+| `@ModelAttribute`
+| 要添加到模型的属性，视图名称通过 `RequestToViewNameTranslator` 隐式确定。
+
+  请注意，`@ModelAttribute` 是可选的。请参阅此表末尾的“其他任何返回值”。
+
+| `ModelAndView` object
+| 要使用的视图和模型属性，以及响应状态（可选）。
+
+| `void`
+| 如果返回值类型为 `void`（或返回值为 `null`）的方法还具有 `ServletResponse`，`OutputStream` 参数或
+  `@ResponseStatus` 注解，则认为该方法已完全处理了响应。如果控制器进行了肯定的 `ETag` 或 `lastModified`
+  时间戳检查，也是如此（请参阅<<mvc-caching-etag-lastmodified>>以获取详细信息）。
+
+  如果以上条件都不成立，则对于REST控制器，`void` 返回类型也可以指示“`无响应体`”，对于HTML控制器，则选择默认视图名称。
+
+| 其他任何返回值
+| 如果返回值与上述任何一个都不匹配并且不是简单类型（由
+  {javadocSpring}/beans/BeanUtils.html#isSimpleProperty-java.lang.Class-[BeanUtils#isSimpleProperty]确定），
+  则默认情况下会将其视为要添加到模型的模型属性。如果是简单类型，则仍然无法解析。
+|===
+
+
+[[mvc-ann-rest-exceptions]]
+==== REST API异常
+[.small]#{docSpringWebFlux}#webflux-ann-rest-exceptions[WebFlux]#
+
+REST服务的常见要求是在响应正文中包含错误详细信息。Spring框架不会自动执行此操作，
+因为响应主体中错误详细信息的表示是特定于应用程序的。但是，`@RestController` 可以将 `@ExceptionHandler`
+方法与 `ResponseEntity` 返回值一起使用，以设置响应的状态和主体。也可以在 `@ControllerAdvice`
+类中声明此类方法，以将其全局应用。
+
+在响应体中使用错误详细信息实现全局异常处理的应用程序应考虑继承
+{javadocSpring}/web/servlet/mvc/method/annotation/ResponseEntityExceptionHandler.html[`ResponseEntityExceptionHandler`]，
+它提供了Spring MVC引发的异常的处理并提供了自定义响应体的钩子。要使用此功能，请创建 `ResponseEntityExceptionHandler`
+的子类，并使用 `@ControllerAdvice` 对其进行注解，重写必要的方法，并将其声明为Spring bean。
+
+
+[[mvc-ann-controller-advice]]
+=== 控制器通知
+[.small]#{docSpringWebFlux}#webflux-ann-controller-advice[WebFlux]#
+
+通常，`@ExceptionHandler`，`@InitBinder` 和 `@ModelAttribute` 方法在声明它们的 `@Controller` 类
+（或类层次结构）中应用。如果希望此类方法在全局范围内（跨控制器）应用，则可以在带有 `@ControllerAdvice`
+或 `@RestControllerAdvice` 注解的类中声明它们。
+
+`@ControllerAdvice` 带有 `@Component` 注解，这意味着可以通过
+<<spring-core.adoc#beans-java-instantiating-container-scan,组件扫描>>将此类注册为Spring Bean。
+`@RestControllerAdvice` 是由 `@ControllerAdvice` 和 `@ResponseBody` 注解的组合注解，
+这实际上意味着 `@ExceptionHandler` 方法通过消息转换（相对于视图解析或模板渲染）呈现给响应体的。
+
+启动时，`@RequestMapping` 和 `@ExceptionHandler` 方法的基础结构类将检测使用 `@ControllerAdvice` 注解的Spring bean，
+然后在运行时应用其方法。全局 `@ExceptionHandler` 方法（来自 `@ControllerAdvice`）在本地方法（来自 `@Controller`）
+__之后__ 应用。相比之下，全局 `@ModelAttribute` 和 `@InitBinder` 方法在本地方法 __之前__ 应用。
+
+默认情况下，`@ControllerAdvice` 方法适用于每个请求（即所有控制器），但是你可以通过使用注解上的属性将其范围缩小
+到控制器的子集，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    // Target all Controllers annotated with @RestController
+    @ControllerAdvice(annotations = RestController.class)
+    public class ExampleAdvice1 {}
+
+    // Target all Controllers within specific packages
+    @ControllerAdvice("org.example.controllers")
+    public class ExampleAdvice2 {}
+
+    // Target all Controllers assignable to specific classes
+    @ControllerAdvice(assignableTypes = {ControllerInterface.class, AbstractController.class})
+    public class ExampleAdvice3 {}
+----
+
+前面示例中的选择器在运行时进行评估，如果广泛使用，可能会对性能产生负面影响。有关更多详细信息，请参见
+{javadocSpring}/web/bind/annotation/ControllerAdvice.html[`@ControllerAdvice`]javadoc。
+
+[[webmvc-fn]]
+== 函数式端点
+[.small]#{docSpringWebFlux}#webflux-fn[WebFlux]#
+
+Spring Web MVC包含WebMvc.fn，这是一个轻量级的函数编程模型，其中的函数用于路由和处理请求，而契约则是为不变性而设计的。
+它是基于注解的编程模型的替代方案，但可以在同一<<mvc-servlet>>上运行。
+
+[[webmvc-fn-overview]]
+=== 总览
+[.small]#{docSpringWebFlux}#webflux-fn-overview[WebFlux]#
+
+在WebMvc.fn中，使用 `HandlerFunction` 处理HTTP请求：该函数接受 `ServerRequest` 并返回 `ServerResponse`。
+请求和响应对象都具有不可变性的约定，这些约定提供了对JDK 8友好的HTTP请求和响应访问。
+`HandlerFunction` 等效于基于注解的编程模型中 `@RequestMapping` 方法的主体。
+
+传入的请求通过 `RouterFunction` 路由到处理程序函数：该函数接受 `ServerRequest` 并返回可选的 `HandlerFunction`
+（即 `Optional<HandlerFunction>`）。当路由器函数匹配时，返回处理程序函数，否则为空的 `Optional`。
+`RouterFunction` 等效于 `@RequestMapping` 注解，但主要区别在于路由器函数不仅提供数据，还提供行为。
+
+`RouterFunctions.route()` 提供了一个路由器构建器，可简化路由器的创建过程，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    import static org.springframework.http.MediaType.APPLICATION_JSON;
+    import static org.springframework.web.servlet.function.RequestPredicates.*;
+    import static org.springframework.web.servlet.function.RouterFunctions.route;
+
+    PersonRepository repository = ...
+    PersonHandler handler = new PersonHandler(repository);
+
+    RouterFunction<ServerResponse> route = route()
+        .GET("/person/{id}", accept(APPLICATION_JSON), handler::getPerson)
+        .GET("/person", accept(APPLICATION_JSON), handler::listPeople)
+        .POST("/person", handler::createPerson)
+        .build();
+
+
+    public class PersonHandler {
+
+        // ...
+
+        public ServerResponse listPeople(ServerRequest request) {
+            // ...
+        }
+
+        public ServerResponse createPerson(ServerRequest request) {
+            // ...
+        }
+
+        public ServerResponse getPerson(ServerRequest request) {
+            // ...
+        }
+    }
+----
+
+如果将 `RouterFunction` 注册为Bean（例如，通过将其暴露在 `@Configuration` 类中），则Servlet将自动检测到它，如<<webmvc-fn-running>>中所述。
+
+[[webmvc-fn-handler-functions]]
+=== `HandlerFunction`
+[.small]#{docSpringWebFlux}#webflux-fn-handler-functions[WebFlux]#
+
+`ServerRequest` 和 `ServerResponse` 是不可变的接口，它们提供JDK 8友好的HTTP请求和响应访问，包括头部，正文，方法和状态码。
+
+[[webmvc-fn-request]]
+==== ServerRequest
+
+`ServerRequest` 提供对HTTP方法，URI，请求头和查询参数的访问，而通过 `body` 方法提供对请求体的访问。
+
+下面的示例将请求体提取为 `String`：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+String string = request.body(String.class);
+----
+
+以下示例将请求体提取到 `List<Person>`，其中 `Person` 对象从序列化形式（例如：JSON或XML）中解码：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    List<Person> people = request.body(new ParameterizedTypeReference<List<Person>>() {});
+----
+
+以下示例显示如何访问参数：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    MultiValueMap<String, String> params = request.params();
+----
+
+[[webmvc-fn-response]]
+==== ServerResponse
+
+`ServerResponse` 提供对HTTP响应的访问，并且由于它是不可变的，因此你可以使用构建方法来创建它。
+你可以使用构建器来设置响应状态，添加响应头或响应体。以下示例使用JSON内容创建200(OK)响应：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    Person person = ...
+    ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(person);
+----
+
+下面的示例演示如何构建一个具有 `Location` 响应头且没有响应体的201(CREATED)响应：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    URI location = ...
+    ServerResponse.created(location).build();
+----
+
+[[webmvc-fn-handler-classes]]
+==== 处理程序类
+
+我们可以将处理程序函数编写为lambda，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    HandlerFunction<ServerResponse> helloWorld =
+      request -> ServerResponse.ok().body("Hello World");
+----
+
+这很方便，但是在应用程序中我们需要多个函数时，多个内联lambda可能会变得混乱不堪。
+因此，将相关的处理程序函数分组到一个处理程序类中很有用，该类的作用与基于注解的应用程序中的 `@Controller` 相似。
+例如，以下类公开了响应式 `Person` 存储库：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    import static org.springframework.http.MediaType.APPLICATION_JSON;
+    import static org.springframework.web.reactive.function.server.ServerResponse.ok;
+
+    public class PersonHandler {
+
+        private final PersonRepository repository;
+
+        public PersonHandler(PersonRepository repository) {
+            this.repository = repository;
+        }
+
+        public ServerResponse listPeople(ServerRequest request) { // <1>
+            List<Person> people = repository.allPeople();
+            return ok().contentType(APPLICATION_JSON).body(people);
+        }
+
+        public ServerResponse createPerson(ServerRequest request) throws Exception { // <2>
+            Person person = request.body(Person.class);
+            repository.savePerson(person);
+            return ok().build();
+        }
+
+        public ServerResponse getPerson(ServerRequest request) { // <3>
+            int personId = Integer.parseInt(request.pathVariable("id"));
+            Person person = repository.getPerson(personId);
+            if (person != null) {
+                return ok().contentType(APPLICATION_JSON).body(person))
+            }
+            else {
+                return ServerResponse.notFound().build();
+            }
+        }
+
+    }
+----
+<1> `listPeople` 是一个处理程序函数，它以JSON格式返回存储库中找到的所有 `Person` 对象。
+<2> `createPerson` 是一个处理程序函数，用于存储请求体中包含的新 `Person`。
+<3> `getPerson` 是一个处理程序函数，它返回由 `id` 路径变量标识的单个person。
+我们从存储库中检索该 `Person` 并创建一个JSON响应（如果找到）。如果未找到，我们将返回404 Not Found响应。
+
+[[webmvc-fn-handler-validation]]
+==== 验证方式
+
+函数端点可以使用Spring的 {docSpringCore}#validation[验证工具]将验证应用于请求体。
+例如，给定 `Person` 的自定义Spring {docSpringCore}#validation[Validator]实现：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    public class PersonHandler {
+
+        private final Validator validator = new PersonValidator(); // <1>
+
+        // ...
+
+        public ServerResponse createPerson(ServerRequest request) {
+            Person person = request.body(Person.class);
+            validate(person); // <2>
+            repository.savePerson(person);
+            return ok().build();
+        }
+
+        private void validate(Person person) {
+            Errors errors = new BeanPropertyBindingResult(person, "person");
+            validator.validate(person, errors);
+            if (errors.hasErrors()) {
+                throw new ServerWebInputException(errors.toString()); // <3>
+            }
+        }
+    }
+----
+<1> 创建 `Validator` 实例。
+<2> 应用验证。
+<3> 引发400响应异常。
+
+处理程序还可以通过基于 `LocalValidatorFactoryBean` 创建和注入全局 `Validator` 实例来使用标准Bean验证API（JSR-303）。
+请参阅 {docSpringCore}#validation-beanvalidation[Spring Validator]。
+
+[[webmvc-fn-router-functions]]
+=== `RouterFunction`
+[.small]#{docSpringWebFlux}#webflux-fn-router-functions[WebFlux]#
+
+路由器函数用于将请求路由到相应的 `HandlerFunction`。通常，你不是自己编写路由器函数，
+而是使用 `RouterFunctions` 实用工具类上的方法来创建一个。`RouterFunctions.route()`（无参数）
+为你提供了流式生成器，用于创建路由器函数，而 `RouterFunctions.route(RequestPredicate, HandlerFunction)`
+提供了直接创建路由器的方法。
+
+通常，建议使用 `route()` 构建器，因为它为典型的映射方案提供了便捷的快捷方式，而无需使用静态导入。
+例如，路由器函数构建器提供了 `GET(String, HandlerFunction)` 方法来为GET请求创建映射，
+和 `POST(String, HandlerFunction)` 方法来为POST请求创建映射。
+
+除了基于HTTP方法的映射外，路由构建器还提供了一种在映射到请求时引入其他谓词的方法。
+对于每个HTTP方法，都有一个重载的变体，它以 `RequestPredicate` 作为参数，尽管可以表达其他约束。
+
+[[webmvc-fn-predicates]]
+==== 谓词
+
+你可以编写自己的 `RequestPredicate`，但是 `RequestPredicates` 实用程序类根据请求路径，HTTP方法，
+内容类型等提供常用的实现。以下示例使用请求谓词基于 `Accept` 头创建约束：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    RouterFunction<ServerResponse> route = RouterFunctions.route()
+        .GET("/hello-world", accept(MediaType.TEXT_PLAIN),
+            request -> ServerResponse.ok().body("Hello World")).build();
+----
+
+你可以使用以下命令组合多个请求谓词：
+
+* `RequestPredicate.and(RequestPredicate)` -- 两者必须匹配。
+* `RequestPredicate.or(RequestPredicate)` -- 两者任何一个匹配即可。
+
+`RequestPredicates` 中的许多谓词都是复合的。例如，`RequestPredicates.GET(String)` 由
+`RequestPredicates.method(HttpMethod)` 和 `RequestPredicates.path(String)` 组成。
+上面显示的示例还使用了两个请求谓词，因为构建器在内部使用 `RequestPredicates.GET` 并将其与 `accept` 谓词组合在一起。
+
+[[webmvc-fn-routes]]
+==== 路由
+
+路由器函数按顺序评估：如果第一个路由不匹配，则评估第二个路由，依此类推。因此，在通用路由之前声明更具体的路由是有意义的。
+请注意，此行为不同于基于注解的编程模型，在该模型中，将自动选择“最特定”的控制器方法。
+
+使用路由器函数生成器时，所有定义的路由都组成一个 `RouterFunction`，从 `build()` 返回。
+还有其他方法可以将多个路由器函数组合在一起：
+
+* 在 `RouterFunctions.route()` 构建器上 `add(RouterFunction)`
+* `RouterFunction.and(RouterFunction)`
+* `RouterFunction.andRoute(RequestPredicate, HandlerFunction)` --
+使用嵌套的 `RouterFunctions.route()` 实现 `RouterFunction.and()` 的快捷方式。
+
+以下示例显示了四种路由的复合：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    import static org.springframework.http.MediaType.APPLICATION_JSON;
+    import static org.springframework.web.servlet.function.RequestPredicates.*;
+
+    PersonRepository repository = ...
+    PersonHandler handler = new PersonHandler(repository);
+
+    RouterFunction<ServerResponse> otherRoute = ...
+
+    RouterFunction<ServerResponse> route = route()
+        .GET("/person/{id}", accept(APPLICATION_JSON), handler::getPerson) //<1>
+        .GET("/person", accept(APPLICATION_JSON), handler::listPeople) //<2>
+        .POST("/person", handler::createPerson) //<3>
+        .add(otherRoute) //<4>
+        .build();
+----
+<1> 带有与JSON匹配的 `Accept` 请求头的 `GET /person/{id}` 被路由到 `PersonHandler.getPerson`
+<2> 带有与JSON匹配的 `Accept` 请求头的 `GET /person` 被路由到 `PersonHandler.listPeople`
+<3> 没有其他谓词的 `POST /person` 被路由到 `PersonHandler.createPerson`，并且
+<4> `otherRoute` 是在其他地方创建的路由器函数，并将其添加到构建的路由中。
+
+[[nested-routes]]
+==== 嵌套路由
+
+一组路由器函数通常具有共享谓词，例如共享路径。在上面的示例中，共享谓词将是与 `/person` 匹配的路径谓词，
+由三个路由使用。使用注解时，你可以通过使用映射到 `/person` 的类型级别 `@RequestMapping` 注解来删除此重复项。
+在WebMvc.fn中，可以通过路由器函数构建器上的 `path` 方法共享路径谓词。
+例如，以上示例的最后几行可以通过使用嵌套路由以以下方式进行改进：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    RouterFunction<ServerResponse> route = route()
+        .path("/person", builder -> builder //<1>
+            .GET("/{id}", accept(APPLICATION_JSON), handler::getPerson)
+            .GET("", accept(APPLICATION_JSON), handler::listPeople)
+            .POST("/person", handler::createPerson))
+        .build();
+----
+<1> 请注意，`path` 函数的第二个参数是使用路由器构建器的使用者。
+
+尽管基于路径的嵌套是最常见的，但是你可以通过使用构建器上的 `nest` 方法来嵌套在任何种类的谓词上。
+上面的内容仍然包含一些以共享的 `Accept` 请求头谓词形式出现的重复代码。
+通过将 `nest` 方法与 `accept` 一起使用，我们可以进一步改进：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    RouterFunction<ServerResponse> route = route()
+        .path("/person", b1 -> b1
+            .nest(accept(APPLICATION_JSON), b2 -> b2
+                .GET("/{id}", handler::getPerson)
+                .GET("", handler::listPeople))
+            .POST("/person", handler::createPerson))
+        .build();
+----
+
+
+[[webmvc-fn-running]]
+=== 运行服务器
+[.small]#{docSpringWebFlux}#webflux-fn-running[WebFlux]#
+
+通常，你可以通过<<mvc-config>>在基于<<mvc-servlet>>的设置中运行路由器函数，
+该配置使用Spring配置来声明处理请求所需的组件。MVC Java配置声明以下基础设施组件以支持函数端点：
+
+* `RouterFunctionMapping`：在Spring配置中检测一个或多个 `RouterFunction<?>`  beans，
+通过 `RouterFunction.andOther` 组合它们，并将请求路由到生成的复合 `RouterFunction`。
+* `HandlerFunctionAdapter`：简单的适配器，它使 `DispatcherHandler` 调用映射到请求的 `HandlerFunction`。
+
+前面的组件使函数端点适合于 `DispatcherServlet` 请求处理生命周期，并且（可能）与带注解的控制器（如果已声明）并排运行。
+这也是Spring Boot Web启动程序如何启用函数端点的方式。
+
+以下示例显示了WebFlux Java配置：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Configuration
+    @EnableMvc
+    public class WebConfig implements WebMvcConfigurer {
+
+        @Bean
+        public RouterFunction<?> routerFunctionA() {
+            // ...
+        }
+
+        @Bean
+        public RouterFunction<?> routerFunctionB() {
+            // ...
+        }
+
+        // ...
+
+        @Override
+        public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+            // configure message conversion...
+        }
+
+        @Override
+        public void addCorsMappings(CorsRegistry registry) {
+            // configure CORS...
+        }
+
+        @Override
+        public void configureViewResolvers(ViewResolverRegistry registry) {
+            // configure view resolution for HTML rendering...
+        }
+    }
+----
+
+[[webmvc-fn-handler-filter-function]]
+=== 过滤处理程序函数
+[.small]#{docSpringWebFlux}#webflux-fn-handler-filter-function[WebFlux]#
+
+你可以使用路由函数构建器上的 `before`，`after` 或 `filter` 方法来过滤处理程序函数。使用注解，可以通过使用
+`@ControllerAdvice`，`ServletFilter` 或同时使用两者来实现类似的功能。
+该过滤器将应用于构建器构建的所有路由。这意味着在嵌套路由中定义的过滤器不适用于“顶级”路由。例如，考虑以下示例：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    RouterFunction<ServerResponse> route = route()
+        .path("/person", b1 -> b1
+            .nest(accept(APPLICATION_JSON), b2 -> b2
+                .GET("/{id}", handler::getPerson)
+                .GET("", handler::listPeople)
+                .before(request -> ServerRequest.from(request) //<1>
+                    .header("X-RequestHeader", "Value")
+                    .build()))
+            .POST("/person", handler::createPerson))
+        .after((request, response) -> logResponse(response)) //<2>
+        .build();
+----
+<1> 添加自定义请求头的 `before` 过滤器仅应用于两个GET路由。
+<2> 记录响应的 `after` 过滤器将应用于所有路由，包括嵌套路由。
+
+路由器构建器上的 `filter` 方法使用 `HandlerFilterFunction` 参数：该函数使用 `ServerRequest` 和
+`HandlerFunction` 参数并返回 `ServerResponse`。
+`handler` 函数参数代表链中的下一个元素。这通常是路由到的处理程序，但是如果应用了多个，它也可以是另一个过滤器。
+
+现在，我们可以在路由中添加一个简单的安全过滤器，假设我们拥有一个可以确定是否允许特定路径的 `SecurityManager`。
+以下示例显示了如何执行此操作：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    SecurityManager securityManager = ...
+
+    RouterFunction<ServerResponse> route = route()
+        .path("/person", b1 -> b1
+            .nest(accept(APPLICATION_JSON), b2 -> b2
+                .GET("/{id}", handler::getPerson)
+                .GET("", handler::listPeople))
+            .POST("/person", handler::createPerson))
+        .filter((request, next) -> {
+            if (securityManager.allowAccessTo(request.path())) {
+                return next.handle(request);
+            }
+            else {
+                return ServerResponse.status(UNAUTHORIZED).build();
+            }
+        })
+        .build();
+----
+
+前面的示例演示了调用 `next.handle(ServerRequest)` 是可选的。当允许访问时，我们仅允许执行处理函数。
+
+除了在路由器函数构建器上使用 `filter` 方法之外，还可以通过 `RouterFunction.filter(HandlerFilterFunction)`
+将过滤器应用于现有路由器函数。
+
+NOTE: 通过专用的 `CorsWebFilter` 提供对函数端点的CORS支持。
+
+[[mvc-uri-building]]
+== URI链接
+[.small]#{docSpringWebFlux}#webflux-uri-building[WebFlux]#
+
+本部分介绍了Spring框架中可用于URI的各种选项。
+
+include::web-uris.adoc[leveloffset=+2]
+
+
+[[mvc-servleturicomponentsbuilder]]
+=== 相对Servlet请求
+
+你可以使用 `ServletUriComponentsBuilder` 创建相对于当前请求的URI，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    HttpServletRequest request = ...
+
+    // Re-uses host, scheme, port, path and query string...
+
+    ServletUriComponentsBuilder ucb = ServletUriComponentsBuilder.fromRequest(request)
+            .replaceQueryParam("accountId", "{id}").build()
+            .expand("123")
+            .encode();
+----
+
+你可以创建相对于上下文路径的URIs，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    // Re-uses host, port and context path...
+
+    ServletUriComponentsBuilder ucb = ServletUriComponentsBuilder.fromContextPath(request)
+            .path("/accounts").build()
+----
+
+你可以创建相对于Servlet的URI（例如：`/main/{asterisk}`），如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    // Re-uses host, port, context path, and Servlet prefix...
+
+    ServletUriComponentsBuilder ucb = ServletUriComponentsBuilder.fromServletMapping(request)
+            .path("/accounts").build()
+----
+
+NOTE: 从5.1开始，`ServletUriComponentsBuilder` 会忽略来自 `Forwarded` 和 `X-Forwarded-*` 请求头的信息，
+这些请求头指定了客户端源的地址。考虑使用<<filters-forwarded-headers,`ForwardedHeaderFilter`>>
+提取和使用或丢弃此类请求头。
+
+
+[[mvc-links-to-controllers]]
+=== 链接到控制器
+
+Spring MVC提供了一种创建到控制器方法的链接的机制。例如，以下MVC控制器允许创建链接：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Controller
+    @RequestMapping("/hotels/{hotel}")
+    public class BookingController {
+
+        @GetMapping("/bookings/{booking}")
+        public ModelAndView getBooking(@PathVariable Long booking) {
+            // ...
+        }
+    }
+----
+
+你可以通过按名称引用方法来创建链接，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    UriComponents uriComponents = MvcUriComponentsBuilder
+        .fromMethodName(BookingController.class, "getBooking", 21).buildAndExpand(42);
+
+    URI uri = uriComponents.encode().toUri();
+----
+
+在前面的示例中，我们提供了实际的方法参数值（在本例中，为long值：`21`），用作路径变量并插入到URL中。
+此外，我们提供值 `42` 来填充所有剩余的URI变量，例如从类型级别请求映射继承的 `hotel` 变量。
+如果该方法具有更多参数，则可以为不需要的URL参数提供 `null` 值。通常，只有 `@PathVariable` 和 `@RequestParam`
+参数与构造URL有关。
+
+还有其他使用 `MvcUriComponentsBuilder` 的方法。例如，你可以使用类似于代理的mock测试技术来避免按名称引用控制器方法，
+如以下示例所示（该示例假定已静态导入 `MvcUriComponentsBuilder.on`）：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    UriComponents uriComponents = MvcUriComponentsBuilder
+        .fromMethodCall(on(BookingController.class).getBooking(21)).buildAndExpand(42);
+
+    URI uri = uriComponents.encode().toUri();
+----
+
+NOTE: 当控制器方法签名可用于 `fromMethodCall` 的链接创建时，其设计受到限制。除了需要适当的参数签名外，
+返回类型还存在技术限制（即，为链接生成器调用生成运行时代理），因此返回类型不得为 `final` 值。
+特别是，视图名称的通用 `String` 返回类型在这里不起作用。你应该改用 `ModelAndView` 甚至普通 `Object`
+（具有 `String` 返回值）。
+
+较早的示例在 `MvcUriComponentsBuilder` 中使用静态方法。在内部，它们依靠 `ServletUriComponentsBuilder`
+从当前请求的scheme, host, port, 上下文路径和Servlet路径准备基本URL。在大多数情况下，此方法效果很好。
+但是，有时可能不足。例如，你可能不在请求的上下文之内（例如：准备链接的批处理过程），或者你可能需要插入路径前缀
+（例如，从请求路径中删除且需要重新设置的语言环境前缀）。
+
+在这种情况下，可以使用静态的 `fromXxx` 重载方法，这些方法接受 `UriComponentsBuilder` 以使用基本URL。
+或者，你可以使用基本URL创建 `MvcUriComponentsBuilder` 的实例，然后使用基于实例的 `withXxx` 方法。
+例如，以下清单使用 `withMethodCall`：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    UriComponentsBuilder base = ServletUriComponentsBuilder.fromCurrentContextPath().path("/en");
+    MvcUriComponentsBuilder builder = MvcUriComponentsBuilder.relativeTo(base);
+    builder.withMethodCall(on(BookingController.class).getBooking(21)).buildAndExpand(42);
+
+    URI uri = uriComponents.encode().toUri();
+----
+
+NOTE: 从5.1开始，`MvcUriComponentsBuilder` 将忽略来自 `Forwarded` 和 `X-Forwarded-*` 请求头的信息，
+这些请求头指定了客户端源的地址。考虑使用 `ForwardedHeaderFilter` 提取和使用或丢弃此类请求头。
+
+
+[[mvc-links-to-controllers-from-views]]
+=== 视图中的链接
+
+在Thymeleaf，FreeMarker或JSP之类的视图中，你可以通过引用每个请求映射的隐式或显式分配的名称来构建到带注解的控制器的链接。
+
+考虑以下示例：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @RequestMapping("/people/{id}/addresses")
+    public class PersonAddressController {
+
+        @RequestMapping("/{country}")
+        public HttpEntity getAddress(@PathVariable String country) { ... }
+    }
+----
+
+给定前面的控制器，你可以按照以下步骤准备来自JSP的链接：
+
+[source,jsp,indent=0]
+[subs="verbatim,quotes"]
+----
+<%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
+...
+<a href="${s:mvcUrl('PAC#getAddress').arg(0,'US').buildAndExpand('123')}">Get Address</a>
+----
+
+上面的示例依赖于Spring标签库中声明的 `mvcUrl` 函数（即 `META-INF/spring.tld`），
+但是很容易定义你自己的函数或为其他模板技术准备类似的函数。
+
+这是如何工作的？在启动时，每个 `@RequestMapping` 都会通过 `HandlerMethodMappingNamingStrategy`
+分配一个默认名称，该默认名称的实现使用类的大写字母和方法名称（例如，`ThingController` 中的 `getThing`
+方法变为“TC#getThing”）。如果名称冲突，则可以使用 `@RequestMapping(name="..")` 来分配一个明确的名称，
+或实现自己的 `HandlerMethodMappingNamingStrategy`。
+
+[[mvc-ann-async]]
+== 异步请求
+[.small]#<<mvc-ann-async-vs-webflux,与WebFlux相比>>#
+
+Spring MVC与Servlet 3.0异步请求<<mvc-ann-async-processing,处理>>广泛集成：
+
+* 控制器方法中的<<mvc-ann-async-deferredresult,`DeferredResult`>>和<<mvc-ann-async-callable,`Callable`>>
+返回值，并为单个异步返回值提供基本支持。
+* 控制器可以<<mvc-ann-async-http-streaming,流式>>传输多个值，包括
+<<mvc-ann-async-sse,SSE>>和<<mvc-ann-async-output-stream,原始数据>>
+* 控制器可以使用响应式客户端并返回<<mvc-ann-async-reactive-types,响应式类型>>以进行响应处理。
+
+
+[[mvc-ann-async-deferredresult]]
+=== `DeferredResult`
+[.small]#<<mvc-ann-async-vs-webflux,与WebFlux相比>>#
+
+一旦在Servlet容器中<<mvc-ann-async-configuration,启用>>了异步请求处理功能，控制器方法就可以使用
+`DeferredResult` 包装任何受支持的控制器方法返回值，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @GetMapping("/quotes")
+    @ResponseBody
+    public DeferredResult<String> quotes() {
+        DeferredResult<String> deferredResult = new DeferredResult<String>();
+        // Save the deferredResult somewhere..
+        return deferredResult;
+    }
+
+    // From some other thread...
+    deferredResult.setResult(data);
+----
+
+控制器可以从另一个线程异步生成返回值，例如：响应外部事件（JMS消息），定时任务或其他事件。
+
+
+[[mvc-ann-async-callable]]
+=== `Callable`
+[.small]#<<mvc-ann-async-vs-webflux,与WebFlux相比>>#
+
+控制器可以使用 `java.util.concurrent.Callable` 包装任何受支持的返回值，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @PostMapping
+    public Callable<String> processUpload(final MultipartFile file) {
+
+        return new Callable<String>() {
+            public String call() throws Exception {
+                // ...
+                return "someView";
+            }
+        };
+
+    }
+----
+
+然后，可以通过<<mvc-ann-async-configuration-spring-mvc,配置>>的 `TaskExecutor` 运行给定任务来获取返回值。
+
+[[mvc-ann-async-processing]]
+=== 处理过程
+[.small]#<<mvc-ann-async-vs-webflux,Compared to WebFlux>>#
+
+这是Servlet异步请求处理的非常简洁的概述：
+
+* 可以通过调用 `request.startAsync()` 将 `ServletRequest` 置于异步模式。
+  这样做的主要作用是可以退出Servlet（以及所有过滤器），但是响应保持打开状态，以便之后完成处理。
+* 对 `request.startAsync()` 的调用返回 `AsyncContext`，可将其用于进一步控制异步处理。
+  例如，它提供了 `dispatch` 方法，该方法与Servlet API中的转发方法类似，不同之处在于，
+  它使应用程序可以恢复对Servlet容器线程的请求处理。
+* `ServletRequest` 提供对当前 `DispatcherType` 的访问，你可以使用它来区分处理初始请求，
+  异步分发，转发和其他分发器类型。
+
+`DeferredResult` 工作流程如下：
+
+* 控制器返回 `DeferredResult` 并将其保存在某个可以访问它的内存队列或列表中。
+* Spring MVC调用 `request.startAsync()`。
+* 同时，`DispatcherServlet` 和所有已配置的过滤器退出请求处理线程，但响应保持打开状态。
+* 应用程序从某个线程设置 `DeferredResult`，Spring MVC将请求分发回Servlet容器。
+* 再次调用 `DispatcherServlet`，并使用异步产生的返回值恢复处理。
+
+`Callable` 工作流程如下：
+
+* 控制器返回一个 `Callable`。
+* Spring MVC调用 `request.startAsync()` 并将 `Callable` 提交给 `TaskExecutor` 以在单独的线程中进行处理。
+* 同时，`DispatcherServlet` 和所有过滤器退出Servlet容器线程，但响应保持打开状态。
+* 最终，`Callable` 产生一个结果，Spring MVC将请求分发回Servlet容器以完成处理。
+* 再次调用 `DispatcherServlet`，并使用 `Callable` 中异步产生的返回值恢复处理。
+
+有关更多背景知识，你还可以阅读在Spring MVC 3.2中引入了异步请求处理支持的
+https://spring.io/blog/2012/05/07/spring-mvc-3-2-preview-introducing-servlet-3-async-support[博客文章]。
+
+[[mvc-ann-async-exceptions]]
+==== 异常处理
+
+使用 `DeferredResult` 时，可以选择是调用带有异常的 `setResult` 还是 `setErrorResult`。
+在这两种情况下，Spring MVC都将请求分发回Servlet容器以完成处理。然后将其视为控制器方法返回了给定值，
+或者好像它产生了给定的异常。然后，异常将通过常规的异常处理机制进行处理（例如，调用 `@ExceptionHandler` 方法）。
+
+使用 `Callable` 时，会发生类似的处理逻辑，主要区别是从 `Callable` 返回结果或引发异常。
+
+[[mvc-ann-async-interception]]
+==== 拦截
+
+`HandlerInterceptor` 实例的类型可以为 `AsyncHandlerInterceptor`，以在启动异步处理的初始请求
+（而不是 `postHandle` 和 `afterCompletion`）上接收 `afterConcurrentHandlingStarted` 回调。
+
+`HandlerInterceptor` 实现也可以注册 `CallableProcessingInterceptor` 或
+`DeferredResultProcessingInterceptor`，以与异步请求的生命周期进行更深入的集成（例如：处理超时事件）。
+有关更多详细信息，请参见 {javadocSpring}/web/servlet/AsyncHandlerInterceptor.html[`AsyncHandlerInterceptor`]。
+
+`DeferredResult` 提供 `onTimeout(Runnable)` 和 `onCompletion(Runnable)` 回调。有关更多详细信息，请参见
+{javadocSpring}/web/context/request/async/DeferredResult.html[`DeferredResult`]
+的javadoc。可以用 `Callable` 代替 `WebAsyncTask`，它公开了超时和完成回调的其他方法。
+
+
+[[mvc-ann-async-vs-webflux]]
+==== 与WebFlux相比
+
+Servlet API最初是为通过Filter-Servlet链进行一次传递而构建的。Servlet 3.0中添加了异步请求处理，
+使应用程序可以退出Filter-Servlet链，但保留响应以进行进一步处理。Spring MVC异步支持围绕该机制构建。
+当控制器返回 `DeferredResult` 时，退出Filter-Servlet链，并释放Servlet容器线程。
+稍后，在设置 `DeferredResult` 时，将进行 `ASYNC` 调度（到相同的URL），在此期间，控制器将再次被映射，
+但不是调用它，而是使用 `DeferredResult` 值（就像控制器返回了它一样）来恢复处理。
+
+相比之下，Spring WebFlux既不是基于Servlet API构建的，也不需要这种异步请求处理功能，因为它在设计上就是异步的。
+异步处理已内置在所有框架协定中，并内在支持请求处理的所有阶段。
+
+从编程模型的角度来看，Spring MVC和Spring WebFlux都支持异步和<<mvc-ann-async-reactive-types>>作为控制器方法中的返回值。
+Spring MVC甚至支持流式传输，包括响应式背压。但是对响应的单个写入仍然处于阻塞状态（并在单独的线程上执行），
+这与WebFlux不同，WebFlux依赖于非阻塞I/O，并且每次写入都不需要额外的线程。
+
+另一个基本区别是，Spring MVC在控制器方法参数中不支持异步或响应式类型（例如：`@RequestBody`，`@RequestPart` 等），
+也没有对将异步和响应式类型作为模型属性的任何显式支持。但Spring WebFlux确实支持所有这些。
+
+[[mvc-ann-async-http-streaming]]
+=== HTTP流
+[.small]#{docSpringWebFlux}#webflux-codecs-streaming[WebFlux]#
+
+你可以将 `DeferredResult` 和 `Callable` 用于单个异步返回值。如果要产生多个异步值并将那些值写入响应，该怎么办？
+本节介绍如何执行此操作。
+
+
+[[mvc-ann-async-objects]]
+==== 对象
+
+你可以使用 `ResponseBodyEmitter` 返回值生成对象流，其中每个对象都使用
+{docSpringIntegration}#rest-message-conversion[`HttpMessageConverter`]序列化并写入响应，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @GetMapping("/events")
+    public ResponseBodyEmitter handle() {
+        ResponseBodyEmitter emitter = new ResponseBodyEmitter();
+        // Save the emitter somewhere..
+        return emitter;
+    }
+
+    // In some other thread
+    emitter.send("Hello once");
+
+    // and again later on
+    emitter.send("Hello again");
+
+    // and done at some point
+    emitter.complete();
+----
+
+你还可以将 `ResponseBodyEmitter` 用作 `ResponseEntity` 的主体，以自定义响应状态和头部信息。
+
+当发射器抛出 `IOException` 时（例如：如果远程客户端离开了），应用程序将不负责清理连接，并且不应调用
+`Emitter.complete` 或 `Emitter.completeWithError`。取而代之的是，该Servlet容器自动启动 `AsyncListener`
+错误通知，其中Spring MVC在其中进行 `completeWithError` 调用。依次，此调用对应用程序执行一个最终的 `ASYNC` 调度，
+在此期间，Spring MVC调用已配置的异常解析器并完成请求。
+
+
+[[mvc-ann-async-sse]]
+==== SSE
+
+`SseEmitter`（`ResponseBodyEmitter` 的子类）提供对服务器发送事件的支持，其中从
+http://www.w3.org/TR/eventsource/[服务器发送的事件]根据W3C SSE规范进行格式化。
+要从控制器生成SSE流，请返回 `SseEmitter`，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @GetMapping(path="/events", produces=MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter handle() {
+        SseEmitter emitter = new SseEmitter();
+        // Save the emitter somewhere..
+        return emitter;
+    }
+
+    // In some other thread
+    emitter.send("Hello once");
+
+    // and again later on
+    emitter.send("Hello again");
+
+    // and done at some point
+    emitter.complete();
+----
+
+虽然SSE是流式传输到浏览器的主要选项，但请注意Internet Explorer不支持服务器发送事件。
+考虑将Spring的 {docSpringWeb}#websocket[WebSocket消息]与针对大多数浏览器的
+{docSpringWeb}#websocket-fallback[SockJS后备]（包括SSE）传输方案结合使用。
+
+另请参阅<<mvc-ann-async-objects,上一节>>以获取有关异常处理的说明。
+
+[[mvc-ann-async-output-stream]]
+==== 原始数据
+
+有时，绕过消息转换并直接输出到响应流 `OutputStream` 很有用（例如：用于文件下载）。
+你可以使用 `StreamingResponseBody` 返回值类型来执行此操作，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @GetMapping("/download")
+    public StreamingResponseBody handle() {
+        return new StreamingResponseBody() {
+            @Override
+            public void writeTo(OutputStream outputStream) throws IOException {
+                // write...
+            }
+        };
+    }
+----
+
+你可以将 `StreamingResponseBody` 用作 `ResponseEntity` 中的主体，以自定义响应状态和头部信息。
+
+
+[[mvc-ann-async-reactive-types]]
+=== 响应式类型
+[.small]#{docSpringWebFlux}#webflux-codecs-streaming[WebFlux]#
+
+Spring MVC支持在控制器中使用响应式客户端库（另请参阅WebFlux部分中的
+{docSpringWebFlux}#webflux-reactive-libraries[响应式库]）。
+这包括来自 `spring-webflux` 的 `WebClient` 和其他资源，例如Spring Data 响应式数据存储库。
+在这种情况下，能够从控制器方法返回响应式类型是很方便的。
+
+响应式返回值的处理方式如下：
+
+* 与使用 `DeferredResult` 相似，也适用于单值promise。示例包括 `Mono` (Reactor) 或 `Single` (RxJava)。
+* 与使用 `ResponseBodyEmitter` 或 `SseEmitter` 相似，适用于具有流媒体类型（例如：`application/stream+json`
+或 `text/event-stream`）的多值流。示例包括 `Flux` (Reactor) 或 `Observable` (RxJava)。
+应用程序还可以返回 `Flux<ServerSentEvent>` 或 `Observable<ServerSentEvent>`。
+* 类似于使用 `DeferredResult<List<?>>`，适用于任何其他媒体类型（例如 `application/json`）的多值流。
+
+TIP: Spring MVC通过 `spring-core` 的 {javadocSpring}/core/ReactiveAdapterRegistry.html[`ReactiveAdapterRegistry`]
+支持Reactor和RxJava，这使其可以适应多个响应式库。
+
+为了流式传输到响应，支持响应式背压，但响应的写仍处于阻塞状态，并通过
+<<mvc-ann-async-configuration-spring-mvc,配置>>的 `TaskExecutor` 在单独的线程上执行，
+以避免阻塞上游源（例如，从 `WebClient` 返回的 `Flux`）。默认情况下，`SimpleAsyncTaskExecutor` 用于阻塞写操作，
+但是在负载下不适合。如果计划使用响应式类型进行流传输，则应使用
+<<mvc-ann-async-configuration-spring-mvc,MVC配置>>来配置任务执行程序。
+
+
+[[mvc-ann-async-disconnects]]
+=== 断开连接
+[.small]#{docSpringWebFlux}#webflux-codecs-streaming[WebFlux]#
+
+当远程客户端离开时，Servlet API不提供任何通知。因此，在通过<<mvc-ann-async-sse,SseEmitter>>
+或<<mvc-ann-async-reactive-types>>流式传输到响应时，定期发送数据很重要，因为如果客户端断开连接，写入将失败。
+发送可以采用空的（仅供引用的）SSE事件或任何其他数据的形式，而另一方必须将这些数据解释为心跳并忽略它们。
+
+或者，考虑使用具有内置心跳机制的Web消息传递解决方案（例如，<<websocket-stomp,基于WebSocket的STOMP>>
+或具有<<websocket-fallback,SockJS>>的WebSocket）。
+
+
+[[mvc-ann-async-configuration]]
+=== 配置
+[.small]#<<mvc-ann-async-vs-webflux,与WebFlux相比>>#
+
+必须在Servlet容器级别启用异步请求处理功能。MVC配置还为异步请求提供了多个选项。
+
+[[mvc-ann-async-configuration-servlet3]]
+==== Servlet容器
+
+过滤器和Servlet声明具有 `asyncSupported` 标志，需要将其设置为 `true` 才能启用异步请求处理。
+另外，应声明过滤器映射以处理 `ASYNC` `javax.servlet.DispatchType`。
+
+在Java配置中，当你使用 `AbstractAnnotationConfigDispatcherServletInitializer` 初始化Servlet容器时，这将自动完成。
+
+在 `web.xml` 配置中，可以将 `<async-supported>true</async-supported>`
+添加到 `DispatcherServlet` 和 `Filter` 声明中，并添加 `<dispatcher>ASYNC</dispatcher>` 来过滤映射。
+
+[[mvc-ann-async-configuration-spring-mvc]]
+==== Spring MVC
+
+MVC配置公开了以下与异步请求处理相关的选项：
+
+* Java配置：在 `WebMvcConfigurer` 上使用 `configureAsyncSupport` 回调。
+* XML名称空间：使用 `<mvc:annotation-driven>` 下的 `<async-support>` 元素。
+
+你可以配置以下内容：
+
+* 异步请求的默认超时时间。如果未设置，则取决于基础Servlet容器。
+* `AsyncTaskExecutor` 用于在使用<<mvc-ann-async-reactive-types>>进行流式传输时阻塞写入，
+并用于执行从控制器方法返回的 `Callable` 实例。如果你使用响应式类型进行流式传输或具有返回
+`Callable` 的控制器方法，我们强烈建议配置此属性，因为默认情况下，它是 `SimpleAsyncTaskExecutor`。
+* `DeferredResultProcessingInterceptor` 实现和 `CallableProcessingInterceptor` 实现.
+
+请注意，你还可以在 `DeferredResult`，`ResponseBodyEmitter` 和 `SseEmitter` 上设置默认超时时间。
+对于 `Callable`，可以使用 `WebAsyncTask` 提供超时时间。
+
+include::webmvc-cors.adoc[leveloffset=+1]
+
+
+[[mvc-web-security]]
+== Web安全
+[.small]#{docSpringWebFlux}#webflux-web-security[WebFlux]#
+
+http://projects.spring.io/spring-security/[Spring Security]
+项目提供了保护Web应用程序免受恶意利用的支持。请参阅Spring Security参考文档，包括：
+
+* {docSpringSecurity}/html5/#mvc[Spring MVC Security]
+* {docSpringSecurity}/html5/#test-mockmvc[Spring MVC测试支持]
+* {docSpringSecurity}/html5/#csrf[CSRF保护]
+* {docSpringSecurity}/html5/#headers[安全响应头]
+
+http://hdiv.org/[HDIV]是另一个与Spring MVC集成的Web安全框架。
+
+
+[[mvc-caching]]
+== HTTP缓存
+[.small]#{docSpringWebFlux}#webflux-caching[WebFlux]#
+
+HTTP缓存可以显着提高Web应用程序的性能。HTTP缓存围绕 `Cache-Control` 响应头以及随后的条件请求头
+（例如 `Last-Modified` 和 `ETag`）。缓存控制为私有（例如浏览器）和公共（例如代理）缓存提供有关如何缓存和重用响应的建议。
+`ETag` 标头用于发出条件请求，如果内容未更改，则可能导致返回没有响应体的304（NOT_MODIFIED）。
+`ETag` 可以看作是 `Last-Modified` 头的更复杂的后继者。
+
+本节描述了Spring Web MVC中与HTTP缓存相关的选项。
+
+
+[[mvc-caching-cachecontrol]]
+=== `CacheControl`
+[.small]#{docSpringWebFlux}#webflux-caching-cachecontrol[WebFlux]#
+
+{javadocSpring}/http/CacheControl.html[`CacheControl`]
+支持配置与 `Cache-Control` 响应头相关的设置，并在许多地方可作为参数使用：
+
+* {javadocSpring}/web/servlet/mvc/WebContentInterceptor.html[`WebContentInterceptor`]
+* {javadocSpring}/web/servlet/support/WebContentGenerator.html[`WebContentGenerator`]
+* <<mvc-caching-etag-lastmodified>>
+* <<mvc-caching-static-resources>>
+
+尽管 https://tools.ietf.org/html/rfc7234#section-5.2.2[RFC 7234]描述了
+`Cache-Control` 响应头的所有可能的指令，但 `CacheControl` 类型采用了面向用例的方法，着重于常见场景：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    // Cache for an hour - "Cache-Control: max-age=3600"
+    CacheControl ccCacheOneHour = CacheControl.maxAge(1, TimeUnit.HOURS);
+
+    // Prevent caching - "Cache-Control: no-store"
+    CacheControl ccNoStore = CacheControl.noStore();
+
+    // Cache for ten days in public and private caches,
+    // public caches should not transform the response
+    // "Cache-Control: max-age=864000, public, no-transform"
+    CacheControl ccCustom = CacheControl.maxAge(10, TimeUnit.DAYS).noTransform().cachePublic();
+----
+
+`WebContentGenerator` 还接受一个更简单的 `cachePeriod` 属性（以秒为单位定义），该属性的工作方式如下：
+
+* `-1` 值不会生成 `Cache-Control` 响应头。
+* `0` 值可以使用 'Cache-Control: no-store' 指令防止进行缓存。
+* `n > 0` 值通过使用 'Cache-Control: max-age=n' 指令将给定响应缓存 `n` 秒。
+
+[[mvc-caching-etag-lastmodified]]
+=== 控制器
+[.small]#{docSpringWebFlux}#webflux-caching-etag-lastmodified[WebFlux]#
+
+控制器可以添加对HTTP缓存的显式支持。我们建议你这样做，因为需要先计算资源的 `lastModified` 或 `ETag` 值，
+然后才能将其与条件请求头进行比较。控制器可以将 `ETag` 响应头和 `Cache-Control` 设置添加到 `ResponseEntity`，
+如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @GetMapping("/book/{id}")
+    public ResponseEntity<Book> showBook(@PathVariable Long id) {
+
+        Book book = findBook(id);
+        String version = book.getVersion();
+
+        return ResponseEntity
+                .ok()
+                .cacheControl(CacheControl.maxAge(30, TimeUnit.DAYS))
+                .eTag(version) // lastModified is also available
+                .body(book);
+    }
+----
+
+如果与条件请求头的比较表明内容未更改，则前面的示例发送带有空响应体的304（NOT_MODIFIED）响应。
+否则，`ETag` 和 `Cache-Control` 头部将添加到响应中。
+
+你还可以在控制器中针对条件请求头进行检查，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @RequestMapping
+    public String myHandleMethod(WebRequest webRequest, Model model) {
+
+        long eTag = ... <1>
+
+        if (request.checkNotModified(eTag)) {
+            return null; <2>
+        }
+
+        model.addAttribute(...); <3>
+        return "myViewName";
+    }
+----
+
+<1> 特定于应用程序的计算。
+<2> 响应已设置为304（NOT_MODIFIED）-- 没有进一步处理。
+<3> 继续进行请求处理。
+
+可以使用三种变体来检查 `eTag` 值，`lastModified` 值或两者的条件请求。对于有条件的 `GET` 和 `HEAD` 请求，
+可以将响应设置为304（NOT_MODIFIED）。对于条件 `POST`，`PUT` 和 `DELETE`，你可以将响应设置为
+412（PRECONDITION_FAILED），以防止并发修改。
+
+
+[[mvc-caching-static-resources]]
+=== 静态资源
+[.small]#{docSpringWebFlux}#webflux-caching-static-resources[WebFlux]#
+
+你应该将静态资源与 `Cache-Control` 和条件响应头一起提供，以实现最佳性能。请参阅有关配置
+<<mvc-config-static-resources>>的部分。
+
+
+[[mvc-httpcaching-shallowetag]]
+=== `ETag` Filter
+
+你可以使用 `ShallowEtagHeaderFilter` 添加从响应内容计算得出的 "`shallow`" `eTag` 值，从而节省带宽，
+但不节省CPU时间。请参阅 <<filters-shallow-etag>>。
+
+
+include::webmvc-view.adoc[leveloffset=+1]
+
+
+[[mvc-config]]
+== MVC配置
+[.small]#{docSpringWebFlux}#webflux-config[WebFlux]#
+
+MVC Java配置和MVC XML名称空间提供适用于大多数应用程序的默认配置以及用于自定义它的配置API。
+
+有关配置API中不可用的更多高级定制，请参阅<<mvc-config-advanced-java>>和<<mvc-config-advanced-xml>>。
+
+你不需要了解由MVC Java配置和MVC名称空间创建的基础beans。如果要了解更多信息，请参阅
+<<mvc-servlet-special-bean-types>>和<<mvc-servlet-config>>。
+
+
+[[mvc-config-enable]]
+=== 启用MVC配置
+[.small]#{docSpringWebFlux}#webflux-config-enable[WebFlux]#
+
+在Java配置中，可以使用 `@EnableWebMvc` 注解启用MVC配置，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Configuration
+    @EnableWebMvc
+    public class WebConfig {
+    }
+----
+
+在XML配置中，可以使用 `<mvc:annotation-driven>` 元素来启用MVC配置，如以下示例所示：
+
+[source,xml,indent=0]
+[subs="verbatim,quotes"]
+----
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:mvc="http://www.springframework.org/schema/mvc"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/mvc
+            http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+        <mvc:annotation-driven/>
+
+    </beans>
+----
+
+前面的示例注册了许多Spring MVC<<mvc-servlet-special-bean-types,基础设施Bean>>，
+并适应了类路径上可用的依赖项（例如：JSON，XML等的有效负载转换器）。
+
+[[mvc-config-customize]]
+=== MVC配置API
+[.small]#{docSpringWebFlux}#webflux-config-customize[WebFlux]#
+
+在Java配置中，可以实现 `WebMvcConfigurer` 接口，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Configuration
+    @EnableWebMvc
+    public class WebConfig implements WebMvcConfigurer {
+
+        // Implement configuration methods...
+    }
+----
+
+在XML中，你可以检查 `<mvc:annotation-driven/>` 的属性和子元素。
+你可以查看 http://schema.spring.io/mvc/spring-mvc.xsd[Spring MVC XML schema]
+或使用IDE的代码自动完成功能来发现可用的属性和子元素。
+
+
+[[mvc-config-conversion]]
+=== 类型转换
+[.small]#{docSpringWebFlux}#webflux-config-conversion[WebFlux]#
+
+默认情况下，将安装 `Number` 和 `Date` 类型的格式化程序，包括对 `@NumberFormat` 和 `@DateTimeFormat` 注解的支持。
+如果类路径中存在Joda-Time，则还将安装对Joda-Time格式库的完全支持。
+
+在Java配置中，你可以注册自定义格式器和转换器，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Configuration
+    @EnableWebMvc
+    public class WebConfig implements WebMvcConfigurer {
+
+        @Override
+        public void addFormatters(FormatterRegistry registry) {
+            // ...
+        }
+    }
+----
+
+以下示例显示了如何在XML中实现相同的配置：
+
+[source,xml,indent=0]
+[subs="verbatim,quotes"]
+----
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:mvc="http://www.springframework.org/schema/mvc"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/mvc
+            http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+        <mvc:annotation-driven conversion-service="conversionService"/>
+
+        <bean id="conversionService"
+                class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+            <property name="converters">
+                <set>
+                    <bean class="org.example.MyConverter"/>
+                </set>
+            </property>
+            <property name="formatters">
+                <set>
+                    <bean class="org.example.MyFormatter"/>
+                    <bean class="org.example.MyAnnotationFormatterFactory"/>
+                </set>
+            </property>
+            <property name="formatterRegistrars">
+                <set>
+                    <bean class="org.example.MyFormatterRegistrar"/>
+                </set>
+            </property>
+        </bean>
+
+    </beans>
+----
+
+NOTE: 有关何时使用FormatterRegistrar实现的更多信息，请参见
+{docSpringCore}#format-FormatterRegistrar-SPI[`FormatterRegistrar` SPI]和
+`FormattingConversionServiceFactoryBean`。
+
+
+[[mvc-config-validation]]
+=== 验证
+[.small]#{docSpringWebFlux}#webflux-config-validation[WebFlux]#
+
+默认情况下，如果 {docSpringCore}#validation-beanvalidation-overview[Bean验证]存在于类路径中
+（例如：Hibernate Validator），则 `LocalValidatorFactoryBean` 将注册为全局 {docSpringCore}#validator[验证器]，
+以与 `@Valid` 一起使用，并在控制器方法参数上进行 `Validated`。
+
+在Java配置中，你可以自定义全局 `Validator` 实例，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Configuration
+    @EnableWebMvc
+    public class WebConfig implements WebMvcConfigurer {
+
+        @Override
+        public Validator getValidator(); {
+            // ...
+        }
+    }
+----
+
+以下示例显示了如何在XML中实现相同的配置：
+
+[source,xml,indent=0]
+[subs="verbatim,quotes"]
+----
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:mvc="http://www.springframework.org/schema/mvc"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/mvc
+            http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+        <mvc:annotation-driven validator="globalValidator"/>
+
+    </beans>
+----
+
+请注意，你还可以在本地注册 `Validator` 实现，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Controller
+    public class MyController {
+
+        @InitBinder
+        protected void initBinder(WebDataBinder binder) {
+            binder.addValidators(new FooValidator());
+        }
+
+    }
+----
+
+TIP: 如果你需要在某个地方注入 `LocalValidatorFactoryBean`，请创建一个bean并用 `@Primary` 标记它，
+以避免与MVC配置中声明的那个冲突。
+
+[[mvc-config-interceptors]]
+=== 拦截器
+
+在Java配置中，你可以注册拦截器以应用于传入的请求，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim"]
+----
+    @Configuration
+    @EnableWebMvc
+    public class WebConfig implements WebMvcConfigurer {
+
+        @Override
+        public void addInterceptors(InterceptorRegistry registry) {
+            registry.addInterceptor(new LocaleChangeInterceptor());
+            registry.addInterceptor(new ThemeChangeInterceptor()).addPathPatterns("/**").excludePathPatterns("/admin/**");
+            registry.addInterceptor(new SecurityInterceptor()).addPathPatterns("/secure/*");
+        }
+    }
+----
+
+以下示例显示了如何在XML中实现相同的配置：
+
+[source,xml,indent=0]
+[subs="verbatim"]
+----
+    <mvc:interceptors>
+        <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/admin/**"/>
+            <bean class="org.springframework.web.servlet.theme.ThemeChangeInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/secure/*"/>
+            <bean class="org.example.SecurityInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+----
+
+
+
+[[mvc-config-content-negotiation]]
+=== 内容类型
+[.small]#{docSpringWebFlux}#webflux-config-content-negotiation[WebFlux]#
+
+你可以配置Spring MVC如何根据请求确定请求的媒体类型（例如：`Accept` 请求头，URL路径扩展，查询参数等）。
+
+默认情况下，首先检查URL路径扩展名 -- 将 `json`，`xml`，`rss` 和 `atom` 注册为已知扩展名（取决于类路径依赖项）。
+`Accept` 请求头是二次检查项。
+
+考虑将这些默认值更改为 `Accept` 请求头，并且如果必须使用基于URL的内容类型解析，请考虑对路径扩展使用查询参数策略。
+有关更多详细信息，请参见<<mvc-ann-requestmapping-suffix-pattern-match>>和<<mvc-ann-requestmapping-rfd>>。
+
+在Java配置中，你可以自定义请求的内容类型解析，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Configuration
+    @EnableWebMvc
+    public class WebConfig implements WebMvcConfigurer {
+
+        @Override
+        public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+            configurer.mediaType("json", MediaType.APPLICATION_JSON);
+            configurer.mediaType("xml", MediaType.APPLICATION_XML);
+        }
+    }
+----
+
+以下示例显示了如何在XML中实现相同的配置：
+
+[source,xml,indent=0]
+[subs="verbatim,quotes"]
+----
+    <mvc:annotation-driven content-negotiation-manager="contentNegotiationManager"/>
+
+    <bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+        <property name="mediaTypes">
+            <value>
+                json=application/json
+                xml=application/xml
+            </value>
+        </property>
+    </bean>
+----
+
+
+[[mvc-config-message-converters]]
+=== 消息转换器
+[.small]#{docSpringWebFlux}#webflux-config-message-codecs[WebFlux]#
+
+你可以通过重写 {javadocSpring}/web/servlet/config/annotation/WebMvcConfigurer.html#configureMessageConverters-java.util.List-[`configureMessageConverters()`]
+（以替换Spring MVC创建的默认转换器）或重写
+{javadocSpring}/web/servlet/config/annotation/WebMvcConfigurer.html#extendMessageConverters-java.util.List-[`extendMessageConverters()`]
+（以定制默认转换器或向默认转换器添加额外的转换器）以在Java配置自定义 `HttpMessageConverter`。
+
+以下示例使用自定义的 `ObjectMapper` 代替默认的，添加了XML和Jackson JSON转换器：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Configuration
+    @EnableWebMvc
+    public class WebConfiguration implements WebMvcConfigurer {
+
+        @Override
+        public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+            Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder()
+                    .indentOutput(true)
+                    .dateFormat(new SimpleDateFormat("yyyy-MM-dd"))
+                    .modulesToInstall(new ParameterNamesModule());
+            converters.add(new MappingJackson2HttpMessageConverter(builder.build()));
+            converters.add(new MappingJackson2XmlHttpMessageConverter(builder.createXmlMapper(true).build()));
+        }
+    }
+----
+
+在前面的示例中，使用 {javadocSpring}/http/converter/json/Jackson2ObjectMapperBuilder.html[`Jackson2ObjectMapperBuilder`]
+为启用了缩进的 `MappingJackson2HttpMessageConverter` 和 `MappingJackson2XmlHttpMessageConverter`
+创建通用配置，自定义日期格式以及
+https://github.com/FasterXML/jackson-module-parameter-names[`jackson-module-parameter-names`]的注册，
+从而增加了对访问参数名称的支持（Java 8中添加的功能）。
+
+该构建器自定义的Jackson默认属性，如下所示：
+
+* http://fasterxml.github.io/jackson-databind/javadoc/2.6/com/fasterxml/jackson/databind/DeserializationFeature.html#FAIL_ON_UNKNOWN_PROPERTIES[`DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES`]被禁用。
+* http://fasterxml.github.io/jackson-databind/javadoc/2.6/com/fasterxml/jackson/databind/MapperFeature.html#DEFAULT_VIEW_INCLUSION[`MapperFeature.DEFAULT_VIEW_INCLUSION`]被禁用。
+
+如果在类路径中检测到以下知名模块，它还会自动注册它们:
+
+* https://github.com/FasterXML/jackson-datatype-joda[jackson-datatype-joda]: 支持Joda-Time类型。
+* https://github.com/FasterXML/jackson-datatype-jsr310[jackson-datatype-jsr310]: 支持Java 8日期和时间API类型。
+* https://github.com/FasterXML/jackson-datatype-jdk8[jackson-datatype-jdk8]: 支持其他Java 8类型，例如：`Optional`。
+* https://github.com/FasterXML/jackson-module-kotlin[`jackson-module-kotlin`]: 支持Kotlin类和数据类。
+
+NOTE: 除了 http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22jackson-dataformat-xml%22[`jackson-dataformat-xml`]之外，
+使用Jackson XML支持启用缩进还需要 http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.codehaus.woodstox%22%20AND%20a%3A%22woodstox-core-asl%22[`woodstox-core-asl`]依赖。
+
+其他有趣的Jackson模块也可用：
+
+* https://github.com/zalando/jackson-datatype-money[jackson-datatype-money]: 支持 `javax.money` 类型（非官方模块）。
+* https://github.com/FasterXML/jackson-datatype-hibernate[jackson-datatype-hibernate]: 支持特定于Hibernate的类型和属性（包括延迟加载方面）。
+
+以下示例显示了如何在XML中实现相同的配置：
+
+[source,xml,indent=0]
+[subs="verbatim,quotes"]
+----
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper" ref="objectMapper"/>
+            </bean>
+            <bean class="org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter">
+                <property name="objectMapper" ref="xmlMapper"/>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <bean id="objectMapper" class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean"
+          p:indentOutput="true"
+          p:simpleDateFormat="yyyy-MM-dd"
+          p:modulesToInstall="com.fasterxml.jackson.module.paramnames.ParameterNamesModule"/>
+
+    <bean id="xmlMapper" parent="objectMapper" p:createXmlMapper="true"/>
+----
+
+
+[[mvc-config-view-controller]]
+=== 视图控制器
+
+这是定义 `ParameterizableViewController` 的快捷方式，该参数可在调用时立即转发到视图。
+在视图生成响应之前没有Java控制器逻辑要执行的静态情况下，可以使用它。
+
+以下Java配置示例将对 `/` 的请求转发到名为 `home` 的视图：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Configuration
+    @EnableWebMvc
+    public class WebConfig implements WebMvcConfigurer {
+
+        @Override
+        public void addViewControllers(ViewControllerRegistry registry) {
+            registry.addViewController("/").setViewName("home");
+        }
+    }
+----
+
+以下示例通过使用XML `<mvc:view-controller>` 元素，实现了与上一示例相同的操作：
+
+[source,xml,indent=0]
+[subs="verbatim,quotes"]
+----
+    <mvc:view-controller path="/" view-name="home"/>
+----
+
+
+[[mvc-config-view-resolvers]]
+=== 视图解析器
+[.small]#{docSpringWebFlux}#webflux-config-view-resolvers[WebFlux]#
+
+MVC配置简化了视图解析器的注册。
+
+以下Java配置示例通过使用JSP和Jackson作为JSON呈现的默认 `View` 来配置内容协商视图解析：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Configuration
+    @EnableWebMvc
+    public class WebConfig implements WebMvcConfigurer {
+
+        @Override
+        public void configureViewResolvers(ViewResolverRegistry registry) {
+            registry.enableContentNegotiation(new MappingJackson2JsonView());
+            registry.jsp();
+        }
+    }
+----
+
+以下示例显示了如何在XML中实现相同的配置：
+
+[source,xml,indent=0]
+[subs="verbatim,quotes"]
+----
+    <mvc:view-resolvers>
+        <mvc:content-negotiation>
+            <mvc:default-views>
+                <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
+            </mvc:default-views>
+        </mvc:content-negotiation>
+        <mvc:jsp/>
+    </mvc:view-resolvers>
+----
+
+但是请注意，FreeMarker，Tiles，Groovy标记和脚本模板也需要配置基础视图技术。
+
+MVC命名空间提供了专用元素。以下示例适用于FreeMarker：
+
+[source,xml,indent=0]
+[subs="verbatim,quotes"]
+----
+
+    <mvc:view-resolvers>
+        <mvc:content-negotiation>
+            <mvc:default-views>
+                <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
+            </mvc:default-views>
+        </mvc:content-negotiation>
+        <mvc:freemarker cache="false"/>
+    </mvc:view-resolvers>
+
+    <mvc:freemarker-configurer>
+        <mvc:template-loader-path location="/freemarker"/>
+    </mvc:freemarker-configurer>
+
+----
+
+在Java配置中，你可以添加相应的 `Configurer` bean，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Configuration
+    @EnableWebMvc
+    public class WebConfig implements WebMvcConfigurer {
+
+        @Override
+        public void configureViewResolvers(ViewResolverRegistry registry) {
+            registry.enableContentNegotiation(new MappingJackson2JsonView());
+            registry.freeMarker().cache(false);
+        }
+
+        @Bean
+        public FreeMarkerConfigurer freeMarkerConfigurer() {
+            FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
+            configurer.setTemplateLoaderPath("/freemarker");
+            return configurer;
+        }
+    }
+----
+
+
+
+[[mvc-config-static-resources]]
+=== 静态资源
+[.small]#{docSpringWebFlux}#webflux-config-static-resources[WebFlux]#
+
+此选项提供了一种方便的方法来从基于 {javadocSpring}/core/io/Resource.html[`Resource`]的位置列表中提供静态资源。
+
+在下一个示例中，给定一个以 `/resources` 开头的请求，相对路径用于在web应用程序根目录下或在 `/static`
+类路径下查找和提供相对于 `/public` 的静态资源。这些资源的使用期限为一年，以确保最大程度地利用浏览器缓存并减少浏览器发出的HTTP请求。
+还会评估 `Last-Modified` 头，如果存在，则返回 `304` 状态码。
+
+以下清单显示了如何使用Java配置进行操作：
+
+[source,java,indent=0]
+[subs="verbatim"]
+----
+    @Configuration
+    @EnableWebMvc
+    public class WebConfig implements WebMvcConfigurer {
+
+        @Override
+        public void addResourceHandlers(ResourceHandlerRegistry registry) {
+            registry.addResourceHandler("/resources/**")
+                .addResourceLocations("/public", "classpath:/static/")
+                .setCachePeriod(31556926);
+        }
+    }
+----
+
+以下示例显示了如何在XML中实现相同的配置：
+
+[source,xml,indent=0]
+[subs="verbatim,quotes"]
+----
+    <mvc:resources mapping="/resources/**"
+        location="/public, classpath:/static/"
+        cache-period="31556926" />
+----
+
+另请参阅<<mvc-caching-static-resources,对静态资源的HTTP缓存支持>>。
+
+资源处理程序还支持
+{javadocSpring}/web/servlet/resource/ResourceResolver.html[`ResourceResolver`]实现和
+{javadocSpring}/web/servlet/resource/ResourceTransformer.html[`ResourceTransformer`]实现的链，
+你可以使用它们创建用于处理优化资源的工具链。
+
+你可以将 `VersionResourceResolver` 用于基于资源，固定应用程序版本或其他内容计算出的MD5哈希值的版本化资源URL。
+`ContentVersionStrategy`（MD5哈希）是一个不错的选择 -- 带有一些值得注意的例外，
+例如与模块加载器一起使用的JavaScript资源。
+
+以下示例显示如何在Java配置中使用 `VersionResourceResolver`：
+
+[source,java,indent=0]
+[subs="verbatim"]
+----
+    @Configuration
+    @EnableWebMvc
+    public class WebConfig implements WebMvcConfigurer {
+
+        @Override
+        public void addResourceHandlers(ResourceHandlerRegistry registry) {
+            registry.addResourceHandler("/resources/**")
+                    .addResourceLocations("/public/")
+                    .resourceChain(true)
+                    .addResolver(new VersionResourceResolver().addContentVersionStrategy("/**"));
+        }
+    }
+----
+
+以下示例显示了如何在XML中实现相同的配置：
+
+[source,xml,indent=0]
+[subs="verbatim"]
+----
+<mvc:resources mapping="/resources/**" location="/public/">
+    <mvc:resource-chain>
+        <mvc:resource-cache/>
+        <mvc:resolvers>
+            <mvc:version-resolver>
+                <mvc:content-version-strategy patterns="/**"/>
+            </mvc:version-resolver>
+        </mvc:resolvers>
+    </mvc:resource-chain>
+</mvc:resources>
+----
+
+然后，你可以使用 `ResourceUrlProvider` 重写URL，并应用完整的解析器和转换器链 -- 例如：插入版本。
+MVC配置提供了 `ResourceUrlProvider` bean，以便可以将其注入到其他对象中。
+你也可以使用 `ResourceUrlEncodingFilter` 对Thymeleaf，JSP，FreeMarker以及其他依赖于
+`HttpServletResponse#encodeURL` 的URL标签进行透明重写。
+
+请注意，在同时使用 `EncodedResourceResolver`（例如：用于gzip压缩或brotli编码的资源）和 `VersionResourceResolver` 时，
+必须按此顺序注册。这样可以确保始终基于未编码文件可靠地计算基于内容的版本。
+
+http://www.webjars.org/documentation[WebJars] 还通过 `WebJarsResourceResolver` 支持，
+当 `org.webjars:webjars-locator` 库存在于类路径中时，WebJars将自动注册。
+解析程序可以重写URL以包括jar的版本，并且还可以与没有版本的传入URL进行匹配，例如：从
+`/jquery/jquery.min.js` 到 `/jquery/1.2.0/jquery.min.js`。
+
+[[mvc-default-servlet-handler]]
+=== 默认Servlet
+
+Spring MVC允许将 `DispatcherServlet` 映射到 `/`（从而覆盖了容器默认Servlet的映射），
+同时仍允许容器默认Servlet处理静态资源请求。它使用 `/**` 的URL映射和相对于其他URL映射的最低优先级配置
+`DefaultServletHttpRequestHandler`。
+
+该处理程序将所有请求转发到默认Servlet。因此，它必须排列在所有其他URL `HandlerMappings` 的最后。
+如果使用 `<mvc:annotation-driven>` 则就是如此。另外，如果你设置自己的自定义 `HandlerMapping` 实例，
+请确保将其 `order` 属性设置为小于 `DefaultServletHttpRequestHandler` 的 `Integer.MAX_VALUE` 的值。
+
+下面的示例说明如何使用默认设置启用该功能：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Configuration
+    @EnableWebMvc
+    public class WebConfig implements WebMvcConfigurer {
+
+        @Override
+        public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+            configurer.enable();
+        }
+    }
+----
+
+以下示例显示了如何在XML中实现相同的配置：
+
+[source,xml,indent=0]
+[subs="verbatim,quotes"]
+----
+    <mvc:default-servlet-handler/>
+----
+
+覆盖 `/` Servlet映射需要注意的是，必须通过名称而不是通过路径来检索默认Servlet的 `RequestDispatcher`。
+`DefaultServletHttpRequestHandler` 尝试使用大多数主要Servlet容器（包括Tomcat，Jetty，GlassFish，JBoss，Resin，WebLogic
+和WebSphere）的已知名称列表，在启动时自动检测容器的默认Servlet。如果默认Servlet是使用其他名称自定义配置的，
+或者在默认Servlet名称未知的情况下使用了其他Servlet容器，那么你必须明确提供默认Servlet的名称，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Configuration
+    @EnableWebMvc
+    public class WebConfig implements WebMvcConfigurer {
+
+        @Override
+        public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+            configurer.enable("myCustomDefaultServlet");
+        }
+
+    }
+----
+
+以下示例显示了如何在XML中实现相同的配置：
+
+[source,xml,indent=0]
+[subs="verbatim,quotes"]
+----
+    <mvc:default-servlet-handler default-servlet-name="myCustomDefaultServlet"/>
+----
+
+
+[[mvc-config-path-matching]]
+=== 路径匹配
+[.small]#{docSpringWebFlux}#webflux-config-path-matching[WebFlux]#
+
+你可以自定义与URL的路径匹配和处理有关的选项。有关各个选项的详细信息，请参见
+ {javadocSpring}/web/servlet/config/annotation/PathMatchConfigurer.html[`PathMatchConfigurer`] javadoc。
+
+以下示例显示了如何在Java配置中自定义路径匹配：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Configuration
+    @EnableWebMvc
+    public class WebConfig implements WebMvcConfigurer {
+
+        @Override
+        public void configurePathMatch(PathMatchConfigurer configurer) {
+            configurer
+                .setUseSuffixPatternMatch(true)
+                .setUseTrailingSlashMatch(false)
+                .setUseRegisteredSuffixPatternMatch(true)
+                .setPathMatcher(antPathMatcher())
+                .setUrlPathHelper(urlPathHelper())
+                .addPathPrefix("/api",
+                        HandlerTypePredicate.forAnnotation(RestController.class));
+        }
+
+        @Bean
+        public UrlPathHelper urlPathHelper() {
+            //...
+        }
+
+        @Bean
+        public PathMatcher antPathMatcher() {
+            //...
+        }
+
+    }
+----
+
+以下示例显示了如何在XML中实现相同的配置：
+
+[source,xml,indent=0]
+[subs="verbatim,quotes"]
+----
+    <mvc:annotation-driven>
+        <mvc:path-matching
+            suffix-pattern="true"
+            trailing-slash="false"
+            registered-suffixes-only="true"
+            path-helper="pathHelper"
+            path-matcher="pathMatcher"/>
+    </mvc:annotation-driven>
+
+    <bean id="pathHelper" class="org.example.app.MyPathHelper"/>
+    <bean id="pathMatcher" class="org.example.app.MyPathMatcher"/>
+----
+
+
+[[mvc-config-advanced-java]]
+=== 高级Java配置
+[.small]#{docSpringWebFlux}#webflux-config-advanced-java[WebFlux]#
+
+`@EnableWebMvc` 导入 `DelegatingWebMvcConfiguration`，其中：
+
+* 为Spring MVC应用程序提供默认的Spring配置
+* 检测并委托给 `WebMvcConfigurer` 实现以自定义该配置。
+
+对于高级模式，可以删除 `@EnableWebMvc` 并直接从 `DelegatingWebMvcConfiguration` 继承而不是实现
+`WebMvcConfigurer`，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Configuration
+    public class WebConfig extends DelegatingWebMvcConfiguration {
+
+        // ...
+
+    }
+----
+
+你可以将现有方法保留在 `WebConfig` 中，但是现在你还可以覆盖基类中的bean声明，
+并且在类路径上仍然可以具有任意数量的其他 `WebMvcConfigurer` 实现。
+
+
+[[mvc-config-advanced-xml]]
+=== 高级XML配置
+
+MVC命名空间没有高级模式。如果你需要在bean上自定义一个不能更改的属性，则可以使用Spring
+`ApplicationContext` 的 `BeanPostProcessor` 生命周期钩子，如以下示例所示：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+    @Component
+    public class MyPostProcessor implements BeanPostProcessor {
+
+        public Object postProcessBeforeInitialization(Object bean, String name) throws BeansException {
+            // ...
+        }
+    }
+----
+
+请注意，你需要将 `MyPostProcessor` 声明为bean，可以用XML显式声明，也可以通过 `<component-scan/>` 声明将其检测出来。
+
+
+[[mvc-http2]]
+== HTTP/2
+[.small]#{docSpringWebFlux}#webflux-http2[WebFlux]#
+
+Servlet 4容器需要支持HTTP/2，并且Spring Framework 5与Servlet API 4兼容。从编程模型的角度来看，
+应用程序不需要做任何特定的事情。但是，有一些与服务器配置有关的注意事项。有关更多详细信息，请参见
+https://github.com/spring-projects/spring-framework/wiki/HTTP-2-support[HTTP/2 Wiki页面]。
+
+Servlet API确实公开了一种与HTTP/2相关的构造。你可以使用 `javax.servlet.http.PushBuilder` 主动将资源推送到客户端，
+并且它支持作为 `@RequestMapping` 方法的<<mvc-ann-arguments,方法参数>>。

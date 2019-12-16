@@ -6,6 +6,7 @@ Hmm, the gate of Spring :-)
 
 * <<spring-core.adoc#beans,Spring Core>>
 * <<spring-session.adoc#overview,Spring Session>>
+* <<spring-mvc.adoc#mvc,Spring MVC>>
 * <<spring-test.adoc#testing-introduction,Spring Testing>>
 * <<spring-boot-test.adoc#boot-features-testing,Spring Boot Testing>>
 * <<spring-data-jpa.adoc#project,Spring Data JPA>>
