@@ -38,11 +38,6 @@ Spring MVC `HandlerMapping` 实现为CORS提供内置支持。成功将请求映
 每个 `HandlerMapping`。在大多数情况下，应用程序使用MVC
 Java配置或XML名称空间声明此类映射，这导致将单个全局映射传递给所有 `HandlerMapping` 实例。
 
-You can combine global CORS configuration at the `HandlerMapping` level with more
-fine-grained, handler-level CORS configuration. For example, annotated controllers can use
-class- or method-level `@CrossOrigin` annotations (other handlers can implement
-`CorsConfigurationSource`).
-
 你可以将 `HandlerMapping` 级别的全局CORS配置与更细粒度的处理程序级别的CORS配置结合使用。
 例如，带注解的控制器可以使用类或方法级别的 `@CrossOrigin` 注解（其他处理程序可以实现 `CorsConfigurationSource`）。
 
