@@ -13,3 +13,5 @@ Hmm, the gate of Spring :-)
 * <<spring-data-solr.adoc#preface,Spring Data Solr>>
 * <<spring-rest-docs.adoc#introduction,Spring Rest Docs>>
 * <<springfox.adoc#introduction,Springfox>>
+
+Back to https://xiaojiac.github.io/hello-world[homepage] ~
