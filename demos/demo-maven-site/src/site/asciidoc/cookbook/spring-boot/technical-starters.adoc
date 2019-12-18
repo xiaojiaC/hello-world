@@ -1,0 +1,28 @@
+|===
+| 名称 | 描述 | Pom
+
+| `spring-boot-starter-jetty`
+| 使用Jetty作为嵌入式servlet容器的启动器。<<spring-boot-starter-tomcat,`spring-boot-starter-tomcat`>>的替代品
+| {spring-boot-starters-code}/spring-boot-starter-jetty/pom.xml[Pom]
+
+| `spring-boot-starter-log4j2`
+| 使用Log4j2进行日志记录的启动器。<<spring-boot-starter-logging,`spring-boot-starter-logging`>>的替代品
+| {spring-boot-starters-code}/spring-boot-starter-log4j2/pom.xml[Pom]
+
+| [[spring-boot-starter-logging]] `spring-boot-starter-logging`
+| 使用Logback进行日志记录的启动器。默认日志记录启动器
+| {spring-boot-starters-code}/spring-boot-starter-logging/pom.xml[Pom]
+
+| `spring-boot-starter-reactor-netty`
+| 使用Reactor Netty作为嵌入式响应式HTTP服务器的启动器
+| {spring-boot-starters-code}/spring-boot-starter-reactor-netty/pom.xml[Pom]
+
+| [[spring-boot-starter-tomcat]] `spring-boot-starter-tomcat`
+| 用于将Tomcat用作嵌入式servlet容器的启动器。<<spring-boot-starter-web,`spring-boot-starter-web`>>使用的默认servlet容器启动器
+| {spring-boot-starters-code}/spring-boot-starter-tomcat/pom.xml[Pom]
+
+| `spring-boot-starter-undertow`
+| 使用Undertow作为嵌入式servlet容器的启动器。<<spring-boot-starter-tomcat,`spring-boot-starter-tomcat`>>的替代品
+| {spring-boot-starters-code}/spring-boot-starter-undertow/pom.xml[Pom]
+
+|===

@@ -3122,7 +3122,7 @@ NOTE: 通过专用的 `CorsWebFilter` 提供对函数端点的CORS支持。
 
 本部分介绍了Spring框架中可用于URI的各种选项。
 
-include::web-uris.adoc[leveloffset=+2]
+include::web-uris.adoc[leveloffset=+1]
 
 
 [[mvc-servleturicomponentsbuilder]]

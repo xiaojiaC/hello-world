@@ -1,5 +1,5 @@
 [[web-uricomponents]]
-= UriComponents
+== UriComponents
 [.small]#Spring MVC and Spring WebFlux#
 
 `UriComponentsBuilder` 有助于从具有变量的URI模板中构建URI，如以下示例所示：
@@ -58,7 +58,7 @@
 
 
 [[web-uribuilder]]
-= UriBuilder
+== UriBuilder
 [.small]#Spring MVC and Spring WebFlux#
 
 <<web-uricomponents,`UriComponentsBuilder`>> 实现了 `UriBuilder`。
@@ -114,7 +114,7 @@
 
 
 [[web-uri-encoding]]
-= URI编码
+== URI编码
 [.small]#Spring MVC and Spring WebFlux#
 
 `UriComponentsBuilder` 在两个级别公开了编码选项：
