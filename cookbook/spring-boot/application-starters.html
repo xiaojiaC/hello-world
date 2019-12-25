@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<title>UriComponents</title>
+<title>Untitled</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -502,275 +502,266 @@ $(addBlockSwitches);
 <div id="header">
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#web-uricomponents">1. UriComponents</a></li>
-<li><a href="#web-uribuilder">2. UriBuilder</a></li>
-<li><a href="#web-uri-encoding">3. URI编码</a></li>
-</ul>
+
 </div>
 </div>
 <div id="content">
-<div class="sect1">
-<h2 id="web-uricomponents">1. UriComponents</h2>
+<div id="preamble">
 <div class="sectionbody">
-<div class="paragraph">
-<p><span class="small">Spring MVC and Spring WebFlux</span></p>
-</div>
-<div class="paragraph">
-<p><code>UriComponentsBuilder</code> 有助于从具有变量的URI模板中构建URI，如以下示例所示：</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">UriComponents uriComponents = UriComponentsBuilder
-        .fromUriString("http://example.com/hotels/{hotel}")  <i class="conum" data-value="1"></i><b>(1)</b>
-        .queryParam("q", "{q}")  <i class="conum" data-value="2"></i><b>(2)</b>
-        .encode() <i class="conum" data-value="3"></i><b>(3)</b>
-        .build(); <i class="conum" data-value="4"></i><b>(4)</b>
-
-URI uri = uriComponents.expand("Westin", "123").toUri();  <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+</colgroup>
+<thead>
 <tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>带有URI模板的静态工厂方法。</td>
+<th class="tableblock halign-left valign-top">名称</th>
+<th class="tableblock halign-left valign-top">描述</th>
+<th class="tableblock halign-left valign-top">Pom</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">核心启动器，包括自动配置支持，日志记录和YAML</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter/pom.xml[Pom]</p></td>
 </tr>
 <tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>添加或替换URI组件。</td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-activemq</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Apache ActiveMQ的JMS消息传递启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-activemq/pom.xml[Pom]</p></td>
 </tr>
 <tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>请求对URI模板和URI变量进行编码。</td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-amqp</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Spring AMQP和Rabbit MQ的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-amqp/pom.xml[Pom]</p></td>
 </tr>
 <tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>构建一个 <code>UriComponents</code>。</td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-aop</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Spring AOP和AspectJ进行面向方面编程的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-aop/pom.xml[Pom]</p></td>
 </tr>
 <tr>
-<td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>设置变量并获取 <code>URI</code>。</td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-artemis</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Apache Artemis的JMS消息传递启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-artemis/pom.xml[Pom]</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-batch</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Spring Batch的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-batch/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-cache</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Spring Framework缓存支持的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-cache/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-cloud-connectors</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Spring Cloud Connectors的启动器，可简化与Cloud Foundry和Heroku等云平台中服务的连接。不赞成使用Java CFEnv</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-cloud-connectors/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-data-cassandra</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Cassandra分布式数据库和Spring Data Cassandra的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-data-cassandra/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-data-cassandra-reactive</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Cassandra分布式数据库和Spring Data Cassandra Reactive的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-data-cassandra-reactive/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-data-couchbase</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Couchbase面向文档的数据库和Spring Data Couchbase的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-data-couchbase/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-data-couchbase-reactive</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Couchbase面向文档的数据库和Spring Data Couchbase Reactive的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-data-couchbase-reactive/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-data-elasticsearch</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Elasticsearch搜索和分析引擎以及Spring Data Elasticsearch的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-data-elasticsearch/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-data-jdbc</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Spring Data JDBC的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-data-jdbc/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a id="spring-boot-starter-data-jpa"></a> <code>spring-boot-starter-data-jpa</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">将Spring Data JPA与Hibernate结合使用的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-data-jpa/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-data-ldap</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Spring Data LDAP的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-data-ldap/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-data-mongodb</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用MongoDB面向文档的数据库和Spring Data MongoDB的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-data-mongodb/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-data-mongodb-reactive</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用MongoDB面向文档的数据库和Spring Data MongoDB Reactive的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-data-mongodb-reactive/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-data-neo4j</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Neo4j图数据库和Spring Data Neo4j的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-data-neo4j/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-data-redis</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">将Redis键值对数据库与Spring Data Redis和Lettuce客户端一起使用的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-data-redis/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-data-redis-reactive</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">将Redis键值对数据库与Spring Data Redis Reacting和Lettuce客户端一起使用的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-data-redis-reactive/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-data-rest</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Spring Data REST在REST上公开Spring Data存储库的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-data-rest/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-data-solr</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Apache Solr搜索平台和Spring Data Solr的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-data-solr/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-freemarker</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用FreeMarker视图构建MVC Web应用程序的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-freemarker/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-groovy-templates</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Groovy模板视图构建MVC Web应用程序的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-groovy-templates/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-hateoas</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Spring MVC和Spring HATEOAS构建基于超媒体的RESTful Web应用程序的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-hateoas/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-integration</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Spring Integration的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-integration/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a id="spring-boot-starter-jdbc"></a> <code>spring-boot-starter-jdbc</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">通过HikariCP连接池使用JDBC的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-jdbc/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-jersey</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用JAX-RS和Jersey构建RESTful Web应用程序的启动器。
+  <a href="#spring-boot-starter-web"><code>spring-boot-starter-web</code></a>的替代品</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-jersey/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-jooq</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用jOOQ访问SQL数据库的启动器。
+  <a href="#spring-boot-starter-data-jpa"><code>spring-boot-starter-data-jpa</code></a>或
+  <a href="#spring-boot-starter-jdbc"><code>spring-boot-starter-jdbc</code></a>的替代品</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-jooq/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-json</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">读写JSON的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-json/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-jta-atomikos</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Atomikos的JTA事务启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-jta-atomikos/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-jta-bitronix</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Bitronix的JTA事务启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-jta-bitronix/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-mail</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Java Mail和Spring Framework的电子邮件发送支持的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-mail/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-mustache</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Mustache视图构建Web应用程序的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-mustache/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-oauth2-client</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Spring Security的OAuth2/OpenID Connect客户端功能的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-oauth2-client/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-oauth2-resource-server</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Spring Security的OAuth2资源服务器功能的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-oauth2-resource-server/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-quartz</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Quartz Scheduler的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-quartz/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-rsocket</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">用于构建RSocket客户端和服务器的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-rsocket/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-security</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Spring Security的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-security/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-test</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用包括JUnit，Hamcrest和Mockito在内的库测试Spring Boot应用程序的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-test/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-thymeleaf</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Thymeleaf视图构建MVC Web应用程序的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-thymeleaf/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-validation</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">通过Hibernate Validator使用Java Bean验证的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-validation/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a id="spring-boot-starter-web"></a> <code>spring-boot-starter-web</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Spring MVC构建Web（包括RESTful）应用程序的启动器。使用Tomcat作为默认的嵌入式容器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-web/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-web-services</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Spring Web Services的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-web-services/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-webflux</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Spring Framework的响应式Web支持构建WebFlux应用程序的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-webflux/pom.xml[Pom]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring-boot-starter-websocket</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使用Spring Framework的WebSocket支持构建WebSocket应用程序的启动器</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{spring-boot-starters-code}/spring-boot-starter-websocket/pom.xml[Pom]</p></td>
+</tr>
+</tbody>
 </table>
-</div>
-<div class="paragraph">
-<p>可以将前面的示例合并为一个链，并通过 <code>buildAndExpand</code> 进行缩短，如以下示例所示：</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">URI uri = UriComponentsBuilder
-        .fromUriString("http://example.com/hotels/{hotel}")
-        .queryParam("q", "{q}")
-        .encode()
-        .buildAndExpand("Westin", "123")
-        .toUri();</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>你可以通过直接传入URI（这意味着编码）来进一步缩短它，如以下示例所示：</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">URI uri = UriComponentsBuilder
-        .fromUriString("http://example.com/hotels/{hotel}")
-        .queryParam("q", "{q}")
-        .build("Westin", "123");</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>你可以使用完整的URI模板进一步缩短它，如以下示例所示：</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">URI uri = UriComponentsBuilder
-        .fromUriString("http://example.com/hotels/{hotel}?q={q}")
-        .build("Westin", "123");</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="web-uribuilder">2. UriBuilder</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p><span class="small">Spring MVC and Spring WebFlux</span></p>
-</div>
-<div class="paragraph">
-<p><a href="#web-uricomponents"><code>UriComponentsBuilder</code></a> 实现了 <code>UriBuilder</code>。
-你可以依次使用 <code>UriBuilderFactory</code> 创建 <code>UriBuilder</code>。<code>UriBuilderFactory</code> 和 <code>UriBuilder</code>
-一起提供了一种可插入的机制，可以基于共享配置（例如基本URL，编码首选项和其他详细信息）从URI模板构建URI。</p>
-</div>
-<div class="paragraph">
-<p>你可以使用 <code>UriBuilderFactory</code> 配置 <code>RestTemplate</code> 和 <code>WebClient</code> 为自定义URI做准备。
-<code>DefaultUriBuilderFactory</code> 是 <code>UriBuilderFactory</code> 的默认实现，该实现在内部使用 <code>UriComponentsBuilder</code>
-并公开共享的配置选项。</p>
-</div>
-<div class="paragraph">
-<p>以下示例显示如何配置 <code>RestTemplate</code>：</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">// import org.springframework.web.util.DefaultUriBuilderFactory.EncodingMode;
-
-String baseUrl = "http://example.org";
-DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(baseUrl);
-factory.setEncodingMode(EncodingMode.TEMPLATE_AND_VARIABLES);
-
-RestTemplate restTemplate = new RestTemplate();
-restTemplate.setUriTemplateHandler(factory);</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>下面的示例配置一个 <code>WebClient</code>：</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">// import org.springframework.web.util.DefaultUriBuilderFactory.EncodingMode;
-
-String baseUrl = "http://example.org";
-DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(baseUrl);
-factory.setEncodingMode(EncodingMode.TEMPLATE_AND_VARIABLES);
-
-WebClient client = WebClient.builder().uriBuilderFactory(factory).build();</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>此外，你也可以直接使用 <code>DefaultUriBuilderFactory</code>。
-它类似于使用 <code>UriComponentsBuilder</code>，但不是静态工厂方法，它是一个包含配置和首选项的实际实例，如以下示例所示：</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">String baseUrl = "http://example.com";
-DefaultUriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory(baseUrl);
-
-URI uri = uriBuilderFactory.uriString("/hotels/{hotel}")
-        .queryParam("q", "{q}")
-        .build("Westin", "123");</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="web-uri-encoding">3. URI编码</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p><span class="small">Spring MVC and Spring WebFlux</span></p>
-</div>
-<div class="paragraph">
-<p><code>UriComponentsBuilder</code> 在两个级别公开了编码选项：</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>{javadocSpring}/web/util/UriComponentsBuilder.html#encode--[UriComponentsBuilder#encode()]:
-首先对URI模板进行预编码，然后在扩展时严格对URI变量进行编码。</p>
-</li>
-<li>
-<p>{javadocSpring}/web/util/UriComponents.html#encode--[UriComponents#encode()]:
-扩展URI变量 <em>后</em> 编码URI组件。</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>这两个选项都用转义的八位字节替换非ASCII和非法字符。但是，第一个选项还会替换出现在URI变量中的具有保留含义的字符。</p>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-考虑“;”，这在路径上是合法的，但具有保留的含义。第一个选项将URI变量中“;”替换为“%3B”，但URI模板中的没有。
-相比之下，第二个选项永远不会替换“;”，因为它是路径中的合法字符。
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>在大多数情况下，第一个选项可能会产生预期的结果，因为它将URI变量视为要完全编码的不透明数据，
-而选项2仅在URI变量有意要包含保留字符的情况下才有用。</p>
-</div>
-<div class="paragraph">
-<p>以下示例使用第一个选项：</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">URI uri = UriComponentsBuilder.fromPath("/hotel list/{city}")
-            .queryParam("q", "{q}")
-            .encode()
-            .buildAndExpand("New York", "foo+bar")
-            .toUri();
-
-    // Result is "/hotel%20list/New%20York?q=foo%2Bbar"</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>你可以通过直接传入URI（这意味着编码）来缩短前面的示例，如以下示例所示：</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">URI uri = UriComponentsBuilder.fromPath("/hotel list/{city}")
-            .queryParam("q", "{q}")
-            .build("New York", "foo+bar")</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>你可以使用完整的URI模板进一步缩短它，如以下示例所示：</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">URI uri = UriComponentsBuilder.fromPath("/hotel list/{city}?q={q}")
-            .build("New York", "foo+bar")</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><code>WebClient</code> 和 <code>RestTemplate</code> 通过 <code>UriBuilderFactory</code> 策略在内部扩展和编码URI模板。
-两者都可以使用自定义策略进行配置。如以下示例所示：</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">String baseUrl = "http://example.com";
-DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(baseUrl)
-factory.setEncodingMode(EncodingMode.TEMPLATE_AND_VALUES);
-
-// Customize the RestTemplate..
-RestTemplate restTemplate = new RestTemplate();
-restTemplate.setUriTemplateHandler(factory);
-
-// Customize the WebClient..
-WebClient client = WebClient.builder().uriBuilderFactory(factory).build();</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><code>DefaultUriBuilderFactory</code> 实现在内部使用 <code>UriComponentsBuilder</code> 来扩展和编码URI模板。
-作为工厂，它提供了一个位置，可以根据以下一种编码模式来配置编码方法：</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>TEMPLATE_AND_VALUES</code>: 使用 <code>UriComponentsBuilder#encode()</code>
-（对应于先前列表中的第一个选项）对URI模板进行预编码，并在扩展时严格编码URI变量。</p>
-</li>
-<li>
-<p><code>VALUES_ONLY</code>: 不对URI模板进行编码，而是在将其扩展到模板之前通过
-<code>UriUtils#encodeUriUriVariables</code> 对URI变量进行严格编码。</p>
-</li>
-<li>
-<p><code>URI_COMPONENTS</code>: 在扩展URI变量之后，使用对应于先前列表中第二个选项的
-<code>UriComponents#encode()</code> 来编码URI组件值。</p>
-</li>
-<li>
-<p><code>NONE</code>: 不应用编码。</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>由于历史原因和向后兼容性，将 <code>RestTemplate</code> 设置为 <code>EncodingMode.URI_COMPONENTS</code>。<code>WebClient</code> 依赖于
-<code>DefaultUriBuilderFactory</code> 中的默认值，该默认值已从5.0.x中的 <code>EncodingMode.URI_COMPONENTS</code>
-更改为5.1中的 <code>EncodingMode.TEMPLATE_AND_VALUES</code>。</p>
-</div>
 </div>
 </div>
 </div>

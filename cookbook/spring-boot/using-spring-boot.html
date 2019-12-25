@@ -1,0 +1,2112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.3">
+<meta name="author" content="Unresolved directive in using-spring-boot.adoc - include::attributes.adoc[]">
+<title>Spring Boot</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<style>
+/* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
+/* Remove comment around @import statement below when using as a custom stylesheet */
+/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700";*/
+article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}
+audio,canvas,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+[hidden],template{display:none}
+script{display:none!important}
+html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
+body{margin:0}
+a{background:transparent}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+abbr[title]{border-bottom:1px dotted}
+b,strong{font-weight:bold}
+dfn{font-style:italic}
+hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}
+input[type="search"]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}
+input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+body{-webkit-font-smoothing:antialiased}
+img,object,svg{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+.center{margin-left:auto;margin-right:auto}
+.spread{width:100%}
+p.lead,.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{font-size:1.21875em;line-height:1.6}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0;direction:ltr}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:none}
+p{font-family:inherit;font-weight:400;font-size:1em;line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #ddddd8;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em;height:0}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{font-size:1em;line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol,ul.no-bullet,ol.no-bullet{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0;font-size:1em}
+ul.square li ul,ul.circle li ul,ul.disc li ul{list-style:inherit}
+ul.square{list-style-type:square}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ul.no-bullet{list-style:none}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+abbr,acronym{text-transform:uppercase;font-size:90%;color:rgba(0,0,0,.8);border-bottom:1px dotted #ddd;cursor:help}
+abbr{text-transform:none}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote cite{display:block;font-size:.9375em;color:rgba(0,0,0,.6)}
+blockquote cite:before{content:"\2014 \0020"}
+blockquote cite a,blockquote cite a:visited{color:rgba(0,0,0,.6)}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media only screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede}
+table thead,table tfoot{background:#f7f8f7;font-weight:bold}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt,table tr:nth-of-type(even){background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
+body{tab-size:4}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.clearfix:before,.clearfix:after,.float-group:before,.float-group:after{content:" ";display:table}
+.clearfix:after,.float-group:after{clear:both}
+*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+pre,pre>code{line-height:1.45;color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;text-rendering:optimizeSpeed}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menu{color:rgba(0,0,0,.8)}
+b.button:before,b.button:after{position:relative;top:-1px;font-weight:400}
+b.button:before{content:"[";padding:0 3px 0 2px}
+b.button:after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header:before,#header:after,#content:before,#content:after,#footnotes:before,#footnotes:after,#footer:before,#footer:after{content:" ";display:table}
+#header:after,#content:after,#footnotes:after,#footer:after{clear:both}
+#content{margin-top:1.25em}
+#content:before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #ddddd8}
+#header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #ddddd8;padding-bottom:8px}
+#header .details{border-bottom:1px solid #ddddd8;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:-ms-flexbox;display:-webkit-flex;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span:before{content:"\00a0\2013\00a0"}
+#header .details br+span.author:before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark:before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber:after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #ddddd8;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #efefed;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media only screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+#toc.toc2{margin-top:0!important;background-color:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #efefed;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #efefed;left:auto;right:0}}
+@media only screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:20em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:100%;background-color:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:rgba(255,255,255,.8);line-height:1.44}
+.sect1{padding-bottom:.625em}
+@media only screen and (min-width:768px){.sect1{padding-bottom:1.25em}}
+.sect1+.sect1{border-top:1px solid #efefed}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor:before,h2>a.anchor:before,h3>a.anchor:before,#toctitle>a.anchor:before,.sidebarblock>.content>.title>a.anchor:before,h4>a.anchor:before,h5>a.anchor:before,h6>a.anchor:before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock>caption.title{white-space:nowrap;overflow:visible;max-width:0}
+.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{color:rgba(0,0,0,.85)}
+table.tableblock #preamble>.sectionbody>.paragraph:first-of-type p{font-size:inherit}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #ddddd8;color:rgba(0,0,0,.6)}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border-style:solid;border-width:1px;border-color:#e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;-webkit-border-radius:4px;border-radius:4px}
+.exampleblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child{margin-bottom:0}
+.sidebarblock{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+.sidebarblock>:first-child{margin-top:0}
+.sidebarblock>:last-child{margin-bottom:0}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock pre:not(.highlight),.listingblock pre[class="highlight"],.listingblock pre[class^="highlight "],.listingblock pre.CodeRay,.listingblock pre.prettyprint{background:#f7f7f8}
+.sidebarblock .literalblock pre,.sidebarblock .listingblock pre:not(.highlight),.sidebarblock .listingblock pre[class="highlight"],.sidebarblock .listingblock pre[class^="highlight "],.sidebarblock .listingblock pre.CodeRay,.sidebarblock .listingblock pre.prettyprint{background:#f2f1f1}
+.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{-webkit-border-radius:4px;border-radius:4px;word-wrap:break-word;padding:1em;font-size:.8125em}
+.literalblock pre.nowrap,.literalblock pre[class].nowrap,.listingblock pre.nowrap,.listingblock pre[class].nowrap{overflow-x:auto;white-space:pre;word-wrap:normal}
+@media only screen and (min-width:768px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:.90625em}}
+@media only screen and (min-width:1280px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:1em}}
+.literalblock.output pre{color:#f7f7f8;background-color:rgba(0,0,0,.9)}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;-webkit-border-radius:4px;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.listingblock>.content{position:relative}
+.listingblock code[data-lang]:before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:#999}
+.listingblock:hover code[data-lang]:before{display:block}
+.listingblock.terminal pre .command:before{content:attr(data-prompt);padding-right:.5em;color:#999}
+.listingblock.terminal pre .command:not([data-prompt]):before{content:"$"}
+table.pyhltable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.pyhltable td{vertical-align:top;padding-top:0;padding-bottom:0;line-height:1.45}
+table.pyhltable td.code{padding-left:.75em;padding-right:0}
+pre.pygments .lineno,table.pyhltable td:not(.code){color:#999;padding-left:0;padding-right:.5em;border-right:1px solid #ddddd8}
+pre.pygments .lineno{display:inline-block;margin-right:.25em}
+table.pyhltable .linenodiv{background:none!important;padding-right:0!important}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock blockquote p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote:before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.5em;margin-right:.5ex;text-align:right}
+.quoteblock .quoteblock{margin-left:0;margin-right:0;padding:.5em 0;border-left:3px solid rgba(0,0,0,.6)}
+.quoteblock .quoteblock blockquote{padding:0 0 0 .75em}
+.quoteblock .quoteblock blockquote:before{display:none}
+.verseblock{margin:0 1em 1.25em 1em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract{margin:0 0 1.25em 0;display:block}
+.quoteblock.abstract blockquote,.quoteblock.abstract blockquote p{text-align:left;word-spacing:0}
+.quoteblock.abstract blockquote:before,.quoteblock.abstract blockquote p:first-of-type:before{display:none}
+table.tableblock{max-width:100%;border-collapse:separate}
+table.tableblock td>.paragraph:last-child p>p:last-child,table.tableblock th>p:last-child,table.tableblock td>p:last-child{margin-bottom:0}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all th.tableblock,table.grid-all td.tableblock{border-width:0 1px 1px 0}
+table.grid-all tfoot>tr>th.tableblock,table.grid-all tfoot>tr>td.tableblock{border-width:1px 1px 0 0}
+table.grid-cols th.tableblock,table.grid-cols td.tableblock{border-width:0 1px 0 0}
+table.grid-all *>tr>.tableblock:last-child,table.grid-cols *>tr>.tableblock:last-child{border-right-width:0}
+table.grid-rows th.tableblock,table.grid-rows td.tableblock{border-width:0 0 1px 0}
+table.grid-all tbody>tr:last-child>th.tableblock,table.grid-all tbody>tr:last-child>td.tableblock,table.grid-all thead:last-child>tr>th.tableblock,table.grid-rows tbody>tr:last-child>th.tableblock,table.grid-rows tbody>tr:last-child>td.tableblock,table.grid-rows thead:last-child>tr>th.tableblock{border-bottom-width:0}
+table.grid-rows tfoot>tr>th.tableblock,table.grid-rows tfoot>tr>td.tableblock{border-width:1px 0 0 0}
+table.frame-all{border-width:1px}
+table.frame-sides{border-width:0 1px}
+table.frame-topbot{border-width:1px 0}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{display:table-cell;line-height:1.6;background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+td>div.verse{white-space:pre}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.unstyled,ol.unnumbered,ul.checklist,ul.none{list-style-type:none}
+ul.unstyled,ol.unnumbered,ul.checklist{margin-left:.625em}
+ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1em;font-size:.85em}
+ul.checklist li>p:first-child>input[type="checkbox"]:first-child{width:1em;position:relative;top:1px}
+ul.inline{margin:0 auto .625em auto;margin-left:-1.375em;margin-right:0;padding:0;list-style:none;overflow:hidden}
+ul.inline>li{list-style:none;float:left;margin-left:1.375em;display:block}
+ul.inline>li>*{display:block}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist>table tr>td:first-of-type{padding:0 .75em;line-height:1}
+.colist>table tr>td:last-of-type{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:solid 4px #fff;-webkit-box-shadow:0 0 0 1px #ddd;box-shadow:0 0 0 1px #ddd}
+.imageblock.left,.imageblock[style*="float: left"]{margin:.25em .625em 1.25em 0}
+.imageblock.right,.imageblock[style*="float: right"]{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em 0;border-width:1px 0 0 0}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;text-indent:-1.05em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
+.gist .file-data>table td.line-data{width:99%}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background-color:#00fafa}
+.black{color:#000}
+.black-background{background-color:#000}
+.blue{color:#0000bf}
+.blue-background{background-color:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background-color:#fa00fa}
+.gray{color:#606060}
+.gray-background{background-color:#7d7d7d}
+.green{color:#006000}
+.green-background{background-color:#007d00}
+.lime{color:#00bf00}
+.lime-background{background-color:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background-color:#7d0000}
+.navy{color:#000060}
+.navy-background{background-color:#00007d}
+.olive{color:#606000}
+.olive-background{background-color:#7d7d00}
+.purple{color:#600060}
+.purple-background{background-color:#7d007d}
+.red{color:#bf0000}
+.red-background{background-color:#fa0000}
+.silver{color:#909090}
+.silver-background{background-color:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background-color:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background-color:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background-color:#fafa00}
+span.icon>.fa{cursor:default}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note:before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip:before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning:before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution:before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important:before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background-color:rgba(0,0,0,.8);-webkit-border-radius:100px;border-radius:100px;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]:after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,span.alt{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background-color:#fffef7;border-color:#e0e0dc;-webkit-box-shadow:0 1px 4px #e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@media print{@page{margin:1.25cm .75cm}
+*{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]:after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+thead{display:table-header-group}
+svg{max-width:100%}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #ddddd8!important;padding-bottom:0!important}
+.sect1{padding-bottom:0!important}
+.sect1+.sect1{border:0!important}
+#header>h1:first-child{margin-top:1.25rem}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em 0}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span:before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]:before{display:block}
+#footer{background:none!important;padding:0 .9375em}
+#footer-text{color:rgba(0,0,0,.6)!important;font-size:.9em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+<style>
+.hidden {
+	display: none;
+}
+
+.switch {
+	border-width: 1px 1px 0 1px;
+	border-style: solid;
+	border-color: #7a2518;
+	display: inline-block;
+}
+
+.switch--item {
+	padding: 10px;
+	background-color: #ffffff;
+	color: #7a2518;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.switch--item:not(:first-child) {
+	border-width: 0 0 0 1px;
+	border-style: solid;
+	border-color: #7a2518;
+}
+
+.switch--item.selected {
+	background-color: #7a2519;
+	color: #ffffff;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
+<script type="text/javascript">
+function addBlockSwitches() {
+	$('.primary').each(function() {
+		primary = $(this);
+		createSwitchItem(primary, createBlockSwitch(primary)).item.addClass("selected");
+		primary.children('.title').remove();
+	});
+	$('.secondary').each(function(idx, node) {
+		secondary = $(node);
+		primary = findPrimary(secondary);
+		switchItem = createSwitchItem(secondary, primary.children('.switch'));
+		switchItem.content.addClass('hidden');
+		findPrimary(secondary).append(switchItem.content);
+		secondary.remove();
+	});
+}
+
+function createBlockSwitch(primary) {
+	blockSwitch = $('<div class="switch"></div>');
+	primary.prepend(blockSwitch);
+	return blockSwitch;
+}
+
+function findPrimary(secondary) {
+	candidate = secondary.prev();
+	while (!candidate.is('.primary')) {
+		candidate = candidate.prev();
+	}
+	return candidate;
+}
+
+function createSwitchItem(block, blockSwitch) {
+	blockName = block.children('.title').text();
+	content = block.children('.content').first().append(block.next('.colist'));
+	item = $('<div class="switch--item">' + blockName + '</div>');
+	item.on('click', '', content, function(e) {
+		$(this).addClass('selected');
+		$(this).siblings().removeClass('selected');
+		e.data.siblings('.content').addClass('hidden');
+		e.data.removeClass('hidden');
+	});
+	blockSwitch.append(item);
+	return {'item': item, 'content': content};
+}
+
+$(addBlockSwitches);
+</script>
+
+</head>
+<body id="using-boot" class="book toc2 toc-left">
+<div id="header">
+<h1>Spring Boot</h1>
+<div class="details">
+<span id="author" class="author">Unresolved directive in using-spring-boot.adoc - include::attributes.adoc[]</span><br>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#using-boot-build-systems">1. 构建系统</a>
+<ul class="sectlevel2">
+<li><a href="#using-boot-dependency-management">1.1. 依赖管理</a></li>
+<li><a href="#using-boot-maven">1.2. Maven</a></li>
+<li><a href="#using-boot-gradle">1.3. Gradle</a></li>
+<li><a href="#using-boot-ant">1.4. Ant</a></li>
+<li><a href="#using-boot-starter">1.5. Starters</a></li>
+</ul>
+</li>
+<li><a href="#using-boot-structuring-your-code">2. 结构化你的代码</a>
+<ul class="sectlevel2">
+<li><a href="#using-boot-using-the-default-package">2.1. 使用“<code>default</code>”包</a></li>
+<li><a href="#using-boot-locating-the-main-class">2.2. 找到应用程序主类</a></li>
+</ul>
+</li>
+<li><a href="#using-boot-configuration-classes">3. 配置类</a>
+<ul class="sectlevel2">
+<li><a href="#using-boot-importing-configuration">3.1. 导入其他配置类</a></li>
+<li><a href="#using-boot-importing-xml-configuration">3.2. 导入XML配置</a></li>
+</ul>
+</li>
+<li><a href="#using-boot-auto-configuration">4. 自动配置</a>
+<ul class="sectlevel2">
+<li><a href="#using-boot-replacing-auto-configuration">4.1. 逐渐取代自动配置</a></li>
+<li><a href="#using-boot-disabling-specific-auto-configuration">4.2. 禁用特定的自动配置类</a></li>
+</ul>
+</li>
+<li><a href="#using-boot-spring-beans-and-dependency-injection">5. Spring Beans和依赖注入</a></li>
+<li><a href="#using-boot-using-springbootapplication-annotation">6. 使用@SpringBootApplication注解</a></li>
+<li><a href="#using-boot-running-your-application">7. 运行你的应用程序</a>
+<ul class="sectlevel2">
+<li><a href="#using-boot-running-from-an-ide">7.1. 从IDE运行</a></li>
+<li><a href="#using-boot-running-as-a-packaged-application">7.2. 作为打包的应用程序运行</a></li>
+<li><a href="#using-boot-running-with-the-maven-plugin">7.3. 使用Maven插件</a></li>
+<li><a href="#using-boot-running-with-the-gradle-plugin">7.4. 使用Gradle插件</a></li>
+<li><a href="#using-boot-hot-swapping">7.5. 热交换</a></li>
+</ul>
+</li>
+<li><a href="#using-boot-devtools">8. 开发者工具</a>
+<ul class="sectlevel2">
+<li><a href="#using-boot-devtools-property-defaults">8.1. 属性默认值</a></li>
+<li><a href="#using-boot-devtools-restart">8.2. 自动重启</a></li>
+<li><a href="#using-boot-devtools-livereload">8.3. LiveReload</a></li>
+<li><a href="#using-boot-devtools-globalsettings">8.4. 全局设置</a></li>
+<li><a href="#using-boot-devtools-remote">8.5. 远程应用</a></li>
+</ul>
+</li>
+<li><a href="#using-boot-packaging-for-production">9. 打包你的应用程序用于生产</a></li>
+<li><a href="#using-boot-whats-next">10. 接下来要读什么</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>本节将详细介绍如何使用Spring Boot。它涵盖了诸如构建系统，自动配置以及如何运行应用程序之类的主题。
+我们还将介绍一些Spring Boot最佳实践。尽管Spring Boot并没有什么特别的地方（它只是另一个可以使用的库），
+但是有一些建议可以使你的开发过程更轻松一些。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="using-boot-build-systems">1. 构建系统</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>强烈建议你选择一个支持<a href="#using-boot-dependency-management"><em>依赖关系管理</em></a>并且可以使用发布到“ Maven Central”存储库的工件的构建系统。
+我们建议你选择Maven或Gradle。可以使Spring Boot与其他构建系统（例如，Ant）一起使用，但是它们并没有得到很好的支持。</p>
+</div>
+<div class="sect2">
+<h3 id="using-boot-dependency-management">1.1. 依赖管理</h3>
+<div class="paragraph">
+<p>每个Spring Boot版本都提供了它所支持的依赖关系的精选列表。实际上，你不需要为构建配置中的所有这些依赖项提供版本，
+因为Spring Boot会为你管理该版本。当你升级Spring Boot本身时，这些依赖项也会以一致的方式升级。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+你仍然可以指定版本，并在需要时覆盖Spring Boot的建议版本。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>精选列表包含可与Spring Boot一起使用的所有spring模块以及完善的第三方库列表。
+该列表作为可与<a href="#using-boot-maven-parent-pom">Maven</a>和<a href="#using-boot-gradle">Gradle</a>
+一起使用的<a href="#using-boot-maven-without-a-parent">标准物料清单(<code>spring-boot-dependencies</code>)</a>提供。</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Spring Boot的每个发行版都与Spring Framework的基本版本相关联。<strong>强烈</strong> 建议你不要更改其版本。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-boot-maven">1.2. Maven</h3>
+<div class="paragraph">
+<p>Maven用户可以从 <code>spring-boot-starter-parent</code> 项目继承来获得合理的默认值。父项目提供以下功能：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Java 1.8是默认的编译器级别。</p>
+</li>
+<li>
+<p>UTF-8源编码。</p>
+</li>
+<li>
+<p>从spring-boot-dependencies pom继承的<a href="#using-boot-dependency-management">依赖管理部分</a>，
+它管理公共依赖项的版本。当在自己的pom中使用这些依赖关系时，可以为这些依赖关系省略 <code>&lt;version&gt;</code> 标记。</p>
+</li>
+<li>
+<p>使用 <code>repackage</code> 执行id执行 {spring-boot-maven-plugin-docs}/repackage-mojo.html[<code>repackage</code> 目标]。</p>
+</li>
+<li>
+<p>明智的 <a href="https://maven.apache.org/plugins/maven-resources-plugin/examples/filter.html">资源过滤</a>.</p>
+</li>
+<li>
+<p>明智的插件配置 (<a href="https://www.mojohaus.org/exec-maven-plugin/">exec plugin</a>,
+<a href="https://github.com/ktoso/maven-git-commit-id-plugin">Git commit ID</a> 和
+<a href="https://maven.apache.org/plugins/maven-shade-plugin/">shade</a>).</p>
+</li>
+<li>
+<p>对 <code>application.properties</code> 和 <code>application.yml</code> 进行明智的资源过滤，包括特定于环境的文件
+（例如：<code>application-dev.properties</code> 和 <code>application-dev.yml</code>）</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>请注意，由于 <code>application.properties</code> 和 <code>application.yml</code> 文件接受Spring样式的占位符（<code>${&#8230;&#8203;}</code>），
+因此Maven过滤已更改为使用 <code>@..@</code> 占位符。（你可以通过设置一个名为 <code>resource.delimiter</code> 的Maven属性来覆盖它。）</p>
+</div>
+<div class="sect3">
+<h4 id="using-boot-maven-parent-pom">1.2.1. 继承Starter Parent</h4>
+<div class="paragraph">
+<p>要将项目配置为从 <code>spring-boot-starter-parent</code> 继承，请设置 <code>parent</code>，如下所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;!-- Inherit defaults from Spring Boot --&gt;
+&lt;parent&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+    &lt;version&gt;{spring-boot-version}&lt;/version&gt;
+&lt;/parent&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+你只需要为此依赖项指定Spring Boot版本号。如果导入其他starter，则可以安全地省略版本号。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>使用该设置，你还可以通过覆盖自己项目中的属性来覆盖各个依赖项。例如，要升级到另一个Spring Data发布系列，
+可以将以下内容添加到 <code>pom.xml</code> 中：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;properties&gt;
+    &lt;spring-data-releasetrain.version&gt;Fowler-SR2&lt;/spring-data-releasetrain.version&gt;
+&lt;/properties&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+检查 {spring-boot-code}/spring-boot-project/spring-boot-dependencies/pom.xml[<code>spring-boot-dependencies</code> pom]以获取受支持属性的列表。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="using-boot-maven-without-a-parent">1.2.2. 在没有父POM的情况下使用Spring Boot</h4>
+<div class="paragraph">
+<p>并非每个人都喜欢从 <code>spring-boot-starter-parent</code> 父POM继承。你可能需要使用自己公司的标准父POM，或者可能希望显式声明所有Maven配置。</p>
+</div>
+<div class="paragraph">
+<p>如果你不想使用 <code>spring-boot-starter-parent</code>，仍然可以通过使用 <code>scope=import</code> 依赖项来保留依赖项管理（而不是插件管理）的好处，如下所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;dependencyManagement&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;!-- Import dependency management from Spring Boot --&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-dependencies&lt;/artifactId&gt;
+            &lt;version&gt;{spring-boot-version}&lt;/version&gt;
+            &lt;type&gt;pom&lt;/type&gt;
+            &lt;scope&gt;import&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+&lt;/dependencyManagement&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>如上所述，前面的示例设置不允许你使用属性来覆盖各个依赖项。为了获得相同的结果，
+需要在项目的 <code>dependencyManagement</code> 中 <code>spring-boot-dependencies</code> 条目 <strong>之前</strong> 添加一个条目。
+例如，要升级到另一个Spring Data发布系列，可以将以下元素添加到 <code>pom.xml</code> 中：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;dependencyManagement&gt;
+    &lt;dependencies&gt;
+        &lt;!-- Override Spring Data release train provided by Spring Boot --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.data&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-data-releasetrain&lt;/artifactId&gt;
+            &lt;version&gt;Fowler-SR2&lt;/version&gt;
+            &lt;type&gt;pom&lt;/type&gt;
+            &lt;scope&gt;import&lt;/scope&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-dependencies&lt;/artifactId&gt;
+            &lt;version&gt;{spring-boot-version}&lt;/version&gt;
+            &lt;type&gt;pom&lt;/type&gt;
+            &lt;scope&gt;import&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+&lt;/dependencyManagement&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+在前面的示例中，我们指定了 <em>BOM</em>，但是可以以相同方式覆盖任何依赖项类型。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="using-boot-maven-plugin">1.2.3. 使用Spring Boot Maven插件</h4>
+<div class="paragraph">
+<p>Spring Boot包含一个 <a href="build-tool-plugins.html#build-tool-plugins-maven-plugin">Maven插件</a>，
+可以将项目打包为可执行jar。如果要使用插件，请将其添加到你的 <code>&lt;plugins&gt;</code> 部分，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+如果你使用Spring Boot starter parent pom，则只需添加插件。除非你要更改父级中定义的设置，否则无需对其进行配置。
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-boot-gradle">1.3. Gradle</h3>
+<div class="paragraph">
+<p>要了解有关将Spring Boot与Gradle结合使用的信息，请参阅Spring Boot的Gradle插件的文档：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>参考（ {spring-boot-gradle-plugin-docs}[HTML] 和 {spring-boot-gradle-plugin-pdfdocs}[PDF]）</p>
+</li>
+<li>
+<p>{spring-boot-gradle-plugin-api}[API]</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-boot-ant">1.4. Ant</h3>
+<div class="paragraph">
+<p>可以使用Apache Ant+Ivy构建Spring Boot项目。<code>spring-boot-antlib</code> “<code>AntLib</code>”模块也可用于帮助Ant创建可执行jar。</p>
+</div>
+<div class="paragraph">
+<p>为了声明依赖关系，典型的 <code>ivy.xml</code> 文件看起来类似于以下示例：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;ivy-module version="2.0"&gt;
+    &lt;info organisation="org.springframework.boot" module="spring-boot-sample-ant" /&gt;
+    &lt;configurations&gt;
+        &lt;conf name="compile" description="everything needed to compile this module" /&gt;
+        &lt;conf name="runtime" extends="compile" description="everything needed to run this module" /&gt;
+    &lt;/configurations&gt;
+    &lt;dependencies&gt;
+        &lt;dependency org="org.springframework.boot" name="spring-boot-starter"
+            rev="${spring-boot.version}" conf="compile" /&gt;
+    &lt;/dependencies&gt;
+&lt;/ivy-module&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>典型的 <code>build.xml</code> 类似于以下示例：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;project
+    xmlns:ivy="antlib:org.apache.ivy.ant"
+    xmlns:spring-boot="antlib:org.springframework.boot.ant"
+    name="myapp" default="build"&gt;
+
+    &lt;property name="spring-boot.version" value="{spring-boot-version}" /&gt;
+
+    &lt;target name="resolve" description="--&gt; retrieve dependencies with ivy"&gt;
+        &lt;ivy:retrieve pattern="lib/[conf]/[artifact]-[type]-[revision].[ext]" /&gt;
+    &lt;/target&gt;
+
+    &lt;target name="classpaths" depends="resolve"&gt;
+        &lt;path id="compile.classpath"&gt;
+            &lt;fileset dir="lib/compile" includes="*.jar" /&gt;
+        &lt;/path&gt;
+    &lt;/target&gt;
+
+    &lt;target name="init" depends="classpaths"&gt;
+        &lt;mkdir dir="build/classes" /&gt;
+    &lt;/target&gt;
+
+    &lt;target name="compile" depends="init" description="compile"&gt;
+        &lt;javac srcdir="src/main/java" destdir="build/classes" classpathref="compile.classpath" /&gt;
+    &lt;/target&gt;
+
+    &lt;target name="build" depends="compile"&gt;
+        &lt;spring-boot:exejar destfile="build/myapp.jar" classes="build/classes"&gt;
+            &lt;spring-boot:lib&gt;
+                &lt;fileset dir="lib/runtime" /&gt;
+            &lt;/spring-boot:lib&gt;
+        &lt;/spring-boot:exejar&gt;
+    &lt;/target&gt;
+&lt;/project&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>如果你不想使用 <code>spring-boot-antlib</code> 模块，请参阅 {spring-boot-docs}/htmlsingle/#howto-build-an-executable-archive-with-ant[不使用spring-boot-antlib “<code>How-to</code>”从Ant构建可执行存档]。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-boot-starter">1.5. Starters</h3>
+<div class="paragraph">
+<p>启动器是一组便捷的依赖项描述符，你可以在应用程序中包括它们。你可以一站式安装所需的所有Spring和相关技术，
+而不必遍历示例代码和依赖描述符复制粘贴它。例如，如果要开始使用Spring和JPA进行数据库访问，请在项目中包括 <code>spring-boot-starter-data-jpa</code> 依赖项。</p>
+</div>
+<div class="paragraph">
+<p>启动器包含许多启动项目并快速运行所需的依赖项，并且具有一组受支持的被管理的传递性依赖项。</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">名字叫什么</div>
+<div class="paragraph">
+<p>所有 <strong>official</strong> 启动器都遵循类似的命名方式。<code>spring-boot-starter-*</code>，其中 <code>*</code> 是特定类型的应用程序。
+这种命名结构旨在在你需要寻找启动器时提供帮助。许多IDE中的Maven集成使你可以按名称搜索依赖项。
+例如，在安装了适当的Eclipse或STS插件的情况下，你可以在POM编辑器中按 <code>ctrl-space</code> 并键入“<code>spring-boot-starter</code>”以获取完整启动器列表。</p>
+</div>
+<div class="paragraph">
+<p>如“<a href="spring-boot-features.html#boot-features-custom-starter">创建自己的启动器</a>”部分中所述，
+第三方starters不应以 <code>spring-boot</code> 开始，因为它是为Spring Boot官方工件保留的。
+而是，第三方启动程序通常以项目名称开头。例如，一个名为 <code>thirdpartyproject</code> 的第三方启动程序项目通常会被命名为
+<code>thirdpartyproject-spring-boot-starter</code>。</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Spring Boot在 <code>org.springframework.boot</code> 组下提供了以下应用程序启动器：</p>
+</div>
+<div class="paragraph">
+<div class="title">Spring Boot application starters</div>
+<p>Unresolved directive in using-spring-boot.adoc - include::application-starters.adoc[]</p>
+</div>
+<div class="paragraph">
+<p>除了应用程序启动程序，以下启动程序可用于添加 <em>{spring-boot-docs}/htmlsingle/#production-ready[生产就绪]</em> 功能：</p>
+</div>
+<div class="paragraph">
+<div class="title">Spring Boot production starters</div>
+<p>Unresolved directive in using-spring-boot.adoc - include::production-starters.adoc[]</p>
+</div>
+<div class="paragraph">
+<p>最后，Spring Boot还包括以下启动程序，如果你想排除或替换特定的技术方面，可以使用这些启动程序：</p>
+</div>
+<div class="paragraph">
+<div class="title">Spring Boot technical starters</div>
+<p>Unresolved directive in using-spring-boot.adoc - include::technical-starters.adoc[]</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+有关社区贡献的其他启动程序的列表，请参阅GitHub上 <code>spring-boot-starters</code> 模块中的
+{spring-boot-master-code}/spring-boot-project/spring-boot-starters/README.adoc[README文件]。
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="using-boot-structuring-your-code">2. 结构化你的代码</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Boot不需要任何特定的代码布局即可工作。但是，有一些最佳做法对你会有所帮助。</p>
+</div>
+<div class="sect2">
+<h3 id="using-boot-using-the-default-package">2.1. 使用“<code>default</code>”包</h3>
+<div class="paragraph">
+<p>当类不包含 <code>package</code> 声明时，将其视为在“<code>default package</code>”中。通常不建议使用“<code>default package</code>”，应避免使用。
+对于使用 <code>@ComponentScan</code>，<code>@ConfigurationPropertiesScan</code>，<code>@EntityScan</code> 或 <code>@SpringBootApplication</code>
+注解的Spring Boot应用程序，这可能会引起特定的问题，因为每个jar中的每个类都会被读取。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+我们建议你遵循Java建议的程序包命名约定，并使用反向域名（例如：<code>com.example.project</code>）。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-boot-locating-the-main-class">2.2. 找到应用程序主类</h3>
+<div class="paragraph">
+<p>我们通常建议你将应用程序主类放在其他类之上的根包中。<a href="#using-boot-using-springbootapplication-annotation"><code>@SpringBootApplication</code> 注解</a>通常放在你的主类上，它隐式定义某些条目的基本“<code>search package</code>”。
+例如，如果你正在编写JPA应用程序，则使用带 <code>@SpringBootApplication</code> 注解的类的包来搜索 <code>@Entity</code> 条目。
+使用根软件包还允许组件扫描仅应用于你的项目。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+如果你不想使用 <code>@SpringBootApplication</code>，则可以通过导入的
+<code>@EnableAutoConfiguration</code> 和 <code>@ComponentScan</code> 注解来定义该行为，因此也可以使用它们。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>以下清单显示了典型的布局：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>com
+ +- example
+     +- myapplication
+         +- Application.java
+         |
+         +- customer
+         |   +- Customer.java
+         |   +- CustomerController.java
+         |   +- CustomerService.java
+         |   +- CustomerRepository.java
+         |
+         +- order
+             +- Order.java
+             +- OrderController.java
+             +- OrderService.java
+             +- OrderRepository.java</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>Application.java</code> 文件将声明 <code>main</code> 方法以及基本的 <code>@SpringBootApplication</code> 注解，如下所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">package com.example.myapplication;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="using-boot-configuration-classes">3. 配置类</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Boot支持基于Java的配置。尽管可以将 <code>SpringApplication</code> 与XML源一起使用，但是我们通常建议你的主要源为单个
+<code>@Configuration</code> 类。通常，定义 <code>main</code> 方法的类是首选的 <code>@Configuration</code>。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+在互联网上已经发布了许多使用XML配置的Spring配置示例。如果可能，请始终尝试使用等效的基于Java的配置。
+搜索 <code>Enable*</code> 注解可能是一个不错的起点。
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="using-boot-importing-configuration">3.1. 导入其他配置类</h3>
+<div class="paragraph">
+<p>你无需将所有 <code>@Configuration</code> 放在单个类中。<code>@Import</code> 注解可用于导入其他配置类。
+另外，你可以使用 <code>@ComponentScan</code> 自动拾取所有Spring组件，包括 <code>@Configuration</code> 类。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-boot-importing-xml-configuration">3.2. 导入XML配置</h3>
+<div class="paragraph">
+<p>如果绝对必须使用基于XML的配置，我们建议你仍然从 <code>@Configuration</code> 类开始。然后使用 <code>@ImportResource</code> 注解来加载XML配置文件。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="using-boot-auto-configuration">4. 自动配置</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Boot自动配置会尝试根据添加的jar依赖项自动配置Spring应用程序。例如，如果 <code>HSQLDB</code> 在类路径上，
+并且你尚未手动配置任何数据库连接bean，则Spring Boot会自动配置内存数据库。</p>
+</div>
+<div class="paragraph">
+<p>你需要通过将 <code>@EnableAutoConfiguration</code> 或 <code>@SpringBootApplication</code> 注解添加到你的 <code>@Configuration</code>
+类之一来启用自动配置。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+你应该只添加一个 <code>@SpringBootApplication</code> 或 <code>@EnableAutoConfiguration</code> 注解。
+我们通常建议你仅将它们中的一个添加到你的主要 <code>@Configuration</code> 类中。
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="using-boot-replacing-auto-configuration">4.1. 逐渐取代自动配置</h3>
+<div class="paragraph">
+<p>自动配置是非侵入性的。在任何时候，你都可以开始定义自己的配置，以替换自动配置的特定部分。
+例如，如果你添加自己的 <code>DataSource</code> bean，则默认的嵌入式数据库支持将回退。</p>
+</div>
+<div class="paragraph">
+<p>如果你需要了解当前正在应用哪些自动配置以及原因，请使用 <code>--debug</code> 开关启动你的应用程序。
+这样做可以启用调试日志以供选择核心记录器，并将条件报告记录到控制台。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-boot-disabling-specific-auto-configuration">4.2. 禁用特定的自动配置类</h3>
+<div class="paragraph">
+<p>如果发现正在应用某个不需要的特定自动配置类，则可以使用 <code>@EnableAutoConfiguration</code> 的 <code>exclude</code> 属性禁用它们，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">import org.springframework.boot.autoconfigure.*;
+import org.springframework.boot.autoconfigure.jdbc.*;
+import org.springframework.context.annotation.*;
+
+@Configuration(proxyBeanMethods = false)
+@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
+public class MyConfiguration {
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>如果该类不在类路径中，则可以使用注解的 <code>excludeName</code> 属性，并指定完全限定的名称。最后，你还可以使用
+<code>spring.autoconfigure.exclude</code> 属性控制要排除的自动配置类的列表。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+你可以在注解级别和使用属性来定义排除项。
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+即使自动配置类是 <code>public</code>，类中唯一被认为是公共API的是类的名称，它可以用来禁用自动配置。
+这些类的实际内容（例如：嵌套配置类或Bean方法）仅供内部使用，我们不建议直接使用它们。
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="using-boot-spring-beans-and-dependency-injection">5. Spring Beans和依赖注入</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>你可以自由使用任何标准的Spring Framework技术来定义bean及其注入依赖关系。为简单起见，我们经常发现使用
+<code>@ComponentScan</code>（查找你的bean）和使用 <code>@Autowired</code>（进行构造函数注入）效果很好。</p>
+</div>
+<div class="paragraph">
+<p>如果按照上面的建议构造代码（将应用程序类放在根包中），则可以添加 <code>@ComponentScan</code>，而无需添加任何参数。
+你的所有应用程序组件（<code>@Component</code>，<code>@Service</code>，<code>@Repository</code>，<code>@Controller</code> 等）都将自动注册为Spring Bean。</p>
+</div>
+<div class="paragraph">
+<p>以下示例显示了一个 <code>@Service</code> Bean，它使用构造函数注入来获取所需的 <code>RiskAssessor</code> Bean：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">package com.example.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class DatabaseAccountService implements AccountService {
+
+    private final RiskAssessor riskAssessor;
+
+    @Autowired
+    public DatabaseAccountService(RiskAssessor riskAssessor) {
+        this.riskAssessor = riskAssessor;
+    }
+
+    // ...
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>如果bean具有一个构造函数，则可以省略 <code>@Autowired</code>，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Service
+public class DatabaseAccountService implements AccountService {
+
+    private final RiskAssessor riskAssessor;
+
+    public DatabaseAccountService(RiskAssessor riskAssessor) {
+        this.riskAssessor = riskAssessor;
+    }
+
+    // ...
+
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+请注意如何使用构造函数注入将 <code>riskAssessor</code> 字段标记为 <code>final</code>，以表示它随后不能更改。
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="using-boot-using-springbootapplication-annotation">6. 使用@SpringBootApplication注解</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>许多Spring Boot开发人员喜欢他们的应用程序使用自动配置，组件扫描，并能够在其“应用程序类”上定义额外的配置。
+单个 <code>@SpringBootApplication</code> 注解可用于同时启用这三个功能，即：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>@EnableAutoConfiguration</code>: 启用<a href="#using-boot-auto-configuration">Spring Boot的自动配置机制</a></p>
+</li>
+<li>
+<p>在应用程序所在的软件包上启用 <code>@Component</code> 扫描（请参阅<a href="#using-boot-structuring-your-code">最佳实践</a>）</p>
+</li>
+<li>
+<p><code>@Configuration</code>: 允许在上下文中注册额外的bean或导入其他配置类</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">package com.example.myapplication;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication // same as @Configuration @EnableAutoConfiguration @ComponentScan
+public class Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>@SpringBootApplication</code> 还提供别名以自定义 <code>@EnableAutoConfiguration</code> 和 <code>@ComponentScan</code> 的属性。
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>这些功能都不是强制性的，你可以选择用它启用的任何功能替换这个单个注解。例如，你可能不想在应用程序中使用组件扫描或配置属性扫描：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">package com.example.myapplication;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+@Configuration(proxyBeanMethods = false)
+@EnableAutoConfiguration
+@Import({ MyConfig.class, MyAnotherConfig.class })
+public class Application {
+
+    public static void main(String[] args) {
+            SpringApplication.run(Application.class, args);
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>在此示例中，除了没有自动检测到 <code>@Component</code> 和 <code>@ConfigurationProperties</code> 注解的类并且显式导入了用户定义的Bean外，
+<code>Application</code> 就像其他任何Spring Boot应用程序一样（请参阅 <code>@Import</code>）。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="using-boot-running-your-application">7. 运行你的应用程序</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>将应用程序打包为jar并使用嵌入式HTTP服务器的最大优势之一是，你可以像运行其他应用程序一样运行应用程序。
+调试Spring Boot应用程序也很容易。你不需要任何特殊的IDE插件或扩展。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+本节仅介绍基于jar的包装。如果选择将应用程序打包为war文件，则应参考服务器和IDE文档。
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="using-boot-running-from-an-ide">7.1. 从IDE运行</h3>
+<div class="paragraph">
+<p>你可以将IDE中的Spring Boot应用程序作为简单的Java应用程序运行。但是，你首先需要导入你的项目。
+导入步骤因你的IDE和构建系统而异。大多数IDE可以直接导入Maven项目。例如：Eclipse用户可以从 <code>File</code> 中选择 <code>Import&#8230;&#8203;</code> &#8594; <code>Existing Maven Projects</code>。</p>
+</div>
+<div class="paragraph">
+<p>如果你不能直接将项目导入IDE，则可以使用构建插件生成IDE元数据。Maven包括用于
+<a href="https://maven.apache.org/plugins/maven-eclipse-plugin/">Eclipse</a> 和 <a href="https://maven.apache.org/plugins/maven-idea-plugin/">IDEA</a>的插件。
+Gradle提供了用于 {gradle-docs}/userguide.html[各种IDE]的插件。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+如果不小心两次运行Web应用程序，则会看到“<code>Port already in use</code>”错误。
+STS用户可以使用 <code>Relaunch</code> 按钮而不是 <code>Run</code> 按钮来确保关闭任何现有实例。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-boot-running-as-a-packaged-application">7.2. 作为打包的应用程序运行</h3>
+<div class="paragraph">
+<p>如果使用Spring Boot Maven或Gradle插件创建可执行jar，则可以使用 <code>java -jar</code> 运行应用程序，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ java -jar target/myapplication-0.0.1-SNAPSHOT.jar</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>也可以在启用了远程调试支持的情况下运行打包的应用程序。这样做使你可以将调试器附加到打包的应用程序，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n \
+       -jar target/myapplication-0.0.1-SNAPSHOT.jar</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-boot-running-with-the-maven-plugin">7.3. 使用Maven插件</h3>
+<div class="paragraph">
+<p>Spring Boot Maven插件包含一个 <code>run</code> 目标，可用于快速编译和运行你的应用程序。应用程序以爆炸形式运行，就像在IDE中一样。
+以下示例显示了运行Spring Boot应用程序的典型Maven命令：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ mvn spring-boot:run</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你可能还想使用 <code>MAVEN_OPTS</code> 操作系统环境变量，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ export MAVEN_OPTS=-Xmx1024m</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-boot-running-with-the-gradle-plugin">7.4. 使用Gradle插件</h3>
+<div class="paragraph">
+<p>Spring Boot Gradle插件包含一个 <code>bootRun</code> 任务，该任务可用于以爆炸形式运行你的应用程序。每当你应用
+<code>org.springframework.boot</code> 和 <code>java</code> 插件时，都会添加 <code>bootRun</code> 任务，在以下示例中显示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ gradle bootRun</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你可能还想使用 <code>JAVA_OPTS</code> 操作系统环境变量，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ export JAVA_OPTS=-Xmx1024m</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-boot-hot-swapping">7.5. 热交换</h3>
+<div class="paragraph">
+<p>由于Spring Boot应用程序只是普通的Java应用程序，因此JVM热交换应该可以立即使用。
+JVM热交换在一定程度上受到它可以替换的字节码的限制。对于更完整的解决方案，可以使用 <a href="https://jrebel.com/software/jrebel/">JRebel</a>。</p>
+</div>
+<div class="paragraph">
+<p><code>spring-boot-devtools</code> 模块还包括对应用程序快速重启的支持。有关详细信息，请参见本章后面的<a href="#using-boot-devtools">开发者工具</a>部分和
+{spring-boot-docs}/htmlsingle#howto-hotswapping[&#8220;How-to&#8221; 热交换]。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="using-boot-devtools">8. 开发者工具</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Boot包含一组额外的工具，这些工具可以使应用程序开发体验更加愉快。
+<code>spring-boot-devtools</code> 模块可以包含在任何项目中，以提供其他开发时功能。要包括devtools支持，
+请将模块依赖项添加到你的构建中，如以下Maven和Gradle清单所示：</p>
+</div>
+<div class="listingblock">
+<div class="title">Maven</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;
+        &lt;optional&gt;true&lt;/optional&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Gradle</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+dependencies {
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+运行完全打包的应用程序时，将自动禁用开发者工具。如果你的应用程序是以 <code>java -jar</code> 启动的，
+或者是从特殊的类加载器启动的，则将其视为“<code>生产应用程序</code>”。如果这不适用于你（即如果你从容器中运行应用程序），
+请考虑排除devtools或设置 <code>-Dspring.devtools.restart.enabled=false</code> 系统属性。
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+在Maven中将依赖项标记为optional或在Gradle中使用自定义 <code>developmentOnly</code> 配置（如上所示）是一种最佳实践，
+它可以防止将devtools过渡地应用到使用你项目的其他模块。
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+重新打包的存档默认情况下不包含devtools。如果要使用<a href="#using-boot-devtools-remote">某个远程devtools功能</a>，
+则需要禁用 <code>excludeDevtools</code> 构建属性以包括它。Maven和Gradle插件均支持该属性。
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="using-boot-devtools-property-defaults">8.1. 属性默认值</h3>
+<div class="paragraph">
+<p>Spring Boot支持的一些库使用缓存来提高性能。例如：<a href="spring-boot-features.html#boot-features-spring-mvc-template-engines">模板引擎</a>缓存已编译的模板，以避免重复解析模板文件。
+另外，Spring MVC可以在提供静态资源时向响应添加HTTP缓存头。</p>
+</div>
+<div class="paragraph">
+<p>尽管缓存在生产中非常有益，但在开发过程中可能适得其反，从而使你无法看到刚刚在应用程序中所做的更改。因此，默认情况下，<code>spring-boot-devtools</code> 禁用缓存选项。</p>
+</div>
+<div class="paragraph">
+<p>缓存选项通常由 <code>application.properties</code> 文件中的设置配置。例如，Thymeleaf提供 <code>spring.thymeleaf.cache</code> 属性。
+<code>spring-boot-devtools</code> 模块不需要手动设置这些属性，而是自动应用合理的开发时配置。</p>
+</div>
+<div class="paragraph">
+<p>由于在开发Spring MVC和Spring WebFlux应用程序时需要有关Web请求的更多信息，因此开发者工具将为 <code>web</code> 日志记录组启用 <code>DEBUG</code> 日志记录。
+这将为你提供有关传入请求，正在处理的处理程序，响应结果等的信息。如果你希望记录所有请求详细信息（包括潜在的敏感信息），
+则可以打开 <code>spring.http.log-request-details</code> 配置属性。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+如果你不希望应用默认属性，则可以在 <code>application.properties</code> 中将 <code>spring.devtools.add-properties</code> 设置为 <code>false</code>。
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+有关devtools应用的属性完整列表，请参见
+{spring-boot-devtools-module-code}/env/DevToolsPropertyDefaultsPostProcessor.java[DevToolsPropertyDefaultsPostProcessor]。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-boot-devtools-restart">8.2. 自动重启</h3>
+<div class="paragraph">
+<p>每当classpath上的文件更改时，使用 <code>spring-boot-devtools</code> 的应用程序都会自动重新启动。在IDE中工作时，
+这可能是一个有用的功能，因为它为代码更改提供了非常快速的反馈循环。默认情况下，
+将监视类路径上指向文件夹的任何条目的更改。请注意，某些资源（例如静态资产和视图模板）
+<a href="#using-boot-devtools-restart-exclude">不需要重新启动应用程序</a>。</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">触发重启</div>
+<div class="paragraph">
+<p>当DevTools监视类路径资源时，触发重启的唯一方法是更新类路径。导致类路径更新的方式取决于所使用的IDE。
+在Eclipse中，保存修改后的文件将导致类路径被更新并触发重新启动。
+在IntelliJ IDEA中，构建项目（<code>Build -&gt; Build Project</code>）具有相同的效果。</p>
+</div>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+只要启用了forking，你还可以使用受支持的构建插件（Maven和Gradle）启动应用程序，
+因为DevTools需要一个隔离的应用程序类加载器才能正常运行。默认情况下，Gradle和Maven插件会fork应用程序进程。
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+与LiveReload一起使用时，自动重启非常有效。有关详细信息，请参见<a href="#using-boot-devtools-livereload">LiveReload部分</a>。
+如果使用JRebel，则禁用自动重新启动，而支持动态类重新加载。其他devtools功能（例如LiveReload和属性覆盖）仍可以使用。
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+DevTools依赖于应用程序上下文的关闭钩子在重新启动期间将其关闭。如果你禁用了关闭钩子
+（<code>SpringApplication.setRegisterShutdownHook(false)</code>），它将无法正常工作。
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+在确定类路径上的条目是否应在更改后触发重新启动时，DevTools会自动忽略名为 <code>spring-boot</code>，
+<code>spring-boot-devtools</code>，<code>spring-boot-autoconfigure</code>，<code>spring-boot-actuator</code> 和 <code>spring-boot-starter</code> 的项目。
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+DevTools需要自定义 <code>ApplicationContext</code> 使用的 <code>ResourceLoader</code>。如果你的应用程序已经提供了，它将被包装。
+不支持在 <code>ApplicationContext</code> 上直接重写 <code>getResource</code> 方法。
+</td>
+</tr>
+</table>
+</div>
+<div id="using-spring-boot-restart-vs-reload" class="sidebarblock">
+<div class="content">
+<div class="title">重新启动 vs 重新加载</div>
+<div class="paragraph">
+<p>Spring Boot提供的重启技术通过使用两个类加载器来工作。不变的类（例如：来自第三方jar的类）将被加载到 <em>基本</em> 类加载器中。
+你正在积极开发的类将加载到 <em>重启</em> 类加载器中。重新启动应用程序时，将丢弃 <em>重启</em> 类加载器，并创建一个新的类加载器。
+这种方法意味着应用程序的重启通常比“<code>冷启动</code>”要快得多，因为 <em>基本</em> 类加载器已经可用并已填充完毕。</p>
+</div>
+<div class="paragraph">
+<p>如果发现重新启动对于你的应用程序来说不够快，或者遇到类加载问题，则可以考虑使用ZeroTurnaround重新加载技术，例如：
+<a href="https://jrebel.com/software/jrebel/">JRebel</a>。这些方法通过在加载类时重写类来使其更易于重新加载。</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="using-boot-devtools-restart-logging-condition-delta">8.2.1. 记录条件评估中的更改</h4>
+<div class="paragraph">
+<p>默认情况下，每次应用程序重新启动时，都会记录一个报告，其中显示了条件评估增量变化。
+该报告显示了你进行代码更改（例如：添加或删除Bean以及设置配置属性）时所造成的对应用程序自动配置的更改。</p>
+</div>
+<div class="paragraph">
+<p>要禁用报告的日志记录，请设置以下属性：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.devtools.restart.log-condition-evaluation-delta=false</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="using-boot-devtools-restart-exclude">8.2.2. 排除资源</h4>
+<div class="paragraph">
+<p>某些资源在更改时不一定需要触发重新启动。例如，Thymeleaf模板可以就地编辑。默认情况下，
+更改 <code>/META-INF/maven</code>，<code>/META-INF/resources</code>，<code>/resources</code>，<code>/static</code>，<code>/public</code> 或 <code>/templates</code>
+中的资源不会触发重新启动，但会触发<a href="#using-boot-devtools-livereload">实时重新加载</a>。如果要自定义这些排除项，则可以使用
+<code>spring.devtools.restart.exclude</code> 属性。例如：仅排除 <code>/static</code> 和 <code>/public</code>，可以设置以下属性：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.devtools.restart.exclude=static/**,public/**</pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+如果要保留这些默认值并 <em>添加</em> 其他排除项，请改用 <code>spring.devtools.restart.additional-exclude</code> 属性。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="using-boot-devtools-restart-additional-paths">8.2.3. 监视其他路径</h4>
+<div class="paragraph">
+<p>当你对不在类路径上的文件进行更改时，你可能希望重新启动或重新加载应用程序。为此，
+请使用 <code>spring.devtools.restart.additional-paths</code> 属性配置其他路径以监视更改。
+你可以使用<a href="#using-boot-devtools-restart-exclude">前面所述</a>的 <code>spring.devtools.restart.exclude</code>
+属性来控制其他路径下的更改是触发完全重启还是<a href="#using-boot-devtools-livereload">实时重新加载</a>。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="using-boot-devtools-restart-disable">8.2.4. 禁用重启</h4>
+<div class="paragraph">
+<p>如果你不想使用重新启动功能，则可以使用 <code>spring.devtools.restart.enabled</code> 属性将其禁用。在大多数情况下，你可以在
+<code>application.properties</code> 中设置此属性（这样做仍会初始化重启类加载器，但它不会监视文件更改）。</p>
+</div>
+<div class="paragraph">
+<p>如果你需要 <em>完全</em> 禁用重启支持（例如：因为它不适用于特定的库），则需要在调用 <code>SpringApplication.run(&#8230;&#8203;)</code> 之前将
+<code>spring.devtools.restart.enabled</code> 系统属性设置为 <code>false</code>。如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public static void main(String[] args) {
+    System.setProperty("spring.devtools.restart.enabled", "false");
+    SpringApplication.run(MyApp.class, args);
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="using-boot-devtools-restart-triggerfile">8.2.5. 使用触发文件</h4>
+<div class="paragraph">
+<p>如果使用持续编译更改文件的IDE，则可能更喜欢仅在特定时间触发重新启动。为此，你可以使用“<code>触发文件</code>”，
+这是一个特殊文件，当你要实际触发重新启动检查时必须对其进行修改。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+对文件的任何更新都将触发检查，但是只有在Devtools检测到有事情要做的情况下，重启才真正发生。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>要使用触发文件，请将 <code>spring.devtools.restart.trigger-file</code> 属性设置为触发文件的名称（不包括任何路径）。
+触发文件必须出现在类路径上的某个位置。</p>
+</div>
+<div class="paragraph">
+<p>例如，如果你的项目具有以下结构：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>src
++- main
+   +- resources
+      +- .reloadtrigger</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>然后，你的 <code>trigger-file</code> 属性将是：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">spring.devtools.restart.trigger-file=.reloadtrigger</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>现在仅在更新 <code>src/main/resources/.reloadtrigger</code> 时才可能发生重启。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+你可能需要将 <code>spring.devtools.restart.trigger-file</code> 设置为<a href="#using-boot-devtools-globalsettings">全局设置</a>，以便所有项目的行为均相同。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>某些IDE具有使你不必手动更新触发器文件的功能。 <a href="https://spring.io/tools">Spring Tools for Eclipse</a>和
+<a href="https://www.jetbrains.com/idea/">IntelliJ IDEA (最终版)</a>都具有这种支持。
+使用Spring Tools，你可以从控制台视图使用“<code>reload</code>”按钮（只要你的 <code>trigger-file</code> 为 <code>.reloadtrigger</code>）。
+对于IntelliJ，你可以按照
+<a href="https://www.jetbrains.com/help/idea/spring-boot.html#configure-application-update-policies-with-devtools">其文档中的说明</a>进行操作。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="using-boot-devtools-customizing-classload">8.2.6. 自定义重启类加载器</h4>
+<div class="paragraph">
+<p>如前面的<a href="#using-spring-boot-restart-vs-reload">重新启动 vs 重新加载</a>部分所述，重新启动功能是通过使用两个类加载器实现的。
+对于大多数应用程序，此方法效果很好。但是，有时可能会导致类加载问题。</p>
+</div>
+<div class="paragraph">
+<p>默认情况下，IDE中的任何打开的项目都使用“<code>重启</code>”类加载器加载，而任何常规的 <code>.jar</code> 文件都使用“<code>基本</code>”类加载器加载。
+如果你在多模块项目上工作，并且并非每个模块都导入到IDE中，则可能需要自定义内容。为此，你可以创建一个
+<code>META-INF/spring-devtools.properties</code> 文件。</p>
+</div>
+<div class="paragraph">
+<p><code>spring-devtools.properties</code> 文件可以包含带有 <code>restart.exclude</code> 和 <code>restart.include</code> 前缀的属性。
+<code>include</code> 元素是应上拉到“<code>重启</code>”类加载器中的项目，而 <code>exclude</code> 元素是应下推到“<code>基本</code>”类加载器中的项目。
+该属性的值是应用于类路径的正则表达式模式，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">restart.exclude.companycommonlibs=/mycorp-common-[\\w\\d-\.]+\.jar
+restart.include.projectcommon=/mycorp-myproj-[\\w\\d-\.]+\.jar</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+所有属性键都必须是唯一的。只要属性以 <code>restart.include</code> 或 <code>restart.exclude</code> 开头，它就会被考虑。
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+将加载类路径中的所有 <code>META-INF/spring-devtools.properties</code>。你可以将文件打包到项目内部，也可以打包到项目使用的库中。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="using-boot-devtools-known-restart-limitations">8.2.7. 已知局限性</h4>
+<div class="paragraph">
+<p>重新启动功能不适用于使用标准 <code>ObjectInputStream</code> 反序列化的对象。如果你需要反序列化数据，
+则可能需要将Spring的 <code>ConfigurableObjectInputStream</code> 与 <code>Thread.currentThread().getContextClassLoader()</code> 结合使用。</p>
+</div>
+<div class="paragraph">
+<p>不幸的是，一些第三方库在不考虑上下文类加载器的情况下反序列化。如果发现这样的问题，则需要向库的原始作者请求修复。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-boot-devtools-livereload">8.3. LiveReload</h3>
+<div class="paragraph">
+<p><code>spring-boot-devtools</code> 模块包括一个嵌入式LiveReload服务器，该服务器可用于在更改资源时触发浏览器刷新。
+可从 <a href="http://livereload.com/extensions/">livereload.com</a>免费获得适用于Chrome，Firefox和Safari的LiveReload浏览器扩展。</p>
+</div>
+<div class="paragraph">
+<p>如果你不想在应用程序运行时启动LiveReload服务器，则可以将 <code>spring.devtools.livereload.enabled</code> 属性设置为 <code>false</code>。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+一次只能运行一台LiveReload服务器。在启动应用程序之前，请确保没有其他LiveReload服务器正在运行。
+如果从IDE启动多个应用程序，则只有第一个具有LiveReload支持。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-boot-devtools-globalsettings">8.4. 全局设置</h3>
+<div class="paragraph">
+<p>你可以通过将以下任何文件添加到 <code>$HOME/.config/spring-boot</code> 文件夹来配置全局devtools设置：</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>spring-boot-devtools.properties</code></p>
+</li>
+<li>
+<p><code>spring-boot-devtools.yaml</code></p>
+</li>
+<li>
+<p><code>spring-boot-devtools.yml</code></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>添加到这些文件的任何属性都将应用于使用devtools的 <em>所有</em> Spring Boot应用程序。例如：要将重新启动配置为始终使用
+<a href="#using-boot-devtools-restart-triggerfile">触发文件</a>，应添加以下属性：</p>
+</div>
+<div class="listingblock">
+<div class="title">~/.config/spring-boot/spring-boot-devtools.properties</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">spring.devtools.restart.trigger-file=.reloadtrigger</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+如果在 <code>$HOME/.config/spring-boot</code> 中找不到devtools配置文件，则在 <code>$HOME</code> 文件夹的根目录中搜索是否存在
+<code>.spring-boot-devtools.properties</code> 文件。这使你可以与不支持 <code>$HOME/.config/spring-boot</code>
+位置的较旧版本的Spring Boot上的应用程序共享devtools全局配置。
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+上述文件中激活的Profiles不会影响
+<a href="spring-boot-features.html#boot-features-external-config-profile-specific-properties">特定于环境的配置文件</a>的加载。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-boot-devtools-remote">8.5. 远程应用</h3>
+<div class="paragraph">
+<p>Spring Boot开发者工具不仅限于本地开发。远程运行应用程序时，你还可以使用多种功能。
+选择启用远程支持，因为启用它可能会带来安全风险。仅当在受信任的网络上运行或使用SSL保护时，才应启用它。
+如果这两个选项都不可用，则不应使用DevTools的远程支持。你永远不要在生产部署上启用支持。</p>
+</div>
+<div class="paragraph">
+<p>要启用它，你需要确保在重新打包的档案中包含 <code>devtools</code>，如以下清单所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+            &lt;configuration&gt;
+                &lt;excludeDevtools&gt;false&lt;/excludeDevtools&gt;
+            &lt;/configuration&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>然后，你需要设置 <code>spring.devtools.remote.secret</code> 属性。像任何重要的密码或机密一样，该值应唯一且强壮，以免被猜测或强行使用。</p>
+</div>
+<div class="paragraph">
+<p>远程devtools支持分为两部分：接受连接的服务器端端点和在IDE中运行的客户端应用程序。设置
+ <code>spring.devtools.remote.secret</code> 属性后，将自动启用服务器组件，客户端组件必须手动启动。</p>
+</div>
+<div class="sect3">
+<h4 id="_运行远程客户端应用程序">8.5.1. 运行远程客户端应用程序</h4>
+<div class="paragraph">
+<p>远程客户端应用程序旨在在你的IDE中运行。你需要使用与你连接到的远程项目相同的类路径来运行
+<code>org.springframework.boot.devtools.RemoteSpringApplication</code>。该应用程序的唯一必需参数是它连接到的远程URL。</p>
+</div>
+<div class="paragraph">
+<p>例如，如果你使用的是Eclipse或STS，并且有一个名为 <code>my-app</code> 的项目已部署到Cloud Foundry，则可以执行以下操作：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>从 <code>Run</code> 菜单中选择 <code>Run Configurations&#8230;&#8203;</code>。</p>
+</li>
+<li>
+<p>创建一个新的 <code>Java Application</code> “启动配置”。</p>
+</li>
+<li>
+<p>浏览 <code>my-app</code> 项目。</p>
+</li>
+<li>
+<p>使用 <code>org.springframework.boot.devtools.RemoteSpringApplication</code> 作为主类。</p>
+</li>
+<li>
+<p>将 <code>https://myapp.cfapps.io</code> 添加到 <code>Program arguments</code>（或任何远程URL）。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>正在运行的远程客户端可能类似于以下清单：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>  .   ____          _                                              __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _          ___               _      \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` |        | _ \___ _ __  ___| |_ ___ \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| []::::::[]   / -_) '  \/ _ \  _/ -_) ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, |        |_|_\___|_|_|_\___/\__\___|/ / / /
+ =========|_|==============|___/===================================/_/_/_/
+ :: Spring Boot Remote :: {spring-boot-version}
+
+2015-06-10 18:25:06.632  INFO 14938 --- [           main] o.s.b.devtools.RemoteSpringApplication   : Starting RemoteSpringApplication on pwmbp with PID 14938 (/Users/pwebb/projects/spring-boot/code/spring-boot-project/spring-boot-devtools/target/classes started by pwebb in /Users/pwebb/projects/spring-boot/code)
+2015-06-10 18:25:06.671  INFO 14938 --- [           main] s.c.a.AnnotationConfigApplicationContext : Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@2a17b7b6: startup date [Wed Jun 10 18:25:06 PDT 2015]; root of context hierarchy
+2015-06-10 18:25:07.043  WARN 14938 --- [           main] o.s.b.d.r.c.RemoteClientConfiguration    : The connection to http://localhost:8080 is insecure. You should use a URL starting with 'https://'.
+2015-06-10 18:25:07.074  INFO 14938 --- [           main] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2015-06-10 18:25:07.130  INFO 14938 --- [           main] o.s.b.devtools.RemoteSpringApplication   : Started RemoteSpringApplication in 0.74 seconds (JVM running for 1.105)</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+因为远程客户端使用与真实应用程序相同的类路径，所以它可以直接读取应用程序属性。这就是读取 <code>spring.devtools.remote.secret</code> 属性并将其传递给服务器进行身份验证的方式。
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+始终建议使用 <code>https://</code> 作为连接协议，以便对通信进行加密并且不能截获密码。
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+如果需要使用代理来访问远程应用程序，请配置 <code>spring.devtools.remote.proxy.host</code> 和 <code>spring.devtools.remote.proxy.port</code> 属性。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="using-boot-devtools-remote-update">8.5.2. 远程更新</h4>
+<div class="paragraph">
+<p>远程客户端以与<a href="#using-boot-devtools-restart">本地重新启动</a>相同的方式监视应用程序类路径中的更改。
+任何更新的资源都会推送到远程应用程序，并且（<em>如果需要</em>）会触发重新启动。
+如果你迭代使用本地没有的云服务的功能，这将很有帮助。通常，远程更新和重新启动比完整的重新构建和部署周期快得多。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+仅在远程客户端正在运行时监视文件。如果在启动远程客户端之前更改文件，则不会将其推送到远程服务器。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="configuring-file-system-watcher">8.5.3. 配置文件系统观察器</h4>
+<div class="paragraph">
+<p>{spring-boot-devtools-module-code}/filewatch/FileSystemWatcher.java[FileSystemWatcher]
+的工作方式是按一定的时间间隔轮询类更改，然后等待预定义的静默期以确保没有更多更改。
+然后将更改上传到远程应用程序。在较慢的开发环境中，可能会发生静默期不够的情况，并且类中的更改可能会分为几批。
+第一批类更改上传后，服务器将重新启动。由于服务器正在重新启动，因此下一批不能发送到应用程序。</p>
+</div>
+<div class="paragraph">
+<p>这通常通过 <code>RemoteSpringApplication</code> 日志中的警告来证明，即有关上载某些类失败的消息，然后进行重试。
+但是，这也可能导致应用程序代码不一致，并且在上传第一批更改后无法重新启动。</p>
+</div>
+<div class="paragraph">
+<p>如果你经常观察到此类问题，请尝试将 <code>spring.devtools.restart.poll-interval</code> 和
+<code>spring.devtools.restart.quiet-period</code> 参数增加到适合你的开发环境的值：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">spring.devtools.restart.poll-interval=2s
+spring.devtools.restart.quiet-period=1s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>现在每2秒轮询一次受监视的classpath文件夹以进行更改，并保持1秒钟的静默时间以确保没有其他类更改。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="using-boot-packaging-for-production">9. 打包你的应用程序用于生产</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>可执行jar可以用于生产部署。由于它们是独立的，因此它们也非常适合云部署。</p>
+</div>
+<div class="paragraph">
+<p>对于其他“生产就绪”功能，例如运行状况，审核和度量REST或JMX端点，请考虑添加 <code>spring-boot-actuator</code>。
+有关详细信息，请参见 <em>{spring-boot-docs}/htmlsingle/#production-ready[生产就绪]</em>。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="using-boot-whats-next">10. 接下来要读什么</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>现在，你应该了解了如何使用Spring Boot以及应遵循的一些最佳实践。现在，你可以继续深入了解特定的
+<em><a href="spring-boot-features.html#boot-features">Spring Boot功能</a></em>，或者可以跳过并阅读有关
+Spring Boot的 <em>{spring-boot-docs}/htmlsingle/#production-ready[生产就绪]</em> 方面的信息。</p>
+</div>
+</div>
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
+<script>hljs.initHighlighting()</script>
+</body>
+</html>
