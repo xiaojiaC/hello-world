@@ -12,6 +12,6 @@ Hmm, the gate of Spring :-)
 * <<spring-data-jpa.adoc#project,Spring Data JPA>>
 * <<spring-data-solr.adoc#preface,Spring Data Solr>>
 * <<spring-rest-docs.adoc#introduction,Spring Rest Docs>>
-* <<springfox.adoc#introduction,Springfox>>
+* <<spring-cloud-gateway.adoc#gateway-starter,Spring Cloud Gateway>>
 
 Back to https://xiaojiac.github.io/hello-world[homepage] ~

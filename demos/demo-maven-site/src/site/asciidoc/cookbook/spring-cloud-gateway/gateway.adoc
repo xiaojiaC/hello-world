@@ -1,0 +1,2629 @@
+[[gateway-starter]]
+== 如何包括Spring Cloud Gateway
+
+要将Spring Cloud Gateway包含在你的项目中，请使用启动器，其组ID为 `org.springframework.cloud`，
+工件ID为​`spring-cloud-starter-gateway`。有关使用当前Spring Cloud Release Train设置构建系统的详细信息，
+请参见 https://projects.spring.io/spring-cloud/[Spring Cloud Project页面]。
+
+如果包括启动器，但不希望启用网关，请设置 `spring.cloud.gateway.enabled=false`。
+
+IMPORTANT: Spring Cloud Gateway基于 https://spring.io/projects/spring-boot#learn[Spring Boot 2.x]，
+https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html[Spring WebFlux]和
+https://projectreactor.io/docs[Project Reactor]构建。结果，当你使用Spring Cloud Gateway时，
+许多你熟悉的同步库（例如：Spring Data和Spring Security）和模式可能不适用。如果你对这些项目不熟悉，建议你在使用Spring Cloud
+Gateway之前先阅读它们的文档以熟悉一些新概念。
+
+IMPORTANT: Spring Cloud Gateway需要Spring Boot和Spring Webflux提供的Netty运行时。它不能在传统的Servlet容器中或构建为WAR使用。
+
+== 术语
+
+* *Route*: 网关的基本构建块。它由ID，目标URI，谓词集合和过滤器集合定义。如果聚合谓词为true，则匹配路由。
+* *Predicate*:  这是一个 {javadoc-se}/java/util/function/Predicate.html[Java 8 Function Predicate]。
+输入类型是 {javadoc-spring}/web/server/ServerWebExchange.html[Spring Framework `ServerWebExchange`]。
+这使你可以匹配HTTP请求中的所有内容，例如请求头或参数。
+* *Filter*: 这些是使用特定工厂构造的 {javadoc-spring}/web/server/GatewayFilter.html[Spring Framework `GatewayFilter`]实例。
+在这里，你可以在发送下游请求之前或之后修改请求和响应。
+
+[[gateway-how-it-works]]
+== 如何运行的
+
+下图从总体上概述了Spring Cloud Gateway的工作方式：
+
+image::spring-cloud-gateway/spring_cloud_gateway_diagram.png[Spring Cloud Gateway Diagram]
+
+客户端向Spring Cloud Gateway发出请求。如果Gateway Handler Mapping确定请求与路由匹配，则将其发送到Gateway Web Handler。
+该处理程序通过特定于请求的过滤器链来运行请求。过滤器由虚线分隔的原因是，过滤器可以在发送代理请求之前和之后运行逻辑。
+先执行所有“`pre`”过滤器逻辑，然后发出代理请求。在请求代理执行完后，将运行“`post`”过滤器逻辑。
+
+NOTE: 在没有端口的路由中定义的URI，HTTP和HTTPS URI的默认端口值分别为80和443。
+
+[[gateway-request-predicates-factories]]
+== Route Predicate工厂
+
+Spring Cloud Gateway将路由匹配作为Spring WebFlux `HandlerMapping` 基础架构的一部分。
+Spring Cloud Gateway包括许多内置的路由谓词工厂。所有这些谓词都与HTTP请求的不同属性匹配。
+你可以将多个路由谓词工厂与逻辑 `and` 语句组合使用。
+
+=== After路由谓词工厂
+
+After路由谓词工厂有一个参数，即 `datetime`。该谓词匹配在指定 `datetime` 之后发生的请求。以下示例配置了after路由谓词：
+
+.application.yml
+====
+[.hljs]
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: after_route
+        uri: https://example.org
+        predicates:
+        - After=2017-01-20T17:42:47.789-07:00[America/Denver]
+----
+====
+
+该路由匹配2017-01-20 17:42 Mountain Time (Denver)之后的任何请求。
+
+=== Before路由谓词工厂
+
+Before路由谓词工厂有一个参数，即 `datetime`。该谓词匹配在指定 `datetime` 之前发生的请求。以下示例配置了before路由谓词：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: before_route
+        uri: https://example.org
+        predicates:
+        - Before=2017-01-20T17:42:47.789-07:00[America/Denver]
+----
+====
+
+该路由匹配2017-01-20 17:42 Mountain Time (Denver)之前的任何请求。
+
+=== Between路由谓词工厂
+
+Between路由谓词工厂之间有两个参数：`datetime1` 和 `datetime2`。该谓词匹配在 `datetime1` 之后和 `datetime2` 之前发生的请求。
+`datetime2` 参数必须在 `datetime1` 之后。以下示例配置了between路由谓词：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: between_route
+        uri: https://example.org
+        predicates:
+        - Between=2017-01-20T17:42:47.789-07:00[America/Denver], 2017-01-21T17:42:47.789-07:00[America/Denver]
+----
+====
+
+该路由与2017-01-20 17:42 Mountain Time (Denver)之后和2017-01-21 17:42 Mountain Time (Denver)
+之前的任何请求相匹配。这对于维护窗口可能很有用。
+
+=== Cookie路由谓词工厂
+
+Cookie路由谓词工厂有两个参数，即cookie名称和正则表达式。该谓词匹配具有给定名称且其值与正则表达式匹配的cookie。
+以下示例配置cookie路由谓词工厂：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: cookie_route
+        uri: https://example.org
+        predicates:
+        - Cookie=chocolate, ch.p
+----
+====
+
+此路由匹配具有名为 `chocolate` 的cookie的请求，该cookie的值与 `ch.p` 正则表达式匹配。
+
+=== Header路由谓词工厂
+
+Header路由谓词工厂有两个参数，请求头名称和正则表达式。该谓词匹配具有给定名称且其值与正则表达式匹配的请求头。
+以下示例配置header路由谓词：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: header_route
+        uri: https://example.org
+        predicates:
+        - Header=X-Request-Id, \d+
+----
+====
+
+如果请求具有名为 `X-Request-Id` 的请求头，且该请求头的值与 `\d+` 正则表达式匹配（即其值为一个或多个数字），则此路由匹配。
+
+=== Host路由谓词工厂
+
+Host路由谓词工厂有一个参数：主机名模式列表。该模式是以 `.` 为分隔符，Ant样式的模式。该谓词与匹配模式的 `Host` 请求头匹配。
+以下示例配置host路由谓词：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: host_route
+        uri: https://example.org
+        predicates:
+        - Host=**.somehost.org,**.anotherhost.org
+----
+====
+
+还支持URI模板变量（例如：`{sub}.myhost.org`）。
+
+如果请求的 `Host 头的值为 `www.somehost.org` 或 `beta.somehost.org` 或 `www.anotherhost.org`，则此路由匹配。
+
+该谓词提取URI模板变量（如上例中定义的 `sub`）作为名称和值的映射，并使用 `ServerWebExchangeUtils.URI_TEMPLATE_VARIABLES_ATTRIBUTE`
+中定义的键将其放置在 `ServerWebExchange.getAttributes()` 中。
+这些值可供<<gateway-route-filters,`GatewayFilter` 工厂>>使用。
+
+
+=== Method路由谓词工厂
+
+Method路由谓词工厂有一个或多个参数：要匹配的HTTP方法。以下示例配置method路由谓词：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: method_route
+        uri: https://example.org
+        predicates:
+        - Method=GET,POST
+----
+====
+
+如果请求方法是 `GET` 或 `POST`，则此路由匹配。
+
+=== Path路由谓词工厂
+
+Path路由谓词工厂有两个参数：Spring `PathMatcher` 模式列表和一个称为 `matchOptionalTrailingSeparator` 的可选标志。
+以下示例配置path路由谓词：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: host_route
+        uri: https://example.org
+        predicates:
+        - Path=/red/{segment},/blue/{segment}
+----
+====
+
+如果请求路径为 `/red/1` 或 `/red/blue` 或 `/blue/green`，则此路由匹配。
+
+该谓词提取URI模板变量（如上例中定义的 `segment`）作为名称和值的映射，
+并使用 `ServerWebExchangeUtils.URI_TEMPLATE_VARIABLES_ATTRIBUTE` 中定义的键将其放置在
+`ServerWebExchange.getAttributes()` 中。这些值可供<<gateway-route-filters,`GatewayFilter` 工厂>>使用。
+
+可以使用实用工具方法（即 `get`）来简化对这些变量的访问。下面的示例演示如何使用 `get` 方法：
+
+====
+[source,java]
+----
+Map<String, String> uriVariables = ServerWebExchangeUtils.getPathPredicateVariables(exchange);
+
+String segment = uriVariables.get("segment");
+----
+====
+
+=== Query路由谓词工厂
+
+Query路由谓词工厂有两个参数：一个必需的 `param` 和一个可选的 `regexp`。以下示例配置query路由谓词：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: query_route
+        uri: https://example.org
+        predicates:
+        - Query=green
+----
+====
+
+如果请求包含 `green` 查询参数，则上述路由匹配。
+
+.application.yml
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: query_route
+        uri: https://example.org
+        predicates:
+        - Query=red, gree.
+----
+
+如果请求包含一个值与 `gree` 匹配（因为是正则表达式，所以 `green` 和 `greet` 均匹配）的 `red` 查询参数，则上述路由匹配。
+
+=== RemoteAddr路由谓词工厂
+
+RemoteAddr路由谓词工厂有一个参数：CIDR表示法（IPv4或IPv6）字符串的列表（最小大小为1），例如：`192.168.0.1/16`（其中
+`192.168.0.1` 是IP地址，而 `16` 是子网掩码）。下面的示例配置RemoteAddr路由谓词：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: remoteaddr_route
+        uri: https://example.org
+        predicates:
+        - RemoteAddr=192.168.1.1/24
+----
+====
+
+如果请求的远程地址是 `192.168.1.10`，则此路由匹配。
+
+=== Weight路由谓词工厂
+
+Weight路由谓词工厂有两个参数：`group` 和 `weight`。权重是按组计算的。以下示例配置weight路由谓词：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: weight_high
+        uri: https://weighthigh.org
+        predicates:
+        - Weight=group1, 8
+      - id: weight_low
+        uri: https://weightlow.org
+        predicates:
+        - Weight=group1, 2
+----
+====
+
+该路由会将约80%的流量转发至 `https://weighthigh.org`，并将约20%的流量转发至 `https://weighlow.org`。
+
+==== 修改远程地址的解析方式
+
+默认情况下，RemoteAddr路由谓词工厂使用传入请求中的远程地址。如果Spring Cloud Gateway位于代理层后面，则此地址可能与实际的客户端IP地址不匹配。
+
+你可以通过设置自定义的 `RemoteAddressResolver` 来自定义解析远程地址的方式。
+Spring Cloud Gateway随附了一个基于 https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For[X-Forwarded-For 请求头]
+的非默认远程地址解析器 `XForwardedRemoteAddressResolver`。
+
+`XForwardedRemoteAddressResolver` 有两个静态构造函数方法，它们采用不同的安全性方法：
+
+* `XForwardedRemoteAddressResolver::trustAll` 返回一个 `RemoteAddressResolver`，
+该地址始终采用 `X-Forwarded-For` 请求头中找到的第一个IP地址。这种方法容易受到欺骗，因为恶意客户端可能会为
+`X-Forwarded-For` 设置初始值，该初始值将被解析程序接受。
+
+* `XForwardedRemoteAddressResolver::maxTrustedIndex` 获取一个索引，该索引与在Spring Cloud Gateway前运行的受信任基础设施的数量相关。
+例如：如果只能通过HAProxy访问Spring Cloud Gateway，则应使用值1。如果在访问Spring Cloud Gateway之前需要两跳可信基础设施，则应使用值2。
+
+考虑以下请求头值：
+
+====
+[source]
+----
+X-Forwarded-For: 0.0.0.1, 0.0.0.2, 0.0.0.3
+----
+====
+
+以下 `maxTrustedIndex` 值产生以下远程地址：
+
+[options="header"]
+|===
+|`maxTrustedIndex`           | 结果
+|[`Integer.MIN_VALUE`,0]     | (无效，初始化期间发生 `IllegalArgumentException`)
+|1                           | 0.0.0.3
+|2                           | 0.0.0.2
+|3                           | 0.0.0.1
+|[4, `Integer.MAX_VALUE`]    | 0.0.0.1
+|===
+
+以下示例显示了如何使用Java实现相同的配置：
+
+.GatewayConfig.java
+====
+[source,java]
+----
+RemoteAddressResolver resolver = XForwardedRemoteAddressResolver
+    .maxTrustedIndex(1);
+
+...
+
+.route("direct-route",
+    r -> r.remoteAddr("10.1.1.1", "10.10.1.1/24")
+        .uri("https://downstream1")
+.route("proxied-route",
+    r -> r.remoteAddr(resolver, "10.10.1.1", "10.10.1.1/24")
+        .uri("https://downstream2")
+)
+----
+====
+
+[[gateway-route-filters]]
+== `GatewayFilter` 工厂
+
+路由过滤器允许以某种方式修改传入的HTTP请求或传出的HTTP响应。路由过滤器适用于特定路由。
+Spring Cloud Gateway包括许多内置的GatewayFilter工厂。
+
+NOTE: 有关如何使用下列任一过滤器的更详细的例子，请查看
+{code-spring-cloud-gateway}/master/spring-cloud-gateway-core/src/test/java/org/springframework/cloud/gateway/filter/factory[单元测试]。
+
+=== `AddRequestHeader` `GatewayFilter` 工厂
+
+`AddRequestHeader` `GatewayFilter` 工厂采用名称和值参数。
+下面的示例配置一个 `AddRequestHeader` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: add_request_header_route
+        uri: https://example.org
+        filters:
+        - AddRequestHeader=X-Request-red, blue
+----
+====
+
+此清单将 `X-Request-red:blue` 头部添加到所有匹配请求的下游请求头中。
+
+`AddRequestHeader` 知道用于匹配路径或主机的URI变量。URI变量可以在值中使用，并在运行时展开。
+下面的示例配置使用变量的 `AddRequestHeader` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: add_request_header_route
+        uri: https://example.org
+        predicates:
+        - Path=/red/{segment}
+        filters:
+        - AddRequestHeader=X-Request-Red, Blue-{segment}
+----
+====
+
+=== `AddRequestParameter` `GatewayFilter` 工厂
+
+`AddRequestParameter` `GatewayFilter` 工厂采用名称和值参数。
+下面的示例配置一个 `AddRequestParameter` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: add_request_parameter_route
+        uri: https://example.org
+        filters:
+        - AddRequestParameter=red, blue
+----
+====
+
+这会将 `red=blue` 添加到所有匹配请求的下游请求的查询字符串中。
+
+`AddRequestParameter` 知道用于匹配路径或主机的URI变量。URI变量可以在值中使用，并在运行时展开。
+下面的示例配置使用变量的 `AddRequestParameter` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: add_request_parameter_route
+        uri: https://example.org
+        predicates:
+        - Host: {segment}.myhost.org
+        filters:
+        - AddRequestParameter=foo, bar-{segment}
+----
+====
+
+=== `AddResponseHeader` `GatewayFilter` 工厂
+
+`AddResponseHeader` `GatewayFilter` 工厂采用名称和值参数。
+以下示例配置一个 `AddResponseHeader` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: add_response_header_route
+        uri: https://example.org
+        filters:
+        - AddResponseHeader=X-Response-Red, Blue
+----
+====
+
+这会将 `X-Response-Foo:Bar` 头部添加到所有匹配请求的下游响应头中。
+
+`AddResponseHeader` 知道用于匹配路径或主机的URI变量。URI变量可以在值中使用，并在运行时展开。
+以下示例配置使用变量的 `AddResponseHeader` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: add_response_header_route
+        uri: https://example.org
+        predicates:
+        - Host: {segment}.myhost.org
+        filters:
+        - AddResponseHeader=foo, bar-{segment}
+----
+====
+
+=== `DedupeResponseHeader` `GatewayFilter` 工厂
+
+`DedupeResponseHeader` `GatewayFilter` 工厂采用 `name` 参数和可选的 `strategy` 参数。
+`name` 可以包含以空格分隔的响应头名称列表。以下示例配置了 `DedupeResponseHeader` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: dedupe_response_header_route
+        uri: https://example.org
+        filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+----
+====
+
+当网关CORS逻辑和下游逻辑都添加它们时，这将删除 `Access-Control-Allow-Credentials` 和
+`Access-Control-Allow-Origin` 响应头的重复值。
+
+`DedupeResponseHeader` 过滤器还接受可选的 `strategy` 参数。
+接受的值为 `RETAIN_FIRST`（默认值），`RETAIN_LAST` 和 `RETAIN_UNIQUE`。
+
+[[hystrix]]
+=== Hystrix `GatewayFilter` 工厂
+
+https://cloud.spring.io/spring-cloud-netflix/multi/multi__modules_in_maintenance_mode.html[Netflix已将Hystrix置于维护模式]。
+我们建议你将<<spring-cloud-circuitbreaker-filter-factory,Spring Cloud CircuitBreaker 网关过滤器>>
+与Resilience4J一起使用，因为在将来的版本中将不再支持Hystrix。
+
+https://github.com/Netflix/Hystrix[Hystrix]是Netflix的一个库，用于实现 https://martinfowler.com/bliki/CircuitBreaker.html[断路器模式]。
+Hystrix `GatewayFilter` 可让你将断路器引入网关路由，保护你的服务免受级联故障的影响，并在下游故障的情况下提供降级响应。
+
+要在项目中启用Hystrix `GatewayFilter` 实例，请添加来自 https://cloud.spring.io/spring-cloud-netflix/[Spring Cloud Netflix]
+的 `spring-cloud-starter-netflix-hystrix` 的依赖。
+
+Hystrix `GatewayFilter` 工厂需要一个 `name` 参数，即 `HystrixCommand` 的名称。以下示例配置了Hystrix `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: hystrix_route
+        uri: https://example.org
+        filters:
+        - Hystrix=myCommandName
+----
+====
+
+这会将其余的过滤器包装在命令名称为 `myCommandName` 的 `HystrixCommand` 中。
+
+Hystrix过滤器还可以接受可选的 `fallbackUri` 参数。当前，仅支持 `forward:` schemed URI。
+如果调用了降级，则请求将转发到与URI匹配的控制器。以下示例配置了这种降级：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: hystrix_route
+        uri: lb://backing-service:8088
+        predicates:
+        - Path=/consumingserviceendpoint
+        filters:
+        - name: Hystrix
+          args:
+            name: fallbackcmd
+            fallbackUri: forward:/incaseoffailureusethis
+        - RewritePath=/consumingserviceendpoint, /backingserviceendpoint
+----
+====
+
+这将在调用Hystrix降级时转发到 `/incaseoffailureusethis` URI。
+请注意，此示例还演示了（可选）Spring Cloud Netflix Ribbon负载均衡（在目标URI上定义了 `lb` 前缀）。
+
+主要场景是将 `fallbackUri` 用于网关应用程序中的内部控制器或处理程序。
+但是，你还可以将请求重新路由到外部应用程序中的控制器或处理程序，如下所示：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: ingredients
+        uri: lb://ingredients
+        predicates:
+        - Path=//ingredients/**
+        filters:
+        - name: Hystrix
+          args:
+            name: fetchIngredients
+            fallbackUri: forward:/fallback
+      - id: ingredients-fallback
+        uri: http://localhost:9994
+        predicates:
+        - Path=/fallback
+----
+====
+
+在此示例中，网关应用程序中没有 `fallback` 端点或处理程序。但是，另一个应用程序中有一个，注册在 `http://localhost:9994` 下。
+
+如果将请求转发给降级，则Hystrix网关过滤器还会提供引发该请求的 `Throwable`。
+它作为 `ServerWebExchangeUtils.HYSTRIX_EXECUTION_EXCEPTION_ATTR` 属性添加到 `ServerWebExchange`，
+你可以在网关应用程序中处理降级时使用该属性。
+
+对于外部控制器/处理程序场景，你可以添加带有异常详细信息的头部。你可以在
+<<fallback-headers, FallbackHeaders GatewayFilter Factory部分中>>找到有关此操作的更多信息。
+
+你可以使用application properties使用全局默认值或逐条路由配置Hystrix设置（例如超时），如
+https://github.com/Netflix/Hystrix/wiki/Configuration[Hystrix wiki]上所述。
+
+要为前面显示的示例路由设置五秒钟的超时时间，可以使用以下配置：
+
+.application.yml
+====
+[source,yaml]
+----
+hystrix.command.fallbackcmd.execution.isolation.thread.timeoutInMilliseconds: 5000
+----
+====
+
+[[spring-cloud-circuitbreaker-filter-factory]]
+=== Spring Cloud CircuitBreaker `GatewayFilter` 工厂
+
+Spring Cloud CircuitBreaker GatewayFilter工厂使用Spring Cloud CircuitBreaker API将网关路由包装在断路器中。
+Spring Cloud CircuitBreaker支持可与Spring Cloud Gateway一起使用的两个库Hystrix和Resilience4J。
+由于Netflix已将Hystrix置于仅维护模式，因此建议你使用Resilience4J。
+
+要启用Spring Cloud CircuitBreaker过滤器，你需要在类路径上放置
+`spring-cloud-starter-circuitbreaker-reactor-resilience4j` 或
+`spring-cloud-starter-netflix-hystrix`。以下示例配置了一个Spring Cloud CircuitBreaker `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: circuitbreaker_route
+        uri: https://example.org
+        filters:
+        - CircuitBreaker=myCircuitBreaker
+----
+====
+
+要配置断路器，请参阅所使用的底层断路器实现的配置。
+
+* https://cloud.spring.io/spring-cloud-circuitbreaker/reference/html/spring-cloud-circuitbreaker.html[Resilience4J文档]
+* https://cloud.spring.io/spring-cloud-netflix/reference/html/[Hystrix文档]
+
+Spring Cloud CircuitBreaker过滤器还可以接受可选的 `fallbackUri` 参数。
+当前，仅支持 `forward:` schemed URI。如果调用了降级，则请求将转发到与URI匹配的控制器。以下示例配置了这种降级：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: circuitbreaker_route
+        uri: lb://backing-service:8088
+        predicates:
+        - Path=/consumingServiceEndpoint
+        filters:
+        - name: CircuitBreaker
+          args:
+            name: myCircuitBreaker
+            fallbackUri: forward:/inCaseOfFailureUseThis
+        - RewritePath=/consumingServiceEndpoint, /backingServiceEndpoint
+----
+====
+
+以下清单在Java中做同样的事情：
+
+.Application.java
+====
+[source,java]
+----
+@Bean
+public RouteLocator routes(RouteLocatorBuilder builder) {
+    return builder.routes()
+        .route("circuitbreaker_route", r -> r.path("/consumingServiceEndpoint")
+            .filters(f -> f.circuitBreaker(c -> c.name("myCircuitBreaker").fallbackUri("forward:/inCaseOfFailureUseThis"))
+                .rewritePath("/consumingServiceEndpoint", "/backingServiceEndpoint")).uri("lb://backing-service:8088")
+        .build();
+}
+----
+====
+
+此示例在调用断路器降级时转发到 `/inCaseofFailureUseThis` URI。
+请注意，此示例还演示了（可选）Spring Cloud Netflix Ribbon负载平衡（由目标URI上的 `lb` 前缀定义）。
+
+主要场景是使用 `fallbackUri` 在网关应用程序内定义内部控制器或处理程序。
+但是，你还可以将请求重新路由到外部应用程序中的控制器或处理程序，如下所示：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: ingredients
+        uri: lb://ingredients
+        predicates:
+        - Path=//ingredients/**
+        filters:
+        - name: CircuitBreaker
+          args:
+            name: fetchIngredients
+            fallbackUri: forward:/fallback
+      - id: ingredients-fallback
+        uri: http://localhost:9994
+        predicates:
+        - Path=/fallback
+----
+====
+
+在此示例中，网关应用程序中没有 `fallback` 端点或处理程序。但是，另一个应用程序中有一个，注册在 `http://localhost:9994` 下。
+
+如果将请求转发给降级，则Spring Cloud CircuitBreaker网关过滤器还会提供引发该请求的 `Throwable`。
+它作为 `ServerWebExchangeUtils.CIRCUITBREAKER_EXECUTION_EXCEPTION_ATTR` 属性添加到 `ServerWebExchange`，
+可在网关应用程序中处理降级时使用。
+
+对于外部控制器/处理程序场景，你可以添加带有异常详细信息的头部。你可以在
+<<fallback-headers, FallbackHeaders GatewayFilter Factory部分中>>找到有关此操作的更多信息。
+
+[[fallback-headers]]
+=== `FallbackHeaders` `GatewayFilter` 工厂
+
+`FallbackHeaders` 工厂使你可以在转发到外部应用程序中的 `fallbackUri` 的请求的头部中添加Hystrix或Spring Cloud
+CircuitBreaker执行异常详细信息，如以下情况所示：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: ingredients
+        uri: lb://ingredients
+        predicates:
+        - Path=//ingredients/**
+        filters:
+        - name: CircuitBreaker
+          args:
+            name: fetchIngredients
+            fallbackUri: forward:/fallback
+      - id: ingredients-fallback
+        uri: http://localhost:9994
+        predicates:
+        - Path=/fallback
+        filters:
+        - name: FallbackHeaders
+          args:
+            executionExceptionTypeHeaderName: Test-Header
+----
+====
+
+在此示例中，在运行断路器时发生执行异常之后，该请求将转发到在 `localhost:9994` 上运行的应用程序中的 `fallback` 端点或处理程序。
+`FallbackHeaders` 过滤器将具有异常类型，消息和（如果有）root cause异常类型和消息的头部添加到该请求。
+
+你可以通过设置以下参数的值（显示其默认值）来覆盖配置中头部的名称：
+
+* `executionExceptionTypeHeaderName` (`"Execution-Exception-Type"`)
+* `executionExceptionMessageHeaderName` (`"Execution-Exception-Message"`)
+* `rootCauseExceptionTypeHeaderName` (`"Root-Cause-Exception-Type"`)
+* `rootCauseExceptionMessageHeaderName` (`"Root-Cause-Exception-Message"`)
+
+有关熔断和网关的更多信息，请参见<<hystrix,Hystrix GatewayFilter工厂部分>>或
+<<spring-cloud-circuitbreaker-filter-factory,Spring Cloud CircuitBreaker工厂部分>>。
+
+=== `MapRequestHeader` `GatewayFilter` 工厂
+
+`MapRequestHeader` `GatewayFilter` 工厂采用 `fromHeader` 和 `toHeader` 参数。
+它创建一个新的命名头（`toHeader`），然后从传入的HTTP请求中将其值从现有的命名头（`fromHeader`）中提取出来。
+如果输入头部不存在，则过滤器不起作用。如果新的命名头已经存在，则其值将使用新值进行扩充。
+以下示例配置一个 `MapRequestHeader`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: map_request_header_route
+        uri: https://example.org
+        filters:
+        - MapRequestHeader=Blue, X-Request-Red
+----
+====
+
+这会将 `X-Request-Red:<values>` 头部添加到下游请求中，并带有来自传入HTTP请求的 `Blue` 头部的更新值。
+
+=== `PrefixPath` `GatewayFilter` 工厂
+
+`PrefixPath` `GatewayFilter` 工厂采用单个 `prefix` 参数。
+以下示例配置 `PrefixPath` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: prefixpath_route
+        uri: https://example.org
+        filters:
+        - PrefixPath=/mypath
+----
+====
+
+这会将 `/mypath` 作为所有匹配请求的路径前缀。因此，对 `/hello` 的请求将发送到 `/mypath/ hello`。
+
+=== `PreserveHostHeader` `GatewayFilter` 工厂
+
+`PreserveHostHeader` `GatewayFilter` 工厂没有参数。
+此过滤器设置请求属性，路由过滤器将检查该请求属性，以确定是否应发送原始主机头，而不是由HTTP客户端确定的主机头。
+以下示例配置了 `PreserveHostHeader` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: preserve_host_route
+        uri: https://example.org
+        filters:
+        - PreserveHostHeader
+----
+====
+
+=== `RequestRateLimiter` `GatewayFilter` 工厂
+
+`RequestRateLimiter` `GatewayFilter` 工厂使用 `RateLimiter` 实现来确定是否允许继续当前请求。
+如果不允许，则会返回 `HTTP 429 - Too Many Requests` （默认）状态。
+
+该过滤器采用可选的 `keyResolver` 参数和特定于速率限制器的参数（本节稍后介绍）。
+
+`keyResolver` 是一个实现 `KeyResolver` 接口的bean。在配置中，使用SpEL按名称引用bean。
+`#{@myKeyResolver}` 是一个SpEL表达式，它引用一个名为 `myKeyResolver` 的bean。以下清单显示了 `KeyResolver` 接口：
+
+.KeyResolver.java
+====
+[source,java]
+----
+public interface KeyResolver {
+    Mono<String> resolve(ServerWebExchange exchange);
+}
+----
+====
+
+`KeyResolver` 接口允许可插拔策略派生用于限制请求的key。在未来的里程碑版本中，将有一些 `KeyResolver` 实现。
+
+`KeyResolver` 的默认实现是 `PrincipalNameKeyResolver`，它从 `ServerWebExchange` 检索 `Principal` 并调用 `Principal.getName()`。
+
+默认情况下，如果 `KeyResolver` 找不到key，则拒绝请求。你可以通过设置
+`spring.cloud.gateway.filter.request-rate-limiter.deny-empty-key`（是或否）和
+`spring.cloud.gateway.filter.request-rate-limiter.empty-key-status-code` 属性来调整此行为。
+
+[NOTE]
+=====
+无法使用“快捷方式”表示法配置 `RequestRateLimiter`。下面的示例 _无效_：
+
+.application.properties
+====
+----
+# INVALID SHORTCUT CONFIGURATION
+spring.cloud.gateway.routes[0].filters[0]=RequestRateLimiter=2, 2, #{@userkeyresolver}
+----
+====
+=====
+
+==== Redis `RateLimiter`
+
+Redis的实现基于 https://stripe.com/blog/rate-limiters[Stripe]完成的工作。
+它需要使用 `spring-boot-starter-data-redis-active` Spring Boot启动器。
+
+使用的算法是 https://en.wikipedia.org/wiki/Token_bucket[令牌桶算法]。
+
+`redis-rate-limiter.replenishRate` 是你希望用户每秒执行多少个请求，而不需要丢弃任何请求。这是令牌桶被填充的速率。
+
+`redis-rate-limiter.burstCapacity` 是允许用户在一秒内执行的最大请求数。这是令牌桶可以容纳的令牌数。
+将此值设置为零将阻止所有请求。
+
+通过在 `replenishRate` 和 `burstCapacity` 中设置相同的值可以实现稳定的速率。
+通过将 `burstCapacity` 设置为高于 `replenishRate`，可以允许临时突发。
+在这种情况下，速率限制器需要在两次突发之间保留一段时间（根据 `replenishRate`），
+因为两个连续的突发将导致请求丢弃（`HTTP 429 - Too Many Requests`）。以下清单配置了 `redis-rate-limiter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: requestratelimiter_route
+        uri: https://example.org
+        filters:
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter.replenishRate: 10
+            redis-rate-limiter.burstCapacity: 20
+
+----
+====
+
+以下示例在Java中配置 `KeyResolver`：
+
+.Config.java
+====
+[source,java]
+----
+@Bean
+KeyResolver userKeyResolver() {
+    return exchange -> Mono.just(exchange.getRequest().getQueryParams().getFirst("user"));
+}
+----
+====
+
+这定义了每个用户的请求速率限制为10。允许突发20个请求，但是在下一秒中，只有10个请求可用。
+`KeyResolver` 是获取 `user` 请求参数的简单方法（请注意，不建议在生产环境中使用此参数）。
+
+你还可以将速率限制器定义为实现 `RateLimiter` 接口的Bean。
+在配置中，可以使用SpEL按名称引用Bean。`#{@myRateLimiter}` 是一个SpEL表达式，
+它引用名为 `myRateLimiter` 的bean。以下清单定义了一个速率限制器，该限制器使用前面清单中定义的 `KeyResolver`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: requestratelimiter_route
+        uri: https://example.org
+        filters:
+        - name: RequestRateLimiter
+          args:
+            rate-limiter: "#{@myRateLimiter}"
+            key-resolver: "#{@userKeyResolver}"
+
+----
+====
+
+=== `RedirectTo` `GatewayFilter` 工厂
+
+`RedirectTo` `GatewayFilter` 工厂采用两个参数，即 `status` 和 `url`。
+`status` 参数应该是300系列重定向HTTP代码，例如301。`url` 参数应该是有效的URL，这是 `Location` 头部的值。
+下面的清单配置一个 `RedirectTo` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: prefixpath_route
+        uri: https://example.org
+        filters:
+        - RedirectTo=302, https://acme.org
+----
+====
+
+这将发送带有 `Location:https://acme.org` 头部的302状态以执行重定向。
+
+=== `RemoveHopByHopHeadersFilter` `GatewayFilter` 工厂
+
+`RemoveHopByHopHeadersFilter` `GatewayFilter` 工厂从转发的请求中删除头部。被删除的头部的默认列表来自
+https://tools.ietf.org/html/draft-ietf-httpbis-p1-messaging-14#section-7.1.3[IETF]。
+
+.默认删除的头部是：
+ *  `Connection`
+ *  `Keep-Alive`
+ *  `Proxy-Authenticate`
+ *  `Proxy-Authorization`
+ *  `TE`
+ *  `Trailer`
+ *  `Transfer-Encoding`
+ *  `Upgrade`
+
+要更改已删除的头部，请将 `spring.cloud.gateway.filter.remove-non-proxy-headers.headers` 属性设置为要删除的头部名称列表。
+
+=== `RemoveRequestHeader` `GatewayFilter` 工厂
+
+`RemoveRequestHeader` `GatewayFilter` 工厂带有一个 `name` 参数。它是要删除的请求头名称。
+下面的清单配置一个 `RemoveRequestHeader` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: removerequestheader_route
+        uri: https://example.org
+        filters:
+        - RemoveRequestHeader=X-Request-Foo
+----
+====
+
+这将删除 `X-Request-Foo` 头部，然后将其发送到下游。
+
+=== `RemoveResponseHeader` `GatewayFilter` 工厂
+
+`RemoveResponseHeader` `GatewayFilter` 工厂采用 `name` 参数。它是要删除的响应头名称。
+下面的清单配置一个 `RemoveResponseHeader` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: removeresponseheader_route
+        uri: https://example.org
+        filters:
+        - RemoveResponseHeader=X-Response-Foo
+----
+====
+
+这将从响应中删除 `X-Response-Foo` 头部，然后将其返回到网关客户端。
+
+要删除任何类型的敏感头部，应为可能要为其配置的任何路由配置此过滤器。
+另外，你可以使用 `spring.cloud.gateway.default-filters` 一次配置此过滤器，并将其应用于所有路由。
+
+
+=== `RemoveRequestParameter` `GatewayFilter` 工厂
+
+`RemoveRequestParameter` `GatewayFilter` 工厂采用 `name` 参数。它是要删除的查询参数的名称。
+以下示例配置一个 `RemoveRequestParameter` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: removerequestparameter_route
+        uri: https://example.org
+        filters:
+        - RemoveRequestParameter=red
+----
+====
+
+这将删除 `red` 参数，然后再将其发送到下游。
+
+
+=== `RewritePath` `GatewayFilter` 工厂
+
+`RewritePath` `GatewayFilter` 工厂采用路径 `regexp` 参数和 `replacement` 参数。
+这使用Java正则表达式提供了一种灵活的方式来重写请求路径。
+以下清单配置了 `RewritePath` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: rewritepath_route
+        uri: https://example.org
+        predicates:
+        - Path=/foo/**
+        filters:
+        - RewritePath=/red(?<segment>/?.*), $\{segment}
+----
+====
+
+对于 `/red/blue` 的请求路径，这会在发出下游请求之前将路径设置为 `/blue`。请注意，由于YAML规范，应将 `$` 替换为 `$\`。
+
+=== `RewriteLocationResponseHeader` `GatewayFilter` 工厂
+
+`RewriteLocationResponseHeader` `GatewayFilter` 工厂通常会修改 `Location` 响应头的值，以摆脱特定于后端的详细信息。
+它需要 `stripVersionMode`，`locationHeaderName`，`hostValue` 和 `protocolRegex` 参数。
+下面的清单配置一个 `RewriteLocationResponseHeader` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: rewritelocationresponseheader_route
+        uri: http://example.org
+        filters:
+        - RewriteLocationResponseHeader=AS_IN_REQUEST, Location, ,
+----
+====
+
+例如，对于 `POST https://api.example.com/some/object/name` 的请求，`https://object-service.prod.example.net/v2/some/object/id`
+的 `Location` 响应头值被重写为 `https://api.example.com/some/object/id`。
+
+`stripVersionMode` 参数具有以下可能的值：`NEVER_STRIP`，`AS_IN_REQUEST`（默认值）和 `ALWAYS_STRIP`。
+
+ * `NEVER_STRIP`: 即使原始请求路径不包含任何版本，也不会剥离该版本。
+ * `AS_IN_REQUEST`: 仅当原始请求路径不包含版本时，才剥离版本。
+ * `ALWAYS_STRIP`: 即使原始请求路径包含版本，也始终会剥离该版本。
+
+`hostValue` 参数（如果提供）用于替换 `Location` 响应头的 `host:port` 部分。如果未提供，则使用 `Host` 请求头的值。
+
+`protocolRegex` 参数必须是有效的正则表达式 `String`，协议名称与之匹配。如果不匹配，则过滤器不执行任何操作。
+默认值为 `http|https|ftp|ftps`。
+
+
+=== `RewriteResponseHeader` `GatewayFilter` 工厂
+
+`RewriteResponseHeader` `GatewayFilter`工厂采用 `name`, `regexp` 和 `replacement` 参数。
+它使用Java正则表达式以灵活的方式重写响应头值。
+以下示例配置 `RewriteResponseHeader` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: rewriteresponseheader_route
+        uri: https://example.org
+        filters:
+        - RewriteResponseHeader=X-Response-Red, , password=[^&]+, password=***
+----
+====
+
+对于 `/42?user=ford&password=omg!what&flag=true` 的头部值，在发出下游请求后将其设置为 `/42?user=ford&password=\***&flag=true`。
+由于YAML规范，必须使用 `$\` 表示 `$`。
+
+=== `SaveSession` `GatewayFilter` 工厂
+
+`SaveSession` `GatewayFilter` 工厂在向下游转发调用 _之前_ 强制执行 `WebSession::save` 操作。
+当将诸如 https://projects.spring.io/spring-session/[Spring Session]之类的数据与惰性数据存储一起使用时，
+这特别有用，你需要确保会话状态在进行转发调用之前已保存。
+以下示例配置 `SaveSession` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: save_session
+        uri: https://example.org
+        predicates:
+        - Path=/foo/**
+        filters:
+        - SaveSession
+----
+====
+
+如果你将 https://projects.spring.io/spring-security/[Spring Security]与Spring Session集成在一起，
+并想确保安全性详细信息已转发到远程进程，那么这一点至关重要。
+
+
+=== `SecureHeaders` `GatewayFilter` 工厂
+
+根据 https://blog.appcanary.com/2017/http-security-headers.html[此博客文章]中的建议，`SecureHeaders`
+`GatewayFilter` 工厂将许多头部添加到响应中。
+
+添加了以下头部（以其默认值显示）：
+
+* `X-Xss-Protection:1 (mode=block`)
+* `Strict-Transport-Security (max-age=631138519`)
+* `X-Frame-Options (DENY)`
+* `X-Content-Type-Options (nosniff)`
+* `Referrer-Policy (no-referrer)`
+* `Content-Security-Policy (default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src 'none'; script-src https:; style-src 'self' https: 'unsafe-inline)'`
+* `X-Download-Options (noopen)`
+* `X-Permitted-Cross-Domain-Policies (none)`
+
+要更改默认值，请在 `spring.cloud.gateway.filter.secure-headers` 命名空间中设置适当的属性。可以使用以下属性：
+
+* `xss-protection-header`
+* `strict-transport-security`
+* `x-frame-options`
+* `x-content-type-options`
+* `referrer-policy`
+* `content-security-policy`
+* `x-download-options`
+* `x-permitted-cross-domain-policies`
+
+要禁用默认值，请设置 `spring.cloud.gateway.filter.secure-headers.disable` 属性，并用逗号分隔值。以下示例显示了如何执行此操作：
+
+====
+[source]
+----
+spring.cloud.gateway.filter.secure-headers.disable=x-frame-options,strict-transport-security
+----
+====
+
+NOTE: 需要使用secure头部的小写全名来禁用它。
+
+=== `SetPath` `GatewayFilter` 工厂
+
+`SetPath` `GatewayFilter` 工厂采用路径 `template` 参数。
+通过允许路径的模板段，它提供了一种操作请求路径的简单方法。这使用了Spring Framework中的URI模板。允许多个匹配段。
+以下示例配置一个 `SetPath` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: setpath_route
+        uri: https://example.org
+        predicates:
+        - Path=/red/{segment}
+        filters:
+        - SetPath=/{segment}
+----
+====
+
+对于 `/red/blue` 的请求路径，这会在发出下游请求之前将路径设置为 `/blue`。
+
+=== `SetRequestHeader` `GatewayFilter` 工厂
+
+`SetRequestHeader` `GatewayFilter` 工厂采用 `name` 和 `value` 参数。
+下面的清单配置了 `SetRequestHeader` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: setrequestheader_route
+        uri: https://example.org
+        filters:
+        - SetRequestHeader=X-Request-Red, Blue
+----
+====
+
+该 `GatewayFilter` 用给定名称替换（而不是添加）所有头部。因此，如果下游服务器响应 `X-Request-Red:1234`，
+则将其替换为 `X-Request-Red:Blue`，这是下游服务将收到的内容。
+
+`SetRequestHeader` 知道用于匹配路径或主机的URI变量。URI变量可以在值中使用，并在运行时展开。
+以下示例配置使用变量的 `SetRequestHeader` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: setrequestheader_route
+        uri: https://example.org
+        predicates:
+        - Host: {segment}.myhost.org
+        filters:
+        - SetRequestHeader=foo, bar-{segment}
+----
+====
+
+=== `SetResponseHeader` `GatewayFilter` 工厂
+
+`SetResponseHeader` `GatewayFilter` 工厂采用 `name` 和 `value` 参数。
+下面的清单配置了 `SetResponseHeader` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: setresponseheader_route
+        uri: https://example.org
+        filters:
+        - SetResponseHeader=X-Response-Red, Blue
+----
+====
+
+该 `GatewayFilter` 用给定名称替换（而不是添加）所有头部。所以，如果下游服务器响应 `X-Request-Red:1234`，
+则将其替换为 `X-Request-Red:Blue`，这是网关客户端将收到的内容。
+
+`SetResponseHeader` 知道用于匹配路径或主机的URI变量。URI变量可用于该值，并将在运行时展开。
+以下示例配置使用变量的 `SetResponseHeader` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: setresponseheader_route
+        uri: https://example.org
+        predicates:
+        - Host: {segment}.myhost.org
+        filters:
+        - SetResponseHeader=foo, bar-{segment}
+----
+====
+
+=== `SetStatus` `GatewayFilter` 工厂
+
+`SetStatus` `GatewayFilter` 工厂采用单个参数 `status`。它必须是有效的Spring `HttpStatus`。
+它可以是整数值 `404` 或枚举的字符串表示形式：`NOT_FOUND`。
+下面的清单配置一个 `SetStatus` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: setstatusstring_route
+        uri: https://example.org
+        filters:
+        - SetStatus=BAD_REQUEST
+      - id: setstatusint_route
+        uri: https://example.org
+        filters:
+        - SetStatus=401
+----
+====
+
+无论哪种情况，响应的HTTP状态都设置为401。
+
+你可以将 `SetStatus` `GatewayFilter` 配置为在响应头中返回代理请求的原始HTTP状态码。
+如果使用以下属性配置头部，则会将其添加到响应中：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      set-status:
+        original-status-header-name: original-http-status
+----
+====
+
+=== `StripPrefix` `GatewayFilter` 工厂
+
+`StripPrefix` `GatewayFilter` 工厂采用一个 `parts` 参数。`parts` 参数指示在向下游发送请求之前要从请求中剥离的路径部分的数量。
+下面的清单配置一个 `StripPrefix` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: nameRoot
+        uri: https://nameservice
+        predicates:
+        - Path=/name/**
+        filters:
+        - StripPrefix=2
+----
+====
+
+当通过网关向 `/name/blue/red` 发出请求时，向 `nameservice` 发出的请求看起来就像 `https://nameservice/red`。
+
+=== Retry `GatewayFilter` 工厂
+
+重试 `GatewayFilter` 工厂支持以下参数：
+
+* `retries`: 应尝试的重试次数。
+* `statuses`: 使用 `org.springframework.http.HttpStatus` 表示的应重试的HTTP状态码。
+* `methods`: 使用 `org.springframework.http.HttpMethod` 表示的应重试的HTTP方法。
+* `series`: 使用 `org.springframework.http.HttpStatus.Series` 表示的要重试的状态码系列。
+* `exceptions`: 应该重试的抛出异常列表。
+* `backoff`: 重试配置的指数补偿。
+在 `firstBackoff * (factor ^ n)` 的退避间隔之后执行重试，其中 `n` 是迭代次数。
+如果配置了 `maxBackoff`，则将应用的最大退避间隔限制为 `maxBackoff`。
+如果 `basedOnPreviousValue` 为 `true`，则使用 `prevBackoff * factor` 计算退避量。
+
+如果启用，下面是 `Retry` 过滤器的默认设置:
+
+* `retries`: 3次
+* `series`: 5XX 系列
+* `methods`: GET 方法
+* `exceptions`: `IOException` 和 `TimeoutException`
+* `backoff`: 禁用
+
+下面的清单配置一个重试 `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: retry_test
+        uri: http://localhost:8080/flakey
+        predicates:
+        - Host=*.retry.com
+        filters:
+        - name: Retry
+          args:
+            retries: 3
+            statuses: BAD_GATEWAY
+            backoff:
+              firstBackoff: 10ms
+              maxBackoff: 50ms
+              factor: 2
+              basedOnPreviousValue: false
+----
+====
+
+NOTE: 重试过滤器当前不支持使用正文进行重试（例如：对于使用正文的POST或PUT请求）。
+
+NOTE: 当将重试过滤器与带有 `forward:` 前缀的URL一起使用时，应仔细编写目标端点，以便在出现错误时，它不会执行任何可能导致将响应发送到客户端并提交的操作。
+例如：如果目标端点是带注解的控制器，则目标控制器方法不应返回带有错误状态码的 `ResponseEntity`。
+相反，它应该引发 `Exception` 或发出错误信号（例如：通过 `Mono.error(ex)` 返回值），可以通过重试配置的重试过滤器来处理该值。
+
+
+=== `RequestSize` `GatewayFilter` 工厂
+
+当请求大小大于允许的限制时，`RequestSize` `GatewayFilter` 工厂可以限制请求到达下游服务。
+过滤器采用 `RequestSize` 参数。它是允许的请求大小限制，以字节为单位。
+下面的清单配置一个 `RequestSize` `GatewayFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: request_size_route
+        uri: http://localhost:8080/upload
+        predicates:
+        - Path=/upload
+        filters:
+        - name: RequestSize
+          args:
+            maxSize: 5000000
+----
+====
+
+当请求由于大小而被拒绝时，`RequestSize` `GatewayFilter` 工厂将响应状态设置为 `413 Payload Too Large`，
+并带有附加的报头 `errorMessage`。以下示例显示了这样的 `errorMessage`：
+
+====
+[source]
+----
+errorMessage` : `Request size is larger than permissible limit. Request size is 6.0 MB where permissible limit is 5.0 MB
+----
+====
+
+NOTE: 如果未在路由定义中提供过滤器参数，则默认请求大小将设置为5 MB。
+
+
+=== 修改请求体 `GatewayFilter` 工厂
+
+CAUTION: 该过滤器被认为是BETA，API将来可能会更改。
+
+你可以使用此过滤器在网关将请求体发送到下游之前修改请求体。
+
+NOTE: 只能使用Java DSL来配置此过滤器。
+
+以下清单显示了如何修改请求体 `GatewayFilter`：
+
+====
+[source,java]
+----
+@Bean
+public RouteLocator routes(RouteLocatorBuilder builder) {
+    return builder.routes()
+        .route("rewrite_request_obj", r -> r.host("*.rewriterequestobj.org")
+            .filters(f -> f.prefixPath("/httpbin")
+                .modifyRequestBody(String.class, Hello.class, MediaType.APPLICATION_JSON_VALUE,
+                    (exchange, s) -> return Mono.just(new Hello(s.toUpperCase())))).uri(uri))
+        .build();
+}
+
+static class Hello {
+    String message;
+
+    public Hello() { }
+
+    public Hello(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+}
+----
+====
+
+=== 修改响应体 `GatewayFilter` 工厂
+
+CAUTION: 该过滤器被认为是BETA，API将来可能会更改。
+
+你可以使用此过滤器在将响应体发送回客户端之前对其进行修改。
+
+NOTE: 只能使用Java DSL来配置此过滤器。
+
+以下清单显示了如何修改响应体 `GatewayFilter`：
+
+====
+[source,java]
+----
+@Bean
+public RouteLocator routes(RouteLocatorBuilder builder) {
+    return builder.routes()
+        .route("rewrite_response_upper", r -> r.host("*.rewriteresponseupper.org")
+            .filters(f -> f.prefixPath("/httpbin")
+                .modifyResponseBody(String.class, String.class,
+                    (exchange, s) -> Mono.just(s.toUpperCase()))).uri(uri)
+        .build();
+}
+----
+====
+
+=== 默认过滤器
+
+要添加过滤器并将其应用于所有路由，可以使用 `spring.cloud.gateway.default-filters`。
+此属性可配置为过滤器列表。以下清单定义了一组默认过滤器：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      default-filters:
+      - AddResponseHeader=X-Response-Default-Red, Default-Blue
+      - PrefixPath=/httpbin
+----
+====
+
+== 全局过滤器
+
+`GlobalFilter` 接口具有与 `GatewayFilter` 相同的签名。这些是特殊过滤器，有条件地应用于所有路由。
+
+NOTE: 此接口及其用法可能会在将来的里程碑版本中更改。
+
+[[gateway-combined-global-filter-and-gatewayfilter-ordering]]
+=== 全局过滤器和 `GatewayFilter` 组合的顺序
+
+当请求与路由匹配时，过滤Web处理程序会将 `GlobalFilter` 的所有实例和 `GatewayFilter` 的所有特定于路由的实例添加到过滤器链中。
+该组合的过滤器链由 `org.springframework.core.Ordered` 接口排序，你可以通过实现 `getOrder()` 方法进行设置。
+
+由于Spring Cloud Gateway区分了过滤器逻辑执行的“`pre`”阶段和“`post`”阶段（请参阅<<gateway-how-it-works,工作原理>>），
+因此具有最高优先级的过滤器是“`pre`”阶段中的第一个筛选器，是“`post`”阶段中的最后一个过滤器。
+
+以下清单配置了一个过滤器链：
+
+.ExampleConfiguration.java
+====
+[source,java]
+----
+@Bean
+public GlobalFilter customFilter() {
+    return new CustomGlobalFilter();
+}
+
+public class CustomGlobalFilter implements GlobalFilter, Ordered {
+
+    @Override
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        log.info("custom global filter");
+        return chain.filter(exchange);
+    }
+
+    @Override
+    public int getOrder() {
+        return -1;
+    }
+}
+----
+====
+
+=== Forward路由过滤器
+
+`ForwardRoutingFilter` 在交换属性 `ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR` 中查找URI。
+如果URL具有 `forward` scheme（例如：`forward:///localendpoint`），则它将使用Spring `DispatcherHandler` 来处理请求。
+请求URL的路径部分被转发URL中的路径覆盖。
+未经修改的原始URL会附加到 `ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR` 属性中的列表中。
+
+=== `LoadBalancerClient` 过滤器
+
+`LoadBalancerClientFilter` 在交换属性 `ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR` 中查找URI。
+如果URL的scheme为 `lb`（例如：`lb://myservice`），它将使用Spring Cloud `LoadBalancerClient` 将名称
+（在本例中为 `myservice`）解析为实际的主机和端口，并在同一属性中替换URI。
+未经修改的原始URL会附加到 `ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR` 属性中的列表中。
+过滤器还会在 `ServerWebExchangeUtils.GATEWAY_SCHEME_PREFIX_ATTR` 属性中查找其是否等于 `lb`。如果是，则应用相同的规则。
+下面的清单配置一个 `LoadBalancerClientFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: myRoute
+        uri: lb://service
+        predicates:
+        - Path=/service/**
+----
+====
+
+NOTE: 默认情况下，当在 `LoadBalancer` 中找不到服务实例时，将返回 `503`。你可以通过设置
+`spring.cloud.gateway.loadbalancer.use404=true` 将网关配置为返回404。
+
+NOTE: 从 `LoadBalancer` 返回的 `ServiceInstance` 的 `isSecure` 值将覆盖对网关的请求中指定的scheme。
+例如：如果请求通过HTTPS进入网关，但 `ServiceInstance` 指示它不安全，则下游请求将通过HTTP发出。
+相反的情况也可以适用。但是，如果在网关配置中为路由指定了 `GATEWAY_SCHEME_PREFIX_ATTR`，
+则会删除前缀，并且路由URL产生的scheme将覆盖 `ServiceInstance` 配置。
+
+WARNING: `LoadBalancerClientFilter` 在底层使用了阻塞的ribbon `LoadBalancerClient`。
+我们建议你<<reactive-loadbalancer-client-filter,改用 `ReactiveLoadBalancerClientFilter`>>。
+你可以通过将 `spring.cloud.loadbalancer.ribbon.enabled` 的值设置为 `false` 来切换到它。
+
+[[reactive-loadbalancer-client-filter]]
+=== The `ReactiveLoadBalancerClientFilter`
+
+`ReactiveLoadBalancerClientFilter` 在名为 `ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR` 的交换属性中查找URI。
+如果URL具有 `lb` scheme（例如：`lb://myservice`），它将使用Spring Cloud `ReactorLoadBalancer` 将名称
+（在本示例中为 `myservice`）解析为实际的主机和端口，并替换同一属性中的URI。
+未经修改的原始URL会附加到 `ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR` 属性中的列表中。
+过滤器还会在 `ServerWebExchangeUtils.GATEWAY_SCHEME_PREFIX_ATTR` 属性中查找其是否等于 `lb`。如果是，则应用相同的规则。
+以下清单配置了 `ReactiveLoadBalancerClientFilter`：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: myRoute
+        uri: lb://service
+        predicates:
+        - Path=/service/**
+----
+====
+
+NOTE: 默认情况下，当 `ReactorLoadBalancer` 无法找到服务实例时，将返回 `503`。你可以通过设置
+`spring.cloud.gateway.loadbalancer.use404=true` 将网关配置为返回 `404`。
+
+NOTE: 从 `ReactiveLoadBalancerClientFilter` 返回的 `ServiceInstance` 的 `isSecure` 值将覆盖对网关的请求中指定的scheme。
+例如：如果请求通过HTTPS进入网关，但 `ServiceInstance` 指示它不安全，则下游请求将通过HTTP发出。
+相反的情况也可以适用。但是，如果在网关配置中为路由指定了 `GATEWAY_SCHEME_PREFIX_ATTR`，则会删除前缀，
+并且路由URL产生的schema将覆盖 `ServiceInstance` 配置。
+
+=== Netty路由过滤器
+
+如果位于 `ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR` 交换属性中的URL具有http或https schema，
+则将运行Netty路由过滤器。它使用Netty `HttpClient` 发出下游代理请求。
+响应被放入 `ServerWebExchangeUtils.CLIENT_RESPONSE_ATTR` 交换属性中，以供以后的过滤器使用。
+（还有一个实验性的 `WebClientHttpRoutingFilter`，它执行相同的功能，但不需要Netty。）
+
+=== Netty写响应过滤器
+
+如果 `ServerWebExchangeUtils.CLIENT_RESPONSE_ATTR` 交换属性中存在Netty `HttpClientResponse`，则 `NettyWriteResponseFilter` 将运行。
+它在所有其他过滤器完成后运行，并将代理响应写回到网关客户端响应。
+（还有一个实验性的 `WebClientWriteResponseFilter` 执行相同的功能，但不需要Netty。）
+
+=== `RouteToRequestUrl` 过滤器
+
+如果 `ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR` 交换属性中有一个 `Route` 对象，则 `RouteToRequestUrlFilter` 将运行。
+它基于请求URI创建一个新URI，但使用 `Route` 对象的URI属性进行更新。
+新的URI放置在 `ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR` 交换属性中。
+
+如果URI具有scheme前缀，例如：`lb:ws://serviceid`，则将从URI中剥离 `lb` scheme，并将其放置在
+`ServerWebExchangeUtils.GATEWAY_SCHEME_PREFIX_ATTR` 中，以供稍后在过滤器链中使用。
+
+=== Websocket路由过滤器
+
+如果位于 `ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR` 交换属性中的URL具有 `ws` 或 `wss` schema，
+则将运行websocket路由过滤器。它使用Spring WebSocket基础设施向下游转发websocket请求。
+
+你可以通过为URI加上 `lb` 前缀来均衡websocket的负载，例如：`lb:ws://serviceid`。
+
+NOTE: 如果将 https://github.com/sockjs[SockJS]用作常规HTTP的降级，则应配置常规HTTP路由以及websocket路由。
+
+下面的清单配置了一个websocket路由过滤器：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      # SockJS route
+      - id: websocket_sockjs_route
+        uri: http://localhost:3001
+        predicates:
+        - Path=/websocket/info/**
+      # Normal Websocket route
+      - id: websocket_route
+        uri: ws://localhost:3001
+        predicates:
+        - Path=/websocket/**
+----
+====
+
+=== 网关指标过滤器
+
+要启用网关指标，请添加 `spring-boot-starter-actuator` 作为项目依赖项。
+然后，默认情况下，只要未将 `spring.cloud.gateway.metrics.enabled` 属性设置为 `false`，网关指标过滤器就会运行。
+该过滤器添加了一个带有以下tag且名为 `gateway.requests` 的计时器度量标准：
+
+* `routeId`: 路由ID.
+* `routeUri`: API路由到的URI。
+* `outcome`: 结果，按 link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/HttpStatus.Series.html[HttpStatus.Series]分类。
+* `status`: 返回给客户端的请求的HTTP状态。
+* `httpStatusCode`: 返回给客户端的请求的HTTP状态码。
+* `httpMethod`: 用于请求的HTTP方法。
+
+然后，可以从 `/actuator/metrics/gateway.requests` 中抓取这些度量标准，并且可以轻松地将它们与Prometheus集成以创建
+link:images/spring-cloud-gateway/gateway-grafana-dashboard.jpeg[Grafana]
+link:spring-cloud-gateway/gateway-grafana-dashboard.json[dashboard]。
+
+NOTE: 要启用prometheus端点，请添加 `micrometer-registry-prometheus` 作为项目依赖项。
+
+=== 将交换标记为已路由
+
+网关路由 `ServerWebExchange` 之后，通过将 `gatewayAlreadyRouted` 添加到交换属性，将交换标记为“`routed`”。
+将请求标记为已路由后，其他路由过滤器将不会再次路由请求，实质上会跳过该过滤器。
+你可以使用以下便捷方法将交换标记为已路由或检查交换是否已路由。
+
+* `ServerWebExchangeUtils.isAlreadyRouted` 接受一个 `ServerWebExchange` 对象，并检查它是否已被“`routed`”。
+* `ServerWebExchangeUtils.setAlreadyRouted` 接受一个 `ServerWebExchange` 对象，并将其标记为“`routed`”。
+
+== TLS和SSL
+
+网关可以通过常规的Spring服务器配置监听HTTPS上的请求。以下示例显示了如何执行此操作：
+
+.application.yml
+====
+[source,yaml]
+----
+server:
+  ssl:
+    enabled: true
+    key-alias: scg
+    key-store-password: scg1234
+    key-store: classpath:scg-keystore.p12
+    key-store-type: PKCS12
+----
+====
+
+你可以将网关routes路由到HTTP和HTTPS后端。
+如果要路由到HTTPS后端，则可以使用以下配置将网关配置为信任所有下游证书：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      httpclient:
+        ssl:
+          useInsecureTrustManager: true
+----
+====
+
+不可在生产环境使用不安全的信任管理器。
+对于生产部署，可以使用以下配置为网关配置一组可以信任的已知证书：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      httpclient:
+        ssl:
+          trustedX509Certificates:
+          - cert1.pem
+          - cert2.pem
+----
+====
+
+如果未为Spring Cloud Gateway提供受信任的证书，则使用默认的信任库（你可以通过设置 `javax.net.ssl.trustStore` 系统属性来覆盖它）。
+
+=== TLS握手
+
+网关维护一个客户端池，该客户端池用于路由到后端。通过HTTPS进行通信时，客户端会启动TLS握手。
+许多超时与此握手相关联。你可以配置这些超时，如下所示（显示默认值）：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      httpclient:
+        ssl:
+          handshake-timeout-millis: 10000
+          close-notify-flush-timeout-millis: 3000
+          close-notify-read-timeout-millis: 0
+----
+====
+
+== 配置
+
+Spring Cloud Gateway的配置由一组 `RouteDefinitionLocator` 实例驱动。
+以下清单显示了 `RouteDefinitionLocator` 接口的定义：
+
+.RouteDefinitionLocator.java
+====
+[source,java]
+----
+public interface RouteDefinitionLocator {
+    Flux<RouteDefinition> getRouteDefinitions();
+}
+----
+====
+
+默认情况下，`PropertiesRouteDefinitionLocator` 通过使用Spring Boot的 `@ConfigurationProperties` 机制加载属性。
+
+之前的配置示例均使用快捷方式符号，该快捷方式符号使用位置参数而不是命名参数。以下两个示例是等效的：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: setstatus_route
+        uri: https://example.org
+        filters:
+        - name: SetStatus
+          args:
+            status: 401
+      - id: setstatusshortcut_route
+        uri: https://example.org
+        filters:
+        - SetStatus=401
+----
+====
+
+对于网关的某些用法，properties是足够的，但是某些生产用例会受益于从外部源（例如：数据库）加载配置。
+未来的里程碑版本将有基于Spring数据存储库（例如：Redis，MongoDB和Cassandra）的 `RouteDefinitionLocator` 实现。
+
+== 路由元数据配置
+
+你可以使用元数据为每个路由配置其他参数，如下所示：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: route_with_metadata
+        uri: https://example.org
+        metadata:
+          optionName: "OptionValue"
+          compositeObject:
+            name: "value"
+          iAmNumber: 1
+----
+====
+
+你可以从一个交换中获取所有元数据属性，如下所示：
+
+====
+[source]
+----
+Route route = exchange.getAttribute(GATEWAY_ROUTE_ATTR);
+// get all metadata properties
+route.getMetadata();
+// get a single metadata property
+route.getMetadata(someKey);
+----
+====
+
+== Http超时配置
+
+可以为所有路由配置Http超时（响应和连接），并为每个特定路由覆盖Http超时。
+
+=== 全局超时
+
+要配置全局http超时：+
+`connect-timeout` 必须以毫秒为单位指定。+
+`response-timeout` 必须指定为 `java.time.Duration`。
+
+.global http timeouts example
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      httpclient:
+        connect-timeout: 1000
+        response-timeout: 5s
+----
+
+=== 每个路由超时
+
+
+要配置每个路由超时：+
+`connect-timeout` 必须以毫秒为单位指定。+
+`response-timeout` 必须以毫秒为单位指定。
+
+.per-route http timeouts configuration via configuration
+[source,yaml]
+----
+      - id: per_route_timeouts
+        uri: https://example.org
+        predicates:
+          - name: Path
+            args:
+              pattern: /delay/{timeout}
+        metadata:
+          response-timeout: 200
+          connect-timeout: 200
+----
+
+.per-route timeouts configuration using Java DSL
+[source,java]
+----
+import static org.springframework.cloud.gateway.support.RouteMetadataUtils.CONNECT_TIMEOUT_ATTR;
+import static org.springframework.cloud.gateway.support.RouteMetadataUtils.RESPONSE_TIMEOUT_ATTR;
+
+      @Bean
+      public RouteLocator customRouteLocator(RouteLocatorBuilder routeBuilder){
+         return routeBuilder.routes()
+               .route("test1", r -> {
+                  return r.host("*.somehost.org").and().path("/somepath")
+                        .filters(f -> f.addRequestHeader("header1", "header-value-1"))
+                        .uri("http://someuri")
+                        .metadata(RESPONSE_TIMEOUT_ATTR, 200)
+                        .metadata(CONNECT_TIMEOUT_ATTR, 200);
+               })
+               .build();
+      }
+----
+
+=== 流式Java路由API
+
+为了允许在Java中进行简单配置，`RouteLocatorBuilder` bean包含了一个流式API。以下清单显示了它的工作方式：
+
+.GatewaySampleApplication.java
+====
+[source,java]
+----
+// static imports from GatewayFilters and RoutePredicates
+@Bean
+public RouteLocator customRouteLocator(RouteLocatorBuilder builder, ThrottleGatewayFilterFactory throttle) {
+    return builder.routes()
+            .route(r -> r.host("**.abc.org").and().path("/image/png")
+                .filters(f ->
+                        f.addResponseHeader("X-TestHeader", "foobar"))
+                .uri("http://httpbin.org:80")
+            )
+            .route(r -> r.path("/image/webp")
+                .filters(f ->
+                        f.addResponseHeader("X-AnotherHeader", "baz"))
+                .uri("http://httpbin.org:80")
+                .metadata("key", "value")
+            )
+            .route(r -> r.order(-1)
+                .host("**.throttle.org").and().path("/get")
+                .filters(f -> f.filter(throttle.apply(1,
+                        1,
+                        10,
+                        TimeUnit.SECONDS)))
+                .uri("http://httpbin.org:80")
+                .metadata("key", "value")
+            )
+            .build();
+}
+----
+====
+
+此样式还允许更多自定义谓词断言。由 `RouteDefinitionLocator` Bean定义的谓词使用逻辑 `and` 进行组合。
+通过使用流式Java API，可以在 `Predicate` 类上使用 `and()`，`or()` 和 `negate()` 运算符。
+
+=== `DiscoveryClient` 路由定义定位器
+
+你可以将网关配置为基于在 `DiscoveryClient` 服务注册中心中注册的服务来创建路由。
+
+要启用此功能，请设置 `spring.cloud.gateway.discovery.locator.enabled=true`
+并确保在类路径上启用了 `DiscoveryClient` 实现（例如：Netflix Eureka，Consul或Zookeeper）。
+
+==== 为 `DiscoveryClient` 路由配置谓词和过滤器
+
+默认情况下，fateway为使用 `DiscoveryClient` 创建的路由定义单个谓词和过滤器。
+
+默认谓词是使用 `/serviceId/**` 模式定义的路径谓词，其中 `serviceId` 是来自 `DiscoveryClient` 的服务的ID。
+
+默认过滤器是带有正则表达式 `/serviceId/(?<remaining>.*)` 和替换 `/${remaining}` 的重写路径过滤器。
+这会在向下游发送请求之前从路径中剥离服务ID。
+
+如果要自定义 `DiscoveryClient` 路由使用的谓词或过滤器，请设置 `spring.cloud.gateway.discovery.locator.predicates[x]`
+和 `spring.cloud.gateway.discovery.locator.filters[y]`。这样做时，如果希望保留默认功能，则需要确保包括前面显示的默认谓词和过滤器。
+下面的例子展示了如何做:
+
+.application.properties
+====
+[source,properties]
+----
+spring.cloud.gateway.discovery.locator.predicates[0].name: Path
+spring.cloud.gateway.discovery.locator.predicates[0].args[pattern]: "'/'+serviceId+'/**'"
+spring.cloud.gateway.discovery.locator.predicates[1].name: Host
+spring.cloud.gateway.discovery.locator.predicates[1].args[pattern]: "'**.foo.com'"
+spring.cloud.gateway.discovery.locator.filters[0].name: Hystrix
+spring.cloud.gateway.discovery.locator.filters[0].args[name]: serviceId
+spring.cloud.gateway.discovery.locator.filters[1].name: RewritePath
+spring.cloud.gateway.discovery.locator.filters[1].args[regexp]: "'/' + serviceId + '/(?<remaining>.*)'"
+spring.cloud.gateway.discovery.locator.filters[1].args[replacement]: "'/${remaining}'"
+----
+====
+
+== Reactor Netty访问日志
+
+要启用Reactor Netty访问日志，请设置 `-Dreactor.netty.http.server.accessLogEnabled=true`。
+
+IMPORTANT: 它必须是Java系统属性，而不是Spring Boot属性。
+
+你可以将日志记录系统配置为具有单独的访问日志文件。以下示例创建一个Logback配置：
+
+.logback.xml
+====
+[source,xml]
+----
+    <appender name="accessLog" class="ch.qos.logback.core.FileAppender">
+        <file>access_log.log</file>
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="async" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="accessLog" />
+    </appender>
+
+    <logger name="reactor.netty.http.server.AccessLog" level="INFO" additivity="false">
+        <appender-ref ref="async"/>
+    </logger>
+----
+====
+
+== CORS配置
+
+你可以配置网关以控制CORS行为。“`global`” CORS配置是URL模式到
+{javadoc-spring}/web/cors/CorsConfiguration.html[Spring Framework `CorsConfiguration`]的映射。以下示例配置了CORS：
+
+.application.yml
+====
+[source,yaml]
+----
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "https://docs.spring.io"
+            allowedMethods:
+            - GET
+----
+====
+
+在前面的示例中，对于所有GET请求的路径，允许来自 `docs.spring.io` 的请求中的CORS请求。
+
+要为未由某些网关路由谓词处理的请求提供相同的CORS配置，
+请将 `spring.cloud.gateway.globalcors.add-to-simple-url-handler-mapping` 属性设置为 `true`。
+当你尝试支持CORS预检请求，并且你的路由谓词由于HTTP方法是 `options` 而未评估为 `true` 时，这很有用。
+
+
+== Actuator API
+
+通过 `/gateway` 执行器端点，你可以监视Spring Cloud Gateway应用程序并与之交互。
+为了可远程访问，必须在应用程序属性中
+https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html#production-ready-endpoints-exposing-endpoints[通过HTTP或JMX公开]和
+https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html#production-ready-endpoints-enabling-endpoints[启用]
+端点。以下清单显示了如何执行此操作：
+
+.application.properties
+====
+[source,properties]
+----
+management.endpoint.gateway.enabled=true # default value
+management.endpoints.web.exposure.include=gateway
+----
+====
+
+=== 详细Actuator格式
+
+新的，更详细的格式已添加到Spring Cloud Gateway。
+它为每个路由添加了更多详细信息，使你可以查看与每个路由关联的谓词和过滤器以及任何可用的配置。
+以下示例配置 `/actuator/gateway/routes`：
+
+====
+[source,json]
+----
+[
+  {
+    "predicate": "(Hosts: [**.addrequestheader.org] && Paths: [/headers], match trailing slash: true)",
+    "route_id": "add_request_header_test",
+    "filters": [
+      "[[AddResponseHeader X-Response-Default-Foo = 'Default-Bar'], order = 1]",
+      "[[AddRequestHeader X-Request-Foo = 'Bar'], order = 1]",
+      "[[PrefixPath prefix = '/httpbin'], order = 2]"
+    ],
+    "uri": "lb://testservice",
+    "order": 0
+  }
+]
+----
+====
+
+默认情况下启用此功能。要禁用它，请设置以下属性：
+
+.application.properties
+====
+[source,properties]
+----
+spring.cloud.gateway.actuator.verbose.enabled=false
+----
+====
+
+在将来的版本中，它将默认为 `true`。
+
+=== 检索路由过滤器
+
+本节详细介绍如何检索路由过滤器，包括：
+
+* <<gateway-global-filters>>
+* <<gateway-single-route-filters>>
+
+[[gateway-global-filters]]
+==== 全局过滤器
+
+要检索应用于所有路由的<<global-filters,全局过滤器>>，请发送 `GET` `/actuator/gateway/globalfilters` 请求。
+产生的响应类似于以下内容：
+
+====
+----
+{
+  "org.springframework.cloud.gateway.filter.LoadBalancerClientFilter@77856cc5": 10100,
+  "org.springframework.cloud.gateway.filter.RouteToRequestUrlFilter@4f6fd101": 10000,
+  "org.springframework.cloud.gateway.filter.NettyWriteResponseFilter@32d22650": -1,
+  "org.springframework.cloud.gateway.filter.ForwardRoutingFilter@106459d9": 2147483647,
+  "org.springframework.cloud.gateway.filter.NettyRoutingFilter@1fbd5e0": 2147483647,
+  "org.springframework.cloud.gateway.filter.ForwardPathFilter@33a71d23": 0,
+  "org.springframework.cloud.gateway.filter.AdaptCachedBodyGlobalFilter@135064ea": 2147483637,
+  "org.springframework.cloud.gateway.filter.WebsocketRoutingFilter@23c05889": 2147483646
+}
+----
+====
+
+该响应包含已找到的全局过滤器的详细信息。
+对于每个全局过滤器，过滤器对象都有一个字符串表示形式（例如：
+`org.springframework.cloud.gateway.filter.LoadBalancerClientFilter@77856cc5`）以及它在过滤器链中的相应顺序。
+
+[[gateway-single-route-filters]]
+==== 路由过滤器
+
+要检索应用于路由的<<gatewayfilter-factories,`GatewayFilter` 工厂>>，请发送 `GET` `/actuator/gateway/routefilters` 请求。
+产生的响应类似于以下内容：
+
+====
+----
+{
+  "[AddRequestHeaderGatewayFilterFactory@570ed9c configClass = AbstractNameValueGatewayFilterFactory.NameValueConfig]": null,
+  "[SecureHeadersGatewayFilterFactory@fceab5d configClass = Object]": null,
+  "[SaveSessionGatewayFilterFactory@4449b273 configClass = Object]": null
+}
+----
+====
+
+该响应包含应用于任何特定路由的 `GatewayFilter` 工厂的详细信息。
+对于每个工厂，都有一个对应对象的字符串表示形式（例如：`[SecureHeadersGatewayFilterFactory@fceab5d configClass = Object]`）。
+请注意，`null` 值是由于端点控制器的实现不完整而引起的，因为它试图设置对象在过滤器链中的顺序，而这并不适用于 `GatewayFilter` 工厂对象。
+
+=== 刷新路由缓存
+
+要清除路由缓存，请发送 `POST` `/actuator/gateway/refresh` 请求。该请求返回200，但没有响应体。
+
+=== 检索网关中定义的路由
+
+要检索网关中定义的路由，请发送 `/actuator/gateway/routes` 请求。产生的响应类似于以下内容：
+
+====
+----
+[{
+  "route_id": "first_route",
+  "route_object": {
+    "predicate": "org.springframework.cloud.gateway.handler.predicate.PathRoutePredicateFactory$$Lambda$432/1736826640@1e9d7e7d",
+    "filters": [
+      "OrderedGatewayFilter{delegate=org.springframework.cloud.gateway.filter.factory.PreserveHostHeaderGatewayFilterFactory$$Lambda$436/674480275@6631ef72, order=0}"
+    ]
+  },
+  "order": 0
+},
+{
+  "route_id": "second_route",
+  "route_object": {
+    "predicate": "org.springframework.cloud.gateway.handler.predicate.PathRoutePredicateFactory$$Lambda$432/1736826640@cd8d298",
+    "filters": []
+  },
+  "order": 0
+}]
+----
+====
+
+该响应包含网关中定义的所有路由的详细信息。下表描述了响应的每个元素（每个均是一个路由）的结构：
+
+[cols="3,2,4"]
+|===
+| 字段路径 | 类型 | 描述
+
+|`route_id`
+| String
+| 路由ID。
+
+|`route_object.predicate`
+| Object
+| 路由谓词。
+
+|`route_object.filters`
+| Array
+| 已应用于路由的<<gatewayfilter-factories, `GatewayFilter` 工厂>>。
+
+|`order`
+| Number
+| 路由顺序。
+
+|===
+
+[[gateway-retrieving-information-about-a-particular-route]]
+=== 检索有关特定路由的信息
+
+要检索有关单个路由的信息，请发送 `GET` `/actuator/gateway/routes/{id}`（例如：`/actuator/gateway/routes/first_route`）请求。
+产生的响应类似于以下内容：
+
+====
+----
+{
+  "id": "first_route",
+  "predicates": [{
+    "name": "Path",
+    "args": {"_genkey_0":"/first"}
+  }],
+  "filters": [],
+  "uri": "https://www.uri-destination.org",
+  "order": 0
+}]
+----
+====
+
+下表描述了响应的结构：
+
+[cols="3,2,4"]
+|===
+| 字段路径 | 类型 | 描述
+
+|`id`
+| String
+| 路由ID。
+
+|`predicates`
+| Array
+| 路由谓词的集合。每个条目都定义给定谓词的名称和自变量。
+
+|`filters`
+| Array
+| 应用于路由的过滤器集合。
+
+|`uri`
+| String
+| 路由的目标URI。
+
+|`order`
+| Number
+| 路由顺序。
+
+|===
+
+=== 创建和删除特定路由
+
+要创建路由，请使用指定路由字段的JSON正文向 `/gateway/routes/{id_route_to_create}` 发送 `POST` 请求（请参阅 <<gateway-retrieving-information-about-a-particular-route>>）。
+
+要删除路由，请向 `/gateway/routes/{id_route_to_delete}` 发送 `DELETE` 请求。
+
+=== 回顾：所有端点的列表
+
+下表总结了Spring Cloud Gateway执行器端点（请注意，每个端点都以 `/actuator/gateway` 为基本路径）：
+
+[cols="2,2,5"]
+|===
+| ID | HTTP方法 | 描述
+
+|`globalfilters`
+|GET
+| 显示应用于路由的全局过滤器列表。
+
+|`routefilters`
+|GET
+| 显示应用于特定路由的 `GatewayFilter` 工厂列表。
+
+|`refresh`
+|POST
+| 清除路由缓存。
+
+|`routes`
+|GET
+| 显示网关中定义的路由列表。
+
+|`routes/{id}`
+|GET
+| 显示有关特定路由的信息。
+
+|`routes/{id}`
+|POST
+| 将新路由添加到网关。
+
+|`routes/{id}`
+|DELETE
+| 从网关中删除现有路由。
+
+|===
+
+[[troubleshooting]]
+== 故障排除
+
+本部分介绍使用Spring Cloud Gateway时可能出现的常见问题。
+
+=== 日志级别
+
+以下记录器可能包含 `DEBUG` 和 `TRACE` 级别的重要疑难解答信息：
+
+- `org.springframework.cloud.gateway`
+- `org.springframework.http.server.reactive`
+- `org.springframework.web.reactive`
+- `org.springframework.boot.autoconfigure.web`
+- `reactor.netty`
+- `redisratelimiter`
+
+=== 窃听
+
+Reactor Netty `HttpClient` 和 `HttpServer` 可以启用窃听。
+与将 `reactor.netty` 日志级别设置为 `DEBUG` 或 `TRACE` 结合使用时，
+它将启用信息记录，例如：通过网络发送和接收的头部和正文。
+要启用窃听，请分别为 `HttpServer` 和 `HttpClient` 设置 `spring.cloud.gateway.httpserver.wiretap=true` 或
+`spring.cloud.gateway.httpclient.wiretap=true`。
+
+== 开发人员指南
+
+TODO: 编写自定义集成概述
+
+=== 编写自定义路由谓词工厂
+
+TODO: 编写自定义路由谓词工厂文档
+
+=== 编写自定义GatewayFilter工厂
+
+要编写 `GatewayFilter`，必须实现 `GatewayFilterFactory`。
+你可以继承一个名为 `AbstractGatewayFilterFactory` 的抽象类。
+以下示例显示了如何执行此操作：
+
+.PreGatewayFilterFactory.java
+====
+[source,java]
+----
+public class PreGatewayFilterFactory extends AbstractGatewayFilterFactory<PreGatewayFilterFactory.Config> {
+
+    public PreGatewayFilterFactory() {
+        super(Config.class);
+    }
+
+    @Override
+    public GatewayFilter apply(Config config) {
+        // grab configuration from Config object
+        return (exchange, chain) -> {
+            //If you want to build a "pre" filter you need to manipulate the
+            //request before calling chain.filter
+            ServerHttpRequest.Builder builder = exchange.getRequest().mutate();
+            //use builder to manipulate the request
+            return chain.filter(exchange.mutate().request(request).build());
+        };
+    }
+
+    public static class Config {
+        //Put the configuration properties for your filter here
+    }
+
+}
+----
+
+.PostGatewayFilterFactory.java
+[source,java]
+----
+public class PostGatewayFilterFactory extends AbstractGatewayFilterFactory<PostGatewayFilterFactory.Config> {
+
+    public PostGatewayFilterFactory() {
+        super(Config.class);
+    }
+
+    @Override
+    public GatewayFilter apply(Config config) {
+        // grab configuration from Config object
+        return (exchange, chain) -> {
+            return chain.filter(exchange).then(Mono.fromRunnable(() -> {
+                ServerHttpResponse response = exchange.getResponse();
+                //Manipulate the response in some way
+            }));
+        };
+    }
+
+    public static class Config {
+        //Put the configuration properties for your filter here
+    }
+
+}
+----
+====
+
+=== 编写自定义全局过滤器
+
+要编写自定义全局过滤器，必须实现 `GlobalFilter` 接口。这会将过滤器应用于所有请求。
+
+以下示例显示如何分别设置全局前置和后置过滤器：
+
+====
+[source,java]
+----
+@Bean
+public GlobalFilter customGlobalFilter() {
+    return (exchange, chain) -> exchange.getPrincipal()
+        .map(Principal::getName)
+        .defaultIfEmpty("Default User")
+        .map(userName -> {
+          //adds header to proxied request
+          exchange.getRequest().mutate().header("CUSTOM-REQUEST-HEADER", userName).build();
+          return exchange;
+        })
+        .flatMap(chain::filter);
+}
+
+@Bean
+public GlobalFilter customGlobalPostFilter() {
+    return (exchange, chain) -> chain.filter(exchange)
+        .then(Mono.just(exchange))
+        .map(serverWebExchange -> {
+          //adds header to response
+          serverWebExchange.getResponse().getHeaders().set("CUSTOM-RESPONSE-HEADER",
+              HttpStatus.OK.equals(serverWebExchange.getResponse().getStatusCode()) ? "It worked": "It did not work");
+          return serverWebExchange;
+        })
+        .then();
+}
+----
+====
+
+=== 编写自定义路由Locators和Writers
+
+TODO: 编写自定义路由Locators和Writers文档
+
+== 使用Spring MVC或Webflux构建一个简单的网关
+
+Spring Cloud Gateway提供了一个名为 `ProxyExchange` 的实用工具对象。
+你可以在常规的Spring Web处理程序中使用它作为方法参数。它通过mirror HTTP动词的方法支持基本的下游HTTP交换。
+使用MVC，它还支持通过 `forward()` 方法转发到本地处理程序。
+要使用 `ProxyExchange`，请在类路径中包含正确的模块（`spring-cloud-gateway-mvc` 或 `spring-cloud-gateway-webflux`）。
+
+以下MVC示例代理了对 `/test` 的请求，将其委托到下游的远程服务器：
+
+====
+[source,java]
+----
+@RestController
+@SpringBootApplication
+public class GatewaySampleApplication {
+
+    @Value("${remote.home}")
+    private URI home;
+
+    @GetMapping("/test")
+    public ResponseEntity<?> proxy(ProxyExchange<byte[]> proxy) throws Exception {
+        return proxy.uri(home.toString() + "/image/png").get();
+    }
+
+}
+----
+====
+
+以下示例对Webflux执行相同的操作：
+
+====
+[source,java]
+----
+@RestController
+@SpringBootApplication
+public class GatewaySampleApplication {
+
+    @Value("${remote.home}")
+    private URI home;
+
+    @GetMapping("/test")
+    public Mono<ResponseEntity<?>> proxy(ProxyExchange<byte[]> proxy) throws Exception {
+        return proxy.uri(home.toString() + "/image/png").get();
+    }
+
+}
+----
+====
+
+`ProxyExchange` 上的便捷方法使处理程序方法可以发现并增强传入请求的URI路径。
+例如：你可能想要提取路径末尾的元素以将它们传递到下游：
+
+====
+[source,java]
+----
+@GetMapping("/proxy/path/**")
+public ResponseEntity<?> proxyPath(ProxyExchange<byte[]> proxy) throws Exception {
+  String path = proxy.path("/proxy/path/");
+  return proxy.uri(home.toString() + "/foos/" + path).get();
+}
+----
+====
+
+网关处理程序方法可以使用Spring MVC和Webflux的所有功能。
+结果，例如：你可以注入请求头和查询参数，并且可以使用映射注解中的声明来约束传入的请求。
+有关这些功能的更多详细信息，请参见Spring MVC中有关 `@RequestMapping` 的文档。
+
+你可以使用 `ProxyExchange` 上的 `header()` 方法将头部添加到下游响应中。
+
+你还可以通过将映射器添加到 `get()` 方法（和其他方法）来操纵响应头（以及响应中你喜欢的任何其他内容）。
+映射器是一个 `Function`，它接收传入的 `ResponseEntity` 并将其转换为传出的实体。
+
+对不传递到下游的“`sensitive`”头部（默认情况下为 `cookie` 和 `authorization`）和 “`proxy`”头部(`x-forwarded-*`) 提供一流的支持。
+
+== 配置属性
+
+要查看所有与Spring Cloud Gateway相关的配置属性的列表，请参阅<<appendix,附录>>。
+
+include::appendix.adoc[leveloffset=+1]

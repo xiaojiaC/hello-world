@@ -1,0 +1,81 @@
+|===
+|名称 | 默认值 | 描述
+
+|spring.cloud.gateway.default-filters |  | 应用于每个路由的过滤器定义列表。
+|spring.cloud.gateway.discovery.locator.enabled | false | 启用DiscoveryClient网关集成的标志。
+|spring.cloud.gateway.discovery.locator.filters |  |
+|spring.cloud.gateway.discovery.locator.include-expression | true | 将评估是否在网关集成中包括服务的SpEL表达式，默认为：true。
+|spring.cloud.gateway.discovery.locator.lower-case-service-id | false | 谓词和过滤器中的小写serviceId选项，默认为false。当eureka自动将serviceId大写时，对eureka很有用。因此 MYSERIVCE 将与 /myservice/** 匹配
+|spring.cloud.gateway.discovery.locator.predicates |  |
+|spring.cloud.gateway.discovery.locator.route-id-prefix |  | routeId的前缀，默认为 discoveryClient.getClass().getSimpleName() + "_"。服务ID将被添加以创建routeId。
+|spring.cloud.gateway.discovery.locator.url-expression | 'lb://'+serviceId | 为每个路由创建uri的SpEL表达式，默认为：'lb://'+serviceId。
+|spring.cloud.gateway.enabled | true | 启用网关功能。
+|spring.cloud.gateway.filter.remove-hop-by-hop.headers |  |
+|spring.cloud.gateway.filter.remove-hop-by-hop.order |  |
+|spring.cloud.gateway.filter.request-rate-limiter.deny-empty-key | true | 如果Key Resolver返回空key，则切换为拒绝请求，默认为true。
+|spring.cloud.gateway.filter.request-rate-limiter.empty-key-status-code |  | denyEmptyKey为true时返回的HttpStatus，默认为FORBIDDEN。
+|spring.cloud.gateway.filter.secure-headers.content-security-policy | default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src 'none'; script-src https:; style-src 'self' https: 'unsafe-inline' |
+|spring.cloud.gateway.filter.secure-headers.content-type-options | nosniff |
+|spring.cloud.gateway.filter.secure-headers.disable |  |
+|spring.cloud.gateway.filter.secure-headers.download-options | noopen |
+|spring.cloud.gateway.filter.secure-headers.frame-options | DENY |
+|spring.cloud.gateway.filter.secure-headers.permitted-cross-domain-policies | none |
+|spring.cloud.gateway.filter.secure-headers.referrer-policy | no-referrer |
+|spring.cloud.gateway.filter.secure-headers.strict-transport-security | max-age=631138519 |
+|spring.cloud.gateway.filter.secure-headers.xss-protection-header | 1 ; mode=block |
+|spring.cloud.gateway.forwarded.enabled | true | 启用ForwardedHeaderFilter。
+|spring.cloud.gateway.globalcors.cors-configurations |  |
+|spring.cloud.gateway.httpclient.connect-timeout |  | 连接超时（以毫秒为单位），默认值为45s。
+|spring.cloud.gateway.httpclient.pool.acquire-timeout |  | 仅对于FIXED类型，等待获取的最长时间（以毫秒为单位）。
+|spring.cloud.gateway.httpclient.pool.max-connections |  | 仅对于FIXED类型，是在现有连接上开始挂起获取之前的最大连接数。
+|spring.cloud.gateway.httpclient.pool.max-idle-time |  | 以毫秒为单位的最大空闲时间，之后通道将被关闭。如果为NULL，则没有最大空闲时间。
+|spring.cloud.gateway.httpclient.pool.name | proxy | 通道池映射名称，默认为proxy。
+|spring.cloud.gateway.httpclient.pool.type |  | 供HttpClient使用的池类型，默认为ELASTIC。
+|spring.cloud.gateway.httpclient.proxy.host |  | Netty HttpClient代理配置的主机名。
+|spring.cloud.gateway.httpclient.proxy.non-proxy-hosts-pattern |  | 配置的主机列表的正则表达式（Java）。应该直接可达，绕过代理。
+|spring.cloud.gateway.httpclient.proxy.password |  | Netty HttpClient代理配置的密码。
+|spring.cloud.gateway.httpclient.proxy.port |  | Netty HttpClient代理配置的端口。
+|spring.cloud.gateway.httpclient.proxy.username |  | Netty HttpClient代理配置的用户名。
+|spring.cloud.gateway.httpclient.response-timeout |  | 响应超时。
+|spring.cloud.gateway.httpclient.ssl.close-notify-flush-timeout | 3000ms | SSL close_notify刷新超时。默认为3000毫秒。
+|spring.cloud.gateway.httpclient.ssl.close-notify-flush-timeout-millis |  |
+|spring.cloud.gateway.httpclient.ssl.close-notify-read-timeout |  | SSL close_notify读取超时。默认为0毫秒。
+|spring.cloud.gateway.httpclient.ssl.close-notify-read-timeout-millis |  |
+|spring.cloud.gateway.httpclient.ssl.default-configuration-type |  | 默认的ssl配置类型。默认为TCP。
+|spring.cloud.gateway.httpclient.ssl.handshake-timeout | 10000ms | SSL握手超时。默认为10000毫秒。
+|spring.cloud.gateway.httpclient.ssl.handshake-timeout-millis |  |
+|spring.cloud.gateway.httpclient.ssl.key-password |  | Key密码，默认与keyStorePassword相同。
+|spring.cloud.gateway.httpclient.ssl.key-store |  | Netty HttpClient的Keystore路径。
+|spring.cloud.gateway.httpclient.ssl.key-store-password |  | Keystore密码。
+|spring.cloud.gateway.httpclient.ssl.key-store-provider |  | Netty HttpClient的Keystore供应商，可选字段。
+|spring.cloud.gateway.httpclient.ssl.key-store-type | JKS | Netty HttpClient的Keystore类型，默认为JKS。
+|spring.cloud.gateway.httpclient.ssl.trusted-x509-certificates |  | 用于验证远程端点证书的受信任证书。
+|spring.cloud.gateway.httpclient.ssl.use-insecure-trust-manager | false | 安装netty InsecureTrustManagerFactory。这是不安全的，不适合生产。
+|spring.cloud.gateway.httpclient.websocket.max-frame-payload-length |  | 最大帧有效负载长度。
+|spring.cloud.gateway.httpclient.wiretap | false | 为Netty HttpClient启用窃听调试。
+|spring.cloud.gateway.httpserver.wiretap | false | 为Netty HttpServer启用窃听调试。
+|spring.cloud.gateway.loadbalancer.use404 | false |
+|spring.cloud.gateway.metrics.enabled | true | 启用指标数据收集。
+|spring.cloud.gateway.metrics.tags |  | 将Tags映射添加到指标。
+|spring.cloud.gateway.redis-rate-limiter.burst-capacity-header | X-RateLimit-Burst-Capacity | 返回突发容量配置的头部名称。
+|spring.cloud.gateway.redis-rate-limiter.config |  |
+|spring.cloud.gateway.redis-rate-limiter.include-headers | true | 是否包括包含速率限制器信息的头部，默认为true。
+|spring.cloud.gateway.redis-rate-limiter.remaining-header | X-RateLimit-Remaining | 头部名称，它返回当前秒内剩余请求数。
+|spring.cloud.gateway.redis-rate-limiter.replenish-rate-header | X-RateLimit-Replenish-Rate | 返回补充率配置的头部名称。
+|spring.cloud.gateway.routes |  | 路由列表。
+|spring.cloud.gateway.set-status.original-status-header-name |  | 头部名称，其中包含代理请求的原http状态码。
+|spring.cloud.gateway.streaming-media-types |  |
+|spring.cloud.gateway.x-forwarded.enabled | true | 如果XForwardedHeadersFilter已启用。
+|spring.cloud.gateway.x-forwarded.for-append | true | 如果启用了将X-Forwarded-For作为列表追加。
+|spring.cloud.gateway.x-forwarded.for-enabled | true | 如果启用了X-Forwarded-For。
+|spring.cloud.gateway.x-forwarded.host-append | true | 如果启用了将X-Forwarded-Host作为列表追加。
+|spring.cloud.gateway.x-forwarded.host-enabled | true | 如果启用了X-Forwarded-Host。
+|spring.cloud.gateway.x-forwarded.order | 0 | XForwardedHeadersFilter的顺序。
+|spring.cloud.gateway.x-forwarded.port-append | true | 如果启用了将X-Forwarded-Port作为列表追加。
+|spring.cloud.gateway.x-forwarded.port-enabled | true | 如果启用了X-Forwarded-Port。
+|spring.cloud.gateway.x-forwarded.prefix-append | true | 如果启用将X-Forwarded-Prefix作为列表追加。
+|spring.cloud.gateway.x-forwarded.prefix-enabled | true | 如果启用了X-Forwarded-Prefix。
+|spring.cloud.gateway.x-forwarded.proto-append | true | 如果启用将X-Forwarded-Proto作为列表追加。
+|spring.cloud.gateway.x-forwarded.proto-enabled | true | 如果启用了X-Forwarded-Proto。
+
+|===

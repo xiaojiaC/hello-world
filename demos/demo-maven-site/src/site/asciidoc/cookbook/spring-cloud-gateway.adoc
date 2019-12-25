@@ -1,0 +1,39 @@
+= Spring Cloud Gateway
+:version: 2.2.1.RELEASE
+Version {version}
+:doctype: book
+:idprefix:
+:idseparator: -
+:toc: left
+:toclevels: 4
+:tabsize: 4
+:numbered:
+:sectanchors:
+:sectnums:
+:icons: font
+:hide-uri-scheme:
+:docinfo: shared,private
+:linkcss: true
+:stylesdir: css
+:stylesheet: spring.css
+:highlightjsdir: js/highlight
+:highlightjs-theme: atom-one-dark-reasonable
+
+:sc-ext: java
+:project-full-name: Spring Cloud Gateway
+:all: {asterisk}{asterisk}
+
+:javadoc-se: https://docs.oracle.com/javase/8/docs/api
+:javadoc-spring: https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework
+
+:code-spring-cloud-gateway: https://github.com/spring-cloud/spring-cloud-gateway/tree/
+
+该项目提供了一个在Spring生态系统之上构建的API网关，包括：Spring 5，Spring Boot 2和Project Reactor。
+Spring Cloud Gateway旨在提供一种简单有效的方法来路由到API，并为它们提供跨领域的关注，例如：安全性，监视/指标和弹性。
+
+include::cookbook/spring-cloud-gateway/gateway.adoc[]
+
+++++
+<script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
+<script type="text/javascript" src="js/toc.js"></script>
+++++

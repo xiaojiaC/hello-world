@@ -9,6 +9,8 @@ Version {version}
 :docinfo1:
 :idprefix:
 :idseparator: -
+:sectanchors:
+:sectnums:
 :linkcss: true
 :stylesdir: css
 :stylesheet: spring.css
