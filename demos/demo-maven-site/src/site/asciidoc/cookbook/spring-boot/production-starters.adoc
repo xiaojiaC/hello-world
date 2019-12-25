@@ -1,0 +1,8 @@
+|===
+| 名称 | 描述 | Pom
+
+| `spring-boot-starter-actuator`
+| 使用Spring Boot的Actuator的启动器，它提供了生产就绪功能，可帮助您监视和管理应用程序
+| {spring-boot-starters-code}/spring-boot-starter-actuator/pom.xml[Pom]
+
+|===

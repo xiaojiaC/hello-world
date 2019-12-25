@@ -1,0 +1,24 @@
+[[boot-documentation]]
+= Spring Boot
+:version: 2.2.2.RELEASE
+Version {version}
+:toc: left
+:toclevels: 4
+:tabsize: 4
+:docinfo: shared
+:docinfo1:
+:idprefix:
+:idseparator: -
+:linkcss: true
+:stylesdir: css
+:stylesheet: spring.css
+:highlightjsdir: js/highlight
+:highlightjs-theme: atom-one-dark-reasonable
+
+include::cookbook/spring-boot/using-spring-boot.adoc[leveloffset=+1]
+include::cookbook/spring-boot/spring-boot-features.adoc[leveloffset=+1]
+
+++++
+<script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
+<script type="text/javascript" src="js/toc.js"></script>
+++++

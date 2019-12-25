@@ -8,6 +8,7 @@ Hmm, the gate of Spring :-)
 * <<spring-session.adoc#overview,Spring Session>>
 * <<spring-mvc.adoc#mvc,Spring MVC>>
 * <<spring-test.adoc#testing-introduction,Spring Testing>>
+* <<spring-boot.adoc#using-boot,Spring Boot>>
 * <<spring-boot-test.adoc#boot-features-testing,Spring Boot Testing>>
 * <<spring-data-jpa.adoc#project,Spring Data JPA>>
 * <<spring-data-solr.adoc#preface,Spring Data Solr>>
