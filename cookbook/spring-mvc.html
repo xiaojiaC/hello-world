@@ -366,7 +366,7 @@ $(addBlockSwitches);
 </div>
 </div>
 <div class="sect1">
-<h2 id="mvc">1. Spring Web MVC</h2>
+<h2 id="mvc"><a class="anchor" href="#mvc"></a>1. Spring Web MVC</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Spring Web MVC是基于Servlet API构建的原始Web框架，从一开始就已包含在Spring框架中。
@@ -380,7 +380,7 @@ $(addBlockSwitches);
 <a href="https://github.com/spring-projects/spring-framework/wiki/Spring-Framework-Versions">Wiki</a>。</p>
 </div>
 <div class="sect2">
-<h3 id="mvc-servlet">1.1. DispatcherServlet</h3>
+<h3 id="mvc-servlet"><a class="anchor" href="#mvc-servlet"></a>1.1. DispatcherServlet</h3>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-dispatcher-handler">WebFlux</a></span></p>
 </div>
@@ -482,7 +482,7 @@ Spring Boot遵循不同的初始化顺序。Spring Boot并没有陷入Servlet容
 </table>
 </div>
 <div class="sect3">
-<h4 id="mvc-servlet-context-hierarchy">1.1.1. 上下文层次结构</h4>
+<h4 id="mvc-servlet-context-hierarchy"><a class="anchor" href="#mvc-servlet-context-hierarchy"></a>1.1.1. 上下文层次结构</h4>
 <div class="paragraph">
 <p><code>DispatcherServlet</code> 期望一个 <code>WebApplicationContext</code>（纯 <code>ApplicationContext</code> 的扩展）作为其自身的配置。
 <code>WebApplicationContext</code> 具有指向 <code>ServletContext</code> 和与其关联的 <code>Servlet</code> 的链接。
@@ -592,7 +592,7 @@ Spring Boot遵循不同的初始化顺序。Spring Boot并没有陷入Servlet容
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-servlet-special-bean-types">1.1.2. 特殊Bean类型</h4>
+<h4 id="mvc-servlet-special-bean-types"><a class="anchor" href="#mvc-servlet-special-bean-types"></a>1.1.2. 特殊Bean类型</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-special-bean-types">WebFlux</a></span></p>
 </div>
@@ -657,7 +657,7 @@ Spring Boot遵循不同的初始化顺序。Spring Boot并没有陷入Servlet容
 </table>
 </div>
 <div class="sect3">
-<h4 id="mvc-servlet-config">1.1.3. Web MVC配置</h4>
+<h4 id="mvc-servlet-config"><a class="anchor" href="#mvc-servlet-config"></a>1.1.3. Web MVC配置</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-framework-config">WebFlux</a></span></p>
 </div>
@@ -683,7 +683,7 @@ Spring Boot依靠MVC Java配置来配置Spring MVC，并提供了许多额外的
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-container-config">1.1.4. Servlet配置</h4>
+<h4 id="mvc-container-config"><a class="anchor" href="#mvc-container-config"></a>1.1.4. Servlet配置</h4>
 <div class="paragraph">
 <p>在Servlet 3.0+环境中，你可以选择以编程方式配置Servlet容器，作为替代方案或与 <code>web.xml</code> 文件结合使用。
 下面的示例注册一个 <code>DispatcherServlet</code>：</p>
@@ -791,7 +791,7 @@ public class MyWebApplicationInitializer implements WebApplicationInitializer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-servlet-sequence">1.1.5. 处理过程</h4>
+<h4 id="mvc-servlet-sequence"><a class="anchor" href="#mvc-servlet-sequence"></a>1.1.5. 处理过程</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-dispatcher-handler-sequence">WebFlux</a></span></p>
 </div>
@@ -879,7 +879,7 @@ public class MyWebApplicationInitializer implements WebApplicationInitializer {
 </table>
 </div>
 <div class="sect3">
-<h4 id="mvc-handlermapping-interceptor">1.1.6. 拦截</h4>
+<h4 id="mvc-handlermapping-interceptor"><a class="anchor" href="#mvc-handlermapping-interceptor"></a>1.1.6. 拦截</h4>
 <div class="paragraph">
 <p>所有 <code>HandlerMapping</code> 实现都支持处理程序拦截器，当你要将特定功能应用于某些请求时（例如，检查主体），该拦截器很有用。
 拦截器必须实现 <code>org.springframework.web.servlet</code> 包中 <code>HandlerInterceptor</code> 类的三种方法，
@@ -915,7 +915,7 @@ Bean或直接在 <code>RequestMappingHandlerAdapter</code> 上对其进行配置
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-exceptionhandlers">1.1.7. 异常</h4>
+<h4 id="mvc-exceptionhandlers"><a class="anchor" href="#mvc-exceptionhandlers"></a>1.1.7. 异常</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-dispatcher-exceptions">WebFlux</a></span></p>
 </div>
@@ -960,7 +960,7 @@ Bean或直接在 <code>RequestMappingHandlerAdapter</code> 上对其进行配置
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="mvc-excetionhandlers-handling">解析器链</h5>
+<h5 id="mvc-excetionhandlers-handling"><a class="anchor" href="#mvc-excetionhandlers-handling"></a>解析器链</h5>
 <div class="paragraph">
 <p>你可以通过在Spring配置中声明多个 <code>HandlerExceptionResolver</code> bean并根据需要设置其
 <code>order</code> 属性来形成异常解析器链。<code>order</code> 属性值越高，异常解析器的位置就越靠后。</p>
@@ -987,7 +987,7 @@ Bean或直接在 <code>RequestMappingHandlerAdapter</code> 上对其进行配置
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-customer-servlet-container-error-page">容器错误页面</h5>
+<h5 id="mvc-ann-customer-servlet-container-error-page"><a class="anchor" href="#mvc-ann-customer-servlet-container-error-page"></a>容器错误页面</h5>
 <div class="paragraph">
 <p>如果任何 <code>HandlerExceptionResolver</code> 都无法解决异常，因此该异常可以传播，
 或者如果响应状态设置为错误状态（即4xx，5xx），则Servlet容器可以在HTML中呈现默认错误页面。
@@ -1036,7 +1036,7 @@ Servlet API没有提供在Java中创建错误页面映射的方法。但是，�
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-viewresolver">1.1.8. 视图解析</h4>
+<h4 id="mvc-viewresolver"><a class="anchor" href="#mvc-viewresolver"></a>1.1.8. 视图解析</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-viewresolution">WebFlux</a></span></p>
 </div>
@@ -1099,7 +1099,7 @@ Servlet API没有提供在Java中创建错误页面映射的方法。但是，�
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="mvc-viewresolver-handling">处理</h5>
+<h5 id="mvc-viewresolver-handling"><a class="anchor" href="#mvc-viewresolver-handling"></a>处理</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-viewresolution-handling">WebFlux</a></span></p>
 </div>
@@ -1119,7 +1119,7 @@ Servlet API没有提供在Java中创建错误页面映射的方法。但是，�
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-redirecting-redirect-prefix">重定向</h5>
+<h5 id="mvc-redirecting-redirect-prefix"><a class="anchor" href="#mvc-redirecting-redirect-prefix"></a>重定向</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-redirecting-redirect-prefix">WebFlux</a></span></p>
 </div>
@@ -1137,7 +1137,7 @@ Servlet API没有提供在Java中创建错误页面映射的方法。但是，�
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-redirecting-forward-prefix">转发</h5>
+<h5 id="mvc-redirecting-forward-prefix"><a class="anchor" href="#mvc-redirecting-forward-prefix"></a>转发</h5>
 <div class="paragraph">
 <p>你还可以使用特殊的 <code>forward:</code> 前缀表示最终由 <code>UrlBasedViewResolver</code> 和子类解析的视图名称。
 这将创建一个 <code>InternalResourceView</code>，它执行 <code>RequestDispatcher.forward()</code>。
@@ -1147,7 +1147,7 @@ Servlet API没有提供在Java中创建错误页面映射的方法。但是，�
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-multiple-representations">内容协商</h5>
+<h5 id="mvc-multiple-representations"><a class="anchor" href="#mvc-multiple-representations"></a>内容协商</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-multiple-representations">WebFlux</a></span></p>
 </div>
@@ -1169,7 +1169,7 @@ Servlet API没有提供在Java中创建错误页面映射的方法。但是，�
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-localeresolver">1.1.9. 语言环境</h4>
+<h4 id="mvc-localeresolver"><a class="anchor" href="#mvc-localeresolver"></a>1.1.9. 语言环境</h4>
 <div class="paragraph">
 <p>正如Spring Web MVC框架所做的那样，Spring体系结构的大多数部分都支持国际化。
 使用 <code>DispatcherServlet</code>，你可以使用客户端的语言环境自动解析消息。这是通过 <code>LocaleResolver</code> 对象完成的。</p>
@@ -1206,7 +1206,7 @@ Spring包含以下可选择的语言环境解析器。</p>
 </ul>
 </div>
 <div class="sect4">
-<h5 id="mvc-timezone">时区</h5>
+<h5 id="mvc-timezone"><a class="anchor" href="#mvc-timezone"></a>时区</h5>
 <div class="paragraph">
 <p>除了获取客户的语言环境外，了解其时区通常也很有用。<code>LocaleContextResolver</code> 接口提供了 <code>LocaleResolver</code>
 的扩展，该扩展使解析程序可以提供更丰富的 <code>LocaleContext</code>，其中可能包含时区信息。</p>
@@ -1217,14 +1217,14 @@ Spring包含以下可选择的语言环境解析器。</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-localeresolver-acceptheader">请求头解析器</h5>
+<h5 id="mvc-localeresolver-acceptheader"><a class="anchor" href="#mvc-localeresolver-acceptheader"></a>请求头解析器</h5>
 <div class="paragraph">
 <p>该语言环境解析器检查客户端（例如，Web浏览器）发送的请求中的 <code>accept-language</code> 标头。
 通常，此请求头字段包含客户端操作系统的语言环境。请注意，此解析器不支持时区信息。</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-localeresolver-cookie">Cookie解析器</h5>
+<h5 id="mvc-localeresolver-cookie"><a class="anchor" href="#mvc-localeresolver-cookie"></a>Cookie解析器</h5>
 <div class="paragraph">
 <p>此语言环境解析器检查客户端上可能存在的 <code>Cookie</code>，以查看是否指定了 <code>Locale</code> 或 <code>TimeZone</code>。
 如果指定，它将使用指定的详细信息。通过使用此语言环境解析器的属性，可以指定Cookie的名称以及最长期限。
@@ -1279,7 +1279,7 @@ Spring包含以下可选择的语言环境解析器。</p>
 </table>
 </div>
 <div class="sect4">
-<h5 id="mvc-localeresolver-session">Session解析器</h5>
+<h5 id="mvc-localeresolver-session"><a class="anchor" href="#mvc-localeresolver-session"></a>Session解析器</h5>
 <div class="paragraph">
 <p>通过 <code>SessionLocaleResolver</code>，你可以从可能与用户请求关联的会话中检索 <code>Locale</code> 和 <code>TimeZone</code>。
 与 <code>CookieLocaleResolver</code> 相比，此策略将本地选择的语言环境设置存储在Servlet容器的 <code>HttpSession</code> 中。
@@ -1291,7 +1291,7 @@ Spring包含以下可选择的语言环境解析器。</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-localeresolver-interceptor">语言环境拦截器</h5>
+<h5 id="mvc-localeresolver-interceptor"><a class="anchor" href="#mvc-localeresolver-interceptor"></a>语言环境拦截器</h5>
 <div class="paragraph">
 <p>你可以通过将 <code>LocaleChangeInterceptor</code> 添加到 <code>HandlerMapping</code> 定义之一来启用语言环境更改。
 它检测请求中的参数并相应地更改语言环境，在调度程序的应用程序上下文中在 <code>LocaleResolver</code> 上调用 <code>setLocale</code> 方法。
@@ -1325,13 +1325,13 @@ Spring包含以下可选择的语言环境解析器。</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-themeresolver">1.1.10. 主题</h4>
+<h4 id="mvc-themeresolver"><a class="anchor" href="#mvc-themeresolver"></a>1.1.10. 主题</h4>
 <div class="paragraph">
 <p>你可以应用Spring Web MVC框架主题来设置应用程序的整体外观，从而增强用户体验。
 主题是静态资源的集合，通常影响样式表和图像，这些样式表和图像会影响应用程序的视觉样式。</p>
 </div>
 <div class="sect4">
-<h5 id="mvc-themeresolver-defining">定义主题</h5>
+<h5 id="mvc-themeresolver-defining"><a class="anchor" href="#mvc-themeresolver-defining"></a>定义主题</h5>
 <div class="paragraph">
 <p>要在Web应用程序中使用主题，你必须设置 <code>org.springframework.ui.context.ThemeSource</code> 接口的实现。
 <code>WebApplicationContext</code> 接口扩展了 <code>ThemeSource</code>，但将其职责委托给专用的实现。默认情况下，委托给
@@ -1373,7 +1373,7 @@ background=/themes/cool/img/coolBg.jpg</pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-themeresolver-resolving">解析主题</h5>
+<h5 id="mvc-themeresolver-resolving"><a class="anchor" href="#mvc-themeresolver-resolving"></a>解析主题</h5>
 <div class="paragraph">
 <p>定义主题后，如<a href="#mvc-themeresolver-defining">上一节</a>所述，你可以决定要使用哪个主题。
 <code>DispatcherServlet</code> 查找一个名为 <code>themeResolver</code> 的bean，
@@ -1413,7 +1413,7 @@ background=/themes/cool/img/coolBg.jpg</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-multipart">1.1.11. Multipart解析器</h4>
+<h4 id="mvc-multipart"><a class="anchor" href="#mvc-multipart"></a>1.1.11. Multipart解析器</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-multipart">WebFlux</a></span></p>
 </div>
@@ -1428,14 +1428,14 @@ background=/themes/cool/img/coolBg.jpg</pre>
 以提供对已解析部分的访问权限，并将其作为请求参数公开。</p>
 </div>
 <div class="sect4">
-<h5 id="mvc-multipart-resolver-commons">Apache Commons <code>FileUpload</code></h5>
+<h5 id="mvc-multipart-resolver-commons"><a class="anchor" href="#mvc-multipart-resolver-commons"></a>Apache Commons <code>FileUpload</code></h5>
 <div class="paragraph">
 <p>要使用Apache Commons <code>FileUpload</code>，可以配置名称为 <code>multipartResolver</code> 的 <code>CommonsMultipartResolver</code> 类型的Bean。
 你还需要添加 <code>commons-fileupload</code> 作为类路径的依赖。</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-multipart-resolver-standard">Servlet 3.0</h5>
+<h5 id="mvc-multipart-resolver-standard"><a class="anchor" href="#mvc-multipart-resolver-standard"></a>Servlet 3.0</h5>
 <div class="paragraph">
 <p>需要通过Servlet容器配置启用Servlet 3.0 multipart解析。为此：</p>
 </div>
@@ -1474,7 +1474,7 @@ background=/themes/cool/img/coolBg.jpg</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-logging">1.1.12. 日志</h4>
+<h4 id="mvc-logging"><a class="anchor" href="#mvc-logging"></a>1.1.12. 日志</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-logging">WebFlux</a></span></p>
 </div>
@@ -1485,7 +1485,7 @@ background=/themes/cool/img/coolBg.jpg</pre>
 <p>TRACE级别的日志记录通常遵循与DEBUG相同的原则，但可用于调试任何问题。此外，某些日志消息在TRACE和DEBUG上可能显示不同级别的详细信息。</p>
 </div>
 <div class="sect4">
-<h5 id="mvc-logging-sensitive-data">敏感数据</h5>
+<h5 id="mvc-logging-sensitive-data"><a class="anchor" href="#mvc-logging-sensitive-data"></a>敏感数据</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-logging-sensitive-data">WebFlux</a></span></p>
 </div>
@@ -1528,7 +1528,7 @@ background=/themes/cool/img/coolBg.jpg</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="filters">1.2. 过滤器</h3>
+<h3 id="filters"><a class="anchor" href="#filters"></a>1.2. 过滤器</h3>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-filters">webFlux</a></span></p>
 </div>
@@ -1552,7 +1552,7 @@ background=/themes/cool/img/coolBg.jpg</pre>
 </ul>
 </div>
 <div class="sect3">
-<h4 id="filters-http-put">1.2.1. 表单数据</h4>
+<h4 id="filters-http-put"><a class="anchor" href="#filters-http-put"></a>1.2.1. 表单数据</h4>
 <div class="paragraph">
 <p>浏览器只能通过HTTP GET或HTTP POST提交表单数据，但非浏览器客户端也可以使用HTTP PUT，PATCH和DELETE。
 Servlet API需要 <code>ServletRequest.getParameter*()</code> 方法来仅支持HTTP POST的表单字段访问。</p>
@@ -1564,7 +1564,7 @@ PUT，PATCH和DELETE请求，从请求的正文中读取表单数据，并包装
 </div>
 </div>
 <div class="sect3">
-<h4 id="filters-forwarded-headers">1.2.2. Forwarded请求头</h4>
+<h4 id="filters-forwarded-headers"><a class="anchor" href="#filters-forwarded-headers"></a>1.2.2. Forwarded请求头</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-forwarded-headers">webFlux</a></span></p>
 </div>
@@ -1596,7 +1596,7 @@ b) 删除那些请求头以消除进一步的影响。该过滤器依赖于包�
 </div>
 </div>
 <div class="sect3">
-<h4 id="filters-shallow-etag">1.2.3. Shallow ETag</h4>
+<h4 id="filters-shallow-etag"><a class="anchor" href="#filters-shallow-etag"></a>1.2.3. Shallow ETag</h4>
 <div class="paragraph">
 <p><code>ShallowEtagHeaderFilter</code> 过滤器通过缓存写入响应的内容并从中计算MD5哈希值来创建“<code>shallow</code>” ETag。
 客户端下一次发送时，它会执行相同的操作，但是还会将计算出的值与 <code>If-None-Match</code> 请求头进行比较，如果两者相等，则返回304（NOT_MODIFIED）。</p>
@@ -1618,7 +1618,7 @@ b) 删除那些请求头以消除进一步的影响。该过滤器依赖于包�
 </div>
 </div>
 <div class="sect3">
-<h4 id="filters-cors">1.2.4. CORS</h4>
+<h4 id="filters-cors"><a class="anchor" href="#filters-cors"></a>1.2.4. CORS</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-filters-cors">webFlux</a></span></p>
 </div>
@@ -1632,7 +1632,7 @@ Security一起使用时，我们建议你依赖内置的 <code>CorsFilter</code>
 </div>
 </div>
 <div class="sect2">
-<h3 id="mvc-controller">1.3. 带注解的控制器</h3>
+<h3 id="mvc-controller"><a class="anchor" href="#mvc-controller"></a>1.3. 带注解的控制器</h3>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-controller">WebFlux</a></span></p>
 </div>
@@ -1669,7 +1669,7 @@ public class HelloController {
 </table>
 </div>
 <div class="sect3">
-<h4 id="mvc-ann-controller">1.3.1. 声明</h4>
+<h4 id="mvc-ann-controller"><a class="anchor" href="#mvc-ann-controller"></a>1.3.1. 声明</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-controller">WebFlux</a></span></p>
 </div>
@@ -1719,7 +1719,7 @@ public class WebConfig {
 其每个方法都继承了类型级别的 <code>@ResponseBody</code> 注解，因此直接将其写入响应体，而不是视图解析并使用HTML模板进行渲染。</p>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-requestmapping-proxying">AOP代理</h5>
+<h5 id="mvc-ann-requestmapping-proxying"><a class="anchor" href="#mvc-ann-requestmapping-proxying"></a>AOP代理</h5>
 <div class="paragraph">
 <p>在某些情况下，你可能需要在运行时用AOP代理装饰控制器。一个示例是，如果你选择直接在控制器上声明 <code>@Transactional</code> 注解。
 在这种情况下，特别是对于控制器，我们建议使用基于类的代理。这通常是控制器的默认选择。
@@ -1730,7 +1730,7 @@ public class WebConfig {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-ann-requestmapping">1.3.2. 请求映射</h4>
+<h4 id="mvc-ann-requestmapping"><a class="anchor" href="#mvc-ann-requestmapping"></a>1.3.2. 请求映射</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-requestmapping">WebFlux</a></span></p>
 </div>
@@ -1788,7 +1788,7 @@ class PersonController {
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-requestmapping-uri-templates">URI模式</h5>
+<h5 id="mvc-ann-requestmapping-uri-templates"><a class="anchor" href="#mvc-ann-requestmapping-uri-templates"></a>URI模式</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-requestmapping-uri-templates">WebFlux</a></span></p>
 </div>
@@ -1873,7 +1873,7 @@ Spring MVC使用 <code>spring-core</code> 中的 <code>PathMatcher</code> 契约
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-requestmapping-pattern-comparison">模式比较</h5>
+<h5 id="mvc-ann-requestmapping-pattern-comparison"><a class="anchor" href="#mvc-ann-requestmapping-pattern-comparison"></a>模式比较</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-requestmapping-pattern-comparison">WebFlux</a></span></p>
 </div>
@@ -1897,7 +1897,7 @@ Spring MVC使用 <code>spring-core</code> 中的 <code>PathMatcher</code> 契约
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-requestmapping-suffix-pattern-match">后缀匹配</h5>
+<h5 id="mvc-ann-requestmapping-suffix-pattern-match"><a class="anchor" href="#mvc-ann-requestmapping-suffix-pattern-match"></a>后缀匹配</h5>
 <div class="paragraph">
 <p>默认情况下，Spring MVC执行 <code>.*</code> 后缀模式匹配，以便映射到 <code>/person</code> 的控制器也隐式映射到 <code>/person.*</code>。
 然后，文件扩展名用于解释请求的内容类型以用于响应（即，代替 <code>Accept</code> 请求头），例如 <code>/person.pdf</code>、<code>/person.xml</code> 等。</p>
@@ -1931,7 +1931,7 @@ Spring MVC使用 <code>spring-core</code> 中的 <code>PathMatcher</code> 契约
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-requestmapping-rfd">后缀匹配和RFD</h5>
+<h5 id="mvc-ann-requestmapping-rfd"><a class="anchor" href="#mvc-ann-requestmapping-rfd"></a>后缀匹配和RFD</h5>
 <div class="paragraph">
 <p>反射型文件下载（RFD）攻击与XSS相似，它依赖于响应中反映的请求输入（例如，查询参数和URI变量）。
 但是，RFD攻击不是将JavaScript插入HTML，而是依靠浏览器切换来执行下载，并在以后双击时将响应视为可执行脚本。</p>
@@ -1954,7 +1954,7 @@ Spring MVC使用 <code>spring-core</code> 中的 <code>PathMatcher</code> 契约
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-requestmapping-consumes">可消费的媒体类型</h5>
+<h5 id="mvc-ann-requestmapping-consumes"><a class="anchor" href="#mvc-ann-requestmapping-consumes"></a>可消费的媒体类型</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-requestmapping-consumes">WebFlux</a></span></p>
 </div>
@@ -1998,7 +1998,7 @@ public void addPet(@RequestBody Pet pet) {
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-requestmapping-produces">可生产的媒体类型</h5>
+<h5 id="mvc-ann-requestmapping-produces"><a class="anchor" href="#mvc-ann-requestmapping-produces"></a>可生产的媒体类型</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-requestmapping-produces">WebFlux</a></span></p>
 </div>
@@ -2043,7 +2043,7 @@ public Pet getPet(@PathVariable String petId) {
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-requestmapping-params-and-headers">请求参数，请求头</h5>
+<h5 id="mvc-ann-requestmapping-params-and-headers"><a class="anchor" href="#mvc-ann-requestmapping-params-and-headers"></a>请求参数，请求头</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-requestmapping-params-and-headers">WebFlux</a></span></p>
 </div>
@@ -2101,7 +2101,7 @@ public void findPet(@PathVariable String petId) {
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-requestmapping-head-options">HTTP HEAD, OPTIONS</h5>
+<h5 id="mvc-ann-requestmapping-head-options"><a class="anchor" href="#mvc-ann-requestmapping-head-options"></a>HTTP HEAD, OPTIONS</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-requestmapping-head-options">WebFlux</a></span></p>
 </div>
@@ -2126,7 +2126,7 @@ public void findPet(@PathVariable String petId) {
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-requestmapping-composed">自定义注解</h5>
+<h5 id="mvc-ann-requestmapping-composed"><a class="anchor" href="#mvc-ann-requestmapping-composed"></a>自定义注解</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#mvc-ann-requestmapping-head-options">WebFlux</a></span></p>
 </div>
@@ -2147,7 +2147,7 @@ public void findPet(@PathVariable String petId) {
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-requestmapping-registration">显式注册</h5>
+<h5 id="mvc-ann-requestmapping-registration"><a class="anchor" href="#mvc-ann-requestmapping-registration"></a>显式注册</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-requestmapping-registration">WebFlux</a></span></p>
 </div>
@@ -2198,7 +2198,7 @@ public class MyConfig {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-ann-methods">1.3.3. 处理器方法</h4>
+<h4 id="mvc-ann-methods"><a class="anchor" href="#mvc-ann-methods"></a>1.3.3. 处理器方法</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-methods">WebFlux</a></span></p>
 </div>
@@ -2206,7 +2206,7 @@ public class MyConfig {
 <p><code>@RequestMapping</code> 处理器方法具有灵活的签名，可以从一系列受支持的控制器方法参数和返回值中进行选择。</p>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-arguments">方法参数</h5>
+<h5 id="mvc-ann-arguments"><a class="anchor" href="#mvc-ann-arguments"></a>方法参数</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-arguments">WebFlux</a></span></p>
 </div>
@@ -2353,7 +2353,7 @@ public class MyConfig {
 </table>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-return-types">返回值</h5>
+<h5 id="mvc-ann-return-types"><a class="anchor" href="#mvc-ann-return-types"></a>返回值</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-return-types">WebFlux</a></span></p>
 </div>
@@ -2457,7 +2457,7 @@ public class MyConfig {
 </table>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-typeconversion">类型转换</h5>
+<h5 id="mvc-ann-typeconversion"><a class="anchor" href="#mvc-ann-typeconversion"></a>类型转换</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-typeconversion">WebFlux</a></span></p>
 </div>
@@ -2472,7 +2472,7 @@ public class MyConfig {
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-matrix-variables">矩阵变量</h5>
+<h5 id="mvc-ann-matrix-variables"><a class="anchor" href="#mvc-ann-matrix-variables"></a>矩阵变量</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-matrix-variables">WebFlux</a></span></p>
 </div>
@@ -2556,7 +2556,7 @@ public void findPet(
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-requestparam"><code>@RequestParam</code></h5>
+<h5 id="mvc-ann-requestparam"><a class="anchor" href="#mvc-ann-requestparam"></a><code>@RequestParam</code></h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-requestparam">WebFlux</a></span></p>
 </div>
@@ -2615,7 +2615,7 @@ public class EditPetForm {
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-requestheader"><code>@RequestHeader</code></h5>
+<h5 id="mvc-ann-requestheader"><a class="anchor" href="#mvc-ann-requestheader"></a><code>@RequestHeader</code></h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-requestheader">WebFlux</a></span></p>
 </div>
@@ -2682,7 +2682,7 @@ public void handle(
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-cookievalue"><code>@CookieValue</code></h5>
+<h5 id="mvc-ann-cookievalue"><a class="anchor" href="#mvc-ann-cookievalue"></a><code>@CookieValue</code></h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-cookievalue">WebFlux</a></span></p>
 </div>
@@ -2721,7 +2721,7 @@ public void handle(@CookieValue("JSESSIONID") String cookie) { <i class="conum" 
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-modelattrib-method-args"><code>@ModelAttribute</code></h5>
+<h5 id="mvc-ann-modelattrib-method-args"><a class="anchor" href="#mvc-ann-modelattrib-method-args"></a><code>@ModelAttribute</code></h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-modelattrib-method-args">WebFlux</a></span></p>
 </div>
@@ -2871,7 +2871,7 @@ public String processSubmit(@Valid @ModelAttribute("pet") Pet pet, BindingResult
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-sessionattributes"><code>@SessionAttributes</code></h5>
+<h5 id="mvc-ann-sessionattributes"><a class="anchor" href="#mvc-ann-sessionattributes"></a><code>@SessionAttributes</code></h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-sessionattributes">WebFlux</a></span></p>
 </div>
@@ -2937,7 +2937,7 @@ public class EditPetForm {
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-sessionattribute"><code>@SessionAttribute</code></h5>
+<h5 id="mvc-ann-sessionattribute"><a class="anchor" href="#mvc-ann-sessionattribute"></a><code>@SessionAttribute</code></h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-sessionattribute">WebFlux</a></span></p>
 </div>
@@ -2970,7 +2970,7 @@ public String handle(@SessionAttribute User user) { <i class="conum" data-value=
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-requestattrib"><code>@RequestAttribute</code></h5>
+<h5 id="mvc-ann-requestattrib"><a class="anchor" href="#mvc-ann-requestattrib"></a><code>@RequestAttribute</code></h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-requestattrib">WebFlux</a></span></p>
 </div>
@@ -2996,7 +2996,7 @@ public String handle(@RequestAttribute Client client) { <i class="conum" data-va
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-redirecting-passing-data">重定向属性</h5>
+<h5 id="mvc-redirecting-passing-data"><a class="anchor" href="#mvc-redirecting-passing-data"></a>重定向属性</h5>
 <div class="paragraph">
 <p>默认情况下，所有模型属性均被视为在重定向URL中作为URI模板变量公开。在其余属性中，
 那些属于原始类型或原始类型的集合或数组的属性会自动附加为查询参数。</p>
@@ -3034,7 +3034,7 @@ public String upload(...) {
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-flash-attributes">Flash属性</h5>
+<h5 id="mvc-flash-attributes"><a class="anchor" href="#mvc-flash-attributes"></a>Flash属性</h5>
 <div class="paragraph">
 <p>Flash属性为一个请求提供了一种存储要在另一个请求中使用的属性的方式。重定向时最常需要此操作，
 例如：Post-Redirect-Get模式。Flash属性在重定向之前（通常在会话中）被临时保存，以便在重定向之后可供请求使用，并立即被删除。</p>
@@ -3072,7 +3072,7 @@ public String upload(...) {
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-multipart-forms">Multipart</h5>
+<h5 id="mvc-multipart-forms"><a class="anchor" href="#mvc-multipart-forms"></a>Multipart</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-multipart-forms">WebFlux</a></span></p>
 </div>
@@ -3202,7 +3202,7 @@ public String handle(<strong>@Valid</strong> @RequestPart("meta-data") MetaData 
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-requestbody"><code>@RequestBody</code></h5>
+<h5 id="mvc-ann-requestbody"><a class="anchor" href="#mvc-ann-requestbody"></a><code>@RequestBody</code></h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-requestbody">WebFlux</a></span></p>
 </div>
@@ -3237,7 +3237,7 @@ public void handle(@Valid @RequestBody Account account, BindingResult result) {
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-httpentity">HttpEntity</h5>
+<h5 id="mvc-ann-httpentity"><a class="anchor" href="#mvc-ann-httpentity"></a>HttpEntity</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-httpentity">WebFlux</a></span></p>
 </div>
@@ -3255,7 +3255,7 @@ public void handle(HttpEntity&lt;Account&gt; entity) {
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-responsebody"><code>@ResponseBody</code></h5>
+<h5 id="mvc-ann-responsebody"><a class="anchor" href="#mvc-ann-responsebody"></a><code>@ResponseBody</code></h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-responsebody">WebFlux</a></span></p>
 </div>
@@ -3287,7 +3287,7 @@ public Account handle() {
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-responseentity">ResponseEntity</h5>
+<h5 id="mvc-ann-responseentity"><a class="anchor" href="#mvc-ann-responseentity"></a>ResponseEntity</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-responseentity">WebFlux</a></span></p>
 </div>
@@ -3310,12 +3310,12 @@ public ResponseEntity&lt;String&gt; handle() {
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-jackson">Jackson JSON</h5>
+<h5 id="mvc-ann-jackson"><a class="anchor" href="#mvc-ann-jackson"></a>Jackson JSON</h5>
 <div class="paragraph">
 <p>Spring提供了对Jackson JSON库的支持。</p>
 </div>
 <div class="sect5">
-<h6 id="mvc-ann-jsonview">JSON视图</h6>
+<h6 id="mvc-ann-jsonview"><a class="anchor" href="#mvc-ann-jsonview"></a>JSON视图</h6>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-jsonview">WebFlux</a></span></p>
 </div>
@@ -3397,7 +3397,7 @@ public class UserController extends AbstractController {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-ann-modelattrib-methods">1.3.4. 模型</h4>
+<h4 id="mvc-ann-modelattrib-methods"><a class="anchor" href="#mvc-ann-modelattrib-methods"></a>1.3.4. 模型</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-modelattrib-methods">WebFlux</a></span></p>
 </div>
@@ -3480,7 +3480,7 @@ public Account handle() {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-ann-initbinder">1.3.5. <code>DataBinder</code></h4>
+<h4 id="mvc-ann-initbinder"><a class="anchor" href="#mvc-ann-initbinder"></a>1.3.5. <code>DataBinder</code></h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-initbinder">WebFlux</a></span></p>
 </div>
@@ -3561,7 +3561,7 @@ public class FormController {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-ann-exceptionhandler">1.3.6. 异常</h4>
+<h4 id="mvc-ann-exceptionhandler"><a class="anchor" href="#mvc-ann-exceptionhandler"></a>1.3.6. 异常</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-controller-exceptions">WebFlux</a></span></p>
 </div>
@@ -3656,7 +3656,7 @@ public ResponseEntity&lt;String&gt; handle(Exception ex) {
 <a href="#mvc-exceptionhandlers">HandlerExceptionResolver</a>机制上。</p>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-exceptionhandler-args">方法参数</h5>
+<h5 id="mvc-ann-exceptionhandler-args"><a class="anchor" href="#mvc-ann-exceptionhandler-args"></a>方法参数</h5>
 <div class="paragraph">
 <p><code>@ExceptionHandler</code> 方法支持以下参数：</p>
 </div>
@@ -3736,7 +3736,7 @@ public ResponseEntity&lt;String&gt; handle(Exception ex) {
 </table>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-exceptionhandler-return-values">返回值</h5>
+<h5 id="mvc-ann-exceptionhandler-return-values"><a class="anchor" href="#mvc-ann-exceptionhandler-return-values"></a>返回值</h5>
 <div class="paragraph">
 <p><code>@ExceptionHandler</code> 方法支持以下返回值：</p>
 </div>
@@ -3801,7 +3801,7 @@ public ResponseEntity&lt;String&gt; handle(Exception ex) {
 </table>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-rest-exceptions">REST API异常</h5>
+<h5 id="mvc-ann-rest-exceptions"><a class="anchor" href="#mvc-ann-rest-exceptions"></a>REST API异常</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-rest-exceptions">WebFlux</a></span></p>
 </div>
@@ -3820,7 +3820,7 @@ public ResponseEntity&lt;String&gt; handle(Exception ex) {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-ann-controller-advice">1.3.7. 控制器通知</h4>
+<h4 id="mvc-ann-controller-advice"><a class="anchor" href="#mvc-ann-controller-advice"></a>1.3.7. 控制器通知</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-ann-controller-advice">WebFlux</a></span></p>
 </div>
@@ -3866,7 +3866,7 @@ public class ExampleAdvice3 {}</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="webmvc-fn">1.4. 函数式端点</h3>
+<h3 id="webmvc-fn"><a class="anchor" href="#webmvc-fn"></a>1.4. 函数式端点</h3>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-fn">WebFlux</a></span></p>
 </div>
@@ -3875,7 +3875,7 @@ public class ExampleAdvice3 {}</code></pre>
 它是基于注解的编程模型的替代方案，但可以在同一<a href="#mvc-servlet">DispatcherServlet</a>上运行。</p>
 </div>
 <div class="sect3">
-<h4 id="webmvc-fn-overview">1.4.1. 总览</h4>
+<h4 id="webmvc-fn-overview"><a class="anchor" href="#webmvc-fn-overview"></a>1.4.1. 总览</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-fn-overview">WebFlux</a></span></p>
 </div>
@@ -3931,7 +3931,7 @@ public class PersonHandler {
 </div>
 </div>
 <div class="sect3">
-<h4 id="webmvc-fn-handler-functions">1.4.2. <code>HandlerFunction</code></h4>
+<h4 id="webmvc-fn-handler-functions"><a class="anchor" href="#webmvc-fn-handler-functions"></a>1.4.2. <code>HandlerFunction</code></h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-fn-handler-functions">WebFlux</a></span></p>
 </div>
@@ -3939,7 +3939,7 @@ public class PersonHandler {
 <p><code>ServerRequest</code> 和 <code>ServerResponse</code> 是不可变的接口，它们提供JDK 8友好的HTTP请求和响应访问，包括头部，正文，方法和状态码。</p>
 </div>
 <div class="sect4">
-<h5 id="webmvc-fn-request">ServerRequest</h5>
+<h5 id="webmvc-fn-request"><a class="anchor" href="#webmvc-fn-request"></a>ServerRequest</h5>
 <div class="paragraph">
 <p><code>ServerRequest</code> 提供对HTTP方法，URI，请求头和查询参数的访问，而通过 <code>body</code> 方法提供对请求体的访问。</p>
 </div>
@@ -3969,7 +3969,7 @@ public class PersonHandler {
 </div>
 </div>
 <div class="sect4">
-<h5 id="webmvc-fn-response">ServerResponse</h5>
+<h5 id="webmvc-fn-response"><a class="anchor" href="#webmvc-fn-response"></a>ServerResponse</h5>
 <div class="paragraph">
 <p><code>ServerResponse</code> 提供对HTTP响应的访问，并且由于它是不可变的，因此你可以使用构建方法来创建它。
 你可以使用构建器来设置响应状态，添加响应头或响应体。以下示例使用JSON内容创建200(OK)响应：</p>
@@ -3991,7 +3991,7 @@ ServerResponse.created(location).build();</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="webmvc-fn-handler-classes">处理程序类</h5>
+<h5 id="webmvc-fn-handler-classes"><a class="anchor" href="#webmvc-fn-handler-classes"></a>处理程序类</h5>
 <div class="paragraph">
 <p>我们可以将处理程序函数编写为lambda，如以下示例所示：</p>
 </div>
@@ -4063,7 +4063,7 @@ public class PersonHandler {
 </div>
 </div>
 <div class="sect4">
-<h5 id="webmvc-fn-handler-validation">验证方式</h5>
+<h5 id="webmvc-fn-handler-validation"><a class="anchor" href="#webmvc-fn-handler-validation"></a>验证方式</h5>
 <div class="paragraph">
 <p>函数端点可以使用Spring的 <a href="https://docs.spring.io/spring/docs/5.2.1.RELEASE/spring-framework-reference/core.html#validation">验证工具</a>将验证应用于请求体。
 例如，给定 <code>Person</code> 的自定义Spring <a href="https://docs.spring.io/spring/docs/5.2.1.RELEASE/spring-framework-reference/core.html#validation">Validator</a>实现：</p>
@@ -4116,7 +4116,7 @@ public class PersonHandler {
 </div>
 </div>
 <div class="sect3">
-<h4 id="webmvc-fn-router-functions">1.4.3. <code>RouterFunction</code></h4>
+<h4 id="webmvc-fn-router-functions"><a class="anchor" href="#webmvc-fn-router-functions"></a>1.4.3. <code>RouterFunction</code></h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-fn-router-functions">WebFlux</a></span></p>
 </div>
@@ -4136,7 +4136,7 @@ public class PersonHandler {
 对于每个HTTP方法，都有一个重载的变体，它以 <code>RequestPredicate</code> 作为参数，尽管可以表达其他约束。</p>
 </div>
 <div class="sect4">
-<h5 id="webmvc-fn-predicates">谓词</h5>
+<h5 id="webmvc-fn-predicates"><a class="anchor" href="#webmvc-fn-predicates"></a>谓词</h5>
 <div class="paragraph">
 <p>你可以编写自己的 <code>RequestPredicate</code>，但是 <code>RequestPredicates</code> 实用程序类根据请求路径，HTTP方法，
 内容类型等提供常用的实现。以下示例使用请求谓词基于 <code>Accept</code> 头创建约束：</p>
@@ -4168,7 +4168,7 @@ public class PersonHandler {
 </div>
 </div>
 <div class="sect4">
-<h5 id="webmvc-fn-routes">路由</h5>
+<h5 id="webmvc-fn-routes"><a class="anchor" href="#webmvc-fn-routes"></a>路由</h5>
 <div class="paragraph">
 <p>路由器函数按顺序评估：如果第一个路由不匹配，则评估第二个路由，依此类推。因此，在通用路由之前声明更具体的路由是有意义的。
 请注意，此行为不同于基于注解的编程模型，在该模型中，将自动选择“最特定”的控制器方法。</p>
@@ -4233,7 +4233,7 @@ RouterFunction&lt;ServerResponse&gt; route = route()
 </div>
 </div>
 <div class="sect4">
-<h5 id="nested-routes">嵌套路由</h5>
+<h5 id="nested-routes"><a class="anchor" href="#nested-routes"></a>嵌套路由</h5>
 <div class="paragraph">
 <p>一组路由器函数通常具有共享谓词，例如共享路径。在上面的示例中，共享谓词将是与 <code>/person</code> 匹配的路径谓词，
 由三个路由使用。使用注解时，你可以通过使用映射到 <code>/person</code> 的类型级别 <code>@RequestMapping</code> 注解来删除此重复项。
@@ -4277,7 +4277,7 @@ RouterFunction&lt;ServerResponse&gt; route = route()
 </div>
 </div>
 <div class="sect3">
-<h4 id="webmvc-fn-running">1.4.4. 运行服务器</h4>
+<h4 id="webmvc-fn-running"><a class="anchor" href="#webmvc-fn-running"></a>1.4.4. 运行服务器</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-fn-running">WebFlux</a></span></p>
 </div>
@@ -4340,7 +4340,7 @@ public class WebConfig implements WebMvcConfigurer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="webmvc-fn-handler-filter-function">1.4.5. 过滤处理程序函数</h4>
+<h4 id="webmvc-fn-handler-filter-function"><a class="anchor" href="#webmvc-fn-handler-filter-function"></a>1.4.5. 过滤处理程序函数</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-fn-handler-filter-function">WebFlux</a></span></p>
 </div>
@@ -4428,7 +4428,7 @@ RouterFunction&lt;ServerResponse&gt; route = route()
 </div>
 </div>
 <div class="sect2">
-<h3 id="mvc-uri-building">1.5. URI链接</h3>
+<h3 id="mvc-uri-building"><a class="anchor" href="#mvc-uri-building"></a>1.5. URI链接</h3>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-uri-building">WebFlux</a></span></p>
 </div>
@@ -4436,7 +4436,7 @@ RouterFunction&lt;ServerResponse&gt; route = route()
 <p>本部分介绍了Spring框架中可用于URI的各种选项。</p>
 </div>
 <div class="sect3">
-<h4 id="web-uricomponents">1.5.1. UriComponents</h4>
+<h4 id="web-uricomponents"><a class="anchor" href="#web-uricomponents"></a>1.5.1. UriComponents</h4>
 <div class="paragraph">
 <p><span class="small">Spring MVC and Spring WebFlux</span></p>
 </div>
@@ -4514,7 +4514,7 @@ URI uri = uriComponents.expand("Westin", "123").toUri();  <i class="conum" data-
 </div>
 </div>
 <div class="sect3">
-<h4 id="web-uribuilder">1.5.2. UriBuilder</h4>
+<h4 id="web-uribuilder"><a class="anchor" href="#web-uribuilder"></a>1.5.2. UriBuilder</h4>
 <div class="paragraph">
 <p><span class="small">Spring MVC and Spring WebFlux</span></p>
 </div>
@@ -4573,7 +4573,7 @@ URI uri = uriBuilderFactory.uriString("/hotels/{hotel}")
 </div>
 </div>
 <div class="sect3">
-<h4 id="web-uri-encoding">1.5.3. URI编码</h4>
+<h4 id="web-uri-encoding"><a class="anchor" href="#web-uri-encoding"></a>1.5.3. URI编码</h4>
 <div class="paragraph">
 <p><span class="small">Spring MVC and Spring WebFlux</span></p>
 </div>
@@ -4693,7 +4693,7 @@ WebClient client = WebClient.builder().uriBuilderFactory(factory).build();</code
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-servleturicomponentsbuilder">1.5.4. 相对Servlet请求</h4>
+<h4 id="mvc-servleturicomponentsbuilder"><a class="anchor" href="#mvc-servleturicomponentsbuilder"></a>1.5.4. 相对Servlet请求</h4>
 <div class="paragraph">
 <p>你可以使用 <code>ServletUriComponentsBuilder</code> 创建相对于当前请求的URI，如以下示例所示：</p>
 </div>
@@ -4747,7 +4747,7 @@ ServletUriComponentsBuilder ucb = ServletUriComponentsBuilder.fromServletMapping
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-links-to-controllers">1.5.5. 链接到控制器</h4>
+<h4 id="mvc-links-to-controllers"><a class="anchor" href="#mvc-links-to-controllers"></a>1.5.5. 链接到控制器</h4>
 <div class="paragraph">
 <p>Spring MVC提供了一种创建到控制器方法的链接的机制。例如，以下MVC控制器允许创建链接：</p>
 </div>
@@ -4843,7 +4843,7 @@ URI uri = uriComponents.encode().toUri();</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-links-to-controllers-from-views">1.5.6. 视图中的链接</h4>
+<h4 id="mvc-links-to-controllers-from-views"><a class="anchor" href="#mvc-links-to-controllers-from-views"></a>1.5.6. 视图中的链接</h4>
 <div class="paragraph">
 <p>在Thymeleaf，FreeMarker或JSP之类的视图中，你可以通过引用每个请求映射的隐式或显式分配的名称来构建到带注解的控制器的链接。</p>
 </div>
@@ -4883,7 +4883,7 @@ public class PersonAddressController {
 </div>
 </div>
 <div class="sect2">
-<h3 id="mvc-ann-async">1.6. 异步请求</h3>
+<h3 id="mvc-ann-async"><a class="anchor" href="#mvc-ann-async"></a>1.6. 异步请求</h3>
 <div class="paragraph">
 <p><span class="small"><a href="#mvc-ann-async-vs-webflux">与WebFlux相比</a></span></p>
 </div>
@@ -4906,7 +4906,7 @@ public class PersonAddressController {
 </ul>
 </div>
 <div class="sect3">
-<h4 id="mvc-ann-async-deferredresult">1.6.1. <code>DeferredResult</code></h4>
+<h4 id="mvc-ann-async-deferredresult"><a class="anchor" href="#mvc-ann-async-deferredresult"></a>1.6.1. <code>DeferredResult</code></h4>
 <div class="paragraph">
 <p><span class="small"><a href="#mvc-ann-async-vs-webflux">与WebFlux相比</a></span></p>
 </div>
@@ -4933,7 +4933,7 @@ deferredResult.setResult(data);</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-ann-async-callable">1.6.2. <code>Callable</code></h4>
+<h4 id="mvc-ann-async-callable"><a class="anchor" href="#mvc-ann-async-callable"></a>1.6.2. <code>Callable</code></h4>
 <div class="paragraph">
 <p><span class="small"><a href="#mvc-ann-async-vs-webflux">与WebFlux相比</a></span></p>
 </div>
@@ -4960,7 +4960,7 @@ public Callable&lt;String&gt; processUpload(final MultipartFile file) {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-ann-async-processing">1.6.3. 处理过程</h4>
+<h4 id="mvc-ann-async-processing"><a class="anchor" href="#mvc-ann-async-processing"></a>1.6.3. 处理过程</h4>
 <div class="paragraph">
 <p><span class="small"><a href="#mvc-ann-async-vs-webflux">Compared to WebFlux</a></span></p>
 </div>
@@ -5033,7 +5033,7 @@ public Callable&lt;String&gt; processUpload(final MultipartFile file) {
 <a href="https://spring.io/blog/2012/05/07/spring-mvc-3-2-preview-introducing-servlet-3-async-support">博客文章</a>。</p>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-async-exceptions">异常处理</h5>
+<h5 id="mvc-ann-async-exceptions"><a class="anchor" href="#mvc-ann-async-exceptions"></a>异常处理</h5>
 <div class="paragraph">
 <p>使用 <code>DeferredResult</code> 时，可以选择是调用带有异常的 <code>setResult</code> 还是 <code>setErrorResult</code>。
 在这两种情况下，Spring MVC都将请求分发回Servlet容器以完成处理。然后将其视为控制器方法返回了给定值，
@@ -5044,7 +5044,7 @@ public Callable&lt;String&gt; processUpload(final MultipartFile file) {
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-async-interception">拦截</h5>
+<h5 id="mvc-ann-async-interception"><a class="anchor" href="#mvc-ann-async-interception"></a>拦截</h5>
 <div class="paragraph">
 <p><code>HandlerInterceptor</code> 实例的类型可以为 <code>AsyncHandlerInterceptor</code>，以在启动异步处理的初始请求
 （而不是 <code>postHandle</code> 和 <code>afterCompletion</code>）上接收 <code>afterConcurrentHandlingStarted</code> 回调。</p>
@@ -5061,7 +5061,7 @@ public Callable&lt;String&gt; processUpload(final MultipartFile file) {
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-async-vs-webflux">与WebFlux相比</h5>
+<h5 id="mvc-ann-async-vs-webflux"><a class="anchor" href="#mvc-ann-async-vs-webflux"></a>与WebFlux相比</h5>
 <div class="paragraph">
 <p>Servlet API最初是为通过Filter-Servlet链进行一次传递而构建的。Servlet 3.0中添加了异步请求处理，
 使应用程序可以退出Filter-Servlet链，但保留响应以进行进一步处理。Spring MVC异步支持围绕该机制构建。
@@ -5085,7 +5085,7 @@ Spring MVC甚至支持流式传输，包括响应式背压。但是对响应的�
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-ann-async-http-streaming">1.6.4. HTTP流</h4>
+<h4 id="mvc-ann-async-http-streaming"><a class="anchor" href="#mvc-ann-async-http-streaming"></a>1.6.4. HTTP流</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-codecs-streaming">WebFlux</a></span></p>
 </div>
@@ -5094,7 +5094,7 @@ Spring MVC甚至支持流式传输，包括响应式背压。但是对响应的�
 本节介绍如何执行此操作。</p>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-async-objects">对象</h5>
+<h5 id="mvc-ann-async-objects"><a class="anchor" href="#mvc-ann-async-objects"></a>对象</h5>
 <div class="paragraph">
 <p>你可以使用 <code>ResponseBodyEmitter</code> 返回值生成对象流，其中每个对象都使用
 <a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/integration.html#rest-message-conversion"><code>HttpMessageConverter</code></a>序列化并写入响应，如以下示例所示：</p>
@@ -5129,7 +5129,7 @@ emitter.complete();</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-async-sse">SSE</h5>
+<h5 id="mvc-ann-async-sse"><a class="anchor" href="#mvc-ann-async-sse"></a>SSE</h5>
 <div class="paragraph">
 <p><code>SseEmitter</code>（<code>ResponseBodyEmitter</code> 的子类）提供对服务器发送事件的支持，其中从
 <a href="http://www.w3.org/TR/eventsource/">服务器发送的事件</a>根据W3C SSE规范进行格式化。
@@ -5164,7 +5164,7 @@ emitter.complete();</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-async-output-stream">原始数据</h5>
+<h5 id="mvc-ann-async-output-stream"><a class="anchor" href="#mvc-ann-async-output-stream"></a>原始数据</h5>
 <div class="paragraph">
 <p>有时，绕过消息转换并直接输出到响应流 <code>OutputStream</code> 很有用（例如：用于文件下载）。
 你可以使用 <code>StreamingResponseBody</code> 返回值类型来执行此操作，如以下示例所示：</p>
@@ -5188,7 +5188,7 @@ public StreamingResponseBody handle() {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-ann-async-reactive-types">1.6.5. 响应式类型</h4>
+<h4 id="mvc-ann-async-reactive-types"><a class="anchor" href="#mvc-ann-async-reactive-types"></a>1.6.5. 响应式类型</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-codecs-streaming">WebFlux</a></span></p>
 </div>
@@ -5238,7 +5238,7 @@ Spring MVC通过 <code>spring-core</code> 的 <a href="https://docs.spring.io/sp
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-ann-async-disconnects">1.6.6. 断开连接</h4>
+<h4 id="mvc-ann-async-disconnects"><a class="anchor" href="#mvc-ann-async-disconnects"></a>1.6.6. 断开连接</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-codecs-streaming">WebFlux</a></span></p>
 </div>
@@ -5253,7 +5253,7 @@ Spring MVC通过 <code>spring-core</code> 的 <a href="https://docs.spring.io/sp
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-ann-async-configuration">1.6.7. 配置</h4>
+<h4 id="mvc-ann-async-configuration"><a class="anchor" href="#mvc-ann-async-configuration"></a>1.6.7. 配置</h4>
 <div class="paragraph">
 <p><span class="small"><a href="#mvc-ann-async-vs-webflux">与WebFlux相比</a></span></p>
 </div>
@@ -5261,7 +5261,7 @@ Spring MVC通过 <code>spring-core</code> 的 <a href="https://docs.spring.io/sp
 <p>必须在Servlet容器级别启用异步请求处理功能。MVC配置还为异步请求提供了多个选项。</p>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-async-configuration-servlet3">Servlet容器</h5>
+<h5 id="mvc-ann-async-configuration-servlet3"><a class="anchor" href="#mvc-ann-async-configuration-servlet3"></a>Servlet容器</h5>
 <div class="paragraph">
 <p>过滤器和Servlet声明具有 <code>asyncSupported</code> 标志，需要将其设置为 <code>true</code> 才能启用异步请求处理。
 另外，应声明过滤器映射以处理 <code>ASYNC</code> <code>javax.servlet.DispatchType</code>。</p>
@@ -5275,7 +5275,7 @@ Spring MVC通过 <code>spring-core</code> 的 <a href="https://docs.spring.io/sp
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-ann-async-configuration-spring-mvc">Spring MVC</h5>
+<h5 id="mvc-ann-async-configuration-spring-mvc"><a class="anchor" href="#mvc-ann-async-configuration-spring-mvc"></a>Spring MVC</h5>
 <div class="paragraph">
 <p>MVC配置公开了以下与异步请求处理相关的选项：</p>
 </div>
@@ -5315,7 +5315,7 @@ Spring MVC通过 <code>spring-core</code> 的 <a href="https://docs.spring.io/sp
 </div>
 </div>
 <div class="sect2">
-<h3 id="mvc-cors">1.7. CORS</h3>
+<h3 id="mvc-cors"><a class="anchor" href="#mvc-cors"></a>1.7. CORS</h3>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-cors">WebFlux</a></span></p>
 </div>
@@ -5323,7 +5323,7 @@ Spring MVC通过 <code>spring-core</code> 的 <a href="https://docs.spring.io/sp
 <p>Spring MVC使你可以处理CORS（跨域资源共享）。本节介绍如何执行此操作。</p>
 </div>
 <div class="sect3">
-<h4 id="mvc-cors-intro">1.7.1. 介绍</h4>
+<h4 id="mvc-cors-intro"><a class="anchor" href="#mvc-cors-intro"></a>1.7.1. 介绍</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-cors-intro">WebFlux</a></span></p>
 </div>
@@ -5339,7 +5339,7 @@ Spring MVC通过 <code>spring-core</code> 的 <a href="https://docs.spring.io/sp
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-cors-processing">1.7.2. 处理过程</h4>
+<h4 id="mvc-cors-processing"><a class="anchor" href="#mvc-cors-processing"></a>1.7.2. 处理过程</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-cors-processing">WebFlux</a></span></p>
 </div>
@@ -5362,12 +5362,6 @@ Spring MVC通过 <code>spring-core</code> 的 <a href="https://docs.spring.io/sp
 <a href="https://docs.spring.io/spring-framework/docs/5.2.2.RELEASE/javadoc-api/org/springframework/web/servlet/handler/AbstractHandlerMapping.html#setCorsConfigurations-java.util.Map-">配置</a>
 每个 <code>HandlerMapping</code>。在大多数情况下，应用程序使用MVC
 Java配置或XML名称空间声明此类映射，这导致将单个全局映射传递给所有 <code>HandlerMapping</code> 实例。</p>
-</div>
-<div class="paragraph">
-<p>You can combine global CORS configuration at the <code>HandlerMapping</code> level with more
-fine-grained, handler-level CORS configuration. For example, annotated controllers can use
-class- or method-level <code>@CrossOrigin</code> annotations (other handlers can implement
-<code>CorsConfigurationSource</code>).</p>
 </div>
 <div class="paragraph">
 <p>你可以将 <code>HandlerMapping</code> 级别的全局CORS配置与更细粒度的处理程序级别的CORS配置结合使用。
@@ -5407,7 +5401,7 @@ class- or method-level <code>@CrossOrigin</code> annotations (other handlers can
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-cors-controller">1.7.3. <code>@CrossOrigin</code></h4>
+<h4 id="mvc-cors-controller"><a class="anchor" href="#mvc-cors-controller"></a>1.7.3. <code>@CrossOrigin</code></h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-cors-controller">WebFlux</a></span></p>
 </div>
@@ -5504,7 +5498,7 @@ public class AccountController {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-cors-global">1.7.4. 全局配置</h4>
+<h4 id="mvc-cors-global"><a class="anchor" href="#mvc-cors-global"></a>1.7.4. 全局配置</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-cors-global">WebFlux</a></span></p>
 </div>
@@ -5537,7 +5531,7 @@ public class AccountController {
 <p><code>maxAge</code> 设置为30分钟。</p>
 </div>
 <div class="sect4">
-<h5 id="mvc-cors-global-java">Java配置</h5>
+<h5 id="mvc-cors-global-java"><a class="anchor" href="#mvc-cors-global-java"></a>Java配置</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-cors-global">WebFlux</a></span></p>
 </div>
@@ -5567,7 +5561,7 @@ public class WebConfig implements WebMvcConfigurer {
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-cors-global-xml">XML配置</h5>
+<h5 id="mvc-cors-global-xml"><a class="anchor" href="#mvc-cors-global-xml"></a>XML配置</h5>
 <div class="paragraph">
 <p>要在XML名称空间中启用CORS，可以使用 <code>&lt;mvc:cors&gt;</code> 元素，如以下示例所示：</p>
 </div>
@@ -5591,7 +5585,7 @@ public class WebConfig implements WebMvcConfigurer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-cors-filter">1.7.5. CORS过滤器</h4>
+<h4 id="mvc-cors-filter"><a class="anchor" href="#mvc-cors-filter"></a>1.7.5. CORS过滤器</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-cors-webfilter">WebFlux</a></span></p>
 </div>
@@ -5635,7 +5629,7 @@ CorsFilter filter = new CorsFilter(source);</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="mvc-web-security">1.8. Web安全</h3>
+<h3 id="mvc-web-security"><a class="anchor" href="#mvc-web-security"></a>1.8. Web安全</h3>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-web-security">WebFlux</a></span></p>
 </div>
@@ -5664,7 +5658,7 @@ CorsFilter filter = new CorsFilter(source);</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="mvc-caching">1.9. HTTP缓存</h3>
+<h3 id="mvc-caching"><a class="anchor" href="#mvc-caching"></a>1.9. HTTP缓存</h3>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-caching">WebFlux</a></span></p>
 </div>
@@ -5678,7 +5672,7 @@ CorsFilter filter = new CorsFilter(source);</code></pre>
 <p>本节描述了Spring Web MVC中与HTTP缓存相关的选项。</p>
 </div>
 <div class="sect3">
-<h4 id="mvc-caching-cachecontrol">1.9.1. <code>CacheControl</code></h4>
+<h4 id="mvc-caching-cachecontrol"><a class="anchor" href="#mvc-caching-cachecontrol"></a>1.9.1. <code>CacheControl</code></h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-caching-cachecontrol">WebFlux</a></span></p>
 </div>
@@ -5738,7 +5732,7 @@ CacheControl ccCustom = CacheControl.maxAge(10, TimeUnit.DAYS).noTransform().cac
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-caching-etag-lastmodified">1.9.2. 控制器</h4>
+<h4 id="mvc-caching-etag-lastmodified"><a class="anchor" href="#mvc-caching-etag-lastmodified"></a>1.9.2. 控制器</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-caching-etag-lastmodified">WebFlux</a></span></p>
 </div>
@@ -5809,7 +5803,7 @@ public String myHandleMethod(WebRequest webRequest, Model model) {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-caching-static-resources">1.9.3. 静态资源</h4>
+<h4 id="mvc-caching-static-resources"><a class="anchor" href="#mvc-caching-static-resources"></a>1.9.3. 静态资源</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-caching-static-resources">WebFlux</a></span></p>
 </div>
@@ -5819,7 +5813,7 @@ public String myHandleMethod(WebRequest webRequest, Model model) {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-httpcaching-shallowetag">1.9.4. <code>ETag</code> Filter</h4>
+<h4 id="mvc-httpcaching-shallowetag"><a class="anchor" href="#mvc-httpcaching-shallowetag"></a>1.9.4. <code>ETag</code> Filter</h4>
 <div class="paragraph">
 <p>你可以使用 <code>ShallowEtagHeaderFilter</code> 添加从响应内容计算得出的 &#8220;shallow&#8221; <code>eTag</code> 值，从而节省带宽，
 但不节省CPU时间。请参阅 <a href="#filters-shallow-etag">Shallow ETag</a>。</p>
@@ -5827,7 +5821,7 @@ public String myHandleMethod(WebRequest webRequest, Model model) {
 </div>
 </div>
 <div class="sect2">
-<h3 id="mvc-view">1.10. 视图技术</h3>
+<h3 id="mvc-view"><a class="anchor" href="#mvc-view"></a>1.10. 视图技术</h3>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-view">WebFlux</a></span></p>
 </div>
@@ -5836,7 +5830,7 @@ public String myHandleMethod(WebRequest webRequest, Model model) {
 本章介绍与Spring MVC集成的视图技术。我们假设你已经熟悉<a href="#mvc-viewresolver">视图解析</a>。</p>
 </div>
 <div class="sect3">
-<h4 id="mvc-view-thymeleaf">1.10.1. Thymeleaf</h4>
+<h4 id="mvc-view-thymeleaf"><a class="anchor" href="#mvc-view-thymeleaf"></a>1.10.1. Thymeleaf</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-view-thymeleaf">WebFlux</a></span></p>
 </div>
@@ -5853,7 +5847,7 @@ Thymeleaf提供了最广泛的功能集之一，以使这种过渡更加容易�
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-view-freemarker">1.10.2. FreeMarker</h4>
+<h4 id="mvc-view-freemarker"><a class="anchor" href="#mvc-view-freemarker"></a>1.10.2. FreeMarker</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-view-freemarker">WebFlux</a></span></p>
 </div>
@@ -5862,7 +5856,7 @@ Thymeleaf提供了最广泛的功能集之一，以使这种过渡更加容易�
 Spring框架具有内置的集成，可以将Spring MVC与FreeMarker模板一起使用。</p>
 </div>
 <div class="sect4">
-<h5 id="mvc-view-freemarker-contextconfig">视图配置</h5>
+<h5 id="mvc-view-freemarker-contextconfig"><a class="anchor" href="#mvc-view-freemarker-contextconfig"></a>视图配置</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-view-freemarker-contextconfig">WebFlux</a></span></p>
 </div>
@@ -5924,7 +5918,7 @@ public class WebConfig implements WebMvcConfigurer {
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-views-freemarker">FreeMarker配置</h5>
+<h5 id="mvc-views-freemarker"><a class="anchor" href="#mvc-views-freemarker"></a>FreeMarker配置</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-views-freemarker">WebFlux</a></span></p>
 </div>
@@ -5952,7 +5946,7 @@ public class WebConfig implements WebMvcConfigurer {
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-view-freemarker-forms">表单处理</h5>
+<h5 id="mvc-view-freemarker-forms"><a class="anchor" href="#mvc-view-freemarker-forms"></a>表单处理</h5>
 <div class="paragraph">
 <p>Spring提供了一个供JSP使用的标签库，其中包含一个 <code>&lt;spring:bind/&gt;</code> 元素。
 该元素主要允许表单显示来自表单支持对象的值，并显示来自Web或业务层中 <code>Validator</code> 的验证失败的结果。
@@ -5961,12 +5955,12 @@ Spring还支持FreeMarker中的相同功能，并为生成表单输入元素本�
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-view-document">1.10.3. PDF和Excel</h4>
+<h4 id="mvc-view-document"><a class="anchor" href="#mvc-view-document"></a>1.10.3. PDF和Excel</h4>
 <div class="paragraph">
 <p>Spring提供了返回HTML以外的输出的方法，包括PDF和Excel电子表格。本节介绍如何使用这些功能。</p>
 </div>
 <div class="sect4">
-<h5 id="mvc-view-document-intro">文档视图简介</h5>
+<h5 id="mvc-view-document-intro"><a class="anchor" href="#mvc-view-document-intro"></a>文档视图简介</h5>
 <div class="paragraph">
 <p>HTML页面并非始终是用户查看模型输出的最佳方法，而Spring使从模型数据动态生成PDF文档或Excel电子表格变得简单。
 该文档是视图，并从服务器以正确的内容类型进行流传输，以（希望）使客户端PC能够运行其电子表格或PDF查看器应用程序作为响应。</p>
@@ -5989,7 +5983,7 @@ Spring还支持FreeMarker中的相同功能，并为生成表单输入元素本�
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-view-document-pdf">PDF视图</h5>
+<h5 id="mvc-view-document-pdf"><a class="anchor" href="#mvc-view-document-pdf"></a>PDF视图</h5>
 <div class="paragraph">
 <p>单词列表的简单PDF视图可以继承 <code>org.springframework.web.servlet.view.document.AbstractPdfView</code>
 并实现 <code>buildPdfDocument()</code> 方法，如以下示例所示：</p>
@@ -6014,7 +6008,7 @@ Spring还支持FreeMarker中的相同功能，并为生成表单输入元素本�
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-view-document-excel">Excel视图</h5>
+<h5 id="mvc-view-document-excel"><a class="anchor" href="#mvc-view-document-excel"></a>Excel视图</h5>
 <div class="paragraph">
 <p>从Spring Framework 4.2开始，提供 <code>org.springframework.web.servlet.view.document.AbstractXlsView</code>
 作为Excel视图的基类。它基于Apache POI，具有取代过时的 <code>AbstractExcelView</code> 类的专用子类
@@ -6027,7 +6021,7 @@ Spring还支持FreeMarker中的相同功能，并为生成表单输入元素本�
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-view-jackson">1.10.4. Jackson</h4>
+<h4 id="mvc-view-jackson"><a class="anchor" href="#mvc-view-jackson"></a>1.10.4. Jackson</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-view-httpmessagewriter">WebFlux</a></span></p>
 </div>
@@ -6035,7 +6029,7 @@ Spring还支持FreeMarker中的相同功能，并为生成表单输入元素本�
 <p>Spring提供了对Jackson JSON库的支持。</p>
 </div>
 <div class="sect4">
-<h5 id="mvc-view-json-mapping">基于Jackson的JSON MVC视图</h5>
+<h5 id="mvc-view-json-mapping"><a class="anchor" href="#mvc-view-json-mapping"></a>基于Jackson的JSON MVC视图</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-view-httpmessagewriter">WebFlux</a></span></p>
 </div>
@@ -6051,7 +6045,7 @@ Spring还支持FreeMarker中的相同功能，并为生成表单输入元素本�
 </div>
 </div>
 <div class="sect4">
-<h5 id="mvc-view-xml-mapping">基于Jackson的XML视图</h5>
+<h5 id="mvc-view-xml-mapping"><a class="anchor" href="#mvc-view-xml-mapping"></a>基于Jackson的XML视图</h5>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-view-httpmessagewriter">WebFlux</a></span></p>
 </div>
@@ -6068,7 +6062,7 @@ Spring还支持FreeMarker中的相同功能，并为生成表单输入元素本�
 </div>
 </div>
 <div class="sect2">
-<h3 id="mvc-config">1.11. MVC配置</h3>
+<h3 id="mvc-config"><a class="anchor" href="#mvc-config"></a>1.11. MVC配置</h3>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-config">WebFlux</a></span></p>
 </div>
@@ -6083,7 +6077,7 @@ Spring还支持FreeMarker中的相同功能，并为生成表单输入元素本�
 <a href="#mvc-servlet-special-bean-types">特殊Bean类型</a>和<a href="#mvc-servlet-config">Web MVC配置</a>。</p>
 </div>
 <div class="sect3">
-<h4 id="mvc-config-enable">1.11.1. 启用MVC配置</h4>
+<h4 id="mvc-config-enable"><a class="anchor" href="#mvc-config-enable"></a>1.11.1. 启用MVC配置</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-config-enable">WebFlux</a></span></p>
 </div>
@@ -6124,7 +6118,7 @@ public class WebConfig {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-config-customize">1.11.2. MVC配置API</h4>
+<h4 id="mvc-config-customize"><a class="anchor" href="#mvc-config-customize"></a>1.11.2. MVC配置API</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-config-customize">WebFlux</a></span></p>
 </div>
@@ -6148,7 +6142,7 @@ public class WebConfig implements WebMvcConfigurer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-config-conversion">1.11.3. 类型转换</h4>
+<h4 id="mvc-config-conversion"><a class="anchor" href="#mvc-config-conversion"></a>1.11.3. 类型转换</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-config-conversion">WebFlux</a></span></p>
 </div>
@@ -6228,7 +6222,7 @@ public class WebConfig implements WebMvcConfigurer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-config-validation">1.11.4. 验证</h4>
+<h4 id="mvc-config-validation"><a class="anchor" href="#mvc-config-validation"></a>1.11.4. 验证</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-config-validation">WebFlux</a></span></p>
 </div>
@@ -6304,7 +6298,7 @@ public class MyController {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-config-interceptors">1.11.5. 拦截器</h4>
+<h4 id="mvc-config-interceptors"><a class="anchor" href="#mvc-config-interceptors"></a>1.11.5. 拦截器</h4>
 <div class="paragraph">
 <p>在Java配置中，你可以注册拦截器以应用于传入的请求，如以下示例所示：</p>
 </div>
@@ -6344,7 +6338,7 @@ public class WebConfig implements WebMvcConfigurer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-config-content-negotiation">1.11.6. 内容类型</h4>
+<h4 id="mvc-config-content-negotiation"><a class="anchor" href="#mvc-config-content-negotiation"></a>1.11.6. 内容类型</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-config-content-negotiation">WebFlux</a></span></p>
 </div>
@@ -6395,7 +6389,7 @@ public class WebConfig implements WebMvcConfigurer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-config-message-converters">1.11.7. 消息转换器</h4>
+<h4 id="mvc-config-message-converters"><a class="anchor" href="#mvc-config-message-converters"></a>1.11.7. 消息转换器</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-config-message-codecs">WebFlux</a></span></p>
 </div>
@@ -6517,7 +6511,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-config-view-controller">1.11.8. 视图控制器</h4>
+<h4 id="mvc-config-view-controller"><a class="anchor" href="#mvc-config-view-controller"></a>1.11.8. 视图控制器</h4>
 <div class="paragraph">
 <p>这是定义 <code>ParameterizableViewController</code> 的快捷方式，该参数可在调用时立即转发到视图。
 在视图生成响应之前没有Java控制器逻辑要执行的静态情况下，可以使用它。</p>
@@ -6548,7 +6542,7 @@ public class WebConfig implements WebMvcConfigurer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-config-view-resolvers">1.11.9. 视图解析器</h4>
+<h4 id="mvc-config-view-resolvers"><a class="anchor" href="#mvc-config-view-resolvers"></a>1.11.9. 视图解析器</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-config-view-resolvers">WebFlux</a></span></p>
 </div>
@@ -6635,7 +6629,7 @@ public class WebConfig implements WebMvcConfigurer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-config-static-resources">1.11.10. 静态资源</h4>
+<h4 id="mvc-config-static-resources"><a class="anchor" href="#mvc-config-static-resources"></a>1.11.10. 静态资源</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-config-static-resources">WebFlux</a></span></p>
 </div>
@@ -6743,7 +6737,7 @@ MVC配置提供了 <code>ResourceUrlProvider</code> bean，以便可以将其注
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-default-servlet-handler">1.11.11. 默认Servlet</h4>
+<h4 id="mvc-default-servlet-handler"><a class="anchor" href="#mvc-default-servlet-handler"></a>1.11.11. 默认Servlet</h4>
 <div class="paragraph">
 <p>Spring MVC允许将 <code>DispatcherServlet</code> 映射到 <code>/</code>（从而覆盖了容器默认Servlet的映射），
 同时仍允许容器默认Servlet处理静态资源请求。它使用 <code>/**</code> 的URL映射和相对于其他URL映射的最低优先级配置
@@ -6808,7 +6802,7 @@ public class WebConfig implements WebMvcConfigurer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-config-path-matching">1.11.12. 路径匹配</h4>
+<h4 id="mvc-config-path-matching"><a class="anchor" href="#mvc-config-path-matching"></a>1.11.12. 路径匹配</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-config-path-matching">WebFlux</a></span></p>
 </div>
@@ -6870,7 +6864,7 @@ public class WebConfig implements WebMvcConfigurer {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-config-advanced-java">1.11.13. 高级Java配置</h4>
+<h4 id="mvc-config-advanced-java"><a class="anchor" href="#mvc-config-advanced-java"></a>1.11.13. 高级Java配置</h4>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-config-advanced-java">WebFlux</a></span></p>
 </div>
@@ -6907,7 +6901,7 @@ public class WebConfig extends DelegatingWebMvcConfiguration {
 </div>
 </div>
 <div class="sect3">
-<h4 id="mvc-config-advanced-xml">1.11.14. 高级XML配置</h4>
+<h4 id="mvc-config-advanced-xml"><a class="anchor" href="#mvc-config-advanced-xml"></a>1.11.14. 高级XML配置</h4>
 <div class="paragraph">
 <p>MVC命名空间没有高级模式。如果你需要在bean上自定义一个不能更改的属性，则可以使用Spring
 <code>ApplicationContext</code> 的 <code>BeanPostProcessor</code> 生命周期钩子，如以下示例所示：</p>
@@ -6929,7 +6923,7 @@ public class MyPostProcessor implements BeanPostProcessor {
 </div>
 </div>
 <div class="sect2">
-<h3 id="mvc-http2">1.12. HTTP/2</h3>
+<h3 id="mvc-http2"><a class="anchor" href="#mvc-http2"></a>1.12. HTTP/2</h3>
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-http2">WebFlux</a></span></p>
 </div>
@@ -6946,13 +6940,13 @@ public class MyPostProcessor implements BeanPostProcessor {
 </div>
 </div>
 <div class="sect1">
-<h2 id="webmvc-client">2. REST客户端</h2>
+<h2 id="webmvc-client"><a class="anchor" href="#webmvc-client"></a>2. REST客户端</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>本节描述了客户端对REST端点的访问选项。</p>
 </div>
 <div class="sect2">
-<h3 id="webmvc-resttemplate">2.1. <code>RestTemplate</code></h3>
+<h3 id="webmvc-resttemplate"><a class="anchor" href="#webmvc-resttemplate"></a>2.1. <code>RestTemplate</code></h3>
 <div class="paragraph">
 <p><code>RestTemplate</code> 是执行HTTP请求的同步客户端。它是原始的Spring REST客户端，并且在基础HTTP客户端库上公开了简单的模板方法API。</p>
 </div>
@@ -6974,7 +6968,7 @@ public class MyPostProcessor implements BeanPostProcessor {
 </div>
 </div>
 <div class="sect2">
-<h3 id="webmvc-webclient">2.2. <code>WebClient</code></h3>
+<h3 id="webmvc-webclient"><a class="anchor" href="#webmvc-webclient"></a>2.2. <code>WebClient</code></h3>
 <div class="paragraph">
 <p><code>WebClient</code> 是执行HTTP请求的非阻塞，响应式客户端。它是在5.0中引入的，它提供了 <code>RestTemplate</code> 的现代替代方案，
 并有效支持同步和异步以及流方案。</p>
@@ -7011,7 +7005,7 @@ public class MyPostProcessor implements BeanPostProcessor {
 </div>
 </div>
 <div class="sect1">
-<h2 id="testing">3. 测试</h2>
+<h2 id="testing"><a class="anchor" href="#testing"></a>3. 测试</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p><span class="small"><a href="https://docs.spring.io/spring/docs/5.2.2.RELEASE/spring-framework-reference/web-reactive.html#webflux-test">与Spring WebFlux相同</a></span></p>
