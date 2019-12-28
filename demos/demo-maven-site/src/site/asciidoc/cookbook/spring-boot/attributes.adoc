@@ -1,6 +1,7 @@
 
 :spring-boot-artifactory-repo: snapshot
 :spring-boot-version: {version}
+:spring-framework-version: 5.2.2.RELEASE
 
 :github-tag: v{version}
 :github-repo: spring-projects/spring-boot

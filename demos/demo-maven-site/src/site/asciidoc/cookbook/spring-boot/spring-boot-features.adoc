@@ -1256,7 +1256,7 @@ NOTE: 由于在应用程序生命周期中非常早就请求了此bean，因此�
 Spring Boot为表达持续时间提供了专门的支持。如果公开 `java.time.Duration` 属性，则应用程序属性中的以下格式可用：
 
 * 常规的 `long` 表示形式（使用毫秒作为默认单位，除非已指定 `@DurationUnit`）
-* {java-api}/java/time/Duration.html#parse-java.lang.CharSequence-[`java.time.Duration`使用的]标准ISO-8601格式
+* {java-api}/java/time/Duration.html#parse-java.lang.CharSequence-[`java.time.Duration` 使用的]标准ISO-8601格式
 * 值和单位相结合的更易读的格式（例如：10s表示10秒）
 
 考虑以下示例：
@@ -2967,38 +2967,37 @@ Netty的资源配置 -- 这将同时应用于客户端和服务器。
 
 [[boot-features-rsocket]]
 == RSocket
-https://rsocket.io[RSocket] is a binary protocol for use on byte stream transports.
-It enables symmetric interaction models via async message passing over a single connection.
 
+https://rsocket.io[RSocket]是用于字节流传输的二进制协议。它通过在单个连接上传递异步消息来支持对称交互模型。
 
-The `spring-messaging` module of the Spring Framework provides support for RSocket requesters and responders, both on the client and on the server side.
-See the {spring-framework-docs}web-reactive.html#rsocket-spring[RSocket section] of the Spring Framework reference for more details, including an overview of the RSocket protocol.
+Spring框架的 `spring-messaging` 模块在客户端和服务器端都支持RSocket请求者和响应者。有关更多详细信息，请参见Spring
+Framework参考中的 {spring-framework-docs}web-reactive.html#rsocket-spring[RSocket部分]，其中包括RSocket协议的概述。
 
 
 [[boot-features-rsocket-strategies-auto-configuration]]
-=== RSocket Strategies Auto-configuration
-Spring Boot auto-configures an `RSocketStrategies` bean that provides all the required infrastructure for encoding and decoding RSocket payloads.
-By default, the auto-configuration will try to configure the following (in order):
+=== RSocket策略自动配置
 
-. https://cbor.io/[CBOR] codecs with Jackson
-. JSON codecs with Jackson
+Spring Boot自动配置一个 `RSocketStrategies` bean，该bean提供了编码和解码RSocket有效载荷所需的所有基础设施。
+默认情况下，自动配置将尝试（按顺序）配置以下内容：
 
-The `spring-boot-starter-rsocket` starter provides both dependencies.
-Check out the <<boot-features-json-jackson,Jackson support section>> to know more about customization possibilities.
+. Jackson的 https://cbor.io/[CBOR]编解码器
+. Jackson的JSON编解码器
 
-Developers can customize the `RSocketStrategies` component by creating beans that implement the `RSocketStrategiesCustomizer` interface.
-Note that their `@Order` is important, as it determines the order of codecs.
+`spring-boot-starter-socket` 启动器提供了两个依赖项。查阅<<boot-features-json-jackson,Jackson支持部分>>，
+了解更多定制的可能性。
+
+开发人员可以通过创建实现 `RSocketStrategiesCustomizer` 接口的bean来自定义 `RSocketStrategies` 组件。
+请注意，它们的 `@Order` 很重要，因为它确定编解码器的顺序。
 
 
 [[boot-features-rsocket-server-auto-configuration]]
-=== RSocket server Auto-configuration
-Spring Boot provides RSocket server auto-configuration.
-The required dependencies are provided by the `spring-boot-starter-rsocket`.
+=== RSocket服务器自动配置
 
-Spring Boot allows exposing RSocket over WebSocket from a WebFlux server, or standing up an independent RSocket server.
-This depends on the type of application and its configuration.
+Spring Boot提供了RSocket服务器自动配置。所需的依赖关系由 `spring-boot-starter-rsocket` 提供。
 
-For WebFlux application (i.e. of type `WebApplicationType.REACTIVE`), the RSocket server will be plugged into the Web Server only if the following properties match:
+Spring Boot允许从WebFlux服务器通过WebSocket公开RSocket，或支持独立的RSocket服务器。这取决于应用程序的类型及其配置。
+
+对于WebFlux应用程序（即 `WebApplicationType.REACTIVE` 类型），RSocket服务器只有在下列属性匹配时才会被插入到Web服务器:
 
 [source,properties,indent=0,subs="verbatim,quotes,attributes",configprops]
 ----
@@ -3007,10 +3006,9 @@ For WebFlux application (i.e. of type `WebApplicationType.REACTIVE`), the RSocke
     #spring.rsocket.server.port= # no port is defined
 ----
 
-WARNING: Plugging RSocket into a web server is only supported with Reactor Netty, as RSocket itself is built with that library.
+WARNING: 只有Reactor Netty才支持将RSocket插入web服务器，因为RSocket本身就是用这个库构建的。
 
-Alternatively, an RSocket TCP or websocket server is started as an independent, embedded server.
-Besides the dependency requirements, the only required configuration is to define a port for that server:
+另外，RSocket TCP或Websocket服务器也可以作为独立的嵌入式服务器启动。除了依赖性要求之外，唯一需要的配置是为该服务器定义端口：
 
 [source,properties,indent=0,subs="verbatim,quotes,attributes",configprops]
 ----
@@ -3021,24 +3019,24 @@ Besides the dependency requirements, the only required configuration is to defin
 
 
 [[boot-features-rsocket-messaging]]
-=== Spring Messaging RSocket support
-Spring Boot will auto-configure the Spring Messaging infrastructure for RSocket.
+=== Spring Messaging RSocket支持
 
-This means that Spring Boot will create a `RSocketMessageHandler` bean that will handle RSocket requests to your application.
+Spring Boot将为RSocket自动配置Spring Messaging基础设施。
 
+这意味着Spring Boot将创建一个 `RSocketMessageHandler` bean，该bean将处理对你的应用程序的RSocket请求。
 
 [[boot-features-rsocket-requester]]
-=== Calling RSocket Services with `RSocketRequester`
-Once the `RSocket` channel is established between server and client, any party can send or receive requests to the other.
+=== 使用 `RSocketRequester` 调用RSocket服务
 
-As a server, you can get injected with an `RSocketRequester` instance on any handler method of an RSocket `@Controller`.
-As a client, you need to configure and establish an RSocket connection first.
-Spring Boot auto-configures an `RSocketRequester.Builder` for such cases with the expected codecs.
+在服务器和客户端之间建立RSocket通道后，任何一方都可以向另一方发送或接收请求。
 
-The `RSocketRequester.Builder` instance is a prototype bean, meaning each injection point will provide you with a new instance .
-This is done on purpose since this builder is stateful and you shouldn't create requesters with different setups using the same instance.
+作为服务器，你可以在RSocket `@Controller` 的任何处理程序方法上注入 `RSocketRequester` 实例。
+作为客户端，你需要首先配置和建立RSocket连接。在这种情况下，Spring Boot会使用预期的编解码器自动配置 `RSocketRequester.Builder`。
 
-The following code shows a typical example:
+`RSocketRequester.Builder` 实例是一个原型bean，这意味着每个注入点将为你提供一个新实例。
+这样做是有目的的，因为此构建器是有状态的，因此你不应使用同一实例创建具有不同设置的请求者。
+
+以下代码显示了一个典型示例：
 
 [source,java,indent=0]
 ----
@@ -3063,66 +3061,73 @@ The following code shows a typical example:
 
 
 [[boot-features-security]]
-== Security
-If {spring-security}[Spring Security] is on the classpath, then web applications are secured by default.
-Spring Boot relies on Spring Security’s content-negotiation strategy to determine whether to use `httpBasic` or `formLogin`.
-To add method-level security to a web application, you can also add `@EnableGlobalMethodSecurity` with your desired settings.
-Additional information can be found in the {spring-security-docs}#jc-method[Spring Security Reference Guide].
+== 安全
 
-The default `UserDetailsService` has a single user.
-The user name is `user`, and the password is random and is printed at INFO level when the application starts, as shown in the following example:
+如果 {spring-security}[Spring Security]在类路径上，则默认情况下Web应用程序是安全的。
+Spring Boot依靠Spring Security的内容协商策略来确定是使用 `httpBasic` 还是 `formLogin`。
+要将方法级安全性添加到Web应用程序，还可以使用所需的设置添加 `@EnableGlobalMethodSecurity`。
+可以在 {spring-security-docs}#jc-method[Spring Security参考指南]中找到更多信息。
+
+默认的 `UserDetailsService` 具有单个用户。用户名是 `user`，密码是随机的，并在应用程序启动时以INFO级别显示，如下例所示：
 
 [indent=0]
 ----
     Using generated security password: 78fa095d-3f4c-48b1-ad50-e24c31d5cf35
 ----
 
-NOTE: If you fine-tune your logging configuration, ensure that the `org.springframework.boot.autoconfigure.security` category is set to log `INFO`-level messages.
-Otherwise, the default password is not printed.
+NOTE: 如果你微调日志记录配置，请确保将 `org.springframework.boot.autoconfigure.security` 类别设置为记录 `INFO`
+级别的消息。否则，不会打印默认密码。
 
-You can change the username and password by providing a `spring.security.user.name` and `spring.security.user.password`.
+你可以通过提供 `spring.security.user.name` 和 `spring.security.user.password` 来更改用户名和密码。
 
-The basic features you get by default in a web application are:
+默认情况下，你在Web应用程序中获得的基本功能是：
 
-* A `UserDetailsService` (or `ReactiveUserDetailsService` in case of a WebFlux application) bean with in-memory store and a single user with a generated password (see {spring-boot-module-api}/autoconfigure/security/SecurityProperties.User.html[`SecurityProperties.User`] for the properties of the user).
-* Form-based login or HTTP Basic security (depending on the `Accept` header in the request) for the entire application (including actuator endpoints if actuator is on the classpath).
-* A `DefaultAuthenticationEventPublisher` for publishing authentication events.
+* 一个具有内存存储的 `UserDetailsService`（如果是WebFlux应用程序，则为 `ReactiveUserDetailsService`）Bean，
+一个具有已生成密码的用户（请参阅 {spring-boot-module-api}/autoconfigure/security/SecurityProperties.User.html[`SecurityProperties.User`]以获取用户属性）。
+* 整个应用程序的基于表单的登录或HTTP基本安全性（取决于请求中的 `Accept` 头部）（包括执行器端点，如果执行器位于类路径上）。
+* 用于发布身份验证事件的 `DefaultAuthenticationEventPublisher`。
 
-You can provide a different `AuthenticationEventPublisher` by adding a bean for it.
-
+你可以通过为它添加一个bean来提供一个不同的 `AuthenticationEventPublisher`。
 
 
 [[boot-features-security-mvc]]
-=== MVC Security
-The default security configuration is implemented in `SecurityAutoConfiguration` and `UserDetailsServiceAutoConfiguration`.
-`SecurityAutoConfiguration` imports `SpringBootWebSecurityConfiguration` for web security and `UserDetailsServiceAutoConfiguration` configures authentication, which is also relevant in non-web applications.
-To switch off the default web application security configuration completely or to combine multiple Spring Security components such as OAuth 2 Client and Resource Server, add a bean of type `WebSecurityConfigurerAdapter` (doing so does not disable the `UserDetailsService` configuration or Actuator's security).
+=== MVC安全
 
-To also switch off the `UserDetailsService` configuration, you can add a bean of type `UserDetailsService`, `AuthenticationProvider`, or `AuthenticationManager`.
+默认的安全配置在 `SecurityAutoConfiguration` 和 `UserDetailsServiceAutoConfiguration` 中实现。
+`SecurityAutoConfiguration` 导入用于Web安全的 `SpringBootWebSecurityConfiguration`，
+而 `UserDetailsServiceAutoConfiguration` 配置身份验证，这也与非Web应用程序相关。
+要完全关闭默认的Web应用程序安全性配置或合并多个Spring Security组件（例如：OAuth 2客户端和资源服务器），
+请添加类型为 `WebSecurityConfigurerAdapter` 的bean（这样做不会禁用 `UserDetailsService` 配置或Actuator的安全性）。
 
-Access rules can be overridden by adding a custom `WebSecurityConfigurerAdapter`.
-Spring Boot provides convenience methods that can be used to override access rules for actuator endpoints and static resources.
-`EndpointRequest` can be used to create a `RequestMatcher` that is based on the configprop:management.endpoints.web.base-path[] property.
-`PathRequest` can be used to create a `RequestMatcher` for resources in commonly used locations.
+要关闭 `UserDetailsService` 配置，你可以添加
+`UserDetailsService`、`AuthenticationProvider` 或 `AuthenticationManager` 类型的bean。
 
+通过添加自定义 `WebSecurityConfigurerAdapter` 可以覆盖访问规则。
+Spring Boot提供了便捷的方法，可用于覆盖actuator端点和静态资源的访问规则。
+`EndpointRequest` 可用于创建基于 `management.endpoints.web.base-path` 属性的 `RequestMatcher`。
+可以使用 `PathRequest` 为常用位置的资源创建一个 `RequestMatcher`。
 
 
 [[boot-features-security-webflux]]
-=== WebFlux Security
-Similar to Spring MVC applications, you can secure your WebFlux applications by adding the `spring-boot-starter-security` dependency.
-The default security configuration is implemented in `ReactiveSecurityAutoConfiguration` and `UserDetailsServiceAutoConfiguration`.
-`ReactiveSecurityAutoConfiguration` imports `WebFluxSecurityConfiguration` for web security and `UserDetailsServiceAutoConfiguration` configures authentication, which is also relevant in non-web applications.
-To switch off the default web application security configuration completely, you can add a bean of type `WebFilterChainProxy` (doing so does not disable the `UserDetailsService` configuration or Actuator's security).
+=== WebFlux安全
 
-To also switch off the `UserDetailsService` configuration, you can add a bean of type `ReactiveUserDetailsService` or `ReactiveAuthenticationManager`.
+与Spring MVC应用程序类似，你可以通过添加 `spring-boot-starter-security` 依赖项来保护WebFlux应用程序。
+默认的安全配置在 `ReactiveSecurityAutoConfiguration` 和 `UserDetailsServiceAutoConfiguration` 中实现。
+`ReactiveSecurityAutoConfiguration` 导入 `WebFluxSecurityConfiguration` 以获得Web安全，
+而 `UserDetailsServiceAutoConfiguration` 配置身份验证，这也与非Web应用程序相关。
+要完全关闭默认的Web应用程序安全配置，你可以添加 `WebFilterChainProxy` 类型的Bean
+（这样做不会禁用 `UserDetailsService` 配置或Actuator的安全性）。
 
-Access rules and the use of multiple Spring Security components such as OAuth 2 Client and Resource Server can be configured by adding a custom `SecurityWebFilterChain` bean.
-Spring Boot provides convenience methods that can be used to override access rules for actuator endpoints and static resources.
-`EndpointRequest` can be used to create a `ServerWebExchangeMatcher` that is based on the configprop:management.endpoints.web.base-path[] property.
+要关闭 `UserDetailsService` 配置，你可以添加类型为 `ReactiveUserDetailsService` 或 `ReactiveAuthenticationManager`
+的bean。
 
-`PathRequest` can be used to create a `ServerWebExchangeMatcher` for resources in commonly used locations.
+可以通过添加自定义 `SecurityWebFilterChain` bean来配置访问规则以及使用多个Spring Security组件
+（例如：OAuth 2 Client和Resource Server）。Spring Boot提供了便捷的方法，可用于覆盖actuator端点和静态资源的访问规则。
+`EndpointRequest` 可用于创建基于 `management.endpoints.web.base-path` 属性的 `ServerWebExchangeMatcher`。
 
-For example, you can customize your security configuration by adding something like:
+可以使用 `PathRequest` 为常用位置的资源创建 `ServerWebExchangeMatcher`。
+
+例如，你可以通过添加以下内容来自定义安全配置：
 
 [source,java,indent=0]
 ----
@@ -3142,17 +3147,16 @@ For example, you can customize your security configuration by adding something l
 
 [[boot-features-security-oauth2]]
 === OAuth2
-https://oauth.net/2/[OAuth2] is a widely used authorization framework that is supported by Spring.
 
-
+https://oauth.net/2/[OAuth2]是Spring支持的一种广泛使用的授权框架。
 
 [[boot-features-security-oauth2-client]]
-==== Client
-If you have `spring-security-oauth2-client` on your classpath, you can take advantage of some auto-configuration to make it easy to set up an OAuth2/Open ID Connect clients.
-This configuration makes use of the properties under `OAuth2ClientProperties`.
-The same properties are applicable to both servlet and reactive applications.
+==== 客户端
 
-You can register multiple OAuth2 clients and providers under the `spring.security.oauth2.client` prefix, as shown in the following example:
+如果你在类路径中具有 `spring-security-oauth2-client`，则可以利用一些自动配置功能来轻松设置OAuth2/OpenID Connect客户端。
+此配置使用 `OAuth2ClientProperties` 下的属性。相同的属性适用于servlet和响应式应用程序。
+
+你可以在 `spring.security.oauth2.client` 前缀下注册多个OAuth2客户端和Provider，如以下示例所示：
 
 [source,properties,indent=0,configprops]
 ----
@@ -3182,20 +3186,21 @@ You can register multiple OAuth2 clients and providers under the `spring.securit
     spring.security.oauth2.client.provider.my-oauth-provider.user-name-attribute=name
 ----
 
-For OpenID Connect providers that support https://openid.net/specs/openid-connect-discovery-1_0.html[OpenID Connect discovery], the configuration can be further simplified.
-The provider needs to be configured with an `issuer-uri` which is the URI that the it asserts as its Issuer Identifier.
-For example, if the `issuer-uri` provided is "https://example.com", then an `OpenID Provider Configuration Request` will be made to "https://example.com/.well-known/openid-configuration".
-The result is expected to be an `OpenID Provider Configuration Response`.
-The following example shows how an OpenID Connect Provider can be configured with the `issuer-uri`:
+对于支持 https://openid.net/specs/openid-connect-discovery-1_0.html[OpenID Connect发现]的OpenID
+Connect Providers，可以进一步简化配置。
+供应商需要配置一个 `issuer-uri`，该URI是其声明的Issuer标识符。
+例如，如果提供的 `issuer-uri` 是“https://example.com”，则将向“https://example.com/.well-known/openid-configuration”
+发出 `OpenID Provider Configuration Request`。结果应为 `OpenID Provider Configuration Response`。
+以下示例显示了如何使用 `issuer-uri` 配置OpenID Connect Provider：
 
 [source,properties,indent=0,configprops]
 ----
     spring.security.oauth2.client.provider.oidc-provider.issuer-uri=https://dev-123456.oktapreview.com/oauth2/default/
 ----
 
-By default, Spring Security's `OAuth2LoginAuthenticationFilter` only processes URLs matching `/login/oauth2/code/*`.
-If you want to customize the `redirect-uri` to use a different pattern, you need to provide configuration to process that custom pattern.
-For example, for servlet applications, you can add your own `WebSecurityConfigurerAdapter` that resembles the following:
+默认情况下，Spring Security的 `OAuth2LoginAuthenticationFilter` 仅处理与 `/login/oauth2/code/*` 匹配的URL。
+如果要自定义 `redirect-uri` 以使用其他模式，则需要提供配置以处理该自定义模式。
+例如，对于servlet应用程序，你可以添加自己的类似于以下内容的 `WebSecurityConfigurerAdapter`：
 
 [source,java,indent=0]
 ----
@@ -3217,13 +3222,15 @@ public class OAuth2LoginSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 [[boot-features-security-oauth2-common-providers]]
-===== OAuth2 client registration for common providers
-For common OAuth2 and OpenID providers, including Google, Github, Facebook, and Okta, we provide a set of provider defaults (`google`, `github`, `facebook`, and `okta`, respectively).
+===== 常见供应商的OAuth2客户端注册
 
-If you do not need to customize these providers, you can set the `provider` attribute to the one for which you need to infer defaults.
-Also, if the key for the client registration matches a default supported provider, Spring Boot infers that as well.
+对于常见的OAuth2和OpenID供应商，包括Google，Github，Facebook和Okta，我们提供了一组供应商默认值（分别为
+`google`，`github`，`facebook` 和 `okta`）。
 
-In other words, the two configurations in the following example use the Google provider:
+如果不需要自定义这些供应商，则可以将 `provider` 属性设置为需要为其推断默认值的属性。
+另外，如果用于客户端注册的key与默认支持的供应商匹配，则Spring Boot也会进行推断。
+
+换句话说，以下示例中的两个配置都使用Google供应商：
 
 [source,properties,indent=0,configprops]
 ----
@@ -3238,9 +3245,10 @@ In other words, the two configurations in the following example use the Google p
 
 
 [[boot-features-security-oauth2-server]]
-==== Resource Server
-If you have `spring-security-oauth2-resource-server` on your classpath, Spring Boot can set up an OAuth2 Resource Server.
-For JWT configuration, a JWK Set URI or OIDC Issuer URI needs to be specified, as shown in the following examples:
+==== 资源服务器
+
+如果你的类路径上有 `spring-security-oauth2-resource-server`，则Spring Boot可以设置OAuth2资源服务器。
+对于JWT配置，需要指定JWK Set URI或OIDC Issuer URI，如以下示例所示：
 
 [source,properties,indent=0,configprops]
 ----
@@ -3252,14 +3260,15 @@ For JWT configuration, a JWK Set URI or OIDC Issuer URI needs to be specified, a
     spring.security.oauth2.resourceserver.jwt.issuer-uri=https://dev-123456.oktapreview.com/oauth2/default/
 ----
 
-NOTE: If the authorization server does not support a JWK Set URI, you can configure the resource server with the Public Key used for verifying the signature of the JWT.
-This can be done using the configprop:spring.security.oauth2.resourceserver.jwt.public-key-location[] property, where the value needs to point to a file containing the public key in the PEM-encoded x509 format.
+NOTE: 如果授权服务器不支持JWK Set URI，则可以使用用于验证JWT签名的公钥来配置资源服务器。
+可以使用 `spring.security.oauth2.resourceserver.jwt.public-key-location` 属性来完成此操作，
+该属性值需要指向包含PEM-encoded x509格式的公钥的文件。
 
-The same properties are applicable for both servlet and reactive applications.
+相同的属性适用于servlet和响应式应用程序。
 
-Alternatively, you can define your own `JwtDecoder` bean for servlet applications or a `ReactiveJwtDecoder` for reactive applications.
+另外，你可以为Servlet应用程序定义自己的 `JwtDecoder` Bean，或者为响应式应用程序定义 `ReactiveJwtDecoder`。
 
-In cases where opaque tokens are used instead of JWTs, you can configure the following properties to validate tokens via introspection:
+如果使用opaque tokens而不是JWT，则可以配置以下属性以通过自省来验证tokens：
 
 [source,properties,indent=0,configprops]
 ----
@@ -3268,30 +3277,28 @@ In cases where opaque tokens are used instead of JWTs, you can configure the fol
     spring.security.oauth2.resourceserver.opaquetoken.client-secret=my-client-secret
 ----
 
-Again, the same properties are applicable for both servlet and reactive applications.
+同样，相同的属性适用于servlet和响应式应用程序。
 
-Alternatively, you can define your own `OpaqueTokenIntrospector` bean for servlet applications or a `ReactiveOpaqueTokenIntrospector` for reactive applications.
+另外，你可以为Servlet应用程序定义自己的 `OpaqueTokenIntrospector` Bean，或者为响应式应用程序定义
+`ReactiveOpaqueTokenIntrospector`。
 
+==== 授权服务器
 
-
-==== Authorization Server
-Currently, Spring Security does not provide support for implementing an OAuth 2.0 Authorization Server.
-However, this functionality is available from the {spring-security-oauth2}[Spring Security OAuth] project, which will eventually be superseded by Spring Security completely.
-Until then, you can use the `spring-security-oauth2-autoconfigure` module to easily set up an OAuth 2.0 authorization server; see its https://docs.spring.io/spring-security-oauth2-boot[documentation] for instructions.
+当前，Spring Security不提供对实现OAuth 2.0授权服务器的支持。但是， {spring-security-oauth2}[Spring Security OAuth]项目提供了此功能，
+最终将被Spring Security完全取代。在此之前，你可以使用 `spring-security-oauth2-autoconfigure`
+模块轻松设置OAuth 2.0授权服务器；有关说明，请参见其 https://docs.spring.io/spring-security-oauth2-boot[文档]。
 
 
 [[boot-features-security-saml]]
 === SAML 2.0
 
-
-
 [[boot-features-security-saml2-relying-party]]
-==== Relying Party
-If you have `spring-security-saml2-service-provider` on your classpath, you can take advantage of some auto-configuration to make it easy to set up a SAML 2.0 Relying Party.
-This configuration makes use of the properties under `Saml2RelyingPartyProperties`.
+==== 依赖方
 
-A relying party registration represents a paired configuration between an Identity Provider, IDP, and a Service Provider, SP.
-You can register multiple relying parties under the `spring.security.saml2.relyingparty` prefix, as shown in the following example:
+如果你在类路径中具有 `spring-security-saml2-service-provider`，则可以利用一些自动配置功能来轻松设置
+SAML 2.0依赖方。此配置使用 `Saml2RelyingPartyProperties` 下的属性。
+
+依赖方注册代表身份供应商IDP和服务供应商SP之间的配对配置。你可以在 `spring.security.saml2.relyingparty` 前缀下注册多个依赖方，如以下示例所示：
 
 [source,properties,indent=0,configprops]
 ----
@@ -3311,63 +3318,64 @@ You can register multiple relying parties under the `spring.security.saml2.relyi
 
 
 [[boot-features-security-actuator]]
-=== Actuator Security
-For security purposes, all actuators other than `/health` and `/info` are disabled by default.
-The configprop:management.endpoints.web.exposure.include[] property can be used to enable the actuators.
+=== Actuator安全
 
-If Spring Security is on the classpath and no other WebSecurityConfigurerAdapter is present, all actuators other than `/health` and `/info` are secured by Spring Boot auto-configuration.
-If you define a custom `WebSecurityConfigurerAdapter`, Spring Boot auto-configuration will back off and you will be in full control of actuator access rules.
+为了安全起见，默认情况下禁用 `/health` 和 `/info` 以外的所有actuators。
+`management.endpoints.web.exposure.include` 属性可用于启用actuators。
 
-NOTE: Before setting the `management.endpoints.web.exposure.include`, ensure that the exposed actuators do not contain sensitive information and/or are secured by placing them behind a firewall or by something like Spring Security.
+如果Spring Security位于类路径上，并且不存在其他 `WebSecurityConfigurerAdapter`，
+则除 `/health` 和 `/info` 以外的所有actuators均由Spring Boot自动配置保护。
+如果定义自定义 `WebSecurityConfigurerAdapter`，则Spring Boot自动配置将退出，你将完全控制actuator访问规则。
 
+NOTE: 在设置 `management.endpoints.web.exposure.include` 之前，请确保暴露的actuators不包含敏感信息和/或通过将它们放置在防火墙后面或通过诸如
+Spring Security之类的方法进行保护。
 
 
 [[boot-features-security-csrf]]
-==== Cross Site Request Forgery Protection
-Since Spring Boot relies on Spring Security's defaults, CSRF protection is turned on by default.
-This means that the actuator endpoints that require a `POST` (shutdown and loggers endpoints), `PUT` or `DELETE` will get a 403 forbidden error when the default security configuration is in use.
+==== 跨站请求伪造保护
 
-NOTE: We recommend disabling CSRF protection completely only if you are creating a service that is used by non-browser clients.
+由于Spring Boot依赖于Spring Security的默认设置，因此CSRF保护默认情况下处于启用状态。
+这意味着在使用默认安全配置时，需要POST（shutdown和loggers端点），PUT或DELETE的actuator端点将收到403 forbidden错误。
 
-Additional information about CSRF protection can be found in the {spring-security-docs}#csrf[Spring Security Reference Guide].
+NOTE: 我们建议仅在创建非浏览器客户端使用的服务时完全禁用CSRF保护。
 
+关于CSRF保护的其他信息可以在 {spring-security-docs}#csrf[Spring Security参考指南]中找到。
 
 
 [[boot-features-sql]]
-== Working with SQL Databases
-The {spring-framework}[Spring Framework] provides extensive support for working with SQL databases, from direct JDBC access using `JdbcTemplate` to complete "`object relational mapping`" technologies such as Hibernate.
-{spring-data}[Spring Data] provides an additional level of functionality: creating `Repository` implementations directly from interfaces and using conventions to generate queries from your method names.
+== 使用SQL数据库
 
+{spring-framework}[Spring Framework]为使用SQL数据库提供了广泛的支持，从使用 `JdbcTemplate` 的直接JDBC
+访问到完整的“`对象关系映射`”技术（例如：Hibernate）。
+{spring-data}[Spring Data]提供了更高级别的功能：直接从接口创建 `Repository` 实现，并使用约定从你的方法名称生成查询。
 
 
 [[boot-features-configure-datasource]]
-=== Configure a DataSource
-Java's `javax.sql.DataSource` interface provides a standard method of working with database connections.
-Traditionally, a 'DataSource' uses a `URL` along with some credentials to establish a database connection.
+=== 配置DataSource
 
-TIP: See <<howto.adoc#howto-configure-a-datasource,the "`How-to`" section>> for more advanced examples, typically to take full control over the configuration of the DataSource.
+Java的 `javax.sql.DataSource` 接口提供了使用数据库连接的标准方法。传统上，“DataSource”使用 `URL` 和一些凭据来建立数据库连接。
 
+TIP: 有关更多高级示例，请参见 {spring-boot-docs}/htmlsingle/#howto-configure-a-datasource["How-to"部分]，通常可以完全控制DataSource的配置。
 
 
 [[boot-features-embedded-database-support]]
-==== Embedded Database Support
-It is often convenient to develop applications by using an in-memory embedded database.
-Obviously, in-memory databases do not provide persistent storage.
-You need to populate your database when your application starts and be prepared to throw away data when your application ends.
+==== 嵌入式数据库支持
 
-TIP: The "`How-to`" section includes a <<howto.adoc#howto-database-initialization, section on how to initialize a database>>.
+使用内存嵌入式数据库来开发应用程序通常很方便。显然，内存数据库不提供持久存储。你需要在应用程序启动时填充数据库，并准备在应用程序结束时丢弃数据。
 
-Spring Boot can auto-configure embedded https://www.h2database.com[H2], http://hsqldb.org/[HSQL], and https://db.apache.org/derby/[Derby] databases.
-You need not provide any connection URLs.
-You need only include a build dependency to the embedded database that you want to use.
+TIP: "How-to"部分包括有关 {spring-boot-docs}/htmlsingle/#howto-database-initialization[如何初始化数据库的部分]。
+
+Spring Boot可以自动配置嵌入式 https://www.h2database.com[H2]， http://hsqldb.org/[HSQL]和
+https://db.apache.org/derby/[Derby]数据库。你无需提供任何连接URL。你只需要包含要使用的嵌入式数据库的构建依赖项即可。
+
 
 [NOTE]
 ====
-If you are using this feature in your tests, you may notice that the same database is reused by your whole test suite regardless of the number of application contexts that you use.
-If you want to make sure that each context has a separate embedded database, you should set `spring.datasource.generate-unique-name` to `true`.
+如果你在测试中使用此功能，则可能会注意到，整个测试套件将重复使用同一数据库，而不管你使用的应用程序上下文有多少。
+如果要确保每个上下文都有一个单独的嵌入式数据库，则应将 `spring.datasource.generate-unique-name` 设置为true。
 ====
 
-For example, the typical POM dependencies would be as follows:
+例如，典型的POM依赖关系如下：
 
 [source,xml,indent=0]
 ----
@@ -3382,36 +3390,31 @@ For example, the typical POM dependencies would be as follows:
     </dependency>
 ----
 
-NOTE: You need a dependency on `spring-jdbc` for an embedded database to be auto-configured.
-In this example, it is pulled in transitively through `spring-boot-starter-data-jpa`.
+NOTE: 你需要依赖 `spring-jdbc` 来自动配置嵌入式数据库。在此示例中，它通过 `spring-boot-starter-data-jpa` 传递性地传入。
 
-TIP: If, for whatever reason, you do configure the connection URL for an embedded database, take care to ensure that the database's automatic shutdown is disabled.
-If you use H2, you should use `DB_CLOSE_ON_EXIT=FALSE` to do so.
-If you use HSQLDB, you should ensure that `shutdown=true` is not used.
-Disabling the database's automatic shutdown lets Spring Boot control when the database is closed, thereby ensuring that it happens once access to the database is no longer needed.
-
+TIP: 如果出于某种原因确实为嵌入式数据库配置了连接URL，请务必确保禁用了数据库的自动关闭功能。
+如果使用H2，则应使用 `DB_CLOSE_ON_EXIT=FALSE` 进行操作。如果使用HSQLDB，则应确保未使用 `shutdown=true`。
+通过禁用数据库的自动关闭功能，Spring Boot可以控制何时关闭数据库，从而确保一旦不再需要访问数据库时就可以进行自动关闭。
 
 
 [[boot-features-connect-to-production-database]]
-==== Connection to a Production Database
-Production database connections can also be auto-configured by using a pooling `DataSource`.
-Spring Boot uses the following algorithm for choosing a specific implementation:
+==== 连接到生产数据库
 
-. We prefer https://github.com/brettwooldridge/HikariCP[HikariCP] for its performance and concurrency.
-  If HikariCP is available, we always choose it.
-. Otherwise, if the Tomcat pooling `DataSource` is available, we use it.
-. If neither HikariCP nor the Tomcat pooling datasource are available and if https://commons.apache.org/proper/commons-dbcp/[Commons DBCP2] is available, we use it.
+生产数据库连接也可以通过使用池化 `DataSource` 来自动配置。Spring Boot使用以下算法来选择特定的实现：
 
-If you use the `spring-boot-starter-jdbc` or `spring-boot-starter-data-jpa` "`starters`", you automatically get a dependency to `HikariCP`.
+. 我们更喜欢 https://github.com/brettwooldridge/HikariCP[HikariCP]的性能和并发性。如果有HikariCP，我们总是选择它。
+. 反之，如果Tomcat池化 `DataSource` 可用，我们将使用它。
+. HikariCP和Tomcat池数据源均不可用，如果 https://commons.apache.org/proper/commons-dbcp/[Commons DBCP2]可用，我们将使用它。
 
-NOTE: You can bypass that algorithm completely and specify the connection pool to use by setting the configprop:spring.datasource.type[] property.
-This is especially important if you run your application in a Tomcat container, as `tomcat-jdbc` is provided by default.
+如果你使用 `spring-boot-starter-jdbc` 或 `spring-boot-starter-data-jpa` “`starters`”，则会自动获得对
+`HikariCP` 的依赖。
 
-TIP: Additional connection pools can always be configured manually.
-If you define your own `DataSource` bean, auto-configuration does not occur.
+NOTE: 你可以通过设置 `spring.datasource.type` 属性来完全绕过该算法，并指定要使用的连接池。
+如果你在Tomcat容器中运行应用程序，这一点尤其重要，因为默认情况下提供了 `tomcat-jdbc`。
 
-DataSource configuration is controlled by external configuration properties in `+spring.datasource.*+`.
-For example, you might declare the following section in `application.properties`:
+TIP: 其他连接池始终可以手动配置。如果定义自己的 `DataSource` bean，则不会进行自动配置。
+
+DataSource配置由 `+spring.datasource.*+` 中的外部配置属性控制。例如：你可以在 `application.properties` 中声明以下部分：
 
 [source,properties,indent=0,configprops]
 ----
@@ -3421,20 +3424,19 @@ For example, you might declare the following section in `application.properties`
     spring.datasource.driver-class-name=com.mysql.jdbc.Driver
 ----
 
-NOTE: You should at least specify the URL by setting the configprop:spring.datasource.url[] property.
-Otherwise, Spring Boot tries to auto-configure an embedded database.
+NOTE: 你至少应通过设置 `spring.datasource.url` 属性来指定URL。否则，Spring Boot会尝试自动配置嵌入式数据库。
 
-TIP: You often do not need to specify the `driver-class-name`, since Spring Boot can deduce it for most databases from the `url`.
+TIP: 你通常不需要指定 `driver-class-name` 名称，因为Spring Boot可以根据 `url` 从大多数数据库推断出它。
 
-NOTE: For a pooling `DataSource` to be created, we need to be able to verify that a valid `Driver` class is available, so we check for that before doing anything.
-In other words, if you set `spring.datasource.driver-class-name=com.mysql.jdbc.Driver`, then that class has to be loadable.
+NOTE: 对于要创建池化 `DataSource`，我们需要能够验证有效的 `Driver` 类是否可用，因此我们在进行任何操作之前都要进行检查。
+换句话说，如果设置 `spring.datasource.driver-class-name=com.mysql.jdbc.Driver`，则该类必须是可加载的。
 
-See {spring-boot-autoconfigure-module-code}/jdbc/DataSourceProperties.java[`DataSourceProperties`] for more of the supported options.
-These are the standard options that work regardless of the actual implementation.
-It is also possible to fine-tune implementation-specific settings by using their respective prefix (`+spring.datasource.hikari.*+`, `+spring.datasource.tomcat.*+`, and `+spring.datasource.dbcp2.*+`).
-Refer to the documentation of the connection pool implementation you are using for more details.
+有关更多受支持的选项，请参见 {spring-boot-autoconfigure-module-code}/jdbc/DataSourceProperties.java[`DataSourceProperties`]。
+这些是不管实际实现如何都会起作用的标准选项。也可以使用它们各自的前缀（
+`+spring.datasource.hikari.*+`, `+spring.datasource.tomcat.*+` 和 `+spring.datasource.dbcp2.*+`）
+微调实现特定的设置。有关更多详细信息，请参阅所用连接池实现的文档。
 
-For instance, if you use the {tomcat-docs}/jdbc-pool.html#Common_Attributes[Tomcat connection pool], you could customize many additional settings, as shown in the following example:
+例如，如果使用 {tomcat-docs}/jdbc-pool.html#Common_Attributes[Tomcat连接池]，则可以自定义许多其他设置，如以下示例所示：
 
 [source,properties,indent=0,configprops]
 ----
@@ -3451,11 +3453,13 @@ For instance, if you use the {tomcat-docs}/jdbc-pool.html#Common_Attributes[Tomc
 
 
 [[boot-features-connecting-to-a-jndi-datasource]]
-==== Connection to a JNDI DataSource
-If you deploy your Spring Boot application to an Application Server, you might want to configure and manage your DataSource by using your Application Server's built-in features and access it by using JNDI.
+==== 连接到JNDI数据源
 
-The configprop:spring.datasource.jndi-name[] property can be used as an alternative to the configprop:spring.datasource.url[], configprop:spring.datasource.username[], and configprop:spring.datasource.password[] properties to access the `DataSource` from a specific JNDI location.
-For example, the following section in `application.properties` shows how you can access a JBoss AS defined `DataSource`:
+如果你将Spring Boot应用程序部署到Application Server，则可能需要使用Application Server的内置功能来配置和管理DataSource，并使用JNDI对其进行访问。
+
+`spring.datasource.jndi-name` 属性可以用作 `spring.datasource.url`，`spring.datasource.username` 和
+`spring.datasource.password` 属性的替代方案，以从特定的JNDI位置访问 `DataSource`。
+例如：`application.properties` 中的以下部分显示了如何访问JBoss AS定义的 `DataSource`：
 
 [source,properties,indent=0,configprops]
 ----
@@ -3463,10 +3467,11 @@ For example, the following section in `application.properties` shows how you can
 ----
 
 
-
 [[boot-features-using-jdbc-template]]
-=== Using JdbcTemplate
-Spring's `JdbcTemplate` and `NamedParameterJdbcTemplate` classes are auto-configured, and you can `@Autowire` them directly into your own beans, as shown in the following example:
+=== 使用JdbcTemplate
+
+Spring的 `JdbcTemplate` 和 `NamedParameterJdbcTemplate` 类是自动配置的，你可以将它们直接 `@Autowire`
+到自己的bean中，如以下示例所示：
 
 [source,java,indent=0]
 ----
@@ -3489,41 +3494,39 @@ Spring's `JdbcTemplate` and `NamedParameterJdbcTemplate` classes are auto-config
     }
 ----
 
-You can customize some properties of the template by using the `spring.jdbc.template.*` properties, as shown in the following example:
+你可以使用 `spring.jdbc.template.*` 属性来自定义模板的某些属性，如以下示例所示：
 
 [source,properties,indent=0,configprops]
 ----
     spring.jdbc.template.max-rows=500
 ----
 
-NOTE: The `NamedParameterJdbcTemplate` reuses the same `JdbcTemplate` instance behind the scenes.
-If more than one `JdbcTemplate` is defined and no primary candidate exists, the `NamedParameterJdbcTemplate` is not auto-configured.
-
+NOTE: `NamedParameterJdbcTemplate` 在幕后重用相同的 `JdbcTemplate` 实例。如果定义了多个 `JdbcTemplate`
+并且不存在主要候选对象，则不会自动配置 `NamedParameterJdbcTemplate`。
 
 
 [[boot-features-jpa-and-spring-data]]
-=== JPA and Spring Data JPA
-The Java Persistence API is a standard technology that lets you "`map`" objects to relational databases.
-The `spring-boot-starter-data-jpa` POM provides a quick way to get started.
-It provides the following key dependencies:
+=== JPA和Spring Data JPA
 
-* Hibernate: One of the most popular JPA implementations.
-* Spring Data JPA: Makes it easy to implement JPA-based repositories.
-* Spring ORMs: Core ORM support from the Spring Framework.
+Java Persistence API是一种标准技术，可让你将对象“映射”到关系数据库。
+`spring-boot-starter-data-jpa` POM提供了一种快速入门的方法。它提供以下关键依赖：
 
-TIP: We do not go into too many details of JPA or {spring-data}[Spring Data] here.
-You can follow the https://spring.io/guides/gs/accessing-data-jpa/["`Accessing Data with JPA`"] guide from https://spring.io and read the {spring-data-jpa}[Spring Data JPA] and https://hibernate.org/orm/documentation/[Hibernate] reference documentation.
+* Hibernate: 最受欢迎的JPA实现之一。
+* Spring Data JPA: 使基于JPA的存储库的实现变得容易。
+* Spring ORMs: Spring框架对ORM的核心支持。
 
+TIP: 在这里，我们不会过多讨论JPA或 {spring-data}[Spring Data]。
+你可以按照 https://spring.io 的 https://spring.io/guides/gs/accessing-data-jpa/[“使用JPA访问数据”]指南进行操作，
+并阅读 {spring-data-jpa}[Spring Data JPA]和 https://hibernate.org/orm/documentation/[Hibernate]参考文档。
 
 
 [[boot-features-entity-classes]]
-==== Entity Classes
-Traditionally, JPA "`Entity`" classes are specified in a `persistence.xml` file.
-With Spring Boot, this file is not necessary and "`Entity Scanning`" is used instead.
-By default, all packages below your main configuration class (the one annotated with `@EnableAutoConfiguration` or `@SpringBootApplication`) are searched.
+==== 实体类
 
-Any classes annotated with `@Entity`, `@Embeddable`, or `@MappedSuperclass` are considered.
-A typical entity class resembles the following example:
+传统上，JPA“`Entity`”类在 `persistence.xml` 文件中指定。在Spring Boot中，此文件不是必需的，而是使用“实体扫描”。
+默认情况下，将搜索主配置类（用 `@EnableAutoConfiguration` 或 `@SpringBootApplication` 注解的一个）下的所有软件包。
+
+考虑任何带有 `@Entity`，`@Embeddable` 或 `@MappedSuperclass` 注解的类。典型的实体类类似于以下示例：
 
 [source,java,indent=0]
 ----
@@ -3570,23 +3573,23 @@ A typical entity class resembles the following example:
     }
 ----
 
-TIP: You can customize entity scanning locations by using the `@EntityScan` annotation.
-See the "`<<howto.adoc#howto-separate-entity-definitions-from-spring-configuration>>`" how-to.
-
+TIP: 你可以使用 `@EntityScan` 注解来自定义实体扫描位置。请参见
+{spring-boot-docs}/htmlsingle/#howto-separate-entity-definitions-from-spring-configuration[“从Spring配置中分离@Entity定义”]。
 
 
 [[boot-features-spring-data-jpa-repositories]]
-==== Spring Data JPA Repositories
-{spring-data-jpa}[Spring Data JPA] repositories are interfaces that you can define to access data.
-JPA queries are created automatically from your method names.
-For example, a `CityRepository` interface might declare a `findAllByState(String state)` method to find all the cities in a given state.
+==== Spring Data JPA存储库
 
-For more complex queries, you can annotate your method with Spring Data's {spring-data-jpa-api}/repository/Query.html[`Query`] annotation.
+{spring-data-jpa}[Spring Data JPA]存储库是可以定义以访问数据的接口。JPA查询是根据你的方法名称自动创建的。
+例如：`CityRepository` 接口可能声明了 `findAllByState(String state)` 方法来查找给定状态下的所有城市。
 
-Spring Data repositories usually extend from the {spring-data-commons-api}/repository/Repository.html[`Repository`] or {spring-data-commons-api}/repository/CrudRepository.html[`CrudRepository`] interfaces.
-If you use auto-configuration, repositories are searched from the package containing your main configuration class (the one annotated with `@EnableAutoConfiguration` or `@SpringBootApplication`) down.
+对于更复杂的查询，你可以使用Spring Data的 {spring-data-jpa-api}/repository/Query.html[`Query`]注解对方法进行注释。
 
-The following example shows a typical Spring Data repository interface definition:
+Spring Data存储库通常从 {spring-data-commons-api}/repository/Repository.html[`Repository`]或
+{spring-data-commons-api}/repository/CrudRepository.html[`CrudRepository`]接口继承。
+如果使用自动配置，则会从包含主配置类（以 `@EnableAutoConfiguration` 或 `@SpringBootApplication` 注解的主配置类）的包中搜索存储库。
+
+以下示例显示了典型的Spring Data存储库接口定义：
 
 [source,java,indent=0]
 ----
@@ -3604,98 +3607,95 @@ The following example shows a typical Spring Data repository interface definitio
     }
 ----
 
-Spring Data JPA repositories support three different modes of bootstrapping: default, deferred, and lazy.
-To enable deferred or lazy bootstrapping, set the configprop:spring.data.jpa.repositories.bootstrap-mode[] property to `deferred` or `lazy` respectively.
-When using deferred or lazy bootstrapping, the auto-configured `EntityManagerFactoryBuilder` will use the context's `AsyncTaskExecutor`, if any, as the bootstrap executor.
-If more than one exists, the one named `applicationTaskExecutor` will be used.
+Spring Data JPA存储库支持三种不同的引导模式：default, deferred 和 lazy。
+要启用deferred引导或lazy引导，请将 `spring.data.jpa.repositories.bootstrap-mode` 属性分别设置为 `deferred` 或 `lazy`。
+使用deferred或lazy启动时，自动配置的 `EntityManagerFactoryBuilder` 将使用上下文的 `AsyncTaskExecutor`（如果有）作为引导执行器。
+如果存在多个，则将使用一个名为 `applicationTaskExecutor` 的执行器。
 
-TIP: We have barely scratched the surface of Spring Data JPA.
-For complete details, see the {spring-data-jdbc-docs}[Spring Data JPA reference documentation].
-
+TIP: 我们仅仅触及了Spring Data JPA的皮毛。有关完整的详细信息，请参阅 {spring-data-jdbc-docs}[Spring Data JPA参考文档]。
 
 
 [[boot-features-creating-and-dropping-jpa-databases]]
-==== Creating and Dropping JPA Databases
-By default, JPA databases are automatically created *only* if you use an embedded database (H2, HSQL, or Derby).
-You can explicitly configure JPA settings by using `+spring.jpa.*+` properties.
-For example, to create and drop tables you can add the following line to your `application.properties`:
+==== 创建和删除JPA数据库
+
+默认情况下，*仅* 当你使用嵌入式数据库（H2，HSQL或Derby）时，才会自动创建JPA数据库。
+你可以使用 `+spring.jpa.*+` 属性显式配置JPA设置。
+例如：要创建和删除表，可以将以下行添加到 `application.properties`：
 
 [indent=0]
 ----
     spring.jpa.hibernate.ddl-auto=create-drop
 ----
 
-NOTE: Hibernate's own internal property name for this (if you happen to remember it better) is `hibernate.hbm2ddl.auto`.
-You can set it, along with other Hibernate native properties, by using `+spring.jpa.properties.*+` (the prefix is stripped before adding them to the entity manager).
-The following line shows an example of setting JPA properties for Hibernate:
+NOTE: 为此，Hibernate自己的内部属性名称是 `hibernate.hbm2ddl.auto`。
+你可以使用 `+spring.jpa.properties.*+`（将它们添加到实体管理器时，会先剔除前缀）来设置它以及其他Hibernate本地属性。
+下面的行显示了为Hibernate设置JPA属性的示例：
 
 [indent=0]
 ----
     spring.jpa.properties.hibernate.globally_quoted_identifiers=true
 ----
 
-The line in the preceding example passes a value of `true` for the `hibernate.globally_quoted_identifiers` property to the Hibernate entity manager.
+前面示例中的行将 `hibernate.globally_quoted_identifiers` 属性值设置为 `true` 传递给Hibernate实体管理器。
 
-By default, the DDL execution (or validation) is deferred until the `ApplicationContext` has started.
-There is also a `spring.jpa.generate-ddl` flag, but it is not used if Hibernate auto-configuration is active, because the `ddl-auto` settings are more fine-grained.
-
+默认情况下，DDL执行（或验证）推迟到 `ApplicationContext` 启动之后。还有一个 `spring.jpa.generate-ddl` 标志，
+但是如果Hibernate自动配置处于活动状态，则不会使用它，因为 `ddl-auto` 设置粒度更细。
 
 
 [[boot-features-jpa-in-web-environment]]
-==== Open EntityManager in View
-If you are running a web application, Spring Boot by default registers {spring-framework-api}/orm/jpa/support/OpenEntityManagerInViewInterceptor.html[`OpenEntityManagerInViewInterceptor`] to apply the "`Open EntityManager in View`" pattern, to allow for lazy loading in web views.
-If you do not want this behavior, you should set `spring.jpa.open-in-view` to `false` in your `application.properties`.
+==== 在视图中打开EntityManager
 
-
+如果你正在运行Web应用程序，则Spring Boot默认情况下会注册
+{spring-framework-api}/orm/jpa/support/OpenEntityManagerInViewInterceptor.html[`OpenEntityManagerInViewInterceptor`]
+以应用“在视图中打开EntityManager”模式，以允许在Web视图中进行延迟加载。
+如果你不希望出现这种情况，则应在 `application.properties` 中将 `spring.jpa.open-in-view` 设置为 `false`。
 
 [[boot-features-data-jdbc]]
 === Spring Data JDBC
-Spring Data includes repository support for JDBC and will automatically generate SQL for the methods on `CrudRepository`.
-For more advanced queries, a `@Query` annotation is provided.
 
-Spring Boot will auto-configure Spring Data's JDBC repositories when the necessary dependencies are on the classpath.
-They can be added to your project with a single dependency on `spring-boot-starter-data-jdbc`.
-If necessary, you can take control of Spring Data JDBC's configuration by adding the `@EnableJdbcRepositories` annotation or a `JdbcConfiguration` subclass to your application.
+Spring Data包括对JDBC的存储库支持，并将为 `CrudRepository` 上的方法自动生成SQL。对于更高级的查询，提供了 `@Query` 注解。
 
-TIP: For complete details of Spring Data JDBC, please refer to the {spring-data-jdbc-docs}[reference documentation].
+当必要的依赖项位于类路径上时，Spring Boot将自动配置Spring Data的JDBC存储库。
+可以将它们添加到你的项目中，而只需依赖 `spring-boot-starter-data-jdbc`。
+如有必要，你可以通过在应用程序中添加 `@EnableJdbcRepositories` 注解或
+`JdbcConfiguration` 子类来控制Spring Data JDBC的配置。
 
+TIP: 有关Spring Data JDBC的完整详细信息，请参考 {spring-data-jdbc-docs}[参考文档]。
 
 
 [[boot-features-sql-h2-console]]
-=== Using H2's Web Console
-The https://www.h2database.com[H2 database] provides a https://www.h2database.com/html/quickstart.html#h2_console[browser-based console] that Spring Boot can auto-configure for you.
-The console is auto-configured when the following conditions are met:
+=== 使用H2的Web控制台
 
-* You are developing a servlet-based web application.
-* `com.h2database:h2` is on the classpath.
-* You are using <<using-spring-boot.adoc#using-boot-devtools,Spring Boot's developer tools>>.
+https://www.h2database.com[H2数据库]提供了一个 https://www.h2database.com/html/quickstart.html#h2_console[基于浏览器]的控制台，
+Spring Boot可以为你自动配置该控制台。满足以下条件时，将自动配置控制台：
 
-TIP: If you are not using Spring Boot's developer tools but would still like to make use of H2's console, you can configure the configprop:spring.h2.console.enabled[] property with a value of `true`.
+* 你正在开发基于servlet的Web应用程序。
+* `com.h2database:h2` 在类路径上。
+* 你正在使用 <<using-spring-boot.adoc#using-boot-devtools,Spring Boot的开发者工具>>。
 
-NOTE: The H2 console is only intended for use during development, so you should take care to ensure that `spring.h2.console.enabled` is not set to `true` in production.
+TIP: 如果你未使用Spring Boot的开发者工具，但仍想使用H2的控制台，则可以将 `spring.h2.console.enabled` 属性配置为 `true`。
 
+NOTE: H2控制台仅在开发期间使用，因此应注意确保在生产中未将 `spring.h2.console.enabled` 设置为 `true`。
 
 
 [[boot-features-sql-h2-console-custom-path]]
-==== Changing the H2 Console's Path
-By default, the console is available at `/h2-console`.
-You can customize the console's path by using the configprop:spring.h2.console.path[] property.
+==== 更改H2控制台的路径
 
+默认情况下，该控制台在 `/h2-console` 端点可用。你可以使用 `spring.h2.console.path` 属性来自定义控制台的路径。
 
 
 [[boot-features-jooq]]
-=== Using jOOQ
-jOOQ Object Oriented Querying (https://www.jooq.org/[jOOQ]) is a popular product from https://www.datageekery.com/[Data Geekery] which generates Java code from your database and lets you build type-safe SQL queries through its fluent API.
-Both the commercial and open source editions can be used with Spring Boot.
+=== 使用jOOQ
 
+jOOQ Object Oriented Querying (https://www.jooq.org/[jOOQ])是 https://www.datageekery.com/[Data Geekery]
+的一种流行产品，它可以从数据库中生成Java代码，并允许你通过其流式API构建类型安全的SQL查询。商业版和开源版都可以与Spring Boot一起使用。
 
+==== 代码生成
 
-==== Code Generation
-In order to use jOOQ type-safe queries, you need to generate Java classes from your database schema.
-You can follow the instructions in the {jooq-docs}/#jooq-in-7-steps-step3[jOOQ user manual].
-If you use the `jooq-codegen-maven` plugin and you also use the `spring-boot-starter-parent` "`parent POM`", you can safely omit the plugin's `<version>` tag.
-You can also use Spring Boot-defined version variables (such as `h2.version`) to declare the plugin's database dependency.
-The following listing shows an example:
+为了使用jOOQ类型安全查询，你需要从数据库schema中生成Java类。你可以按照 {jooq-docs}/#jooq-in-7-steps-step3[jOOQ用户手册]中的说明进行操作。
+如果你使用 `jooq-codegen-maven` 插件，并且还使用 `spring-boot-starter-parent` “父POM”，
+则可以安全地忽略该插件的 `<version>` 标签。你还可以使用Spring Boot定义的版本变量（例如：`h2.version`）
+来声明插件的数据库依赖关系。以下清单显示了一个示例：
 
 [source,xml,indent=0]
 ----
@@ -3726,10 +3726,11 @@ The following listing shows an example:
 
 
 
-==== Using DSLContext
-The fluent API offered by jOOQ is initiated through the `org.jooq.DSLContext` interface.
-Spring Boot auto-configures a `DSLContext` as a Spring Bean and connects it to your application `DataSource`.
-To use the `DSLContext`, you can `@Autowire` it, as shown in the following example:
+==== 使用DSLContext
+
+jOOQ提供的流式API是通过 `org.jooq.DSLContext` 接口启动的。
+Spring Boot将 `DSLContext` 自动配置为Spring Bean，并将其连接到你的应用程序 `DataSource`。
+要使用 `DSLContext`，可以使用 `@Autowire`，如下例所示：
 
 [source,java,indent=0]
 ----
@@ -3746,9 +3747,9 @@ To use the `DSLContext`, you can `@Autowire` it, as shown in the following examp
     }
 ----
 
-TIP: The jOOQ manual tends to use a variable named `create` to hold the `DSLContext`.
+TIP: jOOQ手册倾向于使用名为 `create` 的变量来保存 `DSLContext`。
 
-You can then use the `DSLContext` to construct your queries, as shown in the following example:
+然后，可以使用 `DSLContext` 构造查询，如以下示例所示：
 
 [source,java,indent=0]
 ----
@@ -3761,17 +3762,16 @@ You can then use the `DSLContext` to construct your queries, as shown in the fol
 
 
 
-==== jOOQ SQL Dialect
-Unless the configprop:spring.jooq.sql-dialect[] property has been configured, Spring Boot determines the SQL dialect to use for your datasource.
-If Spring Boot could not detect the dialect, it uses `DEFAULT`.
+==== jOOQ SQL方言
 
-NOTE: Spring Boot can only auto-configure dialects supported by the open source version of jOOQ.
+除非已配置 `spring.jooq.sql-dialect` 属性，否则Spring Boot会确定要用于数据源的SQL方言。如果Spring Boot无法检测到方言，则使用 `DEFAULT`。
+
+NOTE: Spring Boot只能自动配置开源版本的jOOQ支持的方言。
 
 
+==== 自定义jOOQ
 
-==== Customizing jOOQ
-More advanced customizations can be achieved by defining your own `@Bean` definitions, which is used when the jOOQ `Configuration` is created.
-You can define beans for the following jOOQ Types:
+可以通过定义自己的 `@Bean` 定义来实现更高级的自定义，这在创建jOOQ `Configuration` 时将使用。你可以为以下jOOQ类型定义bean：
 
 * `ConnectionProvider`
 * `ExecutorProvider`
@@ -3784,13 +3784,13 @@ You can define beans for the following jOOQ Types:
 * `VisitListenerProvider`
 * `TransactionListenerProvider`
 
-You can also create your own `org.jooq.Configuration` `@Bean` if you want to take complete control of the jOOQ configuration.
-
+如果要完全控制jOOQ配置，也可以创建自己的 `org.jooq.Configuration` `@Bean`。
 
 
 [[boot-features-nosql]]
-== Working with NoSQL Technologies
-Spring Data provides additional projects that help you access a variety of NoSQL technologies, including:
+== 使用NoSQL技术
+
+Spring Data提供了其他项目来帮助你访问各种NoSQL技术，包括：
 
 * {spring-data-mongodb}[MongoDB]
 * {spring-data-neo4j}[Neo4J]
@@ -3802,30 +3802,29 @@ Spring Data provides additional projects that help you access a variety of NoSQL
 * {spring-data-couchbase}[Couchbase]
 * {spring-data-ldap}[LDAP]
 
-Spring Boot provides auto-configuration for Redis, MongoDB, Neo4j, Elasticsearch, Solr Cassandra, Couchbase, and LDAP.
-You can make use of the other projects, but you must configure them yourself.
-Refer to the appropriate reference documentation at {spring-data}.
-
+Spring Boot为Redis，MongoDB，Neo4j，Elasticsearch，Solr Cassandra，Couchbase和LDAP提供自动配置。
+你可以使用其他项目，但必须自己进行配置。请参阅 {spring-data} 中的相应参考文档。
 
 
 [[boot-features-redis]]
 === Redis
-https://redis.io/[Redis] is a cache, message broker, and richly-featured key-value store.
-Spring Boot offers basic auto-configuration for the https://github.com/lettuce-io/lettuce-core/[Lettuce] and https://github.com/xetorthio/jedis/[Jedis] client libraries and the abstractions on top of them provided by https://github.com/spring-projects/spring-data-redis[Spring Data Redis].
 
-There is a `spring-boot-starter-data-redis` "`Starter`" for collecting the dependencies in a convenient way.
-By default, it uses https://github.com/lettuce-io/lettuce-core/[Lettuce].
-That starter handles both traditional and reactive applications.
+https://redis.io/[Redis]是一个缓存，消息代理和功能丰富的键值存储。
+Spring Boot为 https://github.com/lettuce-io/lettuce-core/[Lettuce]和 https://github.com/xetorthio/jedis/[Jedis]
+客户端库以及Spring Data Redis提供的基于它们的抽象提供了基本的自动配置。
 
-TIP: we also provide a `spring-boot-starter-data-redis-reactive` "`Starter`" for consistency with the other stores with reactive support.
+有一个 `spring-boot-starter-data-redis` “`Starter`”便于收集依赖项。默认情况下，它使用 https://github.com/lettuce-io/lettuce-core/[Lettuce]。
+该启动器可以处理传统应用程序和响应式应用程序。
 
+TIP: 我们还提供了一个 `spring-boot-starter-data-redis-reactive` “`Starter`”，以与具有响应式支持的其他存储保持一致。
 
 
 [[boot-features-connecting-to-redis]]
-==== Connecting to Redis
-You can inject an auto-configured `RedisConnectionFactory`, `StringRedisTemplate`, or vanilla `RedisTemplate` instance as you would any other Spring Bean.
-By default, the instance tries to connect to a Redis server at `localhost:6379`.
-The following listing shows an example of such a bean:
+==== 连接到Redis
+
+你可以像注入其他任何Spring Bean一样注入自动配置的 `RedisConnectionFactory`，`StringRedisTemplate` 或vanilla
+`RedisTemplate` 实例。默认情况下，该实例尝试连接到位于 `localhost:6379` 的Redis服务器。
+下面的清单显示了这种Bean的示例：
 
 [source,java,indent=0]
 ----
@@ -3844,26 +3843,28 @@ The following listing shows an example of such a bean:
     }
 ----
 
-TIP: You can also register an arbitrary number of beans that implement `LettuceClientConfigurationBuilderCustomizer` for more advanced customizations.
-If you use Jedis, `JedisClientConfigurationBuilderCustomizer` is also available.
+TIP: 你还可以注册任意数量的Bean，这些Bean实现 `LettuceClientConfigurationBuilderCustomizer` 以获得更高级的自定义。
+如果使用Jedis，则可以使用 `JedisClientConfigurationBuilderCustomizer`。
 
-If you add your own `@Bean` of any of the auto-configured types, it replaces the default (except in the case of `RedisTemplate`, when the exclusion is based on the bean name, `redisTemplate`, not its type).
-By default, if `commons-pool2` is on the classpath, you get a pooled connection factory.
-
+如果添加自己的任何自动配置类型的 `@Bean`，它将替换默认值
+（`RedisTemplate` 除外，除非排除是基于bean名称 `redisTemplate` 而不是其类型时）。
+默认情况下，如果 `commons-pool2` 在类路径上，则会得到一个池化的连接工厂。
 
 
 [[boot-features-mongodb]]
 === MongoDB
-https://www.mongodb.com/[MongoDB] is an open-source NoSQL document database that uses a JSON-like schema instead of traditional table-based relational data.
-Spring Boot offers several conveniences for working with MongoDB, including the `spring-boot-starter-data-mongodb` and `spring-boot-starter-data-mongodb-reactive` "`Starters`".
 
+https://www.mongodb.com/[MongoDB]是一个开源NoSQL文档数据库，它使用类似JSON的结构而不是传统的基于表的关系数据。
+Spring Boot为MongoDB的使用提供了许多便利，包括 `spring-boot-starter-data-mongodb` 和
+`spring-boot-starter-data-mongodb-reactive` “`Starters`”。
 
 
 [[boot-features-connecting-to-mongodb]]
-==== Connecting to a MongoDB Database
-To access Mongo databases, you can inject an auto-configured `org.springframework.data.mongodb.MongoDbFactory`.
-By default, the instance tries to connect to a MongoDB server at `mongodb://localhost/test`.
-The following example shows how to connect to a MongoDB database:
+==== 连接到MongoDB数据库
+
+要访问Mongo数据库，可以注入自动配置的 `org.springframework.data.mongodb.MongoDbFactory`。
+默认情况下，该实例尝试通过 `mongodb://localhost/test` 连接到MongoDB服务器。
+以下示例显示了如何连接到MongoDB数据库：
 
 [source,java,indent=0]
 ----
@@ -3890,15 +3891,14 @@ The following example shows how to connect to a MongoDB database:
     }
 ----
 
-You can set the configprop:spring.data.mongodb.uri[] property to change the URL and configure additional settings such as the _replica set_, as shown in the following example:
+你可以设置 `spring.data.mongodb.uri` 属性来更改URL并配置其他设置，例如 _副本集_，如以下示例所示：
 
 [source,properties,indent=0,configprops]
 ----
     spring.data.mongodb.uri=mongodb://user:secret@mongo1.example.com:12345,mongo2.example.com:23456/test
 ----
 
-Alternatively, as long as you use Mongo 2.x, you can specify a `host`/`port`.
-For example, you might declare the following settings in your `application.properties`:
+另外，只要你使用Mongo 2.x，就可以指定 `host`/`port`。例如：你可以在 `application.properties` 中声明以下设置：
 
 [source,properties,indent=0,configprops]
 ----
@@ -3906,27 +3906,25 @@ For example, you might declare the following settings in your `application.prope
     spring.data.mongodb.port=27017
 ----
 
-If you have defined your own `MongoClient`, it will be used to auto-configure a suitable `MongoDbFactory`.
-Both `com.mongodb.MongoClient` and `com.mongodb.client.MongoClient` are supported.
+如果你定义了自己的 `MongoClient`，它将用于自动配置合适的 `MongoDbFactory`。`com.mongodb.MongoClient` 和
+`com.mongodb.client.MongoClient` 均受支持。
 
-NOTE: If you use the Mongo 3.0 Java driver, `spring.data.mongodb.host` and `spring.data.mongodb.port` are not supported.
-In such cases, `spring.data.mongodb.uri` should be used to provide all of the configuration.
+NOTE: 如果使用Mongo 3.0 Java驱动程序，则不支持 `spring.data.mongodb.host` 和 `spring.data.mongodb.port`。
+在这种情况下，应使用 `spring.data.mongodb.uri` 提供所有配置。
 
-TIP: If `spring.data.mongodb.port` is not specified, the default of `27017` is used.
-You could delete this line from the example shown earlier.
+TIP: 如果未指定 `spring.data.mongodb.port`，则使用默认值 `27017`。你可以从前面显示的示例中删除此行。
 
-TIP: If you do not use Spring Data Mongo, you can inject `com.mongodb.MongoClient` beans instead of using `MongoDbFactory`.
-If you want to take complete control of establishing the MongoDB connection, you can also declare your own `MongoDbFactory` or `MongoClient` bean.
+TIP: 如果不使用Spring Data Mongo，则可以注入 `com.mongodb.MongoClient` bean，而不是使用 `MongoDbFactory`。
+如果你想完全控制建立MongoDB连接的方式，还可以声明自己的 `MongoDbFactory` 或 `MongoClient` bean。
 
-NOTE: If you are using the reactive driver, Netty is required for SSL.
-The auto-configuration configures this factory automatically if Netty is available and the factory to use hasn't been customized already.
-
+NOTE: 如果你使用响应式驱动程序，则SSL需要Netty。如果Netty可用并且尚未自定义要使用的工厂，则自动配置会自动配置该工厂。
 
 
 [[boot-features-mongo-template]]
 ==== MongoTemplate
-{spring-data-mongodb}[Spring Data MongoDB] provides a {spring-data-mongodb-api}/core/MongoTemplate.html[`MongoTemplate`] class that is very similar in its design to Spring's `JdbcTemplate`.
-As with `JdbcTemplate`, Spring Boot auto-configures a bean for you to inject the template, as follows:
+
+{spring-data-mongodb}[Spring Data MongoDB]提供了一个 {spring-data-mongodb-api}/core/MongoTemplate.html[`MongoTemplate`]类，
+该类的设计与Spring的 `JdbcTemplate` 非常相似。与 `JdbcTemplate` 一样，Spring Boot为你自动配置一个Bean来注入模板，如下所示：
 
 [source,java,indent=0]
 ----
@@ -3949,18 +3947,17 @@ As with `JdbcTemplate`, Spring Boot auto-configures a bean for you to inject the
     }
 ----
 
-See the {spring-data-mongodb-api}/core/MongoOperations.html[`MongoOperations` Javadoc] for complete details.
-
+有关完整的详细信息，请参见 {spring-data-mongodb-api}/core/MongoOperations.html[`MongoOperations` Javadoc]。
 
 
 [[boot-features-spring-data-mongo-repositories]]
 [[boot-features-spring-data-mongodb-repositories]]
-==== Spring Data MongoDB Repositories
-Spring Data includes repository support for MongoDB.
-As with the JPA repositories discussed earlier, the basic principle is that queries are constructed automatically, based on method names.
+==== Spring Data MongoDB存储库
 
-In fact, both Spring Data JPA and Spring Data MongoDB share the same common infrastructure.
-You could take the JPA example from earlier and, assuming that `City` is now a Mongo data class rather than a JPA `@Entity`, it works in the same way, as shown in the following example:
+Spring Data包括对MongoDB的存储库支持。与前面讨论的JPA存储库一样，基本原理是根据方法名称自动构造查询。
+
+实际上，Spring Data JPA和Spring Data MongoDB共享相同的通用基础设施。你可以从以前的JPA示例开始，并假设 `City` 现在是Mongo数据类，而不是JPA
+`@Entity`，它的工作方式相同，如以下示例所示：
 
 [source,java,indent=0]
 ----
@@ -3978,28 +3975,26 @@ You could take the JPA example from earlier and, assuming that `City` is now a M
     }
 ----
 
-TIP: You can customize document scanning locations by using the `@EntityScan` annotation.
+TIP: 你可以使用 `@EntityScan` 注解来自定义文档扫描位置。
 
-TIP: For complete details of Spring Data MongoDB, including its rich object mapping technologies, refer to its {spring-data-mongodb}[reference documentation].
-
+TIP: 有关Spring Data MongoDB的完整详细信息，包括其丰富的对象映射技术，请参阅其 {spring-data-mongodb}[参考文档]。
 
 
 [[boot-features-mongo-embedded]]
-==== Embedded Mongo
-Spring Boot offers auto-configuration for https://github.com/flapdoodle-oss/de.flapdoodle.embed.mongo[Embedded Mongo].
-To use it in your Spring Boot application, add a dependency on `de.flapdoodle.embed:de.flapdoodle.embed.mongo`.
+==== 嵌入式Mongo
 
-The port that Mongo listens on can be configured by setting the configprop:spring.data.mongodb.port[] property.
-To use a randomly allocated free port, use a value of 0.
-The `MongoClient` created by `MongoAutoConfiguration` is automatically configured to use the randomly allocated port.
+Spring Boot为 https://github.com/flapdoodle-oss/de.flapdoodle.embed.mongo[Embedded Mongo]提供自动配置。
+要在Spring Boot应用程序中使用它，请添加对 `de.flapdoodle.embed:de.flapdoodle.embed.mongo` 的依赖。
 
-NOTE: If you do not configure a custom port, the embedded support uses a random port (rather than 27017) by default.
+可以通过设置 `spring.data.mongodb.port` 属性来配置Mongo监听的端口。要使用随机分配的空闲端口，请使用0值。
+`MongoAutoConfiguration` 创建的 `MongoClient` 将自动配置为使用随机分配的端口。
 
-If you have SLF4J on the classpath, the output produced by Mongo is automatically routed to a logger named `org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongo`.
+NOTE: 如果未配置自定义端口，则默认情况下，嵌入式支持会使用随机端口（而不是27017）。
 
-You can declare your own `IMongodConfig` and `IRuntimeConfig` beans to take control of the Mongo instance's configuration and logging routing.
-The download configuration can be customized by declaring a `DownloadConfigBuilderCustomizer` bean.
+如果类路径上有SLF4J，则Mongo产生的输出将自动路由到名为 `org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongo` 的记录器。
 
+你可以声明自己的 `IMongodConfig` 和 `IRuntimeConfig` bean，以控制Mongo实例的配置和日志记录路由。
+可以通过声明 `DownloadConfigBuilderCustomizer` bean来定制下载配置。
 
 
 [[boot-features-neo4j]]
@@ -4559,36 +4554,35 @@ If you have custom attributes, you can use configprop:spring.ldap.embedded.valid
 
 [[boot-features-influxdb]]
 === InfluxDB
-https://www.influxdata.com/[InfluxDB] is an open-source time series database optimized for fast, high-availability storage and retrieval of time series data in fields such as operations monitoring, application metrics, Internet-of-Things sensor data, and real-time analytics.
 
+https://www.influxdata.com/[InfluxDB]是一个开放源代码的时间序列数据库，已优化用于在操作监视，应用程序度量，
+物联网传感器数据和实时分析等领域中快速，高可用性地存储和检索时间序列数据。
 
 
 [[boot-features-connecting-to-influxdb]]
-==== Connecting to InfluxDB
-Spring Boot auto-configures an `InfluxDB` instance, provided the `influxdb-java` client is on the classpath and the URL of the database is set, as shown in the following example:
+==== 连接到InfluxDB
+
+只要 `influxdb-java` 客户端位于类路径上并设置了数据库的URL，Spring Boot就会自动配置 `InfluxDB` 实例，如以下示例所示：
 
 [source,properties,indent=0,configprops]
 ----
     spring.influx.url=https://172.0.0.1:8086
 ----
 
-If the connection to InfluxDB requires a user and password, you can set the `spring.influx.user` and `spring.influx.password` properties accordingly.
+如果与InfluxDB的连接需要用户和密码，则可以相应地设置 `spring.influx.user` 和 `spring.influx.password` 属性。
 
-InfluxDB relies on OkHttp.
-If you need to tune the http client `InfluxDB` uses behind the scenes, you can register an `InfluxDbOkHttpClientBuilderProvider` bean.
-
+InfluxDB依赖OkHttp。如果需要在后台调整 `InfluxDB` 使用的http客户端，则可以注册 `InfluxDbOkHttpClientBuilderProvider` bean。
 
 
 [[boot-features-caching]]
-== Caching
-The Spring Framework provides support for transparently adding caching to an application.
-At its core, the abstraction applies caching to methods, thus reducing the number of executions based on the information available in the cache.
-The caching logic is applied transparently, without any interference to the invoker.
-Spring Boot auto-configures the cache infrastructure as long as caching support is enabled via the `@EnableCaching` annotation.
+== 缓存
 
-NOTE: Check the {spring-framework-docs}integration.html#cache[relevant section] of the Spring Framework reference for more details.
+Spring框架提供了对向应用程序透明添加缓存的支持。从本质上讲，抽象将缓存应用于方法，从而根据缓存中可用的信息减少执行次数。
+缓存逻辑是透明应用的，不会对调用者造成任何干扰。只要通过 `@EnableCaching` 注解启用了缓存支持，Spring Boot就会自动配置缓存基础设施。
 
-In a nutshell, adding caching to an operation of your service is as easy as adding the relevant annotation to its method, as shown in the following example:
+NOTE: 检查Spring Framework指南的 {spring-framework-docs}integration.html#cache[相关部分]以获取更多详细信息。
+
+简而言之，将缓存添加到服务的操作就像将相关注解添加到其方法一样容易，如以下示例所示：
 
 [source,java,indent=0]
 ----
@@ -4606,30 +4600,28 @@ In a nutshell, adding caching to an operation of your service is as easy as addi
     }
 ----
 
-This example demonstrates the use of caching on a potentially costly operation.
-Before invoking `computePiDecimal`, the abstraction looks for an entry in the `piDecimals` cache that matches the `i` argument.
-If an entry is found, the content in the cache is immediately returned to the caller, and the method is not invoked.
-Otherwise, the method is invoked, and the cache is updated before returning the value.
+本示例说明了在潜在的昂贵操作上使用缓存的方法。在调用 `computePiDecimal` 之前，抽象将在 `piDecimals` 缓存中查找与 `i` 参数匹配的条目。
+如果找到条目，则高速缓存中的内容会立即返回给调用方，并且不会调用该方法。否则，将调用该方法，并在返回值之前更新缓存。
 
-CAUTION: You can also use the standard JSR-107 (JCache) annotations (such as `@CacheResult`) transparently.
-However, we strongly advise you to not mix and match the Spring Cache and JCache annotations.
+CAUTION: 你还可以透明地使用标准JSR-107（JCache）注解（例如：`@CacheResult`）。但是，我们强烈建议你不要混合使用Spring Cache和JCache注解。
 
-If you do not add any specific cache library, Spring Boot auto-configures a <<boot-features-caching-provider-simple,simple provider>> that uses concurrent maps in memory.
-When a cache is required (such as `piDecimals` in the preceding example), this provider creates it for you.
-The simple provider is not really recommended for production usage, but it is great for getting started and making sure that you understand the features.
-When you have made up your mind about the cache provider to use, please make sure to read its documentation to figure out how to configure the caches that your application uses.
-Nearly all providers require you to explicitly configure every cache that you use in the application.
-Some offer a way to customize the default caches defined by the configprop:spring.cache.cache-names[] property.
+如果你不添加任何特定的缓存库，Spring Boot会自动配置一个使用内存中concurrent maps的<<boot-features-caching-provider-simple,简单供应商>>。
+当需要缓存时（例如：上例中的 `piDecimals`），此供应商将为你创建它。实际上，不建议将该简单供应商用于生产环境，
+但是它对于入门并确保你了解功能非常有用。确定要使用的缓存供应商后，请确保阅读其文档，以了解如何配置应用程序使用的缓存。
+几乎所有供应商都要求你显式配置在应用程序中使用的每个缓存。有些提供自定义 `spring.cache.cache-names` 属性来定义默认缓存的方法。
 
-TIP: It is also possible to transparently {spring-framework-docs}integration.html#cache-annotations-put[update] or {spring-framework-docs}integration.html#cache-annotations-evict[evict] data from the cache.
-
+TIP: 还可以透明地 {spring-framework-docs}integration.html#cache-annotations-put[更新]或从缓存中
+{spring-framework-docs}integration.html#cache-annotations-evict[驱逐]数据。
 
 
 [[boot-features-caching-provider]]
-=== Supported Cache Providers
-The cache abstraction does not provide an actual store and relies on abstraction materialized by the `org.springframework.cache.Cache` and `org.springframework.cache.CacheManager` interfaces.
+=== 支持的缓存供应商
 
-If you have not defined a bean of type `CacheManager` or a `CacheResolver` named `cacheResolver` (see {spring-framework-api}/cache/annotation/CachingConfigurer.html[`CachingConfigurer`]), Spring Boot tries to detect the following providers (in the indicated order):
+缓存抽象不提供实际的存储，而是依赖于由 `org.springframework.cache.Cache` 和 `org.springframework.cache.CacheManager` 接口实现的抽象。
+
+如果尚未定义 `CacheManager` 类型的Bean或名为 `cacheResolver` 的 `CacheResolver`
+（请参阅 {spring-framework-api}/cache/annotation/CachingConfigurer.html[`CachingConfigurer`]），
+则Spring Boot尝试检测以下供应商（按指示的顺序）：
 
 . <<boot-features-caching-provider-generic,Generic>>
 . <<boot-features-caching-provider-jcache,JCache (JSR-107)>> (EhCache 3, Hazelcast, Infinispan, and others)
@@ -4641,15 +4633,14 @@ If you have not defined a bean of type `CacheManager` or a `CacheResolver` named
 . <<boot-features-caching-provider-caffeine,Caffeine>>
 . <<boot-features-caching-provider-simple,Simple>>
 
-TIP: It is also possible to _force_ a particular cache provider by setting the configprop:spring.cache.type[] property.
-Use this property if you need to <<boot-features-caching-provider-none,disable caching altogether>> in certain environment (such as tests).
+TIP: 也可以通过设置 `spring.cache.type` 属性来 _强制_ 指定特定的缓存供应商。如果你需要在某些环境（例如测试）中
+<<boot-features-caching-provider-none,完全禁用缓存>>，请使用此属性。
 
-TIP: Use the `spring-boot-starter-cache` "`Starter`" to quickly add basic caching dependencies.
-The starter brings in `spring-context-support`.
-If you add dependencies manually, you must include `spring-context-support` in order to use the JCache, EhCache 2.x, or Caffeine support.
+TIP: 使用 `spring-boot-starter-cache` “`Starter`”快速添加基本的缓存依赖项。入门程序提供了 `spring-context-support`。
+如果手动添加依赖项，则必须包括 `spring-context-support` 才能使用JCache，EhCache 2.x或Caffeine支持。
 
-If the `CacheManager` is auto-configured by Spring Boot, you can further tune its configuration before it is fully initialized by exposing a bean that implements the `CacheManagerCustomizer` interface.
-The following example sets a flag to say that `null` values should be passed down to the underlying map:
+如果 `CacheManager` 是由Spring Boot自动配置的，则可以通过公开实现 `CacheManagerCustomizer` 接口的bean，
+在完全初始化之前进一步调整其配置。下面的示例设置一个标志，指示应该将 `null` 值向下传递到基础映射：
 
 [source,java,indent=0]
 ----
@@ -4664,27 +4655,27 @@ The following example sets a flag to say that `null` values should be passed dow
     }
 ----
 
-NOTE: In the preceding example, an auto-configured `ConcurrentMapCacheManager` is expected.
-If that is not the case (either you provided your own config or a different cache provider was auto-configured), the customizer is not invoked at all.
-You can have as many customizers as you want, and you can also order them by using `@Order` or `Ordered`.
-
+NOTE: 在前面的示例中，需要一个自动配置的 `ConcurrentMapCacheManager`。
+如果不是这种情况（你提供了自己的配置，或者自动配置了其他缓存供应商），则根本不会调用定制程序。
+你可以根据需要拥有任意数量的定制程序，也可以使用 `@Order` 或 `Ordered` 对其进行排序。
 
 
 [[boot-features-caching-provider-generic]]
-==== Generic
-Generic caching is used if the context defines _at least_ one `org.springframework.cache.Cache` bean.
-A `CacheManager` wrapping all beans of that type is created.
+==== 泛型
 
+如果上下文定义了 _至少一个_ `org.springframework.cache.Cache` bean，则使用泛型缓存。
+创建一个包装所有该类型Bean的 `CacheManager`。
 
 
 [[boot-features-caching-provider-jcache]]
 ==== JCache (JSR-107)
-https://jcp.org/en/jsr/detail?id=107[JCache] is bootstrapped through the presence of a `javax.cache.spi.CachingProvider` on the classpath (that is, a JSR-107 compliant caching library exists on the classpath), and the `JCacheCacheManager` is provided by the `spring-boot-starter-cache` "`Starter`".
-Various compliant libraries are available, and Spring Boot provides dependency management for Ehcache 3, Hazelcast, and Infinispan.
-Any other compliant library can be added as well.
 
-It might happen that more than one provider is present, in which case the provider must be explicitly specified.
-Even if the JSR-107 standard does not enforce a standardized way to define the location of the configuration file, Spring Boot does its best to accommodate setting a cache with implementation details, as shown in the following example:
+通过在类路径上存在 `javax.cache.spi.CachingProvider` 引导 https://jcp.org/en/jsr/detail?id=107[JCache]（即，在类路径上存在符合JSR-107的缓存库），
+并且 `JCacheCacheManager` 由 `spring-boot-starter-cache` “`Starter`”提供。
+提供了各种兼容的库，Spring Boot为Ehcache 3，Hazelcast和Infinispan提供了依赖管理。也可以添加任何其他兼容的库。
+
+可能会出现多个供应商，在这种情况下，必须明确指定供应商。即使JSR-107标准没有强制采用标准化的方式来定义配置文件的位置，
+Spring Boot也会尽其最大努力来容纳具有实现细节的缓存，如以下示例所示：
 
 [source,properties,indent=0,configprops]
 ----
@@ -4693,27 +4684,28 @@ Even if the JSR-107 standard does not enforce a standardized way to define the l
     spring.cache.jcache.config=classpath:acme.xml
 ----
 
-NOTE: When a cache library offers both a native implementation and JSR-107 support, Spring Boot prefers the JSR-107 support, so that the same features are available if you switch to a different JSR-107 implementation.
+NOTE: 当缓存库同时提供native实现和JSR-107支持时，Spring Boot会首选JSR-107支持，因此，如果你切换到其他JSR-107实现，则可以使用相同的功能。
 
-TIP: Spring Boot has <<boot-features-hazelcast,general support for Hazelcast>>.
-If a single `HazelcastInstance` is available, it is automatically reused for the `CacheManager` as well, unless the configprop:spring.cache.jcache.config[] property is specified.
+TIP: Spring Boot对<<boot-features-hazelcast,Hazelcast具有常规支持>>。
+如果有单个 `HazelcastInstance` 可用，则除非指定了 `spring.cache.jcache.config` 属性，否则它也会自动用于 `CacheManager`。
 
-There are two ways to customize the underlying `javax.cache.cacheManager`:
+自定义基础 `javax.cache.cacheManager` 有两种方法：
 
-* Caches can be created on startup by setting the configprop:spring.cache.cache-names[] property.
-  If a custom `javax.cache.configuration.Configuration` bean is defined, it is used to customize them.
-* `org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer` beans are invoked with the reference of the `CacheManager` for full customization.
+* 可以在启动时通过设置 `spring.cache.cache-names` 属性来创建缓存。
+  如果自定义了 `javax.cache.configuration.Configuration` Bean，则将其用于自定义它们。
+* 使用 `CacheManager` 的引用调用 `org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer`
+  Bean以进行完全定制。
 
-TIP: If a standard `javax.cache.CacheManager` bean is defined, it is wrapped automatically in an `org.springframework.cache.CacheManager` implementation that the abstraction expects.
-No further customization is applied to it.
-
+TIP: 如果定义了标准的 `javax.cache.CacheManager` bean，它将自动包装在抽象期望的 `org.springframework.cache
+.CacheManager` 实现中。不再对其应用定制。
 
 
 [[boot-features-caching-provider-ehcache2]]
 ==== EhCache 2.x
-https://www.ehcache.org/[EhCache] 2.x is used if a file named `ehcache.xml` can be found at the root of the classpath.
-If EhCache 2.x is found, the `EhCacheCacheManager` provided by the `spring-boot-starter-cache` "`Starter`" is used to bootstrap the cache manager.
-An alternate configuration file can be provided as well, as shown in the following example:
+
+如果可以在类路径的根目录下找到名为 `ehcache.xml` 的文件，则使用 https://www.ehcache.org/[EhCache] 2.x。
+如果找到EhCache 2.x，则使用 `spring-boot-starter-cache` “`Starter`”提供的 `EhCacheCacheManager` 来引导缓存管理器。
+也可以提供备用配置文件，如以下示例所示：
 
 [source,properties,indent=0,configprops]
 ----
@@ -4724,45 +4716,46 @@ An alternate configuration file can be provided as well, as shown in the followi
 
 [[boot-features-caching-provider-hazelcast]]
 ==== Hazelcast
-Spring Boot has <<boot-features-hazelcast,general support for Hazelcast>>.
-If a `HazelcastInstance` has been auto-configured, it is automatically wrapped in a `CacheManager`.
 
+Spring Boot对<<boot-features-hazelcast,Hazelcast具有常规支持>>。
+如果已经自动配置了 `HazelcastInstance`，则将其自动包装在 `CacheManager` 中。
 
 
 [[boot-features-caching-provider-infinispan]]
 ==== Infinispan
-https://infinispan.org/[Infinispan] has no default configuration file location, so it must be specified explicitly.
-Otherwise, the default bootstrap is used.
+
+https://infinispan.org/[Infinispan]没有默认配置文件位置，因此必须明确指定。否则，将使用默认的引导程序。
 
 [source,properties,indent=0,configprops]
 ----
     spring.cache.infinispan.config=infinispan.xml
 ----
 
-Caches can be created on startup by setting the configprop:spring.cache.cache-names[] property.
-If a custom `ConfigurationBuilder` bean is defined, it is used to customize the caches.
+可以在启动时通过设置 `spring.cache.cache-names` 属性来创建缓存。
+如果定义了自定义 `ConfigurationBuilder` bean，则将其用于自定义缓存。
 
-NOTE: The support of Infinispan in Spring Boot is restricted to the embedded mode and is quite basic.
-If you want more options, you should use the official Infinispan Spring Boot starter instead.
-See https://github.com/infinispan/infinispan-spring-boot[Infinispan's documentation] for more details.
-
+NOTE: Spring Boot对Infinispan的支持仅限于嵌入式模式，并且非常基础。
+如果你需要更多选择，则应该使用官方的Infinispan Spring Boot启动器。有关更多详细信息，请参见
+https://github.com/infinispan/infinispan-spring-boot[Infinispan的文档]。
 
 
 [[boot-features-caching-provider-couchbase]]
 ==== Couchbase
-If the https://www.couchbase.com/[Couchbase] Java client and the `couchbase-spring-cache` implementation are available and Couchbase is <<boot-features-couchbase,configured>>, a `CouchbaseCacheManager` is auto-configured.
-It is also possible to create additional caches on startup by setting the configprop:spring.cache.cache-names[] property.
-These caches operate on the `Bucket` that was auto-configured.
-You can _also_ create additional caches on another `Bucket` by using the customizer.
-Assume you need two caches (`cache1` and `cache2`) on the "main" `Bucket` and one (`cache3`) cache with a custom time to live of 2 seconds on the "`another`" `Bucket`.
-You can create the first two caches through configuration, as follows:
+
+如果可以使用 https://www.couchbase.com/[Couchbase] Java客户端和 `couchbase-spring-cache`
+实现，并且<<boot-features-couchbase,已配置>>Couchbase，则将自动配置 `CouchbaseCacheManager`。
+通过设置 `spring.cache.cache-names` 属性，还可以在启动时创建其他缓存。
+这些缓存在自动配置的 `Bucket` 上运行。你 _还_ 可以使用定制程序在另一个 `Bucket` 上创建其他缓存。
+假设你在"main" `Bucket` 上需要两个缓存（`cache1` 和 `cache2`），在"another" `Bucket`
+上需要一个自定义的存活时间为2秒的缓存（`cache3`）。
+你可以通过配置创建前两个缓存，如下所示：
 
 [source,properties,indent=0,configprops]
 ----
     spring.cache.cache-names=cache1,cache2
 ----
 
-Then you can define a `@Configuration` class to configure the extra `Bucket` and the `cache3` cache, as follows:
+然后，你可以定义一个 `@Configuration` 类来配置额外的 `Bucket` 和 `cache3` 缓存，如下所示：
 
 [source,java,indent=0]
 ----
@@ -4791,15 +4784,17 @@ Then you can define a `@Configuration` class to configure the extra `Bucket` and
     }
 ----
 
-This sample configuration reuses the `Cluster` that was created through auto-configuration.
+此示例配置重用了通过自动配置创建的 `Cluster`。
 
 
 
 [[boot-features-caching-provider-redis]]
 ==== Redis
-If https://redis.io/[Redis] is available and configured, a `RedisCacheManager` is auto-configured.
-It is possible to create additional caches on startup by setting the configprop:spring.cache.cache-names[] property and cache defaults can be configured by using `spring.cache.redis.*` properties.
-For instance, the following configuration creates `cache1` and `cache2` caches with a _time to live_ of 10 minutes:
+
+如果 https://redis.io/[Redis]可用并已配置，则 `RedisCacheManager` 将自动配置。
+通过设置 `spring.cache.cache-names` 属性可以在启动时创建其他缓存，
+并且可以使用 `spring.cache.redis.*` 属性配置缓存默认值。
+例如，以下配置创建的 `cache1` 和 `cache2` 缓存的 _存活时间_ 为10分钟：
 
 [source,properties,indent=0,configprops]
 ----
@@ -4807,25 +4802,24 @@ For instance, the following configuration creates `cache1` and `cache2` caches w
     spring.cache.redis.time-to-live=600000
 ----
 
-NOTE: By default, a key prefix is added so that, if two separate caches use the same key, Redis does not have overlapping keys and cannot return invalid values.
-We strongly recommend keeping this setting enabled if you create your own `RedisCacheManager`.
+NOTE: 默认情况下，会添加键前缀，这样，如果两个单独的缓存使用相同的键，则Redis不会有重叠的键，也不会返回无效值。
+如果你创建自己的 `RedisCacheManager`，我们强烈建议将此设置保持启用状态。
 
-TIP: You can take full control of the configuration by adding a `RedisCacheConfiguration` `@Bean` of your own.
-This can be useful if you're looking for customizing the serialization strategy.
-
+TIP: 你可以通过添加自己的 `RedisCacheConfiguration` `@Bean` 来完全控制配置。如果你要自定义序列化策略，这可能会很有用。
 
 
 [[boot-features-caching-provider-caffeine]]
 ==== Caffeine
-https://github.com/ben-manes/caffeine[Caffeine] is a Java 8 rewrite of Guava's cache that supersedes support for Guava.
-If Caffeine is present, a `CaffeineCacheManager` (provided by the `spring-boot-starter-cache` "`Starter`") is auto-configured.
-Caches can be created on startup by setting the configprop:spring.cache.cache-names[] property and can be customized by one of the following (in the indicated order):
 
-. A cache spec defined by `spring.cache.caffeine.spec`
-. A `com.github.benmanes.caffeine.cache.CaffeineSpec` bean is defined
-. A `com.github.benmanes.caffeine.cache.Caffeine` bean is defined
+https://github.com/ben-manes/caffeine[Caffeine]是对Guava缓存的Java 8重写，取代了对Guava的支持。
+如果存在Caffeine，则会自动配置 `CaffeineCacheManager`（由 `spring-boot-starter-cache` “`Starter`”提供）。
+缓存可以在启动时通过设置 `spring.cache.cache-names` 属性来创建，并且可以通过以下方式之一自定义（按指示的顺序）：
 
-For instance, the following configuration creates `cache1` and `cache2` caches with a maximum size of 500 and a _time to live_ of 10 minutes
+. 由 `spring.cache.caffeine.spec` 定义的缓存规范
+. 定义了一个 `com.github.benmanes.caffeine.cache.CaffeineSpec` bean
+. 定义了一个 `com.github.benmanes.caffeine.cache.Caffeine` bean
+
+例如：以下配置将创建最大大小为500，_存活时间_ 为10分钟的 `cache1` 和 `cache2` 缓存。
 
 [source,properties,indent=0,configprops]
 ----
@@ -4833,33 +4827,32 @@ For instance, the following configuration creates `cache1` and `cache2` caches w
     spring.cache.caffeine.spec=maximumSize=500,expireAfterAccess=600s
 ----
 
-If a `com.github.benmanes.caffeine.cache.CacheLoader` bean is defined, it is automatically associated to the `CaffeineCacheManager`.
-Since the `CacheLoader` is going to be associated with _all_ caches managed by the cache manager, it must be defined as `CacheLoader<Object, Object>`.
-The auto-configuration ignores any other generic type.
-
+如果定义了 `com.github.benmanes.caffeine.cache.CacheLoader` Bean，它将自动与 `CaffeineCacheManager` 关联。
+由于 `CacheLoader` 将与由缓存管理器管理的 _所有_ 缓存相关联，因此必须将其定义为 `CacheLoader<Object, Object>`。
+自动配置将忽略任何其他泛型类型。
 
 
 [[boot-features-caching-provider-simple]]
 ==== Simple
-If none of the other providers can be found, a simple implementation using a `ConcurrentHashMap` as the cache store is configured.
-This is the default if no caching library is present in your application.
-By default, caches are created as needed, but you can restrict the list of available caches by setting the `cache-names` property.
-For instance, if you want only `cache1` and `cache2` caches, set the `cache-names` property as follows:
+
+如果找不到其他供应商，则配置使用 `ConcurrentHashMap` 作为缓存存储区的简单实现。如果你的应用程序中不存在任何缓存库，则这是默认设置。
+默认情况下，将根据需要创建缓存，但是你可以通过设置 `cache-names` 属性来限制可用缓存的列表。
+例如，如果只需要 `cache1` 和 `cache2` 高速缓存，请按如下所示设置 `cache-names` 属性：
 
 [source,properties,indent=0,configprops]
 ----
     spring.cache.cache-names=cache1,cache2
 ----
 
-If you do so and your application uses a cache not listed, then it fails at runtime when the cache is needed, but not on startup.
-This is similar to the way the "real" cache providers behave if you use an undeclared cache.
-
+如果这样做，并且你的应用程序使用了未列出的缓存，那么当需要该缓存时，它将在运行时失败，但在启动时不会失败。
+这与使用未声明的缓存时“实际”缓存供应商的行为类似。
 
 
 [[boot-features-caching-provider-none]]
 ==== None
-When `@EnableCaching` is present in your configuration, a suitable cache configuration is expected as well.
-If you need to disable caching altogether in certain environments, force the cache type to `none` to use a no-op implementation, as shown in the following example:
+
+当你的配置中存在 `@EnableCaching` 时，也需要合适的缓存配置。如果你需要在某些环境中完全禁用缓存，
+请强制将缓存类型设置为 `none` 以使用no-op实现，如以下示例所示：
 
 [source,properties,indent=0,configprops]
 ----
@@ -4867,28 +4860,26 @@ If you need to disable caching altogether in certain environments, force the cac
 ----
 
 
-
 [[boot-features-messaging]]
-== Messaging
-The Spring Framework provides extensive support for integrating with messaging systems, from simplified use of the JMS API using `JmsTemplate` to a complete infrastructure to receive messages asynchronously.
-Spring AMQP provides a similar feature set for the Advanced Message Queuing Protocol.
-Spring Boot also provides auto-configuration options for `RabbitTemplate` and RabbitMQ.
-Spring WebSocket natively includes support for STOMP messaging, and Spring Boot has support for that through starters and a small amount of auto-configuration.
-Spring Boot also has support for Apache Kafka.
+== 消息
 
+Spring Framework为与消息传递系统集成提供了广泛的支持，从使用 `JmsTemplate` 简化JMS API到使用完整的基础设施异步接收消息。
+Spring AMQP为高级消息队列协议提供了类似的功能集。Spring Boot还为 `RabbitTemplate` 和RabbitMQ提供了自动配置选项。
+Spring WebSocket本身就包含对STOMP消息的支持，而Spring Boot通过启动器和少量的自动配置对此提供了支持。
+Spring Boot还支持Apache Kafka。
 
 
 [[boot-features-jms]]
 === JMS
-The `javax.jms.ConnectionFactory` interface provides a standard method of creating a `javax.jms.Connection` for interacting with a JMS broker.
-Although Spring needs a `ConnectionFactory` to work with JMS, you generally need not use it directly yourself and can instead rely on higher level messaging abstractions.
-(See the {spring-framework-docs}integration.html#jms[relevant section] of the Spring Framework reference documentation for details.)
-Spring Boot also auto-configures the necessary infrastructure to send and receive messages.
 
+`javax.jms.ConnectionFactory` 接口提供了创建用于与JMS代理进行交互的 `javax.jms.Connection` 的标准方法。
+尽管Spring需要一个 `ConnectionFactory` 来与JMS一起使用，但是你通常不需要自己直接使用它，而可以依赖于更高级别的消息传递抽象。
+（有关详细信息，请参见Spring Framework参考文档的 {spring-framework-docs}integration.html#jms[相关部分]。）Spring
+Boot还会自动配置必要的基础设施，以发送和接收消息。
 
 
 [[boot-features-activemq]]
-==== ActiveMQ Support
+==== ActiveMQ支持
 When https://activemq.apache.org/[ActiveMQ] is available on the classpath, Spring Boot can also configure a `ConnectionFactory`.
 If the broker is present, an embedded broker is automatically started and configured (provided no broker URL is specified through configuration).
 
@@ -4927,7 +4918,7 @@ By default, ActiveMQ creates a destination if it does not yet exist so that dest
 
 
 [[boot-features-artemis]]
-==== Artemis Support
+==== Artemis支持
 Spring Boot can auto-configure a `ConnectionFactory` when it detects that https://activemq.apache.org/artemis/[Artemis] is available on the classpath.
 If the broker is present, an embedded broker is automatically started and configured (unless the mode property has been explicitly set).
 The supported modes are `embedded` (to make explicit that an embedded broker is required and that an error should occur if the broker is not available on the classpath) and `native` (to connect to a broker using the `netty` transport protocol).
@@ -4973,10 +4964,11 @@ No JNDI lookup is involved, and destinations are resolved against their names, u
 
 
 [[boot-features-jms-jndi]]
-==== Using a JNDI ConnectionFactory
-If you are running your application in an application server, Spring Boot tries to locate a JMS `ConnectionFactory` by using JNDI.
-By default, the `java:/JmsXA` and `java:/XAConnectionFactory` location are checked.
-You can use the configprop:spring.jms.jndi-name[] property if you need to specify an alternative location, as shown in the following example:
+==== 使用JNDI ConnectionFactory
+
+如果你正在应用程序服务器中运行应用程序，Spring Boot会尝试使用JNDI来查找JMS `ConnectionFactory`。
+默认情况下，将检查 `java:/JmsXA` 和 `java:/XAConnectionFactory` 位置。
+如果需要指定备用位置，则可以使用 `spring.jms.jndi-name` 属性，如以下示例所示：
 
 [source,properties,indent=0,configprops]
 ----
@@ -4986,8 +4978,9 @@ You can use the configprop:spring.jms.jndi-name[] property if you need to specif
 
 
 [[boot-features-using-jms-sending]]
-==== Sending a Message
-Spring's `JmsTemplate` is auto-configured, and you can autowire it directly into your own beans, as shown in the following example:
+==== 发送消息
+
+Spring的 `JmsTemplate` 是自动配置的，你可以将其直接自动注入到自己的bean中，如以下示例所示：
 
 [source,java,indent=0]
 ----
@@ -5010,25 +5003,21 @@ Spring's `JmsTemplate` is auto-configured, and you can autowire it directly into
     }
 ----
 
-NOTE: {spring-framework-api}/jms/core/JmsMessagingTemplate.html[`JmsMessagingTemplate`] can be injected in a similar manner.
-If a `DestinationResolver` or a `MessageConverter` bean is defined, it is associated automatically to the auto-configured `JmsTemplate`.
-
+NOTE: {spring-framework-api}/jms/core/JmsMessagingTemplate.html[`JmsMessagingTemplate`]可以类似的方式注入。
+如果定义了 `DestinationResolver` 或 `MessageConverter` bean，则将其自动关联到自动配置的 `JmsTemplate`。
 
 
 [[boot-features-using-jms-receiving]]
-==== Receiving a Message
-When the JMS infrastructure is present, any bean can be annotated with `@JmsListener` to create a listener endpoint.
-If no `JmsListenerContainerFactory` has been defined, a default one is configured automatically.
-If a `DestinationResolver` or a `MessageConverter` beans is defined, it is associated automatically to the default factory.
+==== 接收消息
 
-By default, the default factory is transactional.
-If you run in an infrastructure where a `JtaTransactionManager` is present, it is associated to the listener container by default.
-If not, the `sessionTransacted` flag is enabled.
-In that latter scenario, you can associate your local data store transaction to the processing of an incoming message by adding `@Transactional` on your listener method (or a delegate thereof).
-This ensures that the incoming message is acknowledged, once the local transaction has completed.
-This also includes sending response messages that have been performed on the same JMS session.
+存在JMS基础设施时，可以使用 `@JmsListener` 注解任何bean以创建监听器端点。如果未定义 `JmsListenerContainerFactory`
+，则会自动配置一个默认值。如果定义了 `DestinationResolver` 或 `MessageConverter` Bean，则将其自动关联到默认工厂。
 
-The following component creates a listener endpoint on the `someQueue` destination:
+默认情况下，默认工厂是事务性的。如果你在存在 `JtaTransactionManager` 的基础设施中运行，则默认情况下它将与侦听器容器关联。
+如果不是，则启用 `sessionTransacted` 标志。在后一种情况下，你可以通过在监听器方法（或其委托）上添加 `@Transactional`
+来将本地数据存储事务与传入消息的处理相关联。这样可以确保本地事务完成后，接收的消息得到确认。这还包括发送已在同一JMS会话上执行的响应消息。
+
+以下组件在 `someQueue` 目标上创建一个监听器端点：
 
 [source,java,indent=0]
 ----
@@ -5043,11 +5032,13 @@ The following component creates a listener endpoint on the `someQueue` destinati
     }
 ----
 
-TIP: See {spring-framework-api}/jms/annotation/EnableJms.html[the Javadoc of `@EnableJms`] for more details.
+TIP: 有关更多详细信息，请参见 {spring-framework-api}/jms/annotation/EnableJms.html[`@EnableJms` 的Javadoc]。
 
-If you need to create more `JmsListenerContainerFactory` instances or if you want to override the default, Spring Boot provides a `DefaultJmsListenerContainerFactoryConfigurer` that you can use to initialize a `DefaultJmsListenerContainerFactory` with the same settings as the one that is auto-configured.
+如果你需要创建更多的 `JmsListenerContainerFactory` 实例，或者想要覆盖默认实例，Spring
+Boot提供了一个 `DefaultJmsListenerContainerFactoryConfigurer`
+，你可以使用它来初始化具有与自动配置相同设置的 `DefaultJmsListenerContainerFactory`。
 
-For instance, the following example exposes another factory that uses a specific `MessageConverter`:
+例如，以下示例公开了另一个使用特定 `MessageConverter` 的工厂：
 
 [source,java,indent=0]
 ----
@@ -5067,7 +5058,7 @@ For instance, the following example exposes another factory that uses a specific
     }
 ----
 
-Then you can use the factory in any `@JmsListener`-annotated method as follows:
+然后，可以在任何 `@JmsListener` 注释的方法中使用工厂，如下所示：
 
 [source,java,indent=0]
 [subs="verbatim,quotes"]
@@ -5094,7 +5085,7 @@ Spring Boot offers several conveniences for working with AMQP through RabbitMQ, 
 
 
 [[boot-features-rabbitmq]]
-==== RabbitMQ support
+==== RabbitMQ支持
 https://www.rabbitmq.com/[RabbitMQ] is a lightweight, reliable, scalable, and portable message broker based on the AMQP protocol.
 Spring uses `RabbitMQ` to communicate through the AMQP protocol.
 
@@ -5124,7 +5115,7 @@ TIP: See https://spring.io/blog/2010/06/14/understanding-amqp-the-protocol-used-
 
 
 [[boot-features-using-amqp-sending]]
-==== Sending a Message
+==== 发送消息
 Spring's `AmqpTemplate` and `AmqpAdmin` are auto-configured, and you can autowire them directly into your own beans, as shown in the following example:
 
 [source,java,indent=0]
@@ -5170,7 +5161,7 @@ You can also customize the `RetryTemplate` programmatically by declaring a `Rabb
 
 
 [[boot-features-using-amqp-receiving]]
-==== Receiving a Message
+==== 接收消息
 When the Rabbit infrastructure is present, any bean can be annotated with `@RabbitListener` to create a listener endpoint.
 If no `RabbitListenerContainerFactory` has been defined, a default `SimpleRabbitListenerContainerFactory` is automatically configured and you can switch to a direct container using the configprop:spring.rabbitmq.listener.type[] property.
 If a `MessageConverter` or a `MessageRecoverer` bean is defined, it is automatically associated with the default factory.
@@ -5246,7 +5237,7 @@ The latter is the mechanism used when retries are enabled and the maximum number
 
 
 [[boot-features-kafka]]
-=== Apache Kafka Support
+=== Apache Kafka支持
 https://kafka.apache.org/[Apache Kafka] is supported by providing auto-configuration of the `spring-kafka` project.
 
 Kafka configuration is controlled by external configuration properties in `spring.kafka.*`.
@@ -5266,7 +5257,7 @@ See {spring-boot-autoconfigure-module-code}/kafka/KafkaProperties.java[`KafkaPro
 
 
 [[boot-features-kafka-sending-a-message]]
-==== Sending a Message
+==== 发送消息
 Spring's `KafkaTemplate` is auto-configured, and you can autowire it directly in your own beans, as shown in the following example:
 
 [source,java,indent=0]
@@ -5292,7 +5283,7 @@ Also, if a `RecordMessageConverter` bean is defined, it is automatically associa
 
 
 [[boot-features-kafka-receiving-a-message]]
-==== Receiving a Message
+==== 接收消息
 When the Apache Kafka infrastructure is present, any bean can be annotated with `@KafkaListener` to create a listener endpoint.
 If no `KafkaListenerContainerFactory` has been defined, a default one is automatically configured with keys defined in `spring.kafka.listener.*`.
 
@@ -5322,7 +5313,7 @@ TIP: A custom `ChainedKafkaTransactionManager` must be marked `@Primary` as it u
 
 
 [[boot-features-kafka-streams]]
-==== Kafka Streams
+==== Kafka流
 Spring for Apache Kafka provides a factory bean to create a `StreamsBuilder` object and manage the lifecycle of its streams.
 Spring Boot auto-configures the required `KafkaStreamsConfiguration` bean as long as `kafka-streams` is on the classpath and Kafka Streams is enabled via the `@EnableKafkaStreams` annotation.
 
@@ -5358,7 +5349,7 @@ You can customize this behaviour using the configprop:spring.kafka.streams.auto-
 
 
 [[boot-features-kafka-extra-props]]
-==== Additional Kafka Properties
+==== Kafka的其他属性
 The properties supported by auto configuration are shown in <<appendix-application-properties.adoc#common-application-properties>>.
 Note that, for the most part, these properties (hyphenated or camelCase) map directly to the Apache Kafka dotted properties.
 Refer to the Apache Kafka documentation for details.
@@ -5403,7 +5394,7 @@ IMPORTANT: Properties set in this way override any configuration item that Sprin
 
 
 [[boot-features-embedded-kafka]]
-==== Testing with Embedded Kafka
+==== 使用嵌入式Kafka进行测试
 Spring for Apache Kafka provides a convenient way to test projects with an embedded Apache Kafka broker.
 To use this feature, annotate a test class with `@EmbeddedKafka` from the `spring-kafka-test` module.
 For more information, please see the Spring for Apache Kafka https://docs.spring.io/spring-kafka/docs/current/reference/html/#embedded-kafka-annotation[reference manual].
@@ -5687,7 +5678,7 @@ Spring Boot尝试通过在JNDI路径（`java:/JmsXA` 或 `java:/XAConnectionFact
 
 如果要使用非XA `ConnectionFactory`，则可以注入 `nonXaJmsConnectionFactory` bean，
 而不是 `@Primary` `jmsConnectionFactory` bean。
-为了保持一致性，还可使用bean别名 `xaJmsConnectionFactory 提供了 `jmsConnectionFactory` bean。
+为了保持一致性，还可使用bean别名 `xaJmsConnectionFactory` 提供了 `jmsConnectionFactory` bean。
 
 以下示例显示如何注入 `ConnectionFactory` 实例：
 
@@ -6294,7 +6285,7 @@ TIP: 如果不需要将这两个问题分开，则可以将自动配置代码和
 ==== 配置键
 
 如果你的starter提供了配置键，请为其使用唯一的命名空间。
-特别是，不要将键包含在Spring Boot使用的名称空间中（例如：`server`, `management`, `spring`等）。
+特别是，不要将键包含在Spring Boot使用的名称空间中（例如：`server`, `management`, `spring` 等）。
 如果使用相同的命名空间，将来我们可能会以破坏模块的方式修改这些命名空间。
 根据经验，所有键都必须拥有自己的命名空间（例如：`acme`）。
 
