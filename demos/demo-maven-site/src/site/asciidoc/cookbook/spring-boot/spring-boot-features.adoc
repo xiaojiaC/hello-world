@@ -2144,7 +2144,7 @@ Spring Boot会为你创建一个（请参见 {spring-framework-api}/validation/D
 你还可以使用 `spring.resources.static-locations` 属性来自定义静态资源位置（用目录位置列表替换默认值）。
 根Servlet上下文路径 `"/"` 也会作为位置自动添加。
 
-除了前面提到的“标准”静态资源位置，https://www.webjars.org/[Webjars 内容]还有一个特殊情况。
+除了前面提到的“标准”静态资源位置， https://www.webjars.org/[Webjars 内容]还有一个特殊情况。
 如果jar文件以Webjars格式打包，则从jar文件提供带有 `+/webjars/**+` 路径的所有资源。
 
 TIP: 如果你的应用程序打包为jar，则不要使用 `src/main/webapp` 目录。尽管此目录是一个通用标准，
