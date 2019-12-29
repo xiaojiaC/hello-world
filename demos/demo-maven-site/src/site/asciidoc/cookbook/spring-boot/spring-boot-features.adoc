@@ -4060,7 +4060,9 @@ NOTE: You can enable persistence for the embedded mode by providing a path to a 
 ==== Using Native Types
 Neo4j-OGM can map some types, like those in `java.time.*`, to `String`-based properties or to one of the native types that Neo4j provides.
 For backwards compatibility reasons the default for Neo4j-OGM is to use a `String`-based representation.
-To use native types, add a dependency on either `org.neo4j:neo4j-ogm-bolt-native-types` or `org.neo4j:neo4j-ogm-embedded-native-types`, and configure the configprop:spring.data.neo4j.use-native-types[] property as shown in the following example:
+To use native types, add a dependency on either `org.neo4j:neo4j-ogm-bolt-native-types` or `org
+.neo4j:neo4j-ogm-embedded-native-types`, and configure the `spring.data.neo4j.use-native-types`
+property as shown in the following example:
 
 [source,properties,indent=0,configprops]
 ----
@@ -4510,7 +4512,8 @@ You can also inject an auto-configured `LdapTemplate` instance as you would with
 [[boot-features-ldap-embedded]]
 ==== Embedded In-memory LDAP Server
 For testing purposes, Spring Boot supports auto-configuration of an in-memory LDAP server from https://www.ldap.com/unboundid-ldap-sdk-for-java[UnboundID].
-To configure the server, add a dependency to `com.unboundid:unboundid-ldapsdk` and declare a configprop:spring.ldap.embedded.base-dn[] property, as follows:
+To configure the server, add a dependency to `com.unboundid:unboundid-ldapsdk` and declare a
+`spring.ldap.embedded.base-dn` property, as follows:
 
 [source,properties,indent=0,configprops]
 ----
@@ -4541,14 +4544,17 @@ In properties files, you must include the index as part of the property name:
 ====
 
 By default, the server starts on a random port and triggers the regular LDAP support.
-There is no need to specify a configprop:spring.ldap.urls[] property.
+There is no need to specify a `spring.ldap.urls` property.
 
 If there is a `schema.ldif` file on your classpath, it is used to initialize the server.
-If you want to load the initialization script from a different resource, you can also use the configprop:spring.ldap.embedded.ldif[] property.
+If you want to load the initialization script from a different resource, you can also use the
+`spring.ldap.embedded.ldif` property.
 
 By default, a standard schema is used to validate `LDIF` files.
-You can turn off validation altogether by setting the configprop:spring.ldap.embedded.validation.enabled[] property.
-If you have custom attributes, you can use configprop:spring.ldap.embedded.validation.schema[] to define your custom attribute types or object classes.
+You can turn off validation altogether by setting the `spring.ldap.embedded.validation.enabled`
+property.
+If you have custom attributes, you can use `spring.ldap.embedded.validation.schema` to
+define your custom attribute types or object classes.
 
 
 
@@ -4880,13 +4886,15 @@ Boot还会自动配置必要的基础设施，以发送和接收消息。
 
 [[boot-features-activemq]]
 ==== ActiveMQ支持
-When https://activemq.apache.org/[ActiveMQ] is available on the classpath, Spring Boot can also configure a `ConnectionFactory`.
-If the broker is present, an embedded broker is automatically started and configured (provided no broker URL is specified through configuration).
 
-NOTE: If you use `spring-boot-starter-activemq`, the necessary dependencies to connect or embed an ActiveMQ instance are provided, as is the Spring infrastructure to integrate with JMS.
+当 https://activemq.apache.org/[ActiveMQ]在类路径上可用时，Spring Boot也可以配置 `ConnectionFactory`。
+如果存在broker，则将自动启动和配置嵌入式broker（前提是未通过配置指定代理URL）。
 
-ActiveMQ configuration is controlled by external configuration properties in `+spring.activemq.*+`.
-For example, you might declare the following section in `application.properties`:
+NOTE: 如果你使用 `spring-boot-starter-activemq`，则将提供连接或嵌入ActiveMQ实例所需的依赖关系，
+以及与JMS集成的Spring基础设施。
+
+ActiveMQ配置由 `+spring.activemq.*+` 中的外部配置属性控制。
+例如，你可以在 `application.properties` 中声明以下部分：
 
 [source,properties,indent=0,configprops]
 ----
@@ -4895,14 +4903,16 @@ For example, you might declare the following section in `application.properties`
     spring.activemq.password=secret
 ----
 
-By default, a `CachingConnectionFactory` wraps the native `ConnectionFactory` with sensible settings that you can control by external configuration properties in `+spring.jms.*+`:
+默认情况下，`CachingConnectionFactory` 用适当的设置包装native `ConnectionFactory`，你可以通过 `+spring.jms.*+`
+中的外部配置属性来控制这些设置：
 
 [source,properties,indent=0,configprops]
 ----
     spring.jms.cache.session-cache-size=5
 ----
 
-If you'd rather use native pooling, you can do so by adding a dependency to `org.messaginghub:pooled-jms` and configuring the `JmsPoolConnectionFactory` accordingly, as shown in the following example:
+如果你想使用native池，则可以通过向 `org.messaginghub:pooled-jms` 添加依赖项并相应地配置
+`JmsPoolConnectionFactory` 来实现，如以下示例所示：
 
 [source,properties,indent=0,configprops]
 ----
@@ -4910,25 +4920,25 @@ If you'd rather use native pooling, you can do so by adding a dependency to `org
     spring.activemq.pool.max-connections=50
 ----
 
-TIP: See {spring-boot-autoconfigure-module-code}/jms/activemq/ActiveMQProperties.java[`ActiveMQProperties`] for more of the supported options.
-You can also register an arbitrary number of beans that implement `ActiveMQConnectionFactoryCustomizer` for more advanced customizations.
+TIP: 有关更多受支持的选项，请参见 {spring-boot-autoconfigure-module-code}/jms/activemq/ActiveMQProperties.java[`ActiveMQProperties`]。
+你还可以注册任意数量的实现 `ActiveMQConnectionFactoryCustomizer` 的Bean，以进行更高级的自定义。
 
-By default, ActiveMQ creates a destination if it does not yet exist so that destinations are resolved against their provided names.
-
+默认情况下，如果destination尚不存在ActiveMQ会创建，以便根据其提供的名称来解析destinations。
 
 
 [[boot-features-artemis]]
 ==== Artemis支持
-Spring Boot can auto-configure a `ConnectionFactory` when it detects that https://activemq.apache.org/artemis/[Artemis] is available on the classpath.
-If the broker is present, an embedded broker is automatically started and configured (unless the mode property has been explicitly set).
-The supported modes are `embedded` (to make explicit that an embedded broker is required and that an error should occur if the broker is not available on the classpath) and `native` (to connect to a broker using the `netty` transport protocol).
-When the latter is configured, Spring Boot configures a `ConnectionFactory` that connects to a broker running on the local machine with the default settings.
 
-NOTE: If you use `spring-boot-starter-artemis`, the necessary dependencies to connect to an existing Artemis instance are provided, as well as the Spring infrastructure to integrate with JMS.
-Adding `org.apache.activemq:artemis-jms-server` to your application lets you use embedded mode.
+当Spring Boot检测到 https://activemq.apache.org/artemis/[Artemis]在类路径中可用时，它可以自动配置 `ConnectionFactory`。
+如果存在broker，则将自动启动和配置嵌入式broker（除非已明确设置mode属性）。
+受支持的模式是 `embedded`（以明确表明需要嵌入式broker，并且如果类路径上不存在该broker，则将发生错误）和
+`native`（使用Netty传输协议连接到broker）。配置后者后，Spring Boot会配置一个 `ConnectionFactory`，
+该工厂将使用默认设置连接到在本地计算机上运行的broker。
 
-Artemis configuration is controlled by external configuration properties in `+spring.artemis.*+`.
-For example, you might declare the following section in `application.properties`:
+NOTE: 如果你使用 `spring-boot-starter-artemis`，则将提供连接到现有Artemis实例所需的依赖项，以及与JMS集成的Spring基础设施。
+将 `org.apache.activemq:artemis-jms-server` 添加到你的应用程序中可以使你使用嵌入式模式。
+
+Artemis配置由 `+spring.artemis.*+` 中的外部配置属性控制。例如，你可以在 `application.properties` 中声明以下部分：
 
 [source,properties,indent=0,configprops]
 ----
@@ -4939,17 +4949,20 @@ For example, you might declare the following section in `application.properties`
     spring.artemis.password=secret
 ----
 
-When embedding the broker, you can choose if you want to enable persistence and list the destinations that should be made available.
-These can be specified as a comma-separated list to create them with the default options, or you can define bean(s) of type `org.apache.activemq.artemis.jms.server.config.JMSQueueConfiguration` or `org.apache.activemq.artemis.jms.server.config.TopicConfiguration`, for advanced queue and topic configurations, respectively.
+嵌入broker时，可以选择是否要启用持久性并列出应使其可用的destinations。可以将它们指定为以逗号分隔的列表，以使用默认选项创建它们，
+或者你可以定义 `org.apache.activemq.artemis.jms.server.config.JMSQueueConfiguration` 或
+`org.apache.activemq.artemis.jms.server.config.TopicConfiguration` 类型的bean，分别用于高级队列和主题配置。
 
-By default, a `CachingConnectionFactory` wraps the native `ConnectionFactory` with sensible settings that you can control by external configuration properties in `+spring.jms.*+`:
+默认情况下，`CachingConnectionFactory` 用适当的设置包装native `ConnectionFactory`，你可以通过
+`+spring.jms.*+` 中的外部配置属性来控制这些设置：
 
 [source,properties,indent=0,configprops]
 ----
     spring.jms.cache.session-cache-size=5
 ----
 
-If you'd rather use native pooling, you can do so by adding a dependency to `org.messaginghub:pooled-jms` and configuring the `JmsPoolConnectionFactory` accordingly, as shown in the following example:
+如果你想使用native池，则可以通过向 `org.messaginghub:pooled-jms` 添加依赖项并相应地配置
+`JmsPoolConnectionFactory` 来实现，如以下示例所示：
 
 [source,properties,indent=0,configprops]
 ----
@@ -4957,10 +4970,9 @@ If you'd rather use native pooling, you can do so by adding a dependency to `org
     spring.artemis.pool.max-connections=50
 ----
 
-See {spring-boot-autoconfigure-module-code}/jms/artemis/ArtemisProperties.java[`ArtemisProperties`] for more supported options.
+有关更多受支持的选项，请参见 {spring-boot-autoconfigure-module-code}/jms/artemis/ArtemisProperties.java[`ArtemisProperties`]。
 
-No JNDI lookup is involved, and destinations are resolved against their names, using either the `name` attribute in the Artemis configuration or the names provided through configuration.
-
+使用Artemis配置中的 `name` 属性或通过配置提供的名称，来根据destinations名称解析destinations，不涉及JNDI查找。
 
 
 [[boot-features-jms-jndi]]
@@ -5078,19 +5090,19 @@ Boot提供了一个 `DefaultJmsListenerContainerFactoryConfigurer`
 
 [[boot-features-amqp]]
 === AMQP
-The Advanced Message Queuing Protocol (AMQP) is a platform-neutral, wire-level protocol for message-oriented middleware.
-The Spring AMQP project applies core Spring concepts to the development of AMQP-based messaging solutions.
-Spring Boot offers several conveniences for working with AMQP through RabbitMQ, including the `spring-boot-starter-amqp` "`Starter`".
 
+Advanced Message Queuing Protocol (AMQP) 是面向消息中间件的与平台无关的有线级别协议。
+Spring AMQP项目将Spring的核心概念应用于基于AMQP的消息传递解决方案的开发。
+Spring Boot为通过RabbitMQ使用AMQP提供了许多便利，包括 `spring-boot-starter-amqp` “`Starter`”。
 
 
 [[boot-features-rabbitmq]]
 ==== RabbitMQ支持
-https://www.rabbitmq.com/[RabbitMQ] is a lightweight, reliable, scalable, and portable message broker based on the AMQP protocol.
-Spring uses `RabbitMQ` to communicate through the AMQP protocol.
 
-RabbitMQ configuration is controlled by external configuration properties in `+spring.rabbitmq.*+`.
-For example, you might declare the following section in `application.properties`:
+https://www.rabbitmq.com/[RabbitMQ]是基于AMQP协议的轻型，可靠，可伸缩和便携式消息broker。
+Spring使用 `RabbitMQ` 通过AMQP协议进行通信。
+
+RabbitMQ配置由 `+spring.rabbitmq.*+` 中的外部配置属性控制。例如，你可以在 `application.properties` 中声明以下部分：
 
 [source,properties,indent=0,configprops]
 ----
@@ -5100,23 +5112,23 @@ For example, you might declare the following section in `application.properties`
     spring.rabbitmq.password=secret
 ----
 
-Alternatively, you could configure the same connection using the `addresses` attributes:
+另外，你可以使用 `addresses` 属性配置相同的连接：
 
 [source,properties,indent=0]
 ----
     spring.rabbitmq.addresses=amqp://admin:secret@localhost
 ----
 
-If a `ConnectionNameStrategy` bean exists in the context, it will be automatically used to name connections created by the auto-configured `ConnectionFactory`.
-See {spring-boot-autoconfigure-module-code}/amqp/RabbitProperties.java[`RabbitProperties`] for more of the supported options.
+如果上下文中存在 `ConnectionNameStrategy` Bean，它将自动用于命名由自动配置的 `ConnectionFactory` 创建的连接。
+有关更多受支持的选项，请参见 {spring-boot-autoconfigure-module-code}/amqp/RabbitProperties.java[`RabbitProperties`]。
 
-TIP: See https://spring.io/blog/2010/06/14/understanding-amqp-the-protocol-used-by-rabbitmq/[Understanding AMQP, the protocol used by RabbitMQ] for more details.
-
+TIP: 有关更多详细信息，请参阅 https://spring.io/blog/2010/06/14/understanding-amqp-the-protocol-used-by-rabbitmq/[了解RabbitMQ使用的AMQP协议]。
 
 
 [[boot-features-using-amqp-sending]]
 ==== 发送消息
-Spring's `AmqpTemplate` and `AmqpAdmin` are auto-configured, and you can autowire them directly into your own beans, as shown in the following example:
+
+Spring的 `AmqpTemplate` 和 `AmqpAdmin` 是自动配置的，你可以将它们直接自动注入到自己的bean中，如以下示例所示：
 
 [source,java,indent=0]
 ----
@@ -5142,12 +5154,12 @@ Spring's `AmqpTemplate` and `AmqpAdmin` are auto-configured, and you can autowir
     }
 ----
 
-NOTE: {spring-amqp-api}/rabbit/core/RabbitMessagingTemplate.html[`RabbitMessagingTemplate`] can be injected in a similar manner.
-If a `MessageConverter` bean is defined, it is associated automatically to the auto-configured `AmqpTemplate`.
+NOTE: {spring-amqp-api}/rabbit/core/RabbitMessagingTemplate.html[`RabbitMessagingTemplate`]可以类似的方式注入。
+如果定义了 `MessageConverter` bean，它将自动关联到自动配置的 `AmqpTemplate`。
 
-If necessary, any `org.springframework.amqp.core.Queue` that is defined as a bean is automatically used to declare a corresponding queue on the RabbitMQ instance.
+如有必要，任何定义为 `org.springframework.amqp.core.Queue` 的bean都会自动用于在RabbitMQ实例上声明相应的队列。
 
-To retry operations, you can enable retries on the `AmqpTemplate` (for example, in the event that the broker connection is lost):
+要重试操作，可以在 `AmqpTemplate` 上启用重试（例如，在broker连接丢失的情况下）：
 
 [source,properties,indent=0,configprops]
 ----
@@ -5155,18 +5167,18 @@ To retry operations, you can enable retries on the `AmqpTemplate` (for example, 
     spring.rabbitmq.template.retry.initial-interval=2s
 ----
 
-Retries are disabled by default.
-You can also customize the `RetryTemplate` programmatically by declaring a `RabbitRetryTemplateCustomizer` bean.
-
+默认情况下，重试是禁用的。你也可以通过声明 `RabbitRetryTemplateCustomizer` bean来以编程方式自定义 `RetryTemplate`。
 
 
 [[boot-features-using-amqp-receiving]]
 ==== 接收消息
-When the Rabbit infrastructure is present, any bean can be annotated with `@RabbitListener` to create a listener endpoint.
-If no `RabbitListenerContainerFactory` has been defined, a default `SimpleRabbitListenerContainerFactory` is automatically configured and you can switch to a direct container using the configprop:spring.rabbitmq.listener.type[] property.
-If a `MessageConverter` or a `MessageRecoverer` bean is defined, it is automatically associated with the default factory.
 
-The following sample component creates a listener endpoint on the `someQueue` queue:
+存在Rabbit基础设施时，可以使用 `@RabbitListener` 注解任何bean以创建监听器端点。
+如果未定义 `RabbitListenerContainerFactory`，则会自动配置默认的 `SimpleRabbitListenerContainerFactory`，
+你可以使用 `spring.rabbitmq.listener.type` 属性切换到直接容器。
+如果定义了 `MessageConverter` 或 `MessageRecoverer` Bean，它将自动与默认工厂关联。
+
+以下示例组件在 `someQueue` 队列上创建一个监听器端点：
 
 [source,java,indent=0]
 ----
@@ -5181,14 +5193,17 @@ The following sample component creates a listener endpoint on the `someQueue` qu
     }
 ----
 
-TIP: See {spring-amqp-api}/rabbit/annotation/EnableRabbit.html[the Javadoc of `@EnableRabbit`] for more details.
+TIP: 有关更多详细信息，请参见 {spring-amqp-api}/rabbit/annotation/EnableRabbit.html[`@EnableRabbit` 的Javadoc]。
 
-If you need to create more `RabbitListenerContainerFactory` instances or if you want to override the default, Spring Boot provides a `SimpleRabbitListenerContainerFactoryConfigurer` and a `DirectRabbitListenerContainerFactoryConfigurer` that you can use to initialize a `SimpleRabbitListenerContainerFactory` and a `DirectRabbitListenerContainerFactory` with the same settings as the factories used by the auto-configuration.
+如果你需要创建更多 `RabbitListenerContainerFactory` 实例，或者想要覆盖默认实例，
+Spring Boot提供了一个 `SimpleRabbitListenerContainerFactoryConfigurer`
+和 `DirectRabbitListenerContainerFactoryConfigurer`，
+你可以使用它们来初始化 `SimpleRabbitListenerContainerFactory` 和 `DirectRabbitListenerContainerFactory`
+，其设置与自动配置所使用的工厂相同。
 
-TIP: It does not matter which container type you chose.
-Those two beans are exposed by the auto-configuration.
+TIP: 选择哪种容器都没有关系。这两个bean通过自动配置公开。
 
-For instance, the following configuration class exposes another factory that uses a specific `MessageConverter`:
+例如，以下配置类公开了另一个使用特定 `MessageConverter` 的工厂：
 
 [source,java,indent=0]
 ----
@@ -5208,7 +5223,7 @@ For instance, the following configuration class exposes another factory that use
     }
 ----
 
-Then you can use the factory in any `@RabbitListener`-annotated method, as follows:
+然后，你可以在任何 `@RabbitListener` 注释的方法中使用工厂，如下所示：
 
 [source,java,indent=0]
 [subs="verbatim,quotes"]
@@ -5224,24 +5239,21 @@ Then you can use the factory in any `@RabbitListener`-annotated method, as follo
     }
 ----
 
-You can enable retries to handle situations where your listener throws an exception.
-By default, `RejectAndDontRequeueRecoverer` is used, but you can define a `MessageRecoverer` of your own.
-When retries are exhausted, the message is rejected and either dropped or routed to a dead-letter exchange if the broker is configured to do so.
-By default, retries are disabled.
-You can also customize the `RetryTemplate` programmatically by declaring a `RabbitRetryTemplateCustomizer` bean.
+你可以启用重试来处理监听器引发异常的情况。默认情况下，使用 `RejectAndDontRequeueRecoverer`，
+但是你可以定义自己的 `MessageRecoverer`。当重试耗尽时，消息将被拒绝，如果将broker配置为这样做，则消息将被丢弃或路由到死信交换器。
+默认情况下，重试是禁用的。你也可以通过声明 `RabbitRetryTemplateCustomizer` bean来以编程方式自定义 `RetryTemplate`。
 
-IMPORTANT: By default, if retries are disabled and the listener throws an exception, the delivery is retried indefinitely.
-You can modify this behavior in two ways: Set the `defaultRequeueRejected` property to `false` so that zero re-deliveries are attempted or throw an `AmqpRejectAndDontRequeueException` to signal the message should be rejected.
-The latter is the mechanism used when retries are enabled and the maximum number of delivery attempts is reached.
-
+IMPORTANT: 默认情况下，如果禁用了重试，并且监听器抛出异常，则会无限期地重试传递。你可以通过两种方式修改此行为：
+将 `defaultRequeueRejected` 属性设置为 `false`，以便尝试零次重新传递，或者引发
+`AmqpRejectAndDontRequeueException` 以指示应拒绝该消息。后者是启用重试并达到最大传递尝试次数时使用的机制。
 
 
 [[boot-features-kafka]]
 === Apache Kafka支持
-https://kafka.apache.org/[Apache Kafka] is supported by providing auto-configuration of the `spring-kafka` project.
 
-Kafka configuration is controlled by external configuration properties in `spring.kafka.*`.
-For example, you might declare the following section in `application.properties`:
+通过提供 `spring-kafka` 项目的自动配置来支持 https://kafka.apache.org/[Apache Kafka]。
+
+Kafka配置由 `spring.kafka.*` 中的外部配置属性控制。例如，你可以在 `application.properties` 中声明以下部分：
 
 [source,properties,indent=0,configprops]
 ----
@@ -5249,16 +5261,15 @@ For example, you might declare the following section in `application.properties`
     spring.kafka.consumer.group-id=myGroup
 ----
 
-TIP: To create a topic on startup, add a bean of type `NewTopic`.
-If the topic already exists, the bean is ignored.
+TIP: 要在启动时创建主题，请添加 `NewTopic` 类型的Bean。如果该主题已经存在，则将忽略该Bean。
 
-See {spring-boot-autoconfigure-module-code}/kafka/KafkaProperties.java[`KafkaProperties`] for more supported options.
-
+有关更多受支持的选项，请参见 {spring-boot-autoconfigure-module-code}/kafka/KafkaProperties.java[`KafkaProperties`]。
 
 
 [[boot-features-kafka-sending-a-message]]
 ==== 发送消息
-Spring's `KafkaTemplate` is auto-configured, and you can autowire it directly in your own beans, as shown in the following example:
+
+Spring的 `KafkaTemplate` 是自动配置的，你可以直接在自己的bean中自动对其进行注入，如以下示例所示：
 
 [source,java,indent=0]
 ----
@@ -5277,17 +5288,17 @@ public class MyBean {
 }
 ----
 
-NOTE: If the property configprop:spring.kafka.producer.transaction-id-prefix[] is defined, a `KafkaTransactionManager` is automatically configured.
-Also, if a `RecordMessageConverter` bean is defined, it is automatically associated to the auto-configured `KafkaTemplate`.
-
+NOTE: 如果定义了 `spring.kafka.producer.transaction-id-prefix` 属性，则会自动配置 `KafkaTransactionManager`。
+另外，如果定义了 `RecordMessageConverter` bean，它将自动关联到自动配置的 `KafkaTemplate`。
 
 
 [[boot-features-kafka-receiving-a-message]]
 ==== 接收消息
-When the Apache Kafka infrastructure is present, any bean can be annotated with `@KafkaListener` to create a listener endpoint.
-If no `KafkaListenerContainerFactory` has been defined, a default one is automatically configured with keys defined in `spring.kafka.listener.*`.
 
-The following component creates a listener endpoint on the `someTopic` topic:
+存在Apache Kafka基础设施时，可以使用 `@KafkaListener` 注释任何bean以创建监听器端点。
+如果未定义 `KafkaListenerContainerFactory`，则会使用 `spring.kafka.listener.*` 中定义的键自动配置默认值。
+
+以下组件在 `someTopic` 主题上创建监听器端点：
 
 [source,java,indent=0]
 ----
@@ -5302,29 +5313,30 @@ The following component creates a listener endpoint on the `someTopic` topic:
     }
 ----
 
-If a `KafkaTransactionManager` bean is defined, it is automatically associated to the container factory.
-Similarly, if a `ErrorHandler`, `AfterRollbackProcessor` or `ConsumerAwareRebalanceListener` bean is defined, it is automatically associated to the default factory.
+如果定义了 `KafkaTransactionManager` bean，它将自动关联到容器工厂。同样，如果定义了 `ErrorHandler`，`AfterRollbackProcessor`
+或 `ConsumerAwareRebalanceListener` bean，它将自动与默认工厂关联。
 
-Depending on the listener type, a `RecordMessageConverter` or `BatchMessageConverter` bean is associated to the default factory.
-If only a `RecordMessageConverter` bean is present for a batch listener, it is wrapped in a `BatchMessageConverter`.
+根据监听器类型，将 `RecordMessageConverter` 或 `BatchMessageConverter` bean与默认工厂关联。
+如果对于批处理监听器仅存在一个 `RecordMessageConverter` bean，则将其包装在 `BatchMessageConverter` 中。
 
-TIP: A custom `ChainedKafkaTransactionManager` must be marked `@Primary` as it usually references the auto-configured `KafkaTransactionManager` bean.
-
+TIP: 自定义 `ChainedKafkaTransactionManager` 必须标记为 `@Primary`，因为它通常引用自动配置的 `KafkaTransactionManager` bean。
 
 
 [[boot-features-kafka-streams]]
 ==== Kafka流
-Spring for Apache Kafka provides a factory bean to create a `StreamsBuilder` object and manage the lifecycle of its streams.
-Spring Boot auto-configures the required `KafkaStreamsConfiguration` bean as long as `kafka-streams` is on the classpath and Kafka Streams is enabled via the `@EnableKafkaStreams` annotation.
 
-Enabling Kafka Streams means that the application id and bootstrap servers must be set.
-The former can be configured using `spring.kafka.streams.application-id`, defaulting to `spring.application.name` if not set.
-The latter can be set globally or specifically overridden just for streams.
+用于Apache Kafka的Spring提供了一个工厂bean来创建 `StreamsBuilder` 对象并管理其流的生命周期。
+只要 `kafka-streams` 在类路径上并且通过 `@EnableKafkaStreams` 注解启用Kafka Streams，
+Spring Boot就会自动配置所需的 `KafkaStreamsConfiguration` bean。
 
-Several additional properties are available using dedicated properties; other arbitrary Kafka properties can be set using the `spring.kafka.streams.properties` namespace.
-See also <<boot-features-kafka-extra-props>> for more information.
+启用Kafka Streams意味着必须设置应用程序ID和引导服务器。
+可以使用 `spring.kafka.streams.application-id` 来配置前者，如果未设置，则默认为 `spring.application.name`。
+后者可以全局设置，也可以仅针对流进行覆盖。
 
-To use the factory bean, simply wire `StreamsBuilder` into your `@Bean` as shown in the following example:
+使用专用属性可以获得几个附加属性。可以使用 `spring.kafka.streams.properties` 命名空间设置其他任意Kafka属性。
+另请参见<<boot-features-kafka-extra-props>>。
+
+要使用工厂bean，只需将 `StreamsBuilder` 连接到你的 `@Bean` 中，如以下示例所示：
 
 [source,java,indent=0]
 ----
@@ -5343,23 +5355,19 @@ To use the factory bean, simply wire `StreamsBuilder` into your `@Bean` as shown
     }
 ----
 
-By default, the streams managed by the `StreamBuilder` object it creates are started automatically.
-You can customize this behaviour using the configprop:spring.kafka.streams.auto-startup[] property.
-
+默认情况下，由它创建的 `StreamBuilder` 对象管理的流将自动启动。你可以使用 `spring.kafka.streams.auto-startup` 属性来自定义此行为。
 
 
 [[boot-features-kafka-extra-props]]
 ==== Kafka的其他属性
-The properties supported by auto configuration are shown in <<appendix-application-properties.adoc#common-application-properties>>.
-Note that, for the most part, these properties (hyphenated or camelCase) map directly to the Apache Kafka dotted properties.
-Refer to the Apache Kafka documentation for details.
 
-The first few of these properties apply to all components (producers, consumers, admins, and streams) but can be specified at the component level if you wish to use different values.
-Apache Kafka designates properties with an importance of HIGH, MEDIUM, or LOW.
-Spring Boot auto-configuration supports all HIGH importance properties, some selected MEDIUM and LOW properties, and any properties that do not have a default value.
+自动配置支持的属性显示在 {spring-boot-docs}/htmlsingle/#common-application-properties[通用应用程序属性]中。
+请注意，在大多数情况下，这些属性（hyphenated或camelCase）直接映射到Apache Kafka dotted属性。有关详细信息，请参阅Apache Kafka文档。
 
-Only a subset of the properties supported by Kafka are available directly through the `KafkaProperties` class.
-If you wish to configure the producer or consumer with additional properties that are not directly supported, use the following properties:
+这些属性的前几个属性适用于所有组件（生产者，消费者，管理员和流），但如果你希望使用不同的值，则可以在组件级别上指定。
+Apache Kafka指定属性的重要性为HIGH，MEDIUM或LOW。Spring Boot自动配置支持所有HIGH重要性属性，一些选定的MEDIUM和LOW属性以及任何没有默认值的属性。
+
+通过 `KafkaProperties` 类可以直接使用Kafka支持的属性的子集。如果希望使用不直接支持的其他属性来配置生产者或消费者，请使用以下属性：
 
 [source,properties,indent=0,configprops]
 ----
@@ -5370,9 +5378,10 @@ If you wish to configure the producer or consumer with additional properties tha
     spring.kafka.streams.properties.prop.five=fifth
 ----
 
-This sets the common `prop.one` Kafka property to `first` (applies to producers, consumers and admins), the `prop.two` admin property to `second`, the `prop.three` consumer property to `third`, the `prop.four` producer property to `fourth` and the `prop.five` streams property to `fifth`.
+这将常见的 `prop.one` Kafka属性设置为 `first`（适用于生产者，消费者和管理员），`prop.two` 管理员属性设置为 `second`，
+`prop.three` 消费者属性设置为 `third`，`prop.four` 生产者属性设置为 `fourth`，`prop.five` 流属性设置为 `fifth`。
 
-You can also configure the Spring Kafka `JsonDeserializer` as follows:
+你还可以如下配置Spring Kafka `JsonDeserializer`：
 
 [source,properties,indent=0,configprops]
 ----
@@ -5381,7 +5390,7 @@ You can also configure the Spring Kafka `JsonDeserializer` as follows:
     spring.kafka.consumer.properties.spring.json.trusted.packages=com.example,org.acme
 ----
 
-Similarly, you can disable the `JsonSerializer` default behavior of sending type information in headers:
+同样，你可以禁用 `JsonSerializer` 在头部发送类型信息的默认行为：
 
 [source,properties,indent=0,configprops]
 ----
@@ -5389,20 +5398,20 @@ Similarly, you can disable the `JsonSerializer` default behavior of sending type
     spring.kafka.producer.properties.spring.json.add.type.headers=false
 ----
 
-IMPORTANT: Properties set in this way override any configuration item that Spring Boot explicitly supports.
-
+IMPORTANT: 以这种方式设置的属性将覆盖Spring Boot显式支持的任何配置项。
 
 
 [[boot-features-embedded-kafka]]
 ==== 使用嵌入式Kafka进行测试
-Spring for Apache Kafka provides a convenient way to test projects with an embedded Apache Kafka broker.
-To use this feature, annotate a test class with `@EmbeddedKafka` from the `spring-kafka-test` module.
-For more information, please see the Spring for Apache Kafka https://docs.spring.io/spring-kafka/docs/current/reference/html/#embedded-kafka-annotation[reference manual].
 
-To make Spring Boot auto-configuration work with the aforementioned embedded Apache Kafka broker, you need to remap a system property for embedded broker addresses (populated by the `EmbeddedKafkaBroker`) into the Spring Boot configuration property for Apache Kafka.
-There are several ways to do that:
+Spring for Apache Kafka提供了一种使用嵌入式Apache Kafka broker测试项目的便捷方法。
+要使用此功能，请在 `spring-kafka-test` 模块中使用 `@EmbeddedKafka` 注释测试类。
+有关更多信息，请参阅Spring for Apache Kafka https://docs.spring.io/spring-kafka/docs/current/reference/html/#embedded-kafka-annotation[参考手册]。
 
-* Provide a system property to map embedded broker addresses into configprop:spring.kafka.bootstrap-servers[] in the test class:
+要使Spring Boot自动配置与上述嵌入式Apache Kafka broker一起使用，你需要将嵌入式broker地址（由 `EmbeddedKafkaBroker` 填充）
+的系统属性重新映射到Apache Kafka的Spring Boot配置属性中。有几种方法可以做到这一点：
+
+* 提供一个系统属性，以将嵌入式broker地址映射到测试类中的 `spring.kafka.bootstrap-servers` 中：
 
 [source,java,indent=0]
 ----
@@ -5411,7 +5420,7 @@ static {
 }
 ----
 
-* Configure a property name on the `@EmbeddedKafka` annotation:
+* 在 `@EmbeddedKafka` 注解上配置属性名称：
 
 [source,java,indent=0]
 ----
@@ -5419,13 +5428,12 @@ static {
         bootstrapServersProperty = "spring.kafka.bootstrap-servers")
 ----
 
-* Use a placeholder in configuration properties:
+* 在配置属性中使用占位符：
 
 [source,properties,indent=0,configprops]
 ----
 spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}
 ----
-
 
 
 [[boot-features-resttemplate]]
