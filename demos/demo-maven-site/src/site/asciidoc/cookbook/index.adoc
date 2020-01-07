@@ -7,6 +7,7 @@ Hmm, the gate of Spring :-)
 * <<spring-core.adoc#beans,Spring Core>>
 * <<spring-session.adoc#overview,Spring Session>>
 * <<spring-mvc.adoc#mvc,Spring MVC>>
+* <<spring-webflux.adoc#webflux,Spring WebFlux>>
 * <<spring-test.adoc#testing-introduction,Spring Testing>>
 * <<spring-boot.adoc#using-boot,Spring Boot>>
 * <<spring-boot-test.adoc#boot-features-testing,Spring Boot Testing>>

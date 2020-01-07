@@ -1,0 +1,284 @@
+[[webflux-view]]
+= 视图技术
+[.small]#<<spring-mvc.adoc#mvc-view,Web MVC>>#
+
+Spring WebFlux中视图技术的使用是可插拔的。是否决定使用Thymeleaf，FreeMarker或其他某种视图技术主要取决于配置更改。
+本章介绍了与Spring WebFlux集成的视图技术。我们假设你已经熟悉<<webflux-viewresolution>>。
+
+
+[[webflux-view-thymeleaf]]
+== Thymeleaf
+[.small]#<<spring-mvc.adoc#mvc-view-thymeleaf,Web MVC>>#
+
+Thymeleaf是一种现代的服务器端Java模板引擎，它强调可以通过双击在浏览器中预览自然HTML模板，
+这对于独立处理UI模板（例如，由设计人员）而无需使用正在运行的服务器非常有用。
+Thymeleaf提供了广泛的功能集，并且正在积极地开发和维护。有关更完整的介绍，请参见
+http://www.thymeleaf.org/[Thymeleaf]项目主页。
+
+Thymeleaf与Spring WebFlux的集成由Thymeleaf项目管理。该配置涉及一些bean声明，例如：
+`SpringResourceTemplateResolver`，`SpringWebFluxTemplateEngine` 和 `ThymeleafReactiveViewResolver`。
+有关更多详细信息，请参见 http://www.thymeleaf.org/documentation.html[Thymeleaf+Spring]和
+WebFlux集成 http://forum.thymeleaf.org/Thymeleaf-3-0-8-JUST-PUBLISHED-td4030687.html[公告]。
+
+
+
+[[webflux-view-freemarker]]
+== FreeMarker
+[.small]#<<spring-mvc.adoc#mvc-view-freemarker,Web MVC>>#
+
+http://www.freemarker.org[Apache FreeMarker]是一个模板引擎，用于生成从HTML到电子邮件等的任何类型的文本输出。
+Spring框架具有内置的集成，可以将Spring WebFlux与FreeMarker模板一起使用。
+
+
+[[webflux-view-freemarker-contextconfig]]
+=== 视图配置
+[.small]#<<spring-mvc.adoc#mvc-view-freemarker-contextconfig,Web MVC>>#
+
+以下示例显示如何将FreeMarker配置作为一种视图技术：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+	@Configuration
+	@EnableWebFlux
+	public class WebConfig implements WebFluxConfigurer {
+
+		@Override
+		public void configureViewResolvers(ViewResolverRegistry registry) {
+			registry.freemarker();
+		}
+
+		// Configure FreeMarker...
+
+		@Bean
+		public FreeMarkerConfigurer freeMarkerConfigurer() {
+			FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
+			configurer.setTemplateLoaderPath("classpath:/templates");
+			return configurer;
+		}
+	}
+----
+
+你的模板需要存储在 `FreeMarkerConfigurer` 指定的目录中，如上例所示。给定上述配置，如果你的控制器返回视图名称 `welcome`，
+则解析器将查找 `classpath:/templates/freemarker/welcome.ftl` 模板。
+
+
+
+[[webflux-views-freemarker]]
+=== FreeMarker配置
+[.small]#<<spring-mvc.adoc#mvc-views-freemarker,Web MVC>>#
+
+你可以通过在 `FreeMarkerConfigurer` bean上设置适当的bean属性，
+将FreeMarker的“Settings”和“SharedVariables”直接传递给FreeMarker `Configuration` 对象（由Spring管理）。
+`freemarkerSettings` 属性需要一个 `java.util.Properties` 对象，而 `freemarkerVariables` 属性需要一个 `java.util.Map`。
+以下示例显示了如何使用 `FreeMarkerConfigurer`：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+	@Configuration
+	@EnableWebFlux
+	public class WebConfig implements WebFluxConfigurer {
+
+		// ...
+
+		@Bean
+		public FreeMarkerConfigurer freeMarkerConfigurer() {
+			Map<String, Object> variables = new HashMap<>();
+			variables.put("xml_escape", new XmlEscape());
+
+			FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
+			configurer.setTemplateLoaderPath("classpath:/templates");
+			configurer.setFreemarkerVariables(variables);
+			return configurer;
+		}
+	}
+----
+
+有关将settings和variables应用于 `Configuration` 对象的详细信息，请参见FreeMarker文档。
+
+[[webflux-view-freemarker-forms]]
+=== 表单处理
+[.small]#{doc-spring-web}#mvc-view-freemarker-forms[Web MVC]#
+
+Spring提供了一个供JSP使用的标签库，其中包含一个 `<spring:bind/>` 元素。该元素主要允许表单显示来自表单支持对象的值，
+并显示来自Web或业务层中 `Validator` 的验证失败的结果。Spring还支持FreeMarker中的相同功能，并带有用于生成表单输入元素本身的附加便利宏。
+
+[[webflux-view-bind-macros]]
+==== 绑定宏
+[.small]#{doc-spring-web}#mvc-view-bind-macros[Web MVC]#
+
+FreeMarker的 `spring-webflux.jar` 文件中维护了一组标准宏，因此它们始终可用于经过适当配置的应用程序。
+
+Spring模板库中定义的某些宏被视为内部（私有）宏，但是在宏定义中不存在这种作用域，这使得所有宏对于调用代码和用户模板都是可见的。
+以下各节仅关注你需要在模板中直接调用的宏。如果你希望直接查看宏代码，则该文件名为 `spring.ftl`，位于
+`org.springframework.web.reactive.result.view.freemarker` 包中。
+
+有关绑定支持的更多详细信息，请参见Spring MVC的 {doc-spring-web}#mvc-view-simple-binding[简单绑定]。
+
+[[webflux-views-form-macros]]
+==== 表单宏
+[.small]#{doc-spring-web}#mvc-views-form-macros[Web MVC]#
+
+有关Spring对FreeMarker模板的表单宏支持的详细信息，请参阅Spring MVC文档的以下部分。
+
+* {doc-spring-web}#mvc-views-form-macros[输入宏]
+* {doc-spring-web}#mvc-views-form-macros-input[输入字段]
+* {doc-spring-web}#mvc-views-form-macros-select[选择字段]
+* {doc-spring-web}#mvc-views-form-macros-html-escaping[HTML转义]
+
+
+[[webflux-view-script]]
+== 脚本视图
+[.small]#{doc-spring-web}#mvc-view-script[Web MVC]#
+
+Spring框架具有内置的集成，可以将Spring WebFlux与可以在 https://www.jcp.org/en/jsr/detail?id=223[JSR-223]
+Java脚本引擎之上运行的任何模板库一起使用。下表显示了我们在不同脚本引擎上测试过的模板库：
+
+[%header]
+|===
+| 脚本库 | 脚本引擎
+|http://handlebarsjs.com/[Handlebars] |http://openjdk.java.net/projects/nashorn/[Nashorn]
+|https://mustache.github.io/[Mustache] |http://openjdk.java.net/projects/nashorn/[Nashorn]
+|http://facebook.github.io/react/[React] |http://openjdk.java.net/projects/nashorn/[Nashorn]
+|http://www.embeddedjs.com/[EJS] |http://openjdk.java.net/projects/nashorn/[Nashorn]
+|http://www.stuartellis.eu/articles/erb/[ERB] |http://jruby.org[JRuby]
+|https://docs.python.org/2/library/string.html#template-strings[String templates] |http://www.jython.org/[Jython]
+|https://github.com/sdeleuze/kotlin-script-templating[Kotlin Script templating] |http://kotlinlang.org/[Kotlin]
+|===
+
+TIP: 集成任何其他脚本引擎的基本规则是，它必须实现 `ScriptEngine` 和 `Invocable` 接口。
+
+
+[[webflux-view-script-dependencies]]
+=== 要求
+[.small]#{doc-spring-web}#mvc-view-script-dependencies[Web MVC]#
+
+你需要在类路径上具有脚本引擎，其细节因脚本引擎而异：
+
+* Java 8+随附了 http://openjdk.java.net/projects/nashorn/[Nashorn] JavaScript引擎。强烈建议使用可用的最新release版本。
+* 应该将 http://jruby.org[JRuby]添加为对Ruby支持的依赖。
+* 应该将 http://www.jython.org[Jython]添加为对Python支持的依赖。
+* 应该添加 `org.jetbrains.kotlin:kotlin-script-util` 依赖和包含
+`org.jetbrains.kotlin.script.jsr223.KotlinJsr223JvmLocalScriptEngineFactory`
+行的 `META-INF/services/javax.script.ScriptEngineFactory` 文件。有关更多详细信息，请参见
+https://github.com/sdeleuze/kotlin-script-templating[此示例]。
+
+你需要具有脚本模板库。针对Javascript的一种方法是通过 http://www.webjars.org/[WebJars]。
+
+
+[[webflux-view-script-integrate]]
+=== 脚本模板
+[.small]#{doc-spring-web}#mvc-view-script-integrate[Web MVC]#
+
+你可以声明一个 `ScriptTemplateConfigurer` bean来指定要使用的脚本引擎，要加载的脚本文件，
+要调用什么函数来渲染模板等等。以下示例使用Mustache模板和Nashorn JavaScript引擎：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+	@Configuration
+	@EnableWebFlux
+	public class WebConfig implements WebFluxConfigurer {
+
+		@Override
+		public void configureViewResolvers(ViewResolverRegistry registry) {
+			registry.scriptTemplate();
+		}
+
+		@Bean
+		public ScriptTemplateConfigurer configurer() {
+			ScriptTemplateConfigurer configurer = new ScriptTemplateConfigurer();
+			configurer.setEngineName("nashorn");
+			configurer.setScripts("mustache.js");
+			configurer.setRenderObject("Mustache");
+			configurer.setRenderFunction("render");
+			return configurer;
+		}
+	}
+----
+
+使用以下参数调用 `render` 函数：
+
+* `String template`: 模板内容
+* `Map model`: 视图模型
+* `RenderingContext renderingContext`: {api-spring-framework}/web/servlet/view/script/RenderingContext.html[`RenderingContext`]
+用于访问应用程序上下文，语言环境，模板加载器和URL（从5.0开始）
+
+`Mustache.render()` 与该签名本地兼容，所以你可以直接调用它。
+
+如果你的模板技术需要一些自定义，则可以提供一个实现自定义渲染函数的脚本。
+例如， http://handlebarsjs.com[Handlerbars]需要在使用模板之前先对其进行编译，
+并且需要使用 http://en.wikipedia.org/wiki/Polyfill[polyfill]来模拟服务器端脚本引擎中不可用的某些浏览器功能。
+以下示例显示如何设置自定义渲染函数：
+
+[source,java,indent=0]
+[subs="verbatim,quotes"]
+----
+	@Configuration
+	@EnableWebMvc
+	public class WebConfig implements WebFluxConfigurer {
+
+		@Override
+		public void configureViewResolvers(ViewResolverRegistry registry) {
+			registry.scriptTemplate();
+		}
+
+		@Bean
+		public ScriptTemplateConfigurer configurer() {
+			ScriptTemplateConfigurer configurer = new ScriptTemplateConfigurer();
+			configurer.setEngineName("nashorn");
+			configurer.setScripts("polyfill.js", "handlebars.js", "render.js");
+			configurer.setRenderFunction("render");
+			configurer.setSharedEngine(false);
+			return configurer;
+		}
+	}
+----
+
+NOTE: 当使用非线程安全脚本引擎和非并发设计的模板库时，需要将 `sharedEngine` 属性设置为 `false`，
+例如：Nashorn上运行的Handlebars或React。在这种情况下，由于
+https://bugs.openjdk.java.net/browse/JDK-8076099[此bug]，需要Java 8u60或更高版本，
+但通常建议在任何情况下都使用最新的Java SE修补程序版本。
+
+`polyfill.js` 只定义了Handlebars正常运行所需要的 `window` 对象，如下面的代码片段所示:
+
+[source,javascript,indent=0]
+[subs="verbatim,quotes"]
+----
+	var window = {};
+----
+
+这个基本的 `render.js` 实现在使用模板之前先对其进行编译。生产就绪的实现还应该存储和重用缓存的模板或预编译的模板。
+这可以在脚本端以及你需要的任何自定义（例如，管理模板引擎配置）上完成。以下示例显示了如何编译模板：
+
+
+[source,javascript,indent=0]
+[subs="verbatim,quotes"]
+----
+	function render(template, model) {
+		var compiledTemplate = Handlebars.compile(template);
+		return compiledTemplate(model);
+	}
+----
+
+查看Spring Framework单元测试，
+https://github.com/spring-projects/spring-framework/tree/master/spring-webflux/src/test/java/org/springframework/web/reactive/result/view/script[Java] 和
+https://github.com/spring-projects/spring-framework/tree/master/spring-webflux/src/test/resources/org/springframework/web/reactive/result/view/script[resources],
+以获取更多配置示例。
+
+
+
+[[webflux-view-httpmessagewriter]]
+== JSON和XML
+[.small]#<<spring-mvc.adoc#mvc-view-jackson,Web MVC>>#
+
+出于<<webflux-multiple-representations>>的目的，根据客户端请求的内容类型，能够在使用HTML模板呈现模型和以其他格式(如JSON或XML)呈现模型之间进行切换是很有用的。
+为了支持此操作，Spring WebFlux提供了 `HttpMessageWriterView`，你可以使用它插入 `spring-web` 中的任何可用编解码器，
+例如：`Jackson2JsonEncoder`，`Jackson2SmileEncoder` 或 `Jaxb2XmlEncoder`。
+
+与其他视图技术不同，`HttpMessageWriterView` 不需要 `ViewResolver`，而是<<webflux-config-view-resolvers,配置>>为默认视图。
+你可以配置一个或多个此类默认视图，并包装不同的 `HttpMessageWriter` 实例或 `Encoder` 实例。
+与请求的内容类型相匹配的内容类型在运行时使用。
+
+在大多数情况下，模型包含多个属性。要确定要序列化的对象，可以使用模型属性的名称配置 `HttpMessageWriterView` 进行渲染。如果模型仅包含一个属性，则使用该属性。

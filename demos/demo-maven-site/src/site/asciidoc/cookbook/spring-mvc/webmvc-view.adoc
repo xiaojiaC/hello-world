@@ -1,6 +1,6 @@
 [[mvc-view]]
 = 视图技术
-[.small]#{docSpringWebFlux}#webflux-view[WebFlux]#
+[.small]#<<spring-webflux.adoc#webflux-view,WebFlux>>#
 
 Spring MVC中视图技术的使用是可插入的，无论你决定使用Thymeleaf，Groovy标记模板，JSPs还是其他技术，主要取决于配置更改。
 本章介绍与Spring MVC集成的视图技术。我们假设你已经熟悉<<mvc-viewresolver>>。
@@ -8,7 +8,7 @@ Spring MVC中视图技术的使用是可插入的，无论你决定使用Thymele
 
 [[mvc-view-thymeleaf]]
 == Thymeleaf
-[.small]#{docSpringWebFlux}#webflux-view-thymeleaf[WebFlux]#
+[.small]#<<spring-webflux.adoc#webflux-view-thymeleaf,WebFlux>>#
 
 Thymeleaf是一种现代的服务器端Java模板引擎，它强调可以通过双击在浏览器中预览的自然HTML模板，
 这对于独立处理UI模板(例如：由设计人员完成)而不需要运行服务器是非常有用的。如果要替换为JSP，
@@ -22,7 +22,7 @@ Thymeleaf与Spring MVC的集成由Thymeleaf项目管理。该配置涉及一些B
 
 [[mvc-view-freemarker]]
 == FreeMarker
-[.small]#{docSpringWebFlux}#webflux-view-freemarker[WebFlux]#
+[.small]#<<spring-webflux.adoc#webflux-view-freemarker,WebFlux>>#
 
 http://www.freemarker.org[Apache FreeMarker] 是一个模板引擎，用于生成从HTML到电子邮件等的任何类型的文本输出。
 Spring框架具有内置的集成，可以将Spring MVC与FreeMarker模板一起使用。
@@ -30,7 +30,7 @@ Spring框架具有内置的集成，可以将Spring MVC与FreeMarker模板一起
 
 [[mvc-view-freemarker-contextconfig]]
 === 视图配置
-[.small]#{docSpringWebFlux}#webflux-view-freemarker-contextconfig[WebFlux]#
+[.small]#<<spring-webflux.adoc#webflux-view-freemarker-contextconfig,WebFlux>>#
 
 以下示例显示如何配置使用FreeMarker视图技术：
 
@@ -90,7 +90,7 @@ Spring框架具有内置的集成，可以将Spring MVC与FreeMarker模板一起
 
 [[mvc-views-freemarker]]
 === FreeMarker配置
-[.small]#{docSpringWebFlux}#webflux-views-freemarker[WebFlux]#
+[.small]#<<spring-webflux.adoc#webflux-views-freemarker,WebFlux>>#
 
 你可以通过在 `FreeMarkerConfigurer` bean上设置适当的bean属性，将FreeMarker的'Settings' 和 'SharedVariables'
 直接传递给FreeMarker配置对象（由Spring管理）。`freemarkerSettings` 属性需要一个 `java.util.Properties` 对象，
@@ -176,14 +176,14 @@ NOTE: 如果可能，你应该使用基础文档生成库的最新版本。特�
 
 [[mvc-view-jackson]]
 == Jackson
-[.small]#{docSpringWebFlux}#webflux-view-httpmessagewriter[WebFlux]#
+[.small]#<<spring-webflux.adoc#webflux-view-httpmessagewriter,WebFlux>>#
 
 Spring提供了对Jackson JSON库的支持。
 
 
 [[mvc-view-json-mapping]]
 === 基于Jackson的JSON MVC视图
-[.small]#{docSpringWebFlux}#webflux-view-httpmessagewriter[WebFlux]#
+[.small]#<<spring-webflux.adoc#webflux-view-httpmessagewriter,WebFlux>>#
 
 `MappingJackson2JsonView` 使用Jackson类库的 `ObjectMapper` 将响应内容呈现为JSON。
 默认情况下，模型映射的全部内容（特定于框架的类除外）均编码为JSON。对于需要过滤映射内容的情况，
@@ -195,7 +195,7 @@ Spring提供了对Jackson JSON库的支持。
 
 [[mvc-view-xml-mapping]]
 === 基于Jackson的XML视图
-[.small]#{docSpringWebFlux}#webflux-view-httpmessagewriter[WebFlux]#
+[.small]#<<spring-webflux.adoc#webflux-view-httpmessagewriter,WebFlux>>#
 
 `MappingJackson2XmlView` 使用 https://github.com/FasterXML/jackson-dataformat-xml[Jackson XML扩展程序]
 的 `XmlMapper` 将响应内容呈现为XML。如果模型包含多个条目，则应使用 `modelKey` bean属性显式设置要序列化的对象。

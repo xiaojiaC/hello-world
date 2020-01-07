@@ -1,0 +1,44 @@
+[[spring-webflux]]
+= 基于Reactive栈的Web
+:version: 5.2.2.RELEASE
+Version {version}
+:toc: left
+:toclevels: 4
+:tabsize: 4
+:docinfo: shared
+:docinfo1:
+:idprefix:
+:idseparator: -
+:sectanchors:
+:sectnums:
+:linkcss: true
+:stylesdir: css
+:stylesheet: spring.css
+:highlightjsdir: js/highlight
+:highlightjs-theme: atom-one-dark-reasonable
+
+:spring-version: {version}
+:doc-root: https://docs.spring.io
+:api-spring-framework: {doc-root}/spring-framework/docs/{spring-version}/javadoc-api/org/springframework
+:doc-spring-core: {doc-root}/spring/docs/{spring-version}/spring-framework-reference/core.html
+:doc-spring-web: {doc-root}/spring/docs/{spring-version}/spring-framework-reference/web.html
+:doc-spring-webflux: {doc-root}/spring/docs/{spring-version}/spring-framework-reference/web-reactive.html
+:doc-spring-integration: {doc-root}/spring/docs/{spring-version}/spring-framework-reference/integration.html
+:doc-spring-security: {doc-root}/spring-security/site/docs/current/reference/html5/
+
+:javadocSpring: {api-spring-framework}
+
+文档的此部分涵盖对基于 http://www.reactive-streams.org/[Reactive Streams] API构建的响应式Web应用程序的支持，
+该应用程序可在非阻塞服务器（例如：Netty，Undertow和Servlet 3.1+容器）上运行。各个章节涵盖了<<webflux,Spring WebFlux>>框架，
+响应式<<webflux-client,`WebClient`>>，对<<webflux-test,测试>>的支持以及<<webflux-reactive-libraries,响应式库>>。
+对于Servlet Web应用程序，请参阅<<spring-mvc.adoc#spring-web,基于Servlet栈的Web>>。
+
+include::cookbook/spring-webflux/webflux.adoc[leveloffset=+1]
+include::cookbook/spring-webflux/webflux-webclient.adoc[leveloffset=+1]
+include::cookbook/spring-webflux/webflux-test.adoc[leveloffset=+1]
+
+
+++++
+<script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
+<script type="text/javascript" src="js/toc.js"></script>
+++++
