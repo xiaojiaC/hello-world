@@ -17,6 +17,7 @@ Version {version}
 
 include::cookbook/spring-boot/using-spring-boot.adoc[leveloffset=+1]
 include::cookbook/spring-boot/spring-boot-features.adoc[leveloffset=+1]
+include::cookbook/spring-boot/production-ready-features.adoc[leveloffset=+1]
 
 ++++
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
