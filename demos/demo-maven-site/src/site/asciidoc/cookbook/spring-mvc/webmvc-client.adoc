@@ -30,4 +30,4 @@ NOTE: 从5.0开始，无阻塞，响应式 `WebClient` 提供了 `RestTemplate` 
 * 同步和异步交互。
 * 上行流到服务器或从服务器下行流。
 
-有关更多详细信息，请参见 {docSpringWebFlux}#webflux-client[WebClient]。
+有关更多详细信息，请参见<<spring-webflux.adoc#webflux-client,WebClient>>。

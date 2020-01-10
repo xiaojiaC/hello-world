@@ -1,5 +1,5 @@
 [[spring-mvc]]
-= 基于Servlet的Web
+= 基于Servlet栈的Web
 :version: 5.2.2.RELEASE
 Version {version}
 :toc: left
@@ -27,7 +27,7 @@ Version {version}
 文档的此部分涵盖对基于Servlet API构建并部署到Servlet容器的Servlet堆栈Web应用程序的支持。各个章节包括
 <<mvc,Spring MVC>>, <<mvc-view,视图技术>>, <<mvc-cors,CORS 支持>>
 和 {docSpringWeb}#websocket[WebSocket支持]。对于响应式Web应用程序，请参阅
-{docSpringWeb}#spring-web-reactive[基于响应式技术栈的Web]。
+<<spring-webflux.adoc#spring-webflux,基于Reactive栈的Web>>。
 
 include::cookbook/spring-mvc/webmvc.adoc[leveloffset=+1]
 include::cookbook/spring-mvc/webmvc-client.adoc[leveloffset=+1]

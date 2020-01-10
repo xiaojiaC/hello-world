@@ -1,0 +1,2099 @@
+[[production-ready]]
+= Spring Boot Actuator: 生产就绪功能
+include::attributes.adoc[]
+
+Spring Boot包含许多其他功能，可帮助你在将应用程序投入生产时监控和管理你的应用程序。
+你可以选择使用HTTP端点或JMX管理和监视你的应用程序。审计，健康状况和指标收集也可以自动应用于你的应用程序。
+
+
+[[production-ready-enabling]]
+== 启用生产就绪功能
+
+{spring-boot-code}/spring-boot-project/spring-boot-actuator[`spring-boot-actuator`]模块提供了Spring Boot生产就绪的所有功能。
+启用这些功能的最简单方法是添加 `spring-boot-starter-actuator` '`Starter`' 依赖项。
+
+.Actuator的定义
+****
+执行器是制造术语，是指用于移动或控制某些物体的机械设备。执行器可以通过很小的变化产生大量的运动。
+****
+
+要将执行器添加到基于Maven的项目中，请添加以下 '`Starter`' 依赖项：
+
+[source,xml,indent=0]
+----
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+	</dependencies>
+----
+
+对于Gradle，请使用以下声明：
+
+[source,groovy,indent=0]
+----
+	dependencies {
+		compile("org.springframework.boot:spring-boot-starter-actuator")
+	}
+----
+
+
+[[production-ready-endpoints]]
+== 端点
+
+执行器端点使你可以监视应用程序并与之交互。Spring Boot包含许多内置端点，你可以添加自己的端点。例如：`health` 端点提供基本的应用程序运行状况信息。
+
+每个端点都可以启用或禁用。这控制了是否创建端点以及它的bean是否在应用程序上下文中存在。
+为了可以远程访问，端点还必须通过JMX或HTTP公开。大多数应用程序选择HTTP，其中端点的ID和 `/actuator` 前缀被映射到一个URL。
+例如，默认情况下，`health` 端点映射到 `/actuator/health`。
+
+可以使用以下与技术无关的端点：
+
+[cols="2,5"]
+|===
+| ID | 描述
+
+| `auditevents`
+| 公开当前应用程序的审计事件信息。需要一个 `AuditEventRepository` bean。
+
+| `beans`
+| 显示应用程序中所有Spring Beans的完整列表。
+
+| `caches`
+| 公开可用的缓存。
+
+| `conditions`
+| 显示在配置和自动配置类上评估的条件以及它们匹配或不匹配的原因。
+
+| `configprops`
+| 显示所有 `@ConfigurationProperties` 的整理列表。
+
+| `env`
+| 公开Spring的 `ConfigurableEnvironment` 中的属性。
+
+| `flyway`
+| 显示已应用的所有Flyway数据库迁移。需要一个或多个 `Flyway` beans。
+
+| `health`
+| 显示应用程序运行状况信息。
+
+| `httptrace`
+| 显示HTTP跟踪信息（默认情况下，公开最近100个HTTP请求-响应交换）。需要一个 `HttpTraceRepository` bean。
+
+| `info`
+| 显示任意应用程序信息。
+
+| `integrationgraph`
+| 显示Spring Integration图。依赖于 `spring-integration-core`。
+
+| `loggers`
+| 显示和修改应用程序中日志记录器的配置。
+
+| `liquibase`
+| 显示已应用的所有Liquibase数据库迁移。需要一个或多个 `Liquibase` bean。
+
+| `metrics`
+| 显示当前应用程序的度量指标信息。
+
+| `mappings`
+| 显示整理的所有 `@RequestMapping` 路径列表。
+
+| `scheduledtasks`
+| 显示应用程序中的所有计划任务。
+
+| `sessions`
+| 允许从Spring Session支持的会话存储中检索和删除用户会话。需要使用Spring Session的基于Servlet的Web应用程序。
+
+| `shutdown`
+| 使应用程序正常关闭。默认禁用。
+
+| `threaddump`
+| 执行线程转储。
+|===
+
+如果你的应用程序是Web应用程序（Spring MVC，Spring WebFlux或Jersey），则可以使用以下附加端点：
+
+[cols="2,5"]
+|===
+| ID | 描述
+
+| `heapdump`
+| 返回一个 `hprof` 堆转储文件。
+
+| `jolokia`
+| 通过HTTP公开JMX bean（当Jolokia在类路径上时，不适用于WebFlux）。需要依赖于 `jolokia-core`。
+
+| `logfile`
+| 返回日志文件的内容（如果已设置 `logging.file.name` 或 `logging.file.path` 属性）。支持使用HTTP `Range` 标头来检索部分日志文件的内容。
+
+| `prometheus`
+| 以Prometheus服务器可以抓取的格式公开指标。需要依赖于 `micrometer-registry-prometheus`。
+|===
+
+要了解有关执行器端点及其请求和响应格式的更多信息，请参阅单独的API文档（ {spring-boot-actuator-restapi}/html/[HTML] 或
+{spring-boot-actuator-restapi}/pdf/spring-boot-actuator-web-api.pdf[PDF]）。
+
+
+[[production-ready-endpoints-enabling-endpoints]]
+=== 启用端点
+
+默认情况下，除 `shutdown` 外的所有端点均处于启用状态。要配置端点的启用，请使用其 `management.endpoint.<id>.enabled` 属性。以下示例启用
+`shutdown` 端点：
+
+[source,properties,indent=0,configprops]
+----
+	management.endpoint.shutdown.enabled=true
+----
+
+如果你希望端点支持选择加入而不是选择退出，请将 `management.endpoints.enabled-by-default` 属性设置为 `false` 并使用单个端点的 `enabled` 属性重新启用。
+以下示例仅启用 `info` 端点并禁用所有其他端点：
+
+[source,properties,indent=0,configprops]
+----
+	management.endpoints.enabled-by-default=false
+	management.endpoint.info.enabled=true
+----
+
+NOTE: 禁用的端点将从应用程序上下文中完全删除。如果只想更改公开端点的技术，请改用<<production-ready-endpoints-exposing-endpoints,`include` 和 `exclude` 属性>>。
+
+
+[[production-ready-endpoints-exposing-endpoints]]
+=== 暴露端点
+
+由于端点可能包含敏感信息，因此应谨慎考虑何时公开它们。下表显示了默认暴露的内置端点：
+
+[cols="1,1,1"]
+|===
+| ID | JMX | Web
+
+| `auditevents`
+| Yes
+| No
+
+| `beans`
+| Yes
+| No
+
+| `caches`
+| Yes
+| No
+
+| `conditions`
+| Yes
+| No
+
+| `configprops`
+| Yes
+| No
+
+| `env`
+| Yes
+| No
+
+| `flyway`
+| Yes
+| No
+
+| `health`
+| Yes
+| Yes
+
+| `heapdump`
+| N/A
+| No
+
+| `httptrace`
+| Yes
+| No
+
+| `info`
+| Yes
+| Yes
+
+| `integrationgraph`
+| Yes
+| No
+
+| `jolokia`
+| N/A
+| No
+
+| `logfile`
+| N/A
+| No
+
+| `loggers`
+| Yes
+| No
+
+| `liquibase`
+| Yes
+| No
+
+| `metrics`
+| Yes
+| No
+
+| `mappings`
+| Yes
+| No
+
+| `prometheus`
+| N/A
+| No
+
+| `scheduledtasks`
+| Yes
+| No
+
+| `sessions`
+| Yes
+| No
+
+| `shutdown`
+| Yes
+| No
+
+| `threaddump`
+| Yes
+| No
+|===
+
+要更改暴露哪些端点，请使用以下特定于技术的 `include` 和 `exclude` 属性：
+
+[cols="3,1"]
+|===
+| 属性 | 默认值
+
+| `management.endpoints.jmx.exposure.exclude`
+|
+
+| `management.endpoints.jmx.exposure.include`
+| `*`
+
+| `management.endpoints.web.exposure.exclude`
+|
+
+| `management.endpoints.web.exposure.include`
+| `info, health`
+|===
+
+`include` 属性列出了公开的端点的ID。
+`exclude` 属性列出了不应公开的端点的ID。
+`exclude` 属性优先于 `include` 属性。
+`include` 和 `exclude` 属性都可以使用端点ID列表进行配置。
+
+例如，要停止通过JMX公开所有端点，而仅公开 `health` 和 `info` 端点，请使用以下属性：
+
+[source,properties,indent=0,configprops]
+----
+	management.endpoints.jmx.exposure.include=health,info
+----
+
+`*` 可用于选择所有端点。
+例如，要通过HTTP公开除 `env` 和 `bean` 端点之外的所有端点，请使用以下属性：
+
+[source,properties,indent=0,configprops]
+----
+	management.endpoints.web.exposure.include=*
+	management.endpoints.web.exposure.exclude=env,beans
+----
+
+[NOTE]
+====
+`*` 在YAML中具有特殊含义，因此，如果要包括（或排除）所有端点，请确保添加引号，如以下示例所示：
+
+[source,yaml,indent=0]
+----
+	management:
+	  endpoints:
+	    web:
+	      exposure:
+	        include: "*"
+----
+====
+
+NOTE: 如果你的应用程序是公开的，我们强烈建议你<<production-ready-endpoints-security, 保护端点>>。
+
+TIP: 如果你想在端点暴露时实现自己的策略，则可以注册 `EndpointFilter` bean。
+
+
+[[production-ready-endpoints-security]]
+=== 保护HTTP端点
+
+你应该像对待其他任何敏感URL一样，小心保护HTTP端点的安全。
+如果存在Spring Security，则默认情况下将使用Spring Security的内容协商策略保护端点的安全。
+例如，如果你希望为HTTP端点配置自定义安全性，只允许具有特定角色的用户访问它们，
+Spring Boot提供了一些方便的 `RequestMatcher` 对象，可以将它们与Spring Security结合使用。
+
+典型的Spring Security配置可能类似于以下示例：
+
+[source,java,indent=0]
+----
+	@Configuration(proxyBeanMethods = false)
+	public class ActuatorSecurity extends WebSecurityConfigurerAdapter {
+		@Override
+		protected void configure(HttpSecurity http) throws Exception {
+			http.requestMatcher(EndpointRequest.toAnyEndpoint()).authorizeRequests((requests) ->
+					requests.anyRequest().hasRole("ENDPOINT_ADMIN"));
+			http.httpBasic();
+		}
+	}
+----
+
+前面的示例使用 `EndpointRequest.toAnyEndpoint()` 将请求匹配到任何端点，然后确保所有端点具有 `ENDPOINT_ADMIN` 角色才可访问。
+`EndpointRequest` 还提供了其他几种匹配器方法。有关详细信息，请参见API文档（
+{spring-boot-actuator-restapi}/html[HTML] 或
+{spring-boot-actuator-restapi}/pdf/spring-boot-actuator-web-api.pdf[PDF]）。
+
+如果将应用程序部署在防火墙后面，则可能希望无需进行身份验证即可访问所有执行器端点。
+你可以通过更改 `management.endpoints.web.exposure.include` 属性来做到这一点，如下所示：
+
+.application.properties
+[source,properties,indent=0,configprops]
+----
+	management.endpoints.web.exposure.include=*
+----
+
+此外，如果存在Spring Security，则需要添加自定义安全配置，该配置允许未经身份验证的端点访问，如以下示例所示：
+
+[source,java,indent=0]
+----
+	@Configuration(proxyBeanMethods = false)
+	public class ActuatorSecurity extends WebSecurityConfigurerAdapter {
+		@Override
+		protected void configure(HttpSecurity http) throws Exception {
+			http.requestMatcher(EndpointRequest.toAnyEndpoint()).authorizeRequests((requests) ->
+				requests.anyRequest().permitAll());
+		}
+	}
+----
+
+
+
+[[production-ready-endpoints-caching]]
+=== 配置端点
+
+端点自动缓存不带任何参数的读取操作的响应。要配置端点缓存响应的时间，请使用其 `cache.time-to-live` 属性。
+以下示例将 `beans` 端点的缓存的生存时间设置为10秒：
+
+.application.properties
+[source,properties,indent=0,configprops]
+----
+	management.endpoint.beans.cache.time-to-live=10s
+----
+
+NOTE: 前缀 `management.endpoint.<name>` 用于唯一标识正在配置的端点。
+
+NOTE: 发出经过身份验证的HTTP请求时，将 `Principal` 视为端点的输入，因此不会缓存响应。
+
+
+[[production-ready-endpoints-hypermedia]]
+=== 用于执行器Web端点的超媒体
+
+添加了“发现页面”，其中包含指向所有端点的链接。默认情况下，在 `/actuator` 上提供“发现页面”。
+
+配置自定义管理上下文路径后，“发现页面”会自动从 `/actuator` 移至管理上下文的根目录。例如，如果管理上下文路径为 `/management`，则可以从
+`/management` 访问发现页面。当管理上下文路径设置为 `/` 时，将禁用发现页面，以防止与其他映射发生冲突的可能性。
+
+
+[[production-ready-endpoints-cors]]
+=== CORS支持
+
+https://en.wikipedia.org/wiki/Cross-origin_resource_sharing[跨域资源共享] (CORS)
+是 https://www.w3.org/TR/cors/[W3C 规范]，使你可以灵活地指定授权哪种类型的跨域请求。
+如果你使用Spring MVC或Spring WebFlux，则可以将Actuator的Web端点配置为支持这种情况。
+
+默认情况下，CORS支持是禁用的，并且仅在设置了 `management.endpoints.web.cors.allowed-origins` 属性后才启用。
+以下配置允许来自 `example.com` 域的 `GET` 和 `POST` 调用：
+
+[source,properties,indent=0,configprops]
+----
+	management.endpoints.web.cors.allowed-origins=https://example.com
+	management.endpoints.web.cors.allowed-methods=GET,POST
+----
+
+TIP: 有关选项的完整列表，请参见 {spring-boot-actuator-autoconfigure-module-code}/endpoint/web/CorsEndpointProperties.java[CorsEndpointProperties]。
+
+
+[[production-ready-endpoints-custom]]
+=== 实现自定义端点
+
+如果添加带 `@Endpoint` 注解的 `@Bean`，则带 `@ReadOperation`，`@WriteOperation` 或 `@DeleteOperation`
+注解的任何方法都将通过JMX以及Web应用程序通过HTTP自动公开。
+可以使用Jersey，Spring MVC或Spring WebFlux通过HTTP公开端点。如果同时提供Jersey和Spring MVC，将使用Spring MVC。
+
+你也可以使用 `@JmxEndpoint` 或 `@WebEndpoint` 编写特定于技术的端点。这些端点仅限于各自的技术。例如，`@WebEndpoint` 仅通过HTTP公开，而不通过JMX公开。
+
+你可以使用 `@EndpointWebExtension` 和 `@EndpointJmxExtension` 编写特定于技术的扩展。这些注解使你可以提供特定于技术的操作来扩展现有端点。
+
+最后，如果你需要访问特定于Web框架的功能，则可以实现Servlet或Spring `@Controller` 和 `@RestController` 端点，但代价是它们在JMX上不可用，或者在使用其他web框架时不可用。
+
+
+[[production-ready-endpoints-custom-input]]
+==== 接收输入
+
+端点上的操作通过其参数接收输入。通过网络公开时，这些参数的值取自URL的查询参数和JSON请求正文。
+通过JMX公开时，参数将映射到MBean操作的参数。默认情况下，参数是必需的。
+可以通过使用 `@org.springframework.lang.Nullable` 对其进行注释来使它们成为可选的。
+
+JSON请求正文中的每个根属性都可以映射到端点的参数。考虑以下JSON请求正文：
+
+[source,json,indent=0]
+----
+	{
+		"name": "test",
+		"counter": 42
+	}
+----
+
+这可用于调用采用 `String name` 和 `int counter` 参数的写操作。
+
+TIP: 由于端点与技术无关，因此只能在方法签名中指定简单类型。特别是不支持使用定义 `name` 和 `counter` 属性的自定义类型声明单个参数。
+
+NOTE: 为了使输入映射到操作方法的参数，实现端点的Java代码应使用 `-parameters` 进行编译，
+而实现端点的Kotlin代码应使用 `-java-parameters` 进行编译。如果你使用的是Spring Boot的Gradle插件，
+或者使用的是Maven和 `spring-boot-starter-parent`，则此操作会自动发生。
+
+
+[[production-ready-endpoints-custom-input-conversion]]
+===== 输入类型转换
+
+如有必要，传递给端点操作方法的参数会自动转换为所需的类型。
+在调用操作方法之前，使用 `ApplicationConversionService` 实例以及任何具有 `@EndpointConverter` 限定的
+`Converter` 或 `GenericConverter` Bean，将通过JMX或HTTP请求接收的输入转换为所需的类型。
+
+
+[[production-ready-endpoints-custom-web]]
+==== 自定义Web端点
+
+`@Endpoint`，`@WebEndpoint` 或 `@EndpointWebExtension` 上的操作会使用Jersey，Spring MVC或Spring
+WebFlux通过HTTP自动公开。如果同时提供Jersey和Spring MVC，将使用Spring MVC。
+
+
+[[production-ready-endpoints-custom-web-predicate]]
+===== Web端点请求谓词
+
+对于在暴露于Web的端点上的每个操作，都会自动生成一个请求谓词。
+
+
+[[production-ready-endpoints-custom-web-predicate-path]]
+===== 路径
+
+谓词的路径由端点的ID和暴露于Web的端点的基本路径确定。默认的基本路径是 `/actuator`。
+例如：具有 `sessions` ID的端点将使用 `/actuator/sessions` 作为其谓词的路径。
+
+通过使用 `@Selector` 注解操作方法的一个或多个参数，可以进一步自定义路径。这样的参数作为路径变量添加到路径谓词。
+调用端点操作时，变量的值将传递到操作方法中。如果要捕获所有剩余的路径元素，可以将
+`@Selector(Match=ALL_REMAINING)` 添加到最后一个参数，并将其设置为与 `String[]` 转换兼容的类型。
+
+
+[[production-ready-endpoints-custom-web-predicate-http-method]]
+===== HTTP方法
+
+谓词的HTTP方法由操作类型决定，如下表所示：
+
+[cols="3, 1"]
+|===
+| 操作 | HTTP方法
+
+| `@ReadOperation`
+| `GET`
+
+| `@WriteOperation`
+| `POST`
+
+| `@DeleteOperation`
+| `DELETE`
+|===
+
+
+
+[[production-ready-endpoints-custom-web-predicate-consumes]]
+===== 消费
+
+对于使用请求体的 `@WriteOperation` (HTTP `POST`)，谓词的消费类型为
+`application/vnd.spring-boot.actuator.v2+json, application/json`。对于所有其他操作，消费类型为空。
+
+
+[[production-ready-endpoints-custom-web-predicate-produces]]
+===== 生产
+
+谓词的生产类型可以通过 `@DeleteOperation`，`@ReadOperation` 和 `@WriteOperation` 注解的 `produces` 属性来确定。
+该属性是可选的。如果未使用，则会自动确定生产类型。
+
+如果操作方法返回 `void` 或 `Void`，则生产类型为空。如果操作方法返回 `org.springframework.core.io.Resource`，
+则生产类型为 `application/octet-stream`。对于所有其他操作，生产类型为
+`application/vnd.spring-boot.actuator.v2+json, application/json`。
+
+
+[[production-ready-endpoints-custom-web-response-status]]
+===== Web端点响应状态
+
+端点操作的默认响应状态取决于操作类型（读，写或删除）以及该操作返回的内容（如果有）。
+
+`@ReadOperation` 返回一个值，响应状态将为 200 (OK)。如果未返回值，则响应状态将为 404 (Not Found)。
+
+如果 `@WriteOperation` 或 `@DeleteOperation` 返回一个值，则响应状态将为 200 (OK)。如果未返回值，则响应状态将为 204 (No Content)。
+
+如果在没有必需参数或无法将参数转换为必需类型的参数的情况下调用操作，则不会调用该操作方法，并且响应状态将为 400 (Bad Request)。
+
+
+[[production-ready-endpoints-custom-web-range-requests]]
+===== Web端点范围请求
+
+HTTP Range请求可用于请求HTTP资源的一部分。使用Spring MVC或Spring Web Flux时，返回 `org.springframework.core.io.Resource`
+的操作会自动支持范围请求。
+
+NOTE: 使用Jersey时，范围请求不受支持。
+
+
+[[production-ready-endpoints-custom-web-security]]
+===== Web端点安全
+
+Web端点或Web特定端点扩展上的操作可以接收当前的 `java.security.Principal` 或
+`org.springframework.boot.actuate.endpoint.SecurityContext` 作为方法参数。
+前者通常与 `@Nullable` 结合使用，以为经过身份验证和未经身份验证的用户提供不同的行为。
+后者通常用于使用其 `isUserInRole(String)` 方法执行授权检查。
+
+
+[[production-ready-endpoints-custom-servlet]]
+==== Servlet端点
+
+通过实现带有 `@ServletEndpoint` 注解的类（也可以实现 `Supplier<EndpointServlet>`），可以将Servlet公开为端点。
+Servlet端点提供了与Servlet容器更深层次的集成，但以牺牲可移植性为代价。它们用于将现有Servlet公开为端点。
+对于新的端点，尽可能使用 `@Endpoint` 和 `@WebEndpoint` 注解。
+
+
+[[production-ready-endpoints-custom-controller]]
+==== 控制器端点
+
+`@ControllerEndpoint` 和 `@RestControllerEndpoint` 可用于实现仅由Spring MVC或Spring WebFlux公开的端点。
+使用Spring MVC和Spring WebFlux的标准注解（例如： `@RequestMapping` 和 `@GetMapping` ）映射方法，并将端点的ID用作路径的前缀。
+控制器端点提供了与Spring Web框架更深层次的集成，但以牺牲可移植性为代价。尽可能使用 `@Endpoint` 和 `@WebEndpoint` 注解。
+
+
+
+[[production-ready-health]]
+=== 健康信息
+
+你可以使用运行状况信息来检查正在运行的应用程序的状态。监视软件通常使用它在生产系统出现故障时向某人发出警报。
+`health` 端点公开的信息取决于 `management.endpoint.health.show-details` 和
+`management.endpoint.health.show-components` 属性，可以使用以下值之一配置属性：
+
+[cols="1, 3"]
+|===
+| 名称 | 描述
+
+| `never`
+| 详细信息永远不会显示。
+
+| `when-authorized`
+| 详细信息仅显示给授权用户。可以使用 `management.endpoint.health.roles` 配置授权角色。
+
+| `always`
+| 向所有用户显示详细信息。
+|===
+
+默认值为 `never`。当用户担任端点的一个或多个角色时，该用户被视为已授权。如果端点没有配置的角色（默认值），
+则所有通过身份验证的用户均被视为已授权。可以使用 `management.endpoint.health.roles` 属性配置角色。
+
+NOTE: 如果你已保护应用程序安全并希望使用 `always`，则安全配置必须允许经过身份验证的用户和未经身份验证的用户都可以访问运行状况端点。
+
+运行状况信息是从 {spring-boot-actuator-module-code}/health/HealthContributorRegistry.java[`HealthContributorRegistry`]
+的内容（默认情况下，在 `ApplicationContext` 中定义的所有 `HealthContributor` 实例）中收集的。
+Spring Boot包括许多自动配置的 `HealthContributor`，你也可以编写自己的 `HealthContributor`。
+
+`HealthContributor` 可以是 `HealthIndicator` 或 `CompositeHealthContributor`。`HealthIndicator` 提供实际的健康信息，包括 `Status`。
+`CompositeHealthContributor` 提供了其他 `HealthContributor` 的组合。所有贡献者合起来形成一个树形结构来代表整个系统的健康状况。
+
+默认情况下，最终的系统运行状况是由 `StatusAggregator` 派生的，`StatusAggregator` 根据状态的有序列表对每个 `HealthIndicator` 的状态进行排序。
+排序列表中的第一个状态用作整体健康状态。如果没有 `HealthIndicator` 返回 `StatusAggregator` 已知的状态，则使用 `UNKNOWN` 状态。
+
+TIP: `HealthContributorRegistry` 可用于在运行时注册和注销健康指标。
+
+==== 自动配置的HealthIndicators
+
+适当时，Spring Boot会自动配置以下 `HealthIndicators`：
+
+[cols="4,6"]
+|===
+| 名称 | 描述
+
+| {spring-boot-actuator-module-code}/cassandra/CassandraHealthIndicator.java[`CassandraHealthIndicator`]
+| 检查Cassandra数据库是否已启动。
+
+| {spring-boot-actuator-module-code}/couchbase/CouchbaseHealthIndicator.java[`CouchbaseHealthIndicator`]
+| 检查Couchbase集群是否已启动。
+
+| {spring-boot-actuator-module-code}/system/DiskSpaceHealthIndicator.java[`DiskSpaceHealthIndicator`]
+| 检查磁盘空间不足。
+
+| {spring-boot-actuator-module-code}/elasticsearch/ElasticSearchRestHealthContributorAutoConfiguration.java[`ElasticSearchRestHealthContributorAutoConfiguration`]
+| 检查Elasticsearch集群是否已启动。
+
+| {spring-boot-actuator-module-code}/hazelcast/HazelcastHealthIndicator.java[`HazelcastHealthIndicator`]
+| 检查Hazelcast服务器是否已启动。
+
+| {spring-boot-actuator-module-code}/influx/InfluxDbHealthIndicator.java[`InfluxDbHealthIndicator`]
+| 检查InfluxDB服务器是否已启动。
+
+| {spring-boot-actuator-module-code}/jms/JmsHealthIndicator.java[`JmsHealthIndicator`]
+| 检查JMS代理是否启动。
+
+| {spring-boot-actuator-module-code}/ldap/LdapHealthIndicator.java[`LdapHealthIndicator`]
+| 检查LDAP服务器是否已启动。
+
+| {spring-boot-actuator-module-code}/mail/MailHealthIndicator.java[`MailHealthIndicator`]
+| 检查邮件服务器是否已启动。
+
+| {spring-boot-actuator-module-code}/mongo/MongoHealthIndicator.java[`MongoHealthIndicator`]
+| 检查Mongo数据库是否已启动。
+
+| {spring-boot-actuator-module-code}/neo4j/Neo4jHealthIndicator.java[`Neo4jHealthIndicator`]
+| 检查Neo4j数据库是否已启动。
+
+| {spring-boot-actuator-module-code}/health/PingHealthIndicator.java[`PingHealthIndicator`]
+| 始终以 `UP` 响应。
+
+| {spring-boot-actuator-module-code}/amqp/RabbitHealthIndicator.java[`RabbitHealthIndicator`]
+| 检查Rabbit服务器是否已启动。
+
+| {spring-boot-actuator-module-code}/redis/RedisHealthIndicator.java[`RedisHealthIndicator`]
+| 检查Redis服务器是否启动。
+
+| {spring-boot-actuator-module-code}/solr/SolrHealthIndicator.java[`SolrHealthIndicator`]
+| 检查Solr服务器是否已启动。
+|===
+
+TIP: 你可以通过设置 `management.health.defaults.enabled` 属性来禁用它们。
+
+
+
+==== 编写自定义健康指标
+
+为了提供自定义的健康信息，你可以注册实现 {spring-boot-actuator-module-code}/health/HealthIndicator.java[`HealthIndicator`]接口的Spring bean。
+你需要提供 `health()` 方法的实现并返回 `Health` 响应。`Health` 响应应包括状态，并且可以选择包括要显示的其他详细信息。
+以下代码显示了示例 `HealthIndicator` 实现：
+
+[source,java,indent=0]
+----
+	import org.springframework.boot.actuate.health.Health;
+	import org.springframework.boot.actuate.health.HealthIndicator;
+	import org.springframework.stereotype.Component;
+	@Component
+	public class MyHealthIndicator implements HealthIndicator {
+		@Override
+		public Health health() {
+			int errorCode = check(); // perform some specific health check
+			if (errorCode != 0) {
+				return Health.down().withDetail("Error Code", errorCode).build();
+			}
+			return Health.up().build();
+		}
+	}
+----
+
+NOTE: 给定 `HealthIndicator` 的标识符是不带有 `HealthIndicator` 后缀（如果存在）的bean的名称。在前面的示例中，健康信息在名为 `my` 的条目中可用。
+
+除了Spring Boot的预定义 {spring-boot-actuator-module-code}/health/Status.java[`Status`]类型外，
+`Health` 还可以返回代表新系统状态的自定义 `Status`。
+在这种情况下，还需要提供 {spring-boot-actuator-module-code}/health/StatusAggregator.java[`StatusAggregator`]接口的自定义实现，
+或者必须使用 `management.endpoint.health.status.order` 配置属性来配置默认实现。
+
+例如，假设在你的 `HealthIndicator` 实现之一中使用了代码为 `FATAL` 的新 `Status`。要配置严重性顺序，请将以下属性添加到你的应用程序属性中：
+
+[source,properties,indent=0,configprops]
+----
+	management.endpoint.health.status.order=fatal,down,out-of-service,unknown,up
+----
+
+响应中的HTTP状态码反映了总体健康状态（例如：`UP` 映射为200，而 `OUT_OF_SERVICE` 和 `DOWN` 映射为503）。
+如果通过HTTP访问health端点，则可能还需要注册自定义状态映射。例如，以下属性将 `FATAL` 映射到503 (service unavailable)：
+
+[source,properties,indent=0,configprops]
+----
+	management.endpoint.health.status.http-mapping.fatal=503
+----
+
+TIP: 如果需要更多控制，则可以定义自己的 `HttpCodeStatusMapper` bean。
+
+下表显示了内置状态的默认HTTP状态映射：
+
+[cols="1,3"]
+|===
+| 状态 | 映射
+
+| DOWN
+| SERVICE_UNAVAILABLE (503)
+
+| OUT_OF_SERVICE
+| SERVICE_UNAVAILABLE (503)
+
+| UP
+| 默认情况下没有映射，因此http状态为200
+
+| UNKNOWN
+| 默认情况下没有映射，因此http状态为200
+|===
+
+
+
+[[reactive-health-indicators]]
+==== Reactive健康指标
+
+对于诸如使用Spring WebFlux的响应式应用程序，`ReactiveHealthContributor` 提供了一个非阻塞契约来获取应用程序的运行状况。
+与传统的 `HealthContributor` 相似，健康信息是从 {spring-boot-actuator-module-code}/health/ReactiveHealthContributorRegistry.java[`ReactiveHealthContributorRegistry`]
+（默认情况下，在 `ApplicationContext` 中定义的所有 {spring-boot-actuator-module-code}/health/HealthContributor.java[`HealthContributor`]和
+{spring-boot-actuator-module-code}/health/ReactiveHealthContributor.java[`ReactiveHealthContributor`]实例）的内容中收集的。
+不检查reactive API的常规 `HealthContributor` 在弹性调度器上执行。
+
+TIP: 在响应式应用程序中，`ReactiveHealthContributorRegistry` 可用于在运行时注册和注销健康指标。
+
+为了从响应式API提供自定义健康信息，你可以注册实现 {spring-boot-actuator-module-code}/health/ReactiveHealthIndicator.java[`ReactiveHealthIndicator`]
+接口的Spring bean。以下代码显示了示例 `ReactiveHealthIndicator` 实现：
+
+[source,java,indent=0]
+----
+	@Component
+	public class MyReactiveHealthIndicator implements ReactiveHealthIndicator {
+		@Override
+		public Mono<Health> health() {
+			return doHealthCheck() //perform some specific health check that returns a Mono<Health>
+				.onErrorResume(ex -> Mono.just(new Health.Builder().down(ex).build()));
+		}
+	}
+----
+
+TIP: 要自动处理错误，请考虑继承自 `AbstractReactiveHealthIndicator`。
+
+
+
+==== 自动配置的ReactiveHealthIndicators
+
+适当时，Spring Boot会自动配置以下 `ReactiveHealthIndicators`：
+
+[cols="1,4"]
+|===
+| 名称 | 描述
+
+| {spring-boot-actuator-module-code}/cassandra/CassandraReactiveHealthIndicator.java[`CassandraReactiveHealthIndicator`]
+| 检查Cassandra数据库是否已启动。
+
+| {spring-boot-actuator-module-code}/couchbase/CouchbaseReactiveHealthIndicator.java[`CouchbaseReactiveHealthIndicator`]
+| 检查Couchbase集群是否已启动。
+
+| {spring-boot-actuator-module-code}/mongo/MongoReactiveHealthIndicator.java[`MongoReactiveHealthIndicator`]
+| 检查Mongo数据库是否已启动。
+
+| {spring-boot-actuator-module-code}/redis/RedisReactiveHealthIndicator.java[`RedisReactiveHealthIndicator`]
+| 检查Redis服务器是否启动。
+|===
+
+TIP: 如有必要，可用reactive指示器代替常规指示器。另外，任何未明确处理的 `HealthIndicator` 都会自动包装。
+
+
+==== 健康组
+
+有时候，将健康指标分为不同的组很有用。例如，如果将应用程序部署到Kubernetes，则可能需要一组不同的运行状况指示器来进行 "`liveness`" 和 "`readiness`" 探针。
+
+要创建运行状况指示器组，可以使用 `management.endpoint.health.group.<name>` 属性，
+并指定要 `include` 或 `exclude` 的运行状况指示器ID的列表。例如，要创建仅包含数据库指示符的组，可以定义以下内容：
+
+[source,properties,indent=0,configprops]
+----
+	management.endpoint.health.group.custom.include=db
+----
+
+然后，你可以通过单击 `http://localhost:8080/actuator/health/custom` 来检查结果。
+
+默认情况下，组将继承与系统运行状况相同的 `StatusAggregator` 和 `HttpCodeStatusMapper` 设置，
+但是，这些设置也可以基于每个组进行定义。如果需要，也可以覆盖 `show-details` 和 `role` 属性：
+
+[source,properties,indent=0,configprops]
+----
+	management.endpoint.health.group.custom.show-details=when-authorized
+	management.endpoint.health.group.custom.roles=admin
+	management.endpoint.health.group.custom.status.order=fatal,up
+	management.endpoint.health.group.custom.status.http-mapping.fatal=500
+----
+
+TIP: 如果需要注册自定义 `StatusAggregator` 或 `HttpCodeStatusMapper` Bean以便与该组一起使用，则可以使用 `@Qualifier("groupname")`。
+
+
+[[production-ready-application-info]]
+=== 应用信息
+
+应用程序信息公开了从 `ApplicationContext` 中定义的所有 {spring-boot-actuator-module-code}/info/InfoContributor.java[`InfoContributor`] Bean收集的各种信息。Spring
+Boot包含许多自动配置的 `InfoContributor` Bean，你可以编写自己的bean。
+
+
+[[production-ready-application-info-autoconfigure]]
+==== 自动配置的InfoContributors
+
+适当时，Spring Boot会自动配置以下 `InfoContributor` Bean：
+
+[cols="1,4"]
+|===
+| 名称 | 描述
+
+| {spring-boot-actuator-module-code}/info/EnvironmentInfoContributor.java[`EnvironmentInfoContributor`]
+| 在 `info` 键下公开 `Environment` 中的任何键。
+
+| {spring-boot-actuator-module-code}/info/GitInfoContributor.java[`GitInfoContributor`]
+| 如果 `git.properties` 文件可用，则公开git信息。
+
+| {spring-boot-actuator-module-code}/info/BuildInfoContributor.java[`BuildInfoContributor`]
+| 如果 `META-INF/build-info.properties` 文件可用，则公开构建信息。
+|===
+
+TIP: 通过设置 `management.info.defaults.enabled` 属性，可以全部禁用它们。
+
+
+
+[[production-ready-application-info-env]]
+==== 自定义应用信息
+
+你可以通过设置 `+info.*+` Spring属性来自定义 `info` 端点公开的数据。
+`info` 键下的所有 `Environment` 属性将自动显示。例如，你可以将以下设置添加到 `application.properties` 文件：
+
+[source,properties,indent=0,configprops]
+----
+	info.app.encoding=UTF-8
+	info.app.java.source=1.8
+	info.app.java.target=1.8
+----
+
+[TIP]
+====
+除了对这些值进行硬编码之外，你还可以 {spring-boot-docs}/htmlsingle/#howto-automatic-expansion[在构建时展开信息属性]。
+
+假设你使用Maven，则可以按如下所示重写前面的示例：
+
+[source,properties,indent=0,configprops]
+----
+	info.app.encoding=@project.build.sourceEncoding@
+	info.app.java.source=@java.version@
+	info.app.java.target=@java.version@
+----
+====
+
+
+
+[[production-ready-application-info-git]]
+==== Git提交信息
+
+`info` 端点的另一个有用的功能是它能够在项目构建时发布有关 `git` 源代码存储库状态的信息。如果有 `GitProperties` Bean，
+则将公开 `git.branch`，`git.commit.id` 和 `git.commit.time` 属性。
+
+TIP: 如果 `git.properties` 文件在类路径的根目录下可用，则会自动配置 `GitProperties` bean。有关更多详细信息，请参见
+{spring-boot-docs}/htmlsingle/#howto-git-info[生成git信息]。
+
+如果要显示完整的git信息（即 `git.properties` 的完整内容），请使用 `management.info.git.mode` 属性，如下所示：
+
+[source,properties,indent=0,configprops]
+----
+	management.info.git.mode=full
+----
+
+
+
+[[production-ready-application-info-build]]
+==== 构建信息
+
+如果有 `BuildProperties` Bean，则 `info` 端点也可以发布有关你的构建的信息。如果在类路径中有 `META-INF/build-info.properties` 文件，则会发生这种情况。
+
+TIP: Maven和Gradle插件都可以生成该文件。有关更多详细信息，请参见
+{spring-boot-docs}/htmlsingle/#howto-build-info[生成构建信息]。
+
+
+[[production-ready-application-info-custom]]
+==== 编写自定义InfoContributors
+
+为了提供自定义的应用程序信息，你可以注册实现 {spring-boot-actuator-module-code}/info/InfoContributor.java[`InfoContributor`]接口的Spring bean。
+
+以下示例使用单个值提供 `example` 条目：
+
+[source,java,indent=0]
+----
+	import java.util.Collections;
+	import org.springframework.boot.actuate.info.Info;
+	import org.springframework.boot.actuate.info.InfoContributor;
+	import org.springframework.stereotype.Component;
+	@Component
+	public class ExampleInfoContributor implements InfoContributor {
+		@Override
+		public void contribute(Info.Builder builder) {
+			builder.withDetail("example",
+					Collections.singletonMap("key", "value"));
+		}
+	}
+----
+
+如果请求 `info` 端点，则应该看到包含以下附加条目的响应：
+
+[source,json,indent=0]
+----
+	{
+		"example": {
+			"key" : "value"
+		}
+	}
+----
+
+
+
+[[production-ready-monitoring]]
+== 通过HTTP进行监视和管理
+
+如果你正在开发Web应用程序，则Spring Boot Actuator会自动配置所有启用的端点以通过HTTP公开。
+默认约定是使用带有 `/actuator` 前缀的端点的ID作为URL路径。例如：`health` 公开为 `/actuator/health`。
+
+TIP: Spring MVC，Spring WebFlux和Jersey本身支持Actuator。如果同时提供Jersey和Spring MVC，将使用Spring MVC。
+
+
+[[production-ready-customizing-management-server-context-path]]
+=== 自定义管理端点路径
+
+有时，自定义管理端点的前缀很有用。例如，你的应用程序可能已经将 `/actuator` 用于其他目的。你可以使用
+`management.endpoints.web.base-path` 属性更改管理端点的前缀，如以下示例所示：
+
+[source,properties,indent=0,configprops]
+----
+	management.endpoints.web.base-path=/manage
+----
+
+前面的 `application.properties` 示例将端点从 `/actuator/\{id}` 更改为 `/manage/\{id}`（例如： `/manage/info`）。
+
+NOTE: 除非管理端口已配置为<<production-ready-customizing-management-server-port,使用其他HTTP端口公开端点>>，
+否则 `management.endpoints.web.base-path` 是相对于 `server.servlet.context-path` 的。
+如果配置了 `management.server.port`，则 `management.endpoints.web.base-path` 相对于 `management.server.servlet.context-path`。
+
+如果要将端点映射到其他路径，则可以使用 `management.endpoints.web.path-mapping` 属性。
+
+以下示例将 `/actuator/health` 重新映射到  `/healthcheck`：
+
+.application.properties
+[source,properties,indent=0,configprops]
+----
+	management.endpoints.web.base-path=/
+	management.endpoints.web.path-mapping.health=healthcheck
+----
+
+
+
+[[production-ready-customizing-management-server-port]]
+=== 自定义管理服务器端口
+
+对于基于云的部署，通过使用默认的HTTP端口公开管理端点是明智的选择。但是，如果你的应用程序在自己的数据中心内运行，则你可能更喜欢使用其他HTTP端口公开端点。
+
+你可以设置 `management.server.port` 属性以更改HTTP端口，如以下示例所示：
+
+[source,properties,indent=0,configprops]
+----
+	management.server.port=8081
+----
+
+NOTE: 在Cloud Foundry上，默认情况下，应用程序仅在端口8080上接收HTTP和TCP路由请求。
+如果要在Cloud Foundry上使用自定义管理端口，则需要明确设置应用程序的路由，以将流量转发到自定义端口。
+
+
+[[production-ready-management-specific-ssl]]
+=== 配置特定于管理的SSL
+
+当配置为使用定制端口时，还可以通过使用各种 `management.server.ssl.*` 属性将管理服务器配置为其自身的SSL。
+例如，这样做可以使管理服务器通过HTTP可用，而主应用程序使用HTTPS，如以下属性设置所示：
+
+[source,properties,indent=0,configprops]
+----
+	server.port=8443
+	server.ssl.enabled=true
+	server.ssl.key-store=classpath:store.jks
+	server.ssl.key-password=secret
+	management.server.port=8080
+	management.server.ssl.enabled=false
+----
+
+或者，主服务器和管理服务器都可以使用SSL，但具有不同的密钥库，如下所示：
+
+[source,properties,indent=0,configprops]
+----
+	server.port=8443
+	server.ssl.enabled=true
+	server.ssl.key-store=classpath:main.jks
+	server.ssl.key-password=secret
+	management.server.port=8080
+	management.server.ssl.enabled=true
+	management.server.ssl.key-store=classpath:management.jks
+	management.server.ssl.key-password=secret
+----
+
+
+
+[[production-ready-customizing-management-server-address]]
+=== 自定义管理服务器地址
+
+你可以通过设置 `management.server.address` 属性来自定义管理端点可用的地址。如果你只想在内部或面向操作的网络上侦听或仅侦听来自本地主机的连接，则这样做很有用。
+
+NOTE: 仅当端口与主服务器端口不同时，你才能在其他地址上侦听。
+
+以下示例 `application.properties` 不允许远程管理连接：
+
+[source,properties,indent=0,configprops]
+----
+	management.server.port=8081
+	management.server.address=127.0.0.1
+----
+
+
+
+[[production-ready-disabling-http-endpoints]]
+=== 禁用HTTP端点
+
+如果你不想通过HTTP公开端点，则可以将管理端口设置为 `-1`，如以下示例所示：
+
+[source,properties,indent=0,configprops]
+----
+	management.server.port=-1
+----
+
+也可以使用 `management.endpoints.web.exposure.exclude` 属性来实现，如以下示例所示：
+
+[source,properties,indent=0,configprops]
+----
+	management.endpoints.web.exposure.exclude=*
+----
+
+
+
+[[production-ready-jmx]]
+== 通过JMX进行监视和管理
+
+Java管理扩展（JMX）提供了监视和管理应用程序的标准机制。默认情况下，此功能未启用，
+可以通过将配置属性 `spring.jmx.enabled` 设置为 `true` 来启用。默认情况下，Spring Boot将管理端点公开为
+`org.springframework.boot` 域下的JMX MBean。
+
+
+[[production-ready-custom-mbean-names]]
+=== 自定义MBean名称
+
+MBean的名称通常是根据端点的ID生成的。例如，`health` 端点显示为 `org.springframework.boot:type=Endpoint,name=Health`。
+
+如果你的应用程序包含多个Spring `ApplicationContext`，则可能会发现名称冲突。要解决此问题，可以将
+`spring.jmx.unique-names` 属性设置为 `true`，以便MBean名称始终是唯一的。
+
+你还可以自定义暴露端点的JMX域。以下设置在 `application.properties` 中显示了如何这样做：
+
+[source,properties,indent=0,configprops]
+----
+	spring.jmx.unique-names=true
+	management.endpoints.jmx.domain=com.example.myapp
+----
+
+
+
+[[production-ready-disable-jmx-endpoints]]
+=== 禁用JMX端点
+
+如果你不想通过JMX公开端点，则可以将 `management.endpoints.jmx.exposure.exclude` 属性设置为 `*`，如以下示例所示：
+
+[source,properties,indent=0,configprops]
+----
+	management.endpoints.jmx.exposure.exclude=*
+----
+
+
+
+[[production-ready-jolokia]]
+=== 通过HTTP将Jolokia用于JMX
+
+Jolokia是一个JMX-HTTP桥，它提供了另一种访问JMX bean的方法。要使用Jolokia，请包括对 `org.jolokia:jolokia-core`
+的依赖。例如，使用Maven，你将添加以下依赖项：
+
+[source,xml,indent=0]
+----
+	<dependency>
+		<groupId>org.jolokia</groupId>
+		<artifactId>jolokia-core</artifactId>
+	</dependency>
+----
+
+然后可以通过将 `jolokia` 或 `*` 添加到 `management.endpoints.web.exposure.include` 属性来暴露Jolokia端点。
+然后，你可以在管理HTTP服务器上使用 `/actuator/jolokia` 访问它。
+
+
+
+[[production-ready-customizing-jolokia]]
+==== 自定义Jolokia
+
+Jolokia具有许多设置，这些设置通常是通过设置servlet参数进行配置的。
+通过Spring Boot，你可以使用 `application.properties` 文件。为此，请在参数前面加上 `management.endpoint.jolokia.config`。
+如以下示例所示：
+
+[source,properties,indent=0,configprops]
+----
+	management.endpoint.jolokia.config.debug=true
+----
+
+
+[[production-ready-disabling-jolokia]]
+==== 禁用Jolokia
+
+如果你使用Jolokia但不希望Spring Boot对其进行配置，则可将 `management.endpoint.jolokia.enabled` 属性设置为 `false`，如下所示：
+
+[source,properties,indent=0,configprops]
+----
+	management.endpoint.jolokia.enabled=false
+----
+
+
+
+[[production-ready-loggers]]
+== 日志记录器
+
+Spring Boot Actuator可以在运行时查看和配置应用程序的日志级别。
+你可以查看整个列表或单个记录器的配置，该配置由显式配置的日志记录级别以及日志记录框架为其指定的有效日志记录级别组成。
+这些级别可以是以下之一：
+
+* `TRACE`
+* `DEBUG`
+* `INFO`
+* `WARN`
+* `ERROR`
+* `FATAL`
+* `OFF`
+* `null`
+
+`null` 表示没有显式配置。
+
+
+
+[[production-ready-logger-configuration]]
+=== 配置记录器
+
+要配置给定的记录器，请将部分实体 `POST` 到资源的URI中，如以下示例所示：
+
+[source,json,indent=0]
+----
+	{
+		"configuredLevel": "DEBUG"
+	}
+----
+
+TIP: 要“重置”日志记录器的特定级别（并使用默认配置），可以传递一个 `null` 值作为 `configuredLevel`。
+
+
+[[production-ready-metrics]]
+== 指标
+
+Spring Boot Actuator为 https://micrometer.io[Micrometer]提供依赖项管理和自动配置，Micrometer是一种支持多种监视系统的应用程序指标外观，包括：
+
+- <<production-ready-metrics-export-appoptics,AppOptics>>
+- <<production-ready-metrics-export-atlas,Atlas>>
+- <<production-ready-metrics-export-datadog,Datadog>>
+- <<production-ready-metrics-export-dynatrace,Dynatrace>>
+- <<production-ready-metrics-export-elastic,Elastic>>
+- <<production-ready-metrics-export-ganglia,Ganglia>>
+- <<production-ready-metrics-export-graphite,Graphite>>
+- <<production-ready-metrics-export-humio,Humio>>
+- <<production-ready-metrics-export-influx,Influx>>
+- <<production-ready-metrics-export-jmx,JMX>>
+- <<production-ready-metrics-export-kairos,KairosDB>>
+- <<production-ready-metrics-export-newrelic,New Relic>>
+- <<production-ready-metrics-export-prometheus,Prometheus>>
+- <<production-ready-metrics-export-signalfx,SignalFx>>
+- <<production-ready-metrics-export-simple,Simple (in-memory)>>
+- <<production-ready-metrics-export-stackdriver,Stackdriver>>
+- <<production-ready-metrics-export-statsd,StatsD>>
+- <<production-ready-metrics-export-wavefront,Wavefront>>
+
+TIP: 要了解有关Micrometer功能的更多信息，请参阅其 https://micrometer.io/docs[参考文档]，特别是 {micrometer-concepts-docs}[概念部分]。
+
+
+[[production-ready-metrics-getting-started]]
+=== 入门
+
+Spring Boot自动配置组合的 `MeterRegistry`，并为其在类路径上找到的每个受支持的实现向组合添加注册表。在运行时类路径中具有对
+`micrometer-registry-\{system}` 的依赖足以使Spring Boot配置注册表。
+
+大多数注册表具有共同的特征。例如，即使Micrometer注册表实现位于类路径中，你也可以禁用特定的注册表。例如，禁用Datadog：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.datadog.enabled=false
+----
+
+Spring Boot还会将任何自动配置的注册表添加到Metrics类的全局静态复合注册表中，除非你明确告诉它不要这么做：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.use-global-registry=false
+----
+
+你可以注册任意数量的 `MeterRegistryCustomizer` Bean来进一步配置注册表，例如在向注册表注册任何度量器之前应用通用标签：
+
+[source,java,indent=0]
+----
+	@Bean
+	MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
+		return registry -> registry.config().commonTags("region", "us-east-1");
+	}
+----
+
+你可以应用自定义到特定的注册表实现更具体的泛型类型:
+
+[source,java,indent=0]
+----
+	@Bean
+	MeterRegistryCustomizer<GraphiteMeterRegistry> graphiteMetricsNamingConvention() {
+		return registry -> registry.config().namingConvention(MY_CUSTOM_CONVENTION);
+	}
+----
+
+完成该设置后，你可以将 `MeterRegistry` 注入组件并注册指标：
+
+[source,java,indent=0]
+----
+    @Component
+    public class SampleBean {
+
+        private final Counter counter;
+
+        public SampleBean(MeterRegistry registry) {
+            this.counter = registry.counter("received.messages");
+        }
+
+        public void handleMessage(String message) {
+            this.counter.increment();
+            // handle message implementation
+        }
+
+    }
+----
+
+Spring Boot还<<production-ready-metrics-meter,配置了内置工具>>（即 `MeterBinder` 实现），你可以通过配置或专用注解标记来控制它们。
+
+
+[[production-ready-metrics-export]]
+=== 支持的监控系统
+
+
+[[production-ready-metrics-export-appoptics]]
+==== AppOptics
+
+默认情况下，AppOptics注册表会定期将指标推送到 `https://api.appoptics.com/v1/measurements`。
+要将指标导出到SaaS {micrometer-registry-docs}/appoptics[AppOptics]，必须提供你的API令牌：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.appoptics.api-token=YOUR_TOKEN
+----
+
+
+
+[[production-ready-metrics-export-atlas]]
+==== Atlas
+
+默认情况下，度量标准将导出到在本地计算机上运行的 {micrometer-registry-docs}/atlas[Atlas]。
+可以使用以下命令提供要使用的 https://github.com/Netflix/atlas[Atlas服务器]的位置：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.atlas.uri=https://atlas.example.com:7101/api/v1/publish
+----
+
+
+
+[[production-ready-metrics-export-datadog]]
+==== Datadog
+
+Datadog注册表会定期将指标推送到 https://www.datadoghq.com[datadoghq]。
+要将指标导出到 {micrometer-registry-docs}/datadog[Datadog]，必须提供你的API密钥：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.datadog.api-key=YOUR_KEY
+----
+
+你还可以更改将度量标准发送到Datadog的时间间隔：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.datadog.step=30s
+----
+
+
+
+[[production-ready-metrics-export-dynatrace]]
+==== Dynatrace
+
+Dynatrace注册表会定期将指标推送到配置的URI。
+要将指标导出到 {micrometer-registry-docs}/dynatrace[Dynatrace]，必须提供你的API令牌，设备ID和URI：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.dynatrace.api-token=YOUR_TOKEN
+	management.metrics.export.dynatrace.device-id=YOUR_DEVICE_ID
+	management.metrics.export.dynatrace.uri=YOUR_URI
+----
+
+你还可以更改将度量标准发送到Dynatrace的时间间隔：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.dynatrace.step=30s
+----
+
+
+
+[[production-ready-metrics-export-elastic]]
+==== Elastic
+
+默认情况下，指标会导出到在本地计算机上运行的 {micrometer-registry-docs}/elastic[Elastic]。
+可以使用以下属性提供要使用的Elastic服务器的位置：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.elastic.host=https://elastic.example.com:8086
+----
+
+
+
+[[production-ready-metrics-export-ganglia]]
+==== Ganglia
+
+默认情况下，指标将导出到在本地计算机上运行的 {micrometer-registry-docs}/ganglia[Ganglia]。
+可以使用以下命令提供要使用的 http://ganglia.sourceforge.net[Ganglia服务器]主机和端口：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.ganglia.host=ganglia.example.com
+	management.metrics.export.ganglia.port=9649
+----
+
+
+
+[[production-ready-metrics-export-graphite]]
+==== Graphite
+
+默认情况下，指标会导出到本地计算机上运行的 {micrometer-registry-docs}/graphite[Graphite]。
+可以使用以下方式提供要使用的 https://graphiteapp.org[Graphite服务器]主机和端口：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.graphite.host=graphite.example.com
+	management.metrics.export.graphite.port=9004
+----
+
+Micrometer提供了默认的 `HierarchicalNameMapper`，用于控制如何将计量器ID {micrometer-registry-docs}/graphite#_hierarchical_name_mapping[映射到平面层次结构名称]。
+
+TIP: 要控制此行为，请定义 `GraphiteMeterRegistry` 并提供自己的 `HierarchicalNameMapper`。除非你定义自己的，否则将提供自动配置的 `GraphiteConfig` 和 `Clock` Bean：
+
+[source,java]
+----
+@Bean
+public GraphiteMeterRegistry graphiteMeterRegistry(GraphiteConfig config, Clock clock) {
+	return new GraphiteMeterRegistry(config, clock, MY_HIERARCHICAL_MAPPER);
+}
+----
+
+
+
+[[production-ready-metrics-export-humio]]
+==== Humio
+
+默认情况下，Humio注册表会定期将指标推送到 https://cloud.humio.com。
+要将指标导出到SaaS {micrometer-registry-docs}/humio[Humio]，必须提供你的API令牌：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.humio.api-token=YOUR_TOKEN
+----
+
+你还应该配置一个或多个tags以标识将度量标准推送到的数据源：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.humio.tags.alpha=a
+	management.metrics.export.humio.tags.bravo=b
+----
+
+
+
+[[production-ready-metrics-export-influx]]
+==== Influx
+
+默认情况下，指标会导出到本地计算机上运行的 {micrometer-registry-docs}/influx[Influx]。
+可使用以下命令提供要使用的 https://www.influxdata.com[Influx服务器]的位置：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.influx.uri=https://influx.example.com:8086
+----
+
+
+
+[[production-ready-metrics-export-jmx]]
+==== JMX
+
+Micrometer提供了到 {micrometer-registry-docs}/jmx[JMX]的层次结构映射，主要是作为一种便宜且可移植的方式在本地查看指标。
+默认情况下，度量标准被导出到 `metrics` JMX域。可以使用以下方式提供要使用的域：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.jmx.domain=com.example.app.metrics
+----
+
+Micrometer提供了默认的 `HierarchicalNameMapper`，用于控制如何将计量器ID {micrometer-registry-docs}/jmx#_hierarchical_name_mapping[映射到平面层次结构名称]。
+
+TIP: 要控制此行为，请定义 `JmxMeterRegistry` 并提供自己的 `HierarchicalNameMapper`。除非你定义自己的，否则将提供自动配置的 `JmxConfig`
+和 `Clock` Bean。
+
+[source,java]
+----
+@Bean
+public JmxMeterRegistry jmxMeterRegistry(JmxConfig config, Clock clock) {
+	return new JmxMeterRegistry(config, clock, MY_HIERARCHICAL_MAPPER);
+}
+----
+
+
+
+[[production-ready-metrics-export-kairos]]
+==== KairosDB
+
+默认情况下，度量标准将导出到在本地计算机上运行的 {micrometer-registry-docs}/kairos[KairosDB]。
+可以使用以下方式提供使用的 https://kairosdb.github.io/[KairosDB服务器]的位置：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.kairos.uri=https://kairosdb.example.com:8080/api/v1/datapoints
+----
+
+
+
+[[production-ready-metrics-export-newrelic]]
+==== New Relic
+
+New Relic注册表会定期将指标推送到 {micrometer-registry-docs}/new-relic[New Relic]。
+要将指标导出到 https://newrelic.com[New Relic]，必须提供你的API密钥和帐户ID：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.newrelic.api-key=YOUR_KEY
+	management.metrics.export.newrelic.account-id=YOUR_ACCOUNT_ID
+----
+
+你还可以更改将度量标准发送到New Relic的时间间隔：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.newrelic.step=30s
+----
+
+
+
+[[production-ready-metrics-export-prometheus]]
+==== Prometheus
+
+{micrometer-registry-docs}/prometheus[Prometheus]希望抓取或轮询单个应用程序实例以获取指标。
+Spring Boot在 `/actuator/prometheus` 提供了一个执行器端点，以适当的格式显示 https://prometheus.io[Prometheus scrape]。
+
+TIP: 端点默认情况下不可用，若需公开，有关更多详细信息，请参见<<production-ready-endpoints-exposing-endpoints,暴露端点>>。
+
+这是添加到 `prometheus.yml` 的示例 `scrape_config`：
+
+[source,yaml,indent=0]
+----
+	scrape_configs:
+	  - job_name: 'spring'
+		metrics_path: '/actuator/prometheus'
+		static_configs:
+		  - targets: ['HOST:PORT']
+----
+
+对于短暂的或批处理的jobs，其时间可能不够长，无法被捕获，可以使用
+https://github.com/prometheus/pushgateway[Prometheus Pushgateway]支持将其指标暴露给Prometheus。
+要启用Prometheus Pushgateway支持，请在项目中添加以下依赖项：
+
+[source,xml,indent=0]
+----
+<dependency>
+	<groupId>io.prometheus</groupId>
+	<artifactId>simpleclient_pushgateway</artifactId>
+</dependency>
+----
+
+当在类路径上存在Prometheus Pushgateway依赖项时，Spring Boot会自动配置 `PrometheusPushGatewayManager` bean。
+这可以管理将指标推送到Prometheus Pushgateway。可以使用 `management.metrics.export.prometheus.pushgateway`
+下的属性来调整 `PrometheusPushGatewayManager`。对于高级配置，你还可以提供自己的 `PrometheusPushGatewayManager` bean。
+
+
+[[production-ready-metrics-export-signalfx]]
+==== SignalFx
+
+SignalFx注册表会定期将指标推送到 {micrometer-registry-docs}/signalfx[SignalFx]。
+要将指标导出到 https://www.signalfx.com[SignalFx]，必须提供访问令牌：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.signalfx.access-token=YOUR_ACCESS_TOKEN
+----
+
+你还可以更改将度量标准发送到SignalFx的时间间隔：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.signalfx.step=30s
+----
+
+
+
+[[production-ready-metrics-export-simple]]
+==== Simple
+
+Micrometer附带一个简单的内存后端，如果未配置其他注册表，该后端将自动用作后备。
+这使你可以查看在<<production-ready-metrics-endpoint,metrics端点>>中收集了哪些指标。
+
+使用任何其他可用后端时，内存后端都会自动禁用。你也可以显式禁用它：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.simple.enabled=false
+----
+
+
+
+[[production-ready-metrics-export-stackdriver]]
+==== Stackdriver
+
+Stackdriver注册表会定期将指标推送到 https://cloud.google.com/stackdriver/[Stackdriver]。
+要将指标导出到SaaS {micrometer-registry-docs}/stackdriver[Stackdriver]，必须提供你的Google Cloud项目ID：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.stackdriver.project-id=my-project
+----
+
+你还可以更改将度量标准发送到Stackdriver的时间间隔：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.stackdriver.step=30s
+----
+
+
+
+[[production-ready-metrics-export-statsd]]
+==== StatsD
+
+StatsD注册表急切地通过UDP将度量标准推送到StatsD agent。
+默认情况下，指标会导出到本地计算机上运行的 {micrometer-registry-docs}/statsd[StatsD] agent。
+可以使用以下方式提供要使用的StatsD agent主机和端口：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.statsd.host=statsd.example.com
+	management.metrics.export.statsd.port=9125
+----
+
+你还可以更改要使用的StatsD线路协议（默认为Datadog）：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.statsd.flavor=etsy
+----
+
+
+
+[[production-ready-metrics-export-wavefront]]
+==== Wavefront
+
+Wavefront注册表会定期将指标推送到 {micrometer-registry-docs}/wavefront[Wavefront]。
+如果直接将指标导出到 https://www.wavefront.com/[Wavefront]，则必须提供API令牌：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.wavefront.api-token=YOUR_API_TOKEN
+----
+
+或者，你可以使用在你的环境中设置的Wavefront sidecar或内部代理，将指标数据转发到Wavefront API主机：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.wavefront.uri=proxy://localhost:2878
+----
+
+TIP: 如果将指标发布到Wavefront代理（如 https://docs.wavefront.com/proxies_installing.html[文档]中所述），
+则主机必须采用 `proxy://HOST:PORT` 格式。
+
+你还可以更改将度量标准发送到Wavefront的时间间隔：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.export.wavefront.step=30s
+----
+
+
+
+[[production-ready-metrics-meter]]
+=== 支持的指标
+
+如果适用，Spring Boot将注册以下核心指标：
+
+* JVM指标，报告以下各项的利用率：
+** 各种内存和缓冲池
+** 与垃圾收集有关的统计数据
+** 线程利用率
+** 加载/卸载的类数
+* CPU指标
+* 文件描述符指标
+* Kafka消费者指标
+* Log4j2指标: 记录每个级别记录到Log4j2的事件数
+* Logback指标: 记录每个级别记录到Logback的事件数
+* Uptime指标: 报告正常运行时间的量度和代表应用程序绝对启动时间的固定量度
+* Tomcat指标 (必须将 `server.tomcat.mbeanregistry.enabled` 设置为 `true` 才能注册所有Tomcat指标)
+* {spring-integration-docs}system-management.html#micrometer-integration[Spring Integration]指标
+
+
+
+[[production-ready-metrics-spring-mvc]]
+==== Spring MVC指标
+
+通过自动配置，可以检测由Spring MVC处理的请求。
+当 `management.metrics.web.server.request.autotime.enabled` 为 `true` 时，将对所有请求进行这种检测。
+另外，当设置为 `false` 时，可以通过将 `@Timed` 添加到请求处理方法来启用检测：
+
+[source,java,indent=0]
+----
+	@RestController
+	@Timed <1>
+	public class MyController {
+
+		@GetMapping("/api/people")
+		@Timed(extraTags = { "region", "us-east-1" }) <2>
+		@Timed(value = "all.people", longTask = true) <3>
+		public List<Person> listPeople() { ... }
+	}
+----
+<1> 控制器类，用于对控制器中的每个请求处理程序启用计时。
+<2> 一种启用单个端点的方法。如果你将它放在类中，则不必这样做，但是可以用于进一步为此特定端点自定义计时器。
+<3> 在 `longTask = true` 的方法为该方法启用长任务计时器。长任务计时器需要一个单独的度量标准名称，并且可以与短任务计时器堆叠在一起。
+
+默认情况下，使用名称 `http.server.requests` 生成度量。
+可以通过设置 `management.metrics.web.server.request.metric-name` 属性来自定义名称。
+
+默认情况下，与Spring MVC相关的指标带有以下信息标签：
+
+|===
+| 标签 | 描述
+
+| `exception`
+| 处理请求时引发的任何异常的简单类名。
+
+| `method`
+| 请求的方法（例如： `GET` 或 `POST`）
+
+| `outcome`
+| 请求的结果基于响应的状态码。
+  1xx是 `INFORMATIONAL`，2xx是 `SUCCESS`，3xx是 `REDIRECTION`，4xx是 `CLIENT_ERROR`，5xx是 `SERVER_ERROR`
+
+| `status`
+| 响应的HTTP状态码（例如： `200` 或 `500`）
+
+| `uri`
+| 请求在变量替换之前的URI模板，如果可能的话(例如： `/api/person/{id}`)
+|===
+
+要自定义标签，请提供实现 `WebMvcTagsProvider` 的 `@Bean`。
+
+
+[[production-ready-metrics-web-flux]]
+==== Spring WebFlux指标
+
+通过自动配置，可以检测WebFlux控制器和函数式处理程序处理的所有请求。
+
+默认情况下，度量标准的名称为 `http.server.requests`。
+你可以通过设置 `management.metrics.web.server.request.metric-name` 属性来自定义名称。
+
+默认情况下，与WebFlux相关的指标带有以下信息标签：
+
+|===
+| 标签 | 描述
+
+| `exception`
+| 处理请求时引发的任何异常的简单类名。
+
+| `method`
+| 请求的方法（例如： `GET` 或 `POST`）
+
+| `outcome`
+| 请求的结果基于响应的状态码。
+  1xx是 `INFORMATIONAL`，2xx是 `SUCCESS`，3xx是 `REDIRECTION`，4xx是 `CLIENT_ERROR`，5xx是 `SERVER_ERROR`
+
+| `status`
+| 响应的HTTP状态码（例如： `200` 或 `500`）
+
+| `uri`
+| 请求在变量替换之前的URI模板，如果可能的话(例如： `/api/person/{id}`)
+|===
+
+要自定义标签，请提供实现 `WebFluxTagsProvider` 的 `@Bean`。
+
+
+
+[[production-ready-metrics-jersey-server]]
+==== Jersey服务器指标
+
+当Micrometer的 `micrometer-jersey2` 模块位于类路径上时，自动配置将启用对Jersey JAX-RS实现所处理的请求的检测。
+当 `management.metrics.web.server.request.autotime.enabled` 为 `true` 时，将对所有请求进行这种检测。
+另外，当设置为 `false` 时，可以通过将 `@Timed` 添加到请求处理方法来启用检测：
+
+[source,java,indent=0]
+----
+	@Component
+	@Path("/api/people")
+	@Timed <1>
+	public class Endpoint {
+
+		@GET
+		@Timed(extraTags = { "region", "us-east-1" }) <2>
+		@Timed(value = "all.people", longTask = true) <3>
+		public List<Person> listPeople() { ... }
+	}
+----
+<1> 在资源类上，以对资源中的每个请求处理程序启用计时。
+<2> 关于启用单个端点的方法。如果你将它放在类中，则不必这样做，但是可以用于进一步为此特定端点自定义计时器。
+<3> 在 `longTask = true` 的方法上为该方法启用长任务计时器。长任务计时器需要一个单独的度量标准名称，并且可以与短任务计时器堆叠在一起。
+
+默认情况下，使用名称 `http.server.requests` 生成度量。
+可以通过设置 `management.metrics.web.server.request.metric-name` 属性来自定义名称。
+
+默认情况下，Jersey服务器指标带有以下信息：
+
+|===
+| 标签 | 描述
+
+| `exception`
+| 处理请求时引发的任何异常的简单类名。
+
+| `method`
+| 请求的方法（例如： `GET` 或 `POST`）
+
+| `outcome`
+| 请求的结果基于响应的状态码。
+  1xx是 `INFORMATIONAL`，2xx是 `SUCCESS`，3xx是 `REDIRECTION`，4xx是 `CLIENT_ERROR`，5xx是 `SERVER_ERROR`
+
+| `status`
+| 响应的HTTP状态码（例如： `200` 或 `500`）
+
+| `uri`
+| 请求在变量替换之前的URI模板，如果可能的话(例如： `/api/person/{id}`)
+|===
+
+要自定义标签，请提供实现 `JerseyTagsProvider` 的 `@Bean`。
+
+
+
+[[production-ready-metrics-http-clients]]
+==== HTTP客户端指标
+
+Spring Boot Actuator管理 `RestTemplate` 和 `WebClient` 的工具。为此，你必须注入自动配置的构建器并使用它来创建实例：
+
+* `RestTemplateBuilder` for `RestTemplate`
+* `WebClient.Builder` for `WebClient`
+
+也可以手动应用负责此工具的定制程序，即 `MetricsRestTemplateCustomizer` 和 `MetricsWebClientCustomizer`。
+
+默认情况下，将使用名称 `http.client.requests` 生成度量。
+可以通过设置 `management.metrics.web.client.request.metric-name` 属性来自定义名称。
+
+默认情况下，通过检测的客户端所生成的指标带有以下信息标签：
+
+|===
+| 标签 | 描述
+
+| `clientName`
+| URI的主机部分
+
+| `method`
+| 请求的方法（例如： `GET` 或 `POST`）
+
+| `outcome`
+| 请求的结果基于响应的状态码。
+  1xx是 `INFORMATIONAL`，2xx是 `SUCCESS`，3xx是 `REDIRECTION`，4xx是 `CLIENT_ERROR`，5xx是 `SERVER_ERROR`，否则是 `UNKNOWN`
+
+| `status`
+| 响应的HTTP状态码（例如： `200` 或 `500`），如果有I/O问题，则为 `IO_ERROR`；否则为 `CLIENT_ERROR`
+
+| `uri`
+| 请求在变量替换之前的URI模板，如果可能的话(例如： `/api/person/{id}`)
+|===
+
+要自定义标签，可以根据你选择的客户端，提供一个实现 `RestTemplateExchangeTagsProvider` 或
+`WebClientExchangeTagsProvider` 的 `@Bean`。 `RestTemplateExchangeTags` 和 `WebClientExchangeTags` 中有便捷的静态函数。
+
+
+[[production-ready-metrics-cache]]
+==== 缓存指标
+
+通过自动配置，可以在启动时使用前缀为 `cache` 的指标来检测所有可用的 ``Cache``s。
+高速缓存检测针对一组基本指标进行了标准化。还提供其他特定于缓存的指标。
+
+支持以下缓存库：
+
+* Caffeine
+* EhCache 2
+* Hazelcast
+* 任何兼容的JCache (JSR-107)实现
+
+根据缓存的名称和从bean名称派生的 `CacheManager` 的名称对指标进行标记。
+
+NOTE: 只有启动时可用的缓存才绑定到注册表。对于在启动阶段后即时或以编程方式创建的缓存，需要显式注册。提供 `CacheMetricsRegistrar` Bean可简化该过程。
+
+
+
+[[production-ready-metrics-jdbc]]
+==== 数据源指标
+
+通过自动配置，可以使用前缀为 `jdbc.connections` 的度量来检测所有可用的 `DataSource` 对象。
+数据源检测产生的指标表示池中当前活动，空闲，最大允许和最小允许的连接。
+
+指标还根据基于bean名称计算的 `DataSource` 名称进行标记。
+
+TIP: 默认情况下，Spring Boot为所有支持的数据源提供元数据。如果你喜欢的数据源不支持开箱即用，则可以添加额外的
+`DataSourcePoolMetadataProvider` bean。有关示例，请参见 `DataSourcePoolMetadataProvidersConfiguration`。
+
+另外，使用Hikaricp前缀公开特定于Hikari的指标。每个度量指标都以池的名称标记（可以通过 `spring.datasource.name` 进行控制）。
+
+
+
+[[production-ready-metrics-hibernate]]
+==== Hibernate指标
+
+自动配置启用所有可用的Hibernate `EntityManagerFactory` 实例的检测，这些实例使用名为 `hibernate`
+的指标启用了统计信息。
+
+指标还使用来自bean名称的 `EntityManagerFactory` 名称进行标记。
+
+要启用统计信息，必须将标准JPA属性 `hibernate.generate_statistics` 设置为 `true`。
+你可以在自动配置的 `EntityManagerFactory` 上启用它，如以下示例所示：
+
+[source,properties,indent=0,configprops]
+----
+	spring.jpa.properties.hibernate.generate_statistics=true
+----
+
+
+
+[[production-ready-metrics-rabbitmq]]
+==== RabbitMQ指标
+
+自动配置将使用名为 `rabbitmq` 的指标启用所有可用的RabbitMQ连接工厂的检测。
+
+
+[[production-ready-metrics-custom]]
+=== 注册自定义指标
+
+要注册自定义指标，请将 `MeterRegistry` 注入你的组件，如以下示例所示：
+
+[source,java,indent=0]
+----
+    class Dictionary {
+
+        private final List<String> words = new CopyOnWriteArrayList<>();
+
+        Dictionary(MeterRegistry registry) {
+            registry.gaugeCollectionSize("dictionary.size", Tags.empty(), this.words);
+        }
+
+        // …
+
+    }
+----
+
+如果发现重复测量了跨组件或应用程序的一组指标，则可以将此指标封装在 `MeterBinder` 实现中。
+默认情况下，所有 `MeterBinder` Bean的指标都将自动绑定到Spring管理的 `MeterRegistry`。
+
+
+[[production-ready-metrics-per-meter-properties]]
+=== 自定义单个指标
+
+如果需要将自定义应用于特定的 `Meter` 实例，则可以使用 `io.micrometer.core.instrument.config.MeterFilter` 接口。
+默认情况下，所有 `MeterFilter` bean都将自动应用于micrometer `MeterRegistry.Config`。
+
+例如，如果要将所有以 `com.example` 开头的计量器ID的 `mytag.region` 标签重命名为 `mytag.area`，则可以执行以下操作：
+
+[source,java,indent=0]
+----
+    @Bean
+    public MeterFilter renameRegionTagMeterFilter() {
+        return MeterFilter.renameTag("com.example", "mytag.region", "mytag.area");
+    }
+----
+
+
+
+[[production-ready-metrics-common-tags]]
+==== 通用标签
+
+通用标签通常用于在操作环境（如主机，实例，区域，堆栈等）上进行维度深入分析。通用标签适用于所有计量器，并可以按以下示例所示进行配置：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.tags.region=us-east-1
+	management.metrics.tags.stack=prod
+----
+
+上面的示例将 `region` 标签和 `stack` 标签添加到所有计量器，其值分别为 `us-east-1` 和 `prod`。
+
+NOTE: 如果使用Graphite，则通用标签的顺序很重要。由于使用这种方法无法保证通用标签的顺序，因此建议Graphite用户定义自定义 `MeterFilter`。
+
+
+==== Per-meter属性
+
+除了 `MeterFilter` bean之外，还可以使用属性在per-meter基础上应用一组有限的自定义设置。
+Per-meter定制适用于任何以给定名称开头的所有计量器IDs。例如，以下将禁用所有ID以 `example.remote` 开头的计量器：
+
+[source,properties,indent=0,configprops]
+----
+	management.metrics.enable.example.remote=false
+----
+
+以下属性允许按per-meter自定义：
+
+.Per-meter自定义
+|===
+| 属性 | 描述
+
+| `management.metrics.enable`
+| 是否拒绝计量器发出任何指标。
+
+| `management.metrics.distribution.percentiles-histogram`
+| 是否发布适合计算可聚合(跨维度)百分比近似值的直方图。
+
+| `management.metrics.distribution.minimum-expected-value`, `configprop:management.metrics.distribution.maximum-expected-value`
+| 通过限制期望值的范围来发布较少的直方图桶。
+
+| `management.metrics.distribution.percentiles`
+| 发布在应用程序中计算的百分位值
+
+| `management.metrics.distribution.sla`
+| 发布带有SLAs定义的桶的累积直方图。
+|===
+
+有关 `percentiles-histogram`，`percentiles` 和 `sla` 背后的概念的更多详细信息，请参阅micrometer文档的
+{micrometer-concepts-docs}#_histograms_and_percentiles[直方图和百分位数]部分。
+
+
+
+[[production-ready-metrics-endpoint]]
+=== 指标端点
+
+Spring Boot提供了一个 `metrics` 端点，可用于诊断检查应用程序收集的指标。端点默认情况下不可用，若需公开，
+有关更多详细信息，请参见<<production-ready-endpoints-exposing-endpoints,暴露端点>>。
+
+导航到 `/actuator/metrics` 会显示可用计量器名称的列表。你可以通过提供特定名称作为选择器来深入查看有关特定计量器的信息，
+例如： `/actuator/metrics/jvm.memory.max`。
+
+[TIP]
+====
+你在此处使用的名称应与代码中使用的名称相匹配，而不是已经针对其附带的监视系统进行了命名约定标准化后的名称。
+换句话说，如果 `jvm.memory.max` 由于其蛇形命名约定而在Prometheus中显示为 `jvm_memory_max`，
+则在检查 `metrics` 端点中的计量器时，仍应使用 `jvm.memory.max` 作为选择器。
+====
+
+你还可以在网址末尾添加任意数量的 `tag=KEY:VALUE` 查询参数，以在维度上更深入地了解计量器，例如： `/actuator/metrics/jvm.memory.max?tag=area:nonheap`。
+
+[TIP]
+====
+报告的测量值是与计量器名称和已应用的任何标签相匹配的所有计量器的统计信息的总和。
+因此，在上面的示例中，返回的“值”统计量是堆的“代码缓存”，“压缩类空间”和“元空间”区域的最大内存占用量的总和。
+如果你只想查看“元空间”的最大大小，则可以添加一个额外的 `tag=id:Metaspace`，
+即 `/actuator/metrics/jvm.memory.max?tag=area:nonheap&tag=id:Metaspace`。
+====
+
+
+[[production-ready-auditing]]
+== 审计
+
+一旦启动了Spring Security，Spring Boot Actuator将拥有一个灵活的审核框架来发布事件
+（默认情况下，“身份验证成功”，“失败”和“拒绝访问”异常）。此功能对于基于身份验证失败的报告和实施锁定策略非常有用。
+
+可以通过在应用程序的配置中提供类型为 `AuditEventRepository` 的bean来启用审核。为了方便起见，Spring Boot提供了一个
+`InMemoryAuditEventRepository`。`InMemoryAuditEventRepository` 具有有限的功能，我们建议仅将其用于开发环境。
+对于生产环境，请考虑创建自己的替代 `AuditEventRepository` 实现。
+
+
+[[production-ready-auditing-custom]]
+=== 自定义审计
+
+要自定义已发布的安全事件，可以提供自己的 `AbstractAuthenticationAuditListener` 和
+`AbstractAuthorizationAuditListener` 的实现。
+
+你也可以将审计服务用于自己的业务事件。
+为此，可以将 `AuditEventRepository` bean注入你自己的组件中并直接使用它，或者通过Spring
+`ApplicationEventPublisher`（通过实现 `ApplicationEventPublisherAware`）发布 `AuditApplicationEvent`。
+
+
+[[production-ready-http-tracing]]
+== HTTP追踪
+
+可以通过在应用程序的配置中提供 `HttpTraceRepository` 类型的Bean来启用HTTP追踪。
+为了方便起见，Spring Boot默认提供了一个 `InMemoryHttpTraceRepository`，用于存储最近100次请求-响应交换的追踪。
+与其他追踪解决方案相比，`InMemoryHttpTraceRepository` 受到限制，我们建议仅将其用于开发环境。
+对于生产环境，建议使用可用于生产的追踪或可观察性解决方案，
+例如：Zipkin或Spring Cloud Sleuth。或者，创建自己的 `HttpTraceRepository` 来满足你的需求。
+
+`httptrace` 端点可用于获取有关存储在 `HttpTraceRepository` 中的请求-响应交换的信息。
+
+
+[[production-ready-http-tracing-custom]]
+=== 自定义HTTP追踪
+
+要自定义每个追踪中包含的条目，请使用 `management.trace.http.include` 配置属性。对于高级定制，请考虑注册自己的 `HttpExchangeTracer` 实现。
+
+
+
+[[production-ready-process-monitoring]]
+== 进程监控
+
+在 `spring-boot` 模块中，你可以找到两个类来创建通常对进程监视有用的文件：
+
+* `ApplicationPidFileWriter` 创建一个包含应用程序PID的文件（默认情况下，在应用程序目录中，文件名为 `application.pid`）。
+* `WebServerPortFileWriter` 创建一个文件（一个或多个），其中包含正在运行的Web服务器的端口（默认情况下，在应用程序目录中，文件名为 `application.port`）。
+
+默认情况下，这些写入器不会被激活，但你可以启用:
+
+* <<production-ready-process-monitoring-configuration,通过扩展配置>>
+* <<production-ready-process-monitoring-programmatically>>
+
+
+
+[[production-ready-process-monitoring-configuration]]
+=== 扩展配置
+
+在 `META-INF/spring.factories` 文件中，你可以激活写入PID文件的监听器，如以下示例所示：
+
+[indent=0]
+----
+	org.springframework.context.ApplicationListener=\
+	org.springframework.boot.context.ApplicationPidFileWriter,\
+	org.springframework.boot.web.context.WebServerPortFileWriter
+----
+
+
+[[production-ready-process-monitoring-programmatically]]
+=== 以编程方式
+
+你还可以通过调用 `SpringApplication.addListeners(...)` 方法并传递适当的
+`Writer` 对象来激活监听器。此方法还允许你自定义 `Writer` 构造函数中的文件名和路径。
+
+[[production-ready-whats-next]]
+== 接下来要读什么
+
+你可能需要阅读有关 https://graphiteapp.org[Graphite]等绘图工具的信息。
+
+否则，你可以继续阅读 {spring-boot-docs}/htmlsingle/#deployment[部署选项]，也可以继续阅读有关Spring Boot的
+{spring-boot-docs}/htmlsingle/#build-tool-plugins[构建工具插件]的详细信息。

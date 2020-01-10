@@ -60,6 +60,7 @@
       <item name="Spring Data JPA" href="cookbook/spring-data-jpa.html"/>
       <item name="Spring Data Solr" href="cookbook/spring-data-solr.html"/>
       <item name="Spring MVC" href="cookbook/spring-mvc.html"/>
+      <item name="Spring WebFlux" href="cookbook/spring-webflux.html"/>
       <item name="Spring Testing" href="cookbook/spring-test.html"/>
       <item name="Spring Boot" href="cookbook/spring-boot.html"/>
       <item name="Spring Boot Testing" href="cookbook/spring-boot-test.html"/>
@@ -67,6 +68,7 @@
       <item name="Spring Cloud Gateway" href="cookbook/spring-cloud-gateway.html"/>
       <item name="Springfox" href="cookbook/springfox.html"/>
       <item name="Groovy" href="cookbook/groovy.html"/>
+      <item name="Reactor Core" href="http://htmlpreview.github.io/?https://github.com/get-set/reactor-core/blob/master-zh/src/docs/index.html"/>
     </menu>
     <!--<menu ref="reports" inherit="top" />-->
   </body>

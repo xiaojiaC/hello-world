@@ -1,13 +1,13 @@
 [[mvc-cors]]
 = CORS
-[.small]#{docSpringWebFlux}#webflux-cors[WebFlux]#
+[.small]#<<spring-webflux.adoc#webflux-cors,WebFlux>>#
 
 Spring MVC使你可以处理CORS（跨域资源共享）。本节介绍如何执行此操作。
 
 
 [[mvc-cors-intro]]
 == 介绍
-[.small]#{docSpringWebFlux}#webflux-cors-intro[WebFlux]#
+[.small]#<<spring-webflux.adoc#webflux-cors-intro,WebFlux>>#
 
 出于安全原因，浏览器禁止AJAX调用当前来源以外的资源。
 例如，你可以将你的银行帐户放在一个浏览器标签中，将 `evil.com` 放在另一个浏览器标签中。
@@ -20,7 +20,7 @@ http://www.w3.org/TR/cors/[W3C规范]，可让你指定授权哪种类型的跨�
 
 [[mvc-cors-processing]]
 == 处理过程
-[.small]#{docSpringWebFlux}#webflux-cors-processing[WebFlux]#
+[.small]#<<spring-webflux.adoc#webflux-cors-processing,WebFlux>>#
 
 CORS规范分为预检，简单和实际请求。要了解CORS的工作原理，你可以阅读
 https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS[本文]以及其他内容，或者参阅规范以获取更多详细信息。
@@ -57,7 +57,7 @@ Java配置或XML名称空间声明此类映射，这导致将单个全局映射�
 
 [[mvc-cors-controller]]
 == `@CrossOrigin`
-[.small]#{docSpringWebFlux}#webflux-cors-controller[WebFlux]#
+[.small]#<<spring-webflux.adoc#webflux-cors-controller,WebFlux>>#
 
 {javadocSpring}/web/bind/annotation/CrossOrigin.html[`@CrossOrigin`]
 注解启用被注解的控制器方法上的跨域请求，如以下示例所示：
@@ -141,7 +141,7 @@ public class AccountController {
 
 [[mvc-cors-global]]
 == 全局配置
-[.small]#{docSpringWebFlux}#webflux-cors-global[WebFlux]#
+[.small]#<<spring-webflux.adoc#webflux-cors-global,WebFlux>>#
 
 除了细粒度的控制器方法级别配置外，你可能还想定义一些全局CORS配置。
 你可以在任何 `HandlerMapping` 上分别设置基于URL的 `CorsConfiguration` 映射。
@@ -161,7 +161,7 @@ public class AccountController {
 
 [[mvc-cors-global-java]]
 === Java配置
-[.small]#{docSpringWebFlux}#webflux-cors-global[WebFlux]#
+[.small]#<<spring-webflux.adoc#webflux-cors-global,WebFlux>>#
 
 要在MVC Java配置中启用CORS，可以使用 `CorsRegistry` 回调，如以下示例所示：
 
@@ -214,7 +214,7 @@ public class WebConfig implements WebMvcConfigurer {
 
 [[mvc-cors-filter]]
 == CORS过滤器
-[.small]#{docSpringWebFlux}#webflux-cors-webfilter[WebFlux]#
+[.small]#<<spring-webflux.adoc#webflux-cors-webfilter,WebFlux>>#
 
 你可以通过内置的 {javadocSpring}/web/filter/CorsFilter.html[`CorsFilter`]应用CORS支持。
 

@@ -1,0 +1,10 @@
+[[webflux-test]]
+= 测试
+[.small]#<<spring-mvc.adoc#testing,与Spring MVC相同>>#
+
+`spring-test` 模块提供 `ServerHttpRequest`，`ServerHttpResponse` 和 `ServerWebExchange` 的Mock实现。
+有关模拟对象的讨论，请参见<<spring-test.adoc#mock-objects-web-reactive,Spring Web Reactive>>。
+
+<<spring-test.adoc#webtestclient,`WebTestClient`>>
+建立在这些模拟请求和响应对象的基础上，以提供对测试不使用HTTP服务器的WebFlux应用程序的支持。
+你也可以将 `WebTestClient` 用于端到端集成测试。
