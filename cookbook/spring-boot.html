@@ -383,45 +383,45 @@ $(addBlockSwitches);
 </li>
 <li><a href="#boot-features-neo4j">2.11.3. Neo4j</a>
 <ul class="sectlevel4">
-<li><a href="#boot-features-connecting-to-neo4j">Connecting to a Neo4j Database</a></li>
-<li><a href="#boot-features-connecting-to-neo4j-embedded">Using the Embedded Mode</a></li>
-<li><a href="#boot-features-neo4j-ogm-native-types">Using Native Types</a></li>
+<li><a href="#boot-features-connecting-to-neo4j">连接到Neo4j数据库</a></li>
+<li><a href="#boot-features-connecting-to-neo4j-embedded">使用嵌入式模式</a></li>
+<li><a href="#boot-features-neo4j-ogm-native-types">使用Native类型</a></li>
 <li><a href="#boot-features-neo4j-ogm-session">Neo4jSession</a></li>
-<li><a href="#boot-features-spring-data-neo4j-repositories">Spring Data Neo4j Repositories</a></li>
+<li><a href="#boot-features-spring-data-neo4j-repositories">Spring Data Neo4j存储库</a></li>
 </ul>
 </li>
 <li><a href="#boot-features-solr">2.11.4. Solr</a>
 <ul class="sectlevel4">
-<li><a href="#boot-features-connecting-to-solr">Connecting to Solr</a></li>
-<li><a href="#boot-features-spring-data-solr-repositories">Spring Data Solr Repositories</a></li>
+<li><a href="#boot-features-connecting-to-solr">连接到Solr</a></li>
+<li><a href="#boot-features-spring-data-solr-repositories">Spring Data Solr存储库</a></li>
 </ul>
 </li>
 <li><a href="#boot-features-elasticsearch">2.11.5. Elasticsearch</a>
 <ul class="sectlevel4">
-<li><a href="#boot-features-connecting-to-elasticsearch-rest">Connecting to Elasticsearch using REST clients</a></li>
-<li><a href="#boot-features-connecting-to-elasticsearch-reactive-rest">Connecting to Elasticsearch using Reactive REST clients</a></li>
-<li><a href="#boot-features-connecting-to-elasticsearch-jest">Connecting to Elasticsearch using Jest</a></li>
-<li><a href="#boot-features-connecting-to-elasticsearch-spring-data">Connecting to Elasticsearch by Using Spring Data</a></li>
-<li><a href="#boot-features-spring-data-elasticsearch-repositories">Spring Data Elasticsearch Repositories</a></li>
+<li><a href="#boot-features-connecting-to-elasticsearch-rest">使用REST客户端连接到Elasticsearch</a></li>
+<li><a href="#boot-features-connecting-to-elasticsearch-reactive-rest">使用响应式REST客户端连接到Elasticsearch</a></li>
+<li><a href="#boot-features-connecting-to-elasticsearch-jest">使用Jest连接到Elasticsearch</a></li>
+<li><a href="#boot-features-connecting-to-elasticsearch-spring-data">使用Spring Data连接到Elasticsearch</a></li>
+<li><a href="#boot-features-spring-data-elasticsearch-repositories">Spring Data Elasticsearch存储库</a></li>
 </ul>
 </li>
 <li><a href="#boot-features-cassandra">2.11.6. Cassandra</a>
 <ul class="sectlevel4">
-<li><a href="#boot-features-connecting-to-cassandra">Connecting to Cassandra</a></li>
-<li><a href="#boot-features-spring-data-cassandra-repositories">Spring Data Cassandra Repositories</a></li>
+<li><a href="#boot-features-connecting-to-cassandra">连接到Cassandra</a></li>
+<li><a href="#boot-features-spring-data-cassandra-repositories">Spring Data Cassandra存储库</a></li>
 </ul>
 </li>
 <li><a href="#boot-features-couchbase">2.11.7. Couchbase</a>
 <ul class="sectlevel4">
-<li><a href="#boot-features-connecting-to-couchbase">Connecting to Couchbase</a></li>
+<li><a href="#boot-features-connecting-to-couchbase">连接到Couchbase</a></li>
 <li><a href="#boot-features-spring-data-couchbase-repositories">Spring Data Couchbase Repositories</a></li>
 </ul>
 </li>
 <li><a href="#boot-features-ldap">2.11.8. LDAP</a>
 <ul class="sectlevel4">
-<li><a href="#boot-features-ldap-connecting">Connecting to an LDAP Server</a></li>
-<li><a href="#boot-features-ldap-spring-data-repositories">Spring Data LDAP Repositories</a></li>
-<li><a href="#boot-features-ldap-embedded">Embedded In-memory LDAP Server</a></li>
+<li><a href="#boot-features-ldap-connecting">连接到LDAP服务器</a></li>
+<li><a href="#boot-features-ldap-spring-data-repositories">Spring Data LDAP存储库</a></li>
+<li><a href="#boot-features-ldap-embedded">嵌入式内存LDAP服务器</a></li>
 </ul>
 </li>
 <li><a href="#boot-features-influxdb">2.11.9. InfluxDB</a>
@@ -544,6 +544,137 @@ $(addBlockSwitches);
 </ul>
 </li>
 <li><a href="#boot-features-whats-next">2.29. 接下来要读什么</a></li>
+</ul>
+</li>
+<li><a href="#production-ready">3. Spring Boot Actuator: 生产就绪功能</a>
+<ul class="sectlevel2">
+<li><a href="#production-ready-enabling">3.1. 启用生产就绪功能</a></li>
+<li><a href="#production-ready-endpoints">3.2. 端点</a>
+<ul class="sectlevel3">
+<li><a href="#production-ready-endpoints-enabling-endpoints">3.2.1. 启用端点</a></li>
+<li><a href="#production-ready-endpoints-exposing-endpoints">3.2.2. 暴露端点</a></li>
+<li><a href="#production-ready-endpoints-security">3.2.3. 保护HTTP端点</a></li>
+<li><a href="#production-ready-endpoints-caching">3.2.4. 配置端点</a></li>
+<li><a href="#production-ready-endpoints-hypermedia">3.2.5. 用于执行器Web端点的超媒体</a></li>
+<li><a href="#production-ready-endpoints-cors">3.2.6. CORS支持</a></li>
+<li><a href="#production-ready-endpoints-custom">3.2.7. 实现自定义端点</a>
+<ul class="sectlevel4">
+<li><a href="#production-ready-endpoints-custom-input">接收输入</a></li>
+<li><a href="#production-ready-endpoints-custom-web">自定义Web端点</a></li>
+<li><a href="#production-ready-endpoints-custom-servlet">Servlet端点</a></li>
+<li><a href="#production-ready-endpoints-custom-controller">控制器端点</a></li>
+</ul>
+</li>
+<li><a href="#production-ready-health">3.2.8. 健康信息</a>
+<ul class="sectlevel4">
+<li><a href="#自动配置的healthindicators">自动配置的HealthIndicators</a></li>
+<li><a href="#编写自定义健康指标">编写自定义健康指标</a></li>
+<li><a href="#reactive-health-indicators">Reactive健康指标</a></li>
+<li><a href="#自动配置的reactivehealthindicators">自动配置的ReactiveHealthIndicators</a></li>
+<li><a href="#健康组">健康组</a></li>
+</ul>
+</li>
+<li><a href="#production-ready-application-info">3.2.9. 应用信息</a>
+<ul class="sectlevel4">
+<li><a href="#production-ready-application-info-autoconfigure">自动配置的InfoContributors</a></li>
+<li><a href="#production-ready-application-info-env">自定义应用信息</a></li>
+<li><a href="#production-ready-application-info-git">Git提交信息</a></li>
+<li><a href="#production-ready-application-info-build">构建信息</a></li>
+<li><a href="#production-ready-application-info-custom">编写自定义InfoContributors</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#production-ready-monitoring">3.3. 通过HTTP进行监视和管理</a>
+<ul class="sectlevel3">
+<li><a href="#production-ready-customizing-management-server-context-path">3.3.1. 自定义管理端点路径</a></li>
+<li><a href="#production-ready-customizing-management-server-port">3.3.2. 自定义管理服务器端口</a></li>
+<li><a href="#production-ready-management-specific-ssl">3.3.3. 配置特定于管理的SSL</a></li>
+<li><a href="#production-ready-customizing-management-server-address">3.3.4. 自定义管理服务器地址</a></li>
+<li><a href="#production-ready-disabling-http-endpoints">3.3.5. 禁用HTTP端点</a></li>
+</ul>
+</li>
+<li><a href="#production-ready-jmx">3.4. 通过JMX进行监视和管理</a>
+<ul class="sectlevel3">
+<li><a href="#production-ready-custom-mbean-names">3.4.1. 自定义MBean名称</a></li>
+<li><a href="#production-ready-disable-jmx-endpoints">3.4.2. 禁用JMX端点</a></li>
+<li><a href="#production-ready-jolokia">3.4.3. 通过HTTP将Jolokia用于JMX</a>
+<ul class="sectlevel4">
+<li><a href="#production-ready-customizing-jolokia">自定义Jolokia</a></li>
+<li><a href="#production-ready-disabling-jolokia">禁用Jolokia</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#production-ready-loggers">3.5. 日志记录器</a>
+<ul class="sectlevel3">
+<li><a href="#production-ready-logger-configuration">3.5.1. 配置记录器</a></li>
+</ul>
+</li>
+<li><a href="#production-ready-metrics">3.6. 指标</a>
+<ul class="sectlevel3">
+<li><a href="#production-ready-metrics-getting-started">3.6.1. 入门</a></li>
+<li><a href="#production-ready-metrics-export">3.6.2. 支持的监控系统</a>
+<ul class="sectlevel4">
+<li><a href="#production-ready-metrics-export-appoptics">AppOptics</a></li>
+<li><a href="#production-ready-metrics-export-atlas">Atlas</a></li>
+<li><a href="#production-ready-metrics-export-datadog">Datadog</a></li>
+<li><a href="#production-ready-metrics-export-dynatrace">Dynatrace</a></li>
+<li><a href="#production-ready-metrics-export-elastic">Elastic</a></li>
+<li><a href="#production-ready-metrics-export-ganglia">Ganglia</a></li>
+<li><a href="#production-ready-metrics-export-graphite">Graphite</a></li>
+<li><a href="#production-ready-metrics-export-humio">Humio</a></li>
+<li><a href="#production-ready-metrics-export-influx">Influx</a></li>
+<li><a href="#production-ready-metrics-export-jmx">JMX</a></li>
+<li><a href="#production-ready-metrics-export-kairos">KairosDB</a></li>
+<li><a href="#production-ready-metrics-export-newrelic">New Relic</a></li>
+<li><a href="#production-ready-metrics-export-prometheus">Prometheus</a></li>
+<li><a href="#production-ready-metrics-export-signalfx">SignalFx</a></li>
+<li><a href="#production-ready-metrics-export-simple">Simple</a></li>
+<li><a href="#production-ready-metrics-export-stackdriver">Stackdriver</a></li>
+<li><a href="#production-ready-metrics-export-statsd">StatsD</a></li>
+<li><a href="#production-ready-metrics-export-wavefront">Wavefront</a></li>
+</ul>
+</li>
+<li><a href="#production-ready-metrics-meter">3.6.3. 支持的指标</a>
+<ul class="sectlevel4">
+<li><a href="#production-ready-metrics-spring-mvc">Spring MVC指标</a></li>
+<li><a href="#production-ready-metrics-web-flux">Spring WebFlux指标</a></li>
+<li><a href="#production-ready-metrics-jersey-server">Jersey服务器指标</a></li>
+<li><a href="#production-ready-metrics-http-clients">HTTP客户端指标</a></li>
+<li><a href="#production-ready-metrics-cache">缓存指标</a></li>
+<li><a href="#production-ready-metrics-jdbc">数据源指标</a></li>
+<li><a href="#production-ready-metrics-hibernate">Hibernate指标</a></li>
+<li><a href="#production-ready-metrics-rabbitmq">RabbitMQ指标</a></li>
+</ul>
+</li>
+<li><a href="#production-ready-metrics-custom">3.6.4. 注册自定义指标</a></li>
+<li><a href="#production-ready-metrics-per-meter-properties">3.6.5. 自定义单个指标</a>
+<ul class="sectlevel4">
+<li><a href="#production-ready-metrics-common-tags">通用标签</a></li>
+<li><a href="#per-meter属性">Per-meter属性</a></li>
+</ul>
+</li>
+<li><a href="#production-ready-metrics-endpoint">3.6.6. 指标端点</a></li>
+</ul>
+</li>
+<li><a href="#production-ready-auditing">3.7. 审计</a>
+<ul class="sectlevel3">
+<li><a href="#production-ready-auditing-custom">3.7.1. 自定义审计</a></li>
+</ul>
+</li>
+<li><a href="#production-ready-http-tracing">3.8. HTTP追踪</a>
+<ul class="sectlevel3">
+<li><a href="#production-ready-http-tracing-custom">3.8.1. 自定义HTTP追踪</a></li>
+</ul>
+</li>
+<li><a href="#production-ready-process-monitoring">3.9. 进程监控</a>
+<ul class="sectlevel3">
+<li><a href="#production-ready-process-monitoring-configuration">3.9.1. 扩展配置</a></li>
+<li><a href="#production-ready-process-monitoring-programmatically">3.9.2. 以编程方式</a></li>
+</ul>
+</li>
+<li><a href="#production-ready-whats-next">3.10. 接下来要读什么</a></li>
 </ul>
 </li>
 </ul>
@@ -6866,7 +6997,7 @@ public class MyService {
 <p>如果 <a href="https://spring.io/projects/spring-security">Spring Security</a>在类路径上，则默认情况下Web应用程序是安全的。
 Spring Boot依靠Spring Security的内容协商策略来确定是使用 <code>httpBasic</code> 还是 <code>formLogin</code>。
 要将方法级安全性添加到Web应用程序，还可以使用所需的设置添加 <code>@EnableGlobalMethodSecurity</code>。
-可以在 <a href="https://docs.spring.io/spring-security/site/docs/{spring-security-version}/reference/htmlsingle/#jc-method">Spring Security参考指南</a>中找到更多信息。</p>
+可以在 <a href="https://docs.spring.io/spring-security/site/docs/5.2.1.RELEASE/reference/htmlsingle/#jc-method">Spring Security参考指南</a>中找到更多信息。</p>
 </div>
 <div class="paragraph">
 <p>默认的 <code>UserDetailsService</code> 具有单个用户。用户名是 <code>user</code>，密码是随机的，并在应用程序启动时以INFO级别显示，如下例所示：</p>
@@ -7208,7 +7339,7 @@ Spring Security之类的方法进行保护。
 </table>
 </div>
 <div class="paragraph">
-<p>关于CSRF保护的其他信息可以在 <a href="https://docs.spring.io/spring-security/site/docs/{spring-security-version}/reference/htmlsingle/#csrf">Spring Security参考指南</a>中找到。</p>
+<p>关于CSRF保护的其他信息可以在 <a href="https://docs.spring.io/spring-security/site/docs/5.2.1.RELEASE/reference/htmlsingle/#csrf">Spring Security参考指南</a>中找到。</p>
 </div>
 </div>
 </div>
@@ -7607,11 +7738,11 @@ public class City implements Serializable {
 例如：<code>CityRepository</code> 接口可能声明了 <code>findAllByState(String state)</code> 方法来查找给定状态下的所有城市。</p>
 </div>
 <div class="paragraph">
-<p>对于更复杂的查询，你可以使用Spring Data的 <a href="https://docs.spring.io/spring-data/jpa/docs/{spring-data-jpa-version}/api/org/springframework/data/jpa/repository/Query.html"><code>Query</code></a>注解对方法进行注释。</p>
+<p>对于更复杂的查询，你可以使用Spring Data的 <a href="https://docs.spring.io/spring-data/jpa/docs/2.2.3.RELEASE/api/org/springframework/data/jpa/repository/Query.html"><code>Query</code></a>注解对方法进行注释。</p>
 </div>
 <div class="paragraph">
-<p>Spring Data存储库通常从 <a href="https://docs.spring.io/spring-data/commons/docs/{spring-data-commons-version}/api/org/springframework/data/repository/Repository.html"><code>Repository</code></a>或
-<a href="https://docs.spring.io/spring-data/commons/docs/{spring-data-commons-version}/api/org/springframework/data/repository/CrudRepository.html"><code>CrudRepository</code></a>接口继承。
+<p>Spring Data存储库通常从 <a href="https://docs.spring.io/spring-data/commons/docs/2.2.3.RELEASE/api/org/springframework/data/repository/Repository.html"><code>Repository</code></a>或
+<a href="https://docs.spring.io/spring-data/commons/docs/2.2.3.RELEASE/api/org/springframework/data/repository/CrudRepository.html"><code>CrudRepository</code></a>接口继承。
 如果使用自动配置，则会从包含主配置类（以 <code>@EnableAutoConfiguration</code> 或 <code>@SpringBootApplication</code> 注解的主配置类）的包中搜索存储库。</p>
 </div>
 <div class="paragraph">
@@ -7646,7 +7777,7 @@ public interface CityRepository extends Repository&lt;City, Long&gt; {
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-我们仅仅触及了Spring Data JPA的皮毛。有关完整的详细信息，请参阅 <a href="https://docs.spring.io/spring-data/jdbc/docs/{spring-data-jdbc-version}/reference/html/">Spring Data JPA参考文档</a>。
+我们仅仅触及了Spring Data JPA的皮毛。有关完整的详细信息，请参阅 <a href="https://docs.spring.io/spring-data/jdbc/docs/1.1.3.RELEASE/reference/html/">Spring Data JPA参考文档</a>。
 </td>
 </tr>
 </table>
@@ -7719,7 +7850,7 @@ public interface CityRepository extends Repository&lt;City, Long&gt; {
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-有关Spring Data JDBC的完整详细信息，请参考 <a href="https://docs.spring.io/spring-data/jdbc/docs/{spring-data-jdbc-version}/reference/html/">参考文档</a>。
+有关Spring Data JDBC的完整详细信息，请参考 <a href="https://docs.spring.io/spring-data/jdbc/docs/1.1.3.RELEASE/reference/html/">参考文档</a>。
 </td>
 </tr>
 </table>
@@ -7784,7 +7915,7 @@ H2控制台仅在开发期间使用，因此应注意确保在生产中未将 <c
 <div class="sect4">
 <h5 id="代码生成">代码生成</h5>
 <div class="paragraph">
-<p>为了使用jOOQ类型安全查询，你需要从数据库schema中生成Java类。你可以按照 <a href="https://www.jooq.org/doc/{jooq-version}/manual-single-page/#jooq-in-7-steps-step3">jOOQ用户手册</a>中的说明进行操作。
+<p>为了使用jOOQ类型安全查询，你需要从数据库schema中生成Java类。你可以按照 <a href="https://www.jooq.org/doc/3.12.3/manual-single-page/#jooq-in-7-steps-step3">jOOQ用户手册</a>中的说明进行操作。
 如果你使用 <code>jooq-codegen-maven</code> 插件，并且还使用 <code>spring-boot-starter-parent</code> “父POM”，
 则可以安全地忽略该插件的 <code>&lt;version&gt;</code> 标签。你还可以使用Spring Boot定义的版本变量（例如：<code>h2.version</code>）
 来声明插件的数据库依赖关系。以下清单显示了一个示例：</p>
@@ -7975,7 +8106,8 @@ Spring Boot为 <a href="https://github.com/lettuce-io/lettuce-core/">Lettuce</a>
 客户端库以及Spring Data Redis提供的基于它们的抽象提供了基本的自动配置。</p>
 </div>
 <div class="paragraph">
-<p>有一个 <code>spring-boot-starter-data-redis</code> “<code>Starter</code>”便于收集依赖项。默认情况下，它使用 <a href="https://github.com/lettuce-io/lettuce-core/">Lettuce</a>。
+<p>有一个 <code>spring-boot-starter-data-redis</code> &#8220;Starter&#8221; 便于收集依赖项。默认情况下，它使用
+<a href="https://github.com/lettuce-io/lettuce-core/">Lettuce</a>。
 该启动器可以处理传统应用程序和响应式应用程序。</p>
 </div>
 <div class="admonitionblock tip">
@@ -8039,7 +8171,7 @@ public class MyBean {
 <div class="paragraph">
 <p><a href="https://www.mongodb.com/">MongoDB</a>是一个开源NoSQL文档数据库，它使用类似JSON的结构而不是传统的基于表的关系数据。
 Spring Boot为MongoDB的使用提供了许多便利，包括 <code>spring-boot-starter-data-mongodb</code> 和
-<code>spring-boot-starter-data-mongodb-reactive</code> “<code>Starters</code>”。</p>
+<code>spring-boot-starter-data-mongodb-reactive</code> &#8220;Starter&#8221;。</p>
 </div>
 <div class="sect4">
 <h5 id="boot-features-connecting-to-mongodb">连接到MongoDB数据库</h5>
@@ -8148,7 +8280,7 @@ spring.data.mongodb.port=27017</code></pre>
 <div class="sect4">
 <h5 id="boot-features-mongo-template">MongoTemplate</h5>
 <div class="paragraph">
-<p><a href="https://spring.io/projects/spring-data-mongodb">Spring Data MongoDB</a>提供了一个 <a href="https://docs.spring.io/spring-data/mongodb/docs/{spring-data-mongodb-version}/api/org/springframework/data/mongodb/core/MongoTemplate.html"><code>MongoTemplate</code></a>类，
+<p><a href="https://spring.io/projects/spring-data-mongodb">Spring Data MongoDB</a>提供了一个 <a href="https://docs.spring.io/spring-data/mongodb/docs/2.2.3.RELEASE/api/org/springframework/data/mongodb/core/MongoTemplate.html"><code>MongoTemplate</code></a>类，
 该类的设计与Spring的 <code>JdbcTemplate</code> 非常相似。与 <code>JdbcTemplate</code> 一样，Spring Boot为你自动配置一个Bean来注入模板，如下所示：</p>
 </div>
 <div class="listingblock">
@@ -8173,7 +8305,7 @@ public class MyBean {
 </div>
 </div>
 <div class="paragraph">
-<p>有关完整的详细信息，请参见 <a href="https://docs.spring.io/spring-data/mongodb/docs/{spring-data-mongodb-version}/api/org/springframework/data/mongodb/core/MongoOperations.html"><code>MongoOperations</code> Javadoc</a>。</p>
+<p>有关完整的详细信息，请参见 <a href="https://docs.spring.io/spring-data/mongodb/docs/2.2.3.RELEASE/api/org/springframework/data/mongodb/core/MongoOperations.html"><code>MongoOperations</code> Javadoc</a>。</p>
 </div>
 </div>
 <div class="sect4">
@@ -8260,15 +8392,14 @@ public interface CityRepository extends Repository&lt;City, Long&gt; {
 <div class="sect3">
 <h4 id="boot-features-neo4j">2.11.3. Neo4j</h4>
 <div class="paragraph">
-<p><a href="https://neo4j.com/">Neo4j</a> is an open-source NoSQL graph database that uses a rich data model of nodes connected by first class relationships, which is better suited for connected big data than traditional RDBMS approaches.
-Spring Boot offers several conveniences for working with Neo4j, including the <code>spring-boot-starter-data-neo4j</code> &#8220;Starter&#8221;.</p>
+<p><a href="https://neo4j.com/">Neo4j</a>是一个开源NoSQL图形数据库，它使用了由一级关系连接的节点的丰富数据模型，
+与传统的RDBMS方法相比，它更适合于连接的大数据。Spring Boot为Neo4j的使用提供了许多便利，包括 <code>spring-boot-starter-data-neo4j</code> &#8220;Starter&#8221;。</p>
 </div>
 <div class="sect4">
-<h5 id="boot-features-connecting-to-neo4j">Connecting to a Neo4j Database</h5>
+<h5 id="boot-features-connecting-to-neo4j">连接到Neo4j数据库</h5>
 <div class="paragraph">
-<p>To access a Neo4j server, you can inject an auto-configured <code>org.neo4j.ogm.session.Session</code>.
-By default, the instance tries to connect to a Neo4j server at <code>localhost:7687</code> using the Bolt protocol.
-The following example shows how to inject a Neo4j <code>Session</code>:</p>
+<p>要访问Neo4j服务器，你可以注入自动配置的 <code>org.neo4j.ogm.session.Session</code>。
+默认情况下，该实例尝试使用Bolt协议连接到 <code>localhost:7687</code> 处的Neo4j服务器。下面的示例显示如何注入Neo4j <code>Session</code>：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8288,7 +8419,7 @@ public class MyBean {
 </div>
 </div>
 <div class="paragraph">
-<p>You can configure the uri and credentials to use by setting the <code>spring.data.neo4j.*</code> properties, as shown in the following example:</p>
+<p>你可以通过设置 <code>spring.data.neo4j.*</code> 属性来配置要使用的uri和凭据，如以下示例所示：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8298,13 +8429,15 @@ spring.data.neo4j.password=secret</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>You can take full control over the session creation by adding either an <code>org.neo4j.ogm.config.Configuration</code> bean or an <code>org.neo4j.ogm.session.SessionFactory</code> bean.</p>
+<p>通过添加 <code>org.neo4j.ogm.config.Configuration</code> bean或 <code>org.neo4j.ogm.session.SessionFactory</code>
+bean，可以完全控制会话的创建。</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="boot-features-connecting-to-neo4j-embedded">Using the Embedded Mode</h5>
+<h5 id="boot-features-connecting-to-neo4j-embedded">使用嵌入式模式</h5>
 <div class="paragraph">
-<p>If you add <code>org.neo4j:neo4j-ogm-embedded-driver</code> to the dependencies of your application, Spring Boot automatically configures an in-process embedded instance of Neo4j that does not persist any data when your application shuts down.</p>
+<p>如果将 <code>org.neo4j:neo4j-ogm-embedded-driver</code> 添加到应用程序的依赖项中，
+则Spring Boot会自动配置Neo4j的进程内嵌入式实例，该实例在应用程序关闭时不会保留任何数据。</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -8313,18 +8446,18 @@ spring.data.neo4j.password=secret</code></pre>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-As the embedded Neo4j OGM  driver  does not provide the Neo4j kernel itself, you have to declare <code>org.neo4j:neo4j</code> as dependency yourself.
-Refer to <a href="https://neo4j.com/docs/ogm-manual/current/reference/#reference:getting-started">the Neo4j OGM documentation</a> for a list of compatible versions.
+由于嵌入式Neo4j OGM驱动程序本身不提供Neo4j内核，因此你必须自己声明 <code>org.neo4j:neo4j</code> 为依赖项。
+有关兼容版本的列表，请参阅 <a href="https://neo4j.com/docs/ogm-manual/current/reference/#reference:getting-started">Neo4j OGM文档</a>。
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>The embedded driver takes precedence over the other drivers when there are multiple drivers on the classpath.
-You can explicitly disable the embedded mode by setting <code>spring.data.neo4j.embedded.enabled=false</code>.</p>
+<p>当类路径上有多个驱动程序时，嵌入式驱动程序优先于其他驱动程序。你可以通过设置 <code>spring.data.neo4j.embedded.enabled=false</code> 显式禁用嵌入式模式。</p>
 </div>
 <div class="paragraph">
-<p><a href="#boot-features-testing-spring-boot-applications-testing-autoconfigured-neo4j-test">Data Neo4j Tests</a> automatically make use of an embedded Neo4j instance if the embedded driver and Neo4j kernel are on the classpath as described above.</p>
+<p>如果嵌入式驱动程序和Neo4j内核位于上述类路径上，
+则<a href="#boot-features-testing-spring-boot-applications-testing-autoconfigured-neo4j-test">Data Neo4j Tests</a>会自动使用嵌入式Neo4j实例。</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -8333,20 +8466,20 @@ You can explicitly disable the embedded mode by setting <code>spring.data.neo4j.
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-You can enable persistence for the embedded mode by providing a path to a database file in your configuration, e.g. <code>spring.data.neo4j.uri=file://var/tmp/graph.db</code>.
+你可以通过在配置中提供数据库文件的路径来启用嵌入式模式的持久性。
+例如: <code>spring.data.neo4j.uri=file://var/tmp/graph.db</code>。
 </td>
 </tr>
 </table>
 </div>
 </div>
 <div class="sect4">
-<h5 id="boot-features-neo4j-ogm-native-types">Using Native Types</h5>
+<h5 id="boot-features-neo4j-ogm-native-types">使用Native类型</h5>
 <div class="paragraph">
-<p>Neo4j-OGM can map some types, like those in <code>java.time.*</code>, to <code>String</code>-based properties or to one of the native types that Neo4j provides.
-For backwards compatibility reasons the default for Neo4j-OGM is to use a <code>String</code>-based representation.
-To use native types, add a dependency on either <code>org.neo4j:neo4j-ogm-bolt-native-types</code> or <code>org
-.neo4j:neo4j-ogm-embedded-native-types</code>, and configure the <code>spring.data.neo4j.use-native-types</code>
-property as shown in the following example:</p>
+<p>Neo4j-OGM可以将某些类型（例如：<code>java.time.*</code> 中的类型）映射到基于String的属性或Neo4j提供的原生类型之一。
+出于向后兼容的原因，Neo4j-OGM的默认设置是使用基于字符串的表示形式。要使用原生类型，请添加对
+<code>org.neo4j:neo4j-ogm-bolt-native-types</code> 或 <code>org.neo4j:neo4j-ogm-embedded-native-types</code> 的依赖关系，
+并配置 <code>spring.data.neo4j.use-native-types</code> 属性，如以下示例所示：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8357,8 +8490,8 @@ property as shown in the following example:</p>
 <div class="sect4">
 <h5 id="boot-features-neo4j-ogm-session">Neo4jSession</h5>
 <div class="paragraph">
-<p>By default, if you are running a web application, the session is bound to the thread for the entire processing of the request (that is, it uses the "Open Session in View" pattern).
-If you do not want this behavior, add the following line to your <code>application.properties</code> file:</p>
+<p>默认情况下，如果你正在运行Web应用程序，则会话将绑定到线程以进行请求的整个处理（即，它使用“Open Session in View”模式）。
+如果你不希望出现这种情况，请将以下行添加到 <code>application.properties</code> 文件中：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8367,13 +8500,13 @@ If you do not want this behavior, add the following line to your <code>applicati
 </div>
 </div>
 <div class="sect4">
-<h5 id="boot-features-spring-data-neo4j-repositories">Spring Data Neo4j Repositories</h5>
+<h5 id="boot-features-spring-data-neo4j-repositories">Spring Data Neo4j存储库</h5>
 <div class="paragraph">
-<p>Spring Data includes repository support for Neo4j.</p>
+<p>Spring Data包括对Neo4j的存储库支持。</p>
 </div>
 <div class="paragraph">
-<p>Spring Data Neo4j shares the common infrastructure with Spring Data JPA as many other Spring Data modules do.
-You could take the JPA example from earlier and define <code>City</code> as Neo4j OGM <code>@NodeEntity</code> rather than JPA <code>@Entity</code> and the repository abstraction works in the same way, as shown in the following example:</p>
+<p>Spring Data Neo4j与许多其他Spring Data模块一样，与Spring Data JPA共享公共基础设施。
+你可以采用前面的JPA示例，并将 <code>City</code> 定义为Neo4j OGM <code>@NodeEntity</code> 而不是JPA <code>@Entity</code>，并且存储库抽象以相同的方式工作，如以下示例所示：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8391,8 +8524,8 @@ public interface CityRepository extends Neo4jRepository&lt;City, Long&gt; {
 </div>
 </div>
 <div class="paragraph">
-<p>The <code>spring-boot-starter-data-neo4j</code> &#8220;Starter&#8221; enables the repository support as well as transaction management.
-You can customize the locations to look for repositories and entities by using <code>@EnableNeo4jRepositories</code> and <code>@EntityScan</code> respectively on a <code>@Configuration</code>-bean.</p>
+<p><code>spring-boot-starter-data-neo4j</code> &#8220;Starter&#8221; 可支持存储库以及事务管理。
+你可以通过分别在 <code>@Configuration</code>-bean上使用 <code>@EnableNeo4jRepositories</code> 和 <code>@EntityScan</code> 来定制位置以查找存储库和实体。</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -8401,7 +8534,7 @@ You can customize the locations to look for repositories and entities by using <
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-For complete details of Spring Data Neo4j, including its object mapping technologies, refer to the <a href="https://docs.spring.io/spring-data/neo4j/docs/{spring-data-neo4j-version}/reference/html/">reference documentation</a>.
+有关Spring Data Neo4j的完整详细信息，包括其对象映射技术，请参阅 <a href="https://docs.spring.io/spring-data/neo4j/docs/5.2.3.RELEASE/reference/html/">参考文档</a>。
 </td>
 </tr>
 </table>
@@ -8411,16 +8544,15 @@ For complete details of Spring Data Neo4j, including its object mapping technolo
 <div class="sect3">
 <h4 id="boot-features-solr">2.11.4. Solr</h4>
 <div class="paragraph">
-<p><a href="https://lucene.apache.org/solr/">Apache Solr</a> is a search engine.
-Spring Boot offers basic auto-configuration for the Solr 5 client library and the abstractions on top of it provided by <a href="https://github.com/spring-projects/spring-data-solr">Spring Data Solr</a>.
-There is a <code>spring-boot-starter-data-solr</code> &#8220;Starter&#8221; for collecting the dependencies in a convenient way.</p>
+<p><a href="https://lucene.apache.org/solr/">Apache Solr</a>是一个搜索引擎。
+Spring Boot为Solr 5客户端库提供了基本的自动配置，并由 <a href="https://github.com/spring-projects/spring-data-solr">Spring Data Solr</a>在其之上提供了抽象。
+<code>spring-boot-starter-data-solr</code> &#8220;Starter&#8221; 用于以方便的方式收集依赖项。</p>
 </div>
 <div class="sect4">
-<h5 id="boot-features-connecting-to-solr">Connecting to Solr</h5>
+<h5 id="boot-features-connecting-to-solr">连接到Solr</h5>
 <div class="paragraph">
-<p>You can inject an auto-configured <code>SolrClient</code> instance as you would any other Spring bean.
-By default, the instance tries to connect to a server at <code><a href="http://localhost:8983/solr" class="bare">http://localhost:8983/solr</a></code>.
-The following example shows how to inject a Solr bean:</p>
+<p>你可以像插入其他任何Spring Bean一样注入自动配置的 <code>SolrClient</code> 实例。默认情况下，该实例尝试连接到位于
+<code><a href="http://localhost:8983/solr" class="bare">http://localhost:8983/solr</a></code> 的服务器。以下示例显示如何注入Solr bean：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8440,59 +8572,67 @@ public class MyBean {
 </div>
 </div>
 <div class="paragraph">
-<p>If you add your own <code>@Bean</code> of type <code>SolrClient</code>, it replaces the default.</p>
+<p>如果添加自己的类型为 <code>SolrClient</code> 的 <code>@Bean</code>，它将替换默认值。</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="boot-features-spring-data-solr-repositories">Spring Data Solr Repositories</h5>
+<h5 id="boot-features-spring-data-solr-repositories">Spring Data Solr存储库</h5>
 <div class="paragraph">
-<p>Spring Data includes repository support for Apache Solr.
-As with the JPA repositories discussed earlier, the basic principle is that queries are automatically constructed for you based on method names.</p>
+<p>Spring Data包括对Apache Solr的存储库支持。与前面讨论的JPA存储库一样，基本原理是根据方法名称自动为你构建查询。</p>
 </div>
 <div class="paragraph">
-<p>In fact, both Spring Data JPA and Spring Data Solr share the same common infrastructure.
-You could take the JPA example from earlier and, assuming that <code>City</code> is now a <code>@SolrDocument</code> class rather than a JPA <code>@Entity</code>, it works in the same way.</p>
+<p>实际上，Spring Data JPA和Spring Data Solr共享相同的通用基础设施。你可以从以前的JPA示例开始，并假设 <code>City</code> 现在是
+<code>@SolrDocument</code> 类，而不是JPA <code>@Entity</code>，它的工作方式相同。</p>
 </div>
-<div class="paragraph">
-<p>IP: For complete details of Spring Data Solr, refer to the <a href="https://docs.spring.io/spring-data/solr/docs/{spring-data-solr-version}/reference/html/">reference documentation</a>.</p>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+有关Spring Data Solr的完整详细信息，请参阅 <a href="https://docs.spring.io/spring-data/solr/docs/4.1.3.RELEASE/reference/html/">参考文档</a>。
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="boot-features-elasticsearch">2.11.5. Elasticsearch</h4>
 <div class="paragraph">
-<p><a href="https://www.elastic.co/products/elasticsearch">Elasticsearch</a> is an open source, distributed, RESTful search and analytics engine.
-Spring Boot offers basic auto-configuration for Elasticsearch.</p>
+<p><a href="https://www.elastic.co/products/elasticsearch">Elasticsearch</a>是一个开源，分布式，RESTful搜索和分析引擎。
+Spring Boot为Elasticsearch提供了基本的自动配置。</p>
 </div>
 <div class="paragraph">
-<p>Spring Boot supports several clients:</p>
+<p>Spring Boot支持多个客户端：</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>The official Java "Low Level" and "High Level" REST clients</p>
+<p>官方Java“低级”和“高级”REST客户端</p>
 </li>
 <li>
-<p>The <code>ReactiveElasticsearchClient</code> provided by Spring Data Elasticsearch</p>
+<p>Spring Data Elasticsearch提供的 <code>ReactiveElasticsearchClient</code></p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>The transport client is still available but its support has been deprecated in <a href="https://github.com/spring-projects/spring-data-elasticsearch">Spring Data Elasticsearch</a> and Elasticsearch itself.
-It will be removed in a future release.
-Spring Boot provides a dedicated &#8220;Starter&#8221;, <code>spring-boot-starter-data-elasticsearch</code>.</p>
+<p>传输客户端仍然可用，但是 <a href="https://github.com/spring-projects/spring-data-elasticsearch">Spring Data Elasticsearch</a>和Elasticsearch本身已弃用了它的支持。
+它将在未来的版本中删除。Spring Boot提供了专用的 &#8220;Starter&#8221;, 即 <code>spring-boot-starter-data-elasticsearch</code>。</p>
 </div>
 <div class="paragraph">
-<p>The <a href="https://github.com/searchbox-io/Jest">Jest</a> client has been deprecated as well, since both Elasticsearch and Spring Data Elasticsearch provide official support for REST clients.</p>
+<p>由于Elasticsearch和Spring Data Elasticsearch为REST客户端提供了官方支持，因此 <a href="https://github.com/searchbox-io/Jest">Jest</a>客户端也已被弃用。</p>
 </div>
 <div class="sect4">
-<h5 id="boot-features-connecting-to-elasticsearch-rest">Connecting to Elasticsearch using REST clients</h5>
+<h5 id="boot-features-connecting-to-elasticsearch-rest">使用REST客户端连接到Elasticsearch</h5>
 <div class="paragraph">
-<p>Elasticsearch ships <a href="https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/index.html">two different REST clients</a> that you can use to query a cluster: the "Low Level" client and the "High Level" client.</p>
+<p>Elasticsearch附带了两个可用于查询集群的 <a href="https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/index.html">REST客户端</a>：
+“低级”客户端和“高级”客户端。</p>
 </div>
 <div class="paragraph">
-<p>If you have the <code>org.elasticsearch.client:elasticsearch-rest-client</code> dependency on the classpath, Spring Boot will auto-configure and register a <code>RestClient</code> bean that by default targets <code><a href="http://localhost:9200" class="bare">http://localhost:9200</a></code>.
-You can further tune how <code>RestClient</code> is configured, as shown in the following example:</p>
+<p>如果你的类路径具有 <code>org.elasticsearch.client:elasticsearch-rest-client</code> 依赖关系，Spring Boot将自动配置并注册一个 <code>RestClient</code>
+Bean，默认情况下，它连接到 <code><a href="http://localhost:9200" class="bare">http://localhost:9200</a></code>。你可以进一步调整 <code>RestClient</code> 的配置方式，如以下示例所示：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8503,23 +8643,23 @@ spring.elasticsearch.rest.password=secret</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>You can also register an arbitrary number of beans that implement <code>RestClientBuilderCustomizer</code> for more advanced customizations.
-To take full control over the registration, define a <code>RestClient</code> bean.</p>
+<p>你还可以注册任意数量的Bean，它们实现了 <code>RestClientBuilderCustomizer</code> 来进行更高级的自定义。要完全控制注册，请定义 <code>RestClient</code> bean。</p>
 </div>
 <div class="paragraph">
-<p>If you have the <code>org.elasticsearch.client:elasticsearch-rest-high-level-client</code> dependency on the classpath, Spring Boot will auto-configure a <code>RestHighLevelClient</code>, which wraps any existing <code>RestClient</code> bean, reusing its HTTP configuration.</p>
+<p>如果你的类路径具有 <code>org.elasticsearch.client:elasticsearch-rest-high-level-client</code> 依赖关系，
+则Spring Boot将自动配置 <code>RestHighLevelClient</code>，它将包装任何现有的 <code>RestClient</code> bean，并重用其HTTP配置。</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="boot-features-connecting-to-elasticsearch-reactive-rest">Connecting to Elasticsearch using Reactive REST clients</h5>
+<h5 id="boot-features-connecting-to-elasticsearch-reactive-rest">使用响应式REST客户端连接到Elasticsearch</h5>
 <div class="paragraph">
-<p><a href="https://spring.io/projects/spring-data-elasticsearch">Spring Data Elasticsearch</a> ships <code>ReactiveElasticsearchClient</code> for querying Elasticsearch instances in a reactive fashion.
-It is built on top of WebFlux&#8217;s <code>WebClient</code>, so both <code>spring-boot-starter-elasticsearch</code> and <code>spring-boot-starter-webflux</code> dependencies are useful to enable this support.</p>
+<p><a href="https://spring.io/projects/spring-data-elasticsearch">Spring Data Elasticsearch</a> 提供了 <code>ReactiveElasticsearchClient</code>，用于以响应式方式查询Elasticsearch实例。
+它基于WebFlux的 <code>WebClient</code> 构建，因此 <code>spring-boot-starter-elasticsearch</code> 和 <code>spring-boot-starter-webflux</code>
+依赖关系对于启用此支持都是有用的。</p>
 </div>
 <div class="paragraph">
-<p>By default, Spring Boot will auto-configure and register a <code>ReactiveElasticsearchClient</code>
-bean that targets <code><a href="http://localhost:9200" class="bare">http://localhost:9200</a></code>.
-You can further tune how it is configured, as shown in the following example:</p>
+<p>默认情况下，Spring Boot将自动配置并注册一个针对 <code><a href="http://localhost:9200" class="bare">http://localhost:9200</a></code> 的 <code>ReactiveElasticsearchClient</code>
+bean。你可以进一步调整其配置，如以下示例所示：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8531,18 +8671,17 @@ spring.data.elasticsearch.client.reactive.password=secret</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If the configuration properties are not enough and you&#8217;d like to fully control the client
-configuration, you can register a custom <code>ClientConfiguration</code> bean.</p>
+<p>如果配置属性不够，并且你想完全控制客户端配置，则可以注册自定义 <code>ClientConfiguration</code> bean。</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="boot-features-connecting-to-elasticsearch-jest">Connecting to Elasticsearch using Jest</h5>
+<h5 id="boot-features-connecting-to-elasticsearch-jest">使用Jest连接到Elasticsearch</h5>
 <div class="paragraph">
-<p>Now that Spring Boot supports the official <code>RestHighLevelClient</code>, Jest support is deprecated.</p>
+<p>现在，Spring Boot支持官方的 <code>RestHighLevelClient</code>，不再支持Jest。</p>
 </div>
 <div class="paragraph">
-<p>If you have <code>Jest</code> on the classpath, you can inject an auto-configured <code>JestClient</code> that by default targets <code><a href="http://localhost:9200" class="bare">http://localhost:9200</a></code>.
-You can further tune how the client is configured, as shown in the following example:</p>
+<p>如果在类路径上有 <code>Jest</code>，则可以注入默认情况下以 <code><a href="http://localhost:9200" class="bare">http://localhost:9200</a></code> 为目标的自动配置的 <code>JestClient</code>。
+你可以进一步调整客户端的配置，如以下示例所示：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8553,8 +8692,7 @@ spring.elasticsearch.jest.password=secret</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>You can also register an arbitrary number of beans that implement <code>HttpClientConfigBuilderCustomizer</code> for more advanced customizations.
-The following example tunes additional HTTP settings:</p>
+<p>你还可以注册任意数量的实现 <code>HttpClientConfigBuilderCustomizer</code> 的bean，以进行更高级的自定义。以下示例调整其他HTTP设置：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8569,17 +8707,14 @@ The following example tunes additional HTTP settings:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>To take full control over the registration, define a <code>JestClient</code> bean.</p>
+<p>要完全控制注册，请定义 <code>JestClient</code> bean。</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="boot-features-connecting-to-elasticsearch-spring-data">Connecting to Elasticsearch by Using Spring Data</h5>
+<h5 id="boot-features-connecting-to-elasticsearch-spring-data">使用Spring Data连接到Elasticsearch</h5>
 <div class="paragraph">
-<p>To connect to Elasticsearch, a <code>RestHighLevelClient</code> bean must be defined,
-auto-configured by Spring Boot or manually provided by the application (see previous sections).
-With this configuration in place, an
-<code>ElasticsearchRestTemplate</code> can be injected like any other Spring bean,
-as shown in the following example:</p>
+<p>要连接到Elasticsearch，必须定义由Spring Boot自动配置或由应用程序手动提供的 <code>RestHighLevelClient</code> bean（请参阅前面的部分）。
+有了此配置后，可以像其他任何Spring bean一样注入 <code>ElasticsearchRestTemplate</code>，如以下示例所示：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8598,19 +8733,19 @@ public class MyBean {
 </div>
 </div>
 <div class="paragraph">
-<p>In the presence of <code>spring-data-elasticsearch</code> and the required dependencies for using a <code>WebClient</code> (typically <code>spring-boot-starter-webflux</code>), Spring Boot can also auto-configure a <a href="#boot-features-connecting-to-elasticsearch-reactive-rest">ReactiveElasticsearchClient</a> and a <code>ReactiveElasticsearchTemplate</code> as beans.
-They are the reactive equivalent of the other REST clients.</p>
+<p>在存在 <code>spring-data-elasticsearch</code> 和使用 <code>WebClient</code> 所需的依赖关系（通常是 <code>spring-boot-starter-webflux</code> ）的情况下，
+Spring Boot还可以将 <code>ReactiveElasticsearchClient</code> 和 <code>ReactiveElasticsearchTemplate</code> 自动配置为bean。它们与其他REST
+客户端是等效的。</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="boot-features-spring-data-elasticsearch-repositories">Spring Data Elasticsearch Repositories</h5>
+<h5 id="boot-features-spring-data-elasticsearch-repositories">Spring Data Elasticsearch存储库</h5>
 <div class="paragraph">
-<p>Spring Data includes repository support for Elasticsearch.
-As with the JPA repositories discussed earlier, the basic principle is that queries are constructed for you automatically based on method names.</p>
+<p>Spring Data包括对Elasticsearch的存储库支持。与前面讨论的JPA存储库一样，基本原理是根据方法名称自动为你构造查询。</p>
 </div>
 <div class="paragraph">
-<p>In fact, both Spring Data JPA and Spring Data Elasticsearch share the same common infrastructure.
-You could take the JPA example from earlier and, assuming that <code>City</code> is now an Elasticsearch <code>@Document</code> class rather than a JPA <code>@Entity</code>, it works in the same way.</p>
+<p>实际上，Spring Data JPA和Spring Data Elasticsearch共享相同的通用基础设施。你可以从以前的JPA示例开始，并假设 <code>City</code> 现在是Elasticsearch
+<code>@Document</code> 类而不是JPA <code>@Entity</code>，它的工作方式相同。</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -8619,21 +8754,23 @@ You could take the JPA example from earlier and, assuming that <code>City</code>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-For complete details of Spring Data Elasticsearch, refer to the <a href="https://docs.spring.io/spring-data/elasticsearch/docs/current/reference/html/">reference documentation</a>.
+有关Spring Data Elasticsearch的完整详细信息，请参阅 <a href="https://docs.spring.io/spring-data/elasticsearch/docs/current/reference/html/">参考文档</a>。
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Spring Boot supports both classic and reactive Elasticsearch repositories, using the <code>ElasticsearchRestTemplate</code> or <code>ReactiveElasticsearchTemplate</code> beans.
-Most likely those beans are auto-configured by Spring Boot given the required dependencies are present.</p>
+<p>Spring Boot使用 <code>ElasticsearchRestTemplate</code> 或 <code>ReactiveElasticsearchTemplate</code>
+bean支持经典和响应式Elasticsearch存储库。如果提供了所需的依赖项，这些bean很可能是通过Spring Boot自动配置的。</p>
 </div>
 <div class="paragraph">
-<p>If you wish to use your own template for backing the Elasticsearch repositories, you can add your own <code>ElasticsearchRestTemplate</code> or <code>ElasticsearchOperations</code> <code>@Bean</code>, as long as it is named <code>"elasticsearchTemplate"</code>.
-Same applies to <code>ReactiveElasticsearchTemplate</code> and <code>ReactiveElasticsearchOperations</code>, with the bean name <code>"reactiveElasticsearchTemplate"</code>.</p>
+<p>如果你希望使用自己的模板来支持Elasticsearch存储库，则可以添加自己的 <code>ElasticsearchRestTemplate</code> 或
+<code>ElasticsearchOperations</code> <code>@Bean</code>，只要它名为 “<code>elasticsearchTemplate</code>” 即可。同样适用于
+<code>ReactiveElasticsearchTemplate</code> 和 <code>ReactiveElasticsearchOperations</code>，其bean名称为
+“<code>reactiveElasticsearchTemplate</code>”。</p>
 </div>
 <div class="paragraph">
-<p>You can choose to disable the repositories support with the following property:</p>
+<p>你可以选择使用以下属性禁用存储库支持：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8645,16 +8782,15 @@ Same applies to <code>ReactiveElasticsearchTemplate</code> and <code>ReactiveEla
 <div class="sect3">
 <h4 id="boot-features-cassandra">2.11.6. Cassandra</h4>
 <div class="paragraph">
-<p><a href="https://cassandra.apache.org/">Cassandra</a> is an open source, distributed database management system designed to handle large amounts of data across many commodity servers.
-Spring Boot offers auto-configuration for Cassandra and the abstractions on top of it provided by <a href="https://github.com/spring-projects/spring-data-cassandra">Spring Data Cassandra</a>.
-There is a <code>spring-boot-starter-data-cassandra</code> &#8220;Starter&#8221; for collecting the dependencies in a convenient way.</p>
+<p><a href="https://cassandra.apache.org/">Cassandra</a> 是一个开源的分布式数据库管理系统，旨在处理许多商用服务器上的大量数据。
+Spring Boot为Cassandra提供自动配置，并由 <a href="https://github.com/spring-projects/spring-data-cassandra">Spring Data Cassandra</a>在其之上提供抽象。
+有一个 <code>spring-boot-starter-data-cassandra</code> &#8220;Starter&#8221;，用于以方便的方式收集依赖项。</p>
 </div>
 <div class="sect4">
-<h5 id="boot-features-connecting-to-cassandra">Connecting to Cassandra</h5>
+<h5 id="boot-features-connecting-to-cassandra">连接到Cassandra</h5>
 <div class="paragraph">
-<p>You can inject an auto-configured <code>CassandraTemplate</code> or a Cassandra <code>Session</code> instance as you would with any other Spring Bean.
-The <code>spring.data.cassandra.*</code> properties can be used to customize the connection.
-Generally, you provide <code>keyspace-name</code> and <code>contact-points</code> properties, as shown in the following example:</p>
+<p>你可以像使用其他任何Spring Bean一样注入自动配置的 <code>CassandraTemplate</code> 或Cassandra <code>Session</code> 实例。
+<code>spring.data.cassandra.*</code> 属性可用于自定义连接。通常，你会提供 <code>keyspace-name</code> 和 <code>contact-points</code> 属性，如以下示例所示：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8663,10 +8799,10 @@ spring.data.cassandra.contact-points=cassandrahost1,cassandrahost2</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>You can also register an arbitrary number of beans that implement <code>ClusterBuilderCustomizer</code> for more advanced customizations.</p>
+<p>你还可以注册任意数量的Bean，这些Bean实现 <code>ClusterBuilderCustomizer</code> 以获得更高级的自定义。</p>
 </div>
 <div class="paragraph">
-<p>The following code listing shows how to inject a Cassandra bean:</p>
+<p>以下代码清单显示了如何注入Cassandra bean：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8686,14 +8822,13 @@ public class MyBean {
 </div>
 </div>
 <div class="paragraph">
-<p>If you add your own <code>@Bean</code> of type <code>CassandraTemplate</code>, it replaces the default.</p>
+<p>如果添加自己的 <code>CassandraTemplate</code> 类型的 <code>@Bean</code>，它将替换默认值。</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="boot-features-spring-data-cassandra-repositories">Spring Data Cassandra Repositories</h5>
+<h5 id="boot-features-spring-data-cassandra-repositories">Spring Data Cassandra存储库</h5>
 <div class="paragraph">
-<p>Spring Data includes basic repository support for Cassandra.
-Currently, this is more limited than the JPA repositories discussed earlier and needs to annotate finder methods with <code>@Query</code>.</p>
+<p>Spring Data包括对Cassandra的基本存储库支持。当前，这比前面讨论的JPA存储库受到更多限制，并且需要使用 <code>@Query</code> 注解finder方法。</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -8702,7 +8837,7 @@ Currently, this is more limited than the JPA repositories discussed earlier and 
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-For complete details of Spring Data Cassandra, refer to the <a href="https://docs.spring.io/spring-data/cassandra/docs/">reference documentation</a>.
+有关Spring Data Cassandra的完整详细信息，请参阅 <a href="https://docs.spring.io/spring-data/cassandra/docs/">参考文档</a>。
 </td>
 </tr>
 </table>
@@ -8712,16 +8847,16 @@ For complete details of Spring Data Cassandra, refer to the <a href="https://doc
 <div class="sect3">
 <h4 id="boot-features-couchbase">2.11.7. Couchbase</h4>
 <div class="paragraph">
-<p><a href="https://www.couchbase.com/">Couchbase</a> is an open-source, distributed, multi-model NoSQL document-oriented database that is optimized for interactive applications.
-Spring Boot offers auto-configuration for Couchbase and the abstractions on top of it provided by <a href="https://github.com/spring-projects/spring-data-couchbase">Spring Data Couchbase</a>.
-There are <code>spring-boot-starter-data-couchbase</code> and <code>spring-boot-starter-data-couchbase-reactive</code> &#8220;Starters&#8221; for collecting the dependencies in a convenient way.</p>
+<p><a href="https://www.couchbase.com/">Couchbase</a> 是一个开源，分布式，多模型的NoSQL面向文档的数据库，已针对交互式应用程序进行了优化。
+Spring Boot为Couchbase提供自动配置，并由 <a href="https://github.com/spring-projects/spring-data-couchbase">Spring Data Couchbase</a>在其之上提供抽象。
+有 <code>spring-boot-starter-data-couchbase</code>
+和 <code>spring-boot-starter-data-couchbase-reactive</code> &#8220;Starters&#8221;，用于以方便的方式收集依赖项。</p>
 </div>
 <div class="sect4">
-<h5 id="boot-features-connecting-to-couchbase">Connecting to Couchbase</h5>
+<h5 id="boot-features-connecting-to-couchbase">连接到Couchbase</h5>
 <div class="paragraph">
-<p>You can get a <code>Bucket</code> and <code>Cluster</code> by adding the Couchbase SDK and some configuration.
-The <code>spring.couchbase.*</code> properties can be used to customize the connection.
-Generally, you provide the bootstrap hosts, bucket name, and password, as shown in the following example:</p>
+<p>你可以通过添加Couchbase SDK和一些配置来获取 <code>Bucket</code> 和 <code>Cluster</code>。
+<code>spring.couchbase.*</code> 属性可用于自定义连接。通常，你会提供引导主机，存储桶名称和密码，如以下示例所示：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8737,15 +8872,14 @@ spring.couchbase.bucket.password=secret</code></pre>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-You need to provide <em>at least</em> the bootstrap host(s), in which case the bucket name is <code>default</code> and the password is an empty String.
-Alternatively, you can define your own <code>org.springframework.data.couchbase.config.CouchbaseConfigurer</code> <code>@Bean</code> to take control over the whole configuration.
+你 <em>至少</em> 需要提供引导主机，在这种情况下，存储桶名称为 <code>default</code>，密码为空字符串。另外，你可以定义自己的
+<code>org.springframework.data.couchbase.config.CouchbaseConfigurer</code> <code>@Bean</code> 来控制整个配置。
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>It is also possible to customize some of the <code>CouchbaseEnvironment</code> settings.
-For instance, the following configuration changes the timeout to use to open a new <code>Bucket</code> and enables SSL support:</p>
+<p>还可以自定义某些 <code>CouchbaseEnvironment</code> 设置。例如，以下配置更改了用于打开新 <code>Bucket</code> 并启用SSL支持的超时：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8755,20 +8889,21 @@ spring.couchbase.env.ssl.key-store-password=secret</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Check the <code>spring.couchbase.env.*</code> properties for more details.</p>
+<p>检查 <code>spring.couchbase.env.*</code> 属性以获取更多详细信息。</p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="boot-features-spring-data-couchbase-repositories">Spring Data Couchbase Repositories</h5>
 <div class="paragraph">
-<p>Spring Data includes repository support for Couchbase.
-For complete details of Spring Data Couchbase, refer to the <a href="https://docs.spring.io/spring-data/couchbase/docs/current/reference/html/">reference documentation</a>.</p>
+<p>Spring Data包括对Couchbase的存储库支持。有关Spring Data Couchbase的完整详细信息，请参阅
+<a href="https://docs.spring.io/spring-data/couchbase/docs/current/reference/html/">参考文档</a>。</p>
 </div>
 <div class="paragraph">
-<p>You can inject an auto-configured <code>CouchbaseTemplate</code> instance as you would with any other Spring Bean, provided a <em>default</em> <code>CouchbaseConfigurer</code> is available (which happens when you enable Couchbase support, as explained earlier).</p>
+<p>你可以像使用任何其他Spring Bean一样注入自动配置的 <code>CouchbaseTemplate</code> 实例，前提是提供的 <em>默认</em> <code>CouchbaseConfigurer</code> 可用
+（如前所述，当启用Couchbase支持时会发生这种情况）。</p>
 </div>
 <div class="paragraph">
-<p>The following examples shows how to inject a Couchbase bean:</p>
+<p>以下示例显示了如何注入Couchbase bean：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8788,24 +8923,24 @@ public class MyBean {
 </div>
 </div>
 <div class="paragraph">
-<p>There are a few beans that you can define in your own configuration to override those provided by the auto-configuration:</p>
+<p>你可以在自己的配置中定义一些Bean，以覆盖自动配置所提供的那些：</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>A <code>CouchbaseTemplate</code> <code>@Bean</code> with a name of <code>couchbaseTemplate</code>.</p>
+<p>一个名为 <code>couchbaseTemplate</code> 的 <code>CouchbaseTemplate</code> <code>@Bean</code>。</p>
 </li>
 <li>
-<p>An <code>IndexManager</code> <code>@Bean</code> with a name of <code>couchbaseIndexManager</code>.</p>
+<p>一个名为 <code>couchbaseIndexManager</code> 的 <code>IndexManager</code> <code>@Bean</code>。</p>
 </li>
 <li>
-<p>A <code>CustomConversions</code> <code>@Bean</code> with a name of <code>couchbaseCustomConversions</code>.</p>
+<p>一个名为 <code>couchbaseCustomConversions</code> 的 <code>CustomConversions</code> <code>@Bean</code>。</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>To avoid hard-coding those names in your own config, you can reuse <code>BeanNames</code> provided by Spring Data Couchbase.
-For instance, you can customize the converters to use, as follows:</p>
+<p>为了避免在你自己的配置中对这些名称进行硬编码，你可以重用Spring Data Couchbase提供的 <code>BeanNames</code>。
+例如，你可以自定义要使用的转换器，如下所示：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8829,7 +8964,7 @@ public class SomeConfiguration {
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-If you want to fully bypass the auto-configuration for Spring Data Couchbase, provide your own implementation of <code>org.springframework.data.couchbase.config.AbstractCouchbaseDataConfiguration</code>.
+如果要完全绕过Spring Data Couchbase的自动配置，请提供自己的 <code>org.springframework.data.couchbase.config.AbstractCouchbaseDataConfiguration</code> 实现。
 </td>
 </tr>
 </table>
@@ -8839,17 +8974,19 @@ If you want to fully bypass the auto-configuration for Spring Data Couchbase, pr
 <div class="sect3">
 <h4 id="boot-features-ldap">2.11.8. LDAP</h4>
 <div class="paragraph">
-<p><a href="https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol">LDAP</a> (Lightweight Directory Access Protocol) is an open, vendor-neutral, industry standard application protocol for accessing and maintaining distributed directory information services over an IP network.
-Spring Boot offers auto-configuration for any compliant LDAP server as well as support for the embedded in-memory LDAP server from <a href="https://www.ldap.com/unboundid-ldap-sdk-for-java">UnboundID</a>.</p>
+<p><a href="https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol">LDAP</a>（轻型目录访问协议）是一种开放的，与供应商无关的行业标准应用协议，
+用于通过IP网络访问和维护分布式目录信息服务。Spring Boot为任何兼容的LDAP服务器提供自动配置，
+并从 <a href="https://www.ldap.com/unboundid-ldap-sdk-for-java">UnboundID</a>支持嵌入式内存LDAP服务器。</p>
 </div>
 <div class="paragraph">
-<p>LDAP abstractions are provided by <a href="https://github.com/spring-projects/spring-data-ldap">Spring Data LDAP</a>.
-There is a <code>spring-boot-starter-data-ldap</code> &#8220;Starter&#8221; for collecting the dependencies in a convenient way.</p>
+<p>LDAP抽象由 <a href="https://github.com/spring-projects/spring-data-ldap">Spring Data LDAP</a>提供。
+有一个 <code>spring-boot-starter-data-ldap</code> &#8220;Starter&#8221;，以方便的方式收集依赖项。</p>
 </div>
 <div class="sect4">
-<h5 id="boot-features-ldap-connecting">Connecting to an LDAP Server</h5>
+<h5 id="boot-features-ldap-connecting">连接到LDAP服务器</h5>
 <div class="paragraph">
-<p>To connect to an LDAP server, make sure you declare a dependency on the <code>spring-boot-starter-data-ldap</code> &#8220;Starter&#8221; or <code>spring-ldap-core</code> and then declare the URLs of your server in your application.properties, as shown in the following example:</p>
+<p>要连接到LDAP服务器，请确保声明对 <code>spring-boot-starter-data-ldap</code> &#8220;Starter&#8221;
+或 <code>spring-ldap-core</code> 的依赖关系，然后在 <code>application.properties</code> 中声明服务器的URL，如下面的例子所示：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8859,23 +8996,22 @@ spring.ldap.password=secret</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If you need to customize connection settings, you can use the <code>spring.ldap.base</code> and <code>spring.ldap.base-environment</code> properties.</p>
+<p>如果需要自定义连接设置，则可以使用 <code>spring.ldap.base</code> 和 <code>spring.ldap.base-environment</code> 属性。</p>
 </div>
 <div class="paragraph">
-<p>An <code>LdapContextSource</code> is auto-configured based on these settings.
-If a <code>DirContextAuthenticationStrategy</code> bean is available, it is associated to the auto-configured <code>LdapContextSource</code>.
-If you need to customize it, for instance to use a <code>PooledContextSource</code>, you can still inject the auto-configured <code>LdapContextSource</code>.
-Make sure to flag your customized <code>ContextSource</code> as <code>@Primary</code> so that the auto-configured <code>LdapTemplate</code> uses it.</p>
+<p>将基于这些设置自动配置 <code>LdapContextSource</code>。如果 <code>DirContextAuthenticationStrategy</code> Bean可用，
+则将其与自动配置的 <code>LdapContextSource</code> 关联。如果你需要对其进行自定义（例如：使用 <code>PooledContextSource</code>），
+则仍然可以注入自动配置的 <code>LdapContextSource</code>。确保将自定义的 <code>ContextSource</code> 标记为 <code>@Primary</code>，以便自动配置的 <code>LdapTemplate</code> 使用它。</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="boot-features-ldap-spring-data-repositories">Spring Data LDAP Repositories</h5>
+<h5 id="boot-features-ldap-spring-data-repositories">Spring Data LDAP存储库</h5>
 <div class="paragraph">
-<p>Spring Data includes repository support for LDAP.
-For complete details of Spring Data LDAP, refer to the <a href="https://docs.spring.io/spring-data/ldap/docs/1.0.x/reference/html/">reference documentation</a>.</p>
+<p>Spring Data包括对LDAP的存储库支持。有关Spring Data LDAP的完整详细信息，请参阅
+<a href="https://docs.spring.io/spring-data/ldap/docs/1.0.x/reference/html/">参考文档</a>。</p>
 </div>
 <div class="paragraph">
-<p>You can also inject an auto-configured <code>LdapTemplate</code> instance as you would with any other Spring Bean, as shown in the following example:</p>
+<p>你还可以像使用其他任何Spring Bean一样注入自动配置的 <code>LdapTemplate</code> 实例，如以下示例所示：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8896,11 +9032,10 @@ public class MyBean {
 </div>
 </div>
 <div class="sect4">
-<h5 id="boot-features-ldap-embedded">Embedded In-memory LDAP Server</h5>
+<h5 id="boot-features-ldap-embedded">嵌入式内存LDAP服务器</h5>
 <div class="paragraph">
-<p>For testing purposes, Spring Boot supports auto-configuration of an in-memory LDAP server from <a href="https://www.ldap.com/unboundid-ldap-sdk-for-java">UnboundID</a>.
-To configure the server, add a dependency to <code>com.unboundid:unboundid-ldapsdk</code> and declare a
-<code>spring.ldap.embedded.base-dn</code> property, as follows:</p>
+<p>出于测试目的，Spring Boot支持从 <a href="https://www.ldap.com/unboundid-ldap-sdk-for-java">UnboundID</a>自动配置内存中的LDAP服务器。
+要配置服务器，请添加 <code>com.unboundid:unboundid-ldapsdk</code> 依赖项，并声明 <code>spring.ldap.embedded.base-dn</code> 属性，如下所示：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8915,10 +9050,10 @@ To configure the server, add a dependency to <code>com.unboundid:unboundid-ldaps
 </td>
 <td class="content">
 <div class="paragraph">
-<p>It is possible to define multiple base-dn values, however, since distinguished names usually contain commas, they must be defined using the correct notation.</p>
+<p>可以定义多个base-dn值，但是，由于可分辨的名称通常包含逗号，因此必须使用正确的符号来定义它们。</p>
 </div>
 <div class="paragraph">
-<p>In yaml files, you can use the yaml list notation:</p>
+<p>在yaml文件中，你可以使用yaml列表符号：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8928,7 +9063,7 @@ To configure the server, add a dependency to <code>com.unboundid:unboundid-ldaps
 </div>
 </div>
 <div class="paragraph">
-<p>In properties files, you must include the index as part of the property name:</p>
+<p>在属性文件中，必须将索引包括在属性名称中：</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -8941,20 +9076,14 @@ spring.ldap.embedded.base-dn[1]=dc=pivotal,dc=io</code></pre>
 </table>
 </div>
 <div class="paragraph">
-<p>By default, the server starts on a random port and triggers the regular LDAP support.
-There is no need to specify a <code>spring.ldap.urls</code> property.</p>
+<p>默认情况下，服务器在随机端口上启动并触发常规LDAP支持，无需指定 <code>spring.ldap.urls</code> 属性。</p>
 </div>
 <div class="paragraph">
-<p>If there is a <code>schema.ldif</code> file on your classpath, it is used to initialize the server.
-If you want to load the initialization script from a different resource, you can also use the
-<code>spring.ldap.embedded.ldif</code> property.</p>
+<p>如果你的类路径上有一个 <code>schema.ldif</code> 文件，则该文件用于初始化服务器。如果要从其他资源加载初始化脚本，则也可以使用 <code>spring.ldap.embedded.ldif</code> 属性。</p>
 </div>
 <div class="paragraph">
-<p>By default, a standard schema is used to validate <code>LDIF</code> files.
-You can turn off validation altogether by setting the <code>spring.ldap.embedded.validation.enabled</code>
-property.
-If you have custom attributes, you can use <code>spring.ldap.embedded.validation.schema</code> to
-define your custom attribute types or object classes.</p>
+<p>默认情况下，使用标准架构来验证 <code>LDIF</code> 文件。你可以通过设置 <code>spring.ldap.embedded.validation.enabled</code> 属性来完全关闭验证。
+如果具有自定义属性，那么可以使用 <code>spring.ldap.embedded.validation.schema</code> 定义自定义属性类型或对象类。</p>
 </div>
 </div>
 </div>
@@ -9805,7 +9934,7 @@ public class MyBean {
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-<a href="https://docs.spring.io/spring-amqp/docs/{spring-amqp-version}/api/org/springframework/amqp/rabbit/core/RabbitMessagingTemplate.html"><code>RabbitMessagingTemplate</code></a>可以类似的方式注入。
+<a href="https://docs.spring.io/spring-amqp/docs/2.2.2.RELEASE/api/org/springframework/amqp/rabbit/core/RabbitMessagingTemplate.html"><code>RabbitMessagingTemplate</code></a>可以类似的方式注入。
 如果定义了 <code>MessageConverter</code> bean，它将自动关联到自动配置的 <code>AmqpTemplate</code>。
 </td>
 </tr>
@@ -9858,7 +9987,7 @@ public class MyBean {
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-有关更多详细信息，请参见 <a href="https://docs.spring.io/spring-amqp/docs/{spring-amqp-version}/api/org/springframework/amqp/rabbit/annotation/EnableRabbit.html"><code>@EnableRabbit</code> 的Javadoc</a>。
+有关更多详细信息，请参见 <a href="https://docs.spring.io/spring-amqp/docs/2.2.2.RELEASE/api/org/springframework/amqp/rabbit/annotation/EnableRabbit.html"><code>@EnableRabbit</code> 的Javadoc</a>。
 </td>
 </tr>
 </table>
@@ -10912,7 +11041,7 @@ Spring Boot将最合适的 <code>MBeanServer</code> 公开为ID为 <code>mbeanSe
 <p>Spring Boot提供了Web服务自动配置，因此你所要做的就是定义 <code>Endpoints</code>。</p>
 </div>
 <div class="paragraph">
-<p>使用 <code>spring-boot-starter-webservices</code> 模块可以轻松访问 <a href="https://docs.spring.io/spring-ws/docs/{spring-webservices-version}/reference/">Spring Web Services功能</a>。</p>
+<p>使用 <code>spring-boot-starter-webservices</code> 模块可以轻松访问 <a href="https://docs.spring.io/spring-ws/docs/5.2.1.RELEASE/reference/">Spring Web Services功能</a>。</p>
 </div>
 <div class="paragraph">
 <p>可以分别为你的WSDL和XSD自动创建 <code>SimpleWsdl11Definition</code> 和 <code>SimpleXsdSchema</code> Bean。为此请配置其位置，如以下示例所示：</p>
@@ -10925,7 +11054,7 @@ Spring Boot将最合适的 <code>MBeanServer</code> 公开为ID为 <code>mbeanSe
 <div class="sect3">
 <h4 id="boot-features-webservices-template">2.27.1. 使用 <code>WebServiceTemplate</code> 调用Web服务</h4>
 <div class="paragraph">
-<p>如果需要从应用程序中调用远程Web服务，则可以使用 <a href="https://docs.spring.io/spring-ws/docs/{spring-webservices-version}/reference/#client-web-service-template"><code>WebServiceTemplate</code></a>类。
+<p>如果需要从应用程序中调用远程Web服务，则可以使用 <a href="https://docs.spring.io/spring-ws/docs/5.2.1.RELEASE/reference/#client-web-service-template"><code>WebServiceTemplate</code></a>类。
 由于 <code>WebServiceTemplate</code> 实例在使用前通常需要自定义，因此Spring Boot不提供任何单个自动配置的 <code>WebServiceTemplate</code> bean。
 但是，它会自动配置 <code>WebServiceTemplateBuilder</code>，可在需要时将其用于创建 <code>WebServiceTemplate</code> 实例。</p>
 </div>
@@ -11510,6 +11639,2965 @@ public class AcmeProperties {
 <div class="paragraph">
 <p>如果你对Spring Boot的核心功能感到满意，则可以继续阅读有关
 <a href="https://docs.spring.io/spring-boot/docs/2.2.2.RELEASE/reference/htmlsingle/#production-ready-endpoints">生产就绪功能</a>的信息。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="production-ready">3. Spring Boot Actuator: 生产就绪功能</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Boot包含许多其他功能，可帮助你在将应用程序投入生产时监控和管理你的应用程序。
+你可以选择使用HTTP端点或JMX管理和监视你的应用程序。审计，健康状况和指标收集也可以自动应用于你的应用程序。</p>
+</div>
+<div class="sect2">
+<h3 id="production-ready-enabling">3.1. 启用生产就绪功能</h3>
+<div class="paragraph">
+<p><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator"><code>spring-boot-actuator</code></a>模块提供了Spring Boot生产就绪的所有功能。
+启用这些功能的最简单方法是添加 <code>spring-boot-starter-actuator</code> &#8216;Starter&#8217; 依赖项。</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Actuator的定义</div>
+<div class="paragraph">
+<p>执行器是制造术语，是指用于移动或控制某些物体的机械设备。执行器可以通过很小的变化产生大量的运动。</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>要将执行器添加到基于Maven的项目中，请添加以下 &#8216;Starter&#8217; 依赖项：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>对于Gradle，请使用以下声明：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">dependencies {
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="production-ready-endpoints">3.2. 端点</h3>
+<div class="paragraph">
+<p>执行器端点使你可以监视应用程序并与之交互。Spring Boot包含许多内置端点，你可以添加自己的端点。例如：<code>health</code> 端点提供基本的应用程序运行状况信息。</p>
+</div>
+<div class="paragraph">
+<p>每个端点都可以启用或禁用。这控制了是否创建端点以及它的bean是否在应用程序上下文中存在。
+为了可以远程访问，端点还必须通过JMX或HTTP公开。大多数应用程序选择HTTP，其中端点的ID和 <code>/actuator</code> 前缀被映射到一个URL。
+例如，默认情况下，<code>health</code> 端点映射到 <code>/actuator/health</code>。</p>
+</div>
+<div class="paragraph">
+<p>可以使用以下与技术无关的端点：</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 28%;">
+<col style="width: 71%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">ID</th>
+<th class="tableblock halign-left valign-top">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auditevents</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">公开当前应用程序的审计事件信息。需要一个 <code>AuditEventRepository</code> bean。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>beans</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">显示应用程序中所有Spring Beans的完整列表。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>caches</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">公开可用的缓存。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>conditions</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">显示在配置和自动配置类上评估的条件以及它们匹配或不匹配的原因。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>configprops</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">显示所有 <code>@ConfigurationProperties</code> 的整理列表。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>env</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">公开Spring的 <code>ConfigurableEnvironment</code> 中的属性。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>flyway</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">显示已应用的所有Flyway数据库迁移。需要一个或多个 <code>Flyway</code> beans。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>health</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">显示应用程序运行状况信息。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>httptrace</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">显示HTTP跟踪信息（默认情况下，公开最近100个HTTP请求-响应交换）。需要一个 <code>HttpTraceRepository</code> bean。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>info</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">显示任意应用程序信息。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>integrationgraph</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">显示Spring Integration图。依赖于 <code>spring-integration-core</code>。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>loggers</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">显示和修改应用程序中日志记录器的配置。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>liquibase</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">显示已应用的所有Liquibase数据库迁移。需要一个或多个 <code>Liquibase</code> bean。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>metrics</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">显示当前应用程序的度量指标信息。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mappings</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">显示整理的所有 <code>@RequestMapping</code> 路径列表。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>scheduledtasks</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">显示应用程序中的所有计划任务。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sessions</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">允许从Spring Session支持的会话存储中检索和删除用户会话。需要使用Spring Session的基于Servlet的Web应用程序。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>shutdown</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">使应用程序正常关闭。默认禁用。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>threaddump</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">执行线程转储。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>如果你的应用程序是Web应用程序（Spring MVC，Spring WebFlux或Jersey），则可以使用以下附加端点：</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 28%;">
+<col style="width: 71%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">ID</th>
+<th class="tableblock halign-left valign-top">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>heapdump</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">返回一个 <code>hprof</code> 堆转储文件。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>jolokia</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">通过HTTP公开JMX bean（当Jolokia在类路径上时，不适用于WebFlux）。需要依赖于 <code>jolokia-core</code>。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>logfile</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">返回日志文件的内容（如果已设置 <code>logging.file.name</code> 或 <code>logging.file.path</code> 属性）。支持使用HTTP <code>Range</code> 标头来检索部分日志文件的内容。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>prometheus</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">以Prometheus服务器可以抓取的格式公开指标。需要依赖于 <code>micrometer-registry-prometheus</code>。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>要了解有关执行器端点及其请求和响应格式的更多信息，请参阅单独的API文档（ <a href="https://docs.spring.io/spring-boot/docs/2.2.2.RELEASE/actuator-api//html/">HTML</a> 或
+<a href="https://docs.spring.io/spring-boot/docs/2.2.2.RELEASE/actuator-api//pdf/spring-boot-actuator-web-api.pdf">PDF</a>）。</p>
+</div>
+<div class="sect3">
+<h4 id="production-ready-endpoints-enabling-endpoints">3.2.1. 启用端点</h4>
+<div class="paragraph">
+<p>默认情况下，除 <code>shutdown</code> 外的所有端点均处于启用状态。要配置端点的启用，请使用其 <code>management.endpoint.&lt;id&gt;.enabled</code> 属性。以下示例启用
+<code>shutdown</code> 端点：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.endpoint.shutdown.enabled=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>如果你希望端点支持选择加入而不是选择退出，请将 <code>management.endpoints.enabled-by-default</code> 属性设置为 <code>false</code> 并使用单个端点的 <code>enabled</code> 属性重新启用。
+以下示例仅启用 <code>info</code> 端点并禁用所有其他端点：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.endpoints.enabled-by-default=false
+management.endpoint.info.enabled=true</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+禁用的端点将从应用程序上下文中完全删除。如果只想更改公开端点的技术，请改用<a href="#production-ready-endpoints-exposing-endpoints"><code>include</code> 和 <code>exclude</code> 属性</a>。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="production-ready-endpoints-exposing-endpoints">3.2.2. 暴露端点</h4>
+<div class="paragraph">
+<p>由于端点可能包含敏感信息，因此应谨慎考虑何时公开它们。下表显示了默认暴露的内置端点：</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">ID</th>
+<th class="tableblock halign-left valign-top">JMX</th>
+<th class="tableblock halign-left valign-top">Web</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auditevents</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>beans</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>caches</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>conditions</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>configprops</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>env</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>flyway</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>health</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>heapdump</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N/A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>httptrace</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>info</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>integrationgraph</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>jolokia</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N/A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>logfile</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N/A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>loggers</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>liquibase</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>metrics</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mappings</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>prometheus</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N/A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>scheduledtasks</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sessions</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>shutdown</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>threaddump</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>要更改暴露哪些端点，请使用以下特定于技术的 <code>include</code> 和 <code>exclude</code> 属性：</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 75%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">属性</th>
+<th class="tableblock halign-left valign-top">默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>management.endpoints.jmx.exposure.exclude</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>management.endpoints.jmx.exposure.include</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>*</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>management.endpoints.web.exposure.exclude</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>management.endpoints.web.exposure.include</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>info, health</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><code>include</code> 属性列出了公开的端点的ID。
+<code>exclude</code> 属性列出了不应公开的端点的ID。
+<code>exclude</code> 属性优先于 <code>include</code> 属性。
+<code>include</code> 和 <code>exclude</code> 属性都可以使用端点ID列表进行配置。</p>
+</div>
+<div class="paragraph">
+<p>例如，要停止通过JMX公开所有端点，而仅公开 <code>health</code> 和 <code>info</code> 端点，请使用以下属性：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.endpoints.jmx.exposure.include=health,info</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>*</code> 可用于选择所有端点。
+例如，要通过HTTP公开除 <code>env</code> 和 <code>bean</code> 端点之外的所有端点，请使用以下属性：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.endpoints.web.exposure.include=*
+management.endpoints.web.exposure.exclude=env,beans</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><code>*</code> 在YAML中具有特殊含义，因此，如果要包括（或排除）所有端点，请确保添加引号，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml" data-lang="yaml">management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+如果你的应用程序是公开的，我们强烈建议你<a href="#production-ready-endpoints-security">保护端点</a>。
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+如果你想在端点暴露时实现自己的策略，则可以注册 <code>EndpointFilter</code> bean。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="production-ready-endpoints-security">3.2.3. 保护HTTP端点</h4>
+<div class="paragraph">
+<p>你应该像对待其他任何敏感URL一样，小心保护HTTP端点的安全。
+如果存在Spring Security，则默认情况下将使用Spring Security的内容协商策略保护端点的安全。
+例如，如果你希望为HTTP端点配置自定义安全性，只允许具有特定角色的用户访问它们，
+Spring Boot提供了一些方便的 <code>RequestMatcher</code> 对象，可以将它们与Spring Security结合使用。</p>
+</div>
+<div class="paragraph">
+<p>典型的Spring Security配置可能类似于以下示例：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Configuration(proxyBeanMethods = false)
+public class ActuatorSecurity extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.requestMatcher(EndpointRequest.toAnyEndpoint()).authorizeRequests((requests) -&gt;
+                requests.anyRequest().hasRole("ENDPOINT_ADMIN"));
+        http.httpBasic();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>前面的示例使用 <code>EndpointRequest.toAnyEndpoint()</code> 将请求匹配到任何端点，然后确保所有端点具有 <code>ENDPOINT_ADMIN</code> 角色才可访问。
+<code>EndpointRequest</code> 还提供了其他几种匹配器方法。有关详细信息，请参见API文档（
+<a href="https://docs.spring.io/spring-boot/docs/2.2.2.RELEASE/actuator-api//html">HTML</a> 或
+<a href="https://docs.spring.io/spring-boot/docs/2.2.2.RELEASE/actuator-api//pdf/spring-boot-actuator-web-api.pdf">PDF</a>）。</p>
+</div>
+<div class="paragraph">
+<p>如果将应用程序部署在防火墙后面，则可能希望无需进行身份验证即可访问所有执行器端点。
+你可以通过更改 <code>management.endpoints.web.exposure.include</code> 属性来做到这一点，如下所示：</p>
+</div>
+<div class="listingblock">
+<div class="title">application.properties</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.endpoints.web.exposure.include=*</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>此外，如果存在Spring Security，则需要添加自定义安全配置，该配置允许未经身份验证的端点访问，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Configuration(proxyBeanMethods = false)
+public class ActuatorSecurity extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.requestMatcher(EndpointRequest.toAnyEndpoint()).authorizeRequests((requests) -&gt;
+            requests.anyRequest().permitAll());
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="production-ready-endpoints-caching">3.2.4. 配置端点</h4>
+<div class="paragraph">
+<p>端点自动缓存不带任何参数的读取操作的响应。要配置端点缓存响应的时间，请使用其 <code>cache.time-to-live</code> 属性。
+以下示例将 <code>beans</code> 端点的缓存的生存时间设置为10秒：</p>
+</div>
+<div class="listingblock">
+<div class="title">application.properties</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.endpoint.beans.cache.time-to-live=10s</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+前缀 <code>management.endpoint.&lt;name&gt;</code> 用于唯一标识正在配置的端点。
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+发出经过身份验证的HTTP请求时，将 <code>Principal</code> 视为端点的输入，因此不会缓存响应。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="production-ready-endpoints-hypermedia">3.2.5. 用于执行器Web端点的超媒体</h4>
+<div class="paragraph">
+<p>添加了“发现页面”，其中包含指向所有端点的链接。默认情况下，在 <code>/actuator</code> 上提供“发现页面”。</p>
+</div>
+<div class="paragraph">
+<p>配置自定义管理上下文路径后，“发现页面”会自动从 <code>/actuator</code> 移至管理上下文的根目录。例如，如果管理上下文路径为 <code>/management</code>，则可以从
+<code>/management</code> 访问发现页面。当管理上下文路径设置为 <code>/</code> 时，将禁用发现页面，以防止与其他映射发生冲突的可能性。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="production-ready-endpoints-cors">3.2.6. CORS支持</h4>
+<div class="paragraph">
+<p><a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing">跨域资源共享</a> (CORS)
+是 <a href="https://www.w3.org/TR/cors/">W3C 规范</a>，使你可以灵活地指定授权哪种类型的跨域请求。
+如果你使用Spring MVC或Spring WebFlux，则可以将Actuator的Web端点配置为支持这种情况。</p>
+</div>
+<div class="paragraph">
+<p>默认情况下，CORS支持是禁用的，并且仅在设置了 <code>management.endpoints.web.cors.allowed-origins</code> 属性后才启用。
+以下配置允许来自 <code>example.com</code> 域的 <code>GET</code> 和 <code>POST</code> 调用：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.endpoints.web.cors.allowed-origins=https://example.com
+management.endpoints.web.cors.allowed-methods=GET,POST</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+有关选项的完整列表，请参见 <a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator-autoconfigure/src/main/java/org/springframework/boot/actuate/autoconfigure/endpoint/web/CorsEndpointProperties.java">CorsEndpointProperties</a>。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="production-ready-endpoints-custom">3.2.7. 实现自定义端点</h4>
+<div class="paragraph">
+<p>如果添加带 <code>@Endpoint</code> 注解的 <code>@Bean</code>，则带 <code>@ReadOperation</code>，<code>@WriteOperation</code> 或 <code>@DeleteOperation</code>
+注解的任何方法都将通过JMX以及Web应用程序通过HTTP自动公开。
+可以使用Jersey，Spring MVC或Spring WebFlux通过HTTP公开端点。如果同时提供Jersey和Spring MVC，将使用Spring MVC。</p>
+</div>
+<div class="paragraph">
+<p>你也可以使用 <code>@JmxEndpoint</code> 或 <code>@WebEndpoint</code> 编写特定于技术的端点。这些端点仅限于各自的技术。例如，<code>@WebEndpoint</code> 仅通过HTTP公开，而不通过JMX公开。</p>
+</div>
+<div class="paragraph">
+<p>你可以使用 <code>@EndpointWebExtension</code> 和 <code>@EndpointJmxExtension</code> 编写特定于技术的扩展。这些注解使你可以提供特定于技术的操作来扩展现有端点。</p>
+</div>
+<div class="paragraph">
+<p>最后，如果你需要访问特定于Web框架的功能，则可以实现Servlet或Spring <code>@Controller</code> 和 <code>@RestController</code> 端点，但代价是它们在JMX上不可用，或者在使用其他web框架时不可用。</p>
+</div>
+<div class="sect4">
+<h5 id="production-ready-endpoints-custom-input">接收输入</h5>
+<div class="paragraph">
+<p>端点上的操作通过其参数接收输入。通过网络公开时，这些参数的值取自URL的查询参数和JSON请求正文。
+通过JMX公开时，参数将映射到MBean操作的参数。默认情况下，参数是必需的。
+可以通过使用 <code>@org.springframework.lang.Nullable</code> 对其进行注释来使它们成为可选的。</p>
+</div>
+<div class="paragraph">
+<p>JSON请求正文中的每个根属性都可以映射到端点的参数。考虑以下JSON请求正文：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json" data-lang="json">{
+    "name": "test",
+    "counter": 42
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>这可用于调用采用 <code>String name</code> 和 <code>int counter</code> 参数的写操作。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+由于端点与技术无关，因此只能在方法签名中指定简单类型。特别是不支持使用定义 <code>name</code> 和 <code>counter</code> 属性的自定义类型声明单个参数。
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+为了使输入映射到操作方法的参数，实现端点的Java代码应使用 <code>-parameters</code> 进行编译，
+而实现端点的Kotlin代码应使用 <code>-java-parameters</code> 进行编译。如果你使用的是Spring Boot的Gradle插件，
+或者使用的是Maven和 <code>spring-boot-starter-parent</code>，则此操作会自动发生。
+</td>
+</tr>
+</table>
+</div>
+<div class="sect5">
+<h6 id="production-ready-endpoints-custom-input-conversion">输入类型转换</h6>
+<div class="paragraph">
+<p>如有必要，传递给端点操作方法的参数会自动转换为所需的类型。
+在调用操作方法之前，使用 <code>ApplicationConversionService</code> 实例以及任何具有 <code>@EndpointConverter</code> 限定的
+<code>Converter</code> 或 <code>GenericConverter</code> Bean，将通过JMX或HTTP请求接收的输入转换为所需的类型。</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-endpoints-custom-web">自定义Web端点</h5>
+<div class="paragraph">
+<p><code>@Endpoint</code>，<code>@WebEndpoint</code> 或 <code>@EndpointWebExtension</code> 上的操作会使用Jersey，Spring MVC或Spring
+WebFlux通过HTTP自动公开。如果同时提供Jersey和Spring MVC，将使用Spring MVC。</p>
+</div>
+<div class="sect5">
+<h6 id="production-ready-endpoints-custom-web-predicate">Web端点请求谓词</h6>
+<div class="paragraph">
+<p>对于在暴露于Web的端点上的每个操作，都会自动生成一个请求谓词。</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="production-ready-endpoints-custom-web-predicate-path">路径</h6>
+<div class="paragraph">
+<p>谓词的路径由端点的ID和暴露于Web的端点的基本路径确定。默认的基本路径是 <code>/actuator</code>。
+例如：具有 <code>sessions</code> ID的端点将使用 <code>/actuator/sessions</code> 作为其谓词的路径。</p>
+</div>
+<div class="paragraph">
+<p>通过使用 <code>@Selector</code> 注解操作方法的一个或多个参数，可以进一步自定义路径。这样的参数作为路径变量添加到路径谓词。
+调用端点操作时，变量的值将传递到操作方法中。如果要捕获所有剩余的路径元素，可以将
+<code>@Selector(Match=ALL_REMAINING)</code> 添加到最后一个参数，并将其设置为与 <code>String[]</code> 转换兼容的类型。</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="production-ready-endpoints-custom-web-predicate-http-method">HTTP方法</h6>
+<div class="paragraph">
+<p>谓词的HTTP方法由操作类型决定，如下表所示：</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 100%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP方法</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>@ReadOperation</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>GET</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>@WriteOperation</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>POST</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>@DeleteOperation</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DELETE</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect5">
+<h6 id="production-ready-endpoints-custom-web-predicate-consumes">消费</h6>
+<div class="paragraph">
+<p>对于使用请求体的 <code>@WriteOperation</code> (HTTP <code>POST</code>)，谓词的消费类型为
+<code>application/vnd.spring-boot.actuator.v2+json, application/json</code>。对于所有其他操作，消费类型为空。</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="production-ready-endpoints-custom-web-predicate-produces">生产</h6>
+<div class="paragraph">
+<p>谓词的生产类型可以通过 <code>@DeleteOperation</code>，<code>@ReadOperation</code> 和 <code>@WriteOperation</code> 注解的 <code>produces</code> 属性来确定。
+该属性是可选的。如果未使用，则会自动确定生产类型。</p>
+</div>
+<div class="paragraph">
+<p>如果操作方法返回 <code>void</code> 或 <code>Void</code>，则生产类型为空。如果操作方法返回 <code>org.springframework.core.io.Resource</code>，
+则生产类型为 <code>application/octet-stream</code>。对于所有其他操作，生产类型为
+<code>application/vnd.spring-boot.actuator.v2+json, application/json</code>。</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="production-ready-endpoints-custom-web-response-status">Web端点响应状态</h6>
+<div class="paragraph">
+<p>端点操作的默认响应状态取决于操作类型（读，写或删除）以及该操作返回的内容（如果有）。</p>
+</div>
+<div class="paragraph">
+<p><code>@ReadOperation</code> 返回一个值，响应状态将为 200 (OK)。如果未返回值，则响应状态将为 404 (Not Found)。</p>
+</div>
+<div class="paragraph">
+<p>如果 <code>@WriteOperation</code> 或 <code>@DeleteOperation</code> 返回一个值，则响应状态将为 200 (OK)。如果未返回值，则响应状态将为 204 (No Content)。</p>
+</div>
+<div class="paragraph">
+<p>如果在没有必需参数或无法将参数转换为必需类型的参数的情况下调用操作，则不会调用该操作方法，并且响应状态将为 400 (Bad Request)。</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="production-ready-endpoints-custom-web-range-requests">Web端点范围请求</h6>
+<div class="paragraph">
+<p>HTTP Range请求可用于请求HTTP资源的一部分。使用Spring MVC或Spring Web Flux时，返回 <code>org.springframework.core.io.Resource</code>
+的操作会自动支持范围请求。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+使用Jersey时，范围请求不受支持。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect5">
+<h6 id="production-ready-endpoints-custom-web-security">Web端点安全</h6>
+<div class="paragraph">
+<p>Web端点或Web特定端点扩展上的操作可以接收当前的 <code>java.security.Principal</code> 或
+<code>org.springframework.boot.actuate.endpoint.SecurityContext</code> 作为方法参数。
+前者通常与 <code>@Nullable</code> 结合使用，以为经过身份验证和未经身份验证的用户提供不同的行为。
+后者通常用于使用其 <code>isUserInRole(String)</code> 方法执行授权检查。</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-endpoints-custom-servlet">Servlet端点</h5>
+<div class="paragraph">
+<p>通过实现带有 <code>@ServletEndpoint</code> 注解的类（也可以实现 <code>Supplier&lt;EndpointServlet&gt;</code>），可以将Servlet公开为端点。
+Servlet端点提供了与Servlet容器更深层次的集成，但以牺牲可移植性为代价。它们用于将现有Servlet公开为端点。
+对于新的端点，尽可能使用 <code>@Endpoint</code> 和 <code>@WebEndpoint</code> 注解。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-endpoints-custom-controller">控制器端点</h5>
+<div class="paragraph">
+<p><code>@ControllerEndpoint</code> 和 <code>@RestControllerEndpoint</code> 可用于实现仅由Spring MVC或Spring WebFlux公开的端点。
+使用Spring MVC和Spring WebFlux的标准注解（例如： <code>@RequestMapping</code> 和 <code>@GetMapping</code> ）映射方法，并将端点的ID用作路径的前缀。
+控制器端点提供了与Spring Web框架更深层次的集成，但以牺牲可移植性为代价。尽可能使用 <code>@Endpoint</code> 和 <code>@WebEndpoint</code> 注解。</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="production-ready-health">3.2.8. 健康信息</h4>
+<div class="paragraph">
+<p>你可以使用运行状况信息来检查正在运行的应用程序的状态。监视软件通常使用它在生产系统出现故障时向某人发出警报。
+<code>health</code> 端点公开的信息取决于 <code>management.endpoint.health.show-details</code> 和
+<code>management.endpoint.health.show-components</code> 属性，可以使用以下值之一配置属性：</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 100%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">名称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">描述</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>never</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">详细信息永远不会显示。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>when-authorized</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">详细信息仅显示给授权用户。可以使用 <code>management.endpoint.health.roles</code> 配置授权角色。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>always</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">向所有用户显示详细信息。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>默认值为 <code>never</code>。当用户担任端点的一个或多个角色时，该用户被视为已授权。如果端点没有配置的角色（默认值），
+则所有通过身份验证的用户均被视为已授权。可以使用 <code>management.endpoint.health.roles</code> 属性配置角色。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+如果你已保护应用程序安全并希望使用 <code>always</code>，则安全配置必须允许经过身份验证的用户和未经身份验证的用户都可以访问运行状况端点。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>运行状况信息是从 <a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/health/HealthContributorRegistry.java"><code>HealthContributorRegistry</code></a>
+的内容（默认情况下，在 <code>ApplicationContext</code> 中定义的所有 <code>HealthContributor</code> 实例）中收集的。
+Spring Boot包括许多自动配置的 <code>HealthContributor</code>，你也可以编写自己的 <code>HealthContributor</code>。</p>
+</div>
+<div class="paragraph">
+<p><code>HealthContributor</code> 可以是 <code>HealthIndicator</code> 或 <code>CompositeHealthContributor</code>。<code>HealthIndicator</code> 提供实际的健康信息，包括 <code>Status</code>。
+<code>CompositeHealthContributor</code> 提供了其他 <code>HealthContributor</code> 的组合。所有贡献者合起来形成一个树形结构来代表整个系统的健康状况。</p>
+</div>
+<div class="paragraph">
+<p>默认情况下，最终的系统运行状况是由 <code>StatusAggregator</code> 派生的，<code>StatusAggregator</code> 根据状态的有序列表对每个 <code>HealthIndicator</code> 的状态进行排序。
+排序列表中的第一个状态用作整体健康状态。如果没有 <code>HealthIndicator</code> 返回 <code>StatusAggregator</code> 已知的状态，则使用 <code>UNKNOWN</code> 状态。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<code>HealthContributorRegistry</code> 可用于在运行时注册和注销健康指标。
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="自动配置的healthindicators">自动配置的HealthIndicators</h5>
+<div class="paragraph">
+<p>适当时，Spring Boot会自动配置以下 <code>HealthIndicators</code>：</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">名称</th>
+<th class="tableblock halign-left valign-top">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/cassandra/CassandraHealthIndicator.java"><code>CassandraHealthIndicator</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">检查Cassandra数据库是否已启动。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/couchbase/CouchbaseHealthIndicator.java"><code>CouchbaseHealthIndicator</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">检查Couchbase集群是否已启动。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/system/DiskSpaceHealthIndicator.java"><code>DiskSpaceHealthIndicator</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">检查磁盘空间不足。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/elasticsearch/ElasticSearchRestHealthContributorAutoConfiguration.java"><code>ElasticSearchRestHealthContributorAutoConfiguration</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">检查Elasticsearch集群是否已启动。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/hazelcast/HazelcastHealthIndicator.java"><code>HazelcastHealthIndicator</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">检查Hazelcast服务器是否已启动。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/influx/InfluxDbHealthIndicator.java"><code>InfluxDbHealthIndicator</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">检查InfluxDB服务器是否已启动。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/jms/JmsHealthIndicator.java"><code>JmsHealthIndicator</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">检查JMS代理是否启动。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/ldap/LdapHealthIndicator.java"><code>LdapHealthIndicator</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">检查LDAP服务器是否已启动。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/mail/MailHealthIndicator.java"><code>MailHealthIndicator</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">检查邮件服务器是否已启动。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/mongo/MongoHealthIndicator.java"><code>MongoHealthIndicator</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">检查Mongo数据库是否已启动。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/neo4j/Neo4jHealthIndicator.java"><code>Neo4jHealthIndicator</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">检查Neo4j数据库是否已启动。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/health/PingHealthIndicator.java"><code>PingHealthIndicator</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">始终以 <code>UP</code> 响应。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/amqp/RabbitHealthIndicator.java"><code>RabbitHealthIndicator</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">检查Rabbit服务器是否已启动。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/redis/RedisHealthIndicator.java"><code>RedisHealthIndicator</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">检查Redis服务器是否启动。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/solr/SolrHealthIndicator.java"><code>SolrHealthIndicator</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">检查Solr服务器是否已启动。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+你可以通过设置 <code>management.health.defaults.enabled</code> 属性来禁用它们。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="编写自定义健康指标">编写自定义健康指标</h5>
+<div class="paragraph">
+<p>为了提供自定义的健康信息，你可以注册实现 <a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/health/HealthIndicator.java"><code>HealthIndicator</code></a>接口的Spring bean。
+你需要提供 <code>health()</code> 方法的实现并返回 <code>Health</code> 响应。<code>Health</code> 响应应包括状态，并且可以选择包括要显示的其他详细信息。
+以下代码显示了示例 <code>HealthIndicator</code> 实现：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.stereotype.Component;
+@Component
+public class MyHealthIndicator implements HealthIndicator {
+    @Override
+    public Health health() {
+        int errorCode = check(); // perform some specific health check
+        if (errorCode != 0) {
+            return Health.down().withDetail("Error Code", errorCode).build();
+        }
+        return Health.up().build();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+给定 <code>HealthIndicator</code> 的标识符是不带有 <code>HealthIndicator</code> 后缀（如果存在）的bean的名称。在前面的示例中，健康信息在名为 <code>my</code> 的条目中可用。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>除了Spring Boot的预定义 <a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/health/Status.java"><code>Status</code></a>类型外，
+<code>Health</code> 还可以返回代表新系统状态的自定义 <code>Status</code>。
+在这种情况下，还需要提供 <a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/health/StatusAggregator.java"><code>StatusAggregator</code></a>接口的自定义实现，
+或者必须使用 <code>management.endpoint.health.status.order</code> 配置属性来配置默认实现。</p>
+</div>
+<div class="paragraph">
+<p>例如，假设在你的 <code>HealthIndicator</code> 实现之一中使用了代码为 <code>FATAL</code> 的新 <code>Status</code>。要配置严重性顺序，请将以下属性添加到你的应用程序属性中：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.endpoint.health.status.order=fatal,down,out-of-service,unknown,up</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>响应中的HTTP状态码反映了总体健康状态（例如：<code>UP</code> 映射为200，而 <code>OUT_OF_SERVICE</code> 和 <code>DOWN</code> 映射为503）。
+如果通过HTTP访问health端点，则可能还需要注册自定义状态映射。例如，以下属性将 <code>FATAL</code> 映射到503 (service unavailable)：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.endpoint.health.status.http-mapping.fatal=503</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+如果需要更多控制，则可以定义自己的 <code>HttpCodeStatusMapper</code> bean。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>下表显示了内置状态的默认HTTP状态映射：</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">状态</th>
+<th class="tableblock halign-left valign-top">映射</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DOWN</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SERVICE_UNAVAILABLE (503)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OUT_OF_SERVICE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SERVICE_UNAVAILABLE (503)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">默认情况下没有映射，因此http状态为200</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UNKNOWN</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">默认情况下没有映射，因此http状态为200</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="reactive-health-indicators">Reactive健康指标</h5>
+<div class="paragraph">
+<p>对于诸如使用Spring WebFlux的响应式应用程序，<code>ReactiveHealthContributor</code> 提供了一个非阻塞契约来获取应用程序的运行状况。
+与传统的 <code>HealthContributor</code> 相似，健康信息是从 <a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/health/ReactiveHealthContributorRegistry.java"><code>ReactiveHealthContributorRegistry</code></a>
+（默认情况下，在 <code>ApplicationContext</code> 中定义的所有 <a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/health/HealthContributor.java"><code>HealthContributor</code></a>和
+<a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/health/ReactiveHealthContributor.java"><code>ReactiveHealthContributor</code></a>实例）的内容中收集的。
+不检查reactive API的常规 <code>HealthContributor</code> 在弹性调度器上执行。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+在响应式应用程序中，<code>ReactiveHealthContributorRegistry</code> 可用于在运行时注册和注销健康指标。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>为了从响应式API提供自定义健康信息，你可以注册实现 <a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/health/ReactiveHealthIndicator.java"><code>ReactiveHealthIndicator</code></a>
+接口的Spring bean。以下代码显示了示例 <code>ReactiveHealthIndicator</code> 实现：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Component
+public class MyReactiveHealthIndicator implements ReactiveHealthIndicator {
+    @Override
+    public Mono&lt;Health&gt; health() {
+        return doHealthCheck() //perform some specific health check that returns a Mono&lt;Health&gt;
+            .onErrorResume(ex -&gt; Mono.just(new Health.Builder().down(ex).build()));
+    }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+要自动处理错误，请考虑继承自 <code>AbstractReactiveHealthIndicator</code>。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="自动配置的reactivehealthindicators">自动配置的ReactiveHealthIndicators</h5>
+<div class="paragraph">
+<p>适当时，Spring Boot会自动配置以下 <code>ReactiveHealthIndicators</code>：</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">名称</th>
+<th class="tableblock halign-left valign-top">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/cassandra/CassandraReactiveHealthIndicator.java"><code>CassandraReactiveHealthIndicator</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">检查Cassandra数据库是否已启动。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/couchbase/CouchbaseReactiveHealthIndicator.java"><code>CouchbaseReactiveHealthIndicator</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">检查Couchbase集群是否已启动。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/mongo/MongoReactiveHealthIndicator.java"><code>MongoReactiveHealthIndicator</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">检查Mongo数据库是否已启动。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/redis/RedisReactiveHealthIndicator.java"><code>RedisReactiveHealthIndicator</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">检查Redis服务器是否启动。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+如有必要，可用reactive指示器代替常规指示器。另外，任何未明确处理的 <code>HealthIndicator</code> 都会自动包装。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="健康组">健康组</h5>
+<div class="paragraph">
+<p>有时候，将健康指标分为不同的组很有用。例如，如果将应用程序部署到Kubernetes，则可能需要一组不同的运行状况指示器来进行 &#8220;liveness&#8221; 和 &#8220;readiness&#8221; 探针。</p>
+</div>
+<div class="paragraph">
+<p>要创建运行状况指示器组，可以使用 <code>management.endpoint.health.group.&lt;name&gt;</code> 属性，
+并指定要 <code>include</code> 或 <code>exclude</code> 的运行状况指示器ID的列表。例如，要创建仅包含数据库指示符的组，可以定义以下内容：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.endpoint.health.group.custom.include=db</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>然后，你可以通过单击 <code><a href="http://localhost:8080/actuator/health/custom" class="bare">http://localhost:8080/actuator/health/custom</a></code> 来检查结果。</p>
+</div>
+<div class="paragraph">
+<p>默认情况下，组将继承与系统运行状况相同的 <code>StatusAggregator</code> 和 <code>HttpCodeStatusMapper</code> 设置，
+但是，这些设置也可以基于每个组进行定义。如果需要，也可以覆盖 <code>show-details</code> 和 <code>role</code> 属性：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.endpoint.health.group.custom.show-details=when-authorized
+management.endpoint.health.group.custom.roles=admin
+management.endpoint.health.group.custom.status.order=fatal,up
+management.endpoint.health.group.custom.status.http-mapping.fatal=500</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+如果需要注册自定义 <code>StatusAggregator</code> 或 <code>HttpCodeStatusMapper</code> Bean以便与该组一起使用，则可以使用 <code>@Qualifier("groupname")</code>。
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="production-ready-application-info">3.2.9. 应用信息</h4>
+<div class="paragraph">
+<p>应用程序信息公开了从 <code>ApplicationContext</code> 中定义的所有 <a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/info/InfoContributor.java"><code>InfoContributor</code></a> Bean收集的各种信息。Spring
+Boot包含许多自动配置的 <code>InfoContributor</code> Bean，你可以编写自己的bean。</p>
+</div>
+<div class="sect4">
+<h5 id="production-ready-application-info-autoconfigure">自动配置的InfoContributors</h5>
+<div class="paragraph">
+<p>适当时，Spring Boot会自动配置以下 <code>InfoContributor</code> Bean：</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">名称</th>
+<th class="tableblock halign-left valign-top">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/info/EnvironmentInfoContributor.java"><code>EnvironmentInfoContributor</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">在 <code>info</code> 键下公开 <code>Environment</code> 中的任何键。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/info/GitInfoContributor.java"><code>GitInfoContributor</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">如果 <code>git.properties</code> 文件可用，则公开git信息。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/info/BuildInfoContributor.java"><code>BuildInfoContributor</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">如果 <code>META-INF/build-info.properties</code> 文件可用，则公开构建信息。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+通过设置 <code>management.info.defaults.enabled</code> 属性，可以全部禁用它们。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-application-info-env">自定义应用信息</h5>
+<div class="paragraph">
+<p>你可以通过设置 <code>info.*</code> Spring属性来自定义 <code>info</code> 端点公开的数据。
+<code>info</code> 键下的所有 <code>Environment</code> 属性将自动显示。例如，你可以将以下设置添加到 <code>application.properties</code> 文件：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">info.app.encoding=UTF-8
+info.app.java.source=1.8
+info.app.java.target=1.8</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>除了对这些值进行硬编码之外，你还可以 <a href="https://docs.spring.io/spring-boot/docs/2.2.2.RELEASE/reference/htmlsingle/#howto-automatic-expansion">在构建时展开信息属性</a>。</p>
+</div>
+<div class="paragraph">
+<p>假设你使用Maven，则可以按如下所示重写前面的示例：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">info.app.encoding=@project.build.sourceEncoding@
+info.app.java.source=@java.version@
+info.app.java.target=@java.version@</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-application-info-git">Git提交信息</h5>
+<div class="paragraph">
+<p><code>info</code> 端点的另一个有用的功能是它能够在项目构建时发布有关 <code>git</code> 源代码存储库状态的信息。如果有 <code>GitProperties</code> Bean，
+则将公开 <code>git.branch</code>，<code>git.commit.id</code> 和 <code>git.commit.time</code> 属性。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+如果 <code>git.properties</code> 文件在类路径的根目录下可用，则会自动配置 <code>GitProperties</code> bean。有关更多详细信息，请参见
+<a href="https://docs.spring.io/spring-boot/docs/2.2.2.RELEASE/reference/htmlsingle/#howto-git-info">生成git信息</a>。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>如果要显示完整的git信息（即 <code>git.properties</code> 的完整内容），请使用 <code>management.info.git.mode</code> 属性，如下所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.info.git.mode=full</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-application-info-build">构建信息</h5>
+<div class="paragraph">
+<p>如果有 <code>BuildProperties</code> Bean，则 <code>info</code> 端点也可以发布有关你的构建的信息。如果在类路径中有 <code>META-INF/build-info.properties</code> 文件，则会发生这种情况。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Maven和Gradle插件都可以生成该文件。有关更多详细信息，请参见
+<a href="https://docs.spring.io/spring-boot/docs/2.2.2.RELEASE/reference/htmlsingle/#howto-build-info">生成构建信息</a>。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-application-info-custom">编写自定义InfoContributors</h5>
+<div class="paragraph">
+<p>为了提供自定义的应用程序信息，你可以注册实现 <a href="https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/info/InfoContributor.java"><code>InfoContributor</code></a>接口的Spring bean。</p>
+</div>
+<div class="paragraph">
+<p>以下示例使用单个值提供 <code>example</code> 条目：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">import java.util.Collections;
+import org.springframework.boot.actuate.info.Info;
+import org.springframework.boot.actuate.info.InfoContributor;
+import org.springframework.stereotype.Component;
+@Component
+public class ExampleInfoContributor implements InfoContributor {
+    @Override
+    public void contribute(Info.Builder builder) {
+        builder.withDetail("example",
+                Collections.singletonMap("key", "value"));
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>如果请求 <code>info</code> 端点，则应该看到包含以下附加条目的响应：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json" data-lang="json">{
+    "example": {
+        "key" : "value"
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="production-ready-monitoring">3.3. 通过HTTP进行监视和管理</h3>
+<div class="paragraph">
+<p>如果你正在开发Web应用程序，则Spring Boot Actuator会自动配置所有启用的端点以通过HTTP公开。
+默认约定是使用带有 <code>/actuator</code> 前缀的端点的ID作为URL路径。例如：<code>health</code> 公开为 <code>/actuator/health</code>。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Spring MVC，Spring WebFlux和Jersey本身支持Actuator。如果同时提供Jersey和Spring MVC，将使用Spring MVC。
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="production-ready-customizing-management-server-context-path">3.3.1. 自定义管理端点路径</h4>
+<div class="paragraph">
+<p>有时，自定义管理端点的前缀很有用。例如，你的应用程序可能已经将 <code>/actuator</code> 用于其他目的。你可以使用
+<code>management.endpoints.web.base-path</code> 属性更改管理端点的前缀，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.endpoints.web.base-path=/manage</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>前面的 <code>application.properties</code> 示例将端点从 <code>/actuator/{id}</code> 更改为 <code>/manage/{id}</code>（例如： <code>/manage/info</code>）。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+除非管理端口已配置为<a href="#production-ready-customizing-management-server-port">使用其他HTTP端口公开端点</a>，
+否则 <code>management.endpoints.web.base-path</code> 是相对于 <code>server.servlet.context-path</code> 的。
+如果配置了 <code>management.server.port</code>，则 <code>management.endpoints.web.base-path</code> 相对于 <code>management.server.servlet.context-path</code>。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>如果要将端点映射到其他路径，则可以使用 <code>management.endpoints.web.path-mapping</code> 属性。</p>
+</div>
+<div class="paragraph">
+<p>以下示例将 <code>/actuator/health</code> 重新映射到  <code>/healthcheck</code>：</p>
+</div>
+<div class="listingblock">
+<div class="title">application.properties</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.endpoints.web.base-path=/
+management.endpoints.web.path-mapping.health=healthcheck</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="production-ready-customizing-management-server-port">3.3.2. 自定义管理服务器端口</h4>
+<div class="paragraph">
+<p>对于基于云的部署，通过使用默认的HTTP端口公开管理端点是明智的选择。但是，如果你的应用程序在自己的数据中心内运行，则你可能更喜欢使用其他HTTP端口公开端点。</p>
+</div>
+<div class="paragraph">
+<p>你可以设置 <code>management.server.port</code> 属性以更改HTTP端口，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.server.port=8081</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+在Cloud Foundry上，默认情况下，应用程序仅在端口8080上接收HTTP和TCP路由请求。
+如果要在Cloud Foundry上使用自定义管理端口，则需要明确设置应用程序的路由，以将流量转发到自定义端口。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="production-ready-management-specific-ssl">3.3.3. 配置特定于管理的SSL</h4>
+<div class="paragraph">
+<p>当配置为使用定制端口时，还可以通过使用各种 <code>management.server.ssl.*</code> 属性将管理服务器配置为其自身的SSL。
+例如，这样做可以使管理服务器通过HTTP可用，而主应用程序使用HTTPS，如以下属性设置所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">server.port=8443
+server.ssl.enabled=true
+server.ssl.key-store=classpath:store.jks
+server.ssl.key-password=secret
+management.server.port=8080
+management.server.ssl.enabled=false</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>或者，主服务器和管理服务器都可以使用SSL，但具有不同的密钥库，如下所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">server.port=8443
+server.ssl.enabled=true
+server.ssl.key-store=classpath:main.jks
+server.ssl.key-password=secret
+management.server.port=8080
+management.server.ssl.enabled=true
+management.server.ssl.key-store=classpath:management.jks
+management.server.ssl.key-password=secret</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="production-ready-customizing-management-server-address">3.3.4. 自定义管理服务器地址</h4>
+<div class="paragraph">
+<p>你可以通过设置 <code>management.server.address</code> 属性来自定义管理端点可用的地址。如果你只想在内部或面向操作的网络上侦听或仅侦听来自本地主机的连接，则这样做很有用。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+仅当端口与主服务器端口不同时，你才能在其他地址上侦听。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>以下示例 <code>application.properties</code> 不允许远程管理连接：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.server.port=8081
+management.server.address=127.0.0.1</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="production-ready-disabling-http-endpoints">3.3.5. 禁用HTTP端点</h4>
+<div class="paragraph">
+<p>如果你不想通过HTTP公开端点，则可以将管理端口设置为 <code>-1</code>，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.server.port=-1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>也可以使用 <code>management.endpoints.web.exposure.exclude</code> 属性来实现，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.endpoints.web.exposure.exclude=*</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="production-ready-jmx">3.4. 通过JMX进行监视和管理</h3>
+<div class="paragraph">
+<p>Java管理扩展（JMX）提供了监视和管理应用程序的标准机制。默认情况下，此功能未启用，
+可以通过将配置属性 <code>spring.jmx.enabled</code> 设置为 <code>true</code> 来启用。默认情况下，Spring Boot将管理端点公开为
+<code>org.springframework.boot</code> 域下的JMX MBean。</p>
+</div>
+<div class="sect3">
+<h4 id="production-ready-custom-mbean-names">3.4.1. 自定义MBean名称</h4>
+<div class="paragraph">
+<p>MBean的名称通常是根据端点的ID生成的。例如，<code>health</code> 端点显示为 <code>org.springframework.boot:type=Endpoint,name=Health</code>。</p>
+</div>
+<div class="paragraph">
+<p>如果你的应用程序包含多个Spring <code>ApplicationContext</code>，则可能会发现名称冲突。要解决此问题，可以将
+<code>spring.jmx.unique-names</code> 属性设置为 <code>true</code>，以便MBean名称始终是唯一的。</p>
+</div>
+<div class="paragraph">
+<p>你还可以自定义暴露端点的JMX域。以下设置在 <code>application.properties</code> 中显示了如何这样做：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">spring.jmx.unique-names=true
+management.endpoints.jmx.domain=com.example.myapp</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="production-ready-disable-jmx-endpoints">3.4.2. 禁用JMX端点</h4>
+<div class="paragraph">
+<p>如果你不想通过JMX公开端点，则可以将 <code>management.endpoints.jmx.exposure.exclude</code> 属性设置为 <code>*</code>，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.endpoints.jmx.exposure.exclude=*</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="production-ready-jolokia">3.4.3. 通过HTTP将Jolokia用于JMX</h4>
+<div class="paragraph">
+<p>Jolokia是一个JMX-HTTP桥，它提供了另一种访问JMX bean的方法。要使用Jolokia，请包括对 <code>org.jolokia:jolokia-core</code>
+的依赖。例如，使用Maven，你将添加以下依赖项：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.jolokia&lt;/groupId&gt;
+    &lt;artifactId&gt;jolokia-core&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>然后可以通过将 <code>jolokia</code> 或 <code>*</code> 添加到 <code>management.endpoints.web.exposure.include</code> 属性来暴露Jolokia端点。
+然后，你可以在管理HTTP服务器上使用 <code>/actuator/jolokia</code> 访问它。</p>
+</div>
+<div class="sect4">
+<h5 id="production-ready-customizing-jolokia">自定义Jolokia</h5>
+<div class="paragraph">
+<p>Jolokia具有许多设置，这些设置通常是通过设置servlet参数进行配置的。
+通过Spring Boot，你可以使用 <code>application.properties</code> 文件。为此，请在参数前面加上 <code>management.endpoint.jolokia.config</code>。
+如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.endpoint.jolokia.config.debug=true</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-disabling-jolokia">禁用Jolokia</h5>
+<div class="paragraph">
+<p>如果你使用Jolokia但不希望Spring Boot对其进行配置，则可将 <code>management.endpoint.jolokia.enabled</code> 属性设置为 <code>false</code>，如下所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.endpoint.jolokia.enabled=false</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="production-ready-loggers">3.5. 日志记录器</h3>
+<div class="paragraph">
+<p>Spring Boot Actuator可以在运行时查看和配置应用程序的日志级别。
+你可以查看整个列表或单个记录器的配置，该配置由显式配置的日志记录级别以及日志记录框架为其指定的有效日志记录级别组成。
+这些级别可以是以下之一：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>TRACE</code></p>
+</li>
+<li>
+<p><code>DEBUG</code></p>
+</li>
+<li>
+<p><code>INFO</code></p>
+</li>
+<li>
+<p><code>WARN</code></p>
+</li>
+<li>
+<p><code>ERROR</code></p>
+</li>
+<li>
+<p><code>FATAL</code></p>
+</li>
+<li>
+<p><code>OFF</code></p>
+</li>
+<li>
+<p><code>null</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><code>null</code> 表示没有显式配置。</p>
+</div>
+<div class="sect3">
+<h4 id="production-ready-logger-configuration">3.5.1. 配置记录器</h4>
+<div class="paragraph">
+<p>要配置给定的记录器，请将部分实体 <code>POST</code> 到资源的URI中，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json" data-lang="json">{
+    "configuredLevel": "DEBUG"
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+要“重置”日志记录器的特定级别（并使用默认配置），可以传递一个 <code>null</code> 值作为 <code>configuredLevel</code>。
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="production-ready-metrics">3.6. 指标</h3>
+<div class="paragraph">
+<p>Spring Boot Actuator为 <a href="https://micrometer.io">Micrometer</a>提供依赖项管理和自动配置，Micrometer是一种支持多种监视系统的应用程序指标外观，包括：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#production-ready-metrics-export-appoptics">AppOptics</a></p>
+</li>
+<li>
+<p><a href="#production-ready-metrics-export-atlas">Atlas</a></p>
+</li>
+<li>
+<p><a href="#production-ready-metrics-export-datadog">Datadog</a></p>
+</li>
+<li>
+<p><a href="#production-ready-metrics-export-dynatrace">Dynatrace</a></p>
+</li>
+<li>
+<p><a href="#production-ready-metrics-export-elastic">Elastic</a></p>
+</li>
+<li>
+<p><a href="#production-ready-metrics-export-ganglia">Ganglia</a></p>
+</li>
+<li>
+<p><a href="#production-ready-metrics-export-graphite">Graphite</a></p>
+</li>
+<li>
+<p><a href="#production-ready-metrics-export-humio">Humio</a></p>
+</li>
+<li>
+<p><a href="#production-ready-metrics-export-influx">Influx</a></p>
+</li>
+<li>
+<p><a href="#production-ready-metrics-export-jmx">JMX</a></p>
+</li>
+<li>
+<p><a href="#production-ready-metrics-export-kairos">KairosDB</a></p>
+</li>
+<li>
+<p><a href="#production-ready-metrics-export-newrelic">New Relic</a></p>
+</li>
+<li>
+<p><a href="#production-ready-metrics-export-prometheus">Prometheus</a></p>
+</li>
+<li>
+<p><a href="#production-ready-metrics-export-signalfx">SignalFx</a></p>
+</li>
+<li>
+<p><a href="#production-ready-metrics-export-simple">Simple (in-memory)</a></p>
+</li>
+<li>
+<p><a href="#production-ready-metrics-export-stackdriver">Stackdriver</a></p>
+</li>
+<li>
+<p><a href="#production-ready-metrics-export-statsd">StatsD</a></p>
+</li>
+<li>
+<p><a href="#production-ready-metrics-export-wavefront">Wavefront</a></p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+要了解有关Micrometer功能的更多信息，请参阅其 <a href="https://micrometer.io/docs">参考文档</a>，特别是 <a href="https://micrometer.io/docs/concepts">概念部分</a>。
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="production-ready-metrics-getting-started">3.6.1. 入门</h4>
+<div class="paragraph">
+<p>Spring Boot自动配置组合的 <code>MeterRegistry</code>，并为其在类路径上找到的每个受支持的实现向组合添加注册表。在运行时类路径中具有对
+<code>micrometer-registry-{system}</code> 的依赖足以使Spring Boot配置注册表。</p>
+</div>
+<div class="paragraph">
+<p>大多数注册表具有共同的特征。例如，即使Micrometer注册表实现位于类路径中，你也可以禁用特定的注册表。例如，禁用Datadog：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.datadog.enabled=false</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Spring Boot还会将任何自动配置的注册表添加到Metrics类的全局静态复合注册表中，除非你明确告诉它不要这么做：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.use-global-registry=false</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你可以注册任意数量的 <code>MeterRegistryCustomizer</code> Bean来进一步配置注册表，例如在向注册表注册任何度量器之前应用通用标签：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Bean
+MeterRegistryCustomizer&lt;MeterRegistry&gt; metricsCommonTags() {
+    return registry -&gt; registry.config().commonTags("region", "us-east-1");
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你可以应用自定义到特定的注册表实现更具体的泛型类型:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Bean
+MeterRegistryCustomizer&lt;GraphiteMeterRegistry&gt; graphiteMetricsNamingConvention() {
+    return registry -&gt; registry.config().namingConvention(MY_CUSTOM_CONVENTION);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>完成该设置后，你可以将 <code>MeterRegistry</code> 注入组件并注册指标：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Component
+public class SampleBean {
+
+    private final Counter counter;
+
+    public SampleBean(MeterRegistry registry) {
+        this.counter = registry.counter("received.messages");
+    }
+
+    public void handleMessage(String message) {
+        this.counter.increment();
+        // handle message implementation
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Spring Boot还<a href="#production-ready-metrics-meter">配置了内置工具</a>（即 <code>MeterBinder</code> 实现），你可以通过配置或专用注解标记来控制它们。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="production-ready-metrics-export">3.6.2. 支持的监控系统</h4>
+<div class="sect4">
+<h5 id="production-ready-metrics-export-appoptics">AppOptics</h5>
+<div class="paragraph">
+<p>默认情况下，AppOptics注册表会定期将指标推送到 <code><a href="https://api.appoptics.com/v1/measurements" class="bare">https://api.appoptics.com/v1/measurements</a></code>。
+要将指标导出到SaaS <a href="https://micrometer.io/docs/registry/appoptics">AppOptics</a>，必须提供你的API令牌：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.appoptics.api-token=YOUR_TOKEN</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-export-atlas">Atlas</h5>
+<div class="paragraph">
+<p>默认情况下，度量标准将导出到在本地计算机上运行的 <a href="https://micrometer.io/docs/registry/atlas">Atlas</a>。
+可以使用以下命令提供要使用的 <a href="https://github.com/Netflix/atlas">Atlas服务器</a>的位置：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.atlas.uri=https://atlas.example.com:7101/api/v1/publish</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-export-datadog">Datadog</h5>
+<div class="paragraph">
+<p>Datadog注册表会定期将指标推送到 <a href="https://www.datadoghq.com">datadoghq</a>。
+要将指标导出到 <a href="https://micrometer.io/docs/registry/datadog">Datadog</a>，必须提供你的API密钥：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.datadog.api-key=YOUR_KEY</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你还可以更改将度量标准发送到Datadog的时间间隔：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.datadog.step=30s</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-export-dynatrace">Dynatrace</h5>
+<div class="paragraph">
+<p>Dynatrace注册表会定期将指标推送到配置的URI。
+要将指标导出到 <a href="https://micrometer.io/docs/registry/dynatrace">Dynatrace</a>，必须提供你的API令牌，设备ID和URI：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.dynatrace.api-token=YOUR_TOKEN
+management.metrics.export.dynatrace.device-id=YOUR_DEVICE_ID
+management.metrics.export.dynatrace.uri=YOUR_URI</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你还可以更改将度量标准发送到Dynatrace的时间间隔：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.dynatrace.step=30s</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-export-elastic">Elastic</h5>
+<div class="paragraph">
+<p>默认情况下，指标会导出到在本地计算机上运行的 <a href="https://micrometer.io/docs/registry/elastic">Elastic</a>。
+可以使用以下属性提供要使用的Elastic服务器的位置：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.elastic.host=https://elastic.example.com:8086</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-export-ganglia">Ganglia</h5>
+<div class="paragraph">
+<p>默认情况下，指标将导出到在本地计算机上运行的 <a href="https://micrometer.io/docs/registry/ganglia">Ganglia</a>。
+可以使用以下命令提供要使用的 <a href="http://ganglia.sourceforge.net">Ganglia服务器</a>主机和端口：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.ganglia.host=ganglia.example.com
+management.metrics.export.ganglia.port=9649</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-export-graphite">Graphite</h5>
+<div class="paragraph">
+<p>默认情况下，指标会导出到本地计算机上运行的 <a href="https://micrometer.io/docs/registry/graphite">Graphite</a>。
+可以使用以下方式提供要使用的 <a href="https://graphiteapp.org">Graphite服务器</a>主机和端口：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.graphite.host=graphite.example.com
+management.metrics.export.graphite.port=9004</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Micrometer提供了默认的 <code>HierarchicalNameMapper</code>，用于控制如何将计量器ID <a href="https://micrometer.io/docs/registry/graphite#_hierarchical_name_mapping">映射到平面层次结构名称</a>。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+要控制此行为，请定义 <code>GraphiteMeterRegistry</code> 并提供自己的 <code>HierarchicalNameMapper</code>。除非你定义自己的，否则将提供自动配置的 <code>GraphiteConfig</code> 和 <code>Clock</code> Bean：
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Bean
+public GraphiteMeterRegistry graphiteMeterRegistry(GraphiteConfig config, Clock clock) {
+    return new GraphiteMeterRegistry(config, clock, MY_HIERARCHICAL_MAPPER);
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-export-humio">Humio</h5>
+<div class="paragraph">
+<p>默认情况下，Humio注册表会定期将指标推送到 <a href="https://cloud.humio.com。" class="bare">https://cloud.humio.com。</a>
+要将指标导出到SaaS <a href="https://micrometer.io/docs/registry/humio">Humio</a>，必须提供你的API令牌：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.humio.api-token=YOUR_TOKEN</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你还应该配置一个或多个tags以标识将度量标准推送到的数据源：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.humio.tags.alpha=a
+management.metrics.export.humio.tags.bravo=b</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-export-influx">Influx</h5>
+<div class="paragraph">
+<p>默认情况下，指标会导出到本地计算机上运行的 <a href="https://micrometer.io/docs/registry/influx">Influx</a>。
+可使用以下命令提供要使用的 <a href="https://www.influxdata.com">Influx服务器</a>的位置：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.influx.uri=https://influx.example.com:8086</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-export-jmx">JMX</h5>
+<div class="paragraph">
+<p>Micrometer提供了到 <a href="https://micrometer.io/docs/registry/jmx">JMX</a>的层次结构映射，主要是作为一种便宜且可移植的方式在本地查看指标。
+默认情况下，度量标准被导出到 <code>metrics</code> JMX域。可以使用以下方式提供要使用的域：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.jmx.domain=com.example.app.metrics</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Micrometer提供了默认的 <code>HierarchicalNameMapper</code>，用于控制如何将计量器ID <a href="https://micrometer.io/docs/registry/jmx#_hierarchical_name_mapping">映射到平面层次结构名称</a>。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+要控制此行为，请定义 <code>JmxMeterRegistry</code> 并提供自己的 <code>HierarchicalNameMapper</code>。除非你定义自己的，否则将提供自动配置的 <code>JmxConfig</code>
+和 <code>Clock</code> Bean。
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Bean
+public JmxMeterRegistry jmxMeterRegistry(JmxConfig config, Clock clock) {
+    return new JmxMeterRegistry(config, clock, MY_HIERARCHICAL_MAPPER);
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-export-kairos">KairosDB</h5>
+<div class="paragraph">
+<p>默认情况下，度量标准将导出到在本地计算机上运行的 <a href="https://micrometer.io/docs/registry/kairos">KairosDB</a>。
+可以使用以下方式提供使用的 <a href="https://kairosdb.github.io/">KairosDB服务器</a>的位置：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.kairos.uri=https://kairosdb.example.com:8080/api/v1/datapoints</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-export-newrelic">New Relic</h5>
+<div class="paragraph">
+<p>New Relic注册表会定期将指标推送到 <a href="https://micrometer.io/docs/registry/new-relic">New Relic</a>。
+要将指标导出到 <a href="https://newrelic.com">New Relic</a>，必须提供你的API密钥和帐户ID：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.newrelic.api-key=YOUR_KEY
+management.metrics.export.newrelic.account-id=YOUR_ACCOUNT_ID</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你还可以更改将度量标准发送到New Relic的时间间隔：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.newrelic.step=30s</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-export-prometheus">Prometheus</h5>
+<div class="paragraph">
+<p><a href="https://micrometer.io/docs/registry/prometheus">Prometheus</a>希望抓取或轮询单个应用程序实例以获取指标。
+Spring Boot在 <code>/actuator/prometheus</code> 提供了一个执行器端点，以适当的格式显示 <a href="https://prometheus.io">Prometheus scrape</a>。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+端点默认情况下不可用，若需公开，有关更多详细信息，请参见<a href="#production-ready-endpoints-exposing-endpoints">暴露端点</a>。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>这是添加到 <code>prometheus.yml</code> 的示例 <code>scrape_config</code>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml" data-lang="yaml">scrape_configs:
+  - job_name: 'spring'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['HOST:PORT']</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>对于短暂的或批处理的jobs，其时间可能不够长，无法被捕获，可以使用
+<a href="https://github.com/prometheus/pushgateway">Prometheus Pushgateway</a>支持将其指标暴露给Prometheus。
+要启用Prometheus Pushgateway支持，请在项目中添加以下依赖项：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;io.prometheus&lt;/groupId&gt;
+    &lt;artifactId&gt;simpleclient_pushgateway&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>当在类路径上存在Prometheus Pushgateway依赖项时，Spring Boot会自动配置 <code>PrometheusPushGatewayManager</code> bean。
+这可以管理将指标推送到Prometheus Pushgateway。可以使用 <code>management.metrics.export.prometheus.pushgateway</code>
+下的属性来调整 <code>PrometheusPushGatewayManager</code>。对于高级配置，你还可以提供自己的 <code>PrometheusPushGatewayManager</code> bean。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-export-signalfx">SignalFx</h5>
+<div class="paragraph">
+<p>SignalFx注册表会定期将指标推送到 <a href="https://micrometer.io/docs/registry/signalfx">SignalFx</a>。
+要将指标导出到 <a href="https://www.signalfx.com">SignalFx</a>，必须提供访问令牌：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.signalfx.access-token=YOUR_ACCESS_TOKEN</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你还可以更改将度量标准发送到SignalFx的时间间隔：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.signalfx.step=30s</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-export-simple">Simple</h5>
+<div class="paragraph">
+<p>Micrometer附带一个简单的内存后端，如果未配置其他注册表，该后端将自动用作后备。
+这使你可以查看在<a href="#production-ready-metrics-endpoint">metrics端点</a>中收集了哪些指标。</p>
+</div>
+<div class="paragraph">
+<p>使用任何其他可用后端时，内存后端都会自动禁用。你也可以显式禁用它：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.simple.enabled=false</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-export-stackdriver">Stackdriver</h5>
+<div class="paragraph">
+<p>Stackdriver注册表会定期将指标推送到 <a href="https://cloud.google.com/stackdriver/">Stackdriver</a>。
+要将指标导出到SaaS <a href="https://micrometer.io/docs/registry/stackdriver">Stackdriver</a>，必须提供你的Google Cloud项目ID：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.stackdriver.project-id=my-project</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你还可以更改将度量标准发送到Stackdriver的时间间隔：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.stackdriver.step=30s</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-export-statsd">StatsD</h5>
+<div class="paragraph">
+<p>StatsD注册表急切地通过UDP将度量标准推送到StatsD agent。
+默认情况下，指标会导出到本地计算机上运行的 <a href="https://micrometer.io/docs/registry/statsd">StatsD</a> agent。
+可以使用以下方式提供要使用的StatsD agent主机和端口：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.statsd.host=statsd.example.com
+management.metrics.export.statsd.port=9125</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你还可以更改要使用的StatsD线路协议（默认为Datadog）：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.statsd.flavor=etsy</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-export-wavefront">Wavefront</h5>
+<div class="paragraph">
+<p>Wavefront注册表会定期将指标推送到 <a href="https://micrometer.io/docs/registry/wavefront">Wavefront</a>。
+如果直接将指标导出到 <a href="https://www.wavefront.com/">Wavefront</a>，则必须提供API令牌：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.wavefront.api-token=YOUR_API_TOKEN</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>或者，你可以使用在你的环境中设置的Wavefront sidecar或内部代理，将指标数据转发到Wavefront API主机：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.wavefront.uri=proxy://localhost:2878</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+如果将指标发布到Wavefront代理（如 <a href="https://docs.wavefront.com/proxies_installing.html">文档</a>中所述），
+则主机必须采用 <code>proxy://HOST:PORT</code> 格式。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>你还可以更改将度量标准发送到Wavefront的时间间隔：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.export.wavefront.step=30s</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="production-ready-metrics-meter">3.6.3. 支持的指标</h4>
+<div class="paragraph">
+<p>如果适用，Spring Boot将注册以下核心指标：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>JVM指标，报告以下各项的利用率：</p>
+<div class="ulist">
+<ul>
+<li>
+<p>各种内存和缓冲池</p>
+</li>
+<li>
+<p>与垃圾收集有关的统计数据</p>
+</li>
+<li>
+<p>线程利用率</p>
+</li>
+<li>
+<p>加载/卸载的类数</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>CPU指标</p>
+</li>
+<li>
+<p>文件描述符指标</p>
+</li>
+<li>
+<p>Kafka消费者指标</p>
+</li>
+<li>
+<p>Log4j2指标: 记录每个级别记录到Log4j2的事件数</p>
+</li>
+<li>
+<p>Logback指标: 记录每个级别记录到Logback的事件数</p>
+</li>
+<li>
+<p>Uptime指标: 报告正常运行时间的量度和代表应用程序绝对启动时间的固定量度</p>
+</li>
+<li>
+<p>Tomcat指标 (必须将 <code>server.tomcat.mbeanregistry.enabled</code> 设置为 <code>true</code> 才能注册所有Tomcat指标)</p>
+</li>
+<li>
+<p><a href="https://docs.spring.io/spring-integration/docs/5.2.2.RELEASE/reference/html/system-management.html#micrometer-integration">Spring Integration</a>指标</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-spring-mvc">Spring MVC指标</h5>
+<div class="paragraph">
+<p>通过自动配置，可以检测由Spring MVC处理的请求。
+当 <code>management.metrics.web.server.request.autotime.enabled</code> 为 <code>true</code> 时，将对所有请求进行这种检测。
+另外，当设置为 <code>false</code> 时，可以通过将 <code>@Timed</code> 添加到请求处理方法来启用检测：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@RestController
+@Timed <i class="conum" data-value="1"></i><b>(1)</b>
+public class MyController {
+
+    @GetMapping("/api/people")
+    @Timed(extraTags = { "region", "us-east-1" }) <i class="conum" data-value="2"></i><b>(2)</b>
+    @Timed(value = "all.people", longTask = true) <i class="conum" data-value="3"></i><b>(3)</b>
+    public List&lt;Person&gt; listPeople() { ... }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>控制器类，用于对控制器中的每个请求处理程序启用计时。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>一种启用单个端点的方法。如果你将它放在类中，则不必这样做，但是可以用于进一步为此特定端点自定义计时器。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>在 <code>longTask = true</code> 的方法为该方法启用长任务计时器。长任务计时器需要一个单独的度量标准名称，并且可以与短任务计时器堆叠在一起。</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>默认情况下，使用名称 <code>http.server.requests</code> 生成度量。
+可以通过设置 <code>management.metrics.web.server.request.metric-name</code> 属性来自定义名称。</p>
+</div>
+<div class="paragraph">
+<p>默认情况下，与Spring MVC相关的指标带有以下信息标签：</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">标签</th>
+<th class="tableblock halign-left valign-top">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>exception</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">处理请求时引发的任何异常的简单类名。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>method</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">请求的方法（例如： <code>GET</code> 或 <code>POST</code>）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>outcome</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">请求的结果基于响应的状态码。
+  1xx是 <code>INFORMATIONAL</code>，2xx是 <code>SUCCESS</code>，3xx是 <code>REDIRECTION</code>，4xx是 <code>CLIENT_ERROR</code>，5xx是 <code>SERVER_ERROR</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">响应的HTTP状态码（例如： <code>200</code> 或 <code>500</code>）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>uri</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">请求在变量替换之前的URI模板，如果可能的话(例如： <code>/api/person/{id}</code>)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>要自定义标签，请提供实现 <code>WebMvcTagsProvider</code> 的 <code>@Bean</code>。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-web-flux">Spring WebFlux指标</h5>
+<div class="paragraph">
+<p>通过自动配置，可以检测WebFlux控制器和函数式处理程序处理的所有请求。</p>
+</div>
+<div class="paragraph">
+<p>默认情况下，度量标准的名称为 <code>http.server.requests</code>。
+你可以通过设置 <code>management.metrics.web.server.request.metric-name</code> 属性来自定义名称。</p>
+</div>
+<div class="paragraph">
+<p>默认情况下，与WebFlux相关的指标带有以下信息标签：</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">标签</th>
+<th class="tableblock halign-left valign-top">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>exception</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">处理请求时引发的任何异常的简单类名。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>method</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">请求的方法（例如： <code>GET</code> 或 <code>POST</code>）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>outcome</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">请求的结果基于响应的状态码。
+  1xx是 <code>INFORMATIONAL</code>，2xx是 <code>SUCCESS</code>，3xx是 <code>REDIRECTION</code>，4xx是 <code>CLIENT_ERROR</code>，5xx是 <code>SERVER_ERROR</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">响应的HTTP状态码（例如： <code>200</code> 或 <code>500</code>）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>uri</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">请求在变量替换之前的URI模板，如果可能的话(例如： <code>/api/person/{id}</code>)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>要自定义标签，请提供实现 <code>WebFluxTagsProvider</code> 的 <code>@Bean</code>。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-jersey-server">Jersey服务器指标</h5>
+<div class="paragraph">
+<p>当Micrometer的 <code>micrometer-jersey2</code> 模块位于类路径上时，自动配置将启用对Jersey JAX-RS实现所处理的请求的检测。
+当 <code>management.metrics.web.server.request.autotime.enabled</code> 为 <code>true</code> 时，将对所有请求进行这种检测。
+另外，当设置为 <code>false</code> 时，可以通过将 <code>@Timed</code> 添加到请求处理方法来启用检测：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Component
+@Path("/api/people")
+@Timed <i class="conum" data-value="1"></i><b>(1)</b>
+public class Endpoint {
+
+    @GET
+    @Timed(extraTags = { "region", "us-east-1" }) <i class="conum" data-value="2"></i><b>(2)</b>
+    @Timed(value = "all.people", longTask = true) <i class="conum" data-value="3"></i><b>(3)</b>
+    public List&lt;Person&gt; listPeople() { ... }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>在资源类上，以对资源中的每个请求处理程序启用计时。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>关于启用单个端点的方法。如果你将它放在类中，则不必这样做，但是可以用于进一步为此特定端点自定义计时器。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>在 <code>longTask = true</code> 的方法上为该方法启用长任务计时器。长任务计时器需要一个单独的度量标准名称，并且可以与短任务计时器堆叠在一起。</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>默认情况下，使用名称 <code>http.server.requests</code> 生成度量。
+可以通过设置 <code>management.metrics.web.server.request.metric-name</code> 属性来自定义名称。</p>
+</div>
+<div class="paragraph">
+<p>默认情况下，Jersey服务器指标带有以下信息：</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">标签</th>
+<th class="tableblock halign-left valign-top">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>exception</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">处理请求时引发的任何异常的简单类名。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>method</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">请求的方法（例如： <code>GET</code> 或 <code>POST</code>）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>outcome</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">请求的结果基于响应的状态码。
+  1xx是 <code>INFORMATIONAL</code>，2xx是 <code>SUCCESS</code>，3xx是 <code>REDIRECTION</code>，4xx是 <code>CLIENT_ERROR</code>，5xx是 <code>SERVER_ERROR</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">响应的HTTP状态码（例如： <code>200</code> 或 <code>500</code>）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>uri</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">请求在变量替换之前的URI模板，如果可能的话(例如： <code>/api/person/{id}</code>)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>要自定义标签，请提供实现 <code>JerseyTagsProvider</code> 的 <code>@Bean</code>。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-http-clients">HTTP客户端指标</h5>
+<div class="paragraph">
+<p>Spring Boot Actuator管理 <code>RestTemplate</code> 和 <code>WebClient</code> 的工具。为此，你必须注入自动配置的构建器并使用它来创建实例：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>RestTemplateBuilder</code> for <code>RestTemplate</code></p>
+</li>
+<li>
+<p><code>WebClient.Builder</code> for <code>WebClient</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>也可以手动应用负责此工具的定制程序，即 <code>MetricsRestTemplateCustomizer</code> 和 <code>MetricsWebClientCustomizer</code>。</p>
+</div>
+<div class="paragraph">
+<p>默认情况下，将使用名称 <code>http.client.requests</code> 生成度量。
+可以通过设置 <code>management.metrics.web.client.request.metric-name</code> 属性来自定义名称。</p>
+</div>
+<div class="paragraph">
+<p>默认情况下，通过检测的客户端所生成的指标带有以下信息标签：</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">标签</th>
+<th class="tableblock halign-left valign-top">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>clientName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">URI的主机部分</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>method</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">请求的方法（例如： <code>GET</code> 或 <code>POST</code>）</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>outcome</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">请求的结果基于响应的状态码。
+  1xx是 <code>INFORMATIONAL</code>，2xx是 <code>SUCCESS</code>，3xx是 <code>REDIRECTION</code>，4xx是 <code>CLIENT_ERROR</code>，5xx是 <code>SERVER_ERROR</code>，否则是 <code>UNKNOWN</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">响应的HTTP状态码（例如： <code>200</code> 或 <code>500</code>），如果有I/O问题，则为 <code>IO_ERROR</code>；否则为 <code>CLIENT_ERROR</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>uri</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">请求在变量替换之前的URI模板，如果可能的话(例如： <code>/api/person/{id}</code>)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>要自定义标签，可以根据你选择的客户端，提供一个实现 <code>RestTemplateExchangeTagsProvider</code> 或
+<code>WebClientExchangeTagsProvider</code> 的 <code>@Bean</code>。 <code>RestTemplateExchangeTags</code> 和 <code>WebClientExchangeTags</code> 中有便捷的静态函数。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-cache">缓存指标</h5>
+<div class="paragraph">
+<p>通过自动配置，可以在启动时使用前缀为 <code>cache</code> 的指标来检测所有可用的 <code>Cache</code>s。
+高速缓存检测针对一组基本指标进行了标准化。还提供其他特定于缓存的指标。</p>
+</div>
+<div class="paragraph">
+<p>支持以下缓存库：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Caffeine</p>
+</li>
+<li>
+<p>EhCache 2</p>
+</li>
+<li>
+<p>Hazelcast</p>
+</li>
+<li>
+<p>任何兼容的JCache (JSR-107)实现</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>根据缓存的名称和从bean名称派生的 <code>CacheManager</code> 的名称对指标进行标记。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+只有启动时可用的缓存才绑定到注册表。对于在启动阶段后即时或以编程方式创建的缓存，需要显式注册。提供 <code>CacheMetricsRegistrar</code> Bean可简化该过程。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-jdbc">数据源指标</h5>
+<div class="paragraph">
+<p>通过自动配置，可以使用前缀为 <code>jdbc.connections</code> 的度量来检测所有可用的 <code>DataSource</code> 对象。
+数据源检测产生的指标表示池中当前活动，空闲，最大允许和最小允许的连接。</p>
+</div>
+<div class="paragraph">
+<p>指标还根据基于bean名称计算的 <code>DataSource</code> 名称进行标记。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+默认情况下，Spring Boot为所有支持的数据源提供元数据。如果你喜欢的数据源不支持开箱即用，则可以添加额外的
+<code>DataSourcePoolMetadataProvider</code> bean。有关示例，请参见 <code>DataSourcePoolMetadataProvidersConfiguration</code>。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>另外，使用Hikaricp前缀公开特定于Hikari的指标。每个度量指标都以池的名称标记（可以通过 <code>spring.datasource.name</code> 进行控制）。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-hibernate">Hibernate指标</h5>
+<div class="paragraph">
+<p>自动配置启用所有可用的Hibernate <code>EntityManagerFactory</code> 实例的检测，这些实例使用名为 <code>hibernate</code>
+的指标启用了统计信息。</p>
+</div>
+<div class="paragraph">
+<p>指标还使用来自bean名称的 <code>EntityManagerFactory</code> 名称进行标记。</p>
+</div>
+<div class="paragraph">
+<p>要启用统计信息，必须将标准JPA属性 <code>hibernate.generate_statistics</code> 设置为 <code>true</code>。
+你可以在自动配置的 <code>EntityManagerFactory</code> 上启用它，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">spring.jpa.properties.hibernate.generate_statistics=true</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-rabbitmq">RabbitMQ指标</h5>
+<div class="paragraph">
+<p>自动配置将使用名为 <code>rabbitmq</code> 的指标启用所有可用的RabbitMQ连接工厂的检测。</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="production-ready-metrics-custom">3.6.4. 注册自定义指标</h4>
+<div class="paragraph">
+<p>要注册自定义指标，请将 <code>MeterRegistry</code> 注入你的组件，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">class Dictionary {
+
+    private final List&lt;String&gt; words = new CopyOnWriteArrayList&lt;&gt;();
+
+    Dictionary(MeterRegistry registry) {
+        registry.gaugeCollectionSize("dictionary.size", Tags.empty(), this.words);
+    }
+
+    // …
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>如果发现重复测量了跨组件或应用程序的一组指标，则可以将此指标封装在 <code>MeterBinder</code> 实现中。
+默认情况下，所有 <code>MeterBinder</code> Bean的指标都将自动绑定到Spring管理的 <code>MeterRegistry</code>。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="production-ready-metrics-per-meter-properties">3.6.5. 自定义单个指标</h4>
+<div class="paragraph">
+<p>如果需要将自定义应用于特定的 <code>Meter</code> 实例，则可以使用 <code>io.micrometer.core.instrument.config.MeterFilter</code> 接口。
+默认情况下，所有 <code>MeterFilter</code> bean都将自动应用于micrometer <code>MeterRegistry.Config</code>。</p>
+</div>
+<div class="paragraph">
+<p>例如，如果要将所有以 <code>com.example</code> 开头的计量器ID的 <code>mytag.region</code> 标签重命名为 <code>mytag.area</code>，则可以执行以下操作：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Bean
+public MeterFilter renameRegionTagMeterFilter() {
+    return MeterFilter.renameTag("com.example", "mytag.region", "mytag.area");
+}</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="production-ready-metrics-common-tags">通用标签</h5>
+<div class="paragraph">
+<p>通用标签通常用于在操作环境（如主机，实例，区域，堆栈等）上进行维度深入分析。通用标签适用于所有计量器，并可以按以下示例所示进行配置：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.tags.region=us-east-1
+management.metrics.tags.stack=prod</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>上面的示例将 <code>region</code> 标签和 <code>stack</code> 标签添加到所有计量器，其值分别为 <code>us-east-1</code> 和 <code>prod</code>。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+如果使用Graphite，则通用标签的顺序很重要。由于使用这种方法无法保证通用标签的顺序，因此建议Graphite用户定义自定义 <code>MeterFilter</code>。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="per-meter属性">Per-meter属性</h5>
+<div class="paragraph">
+<p>除了 <code>MeterFilter</code> bean之外，还可以使用属性在per-meter基础上应用一组有限的自定义设置。
+Per-meter定制适用于任何以给定名称开头的所有计量器IDs。例如，以下将禁用所有ID以 <code>example.remote</code> 开头的计量器：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties" data-lang="properties">management.metrics.enable.example.remote=false</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下属性允许按per-meter自定义：</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 8. Per-meter自定义</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">属性</th>
+<th class="tableblock halign-left valign-top">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>management.metrics.enable</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">是否拒绝计量器发出任何指标。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>management.metrics.distribution.percentiles-histogram</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">是否发布适合计算可聚合(跨维度)百分比近似值的直方图。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>management.metrics.distribution.minimum-expected-value</code>, <code>configprop:management.metrics.distribution.maximum-expected-value</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">通过限制期望值的范围来发布较少的直方图桶。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>management.metrics.distribution.percentiles</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">发布在应用程序中计算的百分位值</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>management.metrics.distribution.sla</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">发布带有SLAs定义的桶的累积直方图。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>有关 <code>percentiles-histogram</code>，<code>percentiles</code> 和 <code>sla</code> 背后的概念的更多详细信息，请参阅micrometer文档的
+<a href="https://micrometer.io/docs/concepts#_histograms_and_percentiles">直方图和百分位数</a>部分。</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="production-ready-metrics-endpoint">3.6.6. 指标端点</h4>
+<div class="paragraph">
+<p>Spring Boot提供了一个 <code>metrics</code> 端点，可用于诊断检查应用程序收集的指标。端点默认情况下不可用，若需公开，
+有关更多详细信息，请参见<a href="#production-ready-endpoints-exposing-endpoints">暴露端点</a>。</p>
+</div>
+<div class="paragraph">
+<p>导航到 <code>/actuator/metrics</code> 会显示可用计量器名称的列表。你可以通过提供特定名称作为选择器来深入查看有关特定计量器的信息，
+例如： <code>/actuator/metrics/jvm.memory.max</code>。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>你在此处使用的名称应与代码中使用的名称相匹配，而不是已经针对其附带的监视系统进行了命名约定标准化后的名称。
+换句话说，如果 <code>jvm.memory.max</code> 由于其蛇形命名约定而在Prometheus中显示为 <code>jvm_memory_max</code>，
+则在检查 <code>metrics</code> 端点中的计量器时，仍应使用 <code>jvm.memory.max</code> 作为选择器。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>你还可以在网址末尾添加任意数量的 <code>tag=KEY:VALUE</code> 查询参数，以在维度上更深入地了解计量器，例如： <code>/actuator/metrics/jvm.memory.max?tag=area:nonheap</code>。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>报告的测量值是与计量器名称和已应用的任何标签相匹配的所有计量器的统计信息的总和。
+因此，在上面的示例中，返回的“值”统计量是堆的“代码缓存”，“压缩类空间”和“元空间”区域的最大内存占用量的总和。
+如果你只想查看“元空间”的最大大小，则可以添加一个额外的 <code>tag=id:Metaspace</code>，
+即 <code>/actuator/metrics/jvm.memory.max?tag=area:nonheap&amp;tag=id:Metaspace</code>。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="production-ready-auditing">3.7. 审计</h3>
+<div class="paragraph">
+<p>一旦启动了Spring Security，Spring Boot Actuator将拥有一个灵活的审核框架来发布事件
+（默认情况下，“身份验证成功”，“失败”和“拒绝访问”异常）。此功能对于基于身份验证失败的报告和实施锁定策略非常有用。</p>
+</div>
+<div class="paragraph">
+<p>可以通过在应用程序的配置中提供类型为 <code>AuditEventRepository</code> 的bean来启用审核。为了方便起见，Spring Boot提供了一个
+<code>InMemoryAuditEventRepository</code>。<code>InMemoryAuditEventRepository</code> 具有有限的功能，我们建议仅将其用于开发环境。
+对于生产环境，请考虑创建自己的替代 <code>AuditEventRepository</code> 实现。</p>
+</div>
+<div class="sect3">
+<h4 id="production-ready-auditing-custom">3.7.1. 自定义审计</h4>
+<div class="paragraph">
+<p>要自定义已发布的安全事件，可以提供自己的 <code>AbstractAuthenticationAuditListener</code> 和
+<code>AbstractAuthorizationAuditListener</code> 的实现。</p>
+</div>
+<div class="paragraph">
+<p>你也可以将审计服务用于自己的业务事件。
+为此，可以将 <code>AuditEventRepository</code> bean注入你自己的组件中并直接使用它，或者通过Spring
+<code>ApplicationEventPublisher</code>（通过实现 <code>ApplicationEventPublisherAware</code>）发布 <code>AuditApplicationEvent</code>。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="production-ready-http-tracing">3.8. HTTP追踪</h3>
+<div class="paragraph">
+<p>可以通过在应用程序的配置中提供 <code>HttpTraceRepository</code> 类型的Bean来启用HTTP追踪。
+为了方便起见，Spring Boot默认提供了一个 <code>InMemoryHttpTraceRepository</code>，用于存储最近100次请求-响应交换的追踪。
+与其他追踪解决方案相比，<code>InMemoryHttpTraceRepository</code> 受到限制，我们建议仅将其用于开发环境。
+对于生产环境，建议使用可用于生产的追踪或可观察性解决方案，
+例如：Zipkin或Spring Cloud Sleuth。或者，创建自己的 <code>HttpTraceRepository</code> 来满足你的需求。</p>
+</div>
+<div class="paragraph">
+<p><code>httptrace</code> 端点可用于获取有关存储在 <code>HttpTraceRepository</code> 中的请求-响应交换的信息。</p>
+</div>
+<div class="sect3">
+<h4 id="production-ready-http-tracing-custom">3.8.1. 自定义HTTP追踪</h4>
+<div class="paragraph">
+<p>要自定义每个追踪中包含的条目，请使用 <code>management.trace.http.include</code> 配置属性。对于高级定制，请考虑注册自己的 <code>HttpExchangeTracer</code> 实现。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="production-ready-process-monitoring">3.9. 进程监控</h3>
+<div class="paragraph">
+<p>在 <code>spring-boot</code> 模块中，你可以找到两个类来创建通常对进程监视有用的文件：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>ApplicationPidFileWriter</code> 创建一个包含应用程序PID的文件（默认情况下，在应用程序目录中，文件名为 <code>application.pid</code>）。</p>
+</li>
+<li>
+<p><code>WebServerPortFileWriter</code> 创建一个文件（一个或多个），其中包含正在运行的Web服务器的端口（默认情况下，在应用程序目录中，文件名为 <code>application.port</code>）。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>默认情况下，这些写入器不会被激活，但你可以启用:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#production-ready-process-monitoring-configuration">通过扩展配置</a></p>
+</li>
+<li>
+<p><a href="#production-ready-process-monitoring-programmatically">以编程方式</a></p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="production-ready-process-monitoring-configuration">3.9.1. 扩展配置</h4>
+<div class="paragraph">
+<p>在 <code>META-INF/spring.factories</code> 文件中，你可以激活写入PID文件的监听器，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>org.springframework.context.ApplicationListener=\
+org.springframework.boot.context.ApplicationPidFileWriter,\
+org.springframework.boot.web.context.WebServerPortFileWriter</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="production-ready-process-monitoring-programmatically">3.9.2. 以编程方式</h4>
+<div class="paragraph">
+<p>你还可以通过调用 <code>SpringApplication.addListeners(&#8230;&#8203;)</code> 方法并传递适当的
+<code>Writer</code> 对象来激活监听器。此方法还允许你自定义 <code>Writer</code> 构造函数中的文件名和路径。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="production-ready-whats-next">3.10. 接下来要读什么</h3>
+<div class="paragraph">
+<p>你可能需要阅读有关 <a href="https://graphiteapp.org">Graphite</a>等绘图工具的信息。</p>
+</div>
+<div class="paragraph">
+<p>否则，你可以继续阅读 <a href="https://docs.spring.io/spring-boot/docs/2.2.2.RELEASE/reference/htmlsingle/#deployment">部署选项</a>，也可以继续阅读有关Spring Boot的
+<a href="https://docs.spring.io/spring-boot/docs/2.2.2.RELEASE/reference/htmlsingle/#build-tool-plugins">构建工具插件</a>的详细信息。</p>
 </div>
 <script type="text/javascript" src="js/tocbot/tocbot.min.js"></script>
 <script type="text/javascript" src="js/toc.js"></script>

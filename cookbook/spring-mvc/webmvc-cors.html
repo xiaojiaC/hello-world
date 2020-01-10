@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="[.small]#{docSpringWebFlux}#webflux-cors[WebFlux]#">
+<meta name="author" content="[.small]#&lt;&lt;spring-webflux.adoc#webflux-cors,WebFlux&gt;&gt;#">
 <title>CORS</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -503,7 +503,7 @@ $(addBlockSwitches);
 <div id="header">
 <h1>CORS</h1>
 <div class="details">
-<span id="author" class="author">[.small]#{docSpringWebFlux}#webflux-cors[WebFlux]#</span><br>
+<span id="author" class="author">[.small]#&lt;&lt;spring-webflux.adoc#webflux-cors,WebFlux&gt;&gt;#</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -533,7 +533,7 @@ $(addBlockSwitches);
 <h2 id="mvc-cors-intro">1. 介绍</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><span class="small">{docSpringWebFlux}#webflux-cors-intro[WebFlux]</span></p>
+<p><span class="small"><a href="spring-webflux.html#webflux-cors-intro">WebFlux</a></span></p>
 </div>
 <div class="paragraph">
 <p>出于安全原因，浏览器禁止AJAX调用当前来源以外的资源。
@@ -551,7 +551,7 @@ $(addBlockSwitches);
 <h2 id="mvc-cors-processing">2. 处理过程</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><span class="small">{docSpringWebFlux}#webflux-cors-processing[WebFlux]</span></p>
+<p><span class="small"><a href="spring-webflux.html#webflux-cors-processing">WebFlux</a></span></p>
 </div>
 <div class="paragraph">
 <p>CORS规范分为预检，简单和实际请求。要了解CORS的工作原理，你可以阅读
@@ -615,7 +615,7 @@ Java配置或XML名称空间声明此类映射，这导致将单个全局映射�
 <h2 id="mvc-cors-controller">3. <code>@CrossOrigin</code></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><span class="small">{docSpringWebFlux}#webflux-cors-controller[WebFlux]</span></p>
+<p><span class="small"><a href="spring-webflux.html#webflux-cors-controller">WebFlux</a></span></p>
 </div>
 <div class="paragraph">
 <p>{javadocSpring}/web/bind/annotation/CrossOrigin.html[<code>@CrossOrigin</code>]
@@ -714,7 +714,7 @@ public class AccountController {
 <h2 id="mvc-cors-global">4. 全局配置</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><span class="small">{docSpringWebFlux}#webflux-cors-global[WebFlux]</span></p>
+<p><span class="small"><a href="spring-webflux.html#webflux-cors-global">WebFlux</a></span></p>
 </div>
 <div class="paragraph">
 <p>除了细粒度的控制器方法级别配置外，你可能还想定义一些全局CORS配置。
@@ -747,7 +747,7 @@ public class AccountController {
 <div class="sect2">
 <h3 id="mvc-cors-global-java">4.1. Java配置</h3>
 <div class="paragraph">
-<p><span class="small">{docSpringWebFlux}#webflux-cors-global[WebFlux]</span></p>
+<p><span class="small"><a href="spring-webflux.html#webflux-cors-global">WebFlux</a></span></p>
 </div>
 <div class="paragraph">
 <p>要在MVC Java配置中启用CORS，可以使用 <code>CorsRegistry</code> 回调，如以下示例所示：</p>
@@ -803,7 +803,7 @@ public class WebConfig implements WebMvcConfigurer {
 <h2 id="mvc-cors-filter">5. CORS过滤器</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><span class="small">{docSpringWebFlux}#webflux-cors-webfilter[WebFlux]</span></p>
+<p><span class="small"><a href="spring-webflux.html#webflux-cors-webfilter">WebFlux</a></span></p>
 </div>
 <div class="paragraph">
 <p>你可以通过内置的 {javadocSpring}/web/filter/CorsFilter.html[<code>CorsFilter</code>]应用CORS支持。</p>

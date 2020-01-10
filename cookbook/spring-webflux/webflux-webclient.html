@@ -5,8 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="[.small]#&lt;&lt;spring-webflux.adoc#webflux-test,与Spring WebFlux相同&gt;&gt;#">
-<title>测试</title>
+<title>WebClient</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -499,47 +498,677 @@ $(addBlockSwitches);
 </script>
 
 </head>
-<body id="testing" class="book toc2 toc-left">
+<body id="webflux-client" class="book toc2 toc-left">
 <div id="header">
-<h1>测试</h1>
-<div class="details">
-<span id="author" class="author">[.small]#&lt;&lt;spring-webflux.adoc#webflux-test,与Spring WebFlux相同&gt;&gt;#</span><br>
-</div>
+<h1>WebClient</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
-
+<ul class="sectlevel1">
+<li><a href="#webflux-client-builder">1. 配置</a>
+<ul class="sectlevel2">
+<li><a href="#webflux-client-builder-maxinmemorysize">1.1. MaxInMemorySize</a></li>
+<li><a href="#webflux-client-builder-reactor">1.2. Reactor Netty</a></li>
+<li><a href="#webflux-client-builder-jetty">1.3. Jetty</a></li>
+</ul>
+</li>
+<li><a href="#webflux-client-retrieve">2. <code>retrieve()</code></a></li>
+<li><a href="#webflux-client-exchange">3. <code>exchange()</code></a></li>
+<li><a href="#webflux-client-body">4. 请求体</a>
+<ul class="sectlevel2">
+<li><a href="#webflux-client-body-form">4.1. 表单数据</a></li>
+<li><a href="#webflux-client-body-multipart">4.2. Multipart数据</a></li>
+</ul>
+</li>
+<li><a href="#webflux-client-filter">5. 客户端过滤器</a></li>
+<li><a href="#webflux-client-synchronous">6. 同步使用</a></li>
+<li><a href="#webflux-client-testing">7. 测试</a></li>
+</ul>
 </div>
 </div>
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>本节总结了Spring MVC应用程序在 <code>spring-test</code> 中可用的选项。</p>
+<p>Spring WebFlux包括用于HTTP请求的响应式，非阻塞 <code>WebClient</code>。客户端具有函数式，流利的API，
+具有用于声明式组合的响应式类型，请参见 {doc-spring-webflux}#webflux-reactive-libraries[响应式类库]。
+WebFlux客户端和服务器依靠相同的非阻塞<a href="spring-webflux.html#webflux-codecs">编解码器</a>对请求和响应内容进行编码和解码。</p>
+</div>
+<div class="paragraph">
+<p><code>WebClient</code> 在内部委托给HTTP客户端库。默认情况下，它使用 <a href="https://github.com/reactor/reactor-netty">Reactor Netty</a>，
+内置了对Jetty <a href="https://github.com/jetty-project/jetty-reactive-httpclient">响应式HttpClient</a>的支持，其
+他的则可以通过 <code>ClientHttpConnector</code> 插入。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="webflux-client-builder">1. 配置</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>创建 <code>WebClient</code> 的最简单方法是通过静态工厂方法之一：</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Servlet API Mocks：Servlet API契约的模拟实现，用于单元测试控制器，过滤器和其他Web组件。有关更多详细信息，请参见
-<a href="spring-test.html#mock-objects-servlet">Servlet API</a>模拟对象。</p>
+<p><code>WebClient.create()</code></p>
 </li>
 <li>
-<p>TestContext Framework：支持在JUnit和TestNG测试中加载Spring配置，包括在测试方法之间高效地缓存已加载的配置，
-并支持通过 <code>MockServletContext</code> 加载 <code>WebApplicationContext</code>。有关更多详细信息，请参见
-<a href="spring-test.html#testcontext-framework">TestContext Framework</a>。</p>
-</li>
-<li>
-<p>Spring MVC Test：一个框架，也称为 <code>MockMvc</code>，用于通过 <code>DispatcherServlet</code>（即支持注解）测试带注解的控制器，该框架具有Spring MVC基础设施，
-但没有HTTP服务器。有关更多详细信息，请参见 <a href="spring-test.html#spring-mvc-test-framework">Spring MVC Test</a>。</p>
-</li>
-<li>
-<p>Client-side REST: <code>spring-test</code> 提供了一个 <code>MockRestServiceServer</code>，你可以将其用作模拟服务器，以测试内部使用 <code>RestTemplate</code> 的客户端代码。
-有关更多详细信息，请参见<a href="spring-test.html#spring-mvc-test-client">客户端REST测试</a>。</p>
-</li>
-<li>
-<p><code>WebTestClient</code>: 构建用于测试WebFlux应用程序，但也可以用于通过HTTP连接到任何服务器的端到端集成测试。
-它是一个无阻塞的响应式客户端，非常适合测试异步和流传输场景。</p>
+<p><code>WebClient.create(String baseUrl)</code></p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>上面的方法使用默认设置的Reactor Netty <code>HttpClient</code>，并期望 <code>io.projectreactor.netty:reactor-netty</code> 位于类路径上。</p>
+</div>
+<div class="paragraph">
+<p>你还可以将 <code>WebClient.builder()</code> 与其他选项一起使用：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>uriBuilderFactory</code>: 自定义的 <code>UriBuilderFactory</code> 用作基本URL。</p>
+</li>
+<li>
+<p><code>defaultHeader</code>: 每个请求的头部。</p>
+</li>
+<li>
+<p><code>defaultCookie</code>: 每个请求的Cookie。</p>
+</li>
+<li>
+<p><code>defaultRequest</code>: <code>Consumer</code> 可以定制每个请求。</p>
+</li>
+<li>
+<p><code>filter</code>: 每个请求的客户端过滤器。</p>
+</li>
+<li>
+<p><code>exchangeStrategies</code>: HTTP消息读取器/写入器定制。</p>
+</li>
+<li>
+<p><code>clientConnector</code>: HTTP客户端库设置。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>以下示例配置<a href="spring-webflux.html#webflux-codecs">HTTP编解码器</a>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">    WebClient client = WebClient.builder()
+          .exchangeStrategies(builder -&gt; {
+                  return builder.codecs(codecConfigurer -&gt; {
+                      //...
+                  });
+          })
+          .build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>构建后，<code>WebClient</code> 实例是不可变的。但是，你可以克隆它并构建修改后的副本，而不会影响原始实例，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">    WebClient client1 = WebClient.builder()
+            .filter(filterA).filter(filterB).build();
+
+    WebClient client2 = client1.mutate()
+            .filter(filterC).filter(filterD).build();
+
+    // client1 has filterA, filterB
+
+    // client2 has filterA, filterB, filterC, filterD</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="webflux-client-builder-maxinmemorysize">1.1. MaxInMemorySize</h3>
+<div class="paragraph">
+<p>Spring WebFlux配置了在编解码器中缓冲内存中数据的限制，以避免应用程序内存问题。默认情况下，此配置为256KB，
+如果这不足以满足你的用例，你将看到以下内容：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>org.springframework.core.io.buffer.DataBufferLimitException: Exceeded limit on max bytes to buffer</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你可以使用以下代码示例在所有默认编解码器上配置此限制：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">    WebClient webClient = WebClient.builder()
+          .exchangeStrategies(builder -&gt;
+              builder.codecs(codecs -&gt;
+                  codecs.defaultCodecs().maxInMemorySize(2 * 1024 * 1024)
+              )
+          )
+          .build();</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="webflux-client-builder-reactor">1.2. Reactor Netty</h3>
+<div class="paragraph">
+<p>要自定义Reactor Netty设置，只需提供一个预先配置的 <code>HttpClient</code>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">    HttpClient httpClient = HttpClient.create().secure(sslSpec -&gt; ...);
+
+    WebClient webClient = WebClient.builder()
+            .clientConnector(new ReactorClientHttpConnector(httpClient))
+            .build();</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="webflux-client-builder-reactor-resources">1.2.1. 资源</h4>
+<div class="paragraph">
+<p>默认情况下，<code>HttpClient</code> 会参与 <code>reactor.netty.http.HttpResources</code> 中包含的全局Reactor Netty资源，
+包括事件循环线程和连接池。这是推荐的模式，因为固定的共享资源是事件循环并发的首选。在这种模式下，全局资源将保持活动状态，直到进程退出。</p>
+</div>
+<div class="paragraph">
+<p>如果服务器与进程同步，通常不需要显式关闭。但是，如果服务器可以启动或停止进程内（例如：部署为WAR的Spring MVC应用程序），
+则可以声明类型为 <code>ReactorResourceFactory</code> 的Spring托管Bean，其中 <code>globalResources=true</code>（默认值）以确保
+Reactor关闭Spring <code>ApplicationContext</code> 时，将关闭Netty全局资源，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">    @Bean
+    public ReactorResourceFactory reactorResourceFactory() {
+        return new ReactorResourceFactory();
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你也可以选择不参与全局Reactor Netty资源。但是，在这种模式下，确保所有Reactor Netty客户端和服务器实例使用共享资源是你的重担，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">    @Bean
+    public ReactorResourceFactory resourceFactory() {
+        ReactorResourceFactory factory = new ReactorResourceFactory();
+        factory.setGlobalResources(false); <i class="conum" data-value="1"></i><b>(1)</b>
+        return factory;
+    }
+
+    @Bean
+    public WebClient webClient() {
+
+        Function&lt;HttpClient, HttpClient&gt; mapper = client -&gt; {
+            // Further customizations...
+        };
+
+        ClientHttpConnector connector =
+                new ReactorClientHttpConnector(resourceFactory(), mapper); <i class="conum" data-value="2"></i><b>(2)</b>
+
+        return WebClient.builder().clientConnector(connector).build(); <i class="conum" data-value="3"></i><b>(3)</b>
+    }</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>创建独立于全局资源的资源。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>将 <code>ReactorClientHttpConnector</code> 构造函数与资源工厂一起使用。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>将连接器插入 <code>WebClient.Builder</code>。</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="webflux-client-builder-reactor-timeout">1.2.2. 超时</h4>
+<div class="paragraph">
+<p>要配置连接超时：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">import io.netty.channel.ChannelOption;
+
+HttpClient httpClient = HttpClient.create()
+        .tcpConfiguration(client -&gt;
+                client.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>要配置读取和/或写入超时值：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.handler.timeout.WriteTimeoutHandler;
+
+HttpClient httpClient = HttpClient.create()
+        .tcpConfiguration(client -&gt;
+                client.doOnConnected(conn -&gt; conn
+                        .addHandlerLast(new ReadTimeoutHandler(10))
+                        .addHandlerLast(new WriteTimeoutHandler(10))));</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="webflux-client-builder-jetty">1.3. Jetty</h3>
+<div class="paragraph">
+<p>以下示例显示如何自定义Jetty <code>HttpClient</code> 设置：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">    HttpClient httpClient = new HttpClient();
+    httpClient.setCookieStore(...);
+    ClientHttpConnector connector = new JettyClientHttpConnector(httpClient);
+
+    WebClient webClient = WebClient.builder().clientConnector(connector).build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>默认情况下，<code>HttpClient</code> 创建自己的资源（<code>Executor</code>, <code>ByteBufferPool</code>, <code>Scheduler</code>），这些资源将保持活动状态，
+直到进程退出或调用 <code>stop()</code> 为止。</p>
+</div>
+<div class="paragraph">
+<p>你可以在Jetty客户端（和服务器）的多个实例之间共享资源，并通过声明 <code>JettyResourceFactory</code>
+类型的Spring托管bean来确保在关闭Spring <code>ApplicationContext</code> 时关闭资源，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">    @Bean
+    public JettyResourceFactory resourceFactory() {
+        return new JettyResourceFactory();
+    }
+
+    @Bean
+    public WebClient webClient() {
+
+        HttpClient httpClient = new HttpClient();
+        // Further customizations...
+
+        ClientHttpConnector connector =
+                new JettyClientHttpConnector(httpClient, resourceFactory());<i class="conum" data-value="1"></i><b>(1)</b>
+
+        return WebClient.builder().clientConnector(connector).build();<i class="conum" data-value="2"></i><b>(2)</b>
+    }</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>将 <code>JettyClientHttpConnector</code> 构造函数与资源工厂一起使用。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>将连接器插入 <code>WebClient.Builder</code>。</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="webflux-client-retrieve">2. <code>retrieve()</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>retrieve()</code> 方法是获取响应体并将其解码的最简单方法。以下示例显示了如何执行此操作：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">    WebClient client = WebClient.create("http://example.org");
+
+    Mono&lt;Person&gt; result = client.get()
+            .uri("/persons/{id}", id).accept(MediaType.APPLICATION_JSON)
+            .retrieve()
+            .bodyToMono(Person.class);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你还可以从响应中解码出一个对象流，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">    Flux&lt;Quote&gt; result = client.get()
+            .uri("/quotes").accept(MediaType.TEXT_EVENT_STREAM)
+            .retrieve()
+            .bodyToFlux(Quote.class);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>默认情况下，具有4xx或5xx状态码的响应会导致 <code>WebClientResponseException</code> 或其HTTP状态特定的子类之一，
+例如：<code>WebClientResponseException.BadRequest</code>，<code>WebClientResponseException.NotFound</code> 等。
+你还可以使用 <code>onStatus</code> 方法来自定义结果异常，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">    Mono&lt;Person&gt; result = client.get()
+            .uri("/persons/{id}", id).accept(MediaType.APPLICATION_JSON)
+            .retrieve()
+            .onStatus(HttpStatus::is4xxServerError, response -&gt; ...)
+            .onStatus(HttpStatus::is5xxServerError, response -&gt; ...)
+            .bodyToMono(Person.class);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>使用 <code>onStatus</code> 时，如果期望响应包含内容，则 <code>onStatus</code> 回调应使用它。否则，内容将自动耗尽以确保释放资源。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="webflux-client-exchange">3. <code>exchange()</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>与 <code>retrieve</code> 方法相比，<code>exchange()</code> 方法提供了更多的控制。以下示例等效于 <code>retrieve()</code>，但也提供了对 <code>ClientResponse</code> 的访问：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">    Mono&lt;Person&gt; result = client.get()
+            .uri("/persons/{id}", id).accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .flatMap(response -&gt; response.bodyToMono(Person.class));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>在此级别，你还可以创建完整的 <code>ResponseEntity</code>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">    Mono&lt;ResponseEntity&lt;Person&gt;&gt; result = client.get()
+            .uri("/persons/{id}", id).accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .flatMap(response -&gt; response.toEntity(Person.class));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>注意（与 <code>retrieve()</code> 不同），对于 <code>exchange()</code>，没有针对4xx和5xx响应的自动错误信号。你必须检查状态码并决定如何处理。</p>
+</div>
+<div class="paragraph">
+<p>CAUTION:</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>使用 <code>exchange()</code> 时，即使在发生异常时，也必须确保主体始终被消耗或释放（请参阅
+{doc-spring-core}#databuffers-using[使用DataBuffer]）。
+通常，你可以通过在 <code>ClientResponse</code> 上调用 <code>bodyTo*</code> 或 <code>toEntity*</code> 来将主体转换为所需类型的对象来执行此操作，
+但是你也可以调用 <code>releaseBody()</code> 来丢弃主体内容而不使用它，或者可以调用 <code>toBodilessEntity()</code> 来获取主体状态和标头（同时丢弃正文）。</p>
+</div>
+<div class="paragraph">
+<p>最后，有 <code>bodyToMono(Void.class)</code>，仅在没有响应内容的情况下才应使用。如果响应中确实包含内容，则该连接将关闭并且不会放回池中，因为该连接不会处于可重用状态。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="webflux-client-body">4. 请求体</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>可以使用 <code>ReactiveAdapterRegistry</code> 处理的任何异步类型对请求体进行编码，例如：<code>Mono</code> 或Kotlin Coroutines的 <code>Deferred</code>，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">    Mono&lt;Person&gt; personMono = ... ;
+
+    Mono&lt;Void&gt; result = client.post()
+            .uri("/persons/{id}", id)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(personMono, Person.class)
+            .retrieve()
+            .bodyToMono(Void.class);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你还可以对对象流进行编码，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">    Flux&lt;Person&gt; personFlux = ... ;
+
+    Mono&lt;Void&gt; result = client.post()
+            .uri("/persons/{id}", id)
+            .contentType(MediaType.APPLICATION_STREAM_JSON)
+            .body(personFlux, Person.class)
+            .retrieve()
+            .bodyToMono(Void.class);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>另外，如果你具有实际值，则可以使用 <code>bodyValue</code> 快捷方式，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">    Person person = ... ;
+
+    Mono&lt;Void&gt; result = client.post()
+            .uri("/persons/{id}", id)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(person)
+            .retrieve()
+            .bodyToMono(Void.class);</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="webflux-client-body-form">4.1. 表单数据</h3>
+<div class="paragraph">
+<p>要发送表单数据，可以提供 <code>MultiValueMap&lt;String, String&gt;</code> 作为正文。
+请注意，内容由 <code>FormHttpMessageWriter</code> 自动设置为 <code>application/x-www-form-urlencoded</code>。
+下面的示例演示如何使用 <code>MultiValueMap&lt;String, String&gt;</code>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">    MultiValueMap&lt;String, String&gt; formData = ... ;
+
+    Mono&lt;Void&gt; result = client.post()
+            .uri("/path", id)
+            .bodyValue(formData)
+            .retrieve()
+            .bodyToMono(Void.class);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你还可以使用 <code>BodyInserters</code> 内联提供表单数据，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">    import static org.springframework.web.reactive.function.BodyInserters.*;
+
+    Mono&lt;Void&gt; result = client.post()
+            .uri("/path", id)
+            .body(fromFormData("k1", "v1").with("k2", "v2"))
+            .retrieve()
+            .bodyToMono(Void.class);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="webflux-client-body-multipart">4.2. Multipart数据</h3>
+<div class="paragraph">
+<p>要发送multipart数据，你需要提供一个 <code>MultiValueMap&lt;String, ?&gt;</code>，其值可以是代表part内容的对象实例或代表part内容和标头的 <code>HttpEntity</code> 实例。
+<code>MultipartBodyBuilder</code> 提供了一个方便的API来准备multipart请求。下面的示例演示如何创建 <code>MultiValueMap&lt;String, ?&gt;</code>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">    MultipartBodyBuilder builder = new MultipartBodyBuilder();
+    builder.part("fieldPart", "fieldValue");
+    builder.part("filePart", new FileSystemResource("...logo.png"));
+    builder.part("jsonPart", new Person("Jason"));
+
+    MultiValueMap&lt;String, HttpEntity&lt;?&gt;&gt; parts = builder.build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>在大多数情况下，你不必为每个part指定 <code>Content-Type</code>。内容类型是根据选择用于对其进行序列化的 <code>HttpMessageWriter</code> 自动确定的，
+对于 <code>Resource</code> 而言，取决于文件扩展名。如有必要，你可以通过重载的构建器 <code>part</code> 方法之一显式提供 <code>MediaType</code> 以供每个part使用。</p>
+</div>
+<div class="paragraph">
+<p>准备好 <code>MultiValueMap</code> 之后，将其传递给 <code>WebClient</code> 的最简单方法是通过 <code>body</code> 方法，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">    MultipartBodyBuilder builder = ...;
+
+    Mono&lt;Void&gt; result = client.post()
+            .uri("/path", id)
+            .body(builder.build())
+            .retrieve()
+            .bodyToMono(Void.class);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>如果 <code>MultiValueMap</code> 包含至少一个非 <code>String</code> 值，该值也可以表示常规表单数据（即 <code>application/x-www-form-urlencoded</code>），
+则无需将 <code>Content-Type</code> 设置为 <code>multipart/form-data</code>。在使用 <code>MultipartBodyBuilder</code> 时总是这样，这确保了 <code>HttpEntity</code>
+包装器。</p>
+</div>
+<div class="paragraph">
+<p>作为 <code>MultipartBodyBuilder</code> 的替代方案，你还可以通过内置的 <code>BodyInserters</code> 提供内联样式的multipart内容，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">    import static org.springframework.web.reactive.function.BodyInserters.*;
+
+    Mono&lt;Void&gt; result = client.post()
+            .uri("/path", id)
+            .body(fromMultipartData("fieldPart", "value").with("filePart", resource))
+            .retrieve()
+            .bodyToMono(Void.class);</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="webflux-client-filter">5. 客户端过滤器</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>你可以通过 <code>WebClient.Builder</code> 注册客户端过滤器（<code>ExchangeFilterFunction</code>），以拦截和修改请求，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">WebClient client = WebClient.builder()
+        .filter((request, next) -&gt; {
+
+            ClientRequest filtered = ClientRequest.from(request)
+                    .header("foo", "bar")
+                    .build();
+
+            return next.exchange(filtered);
+        })
+        .build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>这可以用于跨领域的关注，例如：身份验证。以下示例使用过滤器通过静态工厂方法进行基本身份验证：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">import static org.springframework.web.reactive.function.client.ExchangeFilterFunctions.basicAuthentication;
+
+WebClient client = WebClient.builder()
+        .filter(basicAuthentication("user", "password"))
+        .build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>过滤器全局应用于每个请求。要更改特定请求的过滤器行为，你可以将请求属性添加到 <code>ClientRequest</code>，然后链中的所有过滤器都可以访问该请求属性，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">WebClient client = WebClient.builder()
+        .filter((request, next) -&gt; {
+            Optional&lt;Object&gt; usr = request.attribute("myAttribute");
+            // ...
+        })
+        .build();
+
+client.get().uri("http://example.org/")
+        .attribute("myAttribute", "...")
+        .retrieve()
+        .bodyToMono(Void.class);
+
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你还可以复制现有的 <code>WebClient</code>，插入新的过滤器或删除已注册的过滤器。以下示例在索引0处插入一个基本身份验证过滤器：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">import static org.springframework.web.reactive.function.client.ExchangeFilterFunctions.basicAuthentication;
+
+WebClient client = webClient.mutate()
+        .filters(filterList -&gt; {
+            filterList.add(0, basicAuthentication("user", "password"));
+        })
+        .build();</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="webflux-client-synchronous">6. 同步使用</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>通过在结果末尾进行阻塞，可以以同步方式使用 <code>WebClient</code>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Person person = client.get().uri("/person/{id}", i).retrieve()
+    .bodyToMono(Person.class)
+    .block();
+
+List&lt;Person&gt; persons = client.get().uri("/persons").retrieve()
+    .bodyToFlux(Person.class)
+    .collectList()
+    .block();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>但是，如果需要进行多次请求，则可以避免单独阻塞每个响应，而等待合并的结果，这样会更有效：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Mono&lt;Person&gt; personMono = client.get().uri("/person/{id}", personId)
+        .retrieve().bodyToMono(Person.class);
+
+Mono&lt;List&lt;Hobby&gt;&gt; hobbiesMono = client.get().uri("/person/{id}/hobbies", personId)
+        .retrieve().bodyToFlux(Hobby.class).collectList();
+
+Map&lt;String, Object&gt; data = Mono.zip(personMono, hobbiesMono, (person, hobbies) -&gt; {
+            Map&lt;String, String&gt; map = new LinkedHashMap&lt;&gt;();
+            map.put("person", person);
+            map.put("hobbies", hobbies);
+            return map;
+        })
+        .block();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以上仅是一个示例。还有许多其他模式和运算符可用于构建响应式管道，该响应式管道可进行许多远程调用（可能是嵌套的，相互依赖的），而不会阻塞到最后。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+使用 <code>Flux</code> 或 <code>Mono</code>，你永远不必阻塞Spring MVC或Spring WebFlux控制器。
+只需从控制器方法返回结果的响应式类型。相同的原则适用于Kotlin Coroutines和Spring WebFlux，只需在控制器方法中使用suspending function或返回 <code>Flow</code> 即可。
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="webflux-client-testing">7. 测试</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>要测试使用 <code>WebClient</code> 的代码，可以使用模拟Web服务器，例如： <a href="https://github.com/square/okhttp#mockwebserver">OkHttp MockWebServer</a>。
+要查看其用法示例，请查看Spring Framework测试套件中的
+<a href="https://github.com/spring-projects/spring-framework/blob/master/spring-webflux/src/test/java/org/springframework/web/reactive/function/client/WebClientIntegrationTests.java"><code>WebClientIntegrationTests</code></a>
+或OkHttp存储库中的 <a href="https://github.com/square/okhttp/tree/master/samples/static-server"><code>static-server</code></a>示例。</p>
 </div>
 </div>
 </div>

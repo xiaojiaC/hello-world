@@ -5,8 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="[.small]#&lt;&lt;spring-webflux.adoc#webflux-test,与Spring WebFlux相同&gt;&gt;#">
-<title>测试</title>
+<title>函数式端点</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -499,47 +498,652 @@ $(addBlockSwitches);
 </script>
 
 </head>
-<body id="testing" class="book toc2 toc-left">
+<body id="webflux-fn" class="book toc2 toc-left">
 <div id="header">
-<h1>测试</h1>
-<div class="details">
-<span id="author" class="author">[.small]#&lt;&lt;spring-webflux.adoc#webflux-test,与Spring WebFlux相同&gt;&gt;#</span><br>
-</div>
+<h1>函数式端点</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
-
+<ul class="sectlevel1">
+<li><a href="#webflux-fn-overview">1. 概览</a></li>
+<li><a href="#webflux-fn-handler-functions">2. HandlerFunction</a>
+<ul class="sectlevel2">
+<li><a href="#webflux-fn-request">2.1. <code>ServerRequest</code></a></li>
+<li><a href="#webflux-fn-response">2.2. <code>ServerResponse</code></a></li>
+<li><a href="#webflux-fn-handler-classes">2.3. 处理程序类</a></li>
+<li><a href="#webflux-fn-handler-validation">2.4. 验证</a></li>
+</ul>
+</li>
+<li><a href="#webflux-fn-router-functions">3. <code>RouterFunction</code></a>
+<ul class="sectlevel2">
+<li><a href="#webflux-fn-predicates">3.1. 谓词</a></li>
+<li><a href="#webflux-fn-routes">3.2. 路由</a></li>
+<li><a href="#_嵌套路由">3.3. 嵌套路由</a></li>
+</ul>
+</li>
+<li><a href="#webflux-fn-running">4. 运行服务器</a></li>
+<li><a href="#webflux-fn-handler-filter-function">5. 过滤处理程序函数</a></li>
+</ul>
 </div>
 </div>
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>本节总结了Spring MVC应用程序在 <code>spring-test</code> 中可用的选项。</p>
+<p>Spring WebFlux包含WebFlux.fn，这是一个轻量级的函数式编程模型，其中的函数用于路由和处理请求，
+而契约则是为不变性而设计的。它是基于注解的编程模型的替代方案，但可以在相同的
+<a href="spring-webflux.html#webflux-reactive-spring-web">[spring-webflux#webflux-reactive-spring-web]</a>基础上运行。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="webflux-fn-overview">1. 概览</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>在WebFlux.fn中，HTTP请求由 <code>HandlerFunction</code> 处理：该函数接受 <code>ServerRequest</code> 并返回延迟的 <code>ServerResponse</code>
+（即 <code>Mono&lt;ServerResponse&gt;</code>）。请求和响应对象都有不可变的契约，这些契约提供对HTTP请求和响应的JDK 8友好访问。
+<code>HandlerFunction</code> 等效于基于注解的编程模型中 <code>@RequestMapping</code> 方法的主体。</p>
+</div>
+<div class="paragraph">
+<p>传入的请求通过 <code>RouterFunction</code> 路由到处理程序函数：该函数接受 <code>ServerRequest</code> 并返回延迟的 <code>HandlerFunction</code>
+（即 <code>Mono&lt;HandlerFunction&gt;</code>）。当路由器函数匹配时，返回处理程序函数。否则为空Mono。
+<code>RouterFunction</code> 等效于 <code>@RequestMapping</code> 注解，但主要区别在于路由器函数不仅提供数据，还提供行为。</p>
+</div>
+<div class="paragraph">
+<p><code>RouterFunctions.route()</code> 提供了一个路由器构建器，可简化路由器的创建过程，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.web.reactive.function.server.RequestPredicates.*;
+import static org.springframework.web.reactive.function.server.RouterFunctions.route;
+
+PersonRepository repository = ...
+PersonHandler handler = new PersonHandler(repository);
+
+RouterFunction&lt;ServerResponse&gt; route = route()
+	.GET("/person/{id}", accept(APPLICATION_JSON), handler::getPerson)
+	.GET("/person", accept(APPLICATION_JSON), handler::listPeople)
+	.POST("/person", handler::createPerson)
+	.build();
+
+
+public class PersonHandler {
+
+	// ...
+
+	public Mono&lt;ServerResponse&gt; listPeople(ServerRequest request) {
+		// ...
+	}
+
+	public Mono&lt;ServerResponse&gt; createPerson(ServerRequest request) {
+		// ...
+	}
+
+	public Mono&lt;ServerResponse&gt; getPerson(ServerRequest request) {
+		// ...
+	}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>运行 <code>RouterFunction</code> 的一种方法是将其转换为 <code>HttpHandler</code> 并通过内置
+<a href="spring-webflux.html#webflux-httphandler">服务器适配器</a>之一进行安装：</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Servlet API Mocks：Servlet API契约的模拟实现，用于单元测试控制器，过滤器和其他Web组件。有关更多详细信息，请参见
-<a href="spring-test.html#mock-objects-servlet">Servlet API</a>模拟对象。</p>
+<p><code>RouterFunctions.toHttpHandler(RouterFunction)</code></p>
 </li>
 <li>
-<p>TestContext Framework：支持在JUnit和TestNG测试中加载Spring配置，包括在测试方法之间高效地缓存已加载的配置，
-并支持通过 <code>MockServletContext</code> 加载 <code>WebApplicationContext</code>。有关更多详细信息，请参见
-<a href="spring-test.html#testcontext-framework">TestContext Framework</a>。</p>
-</li>
-<li>
-<p>Spring MVC Test：一个框架，也称为 <code>MockMvc</code>，用于通过 <code>DispatcherServlet</code>（即支持注解）测试带注解的控制器，该框架具有Spring MVC基础设施，
-但没有HTTP服务器。有关更多详细信息，请参见 <a href="spring-test.html#spring-mvc-test-framework">Spring MVC Test</a>。</p>
-</li>
-<li>
-<p>Client-side REST: <code>spring-test</code> 提供了一个 <code>MockRestServiceServer</code>，你可以将其用作模拟服务器，以测试内部使用 <code>RestTemplate</code> 的客户端代码。
-有关更多详细信息，请参见<a href="spring-test.html#spring-mvc-test-client">客户端REST测试</a>。</p>
-</li>
-<li>
-<p><code>WebTestClient</code>: 构建用于测试WebFlux应用程序，但也可以用于通过HTTP连接到任何服务器的端到端集成测试。
-它是一个无阻塞的响应式客户端，非常适合测试异步和流传输场景。</p>
+<p><code>RouterFunctions.toHttpHandler(RouterFunction, HandlerStrategies)</code></p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>大多数应用程序都可以通过WebFlux Java配置运行，请参阅<a href="#webflux-fn-running">运行服务器</a>。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="webflux-fn-handler-functions">2. HandlerFunction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>ServerRequest</code> 和 <code>ServerResponse</code> 是不可变的接口，它们提供JDK 8友好的HTTP请求和响应访问。
+请求和响应都提供对主体流的 <a href="http://www.reactive-streams.org">Reactive Streams</a>背压。请求主体用Reactor <code>Flux</code> 或 <code>Mono</code> 表示。
+响应主体由任何Reactive Streams <code>Publisher</code> 组成，包括 <code>Flux</code> 和 <code>Mono</code>。有关更多信息，请参见
+<a href="spring-webflux.html#webflux-reactive-libraries">响应式库</a>。</p>
+</div>
+<div class="sect2">
+<h3 id="webflux-fn-request">2.1. <code>ServerRequest</code></h3>
+<div class="paragraph">
+<p><code>ServerRequest</code> 提供对HTTP方法，URI，标头和查询参数的访问，而通过 <code>body</code> 方法提供对主体的访问。</p>
+</div>
+<div class="paragraph">
+<p>下面的示例将请求体提取到 <code>Mono&lt;String&gt;</code>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Mono&lt;String&gt; string = request.bodyToMono(String.class);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下示例将主体提取到 <code>Flux&lt;Person&gt;</code>（或Kotlin中的 <code>Flux&lt;Person&gt;</code>），其中 <code>Person</code> 对象从某种序列化形式（例如：JSON或XML）解码：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Flux&lt;Person&gt; people = request.bodyToFlux(Person.class);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>前面的示例是使用更通用的 <code>ServerRequest.body(BodyExtractor)</code> 的快捷方式，该请求接受
+<code>BodyExtractor</code> 函数式策略接口。实用工具类 <code>BodyExtractors</code> 提供对许多实例的访问。例如，前面的示例也可以编写如下：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Mono&lt;String&gt; string = request.body(BodyExtractors.toMono(String.class));
+Flux&lt;Person&gt; people = request.body(BodyExtractors.toFlux(Person.class));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>下面的示例显示如何访问表单数据：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Mono&lt;MultiValueMap&lt;String, String&gt; map = request.formData();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下示例显示了如何以map形式访问multipart数据：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Mono&lt;MultiValueMap&lt;String, Part&gt; map = request.multipartData();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>下面的示例演示如何以流方式一次访问multiparts：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Flux&lt;Part&gt; parts = request.body(BodyExtractos.toParts());</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="webflux-fn-response">2.2. <code>ServerResponse</code></h3>
+<div class="paragraph">
+<p><code>ServerResponse</code> 提供对HTTP响应的访问，并且由于它是不可变的，因此你可以使用 <code>build</code> 方法来创建它。
+你可以使用构建器来设置响应状态，添加响应头或提供响应体。以下示例使用JSON内容创建200（OK）响应：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Mono&lt;Person&gt; person = ...
+ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(person, Person.class);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>下面的示例演示如何构建一个具有 <code>Location</code> 标头且没有正文的201（CREATED）响应：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">URI location = ...
+ServerResponse.created(location).build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>根据所使用的编解码器，可以传递提示参数以自定义主体的序列化或反序列化方式。例如，要指定
+<a href="https://www.baeldung.com/jackson-json-view-annotation">Jackson JSON视图</a>：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">ServerResponse.ok().hint(Jackson2CodecSupport.JSON_VIEW_HINT, MyJacksonView.class).body(...);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="webflux-fn-handler-classes">2.3. 处理程序类</h3>
+<div class="paragraph">
+<p>我们可以将处理程序函数编写为lambda，如以下示例所示：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">HandlerFunction&lt;ServerResponse&gt; helloWorld =
+  request -&gt; ServerResponse.ok().body(fromObject("Hello World"));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>这很方便，但是在应用程序中我们需要多个函数，并且多个内联lambda可能会变得凌乱。
+因此，将相关的处理程序函数分组到一个处理程序类中很有用，该类的作用与基于注解的应用程序中的
+<code>@Controller</code> 相似。例如，以下类公开了响应式类型 <code>Person</code> 存储库：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.web.reactive.function.ServerResponse.ok;
+import static org.springframework.web.reactive.function.BodyInserters.fromObject;
+
+public class PersonHandler {
+
+	private final PersonRepository repository;
+
+	public PersonHandler(PersonRepository repository) {
+		this.repository = repository;
+	}
+
+	public Mono&lt;ServerResponse&gt; listPeople(ServerRequest request) { <i class="conum" data-value="1"></i><b>(1)</b>
+		Flux&lt;Person&gt; people = repository.allPeople();
+		return ok().contentType(APPLICATION_JSON).body(people, Person.class);
+	}
+
+	public Mono&lt;ServerResponse&gt; createPerson(ServerRequest request) { <i class="conum" data-value="2"></i><b>(2)</b>
+		Mono&lt;Person&gt; person = request.bodyToMono(Person.class);
+		return ok().build(repository.savePerson(person));
+	}
+
+	public Mono&lt;ServerResponse&gt; getPerson(ServerRequest request) { <i class="conum" data-value="3"></i><b>(3)</b>
+		int personId = Integer.valueOf(request.pathVariable("id"));
+		return repository.getPerson(personId)
+			.flatMap(person -&gt; ok().contentType(APPLICATION_JSON).body(fromObject(person)))
+			.switchIfEmpty(ServerResponse.notFound().build());
+	}
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>listPeople</code> 是一个处理函数，它以JSON格式返回存储库中找到的所有 <code>Person</code> 对象。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>createPerson</code> 是一个处理函数，用于存储请求正文中包含的新 <code>Person</code>。请注意，<code>PersonRepository.savePerson(Person)</code>
+返回 <code>Mono&lt;Void&gt;</code>：一个空的 <code>Mono</code>，当从请求中读取并存储此人时，它将发出完成信号。
+因此，当接收到完成信号时（即 <code>Person</code> 保存完毕时），我们使用 <code>build(Publisher&lt;Void&gt;)</code> 方法发送响应。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>getPerson</code> 是一个处理程序函数，它返回由 <code>id</code> 路径变量标识的单个人。我们从存储库中检索该
+<code>Person</code> 并创建一个JSON响应（如果找到）。如果未找到，则使用 <code>switchIfEmpty(Mono&lt;T&gt;)</code>
+返回404 Not Found响应。</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="webflux-fn-handler-validation">2.4. 验证</h3>
+<div class="paragraph">
+<p>函数式端点可以使用Spring的 {doc-spring-core}#validation[验证工具]将验证应用于请求体。
+例如，给定 <code>Person</code> 的自定义Spring {doc-spring-core}#validation[Validator]实现：</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class PersonHandler {
+
+	private final Validator validator = new PersonValidator(); <i class="conum" data-value="1"></i><b>(1)</b>
+
+	// ...
+
+	public Mono&lt;ServerResponse&gt; createPerson(ServerRequest request) {
+		Mono&lt;Person&gt; person = request.bodyToMono(Person.class).doOnNext(this::validate); <i class="conum" data-value="2"></i><b>(2)</b>
+		return ok().build(repository.savePerson(person));
+	}
+
+	private void validate(Person person) {
+		Errors errors = new BeanPropertyBindingResult(body, "person");
+		validator.validate(body, errors);
+		if (errors.hasErrors) {
+			throw new ServerWebInputException(errors.toString()); <i class="conum" data-value="3"></i><b>(3)</b>
+		}
+	}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>创建 <code>Validator</code> 实例。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>应用验证。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>引发400响应的异常。</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>处理程序还可以通过基于 <code>LocalValidatorFactoryBean</code> 创建和注入全局 <code>Validator</code> 实例来使用标准Bean验证API（JSR-303）。
+请参阅 {doc-spring-core}#validation-beanvalidation[Spring Validation]。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="webflux-fn-router-functions">3. <code>RouterFunction</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>路由器函数用于将请求路由到相应的 <code>HandlerFunction</code>。通常，你不是自己编写路由器函数，
+而是使用 <code>RouterFunctions</code> 实用工具类上的方法来创建一个。<code>RouterFunctions.route()</code>（无参数）
+为你提供了流式生成器，用于创建路由器函数，而 <code>RouterFunctions.route(RequestPredicate，HandlerFunction)</code>
+提供了直接创建路由器的方法。</p>
+</div>
+<div class="paragraph">
+<p>通常，建议使用 <code>route()</code> 构建器，因为它为典型的映射方案提供了便捷的快捷方式，而无需难以发现的静态导入。
+例如，路由器函数构建器提供了 <code>GET(String, HandlerFunction)</code> 方法来为GET请求创建映射，
+和 <code>POST(String, HandlerFunction)</code> 来为POST请求创建映射。</p>
+</div>
+<div class="paragraph">
+<p>除了基于HTTP方法的映射外，路由构建器还提供了一种在映射到请求时引入其他谓词的方法。
+对于每个HTTP方法，都有一个重载的变体，它以 <code>RequestPredicate</code> 作为参数，但是可以表示哪些额外的约束。</p>
+</div>
+<div class="sect2">
+<h3 id="webflux-fn-predicates">3.1. 谓词</h3>
+<div class="paragraph">
+<p>你可以编写自己的 <code>RequestPredicate</code>，但是 <code>RequestPredicates</code> 实用工具类根据请求路径，HTTP方法，
+内容类型等提供许多常用的实现。以下示例使用请求谓词基于 <code>Accept</code> 头创建约束：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">RouterFunction&lt;ServerResponse&gt; route = RouterFunctions.route()
+	.GET("/hello-world", accept(MediaType.TEXT_PLAIN),
+		request -&gt; Response.ok().body(fromObject("Hello World")));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>你可以使用以下命令组合多个请求谓词：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>RequestPredicate.and(RequestPredicate)</code>&#8201;&#8212;&#8201;两者必须匹配。</p>
+</li>
+<li>
+<p><code>RequestPredicate.or(RequestPredicate)</code>&#8201;&#8212;&#8201;任何一个匹配即可。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><code>RequestPredicates</code> 中的许多谓词都是组合的。例如，<code>RequestPredicates.GET(String)</code> 由
+<code>RequestPredicates.method(HttpMethod)</code> 和 <code>RequestPredicates.path(String)</code> 组合。
+上面显示的示例还使用了两个请求谓词，因为构建器在内部使用 <code>RequestPredicates.GET</code> 并将其与 <code>accept</code> 谓词组合在一起。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="webflux-fn-routes">3.2. 路由</h3>
+<div class="paragraph">
+<p>路由器函数按顺序评估：如果第一个路由不匹配，则评估第二个路由，依此类推。
+因此，在通用路由之前声明更具体的路由是有意义的。请注意，此行为不同于基于注解的编程模型，在该模型中，将自动选择“最特定”的控制器方法。</p>
+</div>
+<div class="paragraph">
+<p>使用路由器函数生成器时，所有定义的路由都组成一个 <code>RouterFunction</code>，从 <code>build()</code> 返回。还有其他方法可以将多个路由器函数组合在一起：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>在 <code>RouterFunctions.route()</code> 构建器上执行 <code>add(RouterFunction)</code></p>
+</li>
+<li>
+<p><code>RouterFunction.and(RouterFunction)</code></p>
+</li>
+<li>
+<p><code>RouterFunction.andRoute(RequestPredicate, HandlerFunction)</code>&#8201;&#8212;&#8201;具有嵌套 <code>RouterFunctions.route()</code> 的 <code>RouterFunction.and()</code> 的快捷方式。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>以下示例显示了四种路由的组合：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.web.reactive.function.server.RequestPredicates.*;
+
+PersonRepository repository = ...
+PersonHandler handler = new PersonHandler(repository);
+
+RouterFunction&lt;ServerResponse&gt; otherRoute = ...
+
+RouterFunction&lt;ServerResponse&gt; route = route()
+	.GET("/person/{id}", accept(APPLICATION_JSON), handler::getPerson) <i class="conum" data-value="1"></i><b>(1)</b>
+	.GET("/person", accept(APPLICATION_JSON), handler::listPeople) <i class="conum" data-value="2"></i><b>(2)</b>
+	.POST("/person", handler::createPerson) <i class="conum" data-value="3"></i><b>(3)</b>
+	.add(otherRoute) <i class="conum" data-value="4"></i><b>(4)</b>
+	.build();</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>带有与JSON匹配的 <code>Accept</code> 标头的 <code>GET /person/{id}</code> 被路由到 <code>PersonHandler.getPerson</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>带有与JSON匹配的 <code>Accept</code> 标头的 <code>GET /person</code> 被路由到 <code>PersonHandler.listPeople</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>没有其他谓词的 <code>POST /person</code> 被路由到 <code>PersonHandler.createPerson</code>，并且</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>otherRoute</code> 是在其他地方创建的路由器函数，并将其添加到构建的路由中。</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_嵌套路由">3.3. 嵌套路由</h3>
+<div class="paragraph">
+<p>一组路由器函数通常具有共享谓词，例如：共享路径。在上面的示例中，共享谓词将是与 <code>/person</code> 匹配的路径谓词，由三个路由使用。
+使用注解时，你可以通过使用映射到 <code>/person</code> 的类级别 <code>@RequestMapping</code> 注解来删除此重复项。
+在WebFlux.fn中，可以通过路由器函数构建器上的 <code>path</code> 方法共享路径谓词。
+例如，以上示例的最后几行可以通过使用嵌套路由以以下方式进行改进：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">RouterFunction&lt;ServerResponse&gt; route = route()
+	.path("/person", builder -&gt; builder
+		.GET("/{id}", accept(APPLICATION_JSON), handler::getPerson)
+		.GET("", accept(APPLICATION_JSON), handler::listPeople)
+		.POST("/person", handler::createPerson))
+	.build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>请注意，<code>path</code> 的第二个参数是使用路由器构建器的消费者。</p>
+</div>
+<div class="paragraph">
+<p>尽管基于路径的嵌套是最常见的，但是你可以通过使用构建器上的 <code>nest</code> 方法来嵌套在任何种类的谓词上。
+上面的内容仍然包含一些以共享的 <code>Accept</code>-header 谓词形式出现的重复。通过将 <code>nest</code> 方法与 <code>accept</code> 一起使用，我们可以进一步改进：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">RouterFunction&lt;ServerResponse&gt; route = route()
+	.path("/person", b1 -&gt; b1
+		.nest(accept(APPLICATION_JSON), b2 -&gt; b2
+			.GET("/{id}", handler::getPerson)
+			.GET("", handler::listPeople))
+		.POST("/person", handler::createPerson))
+	.build();</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="webflux-fn-running">4. 运行服务器</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>如何在HTTP服务器中运行路由器函数？一个简单的选项是使用以下方法之一将路由器函数转换为 <code>HttpHandler</code>：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>RouterFunctions.toHttpHandler(RouterFunction)</code></p>
+</li>
+<li>
+<p><code>RouterFunctions.toHttpHandler(RouterFunction, HandlerStrategies)</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>然后，可以通过遵循<a href="spring-webflux.html#webflux-httphandler">HttpHandler</a>来获取特定于服务器的指令，将返回的
+<code>HttpHandler</code> 与许多服务器适配器一起使用。</p>
+</div>
+<div class="paragraph">
+<p>Spring Boot还使用了一个更典型的选项，即通过<a href="spring-webflux.html#webflux-config">[spring-webflux#webflux-config]</a>使用基于
+<a href="spring-webflux.html#webflux-dispatcher-handler"><code>DispatcherHandler</code></a>的设置来运行，
+该配置使用Spring配置声明处理请求所需的组件。WebFlux Java配置声明以下基础设施组件以支持函数式端点：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>RouterFunctionMapping</code>: 在Spring配置中检测一个或多个 <code>RouterFunction&lt;?&gt;</code> bean，通过 <code>RouterFunction.andOther</code> 组合它们，
+并将请求路由到生成的组合 <code>RouterFunction</code>。</p>
+</li>
+<li>
+<p><code>HandlerFunctionAdapter</code>: 简单的适配器，使 <code>DispatcherHandler</code> 调用映射到请求的 <code>HandlerFunction</code>。</p>
+</li>
+<li>
+<p><code>ServerResponseResultHandler</code>: 通过调用 <code>ServerResponse</code> 的 <code>writeTo</code> 方法来处理 <code>HandlerFunction</code> 调用的结果。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>前面的组件使函数式端点适合于 <code>DispatcherHandler</code> 请求处理生命周期，并且（如果有）声明的控制器也可以（可能）与带注解的控制器并排运行。
+这也是Spring Boot WebFlux starter启用函数式端点的方式。</p>
+</div>
+<div class="paragraph">
+<p>以下示例显示了WebFlux Java配置（有关如何运行它，请参见<a href="spring-webflux.html#webflux-dispatcher-handler">DispatcherHandler</a>）：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Configuration
+@EnableWebFlux
+public class WebConfig implements WebFluxConfigurer {
+
+	@Bean
+	public RouterFunction&lt;?&gt; routerFunctionA() {
+		// ...
+	}
+
+	@Bean
+	public RouterFunction&lt;?&gt; routerFunctionB() {
+		// ...
+	}
+
+	// ...
+
+	@Override
+	public void configureHttpMessageCodecs(ServerCodecConfigurer configurer) {
+		// configure message conversion...
+	}
+
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		// configure CORS...
+	}
+
+	@Override
+	public void configureViewResolvers(ViewResolverRegistry registry) {
+		// configure view resolution for HTML rendering...
+	}
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="webflux-fn-handler-filter-function">5. 过滤处理程序函数</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>你可以使用路由函数构建器上的 <code>before</code>，<code>after</code> 或 <code>filter</code> 方法来过滤处理程序函数。使用注解，可以通过使用
+<code>@ControllerAdvice</code>，<code>ServletFilter</code> 或同时使用两者来实现类似的功能。该过滤器将应用于构建器构建的所有路由。
+这意味着在嵌套路由中定义的过滤器不适用于“顶级”路由。例如，考虑以下示例：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">RouterFunction&lt;ServerResponse&gt; route = route()
+	.path("/person", b1 -&gt; b1
+		.nest(accept(APPLICATION_JSON), b2 -&gt; b2
+			.GET("/{id}", handler::getPerson)
+			.GET("", handler::listPeople)
+			.before(request -&gt; ServerRequest.from(request) <i class="conum" data-value="1"></i><b>(1)</b>
+				.header("X-RequestHeader", "Value")
+				.build()))
+		.POST("/person", handler::createPerson))
+	.after((request, response) -&gt; logResponse(response)) <i class="conum" data-value="2"></i><b>(2)</b>
+	.build();</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>添加自定义请求头的 <code>before</code> 过滤器仅应用于两个GET路由。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>记录响应的 <code>after</code> 过滤器将应用于所有路由，包括嵌套路由。</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>路由器构建器上的 <code>filter</code> 方法采用 <code>HandlerFilterFunction</code>：
+该函数采用 <code>ServerRequest</code> 和 <code>HandlerFunction</code> 并返回 <code>ServerResponse</code>。处理程序函数参数代表链中的下一个元素。
+这通常是路由到的处理程序，但是如果应用了多个，它也可以是另一个过滤器。</p>
+</div>
+<div class="paragraph">
+<p>现在，我们可以在路由中添加一个简单的安全过滤器，假设我们拥有一个可以确定是否允许特定路径的 <code>SecurityManager</code>。
+以下示例显示了如何执行此操作：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">SecurityManager securityManager = ...
+
+RouterFunction&lt;ServerResponse&gt; route = route()
+	.path("/person", b1 -&gt; b1
+		.nest(accept(APPLICATION_JSON), b2 -&gt; b2
+			.GET("/{id}", handler::getPerson)
+			.GET("", handler::listPeople))
+		.POST("/person", handler::createPerson))
+	.filter((request, next) -&gt; {
+		if (securityManager.allowAccessTo(request.path())) {
+			return next.handle(request);
+		}
+		else {
+			return ServerResponse.status(UNAUTHORIZED).build();
+		}
+	})
+	.build();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>前面的示例演示了调用 <code>next.handle(ServerRequest)</code> 是可选的。当允许访问时，我们才允许执行处理函数。</p>
+</div>
+<div class="paragraph">
+<p>除了在路由器函数构建器上使用 <code>filter</code> 方法之外，还可以通过 <code>RouterFunction.filter(HandlerFilterFunction)</code>
+将过滤器应用于现有路由器函数。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+通过专用的<a href="#webflux-cors-webfilter"><code>CorsWebFilter</code></a>提供对函数式端点的CORS支持。
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
