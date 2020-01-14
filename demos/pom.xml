@@ -49,6 +49,7 @@
     <module>demo-jwt</module>
     <module>demo-ast</module>
     <module>demo-jmh</module>
+    <module>demo-reactor</module>
   </modules>
 
   <dependencies>
@@ -175,7 +176,6 @@
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <configuration>
           <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
-          <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
         </configuration>
       </plugin>
       <plugin>
