@@ -19,7 +19,7 @@ import xj.love.hj.demo.spring.session.common.vo.ResponseVo;
  * @since 1.0
  */
 @ControllerAdvice(annotations = RestController.class)
-public class ApiReponseHandler implements ResponseBodyAdvice<Object> {
+public class ApiResponseHandler implements ResponseBodyAdvice<Object> {
 
     @Override
     public boolean supports(MethodParameter returnType,
