@@ -1,0 +1,7 @@
+*.xml linguist-language=java
+*.xsl linguist-language=java
+*.js linguist-language=java
+*.css linguist-language=java
+*.html linguist-language=java
+*.md linguist-language=java
+*.adoc linguist-language=java
