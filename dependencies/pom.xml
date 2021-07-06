@@ -40,7 +40,7 @@
     <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
     <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
     <maven-failsafe-plugin.version>2.22.0</maven-failsafe-plugin.version>
-    <maven-pmd-plugin.version>3.10.0</maven-pmd-plugin.version>
+    <maven-pmd-plugin.version>3.11.0</maven-pmd-plugin.version>
     <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
     <maven-apt-plugin.version>1.0.4</maven-apt-plugin.version>
     <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
@@ -61,8 +61,8 @@
     <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
     <asciidoctor-maven-plugin.version>1.5.3</asciidoctor-maven-plugin.version>
     <maven-plugin-plugin.version>3.5.2</maven-plugin-plugin.version>
-    <maven-project-info-reports-plugin.version>2.9</maven-project-info-reports-plugin.version>
-    <maven-site-plugin.version>3.3</maven-site-plugin.version>
+    <maven-project-info-reports-plugin.version>3.0.0</maven-project-info-reports-plugin.version>
+    <maven-site-plugin.version>3.7</maven-site-plugin.version>
     <maven-surefire-report-plugin.version>2.21.0</maven-surefire-report-plugin.version>
     <jdepend-maven-plugin.version>2.0</jdepend-maven-plugin.version>
     <taglist-maven-plugin.version>2.4</taglist-maven-plugin.version>
@@ -246,6 +246,26 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-pmd-plugin</artifactId>
           <version>${maven-pmd-plugin.version}</version>
+          <dependencies>
+            <dependency>
+              <groupId>net.sourceforge.pmd</groupId>
+              <artifactId>pmd-java</artifactId>
+              <version>6.8.0</version>
+            </dependency>
+            <dependency>
+              <groupId>net.sourceforge.pmd</groupId>
+              <artifactId>pmd-vm</artifactId>
+              <version>6.8.0</version>
+            </dependency>
+            <!-- https://github.com/alibaba/p3c -->
+            <!--
+            <dependency>
+              <groupId>com.alibaba.p3c</groupId>
+              <artifactId>p3c-pmd</artifactId>
+              <version>1.3.5</version>
+            </dependency>
+            -->
+          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -350,29 +370,12 @@
           <artifactId>maven-site-plugin</artifactId>
           <version>${maven-site-plugin.version}</version>
         </plugin>
+        <!-- https://issues.apache.org/jira/projects/MPIR/issues/MPIR-374?filter=allopenissues -->
+        <!-- -Dorg.slf4j.simpleLogger.log.org.apache.maven.report.projectinfo.DependencyManagementReport=ERROR -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>${maven-project-info-reports-plugin.version}</version>
-          <dependencies>
-            <!-- Replace problematic bcel version. See https://issues.apache.org/jira/browse/MPIR-370 -->
-            <dependency>
-              <groupId>org.apache.maven.shared</groupId>
-              <artifactId>maven-shared-jar</artifactId>
-              <version>1.2</version>
-              <exclusions>
-                <exclusion>
-                  <groupId>com.google.code.findbugs</groupId>
-                  <artifactId>bcel-findbugs</artifactId>
-                </exclusion>
-              </exclusions>
-            </dependency>
-            <dependency>
-              <groupId>org.apache.bcel</groupId>
-              <artifactId>bcel</artifactId>
-              <version>6.2</version>
-            </dependency>
-          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
