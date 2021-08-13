@@ -17,7 +17,7 @@
   <properties>
     <main.basedir>${basedir}/../..</main.basedir>
     <jjwt.version>0.10.5</jjwt.version>
-    <bcprov-jdk15on.version>1.60</bcprov-jdk15on.version>
+    <bcprov-jdk15on.version>1.67</bcprov-jdk15on.version>
   </properties>
 
   <dependencies>
